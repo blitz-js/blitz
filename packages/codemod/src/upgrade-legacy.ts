@@ -433,6 +433,7 @@ const upgradeLegacy = async () => {
         j.Identifier,
         (node) => node.name === "middleware",
       )
+
       if (middlewareArray.length) {
         const middlewares = middlewareArray
           .get()
@@ -451,7 +452,12 @@ const upgradeLegacy = async () => {
         let importStatements = []
         for (let nodes of blitzConfigProgram.get().value.program.body) {
           if (nodes.type === "ImportDeclaration") {
-            if (nodes.source.value !== "blitz") {
+            // Find duplicates
+            const dup = blitzServerProgram.find(
+              j.ImportDeclaration,
+              (node) => node.source.value === nodes.source.value,
+            )
+            if (nodes.source.value !== "blitz" && !dup.length) {
               importStatements.push(nodes)
             }
           }
@@ -466,11 +472,7 @@ const upgradeLegacy = async () => {
           }
         }
 
-        importStatements.forEach((s) =>
-          blitzServerProgram
-            .get()
-            .value.program.body.unshift(j.variableDeclaration(s.kind, s.declarations)),
-        )
+        importStatements.forEach((s) => blitzServerProgram.get().value.program.body.unshift(s))
 
         fs.writeFileSync(
           `${appDir}/blitz-server.${isTypescript ? "ts" : "js"}`,
@@ -741,40 +743,50 @@ const upgradeLegacy = async () => {
         const parsedProgram = program.get()
 
         const findRouterQueryImport = findImport(program, "next/router")
-        findRouterQueryImport?.forEach((node) => {
-          const getNode = node.get()
-          getNode.value.specifiers.slice().forEach((specifier: any, index: number) => {
-            const importedName =
-              specifier.imported.type === "StringLiteral"
-                ? specifier.imported.value
-                : specifier.imported.name
-            if (importedName === "useRouterQuery") {
-              addNamedImport(program, "useRouter", "next/router")
-              getNode.value.specifiers.splice(index, 1)
-              // Removed left overs
-              if (!getNode.value.specifiers?.length) {
-                const index = parsedProgram.value.program.body.indexOf(getNode.value)
-                parsedProgram.value.program.body.splice(index, 1)
+
+        if (findRouterQueryImport?.length) {
+          findRouterQueryImport?.forEach((node) => {
+            const getNode = node.get()
+            getNode.value.specifiers.slice().forEach((specifier: any, index: number) => {
+              const importedName = (): string | null => {
+                if (specifier.imported) {
+                  if (specifier.imported.type === "StringLiteral") {
+                    return specifier.imported.value
+                  } else if (specifier.imported.type === "Identifier") {
+                    return specifier.imported.name
+                  }
+                }
+                return null
               }
-            }
+
+              if (importedName() && importedName() === "useRouterQuery") {
+                addNamedImport(program, "useRouter", "next/router")
+                getNode.value.specifiers.splice(index, 1)
+                // Removed left overs
+                if (!getNode.value.specifiers?.length) {
+                  const index = parsedProgram.value.program.body.indexOf(getNode.value)
+                  parsedProgram.value.program.body.splice(index, 1)
+                }
+              }
+            })
           })
-        })
 
-        const findCallUseRouterQuery = program.find(
-          j.CallExpression,
-          (node) => node.callee.name === "useRouterQuery",
-        )
-        findCallUseRouterQuery.forEach((call) => {
-          const nodePath = call.get()
-          nodePath.parentPath.value.init = j.expressionStatement(
-            j.memberExpression(
-              j.callExpression(j.identifier("useRouter"), []),
-              j.identifier("query"),
-            ),
+          const findCallUseRouterQuery = program.find(
+            j.CallExpression,
+            (node) => node.callee.name === "useRouterQuery",
           )
-        })
+          findCallUseRouterQuery.forEach((call) => {
+            const nodePath = call.get()
+            nodePath.parentPath.value.init = j.expressionStatement(
+              j.memberExpression(
+                j.callExpression(j.identifier("useRouter"), []),
+                j.identifier("query"),
+              ),
+            )
+          })
 
-        fs.writeFileSync(filepath, program.toSource())
+          fs.writeFileSync(filepath, program.toSource())
+        }
       })
 
       getAllFiles(appDir, [], [], [".ts", ".tsx", ".js", ".jsx"]).forEach((file) => {
@@ -786,45 +798,54 @@ const upgradeLegacy = async () => {
           j.ImportDeclaration,
           (node) => node.source.value === "next/router",
         )
-        findRouterQueryImport.forEach((node) => {
-          const getNode = node.get()
-          getNode.value.specifiers.slice().forEach((specifier: any, index: number) => {
-            const importedName =
-              specifier.imported.type === "StringLiteral"
-                ? specifier.imported.value
-                : specifier.imported.name
-            if (importedName === "useRouterQuery") {
-              parsedProgram.value.program.body.unshift(
-                j.importDeclaration(
-                  [j.importSpecifier(j.identifier("useRouter"))],
-                  j.stringLiteral("next/router"),
-                ),
-              )
-              getNode.value.specifiers.splice(index, 1)
-              // Removed left overs
-              if (!getNode.value.specifiers?.length) {
-                const index = parsedProgram.value.program.body.indexOf(getNode.value)
-                parsedProgram.value.program.body.splice(index, 1)
+        if (findRouterQueryImport?.length) {
+          findRouterQueryImport.forEach((node) => {
+            const getNode = node.get()
+            getNode.value.specifiers.slice().forEach((specifier: any, index: number) => {
+              const importedName = (): string | null => {
+                if (specifier.imported) {
+                  if (specifier.imported.type === "StringLiteral") {
+                    return specifier.imported.value
+                  } else if (specifier.imported.type === "Identifier") {
+                    return specifier.imported.name
+                  }
+                }
+                return null
               }
-            }
+
+              if (importedName() && importedName() === "useRouterQuery") {
+                parsedProgram.value.program.body.unshift(
+                  j.importDeclaration(
+                    [j.importSpecifier(j.identifier("useRouter"))],
+                    j.stringLiteral("next/router"),
+                  ),
+                )
+                getNode.value.specifiers.splice(index, 1)
+                // Removed left overs
+                if (!getNode.value.specifiers?.length) {
+                  const index = parsedProgram.value.program.body.indexOf(getNode.value)
+                  parsedProgram.value.program.body.splice(index, 1)
+                }
+              }
+            })
           })
-        })
 
-        const findCallUseRouterQuery = program.find(
-          j.CallExpression,
-          (node) => node.callee.name === "useRouterQuery",
-        )
-        findCallUseRouterQuery.forEach((call) => {
-          const nodePath = call.get()
-          nodePath.parentPath.value.init = j.expressionStatement(
-            j.memberExpression(
-              j.callExpression(j.identifier("useRouter"), []),
-              j.identifier("query"),
-            ),
+          const findCallUseRouterQuery = program.find(
+            j.CallExpression,
+            (node) => node.callee.name === "useRouterQuery",
           )
-        })
+          findCallUseRouterQuery.forEach((call) => {
+            const nodePath = call.get()
+            nodePath.parentPath.value.init = j.expressionStatement(
+              j.memberExpression(
+                j.callExpression(j.identifier("useRouter"), []),
+                j.identifier("query"),
+              ),
+            )
+          })
 
-        fs.writeFileSync(filepath, program.toSource())
+          fs.writeFileSync(filepath, program.toSource())
+        }
       })
     },
   })
@@ -907,9 +928,11 @@ const upgradeLegacy = async () => {
           )
 
         const documentHead = program
-          .find(j.Identifier, (node) => node.name === "DocumentHead")
+          .find(j.JSXElement, (node) => node.openingElement.name.name === "DocumentHead")
           .get()
-        documentHead.value.name = "Head"
+
+        documentHead.value.openingElement.name.name = "Head"
+        documentHead.value.closingElement.name.name = "Head"
 
         const blitzScript = program.find(j.Identifier, (node) => node.name === "BlitzScript").get()
         blitzScript.value.name = "NextScript"
@@ -959,15 +982,20 @@ const upgradeLegacy = async () => {
           const program = getCollectionFromSource(file)
 
           const defaultExportPath = findDefaultExportPath(program)
-          if (!defaultExportPath) {
-            return
+
+          if (defaultExportPath) {
+            const {node} = defaultExportPath
+
+            if (node.declaration.type === "Identifier") {
+              node.declaration = j.callExpression(j.identifier("api"), [node.declaration as any])
+              addNamedImport(program, "api", "app/blitz-server")
+            } else if (node.declaration.type === "FunctionDeclaration") {
+              node.declaration = j.template.expression`api(${node.declaration})`
+              addNamedImport(program, "api", "app/blitz-server")
+            }
+
+            fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
           }
-
-          const {node} = defaultExportPath
-          node.declaration = j.callExpression(j.identifier("api"), [node.declaration as any])
-          addNamedImport(program, "api", "app/blitz-server")
-
-          fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
         })
       }
     },
