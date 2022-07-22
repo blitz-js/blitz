@@ -324,7 +324,7 @@ importers:
       "@vitejs/plugin-react": 1.3.0
       delay: 5.0.0
       eslint: 7.32.0
-      eslint-config-next: 12.2.2_eslint@7.32.0+typescript@4.6.3
+      eslint-config-next: 12.2.3_eslint@7.32.0+typescript@4.6.3
       eslint-plugin-testing-library: 5.0.1_eslint@7.32.0+typescript@4.6.3
       jsdom: 19.0.0
       typescript: 4.6.3
@@ -603,14 +603,12 @@ importers:
       cookie-session: 2.0.0
       debug: 4.3.3
       http: 0.0.1-security
-      ioredis: 5.2.1
       jsonwebtoken: 8.5.1
       nanoid: 3.2.0
       passport: 0.5.2
       path: 0.12.7
       react: 18.0.0
       react-dom: 18.0.0
-      redis: 4.2.0
       secure-password: 4.0.0
       typescript: ^4.5.3
       unbuild: 0.6.9
@@ -628,12 +626,10 @@ importers:
       cookie-session: 2.0.0
       debug: 4.3.3
       http: 0.0.1-security
-      ioredis: 5.2.1
       jsonwebtoken: 8.5.1
       nanoid: 3.2.0
       passport: 0.5.2
       path: 0.12.7
-      redis: 4.2.0
       secure-password: 4.0.0
       url: 0.11.0
     devDependencies:
@@ -647,6 +643,48 @@ importers:
       "@types/react-dom": 17.0.14
       react: 18.0.0
       react-dom: 18.0.0_react@18.0.0
+      typescript: 4.6.3
+      unbuild: 0.6.9
+      watch: 1.0.2
+
+  packages/blitz-auth-ioredis:
+    specifiers:
+      "@blitzjs/auth": 2.0.0-alpha.56
+      "@blitzjs/config": 2.0.0-alpha.55
+      "@typescript-eslint/eslint-plugin": 5.9.1
+      "@typescript-eslint/parser": 5.9.1
+      ioredis: 5.2.1
+      typescript: ^4.5.3
+      unbuild: 0.6.9
+      watch: 1.0.2
+    dependencies:
+      "@blitzjs/auth": 2.0.0-alpha.56_typescript@4.6.3
+      "@typescript-eslint/eslint-plugin": 5.9.1_8d4b52c6a654d64d1d8b695e9b6b2fe5
+      "@typescript-eslint/parser": 5.9.1_eslint@7.32.0+typescript@4.6.3
+      ioredis: 5.2.1
+    devDependencies:
+      "@blitzjs/config": link:../config
+      typescript: 4.6.3
+      unbuild: 0.6.9
+      watch: 1.0.2
+
+  packages/blitz-auth-redis:
+    specifiers:
+      "@blitzjs/auth": 2.0.0-alpha.56
+      "@blitzjs/config": 2.0.0-alpha.55
+      "@typescript-eslint/eslint-plugin": 5.9.1
+      "@typescript-eslint/parser": 5.9.1
+      redis: 4.2.0
+      typescript: ^4.5.3
+      unbuild: 0.6.9
+      watch: 1.0.2
+    dependencies:
+      "@blitzjs/auth": 2.0.0-alpha.56_typescript@4.6.3
+      "@typescript-eslint/eslint-plugin": 5.9.1_8d4b52c6a654d64d1d8b695e9b6b2fe5
+      "@typescript-eslint/parser": 5.9.1_eslint@7.32.0+typescript@4.6.3
+      redis: 4.2.0
+    devDependencies:
+      "@blitzjs/config": link:../config
       typescript: 4.6.3
       unbuild: 0.6.9
       watch: 1.0.2
@@ -1082,47 +1120,6 @@ packages:
       browserslist: 4.20.3
       semver: 6.3.0
 
-  /@babel/helper-create-class-features-plugin/7.17.12_@babel+core@7.12.10:
-    resolution:
-      {
-        integrity: sha512-sZoOeUTkFJMyhqCei2+Z+wtH/BehW8NVKQt7IRUQlRiOARuXymJYfN/FCcI8CvVbR0XVyDM6eLFOlR7YtiXnew==,
-      }
-    engines: {node: ">=6.9.0"}
-    peerDependencies:
-      "@babel/core": ^7.0.0
-    dependencies:
-      "@babel/core": 7.12.10
-      "@babel/helper-annotate-as-pure": 7.16.7
-      "@babel/helper-environment-visitor": 7.18.2
-      "@babel/helper-function-name": 7.17.9
-      "@babel/helper-member-expression-to-functions": 7.17.7
-      "@babel/helper-optimise-call-expression": 7.16.7
-      "@babel/helper-replace-supers": 7.18.2
-      "@babel/helper-split-export-declaration": 7.16.7
-    transitivePeerDependencies:
-      - supports-color
-
-  /@babel/helper-create-class-features-plugin/7.17.12_@babel+core@7.18.2:
-    resolution:
-      {
-        integrity: sha512-sZoOeUTkFJMyhqCei2+Z+wtH/BehW8NVKQt7IRUQlRiOARuXymJYfN/FCcI8CvVbR0XVyDM6eLFOlR7YtiXnew==,
-      }
-    engines: {node: ">=6.9.0"}
-    peerDependencies:
-      "@babel/core": ^7.0.0
-    dependencies:
-      "@babel/core": 7.18.2
-      "@babel/helper-annotate-as-pure": 7.16.7
-      "@babel/helper-environment-visitor": 7.18.2
-      "@babel/helper-function-name": 7.17.9
-      "@babel/helper-member-expression-to-functions": 7.17.7
-      "@babel/helper-optimise-call-expression": 7.16.7
-      "@babel/helper-replace-supers": 7.18.2
-      "@babel/helper-split-export-declaration": 7.16.7
-    transitivePeerDependencies:
-      - supports-color
-    dev: false
-
   /@babel/helper-create-class-features-plugin/7.18.0_@babel+core@7.12.10:
     resolution:
       {
@@ -1142,7 +1139,6 @@ packages:
       "@babel/helper-split-export-declaration": 7.16.7
     transitivePeerDependencies:
       - supports-color
-    dev: false
 
   /@babel/helper-create-class-features-plugin/7.18.0_@babel+core@7.18.2:
     resolution:
@@ -1410,7 +1406,7 @@ packages:
       "@babel/core": ^7.0.0-0
     dependencies:
       "@babel/core": 7.12.10
-      "@babel/helper-create-class-features-plugin": 7.17.12_@babel+core@7.12.10
+      "@babel/helper-create-class-features-plugin": 7.18.0_@babel+core@7.12.10
       "@babel/helper-plugin-utils": 7.17.12
     transitivePeerDependencies:
       - supports-color
@@ -1425,7 +1421,7 @@ packages:
       "@babel/core": ^7.0.0-0
     dependencies:
       "@babel/core": 7.18.2
-      "@babel/helper-create-class-features-plugin": 7.17.12_@babel+core@7.18.2
+      "@babel/helper-create-class-features-plugin": 7.18.0_@babel+core@7.18.2
       "@babel/helper-plugin-utils": 7.17.12
     transitivePeerDependencies:
       - supports-color
@@ -1591,7 +1587,7 @@ packages:
       "@babel/core": ^7.0.0-0
     dependencies:
       "@babel/core": 7.12.10
-      "@babel/helper-create-class-features-plugin": 7.17.12_@babel+core@7.12.10
+      "@babel/helper-create-class-features-plugin": 7.18.0_@babel+core@7.12.10
       "@babel/helper-plugin-utils": 7.17.12
     transitivePeerDependencies:
       - supports-color
@@ -2558,7 +2554,7 @@ packages:
       "@babel/plugin-transform-unicode-escapes": 7.16.7_@babel+core@7.12.10
       "@babel/plugin-transform-unicode-regex": 7.16.7_@babel+core@7.12.10
       "@babel/preset-modules": 0.1.5_@babel+core@7.12.10
-      "@babel/types": 7.17.12
+      "@babel/types": 7.18.4
       core-js-compat: 3.22.5
       semver: 5.7.1
     transitivePeerDependencies:
@@ -2714,6 +2710,73 @@ packages:
       {
         integrity: sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==,
       }
+
+  /@blitzjs/auth/2.0.0-alpha.56_typescript@4.6.3:
+    resolution:
+      {
+        integrity: sha512-dkCMR/Z9YbkMSIQIX6V3ctpZX+CcsKCcOZKD1kPv+4Z2dAR+/Yw9C7xnHiSJBkPs2GqSIn6X0yWDCLA7KZzQ0w==,
+      }
+    dependencies:
+      "@types/b64-lite": 1.3.0
+      "@types/cookie-session": 2.0.44
+      "@types/passport": 1.0.7
+      "@types/secure-password": 3.1.1
+      b64-lite: 1.4.0
+      bad-behavior: 1.0.1
+      blitz: 2.0.0-alpha.56_typescript@4.6.3
+      cookie: 0.4.1
+      cookie-session: 2.0.0
+      debug: 4.3.3
+      http: 0.0.1-security
+      jsonwebtoken: 8.5.1
+      nanoid: 3.2.0
+      passport: 0.5.2
+      path: 0.12.7
+      secure-password: 4.0.0
+      url: 0.11.0
+    transitivePeerDependencies:
+      - "@swc/core"
+      - "@swc/wasm"
+      - "@types/node"
+      - react
+      - supports-color
+      - typescript
+    dev: false
+
+  /@blitzjs/generator/2.0.0-alpha.56:
+    resolution:
+      {
+        integrity: sha512-4R+DkfAJ7iPseI1w7NKBMHzqjHmDjh4gr5624qu74z+B0Gcge+p0fKKn5tJtMLIh03FhQrhI/zaBBpDukIoEgg==,
+      }
+    peerDependencies:
+      react: "*"
+    dependencies:
+      "@babel/core": 7.12.10
+      "@babel/plugin-transform-typescript": 7.12.1_@babel+core@7.12.10
+      "@babel/preset-env": 7.12.10_@babel+core@7.12.10
+      "@babel/types": 7.12.10
+      "@mrleebo/prisma-ast": 0.2.6
+      chalk: 4.1.2
+      console-table-printer: 2.10.0
+      cross-spawn: 7.0.3
+      diff: 5.0.0
+      enquirer: 2.3.6
+      fs-extra: 10.0.1
+      got: 11.8.5
+      jscodeshift: 0.13.0_@babel+preset-env@7.12.10
+      mem-fs: 1.2.0
+      mem-fs-editor: 8.0.0
+      npm-which: 3.0.1
+      ora: 5.3.0
+      pluralize: 8.0.0
+      prettier: 2.6.2
+      recast: 0.20.5
+      tslog: 3.3.1
+      username: 5.1.0
+      vinyl: 2.2.1
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
 
   /@blitzjs/manypkg/0.19.1:
     resolution:
@@ -3465,10 +3528,10 @@ packages:
     dependencies:
       glob: 7.1.7
 
-  /@next/eslint-plugin-next/12.2.2:
+  /@next/eslint-plugin-next/12.2.3:
     resolution:
       {
-        integrity: sha512-XOi0WzJhGH3Lk51SkSu9eZxF+IY1ZZhWcJTIGBycAbWU877IQa6+6KxMATWCOs7c+bmp6Sd8KywXJaDRxzu0JA==,
+        integrity: sha512-B2e8Yg1MpuLsGxhCx4rU8/Tcnr5wFmCx1O2eyLXBPnaCcsFXfGCo067ujagtDLtWASL3GNgzg78U1SB0dbc38A==,
       }
     dependencies:
       glob: 7.1.7
@@ -5830,6 +5893,52 @@ packages:
       readable-stream: 3.6.0
     dev: false
 
+  /blitz/2.0.0-alpha.56_typescript@4.6.3:
+    resolution:
+      {
+        integrity: sha512-A7xNxWBlRnRDReF91AEeFtIWqy2FesJAjd8T00itR2+LiYJxaYHw0cE/H4tLNyp/echmSrznpLpurtoLeDJdYQ==,
+      }
+    hasBin: true
+    peerDependencies:
+      react: "*"
+    dependencies:
+      "@blitzjs/generator": 2.0.0-alpha.56
+      arg: 5.0.1
+      boxen: 7.0.0
+      chalk: 4.1.2
+      console-table-printer: 2.10.0
+      cross-spawn: 7.0.3
+      debug: 4.3.3
+      detect-port: 1.3.0
+      dotenv: 16.0.0
+      dotenv-expand: 8.0.3
+      envinfo: 7.8.1
+      esbuild: 0.14.34
+      find-up: 4.1.0
+      fs-extra: 10.0.1
+      hasbin: 1.2.3
+      node-fetch: 3.2.3
+      npm-which: 3.0.1
+      ora: 5.3.0
+      os-name: 5.0.1
+      p-event: 4.2.0
+      pkg-dir: 5.0.0
+      prompts: 2.4.2
+      resolve-cwd: 3.0.0
+      resolve-from: 5.0.0
+      superjson: 1.8.0
+      ts-node: 10.7.0_typescript@4.6.3
+      tsconfig-paths: 4.0.0
+      tslog: 3.3.1
+      watchpack: 2.1.1
+    transitivePeerDependencies:
+      - "@swc/core"
+      - "@swc/wasm"
+      - "@types/node"
+      - supports-color
+      - typescript
+    dev: false
+
   /body-parser/1.19.2:
     resolution:
       {
@@ -6003,7 +6112,10 @@ packages:
     dev: true
 
   /buffer-equal-constant-time/1.0.1:
-    resolution: {integrity: sha1-+OcRMvf/5uAaXJaXpMbz5I1cyBk=}
+    resolution:
+      {
+        integrity: sha512-zRpUiDwd/xk6ADqPMATG8vc9VPrkck7T07OIx0gnjmJAnHnTVXNQG3vfvWNuiZIkwu9KrKdA1iJKfsfTVxE6NA==,
+      }
     dev: false
 
   /buffer-from/1.1.2:
@@ -8403,10 +8515,10 @@ packages:
       - eslint-import-resolver-webpack
       - supports-color
 
-  /eslint-config-next/12.2.2_eslint@7.32.0+typescript@4.6.3:
+  /eslint-config-next/12.2.3_eslint@7.32.0+typescript@4.6.3:
     resolution:
       {
-        integrity: sha512-oJhWBLC4wDYYUFv/5APbjHUFd0QRFCojMdj/QnMoOEktmeTvwnnoA8F8uaXs0fQgsaTK0tbUxBRv9/Y4/rpxOA==,
+        integrity: sha512-xAQqAqwa2bu9ZMRypz58ym4tNCo22Wc6LuoLpbpf3yW5c4ZkVib9934AgGDDvh2zKrP56Z6X0Pp6gNnuuZzcRw==,
       }
     peerDependencies:
       eslint: ^7.23.0 || ^8.0.0
@@ -8415,7 +8527,7 @@ packages:
       typescript:
         optional: true
     dependencies:
-      "@next/eslint-plugin-next": 12.2.2
+      "@next/eslint-plugin-next": 12.2.3
       "@rushstack/eslint-patch": 1.1.3
       "@typescript-eslint/parser": 5.28.0_eslint@7.32.0+typescript@4.6.3
       eslint: 7.32.0
@@ -9814,7 +9926,10 @@ packages:
       function-bind: 1.1.1
 
   /hasbin/1.2.3:
-    resolution: {integrity: sha1-eMWSaJPIAhXCtWiuH9P8q3omlrA=}
+    resolution:
+      {
+        integrity: sha512-CCd8e/w2w28G8DyZvKgiHnQJ/5XXDz6qiUHnthvtag/6T5acUeN5lqq+HMoBqcmgWueWDhiCplrw0Kb1zDACRg==,
+      }
     engines: {node: ">=0.10"}
     dependencies:
       async: 1.5.2
@@ -11550,7 +11665,7 @@ packages:
       lodash.isplainobject: 4.0.6
       lodash.isstring: 4.0.1
       lodash.once: 4.1.1
-      ms: 2.1.2
+      ms: 2.1.3
       semver: 5.7.1
     dev: false
 
@@ -13552,7 +13667,10 @@ packages:
     engines: {node: ">=8"}
 
   /path/0.12.7:
-    resolution: {integrity: sha1-1NwqUGxM4hl+tIHr/NWzbAFAsQ8=}
+    resolution:
+      {
+        integrity: sha512-aXXC6s+1w7otVF9UletFkFcDsJeO7lSZBPUQhtb5O0xJe8LtYhj/GxldoL09bBj9+ZmE2hNoHqQSFMN5fikh4Q==,
+      }
     dependencies:
       process: 0.11.10
       util: 0.10.4
@@ -13573,7 +13691,10 @@ packages:
     dev: false
 
   /pause/0.0.1:
-    resolution: {integrity: sha1-HUCLP9t2kjuVQ9lvtMnf1TXZy10=}
+    resolution:
+      {
+        integrity: sha512-KG8UEiEVkR3wGEb4m5yZkVCzigAD+cVEJck2CzYZO37ZGJfctvVptVO192MwrtPhzONn6go8ylnOdMhKqi4nfg==,
+      }
     dev: false
 
   /pend/1.2.0:
@@ -16588,7 +16709,10 @@ packages:
     dev: false
 
   /url/0.11.0:
-    resolution: {integrity: sha1-ODjpfPxgUh63PFJajlW/3Z4uKPE=}
+    resolution:
+      {
+        integrity: sha512-kbailJa29QrtXnxgq+DdCEGlbTeYM2eJUxsz6vjZavrCYPMIFHMKQmSKYAIuUK2i7hgPm28a8piX5NTUtM/LKQ==,
+      }
     dependencies:
       punycode: 1.3.2
       querystring: 0.2.0
@@ -16865,7 +16989,10 @@ packages:
       makeerror: 1.0.12
 
   /watch/1.0.2:
-    resolution: {integrity: sha1-NApxe952Vyb6CqB9ch4BR6VR3ww=}
+    resolution:
+      {
+        integrity: sha512-1u+Z5n9Jc1E2c7qDO8SinPoZuHj7FgbgU1olSFoyaklduDvvtX7GMMtlE6OC9FTXq4KvNAOfj6Zu4vI1e9bAKA==,
+      }
     engines: {node: ">=0.1.95"}
     hasBin: true
     dependencies:
