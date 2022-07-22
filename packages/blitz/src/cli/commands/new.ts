@@ -219,7 +219,7 @@ const determinePkgManagerToInstallDeps = async () => {
 }
 
 const newApp: CliCommand = async (argv) => {
-  const shouldUpgrade = !args["--skip-upgrade"]
+  const shouldUpgrade = false // !args["--skip-upgrade"]
   if (shouldUpgrade) {
     await checkLatestVersion()
   }
