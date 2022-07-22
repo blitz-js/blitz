@@ -142,10 +142,10 @@ export function rpcHandler(config: RpcConfig) {
       "It seems your Blitz RPC endpoint file is not named [[...blitz]].(jt)s. Please ensure it is",
     )
 
-    const relativeRoutePath = req.query.blitz.join(sep)
+    const relativeRoutePath = (req.query.blitz as string[])?.join(sep)
     const routePath = sep + relativeRoutePath
 
-    const loadableResolver = resolverMap[routePath]
+    const loadableResolver = resolverMap?.[routePath]
     if (!loadableResolver) {
       throw new Error("No resolver for path: " + routePath)
     }
