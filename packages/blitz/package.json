@@ -1,6 +1,6 @@
 {
   "name": "blitz",
-  "version": "2.0.0-alpha.55",
+  "version": "2.0.0-alpha.56",
   "scripts": {
     "build": "unbuild",
     "dev": "watch unbuild src --wait=0.2",
@@ -23,7 +23,7 @@
     "blitz": "bin/blitz"
   },
   "dependencies": {
-    "@blitzjs/generator": "2.0.0-alpha.55",
+    "@blitzjs/generator": "2.0.0-alpha.56",
     "arg": "5.0.1",
     "boxen": "7.0.0",
     "chalk": "^4.1.0",
@@ -54,7 +54,7 @@
     "watchpack": "2.1.1"
   },
   "devDependencies": {
-    "@blitzjs/config": "workspace:2.0.0-alpha.55",
+    "@blitzjs/config": "workspace:2.0.0-alpha.56",
     "@types/cookie": "0.4.1",
     "@types/cross-spawn": "6.0.2",
     "@types/debug": "4.1.7",
