@@ -228,23 +228,39 @@ export function buildPageExtensionRegex(pageExtensions: string[]) {
 type PagesMapping = {
   [page: string]: string
 }
-export function convertPageFilePathToRoutePath(filePath: string, pageExtensions: string[]) {
-  return filePath
-    .replace(/^.*?[\\/]pages[\\/]/, "/")
-    .replace(/^.*?[\\/]api[\\/]/, "/api/")
-    .replace(/^.*?[\\/]queries[\\/]/, "/api/rpc/")
-    .replace(/^.*?[\\/]mutations[\\/]/, "/api/rpc/")
-    .replace(new RegExp(`\\.+(${pageExtensions.join("|")})$`), "")
+function stripExtension(filePath: string, pageExtensions: string[]) {
+  return filePath.replace(new RegExp(`\\.+(${pageExtensions.join("|")})$`), "")
 }
-export function createPagesMapping(pagePaths: string[], pageExtensions: string[]) {
+export function convertPageFilePathToRoutePath(filePath: string, pageExtensions: string[]) {
+  return stripExtension(
+    filePath
+      .replace(/^.*?[\\/]pages[\\/]/, "/")
+      .replace(/^.*?[\\/]api[\\/]/, "/api/")
+      .replace(/^.*?[\\/]queries[\\/]/, "/api/rpc/")
+      .replace(/^.*?[\\/]mutations[\\/]/, "/api/rpc/"),
+    pageExtensions,
+  )
+}
+export function createPagesMapping(pagePaths: string[], config: any) {
+  const {pageExtensions, blitz} = config
+  const resolverType = blitz?.resolverPath || "queries|mutations"
+
   const previousPages: PagesMapping = {}
-  const pages = pagePaths.reduce((result: PagesMapping, pagePath): PagesMapping => {
+  const pages = pagePaths.reduce<PagesMapping>((result, pagePath) => {
     let page = `${convertPageFilePathToRoutePath(pagePath, pageExtensions).replace(
       /\\/g,
       "/",
     )}`.replace(/\/index$/, "")
-    let pageKey = page === "" ? "/" : page
+    const isResolver = pagePath.includes("/queries/") || pagePath.includes("/mutations/")
+    if (isResolver) {
+      if (typeof resolverType === "function") {
+        page = `/api/rpc${resolverType(pagePath)}`
+      } else if (resolverType === "root") {
+        page = `/api/rpc${stripExtension(pagePath, pageExtensions)}`
+      }
+    }
 
+    let pageKey = page === "" ? "/" : page
     if (pageKey in result) {
       console.warn(
         `Duplicate page detected. ${previousPages[pageKey]} and ${pagePath} both resolve to ${pageKey}.`,
@@ -255,6 +271,7 @@ export function createPagesMapping(pagePaths: string[], pageExtensions: string[]
     result[pageKey] = join(PAGES_DIR_ALIAS, pagePath).replace(/\\/g, "/")
     return result
   }, {})
+
   pages["/_app"] = pages["/_app"] || "next/dist/pages/_app"
   pages["/_error"] = pages["/_error"] || "next/dist/pages/_error"
   pages["/_document"] = pages["/_document"] || "next/dist/pages/_document"
@@ -277,7 +294,7 @@ function getVerb(type: string) {
 const apiPathRegex = /([\\/]api[\\/])/
 export async function collectAllRoutes(directory: string, config: any) {
   const routeFiles = await collectPages(directory, config.pageExtensions!)
-  const rawRouteMappings = createPagesMapping(routeFiles, config.pageExtensions!)
+  const rawRouteMappings = createPagesMapping(routeFiles, config)
   const routes = []
   for (const [route, filePath] of Object.entries(rawRouteMappings)) {
     if (["/_app", "/_document", "/_error"].includes(route)) continue

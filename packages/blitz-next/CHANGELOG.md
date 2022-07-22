@@ -1,5 +1,30 @@
 # @blitzjs/next
 
+## 2.0.0-alpha.56
+
+### Patch Changes
+
+- d9fc5d8e: Allow prefetching multiple queries in gSSP and gSP
+  - @blitzjs/rpc@2.0.0-alpha.56
+
+## 2.0.0-alpha.55
+
+### Patch Changes
+
+- 8d9ea00e: Fix prefetching multiple queries causes only the last one to be passed to page
+- Updated dependencies [df7cee84]
+  - @blitzjs/rpc@2.0.0-alpha.55
+
+## 2.0.0-alpha.54
+
+### Patch Changes
+
+- 348fd6f5: Fix redirectAuthenticatedTo errors
+- 20fc9f80: Fix SSP / SP not prefetching queries correctly
+- 80e1ead7: Add jest.config.js to newly generated typescript apps
+- Updated dependencies [20fc9f80]
+  - @blitzjs/rpc@2.0.0-alpha.54
+
 ## 2.0.0-alpha.53
 
 ### Patch Changes

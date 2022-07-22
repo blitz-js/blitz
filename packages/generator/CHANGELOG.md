@@ -1,5 +1,20 @@
 # @blitzjs/generator
 
+## 2.0.0-alpha.56
+
+## 2.0.0-alpha.55
+
+### Patch Changes
+
+- ab4d9de7: Don't try to copy RPC API endpoint in templates that don't have it
+
+## 2.0.0-alpha.54
+
+### Patch Changes
+
+- a961aff8: Add missing lint deps to the new app templates
+- 80e1ead7: Add jest.config.js to newly generated typescript apps
+
 ## 2.0.0-alpha.53
 
 ## 2.0.0-alpha.52

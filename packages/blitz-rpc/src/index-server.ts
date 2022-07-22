@@ -50,8 +50,9 @@ export function __internal_addBlitzRpcResolver(
 }
 
 const dir = __dirname + (() => "")() // trick to avoid `@vercel/ncc` to glob import
-const loaderServer = resolve(dir, "./loader-server.cjs")
 const loaderClient = resolve(dir, "./loader-client.cjs")
+const loaderServer = resolve(dir, "./loader-server.cjs")
+const loaderServerResolvers = resolve(dir, "./loader-server-resolvers.cjs")
 
 interface WebpackRuleOptions {
   resolverPath: ResolverPathOptions | undefined
@@ -92,6 +93,10 @@ export function installWebpackConfig({
     use: [
       {
         loader: loaderClient,
+        options: webpackRuleOptions,
+      },
+      {
+        loader: loaderServerResolvers,
         options: webpackRuleOptions,
       },
     ],
