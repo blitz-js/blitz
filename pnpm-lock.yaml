@@ -48,7 +48,8 @@ importers:
       "@types/node": 17.0.16
       "@types/preview-email": 2.0.1
       "@types/react": 18.0.1
-      blitz: workspace:2.0.0-alpha.53
+      "@typescript-eslint/eslint-plugin": 5.9.1
+      blitz: workspace:2.0.0-alpha.56
       eslint: 7.32.0
       eslint-config-next: 12.2.0
       eslint-config-prettier: 8.5.0
@@ -90,6 +91,7 @@ importers:
       "@types/node": 17.0.16
       "@types/preview-email": 2.0.1
       "@types/react": 18.0.1
+      "@typescript-eslint/eslint-plugin": 5.9.1_hrkuebk64jiu2ut2d2sm4oylnu
       eslint: 7.32.0
       eslint-config-next: 12.2.0_hrkuebk64jiu2ut2d2sm4oylnu
       eslint-config-prettier: 8.5.0_eslint@7.32.0
@@ -473,8 +475,8 @@ importers:
 
   packages/blitz:
     specifiers:
-      "@blitzjs/config": workspace:2.0.0-alpha.53
-      "@blitzjs/generator": 2.0.0-alpha.53
+      "@blitzjs/config": workspace:2.0.0-alpha.56
+      "@blitzjs/generator": 2.0.0-alpha.56
       "@types/cookie": 0.4.1
       "@types/cross-spawn": 6.0.2
       "@types/debug": 4.1.7
@@ -582,7 +584,7 @@ importers:
 
   packages/blitz-auth:
     specifiers:
-      "@blitzjs/config": workspace:2.0.0-alpha.53
+      "@blitzjs/config": workspace:2.0.0-alpha.56
       "@testing-library/react": 13.0.0
       "@testing-library/react-hooks": 7.0.2
       "@types/b64-lite": 1.3.0
@@ -596,7 +598,7 @@ importers:
       "@types/secure-password": 3.1.1
       b64-lite: 1.4.0
       bad-behavior: 1.0.1
-      blitz: 2.0.0-alpha.53
+      blitz: 2.0.0-alpha.56
       cookie: 0.4.1
       cookie-session: 2.0.0
       debug: 4.3.3
@@ -647,8 +649,8 @@ importers:
 
   packages/blitz-next:
     specifiers:
-      "@blitzjs/config": workspace:2.0.0-alpha.53
-      "@blitzjs/rpc": 2.0.0-alpha.53
+      "@blitzjs/config": workspace:2.0.0-alpha.56
+      "@blitzjs/rpc": 2.0.0-alpha.56
       "@testing-library/dom": 8.13.0
       "@testing-library/jest-dom": 5.16.3
       "@testing-library/react": 13.0.0
@@ -659,7 +661,7 @@ importers:
       "@types/react": 18.0.1
       "@types/react-dom": 17.0.14
       "@types/testing-library__react-hooks": 4.0.0
-      blitz: 2.0.0-alpha.53
+      blitz: 2.0.0-alpha.56
       cross-spawn: 7.0.3
       debug: 4.3.3
       find-up: 4.1.0
@@ -708,14 +710,14 @@ importers:
 
   packages/blitz-rpc:
     specifiers:
-      "@blitzjs/auth": 2.0.0-alpha.53
-      "@blitzjs/config": workspace:2.0.0-alpha.53
+      "@blitzjs/auth": 2.0.0-alpha.56
+      "@blitzjs/config": workspace:2.0.0-alpha.56
       "@types/debug": 4.1.7
       "@types/react": 18.0.1
       "@types/react-dom": 17.0.14
       b64-lite: 1.4.0
       bad-behavior: 1.0.1
-      blitz: 2.0.0-alpha.53
+      blitz: 2.0.0-alpha.56
       chalk: ^4.1.0
       debug: 4.3.3
       next: 12.2.0
@@ -757,12 +759,12 @@ importers:
       "@babel/plugin-syntax-typescript": 7.17.12
       "@babel/preset-env": 7.12.10
       "@blitzjs/config": workspace:*
-      "@blitzjs/generator": 2.0.0-alpha.53
+      "@blitzjs/generator": 2.0.0-alpha.56
       "@types/jscodeshift": 0.11.2
       "@types/node": 17.0.16
       arg: 5.0.1
       ast-types: 0.14.2
-      blitz: 2.0.0-alpha.53
+      blitz: 2.0.0-alpha.56
       chalk: ^4.1.0
       cross-spawn: 7.0.3
       debug: 4.3.3
@@ -800,14 +802,14 @@ importers:
     specifiers:
       "@typescript-eslint/eslint-plugin": 5.9.1
       "@typescript-eslint/parser": 5.9.1
-      eslint-config-next: 12.0.7
-      eslint-config-prettier: 8.3.0
+      eslint-config-next: 12.2.0
+      eslint-config-prettier: 8.5.0
       typescript: ^4.5.3
     dependencies:
       "@typescript-eslint/eslint-plugin": 5.9.1_z2xqbpkx26iu62rx2zdto5f5qy
       "@typescript-eslint/parser": 5.9.1_typescript@4.6.3
-      eslint-config-next: 12.0.7_typescript@4.6.3
-      eslint-config-prettier: 8.3.0
+      eslint-config-next: 12.2.0_typescript@4.6.3
+      eslint-config-prettier: 8.5.0
     devDependencies:
       typescript: 4.6.3
 
@@ -817,7 +819,7 @@ importers:
       "@babel/plugin-transform-typescript": 7.12.1
       "@babel/preset-env": 7.12.10
       "@babel/types": 7.12.10
-      "@blitzjs/config": 2.0.0-alpha.53
+      "@blitzjs/config": 2.0.0-alpha.56
       "@juanm04/cpx": 2.0.1
       "@mrleebo/prisma-ast": 0.2.6
       "@types/babel__core": 7.1.19
@@ -908,7 +910,7 @@ importers:
 
   packages/pkg-template:
     specifiers:
-      "@blitzjs/config": 2.0.0-alpha.53
+      "@blitzjs/config": 2.0.0-alpha.56
       "@types/react": 18.0.1
       "@types/react-dom": 17.0.14
       "@typescript-eslint/eslint-plugin": 5.9.1
@@ -3441,27 +3443,18 @@ packages:
         integrity: sha512-/FCkDpL/8SodJEXvx/DYNlOD5ijTtkozf4PPulYPtkPOJaMPpBSOkzmsta4fnrnbdH6eZjbwbiXFdr6gSQCV4w==,
       }
 
-  /@next/eslint-plugin-next/12.0.7:
+  /@next/eslint-plugin-next/12.2.0:
     resolution:
       {
-        integrity: sha512-xk7eMjw4+roWWR/0ETIoToCNs2wdvCGgQUiUO390Rj33/82yxZsh+ODRSaFWkiKp8zHWQN5GCW+U5pfjt/gyQg==,
+        integrity: sha512-nIj5xV/z3dOfeBnE7qFAjUQZAi4pTlIMuusRM6s/T6lOz8x7mjY5s1ZkTUBmcjPVCb2VIv3CrMH0WZL6xfjZZg==,
       }
     dependencies:
       glob: 7.1.7
-    dev: false
 
   /@next/eslint-plugin-next/12.2.3:
     resolution:
       {
         integrity: sha512-B2e8Yg1MpuLsGxhCx4rU8/Tcnr5wFmCx1O2eyLXBPnaCcsFXfGCo067ujagtDLtWASL3GNgzg78U1SB0dbc38A==,
-      }
-    dependencies:
-      glob: 7.1.7
-
-  /@next/eslint-plugin-next/12.2.2:
-    resolution:
-      {
-        integrity: sha512-XOi0WzJhGH3Lk51SkSu9eZxF+IY1ZZhWcJTIGBycAbWU877IQa6+6KxMATWCOs7c+bmp6Sd8KywXJaDRxzu0JA==,
       }
     dependencies:
       glob: 7.1.7
@@ -5008,7 +5001,6 @@ packages:
     dependencies:
       "@typescript-eslint/types": 5.28.0
       "@typescript-eslint/visitor-keys": 5.28.0
-    dev: true
 
   /@typescript-eslint/scope-manager/5.9.1:
     resolution:
@@ -6752,6 +6744,7 @@ packages:
       {
         integrity: sha512-ksjJc/xVTQzT2q6trPja2qWynMEaGO36rDui2SiqLPYab9TmPgT8nIVcre/yscviPCSweUdCDGKe4MsQA9w1zQ==,
       }
+    deprecated: core-js-pure@<3.23.3 is no longer maintained and not recommended for usage due to the number of issues. Because of the V8 engine whims, feature detection in old core-js versions could cause a slowdown up to 100x even if nothing is polyfilled. Some versions have web compatibility issues. Please, upgrade your dependencies to the actual version of core-js-pure.
     requiresBuild: true
 
   /core-util-is/1.0.3:
@@ -6899,7 +6892,6 @@ packages:
         integrity: sha512-Vr3mLBA8qWmcuschSLAOogKgQ/Jwxulv3RNE4FXnYWRGujzrRWQI4m12fQqRkwX06C0KanhLr4hK+GydchZsaA==,
       }
     engines: {node: ">= 12"}
-    dev: true
 
   /data-urls/2.0.0:
     resolution:
@@ -8397,25 +8389,52 @@ packages:
     optionalDependencies:
       source-map: 0.6.1
 
-  /eslint-config-next/12.0.7_typescript@4.6.3:
+  /eslint-config-next/12.2.0_hrkuebk64jiu2ut2d2sm4oylnu:
     resolution:
       {
-        integrity: sha512-kWOaym5qjyzR190zFKkZMaHetmiRORmzJiKML7Kr9CL213S6SwkrHHCEL58TRdpx0NA+HzrsFR9zgcV2pvV2Yg==,
+        integrity: sha512-QWzNegadFXjQ0h3hixnLacRM9Kot85vQefyNsA8IeOnERZMz0Gvays1W6DMCjSxJbnCwuWaMXj9DCpar5IahRA==,
       }
     peerDependencies:
       eslint: ^7.23.0 || ^8.0.0
-      next: ">=10.2.0"
       typescript: ">=3.3.1"
     peerDependenciesMeta:
       typescript:
         optional: true
     dependencies:
-      "@next/eslint-plugin-next": 12.0.7
+      "@next/eslint-plugin-next": 12.2.0
       "@rushstack/eslint-patch": 1.1.3
-      "@typescript-eslint/parser": 5.9.1_typescript@4.6.3
+      "@typescript-eslint/parser": 5.28.0_hrkuebk64jiu2ut2d2sm4oylnu
+      eslint: 7.32.0
+      eslint-import-resolver-node: 0.3.6
+      eslint-import-resolver-typescript: 2.7.1_hpmu7kn6tcn2vnxpfzvv33bxmy
+      eslint-plugin-import: 2.26.0_zhtk6rij7obli3ams3sxis7j7e
+      eslint-plugin-jsx-a11y: 6.5.1_eslint@7.32.0
+      eslint-plugin-react: 7.30.0_eslint@7.32.0
+      eslint-plugin-react-hooks: 4.5.0_eslint@7.32.0
+      typescript: 4.6.3
+    transitivePeerDependencies:
+      - eslint-import-resolver-webpack
+      - supports-color
+    dev: true
+
+  /eslint-config-next/12.2.0_typescript@4.6.3:
+    resolution:
+      {
+        integrity: sha512-QWzNegadFXjQ0h3hixnLacRM9Kot85vQefyNsA8IeOnERZMz0Gvays1W6DMCjSxJbnCwuWaMXj9DCpar5IahRA==,
+      }
+    peerDependencies:
+      eslint: ^7.23.0 || ^8.0.0
+      typescript: ">=3.3.1"
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+    dependencies:
+      "@next/eslint-plugin-next": 12.2.0
+      "@rushstack/eslint-patch": 1.1.3
+      "@typescript-eslint/parser": 5.28.0_typescript@4.6.3
       eslint-import-resolver-node: 0.3.6
       eslint-import-resolver-typescript: 2.7.1_fkfqfehjtk7sk2efaqbgxsuasa
-      eslint-plugin-import: 2.26.0_oisyptfcq77gha3jnxd6iiraai
+      eslint-plugin-import: 2.26.0_xtdmsd4adcznatktegie3poqce
       eslint-plugin-jsx-a11y: 6.5.1
       eslint-plugin-react: 7.30.0
       eslint-plugin-react-hooks: 4.5.0
@@ -8453,10 +8472,10 @@ packages:
       - supports-color
     dev: true
 
-  /eslint-config-prettier/8.3.0:
+  /eslint-config-prettier/8.5.0:
     resolution:
       {
-        integrity: sha512-BgZuLUSeKzvlL/VUjx/Yb787VQ26RU3gGjA3iiFvdsp/2bMfVIWUVP7tjxtjS0e+HP409cPlPvNkQloz8C91ew==,
+        integrity: sha512-obmWKLUNCnhtQRKc+tmnYuQl0pFU1ibYJQ5BGhTVB08bHe9wC8qUeG7c08dj9XX+AuPj1YSGSQIHl1pnDHZR0Q==,
       }
     hasBin: true
     peerDependencies:
@@ -8526,36 +8545,6 @@ packages:
       - supports-color
     dev: true
 
-  /eslint-module-utils/2.7.3_dbnyosdljuntx5ukba4qoruhni:
-    resolution:
-      {
-        integrity: sha512-088JEC7O3lDZM9xGe0RerkOMd0EjFl+Yvd1jPWIkMT5u3H9+HC34mWWPnqPrN13gieT9pBOO+Qt07Nb/6TresQ==,
-      }
-    engines: {node: ">=4"}
-    peerDependencies:
-      "@typescript-eslint/parser": "*"
-      eslint-import-resolver-node: "*"
-      eslint-import-resolver-typescript: "*"
-      eslint-import-resolver-webpack: "*"
-    peerDependenciesMeta:
-      "@typescript-eslint/parser":
-        optional: true
-      eslint-import-resolver-node:
-        optional: true
-      eslint-import-resolver-typescript:
-        optional: true
-      eslint-import-resolver-webpack:
-        optional: true
-    dependencies:
-      "@typescript-eslint/parser": 5.9.1_typescript@4.6.3
-      debug: 3.2.7
-      eslint-import-resolver-node: 0.3.6
-      eslint-import-resolver-typescript: 2.7.1_fkfqfehjtk7sk2efaqbgxsuasa
-      find-up: 2.1.0
-    transitivePeerDependencies:
-      - supports-color
-    dev: false
-
   /eslint-module-utils/2.7.3_pbmiczca3qpqvnkfcriol7sq7u:
     resolution:
       {
@@ -8577,7 +8566,7 @@ packages:
       eslint-import-resolver-webpack:
         optional: true
     dependencies:
-      "@typescript-eslint/parser": 5.28.0_hrkuebk64jiu2ut2d2sm4oylnu
+      "@typescript-eslint/parser": 5.28.0_typescript@4.6.3
       debug: 3.2.7
       eslint-import-resolver-node: 0.3.6
       eslint-import-resolver-typescript: 2.7.1_fkfqfehjtk7sk2efaqbgxsuasa
@@ -8585,7 +8574,7 @@ packages:
     transitivePeerDependencies:
       - supports-color
 
-  /eslint-plugin-import/2.26.0_oisyptfcq77gha3jnxd6iiraai:
+  /eslint-plugin-import/2.26.0_xtdmsd4adcznatktegie3poqce:
     resolution:
       {
         integrity: sha512-hYfi3FXaM8WPLf4S1cikh/r4IxnO6zrhZbEGz2b660EJRbuxgpDS5gkCuYgGWg2xxh2rBuIr4Pvhve/7c31koA==,
@@ -8598,7 +8587,7 @@ packages:
       "@typescript-eslint/parser":
         optional: true
     dependencies:
-      "@typescript-eslint/parser": 5.9.1_typescript@4.6.3
+      "@typescript-eslint/parser": 5.28.0_typescript@4.6.3
       array-includes: 3.1.5
       array.prototype.flat: 1.3.0
       debug: 2.6.9
@@ -12932,7 +12921,6 @@ packages:
         integrity: sha512-/jKZoMpw0F8GRwl4/eLROPA3cfcXtLApP0QzLmUT/HuPCZWyB7IY9ZrMeKw2O/nFIqPQB3PVM9aYm0F312AXDQ==,
       }
     engines: {node: ">=10.5.0"}
-    dev: true
 
   /node-fetch/3.2.3:
     resolution:
@@ -17005,7 +16993,6 @@ packages:
         integrity: sha512-e0MO3wdXWKrLbL0DgGnUV7WHVuw9OUvL4hjgnPkIeEvESk74gAITi5G606JtZPp39cd8HA9VQzCIvA49LpPN5Q==,
       }
     engines: {node: ">= 8"}
-    dev: true
 
   /webidl-conversions/5.0.0:
     resolution:
