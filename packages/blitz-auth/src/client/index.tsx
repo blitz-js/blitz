@@ -251,17 +251,17 @@ interface AuthPluginDefaultOptions {
   redirectAuthenticatedTo?: RedirectAuthenticatedTo | RedirectAuthenticatedToFn
 }
 
-function withBlitzAuthPluginFactory(defaults?: AuthPluginDefaultOptions) {
+function withBlitzAuthPluginFactory(pageDefaults?: AuthPluginDefaultOptions) {
   return function <TProps = any>(Page: ComponentType<TProps> | BlitzPage<TProps>) {
     const AuthRoot = (props: ComponentProps<any>) => {
       useSession({suspense: false})
 
       let {authenticate, redirectAuthenticatedTo} = getAuthValues(Page, props)
       if (authenticate === undefined) {
-        authenticate = defaults?.authenticate
+        authenticate = pageDefaults?.authenticate
       }
       if (redirectAuthenticatedTo === undefined) {
-        redirectAuthenticatedTo = defaults?.redirectAuthenticatedTo
+        redirectAuthenticatedTo = pageDefaults?.redirectAuthenticatedTo
       }
 
       useAuthorizeIf(authenticate === true)
@@ -326,14 +326,14 @@ function withBlitzAuthPluginFactory(defaults?: AuthPluginDefaultOptions) {
 
 export interface AuthPluginClientOptions {
   cookiePrefix: string
-  defaults?: AuthPluginDefaultOptions
+  pageDefaults?: AuthPluginDefaultOptions
 }
 
 export const AuthClientPlugin = createClientPlugin((options: AuthPluginClientOptions) => {
   globalThis.__BLITZ_SESSION_COOKIE_PREFIX = options.cookiePrefix || "blitz"
 
   return {
-    withProvider: withBlitzAuthPluginFactory(options.defaults),
+    withProvider: withBlitzAuthPluginFactory(options.pageDefaults),
     events: {},
     middleware: {},
     exports: () => ({
