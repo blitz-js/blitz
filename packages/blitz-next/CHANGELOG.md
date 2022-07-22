@@ -1,5 +1,13 @@
 # @blitzjs/next
 
+## 2.0.0-alpha.57
+
+### Patch Changes
+
+- 0f18c68d: Avoid reassigning queryClient in prefetch methods
+- Updated dependencies [716e188d]
+  - @blitzjs/rpc@2.0.0-alpha.57
+
 ## 2.0.0-alpha.56
 
 ### Patch Changes
