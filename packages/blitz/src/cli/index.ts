@@ -144,6 +144,7 @@ async function main() {
     console.warn(NON_STANDARD_NODE_ENV)
   }
 
+  // @ts-expect-error
   process.env.NODE_ENV = process.env.NODE_ENV || defaultEnv
 
   // Make sure commands gracefully respect termination signals (e.g. from Docker)
