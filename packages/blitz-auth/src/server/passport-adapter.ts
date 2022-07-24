@@ -11,6 +11,7 @@ import {
   RequestMiddleware,
   MiddlewareResponse,
   secureProxyMiddleware,
+  truncateString,
 } from "blitz"
 import {IncomingMessage, ServerResponse} from "http"
 import {PublicData, SessionContext} from "../shared"
@@ -161,7 +162,8 @@ export function passportAuth(config: BlitzPassportConfig): ApiHandler {
                 "/"
 
               if (error) {
-                redirectUrl += "?authError=" + encodeURIComponent(error.toString())
+                redirectUrl +=
+                  "?authError=" + encodeURIComponent(truncateString(error.toString(), 100))
                 res.setHeader("Location", redirectUrl)
                 res.statusCode = 302
                 res.end()
