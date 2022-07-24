@@ -140,6 +140,9 @@ export const setupBlitzServer = ({plugins, onError}: SetupBlitzOptions) => {
 
       ctx.prefetchQuery = prefetchQuery
       ctx.prefetchInfiniteQuery = (...args) => prefetchQuery(...args, true)
+      ctx.revalidatePage = () => {
+        throw new Error("revalidatePage is not supported in GSP")
+      }
 
       try {
         const result = await handler({...context, ctx: ctx})
@@ -230,5 +233,7 @@ declare module "blitz" {
   export interface Ctx {
     prefetchQuery: PrefetchQueryFn
     prefetchInfiniteQuery: PrefetchQueryFn
+
+    revalidatePage: NextApiResponse["revalidate"]
   }
 }
