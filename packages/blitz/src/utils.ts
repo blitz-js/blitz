@@ -142,3 +142,7 @@ export function prettyMs(ms: number): string {
 export function interopDefault(mod: any) {
   return mod.default || mod
 }
+
+export function truncateString(str: string, maxLength: number): string {
+  return str.length > maxLength ? str.substring(0, maxLength - 3) + "..." : str
+}
