@@ -1,5 +1,27 @@
 # @blitzjs/auth
 
+## 2.0.0-alpha.56
+
+### Patch Changes
+
+- 3f20a474: Update `deleteSession` return type — allow undefined values
+- abe2afcc: Fix a long-standing issue with occasional blitz auth flakiness
+
+  This bug would sometimes cause users to be logged out or to experience an CSRFTokenMismatchError. This bug, when encountered, usually by lots of setPublicData or session.create calls, would not set the cookie headers correctly resulting in cookies being set to a previous state or in a possibly undefined state.
+
+  There are no security concerns as far as I can tell.
+
+- 8bcb471a: Fix auth issue where session token and publicData cookie were updated unnecessarily, leading to potential user logout
+
+  - Previously, we were updating the session token each time public data changed. This is not needed, and it would cause race condition bugs where a user could be unexpectedly logged out because a request already in flight would not match the new session token.
+  - Previously, we were updating the publicData cookie even when it hadn't changed. This may reduce unnecessary re-renders on the client.
+
+- Updated dependencies [abb1ad5d]
+- Updated dependencies [abe2afcc]
+- Updated dependencies [0ac6e171]
+- Updated dependencies [8bcb471a]
+  - blitz@2.0.0-alpha.56
+
 ## 2.0.0-alpha.55
 
 ### Patch Changes

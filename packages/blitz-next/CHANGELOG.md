@@ -1,5 +1,12 @@
 # @blitzjs/next
 
+## 2.0.0-alpha.56
+
+### Patch Changes
+
+- d9fc5d8e: Allow prefetching multiple queries in gSSP and gSP
+  - @blitzjs/rpc@2.0.0-alpha.56
+
 ## 2.0.0-alpha.55
 
 ### Patch Changes

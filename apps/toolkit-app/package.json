@@ -29,7 +29,7 @@
     "@blitzjs/rpc": "workspace:*",
     "@hookform/resolvers": "2.8.8",
     "@prisma/client": "3.9.0",
-    "blitz": "workspace:2.0.0-alpha.55",
+    "blitz": "workspace:2.0.0-alpha.56",
     "next": "12.2.0",
     "prisma": "4.0.0",
     "react": "18.0.0",
