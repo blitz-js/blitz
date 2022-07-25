@@ -251,7 +251,7 @@ interface AuthPluginDefaultOptions {
   redirectAuthenticatedTo?: RedirectAuthenticatedTo | RedirectAuthenticatedToFn
 }
 
-function withBlitzAuthPluginFactory(pageDefaults?: AuthPluginDefaultOptions) {
+function createBlitzAuthPlugin(pageDefaults?: AuthPluginDefaultOptions) {
   return function <TProps = any>(Page: ComponentType<TProps> | BlitzPage<TProps>) {
     const AuthRoot = (props: ComponentProps<any>) => {
       useSession({suspense: false})
