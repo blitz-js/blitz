@@ -168,6 +168,7 @@ export function addNamedImport(
   importStatement: string,
   importFrom: string,
   defaultSpecifier?: boolean,
+  asImport?: string,
 ) {
   const existingImport = program.find(
     j.ImportDeclaration,
@@ -183,7 +184,11 @@ export function addNamedImport(
     if (existingSpecifier.length) {
       return
     }
-    existingImport.get().value.specifiers.push(j.importSpecifier(j.identifier(importStatement)))
+    existingImport
+      .get()
+      .value.specifiers.push(
+        j.importSpecifier(j.identifier(importStatement), asImport ? j.identifier(asImport) : null),
+      )
   } else {
     program
       .get()
@@ -194,7 +199,12 @@ export function addNamedImport(
               j.stringLiteral(importFrom),
             )
           : j.importDeclaration(
-              [j.importSpecifier(j.identifier(importStatement))],
+              [
+                j.importSpecifier(
+                  j.identifier(importStatement),
+                  asImport ? j.identifier(asImport) : null,
+                ),
+              ],
               j.stringLiteral(importFrom),
             ),
       )

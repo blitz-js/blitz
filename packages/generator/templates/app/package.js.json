@@ -25,7 +25,7 @@
     "@blitzjs/auth": "alpha",
     "@blitzjs/next": "alpha",
     "@blitzjs/rpc": "alpha",
-    "@prisma/client": "3.9.0",
+    "@prisma/client": "4.0.0",
     "blitz": "alpha",
     "next": "12.2.0",
     "prisma": "4.0.0",
