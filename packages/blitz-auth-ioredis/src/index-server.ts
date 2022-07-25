@@ -22,8 +22,10 @@ const RedisStorage = (value: RedisOptions | Redis): SessionConfigMethods => {
       let expires = 0
       if (session.expiresAt) {
         expires = (session.expiresAt.getTime() - Date.now()) / 1000
+        session.expiresAt = session.expiresAt.getTime() as never
       }
-      await redis.set(session.id, JSON.stringify(session), "EX", expires)
+      const copy = Object.assign({}, session)
+      await redis.set(session.id, JSON.stringify(copy), "EX", expires)
       if (session.userId) {
         await redis.lpush(`user:${session.userId}`, session.handle)
       }
@@ -39,7 +41,14 @@ const RedisStorage = (value: RedisOptions | Redis): SessionConfigMethods => {
     },
     async getSession(handle: string): Promise<SessionModel | null> {
       const raw = await redis.get(handle)
-      return raw ? (JSON.parse(raw) as SessionModel) : null
+      if (raw) {
+        const data = JSON.parse(raw)
+        if (data.expiresAt && typeof data.expiresAt === "number") {
+          data.expiresAt = new Date(data.expiresAt!)
+        }
+        return data as SessionModel
+      }
+      return null
     },
     async getSessions(userId: PublicData["userId"]): Promise<SessionModel[]> {
       const handles = await redis.lrange(`user:${userId}`, 0, -1)
