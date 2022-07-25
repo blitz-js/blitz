@@ -162,6 +162,8 @@ export function passportAuth(config: BlitzPassportConfig): ApiHandler {
                 "/"
 
               if (error) {
+                console.error(`Login via ${strategyName} was unsuccessful.`)
+                console.error(error)
                 redirectUrl +=
                   "?authError=" + encodeURIComponent(truncateString(error.toString(), 100))
                 res.setHeader("Location", redirectUrl)
