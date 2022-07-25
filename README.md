@@ -793,7 +793,7 @@ Thanks to these wonderful people ([emoji key](https://allcontributors.org/docs/e
   </tr>
   <tr>
     <td align="center"><a href="kiri.dev"><img src="https://avatars.githubusercontent.com/u/29735836?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Kacper Potyrała</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=SerekKiri" title="Documentation">📖</a></td>
-    <td align="center"><a href="jcde.xyz"><img src="https://avatars.githubusercontent.com/u/31413538?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jeeho Ahn</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=iojcde" title="Documentation">📖</a></td>
+    <td align="center"><a href="jcde.xyz"><img src="https://avatars.githubusercontent.com/u/31413538?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jeeho Ahn</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=iojcde" title="Documentation">📖</a> <a href="#tool-iojcde" title="Tools">🔧</a></td>
   </tr>
 </table>
 
