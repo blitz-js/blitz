@@ -184,6 +184,10 @@ const upgradeLegacy = async () => {
         BlitzLayout: "@blitzjs/next",
       }
 
+      const renames: Record<string, string> = {
+        ErrorComponent: "DefaultErrorComponent",
+      }
+
       getAllFiles(appDir, [], [], [".ts", ".tsx", ".js", ".jsx"]).forEach((filename) => {
         const program = getCollectionFromSource(path.resolve(appDir, filename))
         const parsedProgram = program.get()
@@ -197,7 +201,13 @@ const upgradeLegacy = async () => {
                     ? specifier.imported.value
                     : specifier.imported.name
                 if (importedName in specialImports) {
-                  addNamedImport(program, importedName, specialImports[importedName]!)
+                  addNamedImport(
+                    program,
+                    importedName,
+                    specialImports[importedName]!,
+                    undefined,
+                    renames[importedName],
+                  )
                   removeImport(program, importedName, "blitz")
                 }
               })
