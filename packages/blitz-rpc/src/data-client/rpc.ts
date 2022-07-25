@@ -39,7 +39,7 @@ export interface EnhancedRpc {
 }
 
 export interface RpcClientBase<Input = unknown, Result = unknown> {
-  (params: Input, opts?: RpcOptions): Promise<Result>
+  (params: Input, opts?: RpcOptions, signal?: AbortSignal): Promise<Result>
 }
 
 export interface RpcClient<Input = unknown, Result = unknown>
@@ -57,7 +57,7 @@ export function __internal_buildRpcClient({
 }: BuildRpcClientParams): RpcClient {
   const fullRoutePath = normalizeApiRoute("/api/rpc" + routePath)
 
-  const httpClient: RpcClientBase = async (params, opts = {}) => {
+  const httpClient: RpcClientBase = async (params, opts = {}, signal = undefined) => {
     const debug = (await import("debug")).default("blitz:rpc")
     if (!opts.fromQueryHook && !opts.fromInvoke) {
       console.warn(
@@ -93,9 +93,6 @@ export function __internal_buildRpcClient({
       serialized = serialize(params)
     }
 
-    // Create a new AbortController instance for this request
-    const controller = new AbortController()
-
     const promise = window
       .fetch(fullRoutePath, {
         method: "POST",
@@ -108,7 +105,7 @@ export function __internal_buildRpcClient({
             params: serialized.meta,
           },
         }),
-        signal: controller.signal,
+        signal,
       })
       .then(async (response) => {
         debug("Received request for", routePath)
