@@ -333,7 +333,7 @@ export const AuthClientPlugin = createClientPlugin((options: AuthPluginClientOpt
   globalThis.__BLITZ_SESSION_COOKIE_PREFIX = options.cookiePrefix || "blitz"
 
   return {
-    withProvider: withBlitzAuthPluginFactory(options.pageDefaults),
+    withProvider: createBlitzAuthPlugin(options.pageDefaults),
     events: {},
     middleware: {},
     exports: () => ({
