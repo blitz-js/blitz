@@ -85,7 +85,7 @@ export function useQuery<
   const {data, ...queryRest} = useReactQuery({
     queryKey: routerIsReady ? queryKey : ["_routerNotReady_"],
     queryFn: routerIsReady
-      ? () => enhancedResolverRpcClient(params, {fromQueryHook: true})
+      ? ({signal}) => enhancedResolverRpcClient(params, {fromQueryHook: true}, signal)
       : (emptyQueryFn as any),
     ...options,
     enabled,
@@ -170,7 +170,7 @@ export function usePaginatedQuery<
   const {data, ...queryRest} = useReactQuery({
     queryKey: routerIsReady ? queryKey : ["_routerNotReady_"],
     queryFn: routerIsReady
-      ? () => enhancedResolverRpcClient(params, {fromQueryHook: true})
+      ? ({signal}) => enhancedResolverRpcClient(params, {fromQueryHook: true}, signal)
       : (emptyQueryFn as any),
     ...options,
     keepPreviousData: true,
@@ -267,10 +267,8 @@ export function useInfiniteQuery<
     // Without this cache for usePaginatedQuery and this will conflict and break.
     queryKey: routerIsReady ? queryKey : ["_routerNotReady_"],
     queryFn: routerIsReady
-      ? ({pageParam}) =>
-          enhancedResolverRpcClient(getQueryParams(pageParam), {
-            fromQueryHook: true,
-          })
+      ? ({pageParam, signal}) =>
+          enhancedResolverRpcClient(getQueryParams(pageParam), {fromQueryHook: true}, signal)
       : (emptyQueryFn as any),
     ...options,
     enabled,
