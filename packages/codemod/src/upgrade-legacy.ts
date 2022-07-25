@@ -1146,8 +1146,23 @@ const upgradeLegacy = async () => {
       try {
         await step.action()
       } catch (err) {
+        const error = err as {code: string} | string
         spinner.fail(`${step.name}`)
-        log.error(err as string)
+        log.error(error as string)
+
+        if (error && typeof error === "object" && error.code === "BABEL_PARSE_ERROR") {
+          log.error(
+            log.withBrand(
+              "Don't panic, go to the file with the error & manually fix it. Then run the codemod again. It will continue where it left off.",
+            ),
+          )
+        } else {
+          log.error(
+            log.withBrand(
+              "This is an unexpected error. Please ask for help in the discord #general-help channel. https://discord.blitzjs.com",
+            ),
+          )
+        }
         failedAt = index + 1
         fs.writeJsonSync(".migration.json", {
           failedAt,

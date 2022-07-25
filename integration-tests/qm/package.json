@@ -12,7 +12,7 @@
     "@blitzjs/config": "workspace:*",
     "@blitzjs/next": "workspace:*",
     "@blitzjs/rpc": "workspace:*",
-    "@prisma/client": "3.9.0",
+    "@prisma/client": "4.0.0",
     "blitz": "workspace:*",
     "next": "12.2.0",
     "prisma": "4.0.0",
