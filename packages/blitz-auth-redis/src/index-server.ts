@@ -32,7 +32,7 @@ const RedisStorage = (value: RedisClientOptions | RedisClientType): SessionConfi
         expires = (session.expiresAt.getTime() - Date.now()) / 1000
         session.expiresAt = session.expiresAt.getTime() as never
       }
-      await redis.set(session.id, JSON.stringify(session), {
+      await redis.set(session.handle, JSON.stringify(session), {
         EX: expires,
       })
       if (session.userId) {

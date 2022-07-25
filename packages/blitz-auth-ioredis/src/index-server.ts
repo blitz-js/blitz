@@ -24,7 +24,7 @@ const RedisStorage = (value: RedisOptions | Redis): SessionConfigMethods => {
         expires = (session.expiresAt.getTime() - Date.now()) / 1000
         session.expiresAt = session.expiresAt.getTime() as never
       }
-      await redis.set(session.id, JSON.stringify(session), "EX", expires)
+      await redis.set(session.handle, JSON.stringify(session), "EX", expires)
       if (session.userId) {
         await redis.lpush(`user:${session.userId}`, session.handle)
       }
