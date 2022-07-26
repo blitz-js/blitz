@@ -3599,7 +3599,7 @@
       "contributions": [
         "doc",
         "code"
-      ] 
+      ]
     },
     {
       "login": "iojcde",
@@ -3608,7 +3608,8 @@
       "profile": "https://github.com/iojcde",
       "contributions": [
         "doc",
-        "tool"
+        "tool",
+        "code"
       ]
     }
   ],
