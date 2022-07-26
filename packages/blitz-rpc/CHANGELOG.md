@@ -1,5 +1,14 @@
 # @blitzjs/rpc
 
+## 2.0.0-alpha.58
+
+### Patch Changes
+
+- c721c104: Pass `signal` from useQuery to Blitz internal rpc client to be able to cancel queries on unmount
+- Updated dependencies [83b35590]
+  - blitz@2.0.0-alpha.58
+  - @blitzjs/auth@2.0.0-alpha.58
+
 ## 2.0.0-alpha.57
 
 ### Patch Changes
