@@ -1,5 +1,16 @@
 # blitz
 
+## 2.0.0-alpha.58
+
+### Minor Changes
+
+- 83b35590: Truncate errors from `api/auth/<strategy>/callback` request to 100 characters before passing them to the `?authError=` query parameter
+
+### Patch Changes
+
+- Updated dependencies [e339e2fd]
+  - @blitzjs/generator@2.0.0-alpha.58
+
 ## 2.0.0-alpha.57
 
 ### Patch Changes
