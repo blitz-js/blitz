@@ -1,5 +1,13 @@
 # @blitzjs/next
 
+## 2.0.0-alpha.59
+
+### Patch Changes
+
+- 3b213a35: Export router-context from browser entrypoint
+- Updated dependencies [3b213a35]
+  - @blitzjs/rpc@2.0.0-alpha.59
+
 ## 2.0.0-alpha.58
 
 ### Patch Changes
