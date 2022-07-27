@@ -1,5 +1,17 @@
 # @blitzjs/codemod
 
+## 2.0.0-alpha.58
+
+### Patch Changes
+
+- dcdcd040: These are various changes to will make the codemod more dynamic and work with a larger variety of codebases. These fixes are implemented to make the codemod work with flightdeck.
+- 7e538ba4: Import ErrorComponent as DefaultErrorComponent
+- 8e00605a: Updates the error messages based on if it's a babel parse error or an unexpected error
+- Updated dependencies [83b35590]
+- Updated dependencies [e339e2fd]
+  - blitz@2.0.0-alpha.58
+  - @blitzjs/generator@2.0.0-alpha.58
+
 ## 2.0.0-alpha.57
 
 ### Patch Changes
