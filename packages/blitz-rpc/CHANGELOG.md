@@ -1,5 +1,13 @@
 # @blitzjs/rpc
 
+## 2.0.0-alpha.59
+
+### Patch Changes
+
+- 3b213a35: Remove debug console.log
+  - @blitzjs/auth@2.0.0-alpha.59
+  - blitz@2.0.0-alpha.59
+
 ## 2.0.0-alpha.58
 
 ### Patch Changes
