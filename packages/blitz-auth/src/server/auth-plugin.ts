@@ -104,8 +104,8 @@ export function AuthServerPlugin(options: AuthPluginOptions): BlitzServerPlugin<
     const blitzSessionMiddleware: RequestMiddleware<
       IncomingMessage,
       ServerResponse & {blitzCtx: Ctx}
-    > = async (req, res, next) => {
-      console.log("Starting sessionMiddleware...")
+    > = async (req, res, next) => 
+
       if (!res.blitzCtx?.session) {
         await getSession(req, res)
       }
