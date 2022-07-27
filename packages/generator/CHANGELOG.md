@@ -1,5 +1,11 @@
 # @blitzjs/generator
 
+## 2.0.0-alpha.58
+
+### Patch Changes
+
+- e339e2fd: Add hoist pattern entry for react-query in new app templates
+
 ## 2.0.0-alpha.57
 
 ## 2.0.0-alpha.56

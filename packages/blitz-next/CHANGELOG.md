@@ -1,5 +1,13 @@
 # @blitzjs/next
 
+## 2.0.0-alpha.58
+
+### Patch Changes
+
+- 6ab9db78: Infer result type in the `api` handler and allow customizing it
+- Updated dependencies [c721c104]
+  - @blitzjs/rpc@2.0.0-alpha.58
+
 ## 2.0.0-alpha.57
 
 ### Patch Changes
