@@ -120,15 +120,14 @@ async function printEnvInfo() {
 }
 
 async function main() {
+  if (args["--env"]) {
+    process.env.APP_ENV = args["--env"]
+  }
   loadEnvConfig(process.cwd(), undefined, {error: console.error, info: console.info})
 
   // Version is inlined into the file using taskr build pipeline
   if (args["_"].length === 0 && args["--version"]) {
     await printEnvInfo()
-  }
-
-  if (args["--env"]) {
-    process.env.APP_ENV = args["--env"]
   }
 
   if (args["--help"]) {
