@@ -1,5 +1,12 @@
 # blitz
 
+## 2.0.0-alpha.60
+
+### Patch Changes
+
+- 1d863f35: Fix APP_ENV not being set before loading env config
+  - @blitzjs/generator@2.0.0-alpha.60
+
 ## 2.0.0-alpha.59
 
 ### Patch Changes
