@@ -1,5 +1,12 @@
 # blitz
 
+## 2.0.0-alpha.61
+
+### Patch Changes
+
+- 240f378b: Passes the correct arguments (without flags) to any bin command ran with the blitz cli
+  - @blitzjs/generator@2.0.0-alpha.61
+
 ## 2.0.0-alpha.60
 
 ### Patch Changes
