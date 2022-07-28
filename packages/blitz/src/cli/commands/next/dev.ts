@@ -22,7 +22,7 @@ const dev: CliCommand = async () => {
     port: nextArgs["--port"],
     hostname: nextArgs["--hostname"],
     inspect: nextArgs["--inspect"],
-    env: process.env.NODE_ENV === "production" ? "prod" : "dev",
+    env: process.env.APP_ENV === "production" ? "prod" : "dev",
   }
 
   await import("../../utils/next-commands").then((i) => i.dev(config))
