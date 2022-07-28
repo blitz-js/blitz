@@ -63,6 +63,7 @@ async function runCommandFromBin() {
     process.exit(1)
   }
   let commandBin: string | null = null
+
   try {
     commandBin = await getCommandBin(args._[0])
   } catch (e: any) {
@@ -73,7 +74,7 @@ async function runCommandFromBin() {
     process.exit(1)
   }
 
-  const result = spawn.sync(commandBin, process.argv.slice(3), {stdio: "inherit"})
+  const result = spawn.sync(commandBin, args._.slice(1), {stdio: "inherit"})
   process.exit(result.status || 0)
 }
 
