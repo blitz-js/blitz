@@ -1,5 +1,40 @@
 # @blitzjs/auth
 
+## 2.0.0-alpha.62
+
+### Patch Changes
+
+- Updated dependencies [365e6709]
+  - blitz@2.0.0-alpha.62
+
+## 2.0.0-alpha.61
+
+### Patch Changes
+
+- Updated dependencies [240f378b]
+  - blitz@2.0.0-alpha.61
+
+## 2.0.0-alpha.60
+
+### Patch Changes
+
+- Updated dependencies [1d863f35]
+  - blitz@2.0.0-alpha.60
+
+## 2.0.0-alpha.59
+
+### Patch Changes
+
+- blitz@2.0.0-alpha.59
+
+## 2.0.0-alpha.58
+
+### Patch Changes
+
+- 83b35590: Truncate errors from `api/auth/<strategy>/callback` request to 100 characters before passing them to the `?authError=` query parameter
+- Updated dependencies [83b35590]
+  - blitz@2.0.0-alpha.58
+
 ## 2.0.0-alpha.57
 
 ### Patch Changes

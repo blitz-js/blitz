@@ -1,5 +1,46 @@
 # @blitzjs/rpc
 
+## 2.0.0-alpha.62
+
+### Patch Changes
+
+- Updated dependencies [365e6709]
+  - blitz@2.0.0-alpha.62
+  - @blitzjs/auth@2.0.0-alpha.62
+
+## 2.0.0-alpha.61
+
+### Patch Changes
+
+- Updated dependencies [240f378b]
+  - blitz@2.0.0-alpha.61
+  - @blitzjs/auth@2.0.0-alpha.61
+
+## 2.0.0-alpha.60
+
+### Patch Changes
+
+- Updated dependencies [1d863f35]
+  - blitz@2.0.0-alpha.60
+  - @blitzjs/auth@2.0.0-alpha.60
+
+## 2.0.0-alpha.59
+
+### Patch Changes
+
+- 3b213a35: Remove debug console.log
+  - @blitzjs/auth@2.0.0-alpha.59
+  - blitz@2.0.0-alpha.59
+
+## 2.0.0-alpha.58
+
+### Patch Changes
+
+- c721c104: Pass `signal` from useQuery to Blitz internal rpc client to be able to cancel queries on unmount
+- Updated dependencies [83b35590]
+  - blitz@2.0.0-alpha.58
+  - @blitzjs/auth@2.0.0-alpha.58
+
 ## 2.0.0-alpha.57
 
 ### Patch Changes

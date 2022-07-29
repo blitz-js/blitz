@@ -40,10 +40,10 @@ export interface BlitzNextApiResponse
   extends MiddlewareResponse,
     Omit<NextApiResponse, keyof MiddlewareResponse> {}
 
-export type NextApiHandler = (
+export type NextApiHandler<TResult> = (
   req: NextApiRequest,
   res: BlitzNextApiResponse,
-) => void | Promise<void>
+) => TResult | void | Promise<TResult | void>
 
 type SetupBlitzOptions = {
   plugins: BlitzServerPlugin<RequestMiddleware, Ctx>[]
@@ -74,11 +74,11 @@ export type BlitzGSPHandler<
   GetStaticProps<TProps, Query, PD>
 >
 
-export type BlitzAPIHandler = (
-  req: Parameters<NextApiHandler>[0],
-  res: Parameters<NextApiHandler>[1],
+export type BlitzAPIHandler<TResult> = (
+  req: NextApiRequest,
+  res: BlitzNextApiResponse,
   ctx: Ctx,
-) => ReturnType<NextApiHandler>
+) => TResult | void | Promise<TResult | void>
 
 const prefetchQueryFactory = (
   ctx: BlitzCtx,
@@ -151,7 +151,9 @@ export const setupBlitzServer = ({plugins, onError}: SetupBlitzOptions) => {
     }
 
   const api =
-    (handler: BlitzAPIHandler): NextApiHandler =>
+    <TResult = Promise<void> | void>(
+      handler: BlitzAPIHandler<TResult>,
+    ): NextApiHandler<TResult | void> =>
     async (req, res) => {
       try {
         await handleRequestWithMiddleware(req, res, middlewares)
