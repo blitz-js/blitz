@@ -1,5 +1,12 @@
 # @blitzjs/next
 
+## 2.0.0-alpha.62
+
+### Patch Changes
+
+- 31d7a6f4: Set prefix in moduleNameWrapper's options in Blitz's jest configuration
+  - @blitzjs/rpc@2.0.0-alpha.62
+
 ## 2.0.0-alpha.61
 
 ### Patch Changes

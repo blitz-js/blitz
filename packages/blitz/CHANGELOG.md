@@ -1,5 +1,12 @@
 # blitz
 
+## 2.0.0-alpha.62
+
+### Patch Changes
+
+- 365e6709: Fixes the db seed command so that the database can disconnect after running the seed file.
+  - @blitzjs/generator@2.0.0-alpha.62
+
 ## 2.0.0-alpha.61
 
 ### Patch Changes
