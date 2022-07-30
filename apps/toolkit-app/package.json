@@ -2,7 +2,7 @@
   "name": "toolkit-app",
   "version": "1.0.1-alpha.16",
   "scripts": {
-    "start": "next start",
+    "start": "blitz start",
     "start:dev": "pnpm run prisma:start && blitz dev",
     "start:full": "pnpm buildapp && pnpm start",
     "buildapp": "NODE_ENV=production pnpm blitz codegen && pnpm prisma generate && next build",
