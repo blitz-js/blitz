@@ -1,5 +1,12 @@
 # @blitzjs/codemod
 
+## 2.0.0-alpha.63
+
+### Patch Changes
+
+- @blitzjs/generator@2.0.0-alpha.63
+- blitz@2.0.0-alpha.63
+
 ## 2.0.0-alpha.62
 
 ### Patch Changes
