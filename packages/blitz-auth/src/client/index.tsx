@@ -255,7 +255,7 @@ function createBlitzAuthPlugin(pageDefaults?: AuthPluginDefaultOptions) {
     const AuthRoot = (props: ComponentProps<any>) => {
       useSession({suspense: false})
 
-      let {authenticate} = getAuthValues(Page, props)
+      let {authenticate, redirectAuthenticatedTo} = getAuthValues(Page, props)
       if (authenticate === undefined) {
         authenticate = pageDefaults?.authenticate
       }
