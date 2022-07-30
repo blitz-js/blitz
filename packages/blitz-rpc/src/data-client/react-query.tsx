@@ -9,7 +9,7 @@ import {
   useMutation as useReactQueryMutation,
   UseMutationOptions,
   UseMutationResult,
-} from "react-query"
+} from "@tanstack/react-query"
 import {useSession} from "@blitzjs/auth"
 import {isServer, FirstParam, PromiseReturnType, AsyncFunc} from "blitz"
 import {

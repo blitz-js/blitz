@@ -8,6 +8,11 @@ export {
   setQueryData,
   getQueryClient,
 } from "./react-query-utils"
-export {useQueryErrorResetBoundary, QueryClientProvider, QueryClient, dehydrate} from "react-query"
+export {
+  useQueryErrorResetBoundary,
+  QueryClientProvider,
+  QueryClient,
+  dehydrate,
+} from "@tanstack/react-query"
 export {invoke} from "./invoke"
 export {invokeWithCtx} from "./invokeWithCtx"

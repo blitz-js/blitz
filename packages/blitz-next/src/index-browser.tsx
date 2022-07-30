@@ -7,7 +7,7 @@ import type {
 } from "blitz"
 import Head from "next/head"
 import React, {ReactNode} from "react"
-import {QueryClient, QueryClientProvider, Hydrate, HydrateOptions} from "react-query"
+import {QueryClient, QueryClientProvider, Hydrate, HydrateOptions} from "@tanstack/react-query"
 import {withSuperJSONPage} from "./superjson"
 import {Ctx} from "blitz"
 import {UrlObject} from "url"

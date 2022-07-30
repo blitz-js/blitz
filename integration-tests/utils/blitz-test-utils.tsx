@@ -1,6 +1,6 @@
 import React from "react"
 import {vi} from "vitest"
-import {QueryClient} from "react-query"
+import {QueryClient} from "@tanstack/react-query"
 import {BlitzRpcPlugin, QueryClientProvider} from "@blitzjs/rpc"
 import {NextRouter} from "next/router"
 import {RouterContext} from "next/dist/shared/lib/router-context"
