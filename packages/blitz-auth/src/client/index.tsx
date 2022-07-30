@@ -248,7 +248,6 @@ export function getAuthValues<TProps = any>(
 interface AuthPluginDefaultOptions {
   authenticate?: boolean | {redirectTo?: string | RouteUrlObject}
   suppressFirstRenderFlicker?: boolean
-  redirectAuthenticatedTo?: RedirectAuthenticatedTo | RedirectAuthenticatedToFn
 }
 
 function createBlitzAuthPlugin(pageDefaults?: AuthPluginDefaultOptions) {
@@ -256,12 +255,9 @@ function createBlitzAuthPlugin(pageDefaults?: AuthPluginDefaultOptions) {
     const AuthRoot = (props: ComponentProps<any>) => {
       useSession({suspense: false})
 
-      let {authenticate, redirectAuthenticatedTo} = getAuthValues(Page, props)
+      let {authenticate} = getAuthValues(Page, props)
       if (authenticate === undefined) {
         authenticate = pageDefaults?.authenticate
-      }
-      if (redirectAuthenticatedTo === undefined) {
-        redirectAuthenticatedTo = pageDefaults?.redirectAuthenticatedTo
       }
 
       useAuthorizeIf(authenticate === true)
