@@ -4,7 +4,7 @@ import {UrlObject} from "url"
 import {NextApiResponse} from "next"
 import {resolveHref} from "next/dist/shared/lib/router/router"
 
-const revalidateFactory =
+const revalidateFn =
   (res: NextApiResponse) =>
   (url: UrlObject | string, opts?: Parameters<NextApiResponse["revalidate"]>[1]) => {
     return res.revalidate(resolveHref({} as any, url, false), opts)
@@ -27,8 +27,8 @@ export async function handleRequestWithMiddleware<
 ) {
   if (!(res as unknown as MiddlewareResponse).blitzCtx) {
     ;(res as unknown as MiddlewareResponse).blitzCtx = {
-      revalidatePage: revalidateFactory(res as unknown as NextApiResponse),
-    } as Ctx
+      revalidatePage: revalidateFn(res as unknown as NextApiResponse),
+    }
   }
   if (!(res as any)._blitz) {
     ;(res as any)._blitz = {}
