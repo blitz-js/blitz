@@ -21,11 +21,11 @@
   ],
   "dependencies": {
     "@blitzjs/auth": "2.0.0-alpha.62",
+    "@tanstack/react-query": "4.0.10",
     "b64-lite": "1.4.0",
     "bad-behavior": "1.0.1",
     "chalk": "^4.1.0",
     "debug": "4.3.3",
-    "react-query": "3.39.0",
     "superjson": "1.8.0",
     "zod": "3.17.3"
   },
@@ -39,7 +39,7 @@
     "react": "18.0.0",
     "react-dom": "18.0.0",
     "typescript": "^4.5.3",
-    "unbuild": "0.6.9",
+    "unbuild": "0.7.6",
     "watch": "1.0.2"
   },
   "peerDependencies": {

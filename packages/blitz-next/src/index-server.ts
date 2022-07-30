@@ -25,7 +25,7 @@ import {
   InstallWebpackConfigOptions,
   ResolverPathOptions,
 } from "@blitzjs/rpc"
-import {DefaultOptions, QueryClient} from "react-query"
+import {DefaultOptions, QueryClient} from "@tanstack/react-query"
 import {IncomingMessage, ServerResponse} from "http"
 import {withSuperJsonProps} from "./superjson"
 import {ParsedUrlQuery} from "querystring"
