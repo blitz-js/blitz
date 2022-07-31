@@ -1,5 +1,13 @@
 # @blitzjs/next
 
+## 2.0.0-alpha.63
+
+### Patch Changes
+
+- f52ca398: Upgrade react-query to v4
+- Updated dependencies [f52ca398]
+  - @blitzjs/rpc@2.0.0-alpha.63
+
 ## 2.0.0-alpha.62
 
 ### Patch Changes
