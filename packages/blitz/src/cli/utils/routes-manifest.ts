@@ -2,7 +2,7 @@ import {join, dirname} from "path"
 import os from "os"
 import {promises} from "fs"
 const readFile = promises.readFile
-import {outputFile, readdir} from "fs-extra"
+import {outputFile, readdir, existsSync} from "fs-extra"
 import findUp from "find-up"
 import resolveFrom from "resolve-from"
 import Watchpack from "watchpack"
@@ -152,9 +152,9 @@ const normalizeConfig = (phase: string, config: any) => {
 }
 const loadConfig = (pagesDir: string) => {
   let userConfigModule
+
   try {
     const path = join(pagesDir, NEXT_CONFIG_FILE)
-
     // eslint-disable-next-line no-eval -- block webpack from following this module path
     userConfigModule = eval("require")(path)
   } catch {
@@ -162,6 +162,7 @@ const loadConfig = (pagesDir: string) => {
     // In case user does not have custom config
     userConfigModule = {}
   }
+
   let userConfig = normalizeConfig(
     PHASE_PRODUCTION_SERVER,
     userConfigModule.default || userConfigModule,
@@ -485,7 +486,6 @@ export function parseDefaultExportName(contents: string): string | null {
 export async function generateManifest() {
   const config = await loadConfig(process.cwd())
   const allRoutes = await collectAllRoutes(process.cwd(), config)
-
   const routes: Record<string, RouteManifestEntry> = {}
 
   for (let {filePath, route, type} of allRoutes) {
@@ -527,8 +527,8 @@ export async function generateManifest() {
   })
 }
 
-export const isInternalBlitzMonorepoDevelopment = __dirname.match(
-  /[\\/]packages[\\/]blitz[\\/]dist[\\/]chunks$/,
+const isInternalBlitzMonorepoDevelopment = existsSync(
+  join(process.cwd(), "..", "..", "packages", "blitz", "dist", "chunks"),
 )
 
 async function findNodeModulesRoot(src: string) {
