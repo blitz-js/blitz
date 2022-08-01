@@ -2,4 +2,4 @@
 "blitz": patch
 ---
 
-Fixes blitz codegen to work with monorepos
+Fix blitz codegen to work with monorepos
