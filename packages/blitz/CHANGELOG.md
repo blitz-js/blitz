@@ -1,5 +1,13 @@
 # blitz
 
+## 2.0.0-alpha.64
+
+### Patch Changes
+
+- 54db8a46: Add missing value to "skip" option when choosing a package manager during new app scaffolding
+- 62bf12b5: Fix blitz codegen to work with monorepos
+  - @blitzjs/generator@2.0.0-alpha.64
+
 ## 2.0.0-alpha.63
 
 ### Patch Changes
