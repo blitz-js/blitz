@@ -5,6 +5,7 @@ import fs from "fs"
 import {readVersions, resolveVersionType} from "./read-versions"
 import {getPkgManager} from "./helpers"
 import superjson from "superjson"
+import {isInternalBlitzMonorepoDevelopment} from "./helpers"
 
 const returnNpmEndpoint = (packageName: string) => {
   return `https://registry.npmjs.org/-/package/${packageName}/dist-tags`
@@ -21,9 +22,6 @@ function getUpdateString(packageName: string, tag: string, isGlobal?: boolean) {
       return `pnpm install${isGlobal ? " -g" : ""} ${packageName}@${tag}`
   }
 }
-const isInternalBlitzMonorepoDevelopment = fs.existsSync(
-  join(process.cwd(), "..", "..", "packages", "blitz", "dist", "chunks"),
-)
 
 async function findNodeModulesRoot(src: string) {
   const blitzPkgLocation = dirname(
