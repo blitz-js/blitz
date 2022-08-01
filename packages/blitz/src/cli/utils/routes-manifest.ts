@@ -2,10 +2,11 @@ import {join, dirname} from "path"
 import os from "os"
 import {promises} from "fs"
 const readFile = promises.readFile
-import {outputFile, readdir, existsSync} from "fs-extra"
+import {outputFile, readdir} from "fs-extra"
 import findUp from "find-up"
 import resolveFrom from "resolve-from"
 import Watchpack from "watchpack"
+import {isInternalBlitzMonorepoDevelopment} from "./helpers"
 export const CONFIG_FILE = ".blitz.config.compiled.js"
 export const NEXT_CONFIG_FILE = "next.config.js"
 export const PHASE_PRODUCTION_SERVER = "phase-production-server"
@@ -526,10 +527,6 @@ export async function generateManifest() {
     encoding: "utf-8",
   })
 }
-
-const isInternalBlitzMonorepoDevelopment = existsSync(
-  join(process.cwd(), "..", "..", "packages", "blitz", "dist", "chunks"),
-)
 
 async function findNodeModulesRoot(src: string) {
   let root: string
