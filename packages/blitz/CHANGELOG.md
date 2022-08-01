@@ -1,5 +1,38 @@
 # blitz
 
+## 2.0.0-alpha.63
+
+### Patch Changes
+
+- @blitzjs/generator@2.0.0-alpha.63
+
+## 2.0.0-alpha.62
+
+### Patch Changes
+
+- 365e6709: Fixes the db seed command so that the database can disconnect after running the seed file.
+  - @blitzjs/generator@2.0.0-alpha.62
+
+## 2.0.0-alpha.61
+
+### Patch Changes
+
+- 240f378b: Passes the correct arguments (without flags) to any bin command ran with the blitz cli
+  - @blitzjs/generator@2.0.0-alpha.61
+
+## 2.0.0-alpha.60
+
+### Patch Changes
+
+- 1d863f35: Fix APP_ENV not being set before loading env config
+  - @blitzjs/generator@2.0.0-alpha.60
+
+## 2.0.0-alpha.59
+
+### Patch Changes
+
+- @blitzjs/generator@2.0.0-alpha.59
+
 ## 2.0.0-alpha.58
 
 ### Minor Changes

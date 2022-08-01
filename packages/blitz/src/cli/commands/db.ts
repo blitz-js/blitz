@@ -51,7 +51,7 @@ const runSeed = async (seedBasePath: string) => {
     throw err
   }
 
-  const db = require(dbPath)
+  const db = require(dbPath).default
   await db.$disconnect()
   console.log("Done Seeding")
 }

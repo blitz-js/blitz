@@ -1,5 +1,45 @@
 # @blitzjs/rpc
 
+## 2.0.0-alpha.63
+
+### Patch Changes
+
+- f52ca398: Upgrade react-query to v4
+  - @blitzjs/auth@2.0.0-alpha.63
+  - blitz@2.0.0-alpha.63
+
+## 2.0.0-alpha.62
+
+### Patch Changes
+
+- Updated dependencies [365e6709]
+  - blitz@2.0.0-alpha.62
+  - @blitzjs/auth@2.0.0-alpha.62
+
+## 2.0.0-alpha.61
+
+### Patch Changes
+
+- Updated dependencies [240f378b]
+  - blitz@2.0.0-alpha.61
+  - @blitzjs/auth@2.0.0-alpha.61
+
+## 2.0.0-alpha.60
+
+### Patch Changes
+
+- Updated dependencies [1d863f35]
+  - blitz@2.0.0-alpha.60
+  - @blitzjs/auth@2.0.0-alpha.60
+
+## 2.0.0-alpha.59
+
+### Patch Changes
+
+- 3b213a35: Remove debug console.log
+  - @blitzjs/auth@2.0.0-alpha.59
+  - blitz@2.0.0-alpha.59
+
 ## 2.0.0-alpha.58
 
 ### Patch Changes
