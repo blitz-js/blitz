@@ -199,7 +199,7 @@ const determinePkgManagerToInstallDeps = async () => {
           {title: "npm", value: "npm"},
           {title: "yarn", value: "yarn", disabled: !IS_YARN_INSTALLED},
           {title: "pnpm", value: "pnpm", disabled: !IS_PNPM_INSTALLED},
-          {title: "skip"},
+          {title: "skip", value: "skip"},
         ],
       })
 
