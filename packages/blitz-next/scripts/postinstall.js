@@ -12,17 +12,7 @@ const stat = promisify(fs.stat)
 const debug = require("debug")("blitz:postinstall")
 
 const isInBlitzMonorepo = fs.existsSync(path.join(__dirname, "../../blitz-next"))
-let isInstalledGlobally = isInBlitzMonorepo ? false : true // default
 
-try {
-  const maybeGlobalBlitzPath = resolveFrom(__dirname, "blitz")
-  const localBlitzPath = resolveFrom.silent(process.cwd(), "blitz/dist/index.cjs")
-  isInstalledGlobally = maybeGlobalBlitzPath !== localBlitzPath
-} catch (error) {
-  // noop
-}
-
-// todo: we should reuse `findNodeModulesRoot` from /nextjs/packages/next/build/routes.ts
 async function findNodeModulesRoot(src) {
   let root
   if (isInBlitzMonorepo) {
@@ -105,11 +95,10 @@ function codegen() {
     try {
       const packagePath = require.resolve("blitz/package.json")
       if (packagePath) {
-        const blitzPkg = require.resolve("blitz/dist/index.cjs")
-        if (blitzPkg.includes(".pnpm")) {
-          return path.join(blitzPkg, "../../../../../../blitz/dist/index.cjs")
+        if (packagePath.includes(".pnpm")) {
+          return path.join(packagePath, "../../blitz/dist/index.cjs")
         } else {
-          return path.join(blitzPkg)
+          return path.join(packagePath, "../dist/index.cjs")
         }
       }
     } catch (e) {
@@ -337,6 +326,4 @@ function codegen() {
   const UNABLE_TO_FIND_POSTINSTALL_TRIGGER_JSON_SCHEMA_ERROR = 'UNABLE_TO_FIND_POSTINSTALL_TRIGGER_JSON_SCHEMA_ERROR'
 }
 
-// if (!isInstalledGlobally) {
 codegen()
-// }
