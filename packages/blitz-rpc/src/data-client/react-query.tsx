@@ -9,7 +9,7 @@ import {
   useMutation as useReactQueryMutation,
   UseMutationOptions,
   UseMutationResult,
-} from "react-query"
+} from "@tanstack/react-query"
 import {useSession} from "@blitzjs/auth"
 import {isServer, FirstParam, PromiseReturnType, AsyncFunc} from "blitz"
 import {
@@ -92,7 +92,7 @@ export function useQuery<
   })
 
   if (
-    queryRest.isIdle &&
+    queryRest.fetchStatus === "idle" &&
     isServer &&
     suspenseEnabled !== false &&
     !data &&
@@ -178,7 +178,7 @@ export function usePaginatedQuery<
   })
 
   if (
-    queryRest.isIdle &&
+    queryRest.fetchStatus === "idle" &&
     isServer &&
     suspenseEnabled !== false &&
     !data &&
@@ -275,7 +275,7 @@ export function useInfiniteQuery<
   })
 
   if (
-    queryRest.isIdle &&
+    queryRest.fetchStatus === "idle" &&
     isServer &&
     suspenseEnabled !== false &&
     !data &&

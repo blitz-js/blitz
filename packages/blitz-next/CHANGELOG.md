@@ -1,5 +1,54 @@
 # @blitzjs/next
 
+## 2.0.0-alpha.64
+
+### Patch Changes
+
+- @blitzjs/rpc@2.0.0-alpha.64
+
+## 2.0.0-alpha.63
+
+### Patch Changes
+
+- f52ca398: Upgrade react-query to v4
+- Updated dependencies [f52ca398]
+  - @blitzjs/rpc@2.0.0-alpha.63
+
+## 2.0.0-alpha.62
+
+### Patch Changes
+
+- 31d7a6f4: Set prefix in moduleNameWrapper's options in Blitz's jest configuration
+  - @blitzjs/rpc@2.0.0-alpha.62
+
+## 2.0.0-alpha.61
+
+### Patch Changes
+
+- @blitzjs/rpc@2.0.0-alpha.61
+
+## 2.0.0-alpha.60
+
+### Patch Changes
+
+- @blitzjs/rpc@2.0.0-alpha.60
+
+## 2.0.0-alpha.59
+
+### Patch Changes
+
+- 3b213a35: Export router-context from browser entrypoint
+- Updated dependencies [3b213a35]
+  - @blitzjs/rpc@2.0.0-alpha.59
+
+## 2.0.0-alpha.58
+
+### Patch Changes
+
+- 6ab9db78: Infer result type in the `api` handler and allow customizing it
+- Updated dependencies [c721c104]
+  - @blitzjs/rpc@2.0.0-alpha.58
+
 ## 2.0.0-alpha.57
 
 ### Patch Changes

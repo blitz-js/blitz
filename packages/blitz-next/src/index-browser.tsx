@@ -7,8 +7,7 @@ import type {
 } from "blitz"
 import Head from "next/head"
 import React, {ReactNode} from "react"
-import {QueryClient, QueryClientProvider} from "react-query"
-import {Hydrate, HydrateOptions} from "react-query/hydration"
+import {QueryClient, QueryClientProvider, Hydrate, HydrateOptions} from "@tanstack/react-query"
 import {withSuperJSONPage} from "./superjson"
 import {Ctx} from "blitz"
 import {UrlObject} from "url"
@@ -19,6 +18,7 @@ import {RouterContext} from "./router-context"
 export * from "./error-boundary"
 export * from "./error-component"
 export * from "./use-params"
+export * from "./router-context"
 export {Routes} from ".blitz"
 
 const compose =

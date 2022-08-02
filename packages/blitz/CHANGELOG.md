@@ -1,5 +1,57 @@
 # blitz
 
+## 2.0.0-alpha.64
+
+### Patch Changes
+
+- 54db8a46: Add missing value to "skip" option when choosing a package manager during new app scaffolding
+- 62bf12b5: Fix blitz codegen to work with monorepos
+  - @blitzjs/generator@2.0.0-alpha.64
+
+## 2.0.0-alpha.63
+
+### Patch Changes
+
+- @blitzjs/generator@2.0.0-alpha.63
+
+## 2.0.0-alpha.62
+
+### Patch Changes
+
+- 365e6709: Fixes the db seed command so that the database can disconnect after running the seed file.
+  - @blitzjs/generator@2.0.0-alpha.62
+
+## 2.0.0-alpha.61
+
+### Patch Changes
+
+- 240f378b: Passes the correct arguments (without flags) to any bin command ran with the blitz cli
+  - @blitzjs/generator@2.0.0-alpha.61
+
+## 2.0.0-alpha.60
+
+### Patch Changes
+
+- 1d863f35: Fix APP_ENV not being set before loading env config
+  - @blitzjs/generator@2.0.0-alpha.60
+
+## 2.0.0-alpha.59
+
+### Patch Changes
+
+- @blitzjs/generator@2.0.0-alpha.59
+
+## 2.0.0-alpha.58
+
+### Minor Changes
+
+- 83b35590: Truncate errors from `api/auth/<strategy>/callback` request to 100 characters before passing them to the `?authError=` query parameter
+
+### Patch Changes
+
+- Updated dependencies [e339e2fd]
+  - @blitzjs/generator@2.0.0-alpha.58
+
 ## 2.0.0-alpha.57
 
 ### Patch Changes
