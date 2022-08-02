@@ -124,7 +124,6 @@ async function main() {
   if (args["--env"]) {
     process.env.APP_ENV = args["--env"]
   }
-  loadEnvConfig(process.cwd(), undefined, {error: console.error, info: console.info})
 
   // Version is inlined into the file using taskr build pipeline
   if (args["_"].length === 0 && args["--version"]) {
@@ -145,7 +144,7 @@ async function main() {
   }
 
   process.env.NODE_ENV = process.env.NODE_ENV || defaultEnv
-
+  loadEnvConfig(process.cwd(), undefined, {error: console.error, info: console.info})
   // Make sure commands gracefully respect termination signals (e.g. from Docker)
   process.on("SIGTERM", () => process.exit(0))
   process.on("SIGINT", () => process.exit(0))
