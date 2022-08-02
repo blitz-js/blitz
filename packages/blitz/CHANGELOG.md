@@ -1,5 +1,12 @@
 # blitz
 
+## 2.0.0-alpha.65
+
+### Patch Changes
+
+- dd5f5174: Fix `enhancePrisma is undefined` errors by moving the utility function to a browser entrypoint
+  - @blitzjs/generator@2.0.0-alpha.65
+
 ## 2.0.0-alpha.64
 
 ### Patch Changes
