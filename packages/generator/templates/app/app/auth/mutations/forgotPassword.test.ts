@@ -9,8 +9,8 @@ beforeEach(async () => {
 })
 
 const generatedToken = "plain-token"
-jest.mock("blitz", () => ({
-  ...jest.requireActual<Record<string, unknown>>("blitz")!,
+jest.mock("@blitzjs/auth", () => ({
+  ...jest.requireActual<Record<string, unknown>>("@blitzjs/auth")!,
   generateToken: () => generatedToken,
 }))
 jest.mock("preview-email", () => jest.fn())

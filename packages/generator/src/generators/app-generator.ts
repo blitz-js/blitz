@@ -126,6 +126,9 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
     pkg.dependencies = newDependencies
     pkg.devDependencies = newDevDependencies
     pkg.dependencies.blitz = blitzDependencyVersion
+    pkg.dependencies["@blitzjs/next"] = blitzDependencyVersion
+    pkg.dependencies["@blitzjs/rpc"] = blitzDependencyVersion
+    pkg.dependencies["@blitzjs/auth"] = blitzDependencyVersion
 
     const fallbackUsed = dependenciesUsedFallback || devDependenciesUsedFallback
 
