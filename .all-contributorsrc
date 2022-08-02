@@ -3639,6 +3639,16 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "datner",
+      "name": "Datner",
+      "avatar_url": "https://avatars.githubusercontent.com/u/22598347?v=4",
+      "profile": "https://github.com/datner",
+      "contributions": [
+        "doc",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
