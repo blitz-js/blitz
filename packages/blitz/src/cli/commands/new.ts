@@ -6,8 +6,8 @@ import hasbin from "hasbin"
 import {CliCommand} from "../index"
 import arg from "arg"
 import {AppGenerator, AppGeneratorOptions, getLatestVersion} from "@blitzjs/generator"
-import {runPrisma} from "../../prisma-utils"
 import {checkLatestVersion} from "../utils/check-latest-version"
+import {runPrisma} from "../../run-prisma"
 
 const forms = {
   "react-final-form": "React Final Form" as const,
