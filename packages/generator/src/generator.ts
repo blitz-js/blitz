@@ -302,7 +302,7 @@ export abstract class Generator<
       return path.join(
         __dirname,
         "..",
-        process.env.NODE_ENV === "test" ? "./templates" : "./dist/templates",
+        process.env.NODE_ENV === "test" ? "./templates" : "./templates",
         this.sourceRoot.path,
         ...paths,
       )
