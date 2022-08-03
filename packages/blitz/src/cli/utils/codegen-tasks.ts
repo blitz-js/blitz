@@ -31,7 +31,7 @@ export const codegenTasks = async () => {
     await generateManifest()
     log.success("Routes manifest was successfully generated")
 
-    const {dependencies, devDependencies, prisma} = await getPackageJson()
+    const {dependencies, devDependencies} = await getPackageJson()
 
     const hasPrisma = Object.keys({...dependencies, ...devDependencies}).some(
       (name) => name === "prisma",

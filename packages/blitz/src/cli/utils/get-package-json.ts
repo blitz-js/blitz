@@ -7,5 +7,5 @@ export const getPackageJson = async () => {
   if (existsSync(pkgJsonPath)) {
     return readJSON(pkgJsonPath)
   }
-  return
+  return {}
 }
