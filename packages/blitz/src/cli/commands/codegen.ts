@@ -1,6 +1,5 @@
 import {CliCommand} from "../index"
 import {codegenTasks} from "../utils/codegen-tasks"
-/* @ts-ignore */
 
 const codegen: CliCommand = async () => {
   try {
