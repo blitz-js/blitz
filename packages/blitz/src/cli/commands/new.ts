@@ -9,17 +9,15 @@ import {AppGenerator, AppGeneratorOptions, getLatestVersion} from "@blitzjs/gene
 import {checkLatestVersion} from "../utils/check-latest-version"
 import {runPrisma} from "../../run-prisma"
 
-const forms = {
-  "react-final-form": "React Final Form" as const,
-  "react-hook-form": "React Hook Form" as const,
-  formik: "Formik" as const,
+const forms: Record<AppGeneratorOptions["form"], string> = {
+  finalform: "React Final Form (recommended)",
+  hookform: "React Hook Form",
+  formik: "Formik",
 }
-
-type TForms = keyof typeof forms
 
 const language = {
   typescript: "TypeScript",
-  javascript: "Javascript",
+  javascript: "JavaScript",
 }
 
 type TLanguage = keyof typeof language
@@ -75,7 +73,7 @@ const args = arg(
 let projectName: string = ""
 let projectPath: string = ""
 let projectLanguage: string | TLanguage = ""
-let projectFormLib: AppGeneratorOptions["form"] = undefined
+let projectFormLib: AppGeneratorOptions["form"] = "finalform"
 let projectTemplate: AppGeneratorOptions["template"] = templates.full
 let projectPkgManger: TPkgManager = PREFERABLE_PKG_MANAGER
 let shouldInstallDeps: boolean = true
@@ -110,7 +108,7 @@ const determineLanguage = async () => {
     const res = await prompts({
       type: "select",
       name: "language",
-      message: "Pick which language you'd like to use for your new blitz project",
+      message: "Pick a new project's language",
       initial: 0,
       choices: Object.entries(language).map((c) => {
         return {title: c[1], value: c[1]}
@@ -129,16 +127,16 @@ const determineFormLib = async () => {
     const res = await prompts({
       type: "select",
       name: "form",
-      message: "Pick which form you'd like to use for your new blitz project",
+      message: "Pick a form library (you can switch to something else later if you want)",
       initial: 0,
       choices: Object.entries(forms).map((c) => {
-        return {title: c[1], value: c[1]}
+        return {value: c[0], title: c[1]}
       }),
     })
 
     projectFormLib = res.form
   } else {
-    projectFormLib = forms[args["--form"] as TForms]
+    projectFormLib = args["--form"] as AppGeneratorOptions["form"]
   }
 }
 
@@ -148,14 +146,17 @@ const determineTemplate = async () => {
     !args["--template"] ||
     (args["--template"] && !Object.keys(templates).includes(args["--template"].toLowerCase()))
   ) {
+    const choices: Array<{value: keyof typeof templates; title: string}> = [
+      {value: "full", title: "Full - includes DB and auth (Recommended)"},
+      {value: "minimal", title: "Minimal — no DB, no auth"},
+    ]
+
     const res = await prompts({
       type: "select",
       name: "template",
-      message: "Pick which template you'd like to use for your new blitz project",
+      message: "Pick your new app template",
       initial: 0,
-      choices: Object.entries(templates).map((c) => {
-        return {title: c[0], value: c[0]}
-      }),
+      choices,
     })
 
     projectTemplate = templates[res.template as TTemplate]
@@ -203,7 +204,11 @@ const determinePkgManagerToInstallDeps = async () => {
         ],
       })
 
-      projectPkgManger = res.pkgManager
+      if (res.pkgManager === "skip") {
+        projectPkgManger = PREFERABLE_PKG_MANAGER
+      } else {
+        projectPkgManger = res.pkgManager
+      }
 
       shouldInstallDeps = res.pkgManager !== "skip"
     } else {
