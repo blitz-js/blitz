@@ -36,9 +36,8 @@ export const codegenTasks = async () => {
     const hasPrisma = Object.keys({...dependencies, ...devDependencies}).some(
       (name) => name === "prisma",
     )
-    const hasPrismaSchema = !!prisma?.schema
 
-    if (hasPrisma && hasPrismaSchema) {
+    if (hasPrisma) {
       let prismaSpinner = log.spinner(`Generating Prisma client`).start()
       const result = await runPrisma(["generate"], true)
       if (result.success) {
