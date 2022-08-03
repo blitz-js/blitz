@@ -3,6 +3,8 @@ import {log} from "../../logging"
 import resolveCwd from "resolve-cwd"
 import {join} from "path"
 import fs from "fs-extra"
+import {getPackageJson} from "./get-package-json"
+import {runPrisma} from "../../run-prisma"
 
 export const codegenTasks = async () => {
   try {
@@ -20,15 +22,33 @@ export const codegenTasks = async () => {
         `ReactDOM.hydrateRoot(domEl, reactEl, process.env.NODE_ENV === 'development' ? {onRecoverableError: (err) => err.toString().includes("could not finish this Suspense boundary") ? null : console.error(err)} : undefined);`,
       )
     await fs.writeFile(nextClientIndex, updatedFile)
-    log.success("Next.js patched for suspense error issue")
+    log.success("Next.js was successfully patched with a React Suspense fix")
   } catch (err) {
-    log.error(err)
+    log.error(JSON.stringify(err, null, 2))
   }
 
   try {
     await generateManifest()
-    log.success("Routes manifest generated")
+    log.success("Routes manifest was successfully generated")
+
+    const {dependencies, devDependencies} = await getPackageJson()
+
+    const hasPrisma = Object.keys({...dependencies, ...devDependencies}).some(
+      (name) => name === "prisma",
+    )
+
+    if (hasPrisma) {
+      let prismaSpinner = log.spinner(`Generating Prisma client`).start()
+      const result = await runPrisma(["generate"], true)
+      if (result.success) {
+        prismaSpinner.succeed()
+      } else {
+        prismaSpinner.fail()
+        console.log("\n" + result.stderr)
+        process.exit(1)
+      }
+    }
   } catch (err) {
-    log.error(err)
+    log.error(JSON.stringify(err, null, 2))
   }
 }
