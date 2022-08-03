@@ -79,9 +79,6 @@
     "watch": "1.0.2",
     "zod": "3.17.3"
   },
-  "peerDependencies": {
-    "react": "*"
-  },
   "publishConfig": {
     "access": "public"
   }

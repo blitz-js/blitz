@@ -58,9 +58,5 @@
   },
   "publishConfig": {
     "access": "public"
-  },
-  "peerDependencies": {
-    "next": ">=12.2.0",
-    "react": "*"
   }
 }
