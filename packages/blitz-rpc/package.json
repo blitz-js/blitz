@@ -43,10 +43,6 @@
     "unbuild": "0.7.6",
     "watch": "1.0.2"
   },
-  "peerDependencies": {
-    "blitz": "2.0.0-alpha.65",
-    "next": ">=12.2.0"
-  },
   "publishConfig": {
     "access": "public"
   }

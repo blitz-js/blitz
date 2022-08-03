@@ -71,8 +71,5 @@
   },
   "publishConfig": {
     "access": "public"
-  },
-  "peerDependencies": {
-    "react": "*"
   }
 }
