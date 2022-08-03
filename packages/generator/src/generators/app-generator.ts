@@ -27,7 +27,7 @@ export interface AppGeneratorOptions extends GeneratorOptions {
   version: string
   skipInstall: boolean
   skipGit: boolean
-  form?: "React Final Form" | "React Hook Form" | "Formik"
+  form?: "finalform" | "hookform" | "formik"
   onPostInstall?: () => Promise<void>
 }
 
@@ -302,21 +302,18 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
     assert(pkg, "couldn't find package.json")
 
     const ext = this.options.useTs ? "tsx" : "js"
-    let type: string = ""
 
-    switch (this.options.form) {
-      case "React Final Form":
-        type = "finalform"
+    const type = this.options.form
+    switch (type) {
+      case "finalform":
         pkg.dependencies["final-form"] = "4.x"
         pkg.dependencies["react-final-form"] = "6.x"
         break
-      case "React Hook Form":
-        type = "hookform"
+      case "hookform":
         pkg.dependencies["react-hook-form"] = "7.x"
         pkg.dependencies["@hookform/resolvers"] = "2.x"
         break
-      case "Formik":
-        type = "formik"
+      case "formik":
         pkg.dependencies["formik"] = "2.x"
         break
     }
