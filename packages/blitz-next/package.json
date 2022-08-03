@@ -61,5 +61,8 @@
   "peerDependencies": {
     "next": ">=12.2.0",
     "react": "*"
+  },
+  "resolutions": {
+    "supports-color": "8"
   }
 }
