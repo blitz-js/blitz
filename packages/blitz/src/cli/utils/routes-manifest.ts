@@ -590,7 +590,7 @@ export async function stopWatcher(): Promise<void> {
   if (!webpackWatcher) {
     return
   }
-  console.log("stopWatcher")
+
   webpackWatcher.close()
   webpackWatcher = null
 }
