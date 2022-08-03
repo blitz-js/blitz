@@ -26,8 +26,7 @@
     "bad-behavior": "1.0.1",
     "chalk": "^4.1.0",
     "debug": "4.3.3",
-    "superjson": "1.8.0",
-    "zod": "3.17.3"
+    "superjson": "1.8.0"
   },
   "devDependencies": {
     "@blitzjs/config": "workspace:2.0.0-alpha.65",
@@ -40,7 +39,9 @@
     "react-dom": "18.0.0",
     "typescript": "^4.5.3",
     "unbuild": "0.7.6",
-    "watch": "1.0.2"
+    "vite": "3.0.4",
+    "watch": "1.0.2",
+    "zod": "3.17.3"
   },
   "peerDependencies": {
     "blitz": "2.0.0-alpha.65",
