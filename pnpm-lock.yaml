@@ -745,7 +745,6 @@ importers:
       debug: 4.3.3_supports-color@8.1.1
       superjson: 1.8.0_supports-color@8.1.1
       supports-color: 8.1.1
-      zod: 3.17.3
     devDependencies:
       "@blitzjs/config": link:../config
       "@types/debug": 4.1.7
@@ -758,6 +757,7 @@ importers:
       typescript: 4.6.3
       unbuild: 0.7.6_supports-color@8.1.1
       watch: 1.0.2
+      zod: 3.17.3
 
   packages/codemod:
     specifiers:
@@ -2182,7 +2182,7 @@ packages:
     peerDependencies:
       "@babel/core": ^7.0.0-0
     dependencies:
-      "@babel/core": 7.12.10_supports-color@8.1.1
+      "@babel/core": 7.12.10
       "@babel/helper-plugin-utils": 7.17.12
     dev: false
 
@@ -3060,7 +3060,6 @@ packages:
       semver: 5.7.1
     transitivePeerDependencies:
       - supports-color
-    dev: false
 
   /@babel/preset-flow/7.17.12_@babel+core@7.18.2:
     resolution:
@@ -5491,7 +5490,6 @@ packages:
       typescript: 4.6.3
     transitivePeerDependencies:
       - supports-color
-    dev: false
 
   /@typescript-eslint/experimental-utils/5.28.0_hrkuebk64jiu2ut2d2sm4oylnu:
     resolution:
@@ -9315,7 +9313,6 @@ packages:
     transitivePeerDependencies:
       - eslint-import-resolver-webpack
       - supports-color
-    dev: false
 
   /eslint-config-next/12.2.3_hrkuebk64jiu2ut2d2sm4oylnu:
     resolution:
@@ -9353,7 +9350,6 @@ packages:
     hasBin: true
     peerDependencies:
       eslint: ">=7.0.0"
-    dev: false
 
   /eslint-config-prettier/8.5.0_eslint@7.32.0:
     resolution:
@@ -12018,7 +12014,7 @@ packages:
       pretty-format: 27.5.1
       slash: 3.0.0
       strip-json-comments: 3.1.1
-      ts-node: 10.7.0_fxg3r7oju3tntkxsvleuiot4fa
+      ts-node: 10.7.0_typescript@4.6.3
     transitivePeerDependencies:
       - bufferutil
       - canvas
@@ -17304,6 +17300,7 @@ packages:
       typescript: 4.6.3
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
+    dev: false
 
   /ts-node/10.7.0_typescript@4.6.3:
     resolution:
@@ -17336,7 +17333,6 @@ packages:
       typescript: 4.6.3
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
-    dev: false
 
   /tsconfig-paths/3.14.1:
     resolution:
