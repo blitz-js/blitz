@@ -166,6 +166,10 @@ export async function checkLatestVersion() {
         )
 
         const dotBlitz = join(nodeModulesRoot, ".blitz")
+        if (!fs.existsSync(dotBlitz)) {
+          fs.mkdirSync(dotBlitz)
+        }
+
         fs.writeFileSync(
           join(dotBlitz, "checkUpdateCache.json"),
           superjson.stringify({lastUpdated: new Date()}),

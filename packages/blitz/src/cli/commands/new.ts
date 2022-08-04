@@ -9,7 +9,8 @@ import {AppGenerator, AppGeneratorOptions, getLatestVersion} from "@blitzjs/gene
 import {checkLatestVersion} from "../utils/check-latest-version"
 import {runPrisma} from "../../run-prisma"
 
-const forms: Record<AppGeneratorOptions["form"], string> = {
+type NotUndefined<T> = T extends undefined ? never : T
+const forms: Record<NotUndefined<AppGeneratorOptions["form"]>, string> = {
   finalform: "React Final Form (recommended)",
   hookform: "React Hook Form",
   formik: "Formik",
@@ -224,7 +225,7 @@ const determinePkgManagerToInstallDeps = async () => {
 }
 
 const newApp: CliCommand = async (argv) => {
-  const shouldUpgrade = false // !args["--skip-upgrade"]
+  const shouldUpgrade = !args["--skip-upgrade"]
   if (shouldUpgrade) {
     await checkLatestVersion()
   }
