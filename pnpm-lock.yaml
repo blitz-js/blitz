@@ -745,7 +745,6 @@ importers:
       debug: 4.3.3_supports-color@8.1.1
       superjson: 1.8.0_supports-color@8.1.1
       supports-color: 8.1.1
-      zod: 3.17.3
     devDependencies:
       "@blitzjs/config": link:../config
       "@types/debug": 4.1.7
@@ -758,6 +757,7 @@ importers:
       typescript: 4.6.3
       unbuild: 0.7.6_supports-color@8.1.1
       watch: 1.0.2
+      zod: 3.17.3
 
   packages/codemod:
     specifiers:
