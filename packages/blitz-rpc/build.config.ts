@@ -16,6 +16,7 @@ const config: BuildConfig = {
     "react",
     "blitz",
     "next",
+    "zod",
   ],
   declaration: true,
   rollup: {
