@@ -727,7 +727,6 @@ importers:
       superjson: 1.8.0
       typescript: ^4.5.3
       unbuild: 0.7.6
-      vite: 3.0.4
       watch: 1.0.2
       zod: 3.17.3
     dependencies:
@@ -749,7 +748,6 @@ importers:
       react-dom: 18.0.0_react@18.0.0
       typescript: 4.6.3
       unbuild: 0.7.6
-      vite: 3.0.4
       watch: 1.0.2
       zod: 3.17.3
 
@@ -968,6 +966,7 @@ packages:
         integrity: sha512-TDCmlK5eOvH+eH7cdAFlNXeVJqWIQ7gW9tY1GJIpUtFb6CmjVyq2VM3u71bOyR8CRihcCgMUYoDNyLXao3+70Q==,
       }
     engines: {node: ">=6.9.0"}
+    requiresBuild: true
     dependencies:
       "@babel/highlight": 7.18.6
 
@@ -14071,6 +14070,7 @@ packages:
       nanoid: 3.3.4
       picocolors: 1.0.0
       source-map-js: 1.0.2
+    dev: false
 
   /postcss/8.4.5:
     resolution:
@@ -15073,7 +15073,7 @@ packages:
       rollup: 2.77.2
       typescript: 4.7.4
     optionalDependencies:
-      "@babel/code-frame": 7.16.7
+      "@babel/code-frame": 7.18.6
     dev: true
 
   /rollup-plugin-esbuild/4.9.1_ecpsl2p7zl5puhr4xxlpah6uzm:
@@ -17172,36 +17172,6 @@ packages:
     optionalDependencies:
       fsevents: 2.3.2
     dev: false
-
-  /vite/3.0.4:
-    resolution:
-      {
-        integrity: sha512-NU304nqnBeOx2MkQnskBQxVsa0pRAH5FphokTGmyy8M3oxbvw7qAXts2GORxs+h/2vKsD+osMhZ7An6yK6F1dA==,
-      }
-    engines: {node: ^14.18.0 || >=16.0.0}
-    hasBin: true
-    peerDependencies:
-      less: "*"
-      sass: "*"
-      stylus: "*"
-      terser: ^5.4.0
-    peerDependenciesMeta:
-      less:
-        optional: true
-      sass:
-        optional: true
-      stylus:
-        optional: true
-      terser:
-        optional: true
-    dependencies:
-      esbuild: 0.14.51
-      postcss: 8.4.14
-      resolve: 1.22.1
-      rollup: 2.77.2
-    optionalDependencies:
-      fsevents: 2.3.2
-    dev: true
 
   /vitest/0.8.2_jsdom@19.0.0:
     resolution:
