@@ -209,7 +209,8 @@ export function withBlitz(nextConfig: BlitzConfig = {}) {
     },
   })
 
-  return config
+  const {blitz, ...rest} = config
+  return rest
 }
 
 export type PrefetchQueryFn = <T extends AsyncFunc, TInput = FirstParam<T>>(
