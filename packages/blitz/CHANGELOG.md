@@ -1,5 +1,24 @@
 # blitz
 
+## 2.0.0-alpha.66
+
+### Patch Changes
+
+- 928e840b: Fixes loading production env variables by default for blitz build command
+- 240f3f34: Add BlitzServerMiddleware utility function to wrap middleware in blitz server file
+- 55b1cb20: Runs the codegen on the blitz build command
+- 4d7d126d: Run `prisma generate` as a `blitz codegen` step if "prisma" is found in project's dependencies
+- 890b0c0c: Improve `blitz new` messaging and fix minor issues
+- 807a2b56: Fixes peer dependency warnings
+- a3e6c49c: Fixes the supports-color warning for pnpm
+- Updated dependencies [91aa5356]
+- Updated dependencies [890b0c0c]
+- Updated dependencies [807a2b56]
+- Updated dependencies [a3e6c49c]
+- Updated dependencies [065db256]
+- Updated dependencies [f202aac1]
+  - @blitzjs/generator@2.0.0-alpha.66
+
 ## 2.0.0-alpha.65
 
 ### Patch Changes

@@ -1,5 +1,15 @@
 # @blitzjs/rpc
 
+## 2.0.0-alpha.66
+
+### Patch Changes
+
+- 807a2b56: Fixes peer dependency warnings
+- a3e6c49c: Fixes the supports-color warning for pnpm
+- 9620ef6b: moves zod to devDependencies
+- Updated dependencies [a3e6c49c]
+  - @blitzjs/auth@2.0.0-alpha.66
+
 ## 2.0.0-alpha.65
 
 ### Patch Changes

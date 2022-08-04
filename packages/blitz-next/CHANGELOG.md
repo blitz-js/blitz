@@ -1,5 +1,17 @@
 # @blitzjs/next
 
+## 2.0.0-alpha.66
+
+### Patch Changes
+
+- ccb1af8d: Avoid `invalid config detected` warnings by deleting `"blitz"` key from next config object
+- 807a2b56: Fixes peer dependency warnings
+- a3e6c49c: Fixes the supports-color warning for pnpm
+- Updated dependencies [807a2b56]
+- Updated dependencies [a3e6c49c]
+- Updated dependencies [9620ef6b]
+  - @blitzjs/rpc@2.0.0-alpha.66
+
 ## 2.0.0-alpha.65
 
 ### Patch Changes

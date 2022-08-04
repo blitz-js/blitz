@@ -1,5 +1,19 @@
 # @blitzjs/auth
 
+## 2.0.0-alpha.66
+
+### Patch Changes
+
+- a3e6c49c: Fixes the supports-color warning for pnpm
+- Updated dependencies [928e840b]
+- Updated dependencies [240f3f34]
+- Updated dependencies [55b1cb20]
+- Updated dependencies [4d7d126d]
+- Updated dependencies [890b0c0c]
+- Updated dependencies [807a2b56]
+- Updated dependencies [a3e6c49c]
+  - blitz@2.0.0-alpha.66
+
 ## 2.0.0-alpha.65
 
 ### Patch Changes
