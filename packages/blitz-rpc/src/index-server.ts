@@ -69,6 +69,11 @@ interface WebpackRule {
 
 export interface InstallWebpackConfigOptions {
   webpackConfig: {
+    resolve: {
+      alias: {
+        [key: string]: boolean
+      }
+    }
     module: {
       rules: WebpackRule[]
     }
@@ -80,6 +85,8 @@ export function installWebpackConfig({
   webpackConfig,
   webpackRuleOptions,
 }: InstallWebpackConfigOptions) {
+  webpackConfig.resolve.alias["npm-which"] = false
+  webpackConfig.resolve.alias["cross-spawn"] = false
   webpackConfig.module.rules.push({
     test: /[\\/]\[\[\.\.\.blitz]]\.[jt]sx?$/,
     use: [

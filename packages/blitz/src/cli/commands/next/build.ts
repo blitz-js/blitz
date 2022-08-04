@@ -15,7 +15,7 @@ const build: CliCommand = async () => {
   const config: ServerConfig = {
     rootFolder: process.cwd(),
     inspect: nextArgs["--inspect"],
-    env: process.env.NODE_ENV === "production" ? "prod" : "dev",
+    env: "prod",
   }
 
   await import("../../utils/next-commands").then((i) => i.build(config))
