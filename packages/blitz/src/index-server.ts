@@ -60,3 +60,11 @@ export function createSetupServer<TMiddleware extends RequestMiddleware, TExport
 ) {
   return setupServerConstructor
 }
+
+export const BlitzServerMiddleware = <
+  TMiddleware extends RequestMiddleware<any, any> = RequestMiddleware,
+>(
+  middleware: TMiddleware,
+): BlitzServerPlugin => ({
+  requestMiddlewares: [middleware],
+})
