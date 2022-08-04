@@ -1,5 +1,16 @@
 # @blitzjs/generator
 
+## 2.0.0-alpha.66
+
+### Patch Changes
+
+- 91aa5356: Include `.env.test` file to the generator templates
+- 890b0c0c: Improve `blitz new` messaging and fix minor issues
+- 807a2b56: Fixes peer dependency warnings
+- a3e6c49c: Fixes the supports-color warning for pnpm
+- 065db256: Update new app templates to use blitz-rpc's resolver function
+- f202aac1: Mocks @blitzjs/auth instead of blitz inside the forgotPassword mutation test & hardcodes blitz package version types instead of just using the alpha tag.
+
 ## 2.0.0-alpha.65
 
 ## 2.0.0-alpha.64
