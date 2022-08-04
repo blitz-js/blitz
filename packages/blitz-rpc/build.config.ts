@@ -14,6 +14,8 @@ const config: BuildConfig = {
     "index-server.cjs",
     "index-server.mjs",
     "react",
+    "blitz",
+    "next",
   ],
   declaration: true,
   rollup: {
