@@ -8,7 +8,14 @@ describe("replaceBlitzPkgsVersions", () => {
 
   vi.mock("@blitzjs/generator", async () => {
     return {
-      fetchDistTags: vi.fn(() => ({alpha: "1.0.0", beta: "2.0.0", danger: "3.0.0"})),
+      fetchDistTags: vi.fn((pkg: string) => {
+        if (pkg === "blitz") {
+          return {alpha: "1.0.0", beta: "2.0.0", danger: "3.0.0"}
+        }
+        if (pkg === "zod") {
+          return {latest: "1.2.3"}
+        }
+      }),
     }
   })
 
@@ -24,7 +31,7 @@ describe("replaceBlitzPkgsVersions", () => {
         "@blitzjs/auth": "1.0.0",
         "@blitzjs/next": "1.0.0",
         next: "12.2.0",
-        zod: "latest",
+        zod: "1.2.3",
       },
     })
   })
@@ -37,7 +44,7 @@ describe("replaceBlitzPkgsVersions", () => {
         "@blitzjs/auth": "2.0.0",
         "@blitzjs/next": "2.0.0",
         next: "12.2.0",
-        zod: "latest",
+        zod: "1.2.3",
       },
     })
   })
@@ -50,7 +57,7 @@ describe("replaceBlitzPkgsVersions", () => {
         "@blitzjs/auth": "3.0.0",
         "@blitzjs/next": "3.0.0",
         next: "12.2.0",
-        zod: "latest",
+        zod: "1.2.3",
       },
     })
   })
@@ -63,7 +70,7 @@ describe("replaceBlitzPkgsVersions", () => {
         "@blitzjs/auth": "custom",
         "@blitzjs/next": "custom",
         next: "12.2.0",
-        zod: "latest",
+        zod: "1.2.3",
       },
     })
   })
@@ -76,7 +83,7 @@ describe("replaceBlitzPkgsVersions", () => {
         "@blitzjs/auth": "custom",
         "@blitzjs/next": "custom",
         next: "12.2.0",
-        zod: "latest",
+        zod: "1.2.3",
       },
     })
   })
