@@ -41,7 +41,7 @@ export const codegenTasks = async () => {
       let prismaSpinner = log.spinner(`Generating Prisma client`).start()
       const result = await runPrisma(["generate"], true)
       if (result.success) {
-        prismaSpinner.succeed()
+        prismaSpinner.succeed(log.greenText("Generated Prisma client"))
       } else {
         prismaSpinner.fail()
         console.log("\n" + result.stderr)

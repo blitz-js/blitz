@@ -49,7 +49,7 @@ importers:
       "@types/preview-email": 2.0.1
       "@types/react": 18.0.1
       "@typescript-eslint/eslint-plugin": 5.9.1
-      blitz: workspace:2.0.0-alpha.66
+      blitz: workspace:2.0.0-alpha.67
       eslint: 7.32.0
       eslint-config-next: 12.2.0
       eslint-config-prettier: 8.5.0
@@ -475,8 +475,8 @@ importers:
 
   packages/blitz:
     specifiers:
-      "@blitzjs/config": workspace:2.0.0-alpha.66
-      "@blitzjs/generator": 2.0.0-alpha.66
+      "@blitzjs/config": workspace:2.0.0-alpha.67
+      "@blitzjs/generator": 2.0.0-alpha.67
       "@types/cookie": 0.4.1
       "@types/cross-spawn": 6.0.2
       "@types/debug": 4.1.7
@@ -586,7 +586,7 @@ importers:
 
   packages/blitz-auth:
     specifiers:
-      "@blitzjs/config": workspace:2.0.0-alpha.66
+      "@blitzjs/config": workspace:2.0.0-alpha.67
       "@testing-library/react": 13.0.0
       "@testing-library/react-hooks": 7.0.2
       "@types/b64-lite": 1.3.0
@@ -600,7 +600,7 @@ importers:
       "@types/secure-password": 3.1.1
       b64-lite: 1.4.0
       bad-behavior: 1.0.1
-      blitz: 2.0.0-alpha.66
+      blitz: 2.0.0-alpha.67
       cookie: 0.4.1
       cookie-session: 2.0.0
       debug: 4.3.3
@@ -653,8 +653,8 @@ importers:
 
   packages/blitz-next:
     specifiers:
-      "@blitzjs/config": workspace:2.0.0-alpha.66
-      "@blitzjs/rpc": 2.0.0-alpha.66
+      "@blitzjs/config": workspace:2.0.0-alpha.67
+      "@blitzjs/rpc": 2.0.0-alpha.67
       "@tanstack/react-query": 4.0.10
       "@testing-library/dom": 8.13.0
       "@testing-library/jest-dom": 5.16.3
@@ -666,7 +666,7 @@ importers:
       "@types/react": 18.0.1
       "@types/react-dom": 17.0.14
       "@types/testing-library__react-hooks": 4.0.0
-      blitz: 2.0.0-alpha.66
+      blitz: 2.0.0-alpha.67
       cross-spawn: 7.0.3
       debug: 4.3.3
       find-up: 4.1.0
@@ -716,15 +716,15 @@ importers:
 
   packages/blitz-rpc:
     specifiers:
-      "@blitzjs/auth": 2.0.0-alpha.66
-      "@blitzjs/config": workspace:2.0.0-alpha.66
+      "@blitzjs/auth": 2.0.0-alpha.67
+      "@blitzjs/config": workspace:2.0.0-alpha.67
       "@tanstack/react-query": 4.0.10
       "@types/debug": 4.1.7
       "@types/react": 18.0.1
       "@types/react-dom": 17.0.14
       b64-lite: 1.4.0
       bad-behavior: 1.0.1
-      blitz: 2.0.0-alpha.66
+      blitz: 2.0.0-alpha.67
       chalk: ^4.1.0
       debug: 4.3.3
       next: 12.2.0
@@ -767,12 +767,12 @@ importers:
       "@babel/plugin-syntax-typescript": 7.17.12
       "@babel/preset-env": 7.12.10
       "@blitzjs/config": workspace:*
-      "@blitzjs/generator": 2.0.0-alpha.66
+      "@blitzjs/generator": 2.0.0-alpha.67
       "@types/jscodeshift": 0.11.2
       "@types/node": 17.0.16
       arg: 5.0.1
       ast-types: 0.14.2
-      blitz: 2.0.0-alpha.66
+      blitz: 2.0.0-alpha.67
       chalk: ^4.1.0
       cross-spawn: 7.0.3
       debug: 4.3.3
@@ -827,7 +827,7 @@ importers:
       "@babel/plugin-transform-typescript": 7.12.1
       "@babel/preset-env": 7.12.10
       "@babel/types": 7.12.10
-      "@blitzjs/config": 2.0.0-alpha.66
+      "@blitzjs/config": 2.0.0-alpha.67
       "@juanm04/cpx": 2.0.1
       "@mrleebo/prisma-ast": 0.2.6
       "@types/babel__core": 7.1.19
@@ -920,7 +920,7 @@ importers:
 
   packages/pkg-template:
     specifiers:
-      "@blitzjs/config": 2.0.0-alpha.66
+      "@blitzjs/config": 2.0.0-alpha.67
       "@types/react": 18.0.1
       "@types/react-dom": 17.0.14
       "@typescript-eslint/eslint-plugin": 5.9.1
@@ -3060,7 +3060,6 @@ packages:
       semver: 5.7.1
     transitivePeerDependencies:
       - supports-color
-    dev: false
 
   /@babel/preset-flow/7.17.12_@babel+core@7.18.2:
     resolution:
@@ -5491,7 +5490,6 @@ packages:
       typescript: 4.6.3
     transitivePeerDependencies:
       - supports-color
-    dev: false
 
   /@typescript-eslint/experimental-utils/5.28.0_hrkuebk64jiu2ut2d2sm4oylnu:
     resolution:
@@ -9315,7 +9313,6 @@ packages:
     transitivePeerDependencies:
       - eslint-import-resolver-webpack
       - supports-color
-    dev: false
 
   /eslint-config-next/12.2.4_hrkuebk64jiu2ut2d2sm4oylnu:
     resolution:
@@ -9353,7 +9350,6 @@ packages:
     hasBin: true
     peerDependencies:
       eslint: ">=7.0.0"
-    dev: false
 
   /eslint-config-prettier/8.5.0_eslint@7.32.0:
     resolution:
@@ -12018,7 +12014,7 @@ packages:
       pretty-format: 27.5.1
       slash: 3.0.0
       strip-json-comments: 3.1.1
-      ts-node: 10.7.0_fxg3r7oju3tntkxsvleuiot4fa
+      ts-node: 10.7.0_typescript@4.6.3
     transitivePeerDependencies:
       - bufferutil
       - canvas
@@ -17304,6 +17300,7 @@ packages:
       typescript: 4.6.3
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
+    dev: false
 
   /ts-node/10.7.0_typescript@4.6.3:
     resolution:
@@ -17336,7 +17333,6 @@ packages:
       typescript: 4.6.3
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
-    dev: false
 
   /tsconfig-paths/3.14.1:
     resolution:
