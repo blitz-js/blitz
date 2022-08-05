@@ -1,5 +1,5 @@
 import {describe, it, expect} from "vitest"
-import {paginate} from "./paginate"
+import {paginate} from "../src/paginate"
 
 describe("paginate", () => {
   const dummyPaginationPromises = {

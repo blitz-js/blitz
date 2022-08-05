@@ -4,7 +4,7 @@ import resolveCwd from "resolve-cwd"
 import {join} from "path"
 import fs from "fs-extra"
 import {getPackageJson} from "./get-package-json"
-import {runPrisma} from "../../run-prisma"
+import {runPrisma} from "../../utils/run-prisma"
 
 export const codegenTasks = async () => {
   try {

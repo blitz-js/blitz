@@ -4,9 +4,9 @@ import {readJSONSync, writeJson} from "fs-extra"
 import {join} from "path"
 import username from "username"
 import {Generator, GeneratorOptions, SourceRootType} from "../generator"
+import {baseLogger, log} from "../utils/log"
 import {fetchLatestVersionsFor} from "../utils/fetch-latest-version-for"
 import {getBlitzDependencyVersion} from "../utils/get-blitz-dependency-version"
-import {baseLogger, log} from "../utils/log"
 
 function assert(condition: any, message: string): asserts condition {
   if (!condition) throw new Error(message)

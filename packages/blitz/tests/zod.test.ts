@@ -1,6 +1,6 @@
 import {describe, it, expect} from "vitest"
 import {z} from "zod"
-import {formatZodError, validateZodSchema} from "./zod-utils"
+import {formatZodError, validateZodSchema} from "../src/utils/zod"
 
 const validateSchema = (schema: any, input: any) => {
   const result = schema.safeParse(input)
