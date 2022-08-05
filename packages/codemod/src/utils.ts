@@ -347,6 +347,7 @@ export const replaceBlitzPkgsVersions = async (
   packageJson.dependencies["@blitzjs/auth"] = blitzPkgVersion
   packageJson.dependencies["blitz"] = blitzPkgVersion
   packageJson.dependencies["next"] = "12.2.0"
+  packageJson.dependencies["zod"] = "latest"
 
   return packageJson
 }
