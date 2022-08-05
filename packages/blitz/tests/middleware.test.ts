@@ -3,8 +3,8 @@ import {createServer, IncomingMessage, ServerResponse} from "http"
 import fetch from "node-fetch"
 import listen from "test-listen"
 import {Stream} from "stream"
-import {Middleware} from "./index-server"
-import {handleRequestWithMiddleware} from "./middleware"
+import {Middleware} from "../src/index-server"
+import {handleRequestWithMiddleware} from "../src/middleware"
 
 export function sendData(res: ServerResponse, body: any): void {
   if (body === null || body === undefined) {

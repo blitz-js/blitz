@@ -8,7 +8,7 @@ import {
   buildCustomServer,
 } from "./next-utils"
 import {checkLatestVersion} from "./check-latest-version"
-import {readBlitzConfig} from "../../server-utils"
+import {readBlitzConfig} from "../../utils/server"
 import {codegenTasks} from "./codegen-tasks"
 
 export async function build(config: ServerConfig) {

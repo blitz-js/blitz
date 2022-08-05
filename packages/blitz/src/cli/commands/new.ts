@@ -1,4 +1,3 @@
-import {loadEnvConfig} from "../../env-utils"
 import prompts from "prompts"
 import path from "path"
 import chalk from "chalk"
@@ -6,8 +5,9 @@ import hasbin from "hasbin"
 import {CliCommand} from "../index"
 import arg from "arg"
 import {AppGenerator, AppGeneratorOptions, getLatestVersion} from "@blitzjs/generator"
+import {loadEnvConfig} from "../../utils/env"
+import {runPrisma} from "../../utils/run-prisma"
 import {checkLatestVersion} from "../utils/check-latest-version"
-import {runPrisma} from "../../run-prisma"
 
 const forms: Record<AppGeneratorOptions["form"], string> = {
   finalform: "React Final Form (recommended)",
