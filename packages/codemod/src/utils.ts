@@ -13,6 +13,7 @@ import j, {
 } from "jscodeshift"
 import {parseSync} from "@babel/core"
 import {fetchDistTags} from "@blitzjs/generator"
+import {PromiseReturnType} from "blitz"
 
 export function findIdentifier(program: Collection<any>, name: string): Collection<Identifier> {
   return program.find(j.Identifier, (node) => node.name === name)
@@ -330,7 +331,7 @@ export function replaceIdentifiers(
 
 export const replaceBlitzPkgsVersions = async (
   packageJson: {dependencies?: Record<string, any>},
-  npmTag: keyof ReturnType<typeof fetchDistTags>,
+  npmTag: string,
 ) => {
   let blitzPkgVersion = npmTag
   const result = await fetchDistTags("blitz")
