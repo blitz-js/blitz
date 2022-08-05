@@ -1,5 +1,11 @@
 # @blitzjs/generator
 
+## 2.0.0-alpha.67
+
+### Patch Changes
+
+- ebd74b4e: Fix template path for the generator
+
 ## 2.0.0-alpha.66
 
 ### Patch Changes
