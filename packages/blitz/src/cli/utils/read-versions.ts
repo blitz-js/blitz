@@ -58,17 +58,19 @@ export function readVersions() {
   return versions
 }
 
-export function resolveVersionType(version: string) {
+export function resolveVersionType(
+  version: string,
+): "alpha" | "beta" | "canary" | "stable" | "danger" | "latest" {
   if (version.includes("alpha")) {
-    return "alpha" as const
+    return "alpha"
   }
 
   if (version.includes("beta")) {
-    return "beta" as const
+    return "beta"
   }
 
   if (version.includes("danger")) {
-    return "danger" as const
+    return "danger"
   }
 
   if (version.includes("canary")) {

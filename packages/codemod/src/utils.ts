@@ -12,6 +12,7 @@ import j, {
   Identifier,
 } from "jscodeshift"
 import {parseSync} from "@babel/core"
+import {fetchDistTags} from "@blitzjs/generator"
 
 export function findIdentifier(program: Collection<any>, name: string): Collection<Identifier> {
   return program.find(j.Identifier, (node) => node.name === name)
@@ -325,4 +326,27 @@ export function replaceIdentifiers(
     .forEach((path) => {
       path.value.name = "NextApiRequest"
     })
+}
+
+export const replaceBlitzPkgsVersions = async (
+  packageJson: {dependencies?: Record<string, any>},
+  npmTag: keyof ReturnType<typeof fetchDistTags>,
+) => {
+  let blitzPkgVersion = npmTag
+  const result = await fetchDistTags("blitz")
+  if (npmTag in result) {
+    blitzPkgVersion = result[npmTag]
+  }
+
+  if (!packageJson.dependencies) {
+    packageJson.dependencies = {}
+  }
+
+  packageJson.dependencies["@blitzjs/next"] = blitzPkgVersion
+  packageJson.dependencies["@blitzjs/rpc"] = blitzPkgVersion
+  packageJson.dependencies["@blitzjs/auth"] = blitzPkgVersion
+  packageJson.dependencies["blitz"] = blitzPkgVersion
+  packageJson.dependencies["next"] = "12.2.0"
+
+  return packageJson
 }
