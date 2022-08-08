@@ -50,6 +50,7 @@
     "prettier-plugin-prisma": "3.8.0",
     "pretty-quick": "3.1.3",
     "preview-email": "3.x",
+    "ts-jest": "28.0.7",
     "typescript": "^4.5.3"
   },
   "private": true
