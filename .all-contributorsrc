@@ -3660,6 +3660,16 @@
         "doc",
         "code"
       ]
+    },
+    {
+      "login": "oltdaniel",
+      "name": "Daniel Oltmanns",
+      "avatar_url": "https://avatars.githubusercontent.com/u/53529846?v=4",
+      "profile": "oltdaniel.eu",
+      "contributions": [
+        "doc",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
