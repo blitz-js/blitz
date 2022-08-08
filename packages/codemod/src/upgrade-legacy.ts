@@ -1,4 +1,4 @@
-import j, {ImportDeclaration} from "jscodeshift"
+import j, {ImportDeclaration, ImportDefaultSpecifier, ImportSpecifier} from "jscodeshift"
 import * as fs from "fs-extra"
 import path from "path"
 import {
@@ -105,6 +105,8 @@ const upgradeLegacy = async () => {
 
         Document: "next/document",
         DocumentHead: "next/document",
+        DocumentProps: "next/document",
+        DocumentContext: "next/document",
         Html: "next/document",
         Main: "next/document",
         BlitzScript: "next/document",
@@ -915,21 +917,49 @@ const upgradeLegacy = async () => {
         )
 
         const importStatements = findImport(program, "next/document")
-        importStatements?.remove()
+
+        let nextDocumentImportPaths: (ImportSpecifier | ImportDefaultSpecifier)[] = []
+        importStatements?.forEach((path) => {
+          path.value.specifiers?.forEach((s) => {
+            if (s.type === "ImportSpecifier") {
+              // Go through the typical imports required for Next.js and build the correct import specifier
+              switch (s.imported.name) {
+                case "Document":
+                  nextDocumentImportPaths.unshift(
+                    j.importDefaultSpecifier(j.identifier("Document")),
+                  )
+                  break
+                case "BlitzScript":
+                  nextDocumentImportPaths.push(j.importSpecifier(j.identifier("NextScript")))
+                  break
+                case "Html":
+                  nextDocumentImportPaths.push(j.importSpecifier(j.identifier("Html")))
+                  break
+                case "Main":
+                  nextDocumentImportPaths.push(j.importSpecifier(j.identifier("Main")))
+                  break
+                case "DocumentHead":
+                  nextDocumentImportPaths.push(j.importSpecifier(j.identifier("Head")))
+                  break
+                case "DocumentProps":
+                  nextDocumentImportPaths.push(j.importSpecifier(j.identifier("DocumentProps")))
+                  break
+                case "DocumentContext":
+                  nextDocumentImportPaths.push(j.importSpecifier(j.identifier("DocumentContext")))
+                  break
+              }
+            }
+          })
+        })
+
+        // Add new import statement to the top of the _document page
         program
           .get()
           .value.program.body.unshift(
-            j.importDeclaration(
-              [
-                j.importDefaultSpecifier(j.identifier("Document")),
-                j.importSpecifier(j.identifier("Html")),
-                j.importSpecifier(j.identifier("Head")),
-                j.importSpecifier(j.identifier("Main")),
-                j.importSpecifier(j.identifier("NextScript")),
-              ],
-              j.stringLiteral("next/document"),
-            ),
+            j.importDeclaration([...nextDocumentImportPaths], j.stringLiteral("next/document")),
           )
+        // Remove the old import statements
+        importStatements?.remove()
 
         const documentHead = program
           .find(j.JSXElement, (node) => node.openingElement.name.name === "DocumentHead")
