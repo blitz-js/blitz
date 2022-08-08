@@ -8,6 +8,7 @@ import {AppGenerator, AppGeneratorOptions, getLatestVersion} from "@blitzjs/gene
 import {loadEnvConfig} from "../../utils/env"
 import {runPrisma} from "../../utils/run-prisma"
 import {checkLatestVersion} from "../utils/check-latest-version"
+import {codegenTasks} from "../utils/codegen-tasks"
 
 const forms: Record<AppGeneratorOptions["form"], string> = {
   finalform: "React Final Form (recommended)",
@@ -269,6 +270,10 @@ const newApp: CliCommand = async (argv) => {
           )
           const result = await runPrisma(["migrate", "dev", "--name", "Initial migration"], true)
           if (!result.success) throw new Error()
+
+          if (projectPkgManger === "yarn") {
+            await codegenTasks()
+          }
         } catch (error) {
           postInstallSteps.push(
             "blitz prisma migrate dev (when asked, you can name the migration anything)",
