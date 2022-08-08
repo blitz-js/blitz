@@ -27,7 +27,7 @@ export interface AppGeneratorOptions extends GeneratorOptions {
   version: string
   skipInstall: boolean
   skipGit: boolean
-  form?: "finalform" | "hookform" | "formik"
+  form: "finalform" | "hookform" | "formik"
   onPostInstall?: () => Promise<void>
 }
 
@@ -120,7 +120,7 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
     ] = await Promise.all([
       fetchLatestVersionsFor(pkg.dependencies),
       fetchLatestVersionsFor(pkg.devDependencies),
-      getBlitzDependencyVersion(this.options.version),
+      getBlitzDependencyVersion(),
     ])
 
     pkg.dependencies = newDependencies
