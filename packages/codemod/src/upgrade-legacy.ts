@@ -11,12 +11,14 @@ import {
   getAllFiles,
   getCollectionFromSource,
   wrapDeclaration,
-  findIdentifier,
   removeImport,
   replaceImport,
   replaceIdentifiers,
+  replaceBlitzPkgsVersions,
 } from "./utils"
 import {log} from "blitz"
+
+const CURRENT_BLITZ_TAG = "alpha"
 
 const isInternalBlitzMonorepoDevelopment = fs.existsSync(
   path.join(__dirname, "../../../blitz-next"),
@@ -81,19 +83,11 @@ const upgradeLegacy = async () => {
   steps.push({
     name: "update dependencies in package.json",
     action: async () => {
-      let packageJsonPath = require(path.resolve("package.json"))
-      packageJsonPath.dependencies["react"] = "latest"
-      packageJsonPath.dependencies["react-dom"] = "latest"
-      packageJsonPath.dependencies["@blitzjs/next"] = "alpha"
-      packageJsonPath.dependencies["@blitzjs/rpc"] = "alpha"
-      packageJsonPath.dependencies["@blitzjs/auth"] = "alpha"
-      packageJsonPath.dependencies["blitz"] = "alpha"
-      packageJsonPath.dependencies["next"] = "latest"
-      packageJsonPath.dependencies["prisma"] = "latest"
-      packageJsonPath.dependencies["@prisma/client"] = "latest"
-      packageJsonPath.devDependencies["typescript"] = isTypescript && "latest"
+      const packageJson = require(path.resolve("package.json"))
 
-      fs.writeFileSync(path.resolve("package.json"), JSON.stringify(packageJsonPath, null, " "))
+      const newPackageJson = await replaceBlitzPkgsVersions(packageJson, CURRENT_BLITZ_TAG)
+
+      fs.writeFileSync(path.resolve("package.json"), JSON.stringify(newPackageJson, null, " "))
     },
   })
 
