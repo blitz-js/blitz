@@ -20,6 +20,13 @@ import {log} from "blitz"
 
 const CURRENT_BLITZ_TAG = "alpha"
 
+class ExpectedError extends Error {
+  constructor(message: string) {
+    super(message)
+    this.name = "Expected Error"
+  }
+}
+
 const isInternalBlitzMonorepoDevelopment = fs.existsSync(
   path.join(__dirname, "../../../blitz-next"),
 )
@@ -397,7 +404,7 @@ const upgradeLegacy = async () => {
           replaceTemplateValues(blitzClient),
         )
       } else {
-        throw new Error("App directory doesn't exit")
+        throw new ExpectedError("App directory doesn't exit")
       }
     },
   })
@@ -427,7 +434,7 @@ const upgradeLegacy = async () => {
             blitzClientProgram.toSource(),
           )
         } else {
-          throw new Error(
+          throw new ExpectedError(
             "Cookie Prefix is undefined & not a string. Please set your cookie prefix manually in app/blitz-client",
           )
         }
@@ -1056,7 +1063,7 @@ const upgradeLegacy = async () => {
       })
 
       if (errors > 0) {
-        throw new Error("Local middleware is not supported")
+        throw new ExpectedError("Local middleware is not supported")
       }
     },
   })
@@ -1123,7 +1130,7 @@ const upgradeLegacy = async () => {
       })
 
       if (errors > 0) {
-        throw new Error(
+        throw new ExpectedError(
           "\n invokeWithMiddleware is not supported. \n Use invokeWithCtx instead: https://canary.blitzjs.com/docs/resolver-server-utilities#invoke-with-ctx \n Fix the files above, then run the codemod again.",
         )
       }
@@ -1196,7 +1203,7 @@ const upgradeLegacy = async () => {
               "Don't panic, go to the file with the error & manually fix it. Then run the codemod again. It will continue where it left off.",
             ),
           )
-        } else {
+        } else if (!(err instanceof ExpectedError)) {
           log.error(
             log.withBrand(
               "This is an unexpected error. Please ask for help in the discord #general-help channel. https://discord.blitzjs.com",
