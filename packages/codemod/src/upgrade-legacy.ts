@@ -412,19 +412,25 @@ const upgradeLegacy = async () => {
       )
       if (cookieIdentifier.length) {
         const cookiePrefix = cookieIdentifier.get().parentPath.value.value.value
-        const blitzClientProgram = getCollectionFromSource(
-          path.join(appDir, `blitz-client.${isTypescript ? "ts" : "js"}`),
-        )
-        const cookieIdentifierBlitzClient = blitzClientProgram.find(
-          j.Identifier,
-          (node) => node.name === "cookiePrefix",
-        )
-        cookieIdentifierBlitzClient.get().parentPath.value.value.value = cookiePrefix
+        if (cookiePrefix) {
+          const blitzClientProgram = getCollectionFromSource(
+            path.join(appDir, `blitz-client.${isTypescript ? "ts" : "js"}`),
+          )
+          const cookieIdentifierBlitzClient = blitzClientProgram.find(
+            j.Identifier,
+            (node) => node.name === "cookiePrefix",
+          )
+          cookieIdentifierBlitzClient.get().parentPath.value.value.value = cookiePrefix
 
-        fs.writeFileSync(
-          `${appDir}/blitz-client.${isTypescript ? "ts" : "js"}`,
-          blitzClientProgram.toSource(),
-        )
+          fs.writeFileSync(
+            `${appDir}/blitz-client.${isTypescript ? "ts" : "js"}`,
+            blitzClientProgram.toSource(),
+          )
+        } else {
+          throw new Error(
+            "Cookie Prefix is undefined & not a string. Please set your cookie prefix manually in app/blitz-client",
+          )
+        }
       } else {
         log.error("Cookie Prefix not found in blitz config file")
       }
