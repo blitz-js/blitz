@@ -1,5 +1,23 @@
 # @blitzjs/codemod
 
+## 2.0.0-alpha.68
+
+### Patch Changes
+
+- 06427f67: Throw error if cookiePrefix is undefined when running codemod
+- f120f672: Add DocumentProps & DocumentContext to the codemod import map
+- 8dfaad08: Set correct packages versions in package.json with upgrade-legacy codemod
+- cb55ed26: Fix codemod to accept a self closing `DocumentHead` in the `_document` page
+- Updated dependencies [271c58ac]
+- Updated dependencies [630c7181]
+- Updated dependencies [f0ca738d]
+- Updated dependencies [41608c4c]
+- Updated dependencies [70b334a2]
+- Updated dependencies [dd299ae8]
+- Updated dependencies [078fe474]
+  - blitz@2.0.0-alpha.68
+  - @blitzjs/generator@2.0.0-alpha.68
+
 ## 2.0.0-alpha.67
 
 ### Patch Changes
