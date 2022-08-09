@@ -11,7 +11,7 @@ export const getServerSideProps = gSSP<Props>(async ({ctx}) => {
   const {session} = ctx
 
   return {
-    redirect: {destination: Routes.AuthPage({query: "test"})},
+    redirect: {destination: Routes.Post({postId: "1"})},
     props: {
       userId: session.userId,
       publicData: session.$publicData,
