@@ -31,7 +31,7 @@ const commands = {
   build: () => import("./commands/next/build").then((i) => i.build),
   start: () => import("./commands/next/start").then((i) => i.start),
   new: () => import("./commands/new").then((i) => i.newApp),
-  // generate: () => import("./commands/generate").then((i) => i.generate),
+  generate: () => import("./commands/generate").then((i) => i.generate),
   codegen: () => import("./commands/codegen").then((i) => i.codegen),
   db: () => import("./commands/db").then((i) => i.db),
 }
@@ -41,7 +41,7 @@ const aliases: Record<string, keyof typeof commands> = {
   b: "build",
   s: "start",
   n: "new",
-  // g: "generate",
+  g: "generate",
 }
 
 type Command = keyof typeof commands
