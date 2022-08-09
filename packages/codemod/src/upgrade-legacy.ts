@@ -38,7 +38,7 @@ const upgradeLegacy = async () => {
   const appDir = path.resolve("app")
   let failedAt =
     fs.existsSync(path.resolve(".migration.json")) && fs.readJSONSync("./.migration.json").failedAt
-  let storedErrors: {message: string; step: number}[] = []
+  let collectedErrors: {message: string; step: number}[] = []
   let steps: TStep[] = []
 
   // Add steps in order
@@ -432,7 +432,7 @@ const upgradeLegacy = async () => {
           )
         } else {
           // Show error at end of codemod
-          storedErrors.push({
+          collectedErrors.push({
             message:
               "Cookie Prefix is undefined & not a string. Please set your cookie prefix manually in app/blitz-client",
             step: stepIndex!,
@@ -1132,7 +1132,7 @@ const upgradeLegacy = async () => {
       })
 
       if (errors > 0) {
-        storedErrors.push({
+        collectedErrors.push({
           message:
             "\n invokeWithMiddleware is not supported. \n Use invokeWithCtx instead: https://canary.blitzjs.com/docs/resolver-server-utilities#invoke-with-ctx \n Fix the files above, then run the codemod again.",
           step: stepIndex!,
@@ -1157,7 +1157,7 @@ const upgradeLegacy = async () => {
       const spinner = log.spinner(log.withBrand(`Running ${step.name}...`)).start()
       try {
         await step.action(index)
-        if (storedErrors.filter((e) => e.step === index).length) {
+        if (collectedErrors.filter((e) => e.step === index).length) {
           // Soft stored error
           spinner.fail(`${step.name}`)
         } else {
@@ -1189,8 +1189,8 @@ const upgradeLegacy = async () => {
         process.exit(1)
       }
     }
-    if (storedErrors.length) {
-      for (const error of storedErrors) {
+    if (collectedErrors.length) {
+      for (const error of collectedErrors) {
         log.error(`⚠️  ${error.message}`)
       }
     }
