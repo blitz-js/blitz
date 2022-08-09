@@ -979,7 +979,9 @@ const upgradeLegacy = async () => {
           .get()
 
         documentHead.value.openingElement.name.name = "Head"
-        documentHead.value.closingElement.name.name = "Head"
+        if (documentHead.value.closingElement) {
+          documentHead.value.closingElement.name.name = "Head"
+        }
 
         const blitzScript = program.find(j.Identifier, (node) => node.name === "BlitzScript").get()
         blitzScript.value.name = "NextScript"
