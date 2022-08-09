@@ -263,16 +263,23 @@ function withDehydratedState<T extends Result>(result: T, queryClient: QueryClie
 
 // Converts Blitz's GetServerSidePropsResult and GetStaticPropsResult to a NextJS compatible format
 // Blitz accepts string | RouteUrlObject as redirect.destination — this function converts it to a string
-const normalizeRedirectValues = <R extends Result>(result: BlitzResult): R => {
+const normalizeRedirectValues = <NormalizedResult extends Result>(
+  result: BlitzResult,
+): NormalizedResult => {
   if ("redirect" in result) {
-    // todo: convert RouteUrlObject to string
-    return {
-      ...result,
-      redirect: {...result.redirect, destination: result.redirect?.destination as any as string},
-    } as unknown as R
+    const dest = result.redirect?.destination
+    if (dest && typeof dest === "object") {
+      // todo: not sure about this? what should we put as the first argument if we don't have access to the router here?
+      const resolvedDest = resolveHref({} as any, dest, true)
+
+      return {
+        ...result,
+        redirect: {...result.redirect, destination: resolvedDest[1] || resolvedDest[0]},
+      } as NormalizedResult
+    }
   }
 
-  return result as R
+  return result as NormalizedResult
 }
 
 declare module "blitz" {
