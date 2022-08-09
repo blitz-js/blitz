@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "baseUrl": "./",
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "strictNullChecks": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true
+  },
+  "exclude": [
+    "node_modules"
+  ],
+  "include": [
+    "blitz-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx"
+  ]
+}

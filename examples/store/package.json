@@ -1,0 +1,43 @@
+{
+  "name": "@examples/store",
+  "version": "0.34.0-canary.0",
+  "private": true,
+  "scripts": {
+    "dev": "blitz dev",
+    "build": "blitz prisma migrate deploy && blitz build",
+    "cy:open": "cypress open",
+    "cy:run": "cypress run || cypress run",
+    "test:server": "prisma generate && blitz prisma migrate deploy && blitz db seed && blitz build && blitz start -p 3099",
+    "test": "cross-env NODE_ENV=test start-server-and-test test:server http://localhost:3099 cy:run",
+    "posttest": "node assert-tree-shaking-works.js"
+  },
+  "prisma": {
+    "schema": "db/schema.prisma"
+  },
+  "prettier": {
+    "semi": false,
+    "printWidth": 100,
+    "bracketSpacing": false,
+    "trailingComma": "all"
+  },
+  "dependencies": {
+    "@blitzjs/auth": "alpha",
+    "@blitzjs/next": "alpha",
+    "@blitzjs/rpc": "alpha",
+    "@prisma/client": "latest",
+    "blitz": "alpha",
+    "final-form": "4.20.1",
+    "next": "latest",
+    "prisma": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "react-final-form": "6.5.2",
+    "sass": "1.54.3"
+  },
+  "devDependencies": {
+    "@types/react": "latest",
+    "cypress": "6.2.1",
+    "start-server-and-test": "1.11.7",
+    "typescript": "latest"
+  }
+}
