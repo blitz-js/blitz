@@ -1,5 +1,12 @@
 # @blitzjs/rpc
 
+## 2.0.0-alpha.68
+
+### Patch Changes
+
+- 630c7181: Use internal branded blitz logger for @blitzjs/rpc
+  - @blitzjs/auth@2.0.0-alpha.68
+
 ## 2.0.0-alpha.67
 
 ### Patch Changes

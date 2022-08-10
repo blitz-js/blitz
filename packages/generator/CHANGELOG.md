@@ -1,5 +1,13 @@
 # @blitzjs/generator
 
+## 2.0.0-alpha.68
+
+### Patch Changes
+
+- 70b334a2: Remove trailing comma from tsconfig.json file in the new app template"
+- dd299ae8: Add ts-jest to dependencies in new app templates
+- 078fe474: Add `@testing-library/jest-dom` to new app dependecies
+
 ## 2.0.0-alpha.67
 
 ### Patch Changes
