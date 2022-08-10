@@ -8,7 +8,7 @@ export const getBlitzDependencyVersion = async () => {
     const result = await fetchDistTags("blitz")
 
     if (CURRENT_BLITZ_TAG in result) {
-      return {value: result}
+      return {value: result[CURRENT_BLITZ_TAG]}
     }
 
     logFailedVersionFetch("blitz")
