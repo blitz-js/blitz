@@ -49,7 +49,7 @@ importers:
       "@types/preview-email": 2.0.1
       "@types/react": 18.0.1
       "@typescript-eslint/eslint-plugin": 5.9.1
-      blitz: workspace:2.0.0-alpha.67
+      blitz: workspace:2.0.0-alpha.68
       eslint: 7.32.0
       eslint-config-next: 12.2.0
       eslint-config-prettier: 8.5.0
@@ -329,6 +329,55 @@ importers:
       jsdom: 19.0.0
       typescript: 4.6.3
 
+  integration-tests/react-query-utils:
+    specifiers:
+      "@blitzjs/auth": workspace:*
+      "@blitzjs/config": workspace:*
+      "@blitzjs/next": workspace:*
+      "@blitzjs/rpc": workspace:*
+      "@next/bundle-analyzer": 12.0.8
+      "@prisma/client": 4.0.0
+      "@types/express": 4.17.13
+      "@types/fs-extra": 9.0.13
+      "@types/node-fetch": 2.6.1
+      "@types/react": 18.0.1
+      b64-lite: 1.4.0
+      blitz: workspace:*
+      eslint: 7.32.0
+      fs-extra: 10.0.1
+      get-port: 6.1.2
+      lowdb: 3.0.0
+      next: 12.2.0
+      node-fetch: 3.2.3
+      prisma: 4.0.0
+      react: 18.0.0
+      react-dom: 18.0.0
+      typescript: ^4.5.3
+    dependencies:
+      "@blitzjs/auth": link:../../packages/blitz-auth
+      "@blitzjs/next": link:../../packages/blitz-next
+      "@blitzjs/rpc": link:../../packages/blitz-rpc
+      "@prisma/client": 4.0.0_prisma@4.0.0
+      blitz: link:../../packages/blitz
+      lowdb: 3.0.0
+      next: 12.2.0_zpnidt7m3osuk7shl3s4oenomq
+      prisma: 4.0.0
+      react: 18.0.0
+      react-dom: 18.0.0_react@18.0.0
+    devDependencies:
+      "@blitzjs/config": link:../../packages/config
+      "@next/bundle-analyzer": 12.0.8
+      "@types/express": 4.17.13
+      "@types/fs-extra": 9.0.13
+      "@types/node-fetch": 2.6.1
+      "@types/react": 18.0.1
+      b64-lite: 1.4.0
+      eslint: 7.32.0
+      fs-extra: 10.0.1
+      get-port: 6.1.2
+      node-fetch: 3.2.3
+      typescript: 4.7.4
+
   integration-tests/rpc:
     specifiers:
       "@blitzjs/auth": workspace:*
@@ -475,8 +524,8 @@ importers:
 
   packages/blitz:
     specifiers:
-      "@blitzjs/config": workspace:2.0.0-alpha.67
-      "@blitzjs/generator": 2.0.0-alpha.67
+      "@blitzjs/config": workspace:2.0.0-alpha.68
+      "@blitzjs/generator": 2.0.0-alpha.68
       "@types/cookie": 0.4.1
       "@types/cross-spawn": 6.0.2
       "@types/debug": 4.1.7
@@ -586,7 +635,7 @@ importers:
 
   packages/blitz-auth:
     specifiers:
-      "@blitzjs/config": workspace:2.0.0-alpha.67
+      "@blitzjs/config": workspace:2.0.0-alpha.68
       "@testing-library/react": 13.0.0
       "@testing-library/react-hooks": 7.0.2
       "@types/b64-lite": 1.3.0
@@ -600,7 +649,7 @@ importers:
       "@types/secure-password": 3.1.1
       b64-lite: 1.4.0
       bad-behavior: 1.0.1
-      blitz: 2.0.0-alpha.67
+      blitz: 2.0.0-alpha.68
       cookie: 0.4.1
       cookie-session: 2.0.0
       debug: 4.3.3
@@ -653,8 +702,8 @@ importers:
 
   packages/blitz-next:
     specifiers:
-      "@blitzjs/config": workspace:2.0.0-alpha.67
-      "@blitzjs/rpc": 2.0.0-alpha.67
+      "@blitzjs/config": workspace:2.0.0-alpha.68
+      "@blitzjs/rpc": 2.0.0-alpha.68
       "@tanstack/react-query": 4.0.10
       "@testing-library/dom": 8.13.0
       "@testing-library/jest-dom": 5.16.3
@@ -666,7 +715,7 @@ importers:
       "@types/react": 18.0.1
       "@types/react-dom": 17.0.14
       "@types/testing-library__react-hooks": 4.0.0
-      blitz: 2.0.0-alpha.67
+      blitz: 2.0.0-alpha.68
       cross-spawn: 7.0.3
       debug: 4.3.3
       find-up: 4.1.0
@@ -716,15 +765,15 @@ importers:
 
   packages/blitz-rpc:
     specifiers:
-      "@blitzjs/auth": 2.0.0-alpha.67
-      "@blitzjs/config": workspace:2.0.0-alpha.67
+      "@blitzjs/auth": 2.0.0-alpha.68
+      "@blitzjs/config": workspace:2.0.0-alpha.68
       "@tanstack/react-query": 4.0.10
       "@types/debug": 4.1.7
       "@types/react": 18.0.1
       "@types/react-dom": 17.0.14
       b64-lite: 1.4.0
       bad-behavior: 1.0.1
-      blitz: 2.0.0-alpha.67
+      blitz: 2.0.0-alpha.68
       chalk: ^4.1.0
       debug: 4.3.3
       next: 12.2.0
@@ -767,12 +816,12 @@ importers:
       "@babel/plugin-syntax-typescript": 7.17.12
       "@babel/preset-env": 7.12.10
       "@blitzjs/config": workspace:*
-      "@blitzjs/generator": 2.0.0-alpha.67
+      "@blitzjs/generator": 2.0.0-alpha.68
       "@types/jscodeshift": 0.11.2
       "@types/node": 17.0.16
       arg: 5.0.1
       ast-types: 0.14.2
-      blitz: 2.0.0-alpha.67
+      blitz: 2.0.0-alpha.68
       chalk: ^4.1.0
       cross-spawn: 7.0.3
       debug: 4.3.3
@@ -827,7 +876,7 @@ importers:
       "@babel/plugin-transform-typescript": 7.12.1
       "@babel/preset-env": 7.12.10
       "@babel/types": 7.12.10
-      "@blitzjs/config": 2.0.0-alpha.67
+      "@blitzjs/config": 2.0.0-alpha.68
       "@juanm04/cpx": 2.0.1
       "@mrleebo/prisma-ast": 0.2.6
       "@types/babel__core": 7.1.19
@@ -920,7 +969,7 @@ importers:
 
   packages/pkg-template:
     specifiers:
-      "@blitzjs/config": 2.0.0-alpha.67
+      "@blitzjs/config": 2.0.0-alpha.68
       "@types/react": 18.0.1
       "@types/react-dom": 17.0.14
       "@typescript-eslint/eslint-plugin": 5.9.1
@@ -3060,6 +3109,7 @@ packages:
       semver: 5.7.1
     transitivePeerDependencies:
       - supports-color
+    dev: false
 
   /@babel/preset-flow/7.17.12_@babel+core@7.18.2:
     resolution:
@@ -5490,6 +5540,7 @@ packages:
       typescript: 4.6.3
     transitivePeerDependencies:
       - supports-color
+    dev: false
 
   /@typescript-eslint/experimental-utils/5.28.0_hrkuebk64jiu2ut2d2sm4oylnu:
     resolution:
@@ -7354,7 +7405,10 @@ packages:
     dev: false
 
   /concat-map/0.0.1:
-    resolution: {integrity: sha1-2Klr13/Wjfd5OnMDajug1UBdR3s=}
+    resolution:
+      {
+        integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==,
+      }
 
   /consola/2.15.3:
     resolution:
@@ -9313,6 +9367,7 @@ packages:
     transitivePeerDependencies:
       - eslint-import-resolver-webpack
       - supports-color
+    dev: false
 
   /eslint-config-next/12.2.4_hrkuebk64jiu2ut2d2sm4oylnu:
     resolution:
@@ -9350,6 +9405,7 @@ packages:
     hasBin: true
     peerDependencies:
       eslint: ">=7.0.0"
+    dev: false
 
   /eslint-config-prettier/8.5.0_eslint@7.32.0:
     resolution:
