@@ -30,7 +30,7 @@ class ExpectedError extends Error {
 const isInternalBlitzMonorepoDevelopment = fs.existsSync(
   path.join(__dirname, "../../../blitz-next"),
 )
-type TStep = {name: string; action: (stepIndex?: number) => Promise<void>}
+type Step = {name: string; action: (stepIndex: number) => Promise<void>}
 const upgradeLegacy = async () => {
   let isTypescript = fs.existsSync(path.resolve("tsconfig.json"))
   let blitzConfigFile = `blitz.config.${isTypescript ? "ts" : "js"}`
@@ -39,7 +39,7 @@ const upgradeLegacy = async () => {
   let failedAt =
     fs.existsSync(path.resolve(".migration.json")) && fs.readJSONSync("./.migration.json").failedAt
   let collectedErrors: {message: string; step: number}[] = []
-  let steps: TStep[] = []
+  let steps: Step[] = []
 
   // Add steps in order
 
@@ -434,8 +434,8 @@ const upgradeLegacy = async () => {
           // Show error at end of codemod
           collectedErrors.push({
             message:
-              "Cookie Prefix is undefined & not a string. Please set your cookie prefix manually in app/blitz-client",
-            step: stepIndex!,
+              "Detected cookiePrefix is undefined. Please set your cookie prefix manually in app/blitz-client",
+            step: stepIndex,
           })
         }
       } else {
@@ -1135,11 +1135,11 @@ const upgradeLegacy = async () => {
         collectedErrors.push({
           message:
             "\n invokeWithMiddleware is not supported. \n Use invokeWithCtx instead: https://canary.blitzjs.com/docs/resolver-server-utilities#invoke-with-ctx \n Fix the files above, then run the codemod again.",
-          step: stepIndex!,
+          step: stepIndex,
         })
 
         // Write to the migration file so the user can run the migration again from this point
-        failedAt = stepIndex! + 1
+        failedAt = stepIndex + 1
         fs.writeJsonSync(".migration.json", {
           failedAt,
         })
