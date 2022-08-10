@@ -30,7 +30,7 @@ class ExpectedError extends Error {
 const isInternalBlitzMonorepoDevelopment = fs.existsSync(
   path.join(__dirname, "../../../blitz-next"),
 )
-
+type Step = {name: string; action: (stepIndex: number) => Promise<void>}
 const upgradeLegacy = async () => {
   let isTypescript = fs.existsSync(path.resolve("tsconfig.json"))
   let existingBlitzConfigFiles = ["ts", "js"]
@@ -45,11 +45,8 @@ const upgradeLegacy = async () => {
   const appDir = path.resolve("app")
   let failedAt =
     fs.existsSync(path.resolve(".migration.json")) && fs.readJSONSync("./.migration.json").failedAt
-
-  let steps: {
-    name: string
-    action: () => Promise<void>
-  }[] = []
+  let collectedErrors: {message: string; step: number}[] = []
+  let steps: Step[] = []
 
   // Add steps in order
 
@@ -68,8 +65,8 @@ const upgradeLegacy = async () => {
       withBlitz.shorthand = true
 
       /* Declare the variable using the object above that equals to a require expression, eg.
-        const {withBlitz} = require("@blitzjs/next")
-      */
+          const {withBlitz} = require("@blitzjs/next")
+        */
       let blitzDeclare = j.variableDeclaration("const", [
         j.variableDeclarator(
           j.objectPattern([withBlitz]),
@@ -418,7 +415,7 @@ const upgradeLegacy = async () => {
 
   steps.push({
     name: "Add cookiePrefix to blitz server",
-    action: async () => {
+    action: async (stepIndex) => {
       const blitzConfigProgram = getCollectionFromSource(blitzConfigFile)
       const cookieIdentifier = blitzConfigProgram.find(
         j.Identifier,
@@ -441,9 +438,12 @@ const upgradeLegacy = async () => {
             blitzClientProgram.toSource(),
           )
         } else {
-          throw new ExpectedError(
-            "Cookie Prefix is undefined & not a string. Please set your cookie prefix manually in app/blitz-client",
-          )
+          // Show error at end of codemod
+          collectedErrors.push({
+            message:
+              "Detected cookiePrefix is undefined. Please set your cookie prefix manually in app/blitz-client",
+            step: stepIndex,
+          })
         }
       } else {
         log.error("Cookie Prefix not found in blitz config file")
@@ -986,7 +986,9 @@ const upgradeLegacy = async () => {
           .get()
 
         documentHead.value.openingElement.name.name = "Head"
-        documentHead.value.closingElement.name.name = "Head"
+        if (documentHead.value.closingElement) {
+          documentHead.value.closingElement.name.name = "Head"
+        }
 
         const blitzScript = program.find(j.Identifier, (node) => node.name === "BlitzScript").get()
         blitzScript.value.name = "NextScript"
@@ -1115,7 +1117,7 @@ const upgradeLegacy = async () => {
 
   steps.push({
     name: "check for usages of invokeWithMiddleware",
-    action: async () => {
+    action: async (stepIndex) => {
       let errors = 0
 
       getAllFiles(appDir, [], [], [".ts", ".tsx", ".js", ".jsx"]).forEach((file) => {
@@ -1137,57 +1139,20 @@ const upgradeLegacy = async () => {
       })
 
       if (errors > 0) {
-        throw new ExpectedError(
-          "\n invokeWithMiddleware is not supported. \n Use invokeWithCtx instead: https://canary.blitzjs.com/docs/resolver-server-utilities#invoke-with-ctx \n Fix the files above, then run the codemod again.",
-        )
+        collectedErrors.push({
+          message:
+            "\n invokeWithMiddleware is not supported. \n Use invokeWithCtx instead: https://canary.blitzjs.com/docs/resolver-server-utilities#invoke-with-ctx \n Fix the files above, then run the codemod again.",
+          step: stepIndex,
+        })
+
+        // Write to the migration file so the user can run the migration again from this point
+        failedAt = stepIndex + 1
+        fs.writeJsonSync(".migration.json", {
+          failedAt,
+        })
       }
     },
   })
-
-  // steps.push({
-  //   name: "Update invokeMiddleware to invoke",
-  //   action: async () => {
-  //     getAllFiles(appDir, [], [], [".css"]).forEach((file) => {
-  //       const program = getCollectionFromSource(file)
-  //       const importSpecifier = findImportSpecifier(program, "invokeWithMiddleware")
-  //       importSpecifier?.paths().forEach((path) => {
-  //         path.get().value.imported.name = "invoke"
-  //       })
-
-  //       const invokeWithMiddlewarePath = findCallExpression(program, "invokeWithMiddleware")
-  //       if (invokeWithMiddlewarePath?.length) {
-  //         invokeWithMiddlewarePath?.paths().forEach((path) => {
-  //           path.get().value.callee.name = "invoke"
-  //           if (path.get().value.arguments.length === 3) {
-  //             delete path.get().value.arguments[2]
-  //           }
-  //         })
-  //       }
-
-  //       fs.writeFileSync(path.resolve(file), program.toSource())
-  //     })
-
-  //     getAllFiles(path.resolve("pages"), [], [], [".css"]).forEach((file) => {
-  //       const program = getCollectionFromSource(file)
-  //       const importSpecifier = findImportSpecifier(program, "invokeWithMiddleware")
-  //       importSpecifier?.paths().forEach((path) => {
-  //         path.get().value.imported.name = "invoke"
-  //       })
-
-  //       const invokeWithMiddlewarePath = findCallExpression(program, "invokeWithMiddleware")
-  //       if (invokeWithMiddlewarePath?.length) {
-  //         invokeWithMiddlewarePath?.paths().forEach((path) => {
-  //           path.get().value.callee.name = "invoke"
-  //           if (path.get().value.arguments.length === 3) {
-  //             delete path.get().value.arguments[2]
-  //           }
-  //         })
-  //       }
-
-  //       fs.writeFileSync(path.resolve(file), program.toSource())
-  //     })
-  //   },
-  // })
 
   // Loop through steps and run the action
   if ((failedAt && failedAt < steps.length) || failedAt !== "SUCCESS" || isLegacyBlitz) {
@@ -1198,8 +1163,15 @@ const upgradeLegacy = async () => {
       }
       const spinner = log.spinner(log.withBrand(`Running ${step.name}...`)).start()
       try {
-        await step.action()
+        await step.action(index)
+        if (collectedErrors.filter((e) => e.step === index).length) {
+          // Soft stored error
+          spinner.fail(`${step.name}`)
+        } else {
+          spinner.succeed(`Successfully ran ${step.name}`)
+        }
       } catch (err) {
+        // Hard exit error
         const error = err as {code: string} | string
         spinner.fail(`${step.name}`)
         log.error(error as string)
@@ -1223,10 +1195,12 @@ const upgradeLegacy = async () => {
         })
         process.exit(1)
       }
-
-      spinner.succeed(`Successfully ran ${step.name}`)
     }
-
+    if (collectedErrors.length) {
+      for (const error of collectedErrors) {
+        log.error(`⚠️  ${error.message}`)
+      }
+    }
     fs.writeJsonSync(".migration.json", {
       failedAt: "SUCCESS",
     })
