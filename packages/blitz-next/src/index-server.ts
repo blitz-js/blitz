@@ -30,8 +30,8 @@ import {IncomingMessage, ServerResponse} from "http"
 import {withSuperJsonProps} from "./superjson"
 import {ParsedUrlQuery} from "querystring"
 import {PreviewData} from "next/types"
-import {NextRouter, resolveHref} from "next/dist/shared/lib/router/router"
-import {RouteUrlObject} from "blitz"
+import {resolveHref} from "next/dist/shared/lib/router/router"
+import {RouteUrlObject, isRouteUrlObject} from "blitz"
 
 export * from "./index-browser"
 
@@ -268,9 +268,9 @@ const normalizeRedirectValues = <NormalizedResult extends Result>(
 ): NormalizedResult => {
   if ("redirect" in result) {
     const dest = result.redirect?.destination
-    if (dest && typeof dest === "object") {
+    if (dest && isRouteUrlObject(dest)) {
       // todo: not sure about this? what should we put as the first argument if we don't have access to the router here?
-      const resolvedDest = resolveHref({} as any, dest, true)
+      const resolvedDest = resolveHref({asPath: "/", pathname: "/"} as any, dest, true)
 
       return {
         ...result,
