@@ -49,75 +49,11 @@ const upgradeLegacy = async () => {
   steps.push({
     name: "move the config from blitz.config.ts to next.config.js",
     action: async () => {
-      // const program = getCollectionFromSource(blitzConfigFile)
-      // const parsedProgram = program.get()
-
-      // // Clear file
-      // parsedProgram.value.program.body = []
-
-      // // We create an object property eg. {withBlitz: withBlitz}
-      // let withBlitz = j.objectProperty(j.identifier("withBlitz"), j.identifier("withBlitz"))
-      // // Then set the shorthand to true so we get {withBlitz}
-      // withBlitz.shorthand = true
-
-      // /* Declare the variable using the object above that equals to a require expression, eg.
-      //   const {withBlitz} = require("@blitzjs/next")
-      // */
-      // let blitzDeclare = j.variableDeclaration("const", [
-      //   j.variableDeclarator(
-      //     j.objectPattern([withBlitz]),
-      //     j.callExpression(j.identifier("require"), [j.stringLiteral("@blitzjs/next")]),
-      //   ),
-      // ])
-      // parsedProgram.value.program.body.push(blitzDeclare)
-
-      // // Create the module.exports with the withBlitz callExpression and empty arguments. Giving us module.exports = withBlitz()
-      // let moduleExportStatement = j.expressionStatement(
-      //   j.assignmentExpression(
-      //     "=",
-      //     j.memberExpression(j.identifier("module"), j.identifier("exports")),
-      //     j.callExpression(j.identifier("withBlitz"), [
-      //       j.objectExpression([j.objectProperty(j.identifier("blitz"), j.objectExpression([]))]),
-      //     ]),
-      //   ),
-      // )
-      // parsedProgram.value.program.body.push(moduleExportStatement)
-
-      // fs.writeFileSync(path.resolve("next.config.js"), program.toSource())
       const program = getCollectionFromSource(blitzConfigFile)
       const parsedProgram = program.get()
-      // const blitzConfig = program.find(j.Program).get()
-      // console.log("blitzConfig", blitzConfig)
 
-      // Clear file
-      // parsedProgram.value.program.body = []
-
-      // // We create an object property eg. {withBlitz: withBlitz}
       let withBlitz = j.objectProperty(j.identifier("withBlitz"), j.identifier("withBlitz"))
-      // Then set the shorthand to true so we get {withBlitz}
       withBlitz.shorthand = true
-
-      // /* Declare the variable using the object above that equals to a require expression, eg.
-      //   const {withBlitz} = require("@blitzjs/next")
-      // */
-      // let blitzDeclare = j.variableDeclaration("const", [
-      //   j.variableDeclarator(
-      //     j.objectPattern([withBlitz]),
-      //     j.callExpression(j.identifier("require"), [j.stringLiteral("@blitzjs/next")]),
-      //   ),
-      // ])
-      // parsedProgram.value.program.body.push(blitzDeclare)
-
-      // // Create the module.exports with the withBlitz callExpression and empty arguments. Giving us module.exports = withBlitz()
-      // let moduleExportStatement = j.expressionStatement(
-      //   j.assignmentExpression(
-      //     "=",
-      //     j.memberExpression(j.identifier("module"), j.identifier("exports")),
-      //     j.callExpression(j.identifier("withBlitz"), [
-      //       j.objectExpression([j.objectProperty(j.identifier("blitz"), j.objectExpression([]))]),
-      //     ]),
-      //   ),
-      // )
 
       let config = program.find(j.AssignmentExpression, {
         left: {
@@ -132,36 +68,14 @@ const upgradeLegacy = async () => {
           },
         },
       })
-      // get the all the config information in the right of the assignment expression and put it in the config variable
       let createdConfig = config.get().value.right
-      // let middleware
-      // if (createdConfig.properties){
-      //   // This is the case when the config is not wrapped in a function already
-      //   middleware = createdConfig.properties.find((node) => node.key.name === "middleware")
-      //   if (middleware) {
-      //     // remove the middleware property from the config
-      //     createdConfig.properties = createdConfig.properties.filter((node) => node.key.name !== "middleware")
-      //   }
-      // }
-      // else if (createdConfig.arguments.properties){
-      //   // This is the case when the config is already wrapped in a call expression like in the legacy auth example
-      //   console.log("found config in call expression")
-      //   middleware = createdConfig.arguments.properties.find((node) => node.key.name === "middleware")
-      //   if (middleware) {
-      //     // remove the middleware property from the config
-      //     createdConfig.arguments.properties = createdConfig.arguments.properties.filter((node) => node.key.name !== "middleware")
-      //   }
-      // }
       const middlewareArray = program.find(j.Identifier, (node) => node.name === "middleware")
       if (middlewareArray.size() > 0) {
-        // remove the middleware property from the config
         if (createdConfig.properties) {
-          // This is the case when the config is not wrapped in a function already
           createdConfig.properties = createdConfig.properties.filter(
             (node) => node.key.name !== "middleware",
           )
         } else {
-          // This is the case when the config is already wrapped in a call expression like in the legacy auth example
           if (createdConfig.arguments[0].properties)
             createdConfig.arguments[0].properties = createdConfig.arguments[0].properties.filter(
               (node) => node.key.name !== "middleware",
@@ -173,22 +87,16 @@ const upgradeLegacy = async () => {
           }
         }
       }
-      // create a new assignment expression with the config variable and the withBlitz object expression
       let configWithBlitz = j.expressionStatement(
         j.assignmentExpression(
           "=",
-          // const config = withBlitz{createdConfig}
           j.identifier("const config"),
           j.callExpression(j.identifier("withBlitz"), [createdConfig]),
         ),
       )
-      // add import {withBlitz} from '@blitzjs/next'
       addNamedImport(program, "withBlitz", "@blitzjs/next")
-      // remove the old module.exports statement
       config.remove()
-      // add the new withBlitz wrapped config
       parsedProgram.value.program.body.push(configWithBlitz)
-      // create statement module.exports = config
       let moduleExportStatement = j.expressionStatement(
         j.assignmentExpression(
           "=",
@@ -197,10 +105,7 @@ const upgradeLegacy = async () => {
         ),
       )
       parsedProgram.value.program.body.push(moduleExportStatement)
-      // create a new file next.config.js with the new config
       fs.writeFileSync(path.resolve("next.config.js"), program.toSource())
-      // rename blitz.config.ts to next.config.js
-      // fs.renameSync(path.resolve(blitzConfigFile), path.resolve("next.config.js"))
     },
   })
 
