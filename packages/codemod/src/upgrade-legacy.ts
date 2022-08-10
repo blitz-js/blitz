@@ -33,12 +33,15 @@ const isInternalBlitzMonorepoDevelopment = fs.existsSync(
 
 const upgradeLegacy = async () => {
   let isTypescript = fs.existsSync(path.resolve("tsconfig.json"))
-  let existingBlitzConfigFiles = ["ts", "js"].map((e) => `blitz.config.${e}`).filter(fs.existsSync)
-  if (existingBlitzConfigFiles.length !== 1 || existingBlitzConfigFiles[0] === undefined) {
+  let existingBlitzConfigFiles = ["ts", "js"]
+    .map((e) => `blitz.config.${e}`)
+    .map((e) => path.resolve(e))
+    .filter(fs.existsSync)
+  let blitzConfigFile = existingBlitzConfigFiles.reduce((_prev, current) => current, "")
+  if (blitzConfigFile === "") {
     throw new ExpectedError("Could not identify Legacy Blitz Config file")
   }
   let isLegacyBlitz = true
-  let blitzConfigFile = existingBlitzConfigFiles[0]
   const appDir = path.resolve("app")
   let failedAt =
     fs.existsSync(path.resolve(".migration.json")) && fs.readJSONSync("./.migration.json").failedAt
