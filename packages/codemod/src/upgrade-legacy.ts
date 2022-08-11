@@ -49,37 +49,40 @@ const upgradeLegacy = async () => {
       const program = getCollectionFromSource(blitzConfigFile)
       const parsedProgram = program.get()
 
-      // Clear file
-      parsedProgram.value.program.body = []
-
-      // We create an object property eg. {withBlitz: withBlitz}
       let withBlitz = j.objectProperty(j.identifier("withBlitz"), j.identifier("withBlitz"))
-      // Then set the shorthand to true so we get {withBlitz}
       withBlitz.shorthand = true
-
-      /* Declare the variable using the object above that equals to a require expression, eg.
-          const {withBlitz} = require("@blitzjs/next")
-        */
-      let blitzDeclare = j.variableDeclaration("const", [
-        j.variableDeclarator(
-          j.objectPattern([withBlitz]),
-          j.callExpression(j.identifier("require"), [j.stringLiteral("@blitzjs/next")]),
+      let config = program.find(j.AssignmentExpression, {
+        left: {
+          type: "MemberExpression",
+          object: {
+            type: "Identifier",
+            name: "module",
+          },
+          property: {
+            type: "Identifier",
+            name: "exports",
+          },
+        },
+      })
+      let createdConfig = config.get().value.right
+      let configWithBlitz = j.expressionStatement(
+        j.assignmentExpression(
+          "=",
+          j.identifier("const config"),
+          j.callExpression(j.identifier("withBlitz"), [createdConfig]),
         ),
-      ])
-      parsedProgram.value.program.body.push(blitzDeclare)
-
-      // Create the module.exports with the withBlitz callExpression and empty arguments. Giving us module.exports = withBlitz()
-      let moduleExportExpression = j.expressionStatement(
+      )
+      addNamedImport(program, "withBlitz", "@blitzjs/next")
+      config.remove()
+      parsedProgram.value.program.body.push(configWithBlitz)
+      let moduleExportStatement = j.expressionStatement(
         j.assignmentExpression(
           "=",
           j.memberExpression(j.identifier("module"), j.identifier("exports")),
-          j.callExpression(j.identifier("withBlitz"), [
-            j.objectExpression([j.objectProperty(j.identifier("blitz"), j.objectExpression([]))]),
-          ]),
+          j.identifier("config"),
         ),
       )
-      parsedProgram.value.program.body.push(moduleExportExpression)
-
+      parsedProgram.value.program.body.push(moduleExportStatement)
       fs.writeFileSync(path.resolve("next.config.js"), program.toSource())
     },
   })
