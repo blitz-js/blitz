@@ -1,4 +1,9 @@
-import j, {ImportDeclaration, ImportDefaultSpecifier, ImportSpecifier} from "jscodeshift"
+import j, {
+  Expression,
+  ImportDeclaration,
+  ImportDefaultSpecifier,
+  ImportSpecifier,
+} from "jscodeshift"
 import * as fs from "fs-extra"
 import path from "path"
 import {
@@ -49,6 +54,26 @@ const upgradeLegacy = async () => {
       const program = getCollectionFromSource(blitzConfigFile)
       const parsedProgram = program.get()
 
+      // Remove BlitzConfig type annotation
+      let findBlitzConfigType = program.find(j.Identifier, (node) => node.name === "BlitzConfig")
+      if (findBlitzConfigType) {
+        findBlitzConfigType.forEach((c) => {
+          if (c.name === "typeName") {
+            j(c.parentPath.parentPath).remove()
+          }
+
+          if (c.name === "imported") {
+            j(c).remove()
+          }
+        })
+      }
+
+      // Remove all typescript stuff
+      let findTypes = program.find(j.TSType, (node) => node)
+      if (findTypes) {
+        findTypes.forEach((t) => j(t.parentPath).remove())
+      }
+
       let withBlitz = j.objectProperty(j.identifier("withBlitz"), j.identifier("withBlitz"))
       withBlitz.shorthand = true
       let config = program.find(j.AssignmentExpression, {
@@ -65,24 +90,19 @@ const upgradeLegacy = async () => {
         },
       })
       let createdConfig = config.get().value.right
-      let configWithBlitz = j.expressionStatement(
-        j.assignmentExpression(
-          "=",
-          j.identifier("const config"),
-          j.callExpression(j.identifier("withBlitz"), [createdConfig]),
-        ),
-      )
+
       addNamedImport(program, "withBlitz", "@blitzjs/next")
       config.remove()
-      parsedProgram.value.program.body.push(configWithBlitz)
+
       let moduleExportStatement = j.expressionStatement(
         j.assignmentExpression(
           "=",
           j.memberExpression(j.identifier("module"), j.identifier("exports")),
-          j.identifier("config"),
+          j.callExpression(j.identifier("withBlitz"), [createdConfig]),
         ),
       )
       parsedProgram.value.program.body.push(moduleExportStatement)
+
       fs.writeFileSync(path.resolve("next.config.js"), program.toSource())
     },
   })
@@ -468,7 +488,7 @@ const upgradeLegacy = async () => {
 
         pluginArray.get().parentPath.value.value.elements = [
           ...pluginArray.get().parentPath.value.value.elements,
-          ...middlewares,
+          ...middlewares.map((m: Node) => j.template.expression`BlitzServerMiddleware(${m})`),
         ]
 
         let importStatements = []
@@ -495,11 +515,21 @@ const upgradeLegacy = async () => {
         }
 
         importStatements.forEach((s) => blitzServerProgram.get().value.program.body.unshift(s))
+        addNamedImport(blitzServerProgram, "BlitzServerMiddleware", "blitz")
 
         fs.writeFileSync(
           `${appDir}/blitz-server.${isTypescript ? "ts" : "js"}`,
           blitzServerProgram.toSource(),
         )
+
+        // Remove middleware array from next.config.js
+        const nextConfigProgram = getCollectionFromSource(path.resolve("next.config.js"))
+        const nextConfigMiddlewareArray = nextConfigProgram.find(
+          j.Identifier,
+          (node) => node.name === "middleware",
+        )
+        j(nextConfigMiddlewareArray.get().parentPath).remove()
+        fs.writeFileSync(`next.config.js`, nextConfigProgram.toSource())
       } else {
         log.error("Middleware array not found in blit config file")
       }
