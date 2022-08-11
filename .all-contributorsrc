@@ -3670,6 +3670,17 @@
         "doc",
         "code"
       ]
+    },
+    {
+      "login": "edrickleong",
+      "name": "Edrick Leong",
+      "avatar_url": "https://avatars.githubusercontent.com/u/10529706?v=4",
+      "profile": "https://github.com/edrickleong",
+      "contributions": [
+        "doc",
+        "code",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7,
