@@ -1,6 +1,8 @@
 import {Generator, GeneratorOptions, SourceRootType} from "../generator"
 import {getTemplateRoot} from "../utils/get-template-root"
 import {camelCaseToKebabCase} from "../utils/inflector"
+import {spawn} from "cross-spawn"
+import which from "npm-which"
 
 export interface PageGeneratorOptions extends GeneratorOptions {
   ModelName: string
@@ -67,9 +69,10 @@ export class PageGenerator extends Generator<PageGeneratorOptions> {
   }
 
   async postWrite() {
-    // const {loadConfigProduction} = await import("next/dist/server/config-shared")
-    // const {saveRouteManifest} = await import("next/dist/build/routes")
-    // const config = loadConfigProduction(process.cwd())
-    // await saveRouteManifest(process.cwd(), config)
+    await new Promise<void>((res, rej) => {
+      const blitzBin = which(process.cwd()).sync("blitz")
+      const child = spawn(blitzBin, ["codegen"], {stdio: "inherit"})
+      child.on("exit", (code) => (code === 0 ? res() : rej()))
+    })
   }
 }
