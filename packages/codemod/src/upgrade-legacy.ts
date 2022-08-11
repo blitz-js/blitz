@@ -65,24 +65,6 @@ const upgradeLegacy = async () => {
         },
       })
       let createdConfig = config.get().value.right
-      const middlewareArray = program.find(j.Identifier, (node) => node.name === "middleware")
-      if (middlewareArray.size() > 0) {
-        if (createdConfig.properties) {
-          createdConfig.properties = createdConfig.properties.filter(
-            (node) => node.key.name !== "middleware",
-          )
-        } else {
-          if (createdConfig.arguments[0].properties)
-            createdConfig.arguments[0].properties = createdConfig.arguments[0].properties.filter(
-              (node) => node.key.name !== "middleware",
-            )
-          else {
-            throw new ExpectedError(
-              "Middleware has not been removed from next.config.js. It has to be removed manually",
-            )
-          }
-        }
-      }
       let configWithBlitz = j.expressionStatement(
         j.assignmentExpression(
           "=",
