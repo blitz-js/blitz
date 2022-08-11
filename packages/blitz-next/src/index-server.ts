@@ -269,7 +269,7 @@ const normalizeRedirectValues = <NormalizedResult extends Result>(
   if ("redirect" in result) {
     const dest = result.redirect?.destination
     if (dest && isRouteUrlObject(dest)) {
-      // todo: not sure about this? what should we put as the first argument if we don't have access to the router here?
+      // Todo: find a better way to resolve href without `as any` assertion.
       const resolvedDest = resolveHref({asPath: "/", pathname: "/"} as any, dest, true)
 
       return {
