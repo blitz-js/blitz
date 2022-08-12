@@ -151,6 +151,7 @@ _Code ownership, pull request approvals and merging, etc_ (see [Maintainers L2](
 <table>
   <tr>
     <td align="center"><a href="http://simonknott.de"><img src="https://avatars1.githubusercontent.com/u/14912729?v=4" width="100px;" alt=""/><br /><sub><b>Simon Knott</b></sub></a><br />SuperJSON</td>
+    <td align="center"><a href="http://jins.dev"><img src="https://avatars.githubusercontent.com/u/39466936?v=4" width="100px;" alt=""/><br /><sub><b>JH.Lee</b></sub></a><br />SuperJSON</td>
     <td align="center"><a href="https://juanm04.com"><img src="https://avatars0.githubusercontent.com/u/16712703?v=4" width="100px;" alt=""/><br /><sub><b>Juan Martín Seery</b></sub></a><br />Website/Docs</td>
   </tr>
 </table>
@@ -711,6 +712,7 @@ Thanks to these wonderful people ([emoji key](https://allcontributors.org/docs/e
     <td align="center"><a href="oltdaniel.eu"><img src="https://avatars.githubusercontent.com/u/53529846?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Daniel Oltmanns</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=oltdaniel" title="Documentation">📖</a> <a href="https://github.com/blitz-js/blitz/commits?author=oltdaniel" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/edrickleong"><img src="https://avatars.githubusercontent.com/u/10529706?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Edrick Leong</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=edrickleong" title="Documentation">📖</a> <a href="https://github.com/blitz-js/blitz/commits?author=edrickleong" title="Code">💻</a> <a href="https://github.com/blitz-js/blitz/commits?author=edrickleong" title="Tests">⚠️</a></td>
     <td align="center"><a href="https://github.com/siddhsuresh"><img src="https://avatars.githubusercontent.com/u/83594610?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Siddharth Suresh</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=siddhsuresh" title="Documentation">📖</a> <a href="https://github.com/blitz-js/blitz/commits?author=siddhsuresh" title="Code">💻</a></td>
+    <td align="center"><a href="http://jins.dev"><img src="https://avatars.githubusercontent.com/u/39466936?v=4" width="100px;" alt=""/><br /><sub><b>JH.Lee</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=orionmiz" title="Code">💻</a> <a href="https://github.com/blitz-js/blitz/commits?author=orionmiz" title="Tests">⚠️</a> <a href="#maintenance-orionmiz" title="Maintenance">🚧</a> <a href="https://github.com/blitz-js/blitz/commits?author=orionmiz" title="Documentation">📖</a></td>
   </tr>
 </table>
 
