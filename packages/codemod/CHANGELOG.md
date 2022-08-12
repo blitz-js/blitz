@@ -1,5 +1,15 @@
 # @blitzjs/codemod
 
+## 2.0.0-alpha.70
+
+### Patch Changes
+
+- f88702c1: Remove trailing comma when removing BlitzConfig from next.config.js & Fix codemod so if route (eg. `app/auth/pages`) convert to (eg. `pages/`) instead of (eg. `pages/auth`)
+- Updated dependencies [4656e6ec]
+- Updated dependencies [1e0ec7a9]
+  - @blitzjs/generator@2.0.0-alpha.70
+  - blitz@2.0.0-alpha.70
+
 ## 2.0.0-alpha.69
 
 ### Patch Changes

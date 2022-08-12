@@ -1,5 +1,12 @@
 # @blitzjs/generator
 
+## 2.0.0-alpha.70
+
+### Patch Changes
+
+- 4656e6ec: Print model added or updated in schema.prisma after running model generator
+- 1e0ec7a9: Add `BlitzPage` type to Home pages in app templates
+
 ## 2.0.0-alpha.69
 
 ### Patch Changes
