@@ -3691,6 +3691,18 @@
         "doc",
         "code"
       ]
+    },
+    {
+      "login": "orionmiz",
+      "name": "JH.Lee",
+      "avatar_url": "https://avatars.githubusercontent.com/u/39466936?v=4",
+      "profile": "http://jins.dev",
+      "contributions": [
+        "code",
+        "test",
+        "maintenance",
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
