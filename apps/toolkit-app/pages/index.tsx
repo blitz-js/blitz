@@ -6,7 +6,7 @@ import { useCurrentUser } from "app/core/hooks/useCurrentUser"
 import logout from "app/auth/mutations/logout"
 import logo from "public/logo.png"
 import { useMutation } from "@blitzjs/rpc"
-import { Routes } from "@blitzjs/next"
+import { Routes, BlitzPage } from "@blitzjs/next"
 
 /*
  * This file is just for a pleasant getting started page for your new app.
@@ -53,7 +53,7 @@ const UserInfo = () => {
   }
 }
 
-const Home = () => {
+const Home: BlitzPage = () => {
   return (
     <Layout title="Home">
       <div className="container">
