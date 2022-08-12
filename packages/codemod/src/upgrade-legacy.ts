@@ -63,7 +63,7 @@ const upgradeLegacy = async () => {
           }
 
           if (c.name === "imported") {
-            j(c).remove()
+            j(c.parentPath).remove()
           }
         })
       }
