@@ -3681,6 +3681,16 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "siddhsuresh",
+      "name": "Siddharth Suresh",
+      "avatar_url": "https://avatars.githubusercontent.com/u/83594610?v=4",
+      "profile": "https://github.com/siddhsuresh",
+      "contributions": [
+        "doc",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
