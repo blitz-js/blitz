@@ -11,7 +11,7 @@
     "preinstall": "npx only-allow pnpm",
     "prepare": "husky install",
     "build": "turbo run build",
-    "build:apps": "turbo run buildapp",
+    "build:apps": "turbo run buildapp --concurrency=1",
     "dev": "turbo run dev --no-cache --parallel",
     "lint": "turbo run lint",
     "test": "turbo run test",

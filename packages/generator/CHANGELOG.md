@@ -1,5 +1,13 @@
 # @blitzjs/generator
 
+## 2.0.0-alpha.69
+
+### Patch Changes
+
+- fd31e56b: Add back blitz generate command
+- 6baab190: Add type checking to next.config.js files in new app templates
+- 37623a4f: Fix typo in a next.config.js file name
+
 ## 2.0.0-alpha.68
 
 ### Patch Changes

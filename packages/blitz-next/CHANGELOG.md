@@ -1,5 +1,13 @@
 # @blitzjs/next
 
+## 2.0.0-alpha.69
+
+### Patch Changes
+
+- a3c92cb8: Allow using `RouteUrlObject` as `redirect.destination` in `getStaticProps` and `getServerSideProps`
+- Updated dependencies [49028024]
+  - @blitzjs/rpc@2.0.0-alpha.69
+
 ## 2.0.0-alpha.68
 
 ### Patch Changes
