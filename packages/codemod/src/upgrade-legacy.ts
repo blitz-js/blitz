@@ -63,7 +63,7 @@ const upgradeLegacy = async () => {
           }
 
           if (c.name === "imported") {
-            j(c).remove()
+            j(c.parentPath).remove()
           }
         })
       }
@@ -625,7 +625,7 @@ const upgradeLegacy = async () => {
                     }
                   } else {
                     arr.push({
-                      model: file,
+                      model: "",
                       path: dirPath + "/" + file + "/pages",
                     })
                     break
@@ -659,6 +659,7 @@ const upgradeLegacy = async () => {
           // If the directory exists without a sub model (sub page directory), loop through the directory manually move each file/directory
           if (fs.existsSync(path.join(path.resolve("pages"), pages.model))) {
             let subs = fs.readdirSync(pages.path)
+
             subs.forEach((sub) => {
               fs.moveSync(
                 path.join(pages.path, sub),
