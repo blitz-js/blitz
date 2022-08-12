@@ -1,5 +1,15 @@
 # blitz
 
+## 2.0.0-alpha.69
+
+### Patch Changes
+
+- fd31e56b: Add back blitz generate command
+- Updated dependencies [fd31e56b]
+- Updated dependencies [6baab190]
+- Updated dependencies [37623a4f]
+  - @blitzjs/generator@2.0.0-alpha.69
+
 ## 2.0.0-alpha.68
 
 ### Patch Changes
