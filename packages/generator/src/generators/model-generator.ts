@@ -89,7 +89,6 @@ export class ModelGenerator extends Generator<ModelGeneratorOptions> {
           dryRun ? "" : ` ${updatedOrCreated} in schema.prisma`
         }:\n`,
       )
-      console.log({model})
       ast
         .printSchema({type: "schema", list: [model]})
         .split("\n")
