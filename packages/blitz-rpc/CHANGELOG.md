@@ -1,5 +1,12 @@
 # @blitzjs/rpc
 
+## 2.0.0-alpha.69
+
+### Patch Changes
+
+- 49028024: Add `getQueryData` utility to get an existing query's cached data
+  - @blitzjs/auth@2.0.0-alpha.69
+
 ## 2.0.0-alpha.68
 
 ### Patch Changes

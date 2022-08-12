@@ -1,5 +1,18 @@
 # @blitzjs/codemod
 
+## 2.0.0-alpha.69
+
+### Patch Changes
+
+- 86af6dec: Wrap middlewares with BlitzServerMiddleware function with codemod
+- 72a332e0: Wrap `blitz.config.ts` with the `withBlitz` function during the codemod step instead of creating a blank `next.config.js` file.
+- 2d1482fc: Allow codemod to finish if `cookiePrefix` is undefined. Then show error at the end of running the codemod.
+- Updated dependencies [fd31e56b]
+- Updated dependencies [6baab190]
+- Updated dependencies [37623a4f]
+  - blitz@2.0.0-alpha.69
+  - @blitzjs/generator@2.0.0-alpha.69
+
 ## 2.0.0-alpha.68
 
 ### Patch Changes
