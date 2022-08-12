@@ -1,4 +1,9 @@
-import j, {ImportDeclaration, ImportDefaultSpecifier, ImportSpecifier} from "jscodeshift"
+import j, {
+  Expression,
+  ImportDeclaration,
+  ImportDefaultSpecifier,
+  ImportSpecifier,
+} from "jscodeshift"
 import * as fs from "fs-extra"
 import path from "path"
 import {
@@ -30,7 +35,7 @@ class ExpectedError extends Error {
 const isInternalBlitzMonorepoDevelopment = fs.existsSync(
   path.join(__dirname, "../../../blitz-next"),
 )
-
+type Step = {name: string; action: (stepIndex: number) => Promise<void>}
 const upgradeLegacy = async () => {
   let isTypescript = fs.existsSync(path.resolve("tsconfig.json"))
   let blitzConfigFile = `blitz.config.${isTypescript ? "ts" : "js"}`
@@ -38,11 +43,8 @@ const upgradeLegacy = async () => {
   const appDir = path.resolve("app")
   let failedAt =
     fs.existsSync(path.resolve(".migration.json")) && fs.readJSONSync("./.migration.json").failedAt
-
-  let steps: {
-    name: string
-    action: () => Promise<void>
-  }[] = []
+  let collectedErrors: {message: string; step: number}[] = []
+  let steps: Step[] = []
 
   // Add steps in order
 
@@ -52,36 +54,54 @@ const upgradeLegacy = async () => {
       const program = getCollectionFromSource(blitzConfigFile)
       const parsedProgram = program.get()
 
-      // Clear file
-      parsedProgram.value.program.body = []
+      // Remove BlitzConfig type annotation
+      let findBlitzConfigType = program.find(j.Identifier, (node) => node.name === "BlitzConfig")
+      if (findBlitzConfigType) {
+        findBlitzConfigType.forEach((c) => {
+          if (c.name === "typeName") {
+            j(c.parentPath.parentPath).remove()
+          }
 
-      // We create an object property eg. {withBlitz: withBlitz}
+          if (c.name === "imported") {
+            j(c).remove()
+          }
+        })
+      }
+
+      // Remove all typescript stuff
+      let findTypes = program.find(j.TSType, (node) => node)
+      if (findTypes) {
+        findTypes.forEach((t) => j(t.parentPath).remove())
+      }
+
       let withBlitz = j.objectProperty(j.identifier("withBlitz"), j.identifier("withBlitz"))
-      // Then set the shorthand to true so we get {withBlitz}
       withBlitz.shorthand = true
+      let config = program.find(j.AssignmentExpression, {
+        left: {
+          type: "MemberExpression",
+          object: {
+            type: "Identifier",
+            name: "module",
+          },
+          property: {
+            type: "Identifier",
+            name: "exports",
+          },
+        },
+      })
+      let createdConfig = config.get().value.right
 
-      /* Declare the variable using the object above that equals to a require expression, eg.
-        const {withBlitz} = require("@blitzjs/next")
-      */
-      let blitzDeclare = j.variableDeclaration("const", [
-        j.variableDeclarator(
-          j.objectPattern([withBlitz]),
-          j.callExpression(j.identifier("require"), [j.stringLiteral("@blitzjs/next")]),
-        ),
-      ])
-      parsedProgram.value.program.body.push(blitzDeclare)
+      addNamedImport(program, "withBlitz", "@blitzjs/next")
+      config.remove()
 
-      // Create the module.exports with the withBlitz callExpression and empty arguments. Giving us module.exports = withBlitz()
-      let moduleExportExpression = j.expressionStatement(
+      let moduleExportStatement = j.expressionStatement(
         j.assignmentExpression(
           "=",
           j.memberExpression(j.identifier("module"), j.identifier("exports")),
-          j.callExpression(j.identifier("withBlitz"), [
-            j.objectExpression([j.objectProperty(j.identifier("blitz"), j.objectExpression([]))]),
-          ]),
+          j.callExpression(j.identifier("withBlitz"), [createdConfig]),
         ),
       )
-      parsedProgram.value.program.body.push(moduleExportExpression)
+      parsedProgram.value.program.body.push(moduleExportStatement)
 
       fs.writeFileSync(path.resolve("next.config.js"), program.toSource())
     },
@@ -411,7 +431,7 @@ const upgradeLegacy = async () => {
 
   steps.push({
     name: "Add cookiePrefix to blitz server",
-    action: async () => {
+    action: async (stepIndex) => {
       const blitzConfigProgram = getCollectionFromSource(blitzConfigFile)
       const cookieIdentifier = blitzConfigProgram.find(
         j.Identifier,
@@ -434,9 +454,12 @@ const upgradeLegacy = async () => {
             blitzClientProgram.toSource(),
           )
         } else {
-          throw new ExpectedError(
-            "Cookie Prefix is undefined & not a string. Please set your cookie prefix manually in app/blitz-client",
-          )
+          // Show error at end of codemod
+          collectedErrors.push({
+            message:
+              "Detected cookiePrefix is undefined. Please set your cookie prefix manually in app/blitz-client",
+            step: stepIndex,
+          })
         }
       } else {
         log.error("Cookie Prefix not found in blitz config file")
@@ -465,7 +488,7 @@ const upgradeLegacy = async () => {
 
         pluginArray.get().parentPath.value.value.elements = [
           ...pluginArray.get().parentPath.value.value.elements,
-          ...middlewares,
+          ...middlewares.map((m: Node) => j.template.expression`BlitzServerMiddleware(${m})`),
         ]
 
         let importStatements = []
@@ -492,11 +515,21 @@ const upgradeLegacy = async () => {
         }
 
         importStatements.forEach((s) => blitzServerProgram.get().value.program.body.unshift(s))
+        addNamedImport(blitzServerProgram, "BlitzServerMiddleware", "blitz")
 
         fs.writeFileSync(
           `${appDir}/blitz-server.${isTypescript ? "ts" : "js"}`,
           blitzServerProgram.toSource(),
         )
+
+        // Remove middleware array from next.config.js
+        const nextConfigProgram = getCollectionFromSource(path.resolve("next.config.js"))
+        const nextConfigMiddlewareArray = nextConfigProgram.find(
+          j.Identifier,
+          (node) => node.name === "middleware",
+        )
+        j(nextConfigMiddlewareArray.get().parentPath).remove()
+        fs.writeFileSync(`next.config.js`, nextConfigProgram.toSource())
       } else {
         log.error("Middleware array not found in blit config file")
       }
@@ -1110,7 +1143,7 @@ const upgradeLegacy = async () => {
 
   steps.push({
     name: "check for usages of invokeWithMiddleware",
-    action: async () => {
+    action: async (stepIndex) => {
       let errors = 0
 
       getAllFiles(appDir, [], [], [".ts", ".tsx", ".js", ".jsx"]).forEach((file) => {
@@ -1132,57 +1165,20 @@ const upgradeLegacy = async () => {
       })
 
       if (errors > 0) {
-        throw new ExpectedError(
-          "\n invokeWithMiddleware is not supported. \n Use invokeWithCtx instead: https://canary.blitzjs.com/docs/resolver-server-utilities#invoke-with-ctx \n Fix the files above, then run the codemod again.",
-        )
+        collectedErrors.push({
+          message:
+            "\n invokeWithMiddleware is not supported. \n Use invokeWithCtx instead: https://canary.blitzjs.com/docs/resolver-server-utilities#invoke-with-ctx \n Fix the files above, then run the codemod again.",
+          step: stepIndex,
+        })
+
+        // Write to the migration file so the user can run the migration again from this point
+        failedAt = stepIndex + 1
+        fs.writeJsonSync(".migration.json", {
+          failedAt,
+        })
       }
     },
   })
-
-  // steps.push({
-  //   name: "Update invokeMiddleware to invoke",
-  //   action: async () => {
-  //     getAllFiles(appDir, [], [], [".css"]).forEach((file) => {
-  //       const program = getCollectionFromSource(file)
-  //       const importSpecifier = findImportSpecifier(program, "invokeWithMiddleware")
-  //       importSpecifier?.paths().forEach((path) => {
-  //         path.get().value.imported.name = "invoke"
-  //       })
-
-  //       const invokeWithMiddlewarePath = findCallExpression(program, "invokeWithMiddleware")
-  //       if (invokeWithMiddlewarePath?.length) {
-  //         invokeWithMiddlewarePath?.paths().forEach((path) => {
-  //           path.get().value.callee.name = "invoke"
-  //           if (path.get().value.arguments.length === 3) {
-  //             delete path.get().value.arguments[2]
-  //           }
-  //         })
-  //       }
-
-  //       fs.writeFileSync(path.resolve(file), program.toSource())
-  //     })
-
-  //     getAllFiles(path.resolve("pages"), [], [], [".css"]).forEach((file) => {
-  //       const program = getCollectionFromSource(file)
-  //       const importSpecifier = findImportSpecifier(program, "invokeWithMiddleware")
-  //       importSpecifier?.paths().forEach((path) => {
-  //         path.get().value.imported.name = "invoke"
-  //       })
-
-  //       const invokeWithMiddlewarePath = findCallExpression(program, "invokeWithMiddleware")
-  //       if (invokeWithMiddlewarePath?.length) {
-  //         invokeWithMiddlewarePath?.paths().forEach((path) => {
-  //           path.get().value.callee.name = "invoke"
-  //           if (path.get().value.arguments.length === 3) {
-  //             delete path.get().value.arguments[2]
-  //           }
-  //         })
-  //       }
-
-  //       fs.writeFileSync(path.resolve(file), program.toSource())
-  //     })
-  //   },
-  // })
 
   // Loop through steps and run the action
   if ((failedAt && failedAt < steps.length) || failedAt !== "SUCCESS" || isLegacyBlitz) {
@@ -1193,8 +1189,15 @@ const upgradeLegacy = async () => {
       }
       const spinner = log.spinner(log.withBrand(`Running ${step.name}...`)).start()
       try {
-        await step.action()
+        await step.action(index)
+        if (collectedErrors.filter((e) => e.step === index).length) {
+          // Soft stored error
+          spinner.fail(`${step.name}`)
+        } else {
+          spinner.succeed(`Successfully ran ${step.name}`)
+        }
       } catch (err) {
+        // Hard exit error
         const error = err as {code: string} | string
         spinner.fail(`${step.name}`)
         log.error(error as string)
@@ -1218,10 +1221,12 @@ const upgradeLegacy = async () => {
         })
         process.exit(1)
       }
-
-      spinner.succeed(`Successfully ran ${step.name}`)
     }
-
+    if (collectedErrors.length) {
+      for (const error of collectedErrors) {
+        log.error(`⚠️  ${error.message}`)
+      }
+    }
     fs.writeJsonSync(".migration.json", {
       failedAt: "SUCCESS",
     })
