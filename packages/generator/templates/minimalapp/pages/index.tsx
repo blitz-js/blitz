@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { NextPage } from "next"
+import { BlitzPage } from "@blitzjs/next"
 import logo from "public/logo.png"
 
 /*
@@ -7,7 +7,7 @@ import logo from "public/logo.png"
  * You can delete everything in here and start from scratch if you like.
  */
 
-const Home: NextPage = () => {
+const Home: BlitzPage = () => {
   return (
     <div className="container">
       <main>
