@@ -85,9 +85,6 @@ Your financial contributions help ensure Blitz continues to be developed and mai
 
 <table>
   <tr>
-<td><a aria-label="Render.com" href="https://render.com?utm_source=BlitzJS&utm_medium=sponsorship&utm_campaign=BlitzJS_Sponsorship_2020">
-<img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/canary/assets/render-logo-color2.png" width="200px">
-</a></td>
 <td><a aria-label="RIT" href="https://rit-inc.co.jp/?utm_source=BlitzJS&utm_medium=sponsorship&utm_campaign=BlitzJS_Sponsorship_2021">
 <img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/canary/assets/rit_logo.png" width="200px">
 </a></td>
@@ -119,9 +116,13 @@ Your financial contributions help ensure Blitz continues to be developed and mai
 
 ### 💎 Diamond Sponsors
 
-<a aria-label="Your Company" href="#">
-<img alt="" src="https://dummyimage.com/1000x330/efe8ff/000000.png&text=Your+Logo+Here" width="500px">
-</a>
+<table>
+  <tr>
+    <a aria-label="Flightcontrol" href="https://www.flightcontrol.dev?ref=blitzjs">
+    <img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/canary/assets/flightcontrol.png" width="400px">
+    </a>
+  </tr>
+</table>
 
 <br>
 
