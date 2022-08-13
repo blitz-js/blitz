@@ -8,7 +8,7 @@
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 <a aria-label="All Contributors" href="#contributors-"><img alt="" src="https://img.shields.io/badge/all_contributors-391-17BB8A.svg?style=for-the-badge&labelColor=000000"></a>
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
-  <a aria-label="License" href="https://github.com/blitz-js/blitz/blob/canary/LICENSE">
+  <a aria-label="License" href="https://github.com/blitz-js/blitz/blob/main/LICENSE">
     <img alt="" src="https://img.shields.io/npm/l/blitz.svg?style=for-the-badge&labelColor=000000&color=blue">
   </a>
   <a aria-label="NPM version" href="https://www.npmjs.com/package/blitz">
@@ -66,16 +66,16 @@ Your financial contributions help ensure Blitz continues to be developed and mai
 <table>
   <tr>
  <td><a aria-label="Andreas Asprou" href="https://andreas.fyi">
-<img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/canary/assets/andreas.jpg" width="40px"/>
+<img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/main/assets/andreas.jpg" width="40px"/>
 </a></td>
  <td><a aria-label="Digas" href="https://digsas.com">
-<img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/canary/assets/digsas.svg" width="40px"/>
+<img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/main/assets/digsas.svg" width="40px"/>
 </a></td>
  <td><a aria-label="userTrack" href="https://www.usertrack.net/?ref=blitzjs">
-<img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/canary/assets/usertrack.png" width="40px"/>
+<img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/main/assets/usertrack.png" width="40px"/>
 </a></td>
  <td><a aria-label="MeetKai" href="https://meetkai.com/?ref=blitzjs">
-<img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/canary/assets/meetkai.png" width="40px"/>
+<img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/main/assets/meetkai.png" width="40px"/>
 </a></td>
   </tr>
 </table>
@@ -86,10 +86,10 @@ Your financial contributions help ensure Blitz continues to be developed and mai
 <table>
   <tr>
 <td><a aria-label="RIT" href="https://rit-inc.co.jp/?utm_source=BlitzJS&utm_medium=sponsorship&utm_campaign=BlitzJS_Sponsorship_2021">
-<img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/canary/assets/rit_logo.png" width="200px">
+<img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/main/assets/rit_logo.png" width="200px">
 </a></td>
 <td><a aria-label="Boostry" href="https://boostry.co.jp/?utm_source=BlitzJS&utm_medium=sponsorship&utm_campaign=BlitzJS_Sponsorship_2021">
-<img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/canary/assets/boostry.svg" width="200px">
+<img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/main/assets/boostry.svg" width="200px">
 </a></td>
   </tr>
 </table>
@@ -102,7 +102,7 @@ Your financial contributions help ensure Blitz continues to be developed and mai
   <tr>
   <td>
 <a aria-label="Fauna" href="https://dashboard.fauna.com/accounts/register?utm_source=BlitzJS&utm_medium=sponsorship&utm_campaign=BlitzJS_Sponsorship_2020">
-<img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/canary/assets/Fauna_Logo_Blue.png" width="300px">
+<img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/main/assets/Fauna_Logo_Blue.png" width="300px">
 </a>
 </td>
   </tr>
@@ -119,7 +119,7 @@ Your financial contributions help ensure Blitz continues to be developed and mai
 <table>
   <tr>
     <a aria-label="Flightcontrol" href="https://www.flightcontrol.dev?ref=blitzjs">
-    <img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/canary/assets/flightcontrol.png" width="400px">
+    <img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/main/assets/flightcontrol.png" width="400px">
     </a>
   </tr>
 </table>
