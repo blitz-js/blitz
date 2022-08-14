@@ -1,5 +1,11 @@
 # @blitzjs/generator
 
+## 2.0.0-alpha.71
+
+### Patch Changes
+
+- 176c7b8b: Use correct path for log utilities import
+
 ## 2.0.0-alpha.70
 
 ### Patch Changes

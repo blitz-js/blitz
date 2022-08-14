@@ -1,5 +1,11 @@
 # @blitzjs/next
 
+## 2.0.0-alpha.71
+
+### Patch Changes
+
+- @blitzjs/rpc@2.0.0-alpha.71
+
 ## 2.0.0-alpha.70
 
 ### Patch Changes
