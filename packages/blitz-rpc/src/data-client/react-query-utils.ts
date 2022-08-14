@@ -124,18 +124,23 @@ const sanitize =
 export const sanitizeQuery = sanitize("query")
 export const sanitizeMutation = sanitize("mutation")
 
+type BlitzNoParams = {__blitz_no_params_passed: true}
 export const getQueryKeyFromUrlAndParams = (url: string, params: unknown) => {
   const queryKey = [url]
 
-  const args = typeof params === "function" ? (params as Function)() : params
-  queryKey.push(serialize(args) as any)
+  if (
+    !(typeof params === "object" && (params as BlitzNoParams)["__blitz_no_params_passed"] === true)
+  ) {
+    const args = typeof params === "function" ? (params as Function)() : params
+    queryKey.push(serialize(args) as any)
+  }
 
   return queryKey as [string, any]
 }
 
 export function getQueryKey<TInput, TResult, T extends AsyncFunc>(
   resolver: T | Resolver<TInput, TResult> | RpcClient<TInput, TResult>,
-  params?: TInput,
+  params: TInput | BlitzNoParams = {__blitz_no_params_passed: true},
 ) {
   if (typeof resolver === "undefined") {
     throw new Error("getQueryKey is missing the first argument - it must be a resolver function")
@@ -160,7 +165,7 @@ export function getInfiniteQueryKey<TInput, TResult, T extends AsyncFunc>(
 
 export function invalidateQuery<TInput, TResult, T extends AsyncFunc>(
   resolver: T | Resolver<TInput, TResult> | RpcClient<TInput, TResult>,
-  params?: TInput,
+  params: TInput | BlitzNoParams = {__blitz_no_params_passed: true},
 ) {
   if (typeof resolver === "undefined") {
     throw new Error(
