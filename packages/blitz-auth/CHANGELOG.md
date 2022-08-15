@@ -1,5 +1,12 @@
 # @blitzjs/auth
 
+## 2.0.0-beta.1
+
+### Patch Changes
+
+- 0f4926fd: Set current Blitz tag to latest
+  - blitz@2.0.0-beta.1
+
 ## 2.0.0-beta.72
 
 ### Patch Changes
