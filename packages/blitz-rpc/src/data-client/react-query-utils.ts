@@ -1,4 +1,4 @@
-import {QueryClient, QueryFilters} from "@tanstack/react-query"
+import {QueryClient} from "@tanstack/react-query"
 import {serialize} from "superjson"
 import {isClient, isServer, AsyncFunc} from "blitz"
 import {ResolverType, RpcClient} from "./rpc"
@@ -124,14 +124,11 @@ const sanitize =
 export const sanitizeQuery = sanitize("query")
 export const sanitizeMutation = sanitize("mutation")
 
-type BlitzNoParams = {__blitz_no_params_passed: true}
-export const getQueryKeyFromUrlAndParams = (url: string, params: unknown) => {
+export const getQueryKeyFromUrlAndParams = (url: string, ...params: [unknown]) => {
   const queryKey = [url]
-
-  if (
-    !(typeof params === "object" && (params as BlitzNoParams)["__blitz_no_params_passed"] === true)
-  ) {
-    const args = typeof params === "function" ? (params as Function)() : params
+  if (params.length === 1) {
+    const param = params[0]
+    const args = typeof param === "function" ? (param as Function)() : param
     queryKey.push(serialize(args) as any)
   }
 
@@ -140,7 +137,7 @@ export const getQueryKeyFromUrlAndParams = (url: string, params: unknown) => {
 
 export function getQueryKey<TInput, TResult, T extends AsyncFunc>(
   resolver: T | Resolver<TInput, TResult> | RpcClient<TInput, TResult>,
-  params: TInput | BlitzNoParams = {__blitz_no_params_passed: true},
+  ...params: [TInput]
 ) {
   if (typeof resolver === "undefined") {
     throw new Error("getQueryKey is missing the first argument - it must be a resolver function")
@@ -165,7 +162,7 @@ export function getInfiniteQueryKey<TInput, TResult, T extends AsyncFunc>(
 
 export function invalidateQuery<TInput, TResult, T extends AsyncFunc>(
   resolver: T | Resolver<TInput, TResult> | RpcClient<TInput, TResult>,
-  params: TInput | BlitzNoParams = {__blitz_no_params_passed: true},
+  ...params: [TInput]
 ) {
   if (typeof resolver === "undefined") {
     throw new Error(
@@ -173,7 +170,7 @@ export function invalidateQuery<TInput, TResult, T extends AsyncFunc>(
     )
   }
 
-  const fullQueryKey = getQueryKey(resolver, params)
+  const fullQueryKey = getQueryKey(resolver, ...params)
   return getQueryClient().invalidateQueries(fullQueryKey)
 }
 
