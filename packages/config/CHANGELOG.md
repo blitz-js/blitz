@@ -1,5 +1,11 @@
 # @blitzjs/config
 
+## 2.0.0-beta.72
+
+### Patch Changes
+
+- 2cc888ef: Beta release
+
 ## 2.0.0-alpha.71
 
 ## 2.0.0-alpha.70
