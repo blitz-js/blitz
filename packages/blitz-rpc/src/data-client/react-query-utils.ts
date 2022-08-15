@@ -143,7 +143,7 @@ export function getQueryKey<TInput, TResult, T extends AsyncFunc>(
     throw new Error("getQueryKey is missing the first argument - it must be a resolver function")
   }
 
-  return getQueryKeyFromUrlAndParams(sanitizeQuery(resolver)._routePath, params)
+  return getQueryKeyFromUrlAndParams(sanitizeQuery(resolver)._routePath, ...params)
 }
 
 export function getInfiniteQueryKey<TInput, TResult, T extends AsyncFunc>(
