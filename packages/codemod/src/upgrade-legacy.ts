@@ -278,7 +278,7 @@ const upgradeLegacy = async () => {
             .value.program.body.unshift(
               j.importDeclaration(
                 [j.importDefaultSpecifier(j.identifier("Script"))],
-                j.stringLiteral("next/script"),
+                j.stringLiteral("next/script"), 
               ),
             )
         }
