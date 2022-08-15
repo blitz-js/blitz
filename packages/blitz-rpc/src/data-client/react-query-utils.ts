@@ -129,8 +129,7 @@ export const getQueryKeyFromUrlAndParams = (url: string, ...params: [unknown]): 
   const queryKey: BlitzQueryKey = [url]
   if (params.length === 1) {
     const param = params[0]
-    const args = typeof param === "function" ? param() : param
-    queryKey.push(serialize(args) as any)
+    queryKey.push(serialize(typeof param === "function" ? param() : param) as any)
   }
 
   return queryKey
