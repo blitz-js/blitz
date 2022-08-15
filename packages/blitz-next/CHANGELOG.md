@@ -1,5 +1,13 @@
 # @blitzjs/next
 
+## 2.0.0-beta.1
+
+### Patch Changes
+
+- 0f4926fd: Set current Blitz tag to latest
+- Updated dependencies [0f4926fd]
+  - @blitzjs/rpc@2.0.0-beta.1
+
 ## 2.0.0-beta.72
 
 ### Patch Changes
