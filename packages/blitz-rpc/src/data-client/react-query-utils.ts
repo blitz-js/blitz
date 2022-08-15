@@ -124,15 +124,16 @@ const sanitize =
 export const sanitizeQuery = sanitize("query")
 export const sanitizeMutation = sanitize("mutation")
 
-export const getQueryKeyFromUrlAndParams = (url: string, ...params: [unknown]) => {
-  const queryKey = [url]
+type BlitzQueryKey = [string] | [string, any]
+export const getQueryKeyFromUrlAndParams = (url: string, ...params: [unknown]): BlitzQueryKey => {
+  const queryKey: BlitzQueryKey = [url]
   if (params.length === 1) {
     const param = params[0]
-    const args = typeof param === "function" ? (param as Function)() : param
+    const args = typeof param === "function" ? param() : param
     queryKey.push(serialize(args) as any)
   }
 
-  return queryKey as [string, any]
+  return queryKey
 }
 
 export function getQueryKey<TInput, TResult, T extends AsyncFunc>(
