@@ -3703,6 +3703,15 @@
         "maintenance",
         "doc"
       ]
+    },
+    {
+      "login": "corydeppen",
+      "name": "Cory Deppen",
+      "avatar_url": "https://avatars.githubusercontent.com/u/313264?v=4",
+      "profile": "https://github.com/corydeppen",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
