@@ -1,6 +1,6 @@
 # Contributing
 
-[Read the Contributing Guide at Blitzjs.com](https://alpha.blitzjs.com/docs/contributing)
+[Read the Contributing Guide at Blitzjs.com](https://blitzjs.com/docs/contributing)
 
 ## To run tests
 

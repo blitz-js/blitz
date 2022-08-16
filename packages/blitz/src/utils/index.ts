@@ -104,7 +104,6 @@ export function compose(middleware: RequestMiddleware<any, any>[]) {
       }
 
       try {
-        console.log(`[${handler.name}] Starting handler...`)
         return Promise.resolve(handler(req, res, dispatch.bind(null, i + 1)))
       } catch (err) {
         return Promise.reject(err)

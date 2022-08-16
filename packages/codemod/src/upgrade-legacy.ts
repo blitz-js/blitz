@@ -23,7 +23,7 @@ import {
 } from "./utils"
 import {log} from "blitz"
 
-const CURRENT_BLITZ_TAG = "alpha"
+const CURRENT_BLITZ_TAG = "latest"
 
 class ExpectedError extends Error {
   constructor(message: string) {
