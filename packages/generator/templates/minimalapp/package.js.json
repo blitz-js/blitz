@@ -18,8 +18,8 @@
     "*.{js}": ["eslint --fix"]
   },
   "dependencies": {
-    "@blitzjs/next": "alpha",
-    "blitz": "alpha",
+    "@blitzjs/next": "latest",
+    "blitz": "latest",
     "next": "12.2.0",
     "react": "18.0.0",
     "react-dom": "18.0.0",

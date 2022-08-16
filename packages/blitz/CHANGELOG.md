@@ -1,5 +1,12 @@
 # blitz
 
+## 2.0.0-beta.1
+
+### Patch Changes
+
+- Updated dependencies [0f4926fd]
+  - @blitzjs/generator@2.0.0-beta.1
+
 ## 2.0.0-beta.72
 
 ### Patch Changes
