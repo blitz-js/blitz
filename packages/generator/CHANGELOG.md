@@ -1,5 +1,11 @@
 # @blitzjs/generator
 
+## 2.0.0-beta.1
+
+### Patch Changes
+
+- 0f4926fd: Set current Blitz tag to latest
+
 ## 2.0.0-beta.72
 
 ### Patch Changes
