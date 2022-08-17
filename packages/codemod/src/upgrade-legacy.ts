@@ -94,8 +94,8 @@ const upgradeLegacy = async () => {
         j.assignmentExpression(
           "=",
           j.identifier("const { withBlitz }"),
-          j.callExpression(j.identifier("require"), j.identifier("@blitzjs/next")),
-        ),
+          j.callExpression(j.identifier("require"), [j.identifier(`"@blitzjs/next"`)]),
+        )
       )
       parsedProgram.value.program.body.unshift(importWithBlitz)
       config.remove()
