@@ -263,6 +263,7 @@ const upgradeLegacy = async () => {
         const nextLink = findImport(program, "next/link")
         const nextHead = findImport(program, "next/head")
         const dynamic = findImport(program, "next/dynamic")
+        const nextScript = findImport(program, "next/script")
 
         if (nextImage?.length) {
           nextImage.remove()
@@ -272,6 +273,18 @@ const upgradeLegacy = async () => {
               j.importDeclaration(
                 [j.importDefaultSpecifier(j.identifier("Image"))],
                 j.stringLiteral("next/image"),
+              ),
+            )
+        }
+        
+        if (nextScript?.length) {
+          nextScript.remove()
+          program
+            .get()
+            .value.program.body.unshift(
+              j.importDeclaration(
+                [j.importDefaultSpecifier(j.identifier("Script"))],
+                j.stringLiteral("next/script"), 
               ),
             )
         }
