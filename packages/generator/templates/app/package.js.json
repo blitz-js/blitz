@@ -22,11 +22,11 @@
     "*.{js}": ["eslint --fix"]
   },
   "dependencies": {
-    "@blitzjs/auth": "alpha",
-    "@blitzjs/next": "alpha",
-    "@blitzjs/rpc": "alpha",
+    "@blitzjs/auth": "latest",
+    "@blitzjs/next": "latest",
+    "@blitzjs/rpc": "latest",
     "@prisma/client": "4.0.0",
-    "blitz": "alpha",
+    "blitz": "latest",
     "next": "12.2.0",
     "prisma": "4.0.0",
     "react": "18.0.0",
