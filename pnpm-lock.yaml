@@ -9,7 +9,7 @@ importers:
       husky: 7.0.4
       jsdom: ^19.0.0
       lint-staged: 12.1.7
-      next: 12.2.0
+      next: 12.2.5
       only-allow: 1.1.0
       prettier: ^2.5.1
       prettier-plugin-prisma: 3.8.0
@@ -24,7 +24,7 @@ importers:
       husky: 7.0.4
       jsdom: 19.0.0
       lint-staged: 12.1.7
-      next: 12.2.0
+      next: 12.2.5
       only-allow: 1.1.0
       prettier: 2.6.2
       prettier-plugin-prisma: 3.8.0_prettier@2.6.2
@@ -47,7 +47,7 @@ importers:
       "@types/jest": 27.4.1
       "@types/node": 17.0.16
       "@types/preview-email": 2.0.1
-      "@types/react": 18.0.1
+      "@types/react": 18.0.17
       "@typescript-eslint/eslint-plugin": 5.9.1
       blitz: workspace:2.0.0-beta.1
       eslint: 7.32.0
@@ -56,14 +56,14 @@ importers:
       husky: 7.0.4
       jest: 27.5.1
       lint-staged: 12.1.7
-      next: 12.2.0
+      next: 12.2.5
       prettier: ^2.5.1
       prettier-plugin-prisma: 3.8.0
       pretty-quick: 3.1.3
       preview-email: 3.x
       prisma: 4.0.0
-      react: 18.0.0
-      react-dom: 18.0.0
+      react: 18.2.0
+      react-dom: 18.2.0
       react-hook-form: 7.29.0
       ts-node: 10.7.0
       typescript: ^4.5.3
@@ -76,21 +76,21 @@ importers:
       "@hookform/resolvers": 2.8.8_react-hook-form@7.29.0
       "@prisma/client": 4.0.0_prisma@4.0.0
       blitz: link:../../packages/blitz
-      next: 12.2.0_zpnidt7m3osuk7shl3s4oenomq
+      next: 12.2.5_biqbaboplfbrettd7655fr4n2y
       prisma: 4.0.0
-      react: 18.0.0
-      react-dom: 18.0.0_react@18.0.0
-      react-hook-form: 7.29.0_react@18.0.0
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      react-hook-form: 7.29.0_react@18.2.0
       ts-node: 10.7.0_fxg3r7oju3tntkxsvleuiot4fa
       zod: 3.17.3
     devDependencies:
       "@next/bundle-analyzer": 12.0.8
-      "@testing-library/react": 13.0.0_zpnidt7m3osuk7shl3s4oenomq
-      "@testing-library/react-hooks": 7.0.2_zpnidt7m3osuk7shl3s4oenomq
+      "@testing-library/react": 13.0.0_biqbaboplfbrettd7655fr4n2y
+      "@testing-library/react-hooks": 7.0.2_biqbaboplfbrettd7655fr4n2y
       "@types/jest": 27.4.1
       "@types/node": 17.0.16
       "@types/preview-email": 2.0.1
-      "@types/react": 18.0.1
+      "@types/react": 18.0.17
       "@typescript-eslint/eslint-plugin": 5.9.1_hrkuebk64jiu2ut2d2sm4oylnu
       eslint: 7.32.0
       eslint-config-next: 12.2.0_hrkuebk64jiu2ut2d2sm4oylnu
@@ -114,16 +114,16 @@ importers:
       "@prisma/client": 4.0.0
       "@types/jest": 27.4.1
       "@types/passport-twitter": 1.0.37
-      "@types/react": 18.0.1
+      "@types/react": 18.0.17
       blitz: workspace:*
       eslint: 7.32.0
       jest: 27.5.1
-      next: 12.2.0
+      next: 12.2.5
       passport-mock-strategy: 2.0.0
       passport-twitter: 1.0.4
       prisma: 4.0.0
-      react: 18.0.0
-      react-dom: 18.0.0
+      react: 18.2.0
+      react-dom: 18.2.0
       ts-node: 10.7.0
       typescript: ^4.5.3
     dependencies:
@@ -136,16 +136,16 @@ importers:
       "@types/passport-twitter": 1.0.37
       blitz: link:../../packages/blitz
       jest: 27.5.1_ts-node@10.7.0
-      next: 12.2.0_zpnidt7m3osuk7shl3s4oenomq
+      next: 12.2.5_biqbaboplfbrettd7655fr4n2y
       passport-mock-strategy: 2.0.0
       passport-twitter: 1.0.4
       prisma: 4.0.0
-      react: 18.0.0
-      react-dom: 18.0.0_react@18.0.0
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
       ts-node: 10.7.0_typescript@4.6.3
     devDependencies:
       "@next/bundle-analyzer": 12.0.8
-      "@types/react": 18.0.1
+      "@types/react": 18.0.17
       eslint: 7.32.0
       typescript: 4.6.3
 
@@ -159,18 +159,18 @@ importers:
       "@types/express": 4.17.13
       "@types/fs-extra": 9.0.13
       "@types/node-fetch": 2.6.1
-      "@types/react": 18.0.1
+      "@types/react": 18.0.17
       b64-lite: 1.4.0
       blitz: workspace:*
       eslint: 7.32.0
       fs-extra: 10.0.1
       get-port: 6.1.2
       lowdb: 3.0.0
-      next: 12.2.0
+      next: 12.2.5
       node-fetch: 3.2.3
       prisma: 4.0.0
-      react: 18.0.0
-      react-dom: 18.0.0
+      react: 18.2.0
+      react-dom: 18.2.0
       typescript: ^4.5.3
     dependencies:
       "@blitzjs/auth": link:../../packages/blitz-auth
@@ -179,16 +179,16 @@ importers:
       "@prisma/client": 4.0.0_prisma@4.0.0
       blitz: link:../../packages/blitz
       lowdb: 3.0.0
-      next: 12.2.0_zpnidt7m3osuk7shl3s4oenomq
+      next: 12.2.5_biqbaboplfbrettd7655fr4n2y
       prisma: 4.0.0
-      react: 18.0.0
-      react-dom: 18.0.0_react@18.0.0
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
     devDependencies:
       "@next/bundle-analyzer": 12.0.8
       "@types/express": 4.17.13
       "@types/fs-extra": 9.0.13
       "@types/node-fetch": 2.6.1
-      "@types/react": 18.0.1
+      "@types/react": 18.0.17
       b64-lite: 1.4.0
       eslint: 7.32.0
       fs-extra: 10.0.1
@@ -205,30 +205,30 @@ importers:
       "@types/express": 4.17.13
       "@types/fs-extra": 9.0.13
       "@types/node-fetch": 2.6.1
-      "@types/react": 18.0.1
+      "@types/react": 18.0.17
       blitz: workspace:*
       eslint: 7.32.0
       fs-extra: 10.0.1
       get-port: 6.1.2
-      next: 12.2.0
+      next: 12.2.5
       node-fetch: 3.2.3
-      react: 18.0.0
-      react-dom: 18.0.0
+      react: 18.2.0
+      react-dom: 18.2.0
       typescript: ^4.5.3
     dependencies:
       "@blitzjs/config": link:../../packages/config
       "@blitzjs/next": link:../../packages/blitz-next
       "@blitzjs/rpc": link:../../packages/blitz-rpc
       blitz: link:../../packages/blitz
-      next: 12.2.0_zpnidt7m3osuk7shl3s4oenomq
-      react: 18.0.0
-      react-dom: 18.0.0_react@18.0.0
+      next: 12.2.5_biqbaboplfbrettd7655fr4n2y
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
     devDependencies:
       "@next/bundle-analyzer": 12.0.8
       "@types/express": 4.17.13
       "@types/fs-extra": 9.0.13
       "@types/node-fetch": 2.6.1
-      "@types/react": 18.0.1
+      "@types/react": 18.0.17
       eslint: 7.32.0
       fs-extra: 10.0.1
       get-port: 6.1.2
@@ -246,18 +246,18 @@ importers:
       "@types/express": 4.17.13
       "@types/fs-extra": 9.0.13
       "@types/node-fetch": 2.6.1
-      "@types/react": 18.0.1
+      "@types/react": 18.0.17
       b64-lite: 1.4.0
       blitz: workspace:*
       eslint: 7.32.0
       fs-extra: 10.0.1
       get-port: 6.1.2
       lowdb: 3.0.0
-      next: 12.2.0
+      next: 12.2.5
       node-fetch: 3.2.3
       prisma: 4.0.0
-      react: 18.0.0
-      react-dom: 18.0.0
+      react: 18.2.0
+      react-dom: 18.2.0
       typescript: ^4.5.3
     dependencies:
       "@blitzjs/auth": link:../../packages/blitz-auth
@@ -266,17 +266,17 @@ importers:
       "@prisma/client": 4.0.0_prisma@4.0.0
       blitz: link:../../packages/blitz
       lowdb: 3.0.0
-      next: 12.2.0_zpnidt7m3osuk7shl3s4oenomq
+      next: 12.2.5_biqbaboplfbrettd7655fr4n2y
       prisma: 4.0.0
-      react: 18.0.0
-      react-dom: 18.0.0_react@18.0.0
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
     devDependencies:
       "@blitzjs/config": link:../../packages/config
       "@next/bundle-analyzer": 12.0.8
       "@types/express": 4.17.13
       "@types/fs-extra": 9.0.13
       "@types/node-fetch": 2.6.1
-      "@types/react": 18.0.1
+      "@types/react": 18.0.17
       b64-lite: 1.4.0
       eslint: 7.32.0
       fs-extra: 10.0.1
@@ -293,7 +293,7 @@ importers:
       "@prisma/client": 4.0.0
       "@tanstack/react-query": 4.0.10
       "@testing-library/react": 13.0.0
-      "@types/react": 18.0.1
+      "@types/react": 18.0.17
       "@vitejs/plugin-react": 1.3.0
       blitz: workspace:*
       delay: 5.0.0
@@ -301,10 +301,10 @@ importers:
       eslint-config-next: latest
       eslint-plugin-testing-library: 5.0.1
       jsdom: ^19.0.0
-      next: 12.2.0
+      next: 12.2.5
       prisma: 4.0.0
-      react: 18.0.0
-      react-dom: 18.0.0
+      react: 18.2.0
+      react-dom: 18.2.0
       typescript: ^4.5.3
     dependencies:
       "@blitzjs/auth": link:../../packages/blitz-auth
@@ -312,15 +312,15 @@ importers:
       "@blitzjs/next": link:../../packages/blitz-next
       "@blitzjs/rpc": link:../../packages/blitz-rpc
       "@prisma/client": 4.0.0_prisma@4.0.0
-      "@tanstack/react-query": 4.0.10_zpnidt7m3osuk7shl3s4oenomq
+      "@tanstack/react-query": 4.0.10_biqbaboplfbrettd7655fr4n2y
       blitz: link:../../packages/blitz
-      next: 12.2.0_zpnidt7m3osuk7shl3s4oenomq
+      next: 12.2.5_biqbaboplfbrettd7655fr4n2y
       prisma: 4.0.0
-      react: 18.0.0
-      react-dom: 18.0.0_react@18.0.0
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
     devDependencies:
-      "@testing-library/react": 13.0.0_zpnidt7m3osuk7shl3s4oenomq
-      "@types/react": 18.0.1
+      "@testing-library/react": 13.0.0_biqbaboplfbrettd7655fr4n2y
+      "@types/react": 18.0.17
       "@vitejs/plugin-react": 1.3.0
       delay: 5.0.0
       eslint: 7.32.0
@@ -340,18 +340,18 @@ importers:
       "@types/express": 4.17.13
       "@types/fs-extra": 9.0.13
       "@types/node-fetch": 2.6.1
-      "@types/react": 18.0.1
+      "@types/react": 18.0.17
       b64-lite: 1.4.0
       blitz: workspace:*
       eslint: 7.32.0
       fs-extra: 10.0.1
       get-port: 6.1.2
       lowdb: 3.0.0
-      next: 12.2.0
+      next: 12.2.5
       node-fetch: 3.2.3
       prisma: 4.0.0
-      react: 18.0.0
-      react-dom: 18.0.0
+      react: 18.2.0
+      react-dom: 18.2.0
       typescript: ^4.5.3
     dependencies:
       "@blitzjs/auth": link:../../packages/blitz-auth
@@ -360,17 +360,17 @@ importers:
       "@prisma/client": 4.0.0_prisma@4.0.0
       blitz: link:../../packages/blitz
       lowdb: 3.0.0
-      next: 12.2.0_zpnidt7m3osuk7shl3s4oenomq
+      next: 12.2.5_biqbaboplfbrettd7655fr4n2y
       prisma: 4.0.0
-      react: 18.0.0
-      react-dom: 18.0.0_react@18.0.0
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
     devDependencies:
       "@blitzjs/config": link:../../packages/config
       "@next/bundle-analyzer": 12.0.8
       "@types/express": 4.17.13
       "@types/fs-extra": 9.0.13
       "@types/node-fetch": 2.6.1
-      "@types/react": 18.0.1
+      "@types/react": 18.0.17
       b64-lite: 1.4.0
       eslint: 7.32.0
       fs-extra: 10.0.1
@@ -387,14 +387,14 @@ importers:
       "@types/express": 4.17.13
       "@types/fs-extra": 9.0.13
       "@types/node-fetch": 2.6.1
-      "@types/react": 18.0.1
+      "@types/react": 18.0.17
       b64-lite: 1.4.0
       blitz: workspace:*
       eslint: 7.32.0
       fs-extra: 10.0.1
-      next: 12.2.0
-      react: 18.0.0
-      react-dom: 18.0.0
+      next: 12.2.5
+      react: 18.2.0
+      react-dom: 18.2.0
       typescript: ^4.5.3
     dependencies:
       "@blitzjs/auth": link:../../packages/blitz-auth
@@ -402,14 +402,14 @@ importers:
       "@blitzjs/next": link:../../packages/blitz-next
       "@blitzjs/rpc": link:../../packages/blitz-rpc
       blitz: link:../../packages/blitz
-      next: 12.2.0_zpnidt7m3osuk7shl3s4oenomq
-      react: 18.0.0
-      react-dom: 18.0.0_react@18.0.0
+      next: 12.2.5_biqbaboplfbrettd7655fr4n2y
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
     devDependencies:
       "@types/express": 4.17.13
       "@types/fs-extra": 9.0.13
       "@types/node-fetch": 2.6.1
-      "@types/react": 18.0.1
+      "@types/react": 18.0.17
       b64-lite: 1.4.0
       eslint: 7.32.0
       fs-extra: 10.0.1
@@ -426,18 +426,18 @@ importers:
       "@types/express": 4.17.13
       "@types/fs-extra": 9.0.13
       "@types/node-fetch": 2.6.1
-      "@types/react": 18.0.1
+      "@types/react": 18.0.17
       b64-lite: 1.4.0
       blitz: workspace:*
       eslint: 7.32.0
       fs-extra: 10.0.1
       get-port: 6.1.2
       lowdb: 3.0.0
-      next: 12.2.0
+      next: 12.2.5
       node-fetch: 3.2.3
       prisma: 4.0.0
-      react: 18.0.0
-      react-dom: 18.0.0
+      react: 18.2.0
+      react-dom: 18.2.0
       typescript: ^4.5.3
     dependencies:
       "@blitzjs/auth": link:../../packages/blitz-auth
@@ -446,17 +446,17 @@ importers:
       "@prisma/client": 4.0.0_prisma@4.0.0
       blitz: link:../../packages/blitz
       lowdb: 3.0.0
-      next: 12.2.0_zpnidt7m3osuk7shl3s4oenomq
+      next: 12.2.5_biqbaboplfbrettd7655fr4n2y
       prisma: 4.0.0
-      react: 18.0.0
-      react-dom: 18.0.0_react@18.0.0
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
     devDependencies:
       "@blitzjs/config": link:../../packages/config
       "@next/bundle-analyzer": 12.0.8
       "@types/express": 4.17.13
       "@types/fs-extra": 9.0.13
       "@types/node-fetch": 2.6.1
-      "@types/react": 18.0.1
+      "@types/react": 18.0.17
       b64-lite: 1.4.0
       eslint: 7.32.0
       fs-extra: 10.0.1
@@ -473,7 +473,7 @@ importers:
       "@types/express": 4.17.13
       "@types/fs-extra": 9.0.13
       "@types/node-fetch": 2.6.1
-      "@types/react": 18.0.1
+      "@types/react": 18.0.17
       "@types/rimraf": 3.0.2
       "@types/selenium-webdriver": 4.0.18
       chromedriver: 100.0.0
@@ -485,8 +485,8 @@ importers:
       node-fetch: 3.2.3
       pkg-dir: 5.0.0
       playwright-chromium: 1.14.1
-      react: 18.0.0
-      react-dom: 18.0.0
+      react: 18.2.0
+      react-dom: 18.2.0
       resolve-cwd: 3.0.0
       resolve-from: 5.0.0
       rimraf: 3.0.2
@@ -496,12 +496,12 @@ importers:
     devDependencies:
       "@blitzjs/config": link:../../packages/config
       "@blitzjs/rpc": link:../../packages/blitz-rpc
-      "@tanstack/react-query": 4.0.10_zpnidt7m3osuk7shl3s4oenomq
-      "@testing-library/react": 13.0.0_zpnidt7m3osuk7shl3s4oenomq
+      "@tanstack/react-query": 4.0.10_biqbaboplfbrettd7655fr4n2y
+      "@testing-library/react": 13.0.0_biqbaboplfbrettd7655fr4n2y
       "@types/express": 4.17.13
       "@types/fs-extra": 9.0.13
       "@types/node-fetch": 2.6.1
-      "@types/react": 18.0.1
+      "@types/react": 18.0.17
       "@types/rimraf": 3.0.2
       "@types/selenium-webdriver": 4.0.18
       chromedriver: 100.0.0
@@ -513,8 +513,8 @@ importers:
       node-fetch: 3.2.3
       pkg-dir: 5.0.0
       playwright-chromium: 1.14.1
-      react: 18.0.0
-      react-dom: 18.0.0_react@18.0.0
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
       resolve-cwd: 3.0.0
       resolve-from: 5.0.0
       rimraf: 3.0.2
@@ -537,7 +537,7 @@ importers:
       "@types/node-fetch": 2.6.1
       "@types/npm-which": 3.0.1
       "@types/prompts": 2.0.14
-      "@types/react": 18.0.1
+      "@types/react": 18.0.17
       "@types/react-dom": 17.0.14
       "@types/test-listen": 1.1.0
       "@types/watchpack": 1.1.1
@@ -563,7 +563,7 @@ importers:
       p-event: 4.2.0
       pkg-dir: 5.0.0
       prompts: 2.4.2
-      react: 18.0.0
+      react: 18.2.0
       resolve-cwd: 3.0.0
       resolve-from: 5.0.0
       superjson: 1.8.0
@@ -621,12 +621,12 @@ importers:
       "@types/node-fetch": 2.6.1
       "@types/npm-which": 3.0.1
       "@types/prompts": 2.0.14
-      "@types/react": 18.0.1
+      "@types/react": 18.0.17
       "@types/react-dom": 17.0.14
       "@types/test-listen": 1.1.0
       "@types/watchpack": 1.1.1
       express: 4.17.3_supports-color@8.1.1
-      react: 18.0.0
+      react: 18.2.0
       test-listen: 1.1.0
       typescript: 4.6.3
       unbuild: 0.7.6_supports-color@8.1.1
@@ -644,7 +644,7 @@ importers:
       "@types/debug": 4.1.7
       "@types/jsonwebtoken": 8.5.8
       "@types/passport": 1.0.7
-      "@types/react": 18.0.1
+      "@types/react": 18.0.17
       "@types/react-dom": 17.0.14
       "@types/secure-password": 3.1.1
       b64-lite: 1.4.0
@@ -658,8 +658,8 @@ importers:
       nanoid: 3.2.0
       passport: 0.5.2
       path: 0.12.7
-      react: 18.0.0
-      react-dom: 18.0.0
+      react: 18.2.0
+      react-dom: 18.2.0
       secure-password: 4.0.0
       supports-color: 8.1.1
       typescript: ^4.5.3
@@ -687,15 +687,15 @@ importers:
       url: 0.11.0
     devDependencies:
       "@blitzjs/config": link:../config
-      "@testing-library/react": 13.0.0_zpnidt7m3osuk7shl3s4oenomq
-      "@testing-library/react-hooks": 7.0.2_zpnidt7m3osuk7shl3s4oenomq
+      "@testing-library/react": 13.0.0_biqbaboplfbrettd7655fr4n2y
+      "@testing-library/react-hooks": 7.0.2_biqbaboplfbrettd7655fr4n2y
       "@types/cookie": 0.4.1
       "@types/debug": 4.1.7
       "@types/jsonwebtoken": 8.5.8
-      "@types/react": 18.0.1
+      "@types/react": 18.0.17
       "@types/react-dom": 17.0.14
-      react: 18.0.0
-      react-dom: 18.0.0_react@18.0.0
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
       typescript: 4.6.3
       unbuild: 0.7.6_supports-color@8.1.1
       watch: 1.0.2
@@ -712,7 +712,7 @@ importers:
       "@testing-library/user-event": 13.5.0
       "@types/hoist-non-react-statics": 3.3.1
       "@types/node": 17.0.16
-      "@types/react": 18.0.1
+      "@types/react": 18.0.17
       "@types/react-dom": 17.0.14
       "@types/testing-library__react-hooks": 4.0.0
       blitz: 2.0.0-beta.1
@@ -721,9 +721,9 @@ importers:
       find-up: 4.1.0
       fs-extra: 10.0.1
       hoist-non-react-statics: 3.3.2
-      next: 12.2.0
-      react: 18.0.0
-      react-dom: 18.0.0
+      next: 12.2.5
+      react: 18.2.0
+      react-dom: 18.2.0
       resolve-from: 5.0.0
       superjson: 1.8.0
       supports-color: 8.1.1
@@ -733,7 +733,7 @@ importers:
       watch: 1.0.2
     dependencies:
       "@blitzjs/rpc": link:../blitz-rpc
-      "@tanstack/react-query": 4.0.10_zpnidt7m3osuk7shl3s4oenomq
+      "@tanstack/react-query": 4.0.10_biqbaboplfbrettd7655fr4n2y
       "@types/hoist-non-react-statics": 3.3.1
       debug: 4.3.3_supports-color@8.1.1
       fs-extra: 10.0.1
@@ -744,19 +744,19 @@ importers:
       "@blitzjs/config": link:../config
       "@testing-library/dom": 8.13.0
       "@testing-library/jest-dom": 5.16.3
-      "@testing-library/react": 13.0.0_zpnidt7m3osuk7shl3s4oenomq
-      "@testing-library/react-hooks": 7.0.2_zpnidt7m3osuk7shl3s4oenomq
+      "@testing-library/react": 13.0.0_biqbaboplfbrettd7655fr4n2y
+      "@testing-library/react-hooks": 7.0.2_biqbaboplfbrettd7655fr4n2y
       "@testing-library/user-event": 13.5.0_tlwynutqiyp5mns3woioasuxnq
       "@types/node": 17.0.16
-      "@types/react": 18.0.1
+      "@types/react": 18.0.17
       "@types/react-dom": 17.0.14
-      "@types/testing-library__react-hooks": 4.0.0_zpnidt7m3osuk7shl3s4oenomq
+      "@types/testing-library__react-hooks": 4.0.0_biqbaboplfbrettd7655fr4n2y
       blitz: link:../blitz
       cross-spawn: 7.0.3
       find-up: 4.1.0
-      next: 12.2.0_zpnidt7m3osuk7shl3s4oenomq
-      react: 18.0.0
-      react-dom: 18.0.0_react@18.0.0
+      next: 12.2.5_biqbaboplfbrettd7655fr4n2y
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
       resolve-from: 5.0.0
       ts-jest: 27.1.4_typescript@4.6.3
       typescript: 4.6.3
@@ -769,16 +769,16 @@ importers:
       "@blitzjs/config": workspace:2.0.0-beta.1
       "@tanstack/react-query": 4.0.10
       "@types/debug": 4.1.7
-      "@types/react": 18.0.1
+      "@types/react": 18.0.17
       "@types/react-dom": 17.0.14
       b64-lite: 1.4.0
       bad-behavior: 1.0.1
       blitz: 2.0.0-beta.1
       chalk: ^4.1.0
       debug: 4.3.3
-      next: 12.2.0
-      react: 18.0.0
-      react-dom: 18.0.0
+      next: 12.2.5
+      react: 18.2.0
+      react-dom: 18.2.0
       superjson: 1.8.0
       supports-color: 8.1.1
       typescript: ^4.5.3
@@ -787,7 +787,7 @@ importers:
       zod: 3.17.3
     dependencies:
       "@blitzjs/auth": link:../blitz-auth
-      "@tanstack/react-query": 4.0.10_zpnidt7m3osuk7shl3s4oenomq
+      "@tanstack/react-query": 4.0.10_biqbaboplfbrettd7655fr4n2y
       b64-lite: 1.4.0
       bad-behavior: 1.0.1
       chalk: 4.1.2
@@ -797,12 +797,12 @@ importers:
     devDependencies:
       "@blitzjs/config": link:../config
       "@types/debug": 4.1.7
-      "@types/react": 18.0.1
+      "@types/react": 18.0.17
       "@types/react-dom": 17.0.14
       blitz: link:../blitz
-      next: 12.2.0_zpnidt7m3osuk7shl3s4oenomq
-      react: 18.0.0
-      react-dom: 18.0.0_react@18.0.0
+      next: 12.2.5_biqbaboplfbrettd7655fr4n2y
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
       typescript: 4.6.3
       unbuild: 0.7.6_supports-color@8.1.1
       watch: 1.0.2
@@ -887,7 +887,7 @@ importers:
       "@types/mem-fs-editor": 7.0.1
       "@types/pluralize": 0.0.29
       "@types/prettier": 2.4.4
-      "@types/react": 18.0.1
+      "@types/react": 18.0.17
       "@types/react-dom": 17.0.14
       "@types/vinyl": 2.0.6
       "@typescript-eslint/eslint-plugin": 5.9.1
@@ -909,7 +909,7 @@ importers:
       ora: 5.3.0
       pluralize: 8.0.0
       prettier: ^2.5.1
-      react: 18.0.0
+      react: 18.2.0
       recast: 0.20.5
       supports-color: 8.1.1
       tslog: 3.3.1
@@ -954,7 +954,7 @@ importers:
       "@types/mem-fs-editor": 7.0.1
       "@types/pluralize": 0.0.29
       "@types/prettier": 2.4.4
-      "@types/react": 18.0.1
+      "@types/react": 18.0.17
       "@types/react-dom": 17.0.14
       "@types/vinyl": 2.0.6
       "@typescript-eslint/eslint-plugin": 5.9.1_2anf7xzu4gv3hdfa2vphlhds3y
@@ -962,7 +962,7 @@ importers:
       babylon: 6.18.0
       debug: 4.3.3_supports-color@8.1.1
       eslint: 7.32.0_supports-color@8.1.1
-      react: 18.0.0
+      react: 18.2.0
       typescript: 4.6.3
       unbuild: 0.6.9_supports-color@8.1.1
       watch: 1.0.2
@@ -970,11 +970,11 @@ importers:
   packages/pkg-template:
     specifiers:
       "@blitzjs/config": 2.0.0-beta.1
-      "@types/react": 18.0.1
+      "@types/react": 18.0.17
       "@types/react-dom": 17.0.14
       "@typescript-eslint/eslint-plugin": 5.9.1
       "@typescript-eslint/parser": 5.9.1
-      react: 18.0.0
+      react: 18.2.0
       typescript: ^4.5.3
       unbuild: 0.7.6
       watch: 1.0.2
@@ -983,9 +983,9 @@ importers:
       "@typescript-eslint/parser": 5.9.1_typescript@4.6.3
     devDependencies:
       "@blitzjs/config": link:../config
-      "@types/react": 18.0.1
+      "@types/react": 18.0.17
       "@types/react-dom": 17.0.14
-      react: 18.0.0
+      react: 18.2.0
       typescript: 4.6.3
       unbuild: 0.7.6
       watch: 1.0.2
@@ -3109,6 +3109,7 @@ packages:
       semver: 5.7.1
     transitivePeerDependencies:
       - supports-color
+    dev: false
 
   /@babel/preset-flow/7.17.12_@babel+core@7.18.2:
     resolution:
@@ -3665,7 +3666,7 @@ packages:
     peerDependencies:
       react-hook-form: ^7.0.0
     dependencies:
-      react-hook-form: 7.29.0_react@18.0.0
+      react-hook-form: 7.29.0_react@18.2.0
     dev: false
 
   /@humanwhocodes/config-array/0.5.0:
@@ -4067,10 +4068,10 @@ packages:
       - utf-8-validate
     dev: true
 
-  /@next/env/12.2.0:
+  /@next/env/12.2.5:
     resolution:
       {
-        integrity: sha512-/FCkDpL/8SodJEXvx/DYNlOD5ijTtkozf4PPulYPtkPOJaMPpBSOkzmsta4fnrnbdH6eZjbwbiXFdr6gSQCV4w==,
+        integrity: sha512-vLPLV3cpPGjUPT3PjgRj7e3nio9t6USkuew3JE/jMeon/9Mvp1WyR18v3iwnCuX7eUAm1HmAbJHHLAbcu/EJcw==,
       }
 
   /@next/eslint-plugin-next/12.2.0:
@@ -4090,10 +4091,10 @@ packages:
       glob: 7.1.7
     dev: true
 
-  /@next/swc-android-arm-eabi/12.2.0:
+  /@next/swc-android-arm-eabi/12.2.5:
     resolution:
       {
-        integrity: sha512-hbneH8DNRB2x0Nf5fPCYoL8a0osvdTCe4pvOc9Rv5CpDsoOlf8BWBs2OWpeP0U2BktGvIsuUhmISmdYYGyrvTw==,
+        integrity: sha512-cPWClKxGhgn2dLWnspW+7psl3MoLQUcNqJqOHk2BhNcou9ARDtC0IjQkKe5qcn9qg7I7U83Gp1yh2aesZfZJMA==,
       }
     engines: {node: ">= 10"}
     cpu: [arm]
@@ -4101,10 +4102,10 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@next/swc-android-arm64/12.2.0:
+  /@next/swc-android-arm64/12.2.5:
     resolution:
       {
-        integrity: sha512-1eEk91JHjczcJomxJ8X0XaUeNcp5Lx1U2Ic7j15ouJ83oRX+3GIslOuabW2oPkSgXbHkThMClhirKpvG98kwZg==,
+        integrity: sha512-vMj0efliXmC5b7p+wfcQCX0AfU8IypjkzT64GiKJD9PgiA3IILNiGJr1fw2lyUDHkjeWx/5HMlMEpLnTsQslwg==,
       }
     engines: {node: ">= 10"}
     cpu: [arm64]
@@ -4112,10 +4113,10 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@next/swc-darwin-arm64/12.2.0:
+  /@next/swc-darwin-arm64/12.2.5:
     resolution:
       {
-        integrity: sha512-x5U5gJd7ZvrEtTFnBld9O2bUlX8opu7mIQUqRzj7KeWzBwPhrIzTTsQXAiNqsaMuaRPvyHBVW/5d/6g6+89Y8g==,
+        integrity: sha512-VOPWbO5EFr6snla/WcxUKtvzGVShfs302TEMOtzYyWni6f9zuOetijJvVh9CCTzInnXAZMtHyNhefijA4HMYLg==,
       }
     engines: {node: ">= 10"}
     cpu: [arm64]
@@ -4123,10 +4124,10 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@next/swc-darwin-x64/12.2.0:
+  /@next/swc-darwin-x64/12.2.5:
     resolution:
       {
-        integrity: sha512-iwMNFsrAPjfedjKDv9AXPAV16PWIomP3qw/FfPaxkDVRbUls7BNdofBLzkQmqxqWh93WrawLwaqyXpJuAaiwJA==,
+        integrity: sha512-5o8bTCgAmtYOgauO/Xd27vW52G2/m3i5PX7MUYePquxXAnX73AAtqA3WgPXBRitEB60plSKZgOTkcpqrsh546A==,
       }
     engines: {node: ">= 10"}
     cpu: [x64]
@@ -4134,10 +4135,10 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@next/swc-freebsd-x64/12.2.0:
+  /@next/swc-freebsd-x64/12.2.5:
     resolution:
       {
-        integrity: sha512-gRiAw8g3Akf6niTDLEm1Emfa7jXDjvaAj/crDO8hKASKA4Y1fS4kbi/tyWw5VtoFI4mUzRmCPmZ8eL0tBSG58A==,
+        integrity: sha512-yYUbyup1JnznMtEBRkK4LT56N0lfK5qNTzr6/DEyDw5TbFVwnuy2hhLBzwCBkScFVjpFdfiC6SQAX3FrAZzuuw==,
       }
     engines: {node: ">= 10"}
     cpu: [x64]
@@ -4145,10 +4146,10 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@next/swc-linux-arm-gnueabihf/12.2.0:
+  /@next/swc-linux-arm-gnueabihf/12.2.5:
     resolution:
       {
-        integrity: sha512-/TJZkxaIpeEwnXh6A40trgwd40C5+LJroLUOEQwMOJdavLl62PjCA6dGl1pgooWLCIb5YdBQ0EG4ylzvLwS2+Q==,
+        integrity: sha512-2ZE2/G921Acks7UopJZVMgKLdm4vN4U0yuzvAMJ6KBavPzqESA2yHJlm85TV/K9gIjKhSk5BVtauIUntFRP8cg==,
       }
     engines: {node: ">= 10"}
     cpu: [arm]
@@ -4156,10 +4157,10 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@next/swc-linux-arm64-gnu/12.2.0:
+  /@next/swc-linux-arm64-gnu/12.2.5:
     resolution:
       {
-        integrity: sha512-++WAB4ElXCSOKG9H8r4ENF8EaV+w0QkrpjehmryFkQXmt5juVXz+nKDVlCRMwJU7A1O0Mie82XyEoOrf6Np1pA==,
+        integrity: sha512-/I6+PWVlz2wkTdWqhlSYYJ1pWWgUVva6SgX353oqTh8njNQp1SdFQuWDqk8LnM6ulheVfSsgkDzxrDaAQZnzjQ==,
       }
     engines: {node: ">= 10"}
     cpu: [arm64]
@@ -4167,10 +4168,10 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@next/swc-linux-arm64-musl/12.2.0:
+  /@next/swc-linux-arm64-musl/12.2.5:
     resolution:
       {
-        integrity: sha512-XrqkHi/VglEn5zs2CYK6ofJGQySrd+Lr4YdmfJ7IhsCnMKkQY1ma9Hv5THwhZVof3e+6oFHrQ9bWrw9K4WTjFA==,
+        integrity: sha512-LPQRelfX6asXyVr59p5sTpx5l+0yh2Vjp/R8Wi4X9pnqcayqT4CUJLiHqCvZuLin3IsFdisJL0rKHMoaZLRfmg==,
       }
     engines: {node: ">= 10"}
     cpu: [arm64]
@@ -4178,10 +4179,10 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@next/swc-linux-x64-gnu/12.2.0:
+  /@next/swc-linux-x64-gnu/12.2.5:
     resolution:
       {
-        integrity: sha512-MyhHbAKVjpn065WzRbqpLu2krj4kHLi6RITQdD1ee+uxq9r2yg5Qe02l24NxKW+1/lkmpusl4Y5Lks7rBiJn4w==,
+        integrity: sha512-0szyAo8jMCClkjNK0hknjhmAngUppoRekW6OAezbEYwHXN/VNtsXbfzgYOqjKWxEx3OoAzrT3jLwAF0HdX2MEw==,
       }
     engines: {node: ">= 10"}
     cpu: [x64]
@@ -4189,10 +4190,10 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@next/swc-linux-x64-musl/12.2.0:
+  /@next/swc-linux-x64-musl/12.2.5:
     resolution:
       {
-        integrity: sha512-Tz1tJZ5egE0S/UqCd5V6ZPJsdSzv/8aa7FkwFmIJ9neLS8/00za+OY5pq470iZQbPrkTwpKzmfTTIPRVD5iqDg==,
+        integrity: sha512-zg/Y6oBar1yVnW6Il1I/08/2ukWtOG6s3acdJdEyIdsCzyQi4RLxbbhkD/EGQyhqBvd3QrC6ZXQEXighQUAZ0g==,
       }
     engines: {node: ">= 10"}
     cpu: [x64]
@@ -4200,10 +4201,10 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@next/swc-win32-arm64-msvc/12.2.0:
+  /@next/swc-win32-arm64-msvc/12.2.5:
     resolution:
       {
-        integrity: sha512-0iRO/CPMCdCYUzuH6wXLnsfJX1ykBX4emOOvH0qIgtiZM0nVYbF8lkEyY2ph4XcsurpinS+ziWuYCXVqrOSqiw==,
+        integrity: sha512-3/90DRNSqeeSRMMEhj4gHHQlLhhKg5SCCoYfE3kBjGpE63EfnblYUqsszGGZ9ekpKL/R4/SGB40iCQr8tR5Jiw==,
       }
     engines: {node: ">= 10"}
     cpu: [arm64]
@@ -4211,10 +4212,10 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@next/swc-win32-ia32-msvc/12.2.0:
+  /@next/swc-win32-ia32-msvc/12.2.5:
     resolution:
       {
-        integrity: sha512-8A26RJVcJHwIKm8xo/qk2ePRquJ6WCI2keV2qOW/Qm+ZXrPXHMIWPYABae/nKN243YFBNyPiHytjX37VrcpUhg==,
+        integrity: sha512-hGLc0ZRAwnaPL4ulwpp4D2RxmkHQLuI8CFOEEHdzZpS63/hMVzv81g8jzYA0UXbb9pus/iTc3VRbVbAM03SRrw==,
       }
     engines: {node: ">= 10"}
     cpu: [ia32]
@@ -4222,10 +4223,10 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@next/swc-win32-x64-msvc/12.2.0:
+  /@next/swc-win32-x64-msvc/12.2.5:
     resolution:
       {
-        integrity: sha512-OI14ozFLThEV3ey6jE47zrzSTV/6eIMsvbwozo+XfdWqOPwQ7X00YkRx4GVMKMC0rM44oGS2gmwMKYpe4EblnA==,
+        integrity: sha512-7h5/ahY7NeaO2xygqVrSG/Y8Vs4cdjxIjowTZ5W6CKoTKn7tmnuxlUc2h74x06FKmbhAd9agOjr/AOKyxYYm9Q==,
       }
     engines: {node: ">= 10"}
     cpu: [x64]
@@ -4517,10 +4518,10 @@ packages:
     dependencies:
       "@sinonjs/commons": 1.8.3
 
-  /@swc/helpers/0.4.2:
+  /@swc/helpers/0.4.3:
     resolution:
       {
-        integrity: sha512-556Az0VX7WR6UdoTn4htt/l3zPQ7bsQWK+HqdG4swV7beUCxo/BqmvbOpUkTIm/9ih86LIf1qsUnywNL3obGHw==,
+        integrity: sha512-6JrF+fdUK2zbGpJIlN7G3v966PQjyx/dPt1T9km2wj+EUBqgrxCk3uX4Kct16MIm9gGxfKRcfax2hVf5jvlTzA==,
       }
     dependencies:
       tslib: 2.4.0
@@ -4551,7 +4552,7 @@ packages:
         integrity: sha512-9LsABpZXkWZHi4P1ozRETEDXQocLAxVzQaIhganxbNuz/uA3PsCAJxJTiQrknG5htLMzOF5MqM9G10e6DCxV1A==,
       }
 
-  /@tanstack/react-query/4.0.10_zpnidt7m3osuk7shl3s4oenomq:
+  /@tanstack/react-query/4.0.10_biqbaboplfbrettd7655fr4n2y:
     resolution:
       {
         integrity: sha512-Wn5QhZUE5wvr6rGClV7KeQIUsdTmYR9mgmMZen7DSRWauHW2UTynFg3Kkf6pw+XlxxOLsyLWwz/Q6q1lSpM3TQ==,
@@ -4568,9 +4569,9 @@ packages:
     dependencies:
       "@tanstack/query-core": 4.0.10
       "@types/use-sync-external-store": 0.0.3
-      react: 18.0.0
-      react-dom: 18.0.0_react@18.0.0
-      use-sync-external-store: 1.2.0_react@18.0.0
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      use-sync-external-store: 1.2.0_react@18.2.0
 
   /@testim/chrome-version/1.1.2:
     resolution:
@@ -4614,7 +4615,7 @@ packages:
       redent: 3.0.0
     dev: true
 
-  /@testing-library/react-hooks/7.0.2_zpnidt7m3osuk7shl3s4oenomq:
+  /@testing-library/react-hooks/7.0.2_biqbaboplfbrettd7655fr4n2y:
     resolution:
       {
         integrity: sha512-dYxpz8u9m4q1TuzfcUApqi8iFfR6R0FaMbr2hjZJy1uC8z+bO/K4v8Gs9eogGKYQop7QsrBTFkv/BCF7MzD2Cg==,
@@ -4631,15 +4632,15 @@ packages:
         optional: true
     dependencies:
       "@babel/runtime": 7.18.3
-      "@types/react": 18.0.1
+      "@types/react": 18.0.17
       "@types/react-dom": 17.0.14
       "@types/react-test-renderer": 18.0.0
-      react: 18.0.0
-      react-dom: 18.0.0_react@18.0.0
-      react-error-boundary: 3.1.4_react@18.0.0
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      react-error-boundary: 3.1.4_react@18.2.0
     dev: true
 
-  /@testing-library/react/13.0.0_zpnidt7m3osuk7shl3s4oenomq:
+  /@testing-library/react/13.0.0_biqbaboplfbrettd7655fr4n2y:
     resolution:
       {
         integrity: sha512-p0lYA1M7uoEmk2LnCbZLGmHJHyH59sAaZVXChTXlyhV/PRW9LoIh4mdf7tiXsO8BoNG+vN8UnFJff1hbZeXv+w==,
@@ -4652,8 +4653,8 @@ packages:
       "@babel/runtime": 7.18.3
       "@testing-library/dom": 8.13.0
       "@types/react-dom": 18.0.5
-      react: 18.0.0
-      react-dom: 18.0.0_react@18.0.0
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
     dev: true
 
   /@testing-library/user-event/13.5.0_tlwynutqiyp5mns3woioasuxnq:
@@ -4957,7 +4958,7 @@ packages:
         integrity: sha512-iMIqiko6ooLrTh1joXodJK5X9xeEALT1kM5G3ZLhD3hszxBdIEd5C75U834D9mLcINgD4OyZf5uQXjkuYydWvA==,
       }
     dependencies:
-      "@types/react": 18.0.1
+      "@types/react": 18.0.17
       hoist-non-react-statics: 3.3.2
     dev: false
 
@@ -5266,7 +5267,7 @@ packages:
         integrity: sha512-H03xwEP1oXmSfl3iobtmQ/2dHF5aBHr8aUMwyGZya6OW45G+xtdzmq6HkncefiBt5JU8DVyaWl/nWZbjZCnzAQ==,
       }
     dependencies:
-      "@types/react": 18.0.1
+      "@types/react": 18.0.17
     dev: true
 
   /@types/react-dom/18.0.5:
@@ -5275,7 +5276,7 @@ packages:
         integrity: sha512-OWPWTUrY/NIrjsAPkAk1wW9LZeIjSvkXRhclsFO8CZcZGCOg2G0YZy4ft+rOyYxy8B7ui5iZzi9OkDebZ7/QSA==,
       }
     dependencies:
-      "@types/react": 18.0.1
+      "@types/react": 18.0.17
     dev: true
 
   /@types/react-test-renderer/18.0.0:
@@ -5284,13 +5285,13 @@ packages:
         integrity: sha512-C7/5FBJ3g3sqUahguGi03O79b8afNeSD6T8/GU50oQrJCU0bVCCGQHaGKUbg2Ce8VQEEqTw8/HiS6lXHHdgkdQ==,
       }
     dependencies:
-      "@types/react": 18.0.1
+      "@types/react": 18.0.17
     dev: true
 
-  /@types/react/18.0.1:
+  /@types/react/18.0.17:
     resolution:
       {
-        integrity: sha512-VnWlrVgG0dYt+NqlfMI0yUYb8Rdl4XUROyH+c6gq/iFCiZ805Vi//26UW38DHnxQkbDhnrIWTBiy6oKZqL11cw==,
+        integrity: sha512-38ETy4tL+rn4uQQi7mB81G7V1g0u2ryquNmsVIOKUAEIDK+3CUjZ6rSRpdvS99dNBnkLFL83qfmtLacGOTIhwQ==,
       }
     dependencies:
       "@types/prop-types": 15.7.5
@@ -5387,14 +5388,14 @@ packages:
       "@types/jest": 28.1.1
     dev: true
 
-  /@types/testing-library__react-hooks/4.0.0_zpnidt7m3osuk7shl3s4oenomq:
+  /@types/testing-library__react-hooks/4.0.0_biqbaboplfbrettd7655fr4n2y:
     resolution:
       {
         integrity: sha512-UzZUXthQtVjDruR2YA+hqg9ux5AfmZ8Kaw+QDungax+T7wb/5NC4x7YOpIqRx7oY3KksGQ69bzNE/xwzb5NslQ==,
       }
     deprecated: This is a stub types definition. @testing-library/react-hooks provides its own type definitions, so you do not need this installed.
     dependencies:
-      "@testing-library/react-hooks": 7.0.2_zpnidt7m3osuk7shl3s4oenomq
+      "@testing-library/react-hooks": 7.0.2_biqbaboplfbrettd7655fr4n2y
     transitivePeerDependencies:
       - react
       - react-dom
@@ -5539,6 +5540,7 @@ packages:
       typescript: 4.6.3
     transitivePeerDependencies:
       - supports-color
+    dev: false
 
   /@typescript-eslint/experimental-utils/5.28.0_hrkuebk64jiu2ut2d2sm4oylnu:
     resolution:
@@ -9365,6 +9367,7 @@ packages:
     transitivePeerDependencies:
       - eslint-import-resolver-webpack
       - supports-color
+    dev: false
 
   /eslint-config-next/12.2.5_hrkuebk64jiu2ut2d2sm4oylnu:
     resolution:
@@ -9402,6 +9405,7 @@ packages:
     hasBin: true
     peerDependencies:
       eslint: ">=7.0.0"
+    dev: false
 
   /eslint-config-prettier/8.5.0_eslint@7.32.0:
     resolution:
@@ -12066,7 +12070,7 @@ packages:
       pretty-format: 27.5.1
       slash: 3.0.0
       strip-json-comments: 3.1.1
-      ts-node: 10.7.0_fxg3r7oju3tntkxsvleuiot4fa
+      ts-node: 10.7.0_typescript@4.6.3
     transitivePeerDependencies:
       - bufferutil
       - canvas
@@ -13940,10 +13944,10 @@ packages:
       }
     dev: false
 
-  /next/12.2.0:
+  /next/12.2.5:
     resolution:
       {
-        integrity: sha512-B4j7D3SHYopLYx6/Ark0fenwIar9tEaZZFAaxmKjgcMMexhVJzB3jt7X+6wcdXPPMeUD6r09weUtnDpjox/vIA==,
+        integrity: sha512-tBdjqX5XC/oFs/6gxrZhjmiq90YWizUYU6qOWAfat7zJwrwapJ+BYgX2PmiacunXMaRpeVT4vz5MSPSLgNkrpA==,
       }
     engines: {node: ">=12.22.0"}
     hasBin: true
@@ -13961,35 +13965,35 @@ packages:
       sass:
         optional: true
     dependencies:
-      "@next/env": 12.2.0
-      "@swc/helpers": 0.4.2
+      "@next/env": 12.2.5
+      "@swc/helpers": 0.4.3
       caniuse-lite: 1.0.30001339
-      postcss: 8.4.5
-      styled-jsx: 5.0.2
-      use-sync-external-store: 1.1.0
+      postcss: 8.4.14
+      styled-jsx: 5.0.4
+      use-sync-external-store: 1.2.0
     optionalDependencies:
-      "@next/swc-android-arm-eabi": 12.2.0
-      "@next/swc-android-arm64": 12.2.0
-      "@next/swc-darwin-arm64": 12.2.0
-      "@next/swc-darwin-x64": 12.2.0
-      "@next/swc-freebsd-x64": 12.2.0
-      "@next/swc-linux-arm-gnueabihf": 12.2.0
-      "@next/swc-linux-arm64-gnu": 12.2.0
-      "@next/swc-linux-arm64-musl": 12.2.0
-      "@next/swc-linux-x64-gnu": 12.2.0
-      "@next/swc-linux-x64-musl": 12.2.0
-      "@next/swc-win32-arm64-msvc": 12.2.0
-      "@next/swc-win32-ia32-msvc": 12.2.0
-      "@next/swc-win32-x64-msvc": 12.2.0
+      "@next/swc-android-arm-eabi": 12.2.5
+      "@next/swc-android-arm64": 12.2.5
+      "@next/swc-darwin-arm64": 12.2.5
+      "@next/swc-darwin-x64": 12.2.5
+      "@next/swc-freebsd-x64": 12.2.5
+      "@next/swc-linux-arm-gnueabihf": 12.2.5
+      "@next/swc-linux-arm64-gnu": 12.2.5
+      "@next/swc-linux-arm64-musl": 12.2.5
+      "@next/swc-linux-x64-gnu": 12.2.5
+      "@next/swc-linux-x64-musl": 12.2.5
+      "@next/swc-win32-arm64-msvc": 12.2.5
+      "@next/swc-win32-ia32-msvc": 12.2.5
+      "@next/swc-win32-x64-msvc": 12.2.5
     transitivePeerDependencies:
       - "@babel/core"
       - babel-plugin-macros
     dev: false
 
-  /next/12.2.0_zpnidt7m3osuk7shl3s4oenomq:
+  /next/12.2.5_biqbaboplfbrettd7655fr4n2y:
     resolution:
       {
-        integrity: sha512-B4j7D3SHYopLYx6/Ark0fenwIar9tEaZZFAaxmKjgcMMexhVJzB3jt7X+6wcdXPPMeUD6r09weUtnDpjox/vIA==,
+        integrity: sha512-tBdjqX5XC/oFs/6gxrZhjmiq90YWizUYU6qOWAfat7zJwrwapJ+BYgX2PmiacunXMaRpeVT4vz5MSPSLgNkrpA==,
       }
     engines: {node: ">=12.22.0"}
     hasBin: true
@@ -14007,28 +14011,28 @@ packages:
       sass:
         optional: true
     dependencies:
-      "@next/env": 12.2.0
-      "@swc/helpers": 0.4.2
+      "@next/env": 12.2.5
+      "@swc/helpers": 0.4.3
       caniuse-lite: 1.0.30001339
-      postcss: 8.4.5
-      react: 18.0.0
-      react-dom: 18.0.0_react@18.0.0
-      styled-jsx: 5.0.2_react@18.0.0
-      use-sync-external-store: 1.1.0_react@18.0.0
+      postcss: 8.4.14
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      styled-jsx: 5.0.4_react@18.2.0
+      use-sync-external-store: 1.2.0_react@18.2.0
     optionalDependencies:
-      "@next/swc-android-arm-eabi": 12.2.0
-      "@next/swc-android-arm64": 12.2.0
-      "@next/swc-darwin-arm64": 12.2.0
-      "@next/swc-darwin-x64": 12.2.0
-      "@next/swc-freebsd-x64": 12.2.0
-      "@next/swc-linux-arm-gnueabihf": 12.2.0
-      "@next/swc-linux-arm64-gnu": 12.2.0
-      "@next/swc-linux-arm64-musl": 12.2.0
-      "@next/swc-linux-x64-gnu": 12.2.0
-      "@next/swc-linux-x64-musl": 12.2.0
-      "@next/swc-win32-arm64-msvc": 12.2.0
-      "@next/swc-win32-ia32-msvc": 12.2.0
-      "@next/swc-win32-x64-msvc": 12.2.0
+      "@next/swc-android-arm-eabi": 12.2.5
+      "@next/swc-android-arm64": 12.2.5
+      "@next/swc-darwin-arm64": 12.2.5
+      "@next/swc-darwin-x64": 12.2.5
+      "@next/swc-freebsd-x64": 12.2.5
+      "@next/swc-linux-arm-gnueabihf": 12.2.5
+      "@next/swc-linux-arm64-gnu": 12.2.5
+      "@next/swc-linux-arm64-musl": 12.2.5
+      "@next/swc-linux-x64-gnu": 12.2.5
+      "@next/swc-linux-x64-musl": 12.2.5
+      "@next/swc-win32-arm64-msvc": 12.2.5
+      "@next/swc-win32-ia32-msvc": 12.2.5
+      "@next/swc-win32-x64-msvc": 12.2.5
     transitivePeerDependencies:
       - "@babel/core"
       - babel-plugin-macros
@@ -15002,18 +15006,6 @@ packages:
       nanoid: 3.3.4
       picocolors: 1.0.0
       source-map-js: 1.0.2
-    dev: false
-
-  /postcss/8.4.5:
-    resolution:
-      {
-        integrity: sha512-jBDboWM8qpaqwkMwItqTQTiFikhs/67OYVvblFFTM7MrZjt6yMKd6r2kgXizEbTTljacm4NldIlZnhbjr84QYg==,
-      }
-    engines: {node: ^10 || ^12 || >=14}
-    dependencies:
-      nanoid: 3.3.4
-      picocolors: 1.0.0
-      source-map-js: 1.0.2
 
   /preferred-pm/3.0.3:
     resolution:
@@ -15487,19 +15479,19 @@ packages:
       strip-json-comments: 2.0.1
     dev: false
 
-  /react-dom/18.0.0_react@18.0.0:
+  /react-dom/18.2.0_react@18.2.0:
     resolution:
       {
-        integrity: sha512-XqX7uzmFo0pUceWFCt7Gff6IyIMzFUn7QMZrbrQfGxtaxXZIcGQzoNpRLE3fQLnS4XzLLPMZX2T9TRcSrasicw==,
+        integrity: sha512-6IMTriUmvsjHUjNtEDudZfuDQUoWXVxKHhlEGSk81n4YFS+r/Kl99wXiwlVXtPBtJenozv2P+hxDsw9eA7Xo6g==,
       }
     peerDependencies:
-      react: ^18.0.0
+      react: ^18.2.0
     dependencies:
       loose-envify: 1.4.0
-      react: 18.0.0
-      scheduler: 0.21.0
+      react: 18.2.0
+      scheduler: 0.23.0
 
-  /react-error-boundary/3.1.4_react@18.0.0:
+  /react-error-boundary/3.1.4_react@18.2.0:
     resolution:
       {
         integrity: sha512-uM9uPzZJTF6wRQORmSrvOIgt4lJ9MC1sNgEOj2XGsDTRE4kmpWxg7ENK9EWNKJRMAOY9z0MuF4yIfl6gp4sotA==,
@@ -15509,10 +15501,10 @@ packages:
       react: ">=16.13.1"
     dependencies:
       "@babel/runtime": 7.18.3
-      react: 18.0.0
+      react: 18.2.0
     dev: true
 
-  /react-hook-form/7.29.0_react@18.0.0:
+  /react-hook-form/7.29.0_react@18.2.0:
     resolution:
       {
         integrity: sha512-NcJqWRF6el5HMW30fqZRt27s+lorvlCCDbTpAyHoodQeYWXgQCvZJJQLC1kRMKdrJknVH0NIg3At6TUzlZJFOQ==,
@@ -15521,7 +15513,7 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17 || ^18
     dependencies:
-      react: 18.0.0
+      react: 18.2.0
     dev: false
 
   /react-is/16.13.1:
@@ -15544,10 +15536,10 @@ packages:
     engines: {node: ">=0.10.0"}
     dev: true
 
-  /react/18.0.0:
+  /react/18.2.0:
     resolution:
       {
-        integrity: sha512-x+VL6wbT4JRVPm7EGxXhZ8w8LTROaxPXOqhlGyVSrv0sB1jkyFGgXxJ8LVoPRLvPR6/CIZGFmfzqUa2NYeMr2A==,
+        integrity: sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==,
       }
     engines: {node: ">=0.10.0"}
     dependencies:
@@ -16088,10 +16080,10 @@ packages:
     dependencies:
       xmlchars: 2.2.0
 
-  /scheduler/0.21.0:
+  /scheduler/0.23.0:
     resolution:
       {
-        integrity: sha512-1r87x5fz9MXqswA2ERLo0EbOAU74DpIUO090gIasYTqlVoJeMcl+Z1Rg7WHz+qtPujhS/hGIt9kxZOYBV3faRQ==,
+        integrity: sha512-CtuThmgHNg7zIZWAXi3AsyIzA3n4xx7aNyjwC2VJldO2LMVDhFK+63xGqq6CsJH4rTAt6/M+N4GhZiDYPx9eUw==,
       }
     dependencies:
       loose-envify: 1.4.0
@@ -16890,10 +16882,10 @@ packages:
       }
     engines: {node: ">=8"}
 
-  /styled-jsx/5.0.2:
+  /styled-jsx/5.0.4:
     resolution:
       {
-        integrity: sha512-LqPQrbBh3egD57NBcHET4qcgshPks+yblyhPlH2GY8oaDgKs8SK4C3dBh3oSJjgzJ3G5t1SYEZGHkP+QEpX9EQ==,
+        integrity: sha512-sDFWLbg4zR+UkNzfk5lPilyIgtpddfxXEULxhujorr5jtePTUqiPDc5BC0v1NRqTr/WaFBGQQUoYToGlF4B2KQ==,
       }
     engines: {node: ">= 12.0.0"}
     peerDependencies:
@@ -16907,10 +16899,10 @@ packages:
         optional: true
     dev: false
 
-  /styled-jsx/5.0.2_react@18.0.0:
+  /styled-jsx/5.0.4_react@18.2.0:
     resolution:
       {
-        integrity: sha512-LqPQrbBh3egD57NBcHET4qcgshPks+yblyhPlH2GY8oaDgKs8SK4C3dBh3oSJjgzJ3G5t1SYEZGHkP+QEpX9EQ==,
+        integrity: sha512-sDFWLbg4zR+UkNzfk5lPilyIgtpddfxXEULxhujorr5jtePTUqiPDc5BC0v1NRqTr/WaFBGQQUoYToGlF4B2KQ==,
       }
     engines: {node: ">= 12.0.0"}
     peerDependencies:
@@ -16923,7 +16915,7 @@ packages:
       babel-plugin-macros:
         optional: true
     dependencies:
-      react: 18.0.0
+      react: 18.2.0
 
   /subarg/1.0.0:
     resolution:
@@ -17352,6 +17344,7 @@ packages:
       typescript: 4.6.3
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
+    dev: false
 
   /ts-node/10.7.0_typescript@4.6.3:
     resolution:
@@ -17384,7 +17377,6 @@ packages:
       typescript: 4.6.3
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
-    dev: false
 
   /tsconfig-paths/3.14.1:
     resolution:
@@ -18028,26 +18020,16 @@ packages:
       querystring: 0.2.0
     dev: false
 
-  /use-sync-external-store/1.1.0:
+  /use-sync-external-store/1.2.0:
     resolution:
       {
-        integrity: sha512-SEnieB2FPKEVne66NpXPd1Np4R1lTNKfjuy3XdIoPQKYBAFdzbzSZlSn1KJZUiihQLQC5Znot4SBz1EOTBwQAQ==,
+        integrity: sha512-eEgnFxGQ1Ife9bzYs6VLi8/4X6CObHMw9Qr9tPY43iKwsPw8xE8+EFsf/2cFZ5S3esXgpWgtSCtLNS41F+sKPA==,
       }
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
     dev: false
 
-  /use-sync-external-store/1.1.0_react@18.0.0:
-    resolution:
-      {
-        integrity: sha512-SEnieB2FPKEVne66NpXPd1Np4R1lTNKfjuy3XdIoPQKYBAFdzbzSZlSn1KJZUiihQLQC5Znot4SBz1EOTBwQAQ==,
-      }
-    peerDependencies:
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0
-    dependencies:
-      react: 18.0.0
-
-  /use-sync-external-store/1.2.0_react@18.0.0:
+  /use-sync-external-store/1.2.0_react@18.2.0:
     resolution:
       {
         integrity: sha512-eEgnFxGQ1Ife9bzYs6VLi8/4X6CObHMw9Qr9tPY43iKwsPw8xE8+EFsf/2cFZ5S3esXgpWgtSCtLNS41F+sKPA==,
@@ -18055,7 +18037,7 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
     dependencies:
-      react: 18.0.0
+      react: 18.2.0
 
   /use/3.1.1:
     resolution:
