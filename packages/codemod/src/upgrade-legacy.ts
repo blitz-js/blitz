@@ -90,8 +90,14 @@ const upgradeLegacy = async () => {
         },
       })
       let createdConfig = config.get().value.right
-
-      addNamedImport(program, "withBlitz", "@blitzjs/next")
+      let importWithBlitz = j.expressionStatement(
+        j.assignmentExpression(
+          "=",
+          j.identifier("const { withBlitz }"),
+          j.callExpression(j.identifier("require"), [j.identifier(`"@blitzjs/next"`)]),
+        )
+      )
+      parsedProgram.value.program.body.unshift(importWithBlitz)
       config.remove()
 
       let moduleExportStatement = j.expressionStatement(
