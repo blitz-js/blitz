@@ -9,3 +9,5 @@
 ---
 
 Bump react, react-dom, @types/react and next versions
+
+This fixes a console warning: `Warning: Received `true` for a non-boolean attribute `global`.` when using `styled-jsx`. Versions bump also fixes React Hydration error that happens on and off when using `redirectAuthenticatedTo`.
