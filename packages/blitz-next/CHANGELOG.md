@@ -1,5 +1,16 @@
 # @blitzjs/next
 
+## 2.0.0-beta.2
+
+### Patch Changes
+
+- db7233db: Bump react, react-dom, @types/react and next versions
+
+  This fixes a console warning: `Warning: Received`true`for a non-boolean attribute`global`.` when using `styled-jsx`. Versions bump also fixes React Hydration error that happens on and off when using `redirectAuthenticatedTo`.
+
+- Updated dependencies [db7233db]
+  - @blitzjs/rpc@2.0.0-beta.2
+
 ## 2.0.0-beta.1
 
 ### Patch Changes
