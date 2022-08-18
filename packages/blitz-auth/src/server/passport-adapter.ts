@@ -118,8 +118,9 @@ export function passportAuth(config: BlitzPassportConfig): ApiHandler {
 
     const {name, strategy, authenticateOptions} = blitzStrategy
 
-    passport.use((name || strategy.name) as string, strategy)
-    const strategyName = name || (strategy.name as string)
+    const strategyName = (name || strategy.name) as string
+
+    passport.use(strategyName, strategy)
 
     if (req.query.auth.length === 1) {
       console.info(`Starting authentication via ${strategyName}...`)
