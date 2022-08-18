@@ -115,20 +115,25 @@ const upgradeLegacy = async () => {
   
   steps.push({
     name: "update .eslintrc.js configuration",
-    action: async () =>{
-      const program = getCollectionFromSource(".eslintrc.js")
-      const parsedProgram = program.get()
-      parsedProgram.value.program.body = []
-      const moduleExport = j.expressionStatement(
-        j.assignmentExpression(
-          "=",
-          j.memberExpression(j.identifier("module"), j.identifier("exports")),
-          j.callExpression(j.identifier("require"), [j.identifier(`"@blitzjs/next/eslint"`)]),
-      )
-      )
-      parsedProgram.value.program.body.push(moduleExport)
-      fs.writeFileSync(path.resolve(".eslintrc.js"), program.toSource())
-    }
+    action: async () => {
+      if (fs.existsSync(path.resolve(".eslintrc.js"))) {
+        const program = getCollectionFromSource(".eslintrc.js")
+        const parsedProgram = program.get()
+        parsedProgram.value.program.body = []
+        const moduleExport = j.expressionStatement(
+          j.assignmentExpression(
+            "=",
+            j.memberExpression(j.identifier("module"), j.identifier("exports")),
+            j.callExpression(j.identifier("require"), [j.identifier(`"@blitzjs/next/eslint"`)]),
+          ),
+        )
+        parsedProgram.value.program.body.push(moduleExport)
+        fs.writeFileSync(path.resolve(".eslintrc.js"), program.toSource())
+      }
+      else{
+        log.error(".eslintrc.js does not exist")
+      }
+    },
   })
 
   steps.push({
