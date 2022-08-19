@@ -1,5 +1,49 @@
 # @blitzjs/codemod
 
+## 2.0.0-beta.2
+
+### Patch Changes
+
+- db7233db: Bump react, react-dom, @types/react and next versions
+
+  This fixes a console warning: `Warning: Received`true`for a non-boolean attribute`global`.` when using `styled-jsx`. Versions bump also fixes React Hydration error that happens on and off when using `redirectAuthenticatedTo`.
+
+- a3b5fdd0: Change ES6 import for `withBlitz` during the codemod to the require syntax.
+- ebfb562b: Add `Script` as a default import from next.js during the codemod.
+- Updated dependencies [db7233db]
+- Updated dependencies [eb971568]
+- Updated dependencies [0936cb38]
+- Updated dependencies [8ada2c26]
+- Updated dependencies [3f9fe8f0]
+  - blitz@2.0.0-beta.2
+  - @blitzjs/generator@2.0.0-beta.2
+
+## 2.0.0-beta.1
+
+### Patch Changes
+
+- 0f4926fd: Set current Blitz tag to latest
+- Updated dependencies [0f4926fd]
+  - @blitzjs/generator@2.0.0-beta.1
+  - blitz@2.0.0-beta.1
+
+## 2.0.0-beta.72
+
+### Patch Changes
+
+- 2cc888ef: Beta release
+- Updated dependencies [2cc888ef]
+  - blitz@2.0.0-beta.72
+  - @blitzjs/generator@2.0.0-beta.72
+
+## 2.0.0-alpha.71
+
+### Patch Changes
+
+- Updated dependencies [176c7b8b]
+  - @blitzjs/generator@2.0.0-alpha.71
+  - blitz@2.0.0-alpha.71
+
 ## 2.0.0-alpha.70
 
 ### Patch Changes

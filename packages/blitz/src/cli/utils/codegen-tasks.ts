@@ -19,7 +19,7 @@ export const codegenTasks = async () => {
       .toString()
       .replace(
         /ReactDOM\.hydrateRoot\(.*?\);/,
-        `ReactDOM.hydrateRoot(domEl, reactEl, process.env.NODE_ENV === 'development' ? {onRecoverableError: (err) => err.toString().includes("could not finish this Suspense boundary") ? null : console.error(err)} : undefined);`,
+        `ReactDOM.hydrateRoot(domEl, reactEl, {onRecoverableError: (err) => err.toString().includes("could not finish this Suspense boundary") ? null : console.error(err)});`,
       )
     await fs.writeFile(nextClientIndex, updatedFile)
     log.success("Next.js was successfully patched with a React Suspense fix")

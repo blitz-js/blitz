@@ -1,5 +1,34 @@
 # @blitzjs/generator
 
+## 2.0.0-beta.2
+
+### Patch Changes
+
+- db7233db: Bump react, react-dom, @types/react and next versions
+
+  This fixes a console warning: `Warning: Received`true`for a non-boolean attribute`global`.` when using `styled-jsx`. Versions bump also fixes React Hydration error that happens on and off when using `redirectAuthenticatedTo`.
+
+- eb971568: Add `BlitzPage` types to auth pages in new app template
+- 8ada2c26: Include ResetPasswordPage in new app template
+
+## 2.0.0-beta.1
+
+### Patch Changes
+
+- 0f4926fd: Set current Blitz tag to latest
+
+## 2.0.0-beta.72
+
+### Patch Changes
+
+- 2cc888ef: Beta release
+
+## 2.0.0-alpha.71
+
+### Patch Changes
+
+- 176c7b8b: Use correct path for log utilities import
+
 ## 2.0.0-alpha.70
 
 ### Patch Changes

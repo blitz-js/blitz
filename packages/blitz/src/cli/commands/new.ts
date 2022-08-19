@@ -300,8 +300,10 @@ const newApp: CliCommand = async (argv) => {
       console.log(chalk.yellow(`   ${index + 1}. ${step}`))
     })
     console.log("") // new line
+    process.exit(0)
   } catch (error) {
     console.error(error)
+    process.exit(1)
   }
 }
 

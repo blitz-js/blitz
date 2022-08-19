@@ -23,7 +23,7 @@ import {
 } from "./utils"
 import {log} from "blitz"
 
-const CURRENT_BLITZ_TAG = "alpha"
+const CURRENT_BLITZ_TAG = "latest"
 
 class ExpectedError extends Error {
   constructor(message: string) {
@@ -90,8 +90,14 @@ const upgradeLegacy = async () => {
         },
       })
       let createdConfig = config.get().value.right
-
-      addNamedImport(program, "withBlitz", "@blitzjs/next")
+      let importWithBlitz = j.expressionStatement(
+        j.assignmentExpression(
+          "=",
+          j.identifier("const { withBlitz }"),
+          j.callExpression(j.identifier("require"), [j.identifier(`"@blitzjs/next"`)]),
+        )
+      )
+      parsedProgram.value.program.body.unshift(importWithBlitz)
       config.remove()
 
       let moduleExportStatement = j.expressionStatement(
@@ -257,6 +263,7 @@ const upgradeLegacy = async () => {
         const nextLink = findImport(program, "next/link")
         const nextHead = findImport(program, "next/head")
         const dynamic = findImport(program, "next/dynamic")
+        const nextScript = findImport(program, "next/script")
 
         if (nextImage?.length) {
           nextImage.remove()
@@ -266,6 +273,18 @@ const upgradeLegacy = async () => {
               j.importDeclaration(
                 [j.importDefaultSpecifier(j.identifier("Image"))],
                 j.stringLiteral("next/image"),
+              ),
+            )
+        }
+        
+        if (nextScript?.length) {
+          nextScript.remove()
+          program
+            .get()
+            .value.program.body.unshift(
+              j.importDeclaration(
+                [j.importDefaultSpecifier(j.identifier("Script"))],
+                j.stringLiteral("next/script"), 
               ),
             )
         }
