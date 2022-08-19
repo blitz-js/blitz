@@ -70,8 +70,12 @@ const upgradeLegacy = async () => {
 
       // Remove all typescript stuff
       let findTypes = program.find(j.TSType, (node) => node)
-      if (findTypes) {
-        findTypes.forEach((t) => j(t.parentPath).remove())
+      if (findTypes.length) {
+        findTypes.forEach((t) => {
+          if (t.name === "typeAnnotation") {
+            j(t.parentPath).remove()
+          }
+        })
       }
 
       let withBlitz = j.objectProperty(j.identifier("withBlitz"), j.identifier("withBlitz"))
@@ -95,7 +99,7 @@ const upgradeLegacy = async () => {
           "=",
           j.identifier("const { withBlitz }"),
           j.callExpression(j.identifier("require"), [j.identifier(`"@blitzjs/next"`)]),
-        )
+        ),
       )
       parsedProgram.value.program.body.unshift(importWithBlitz)
       config.remove()
@@ -112,7 +116,7 @@ const upgradeLegacy = async () => {
       fs.writeFileSync(path.resolve("next.config.js"), program.toSource())
     },
   })
-  
+
   steps.push({
     name: "update .eslintrc.js configuration",
     action: async (stepIndex) => {
@@ -129,11 +133,9 @@ const upgradeLegacy = async () => {
         )
         parsedProgram.value.program.body.push(moduleExport)
         fs.writeFileSync(path.resolve(".eslintrc.js"), program.toSource())
-      }
-      else{
+      } else {
         collectedErrors.push({
-          message:
-            ".eslintrc.js does not exist",
+          message: ".eslintrc.js does not exist",
           step: stepIndex,
         })
       }
@@ -303,7 +305,7 @@ const upgradeLegacy = async () => {
               ),
             )
         }
-        
+
         if (nextScript?.length) {
           nextScript.remove()
           program
@@ -311,7 +313,7 @@ const upgradeLegacy = async () => {
             .value.program.body.unshift(
               j.importDeclaration(
                 [j.importDefaultSpecifier(j.identifier("Script"))],
-                j.stringLiteral("next/script"), 
+                j.stringLiteral("next/script"),
               ),
             )
         }
