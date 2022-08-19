@@ -115,7 +115,7 @@ const upgradeLegacy = async () => {
   
   steps.push({
     name: "update .eslintrc.js configuration",
-    action: async () => {
+    action: async (stepIndex) => {
       if (fs.existsSync(path.resolve(".eslintrc.js"))) {
         const program = getCollectionFromSource(".eslintrc.js")
         const parsedProgram = program.get()
@@ -131,7 +131,11 @@ const upgradeLegacy = async () => {
         fs.writeFileSync(path.resolve(".eslintrc.js"), program.toSource())
       }
       else{
-        log.error(".eslintrc.js does not exist")
+        collectedErrors.push({
+          message:
+            ".eslintrc.js does not exist",
+          step: stepIndex,
+        })
       }
     },
   })
