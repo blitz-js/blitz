@@ -1190,40 +1190,40 @@ const upgradeLegacy = async () => {
 
   steps.push({
     name: "check for usages of invokeWithMiddleware",
-    action: async (stepIndex) => {
-      let errors = 0
-
-      getAllFiles(appDir, [], [], [".ts", ".tsx", ".js", ".jsx"]).forEach((file) => {
-        const program = getCollectionFromSource(file)
-        const invokeWithMiddlewarePath = findCallExpression(program, "invokeWithMiddleware")
-        if (invokeWithMiddlewarePath?.length) {
-          log.error(`\n invokeWithMiddleware found at ${file}. \n`)
-          errors++
-        }
-      })
-
+    action: async () => {
       getAllFiles(path.resolve("pages"), [], [], [".ts", ".tsx", ".js", ".jsx"]).forEach((file) => {
         const program = getCollectionFromSource(file)
-        const invokeWithMiddlewarePath = findCallExpression(program, "invokeWithMiddleware")
-        if (invokeWithMiddlewarePath?.length) {
-          log.error(`\n invokeWithMiddleware found at ${file}. \n`)
-          errors++
+        try {
+          const invokeWithMiddlewarePath = findCallExpression(program, "invokeWithMiddleware")
+          if (invokeWithMiddlewarePath?.length) {
+            invokeWithMiddlewarePath.map((path) => {
+              const {node} = path
+              const {arguments: args} = node
+              args.pop() //remove {req,res}
+              args.push(j.identifier("ctx"))
+              return path
+            })
+            replaceIdentifiers(program, "invokeWithMiddleware", "invokeWithCtx")
+            addNamedImport(program, "invokeWithCtx", "@blitzjs/rpc")
+            const getServerSidePropsPath = findCallExpression(program, "gSSP")
+            if (getServerSidePropsPath) {
+              getServerSidePropsPath.forEach((path) => {
+                const {node} = path
+                const {arguments: asyncFunction} = node
+                //@ts-ignore
+                const params = asyncFunction[0]?.params
+                if (params && params.length) {
+                  params[0].properties.push(j.identifier("ctx"))
+                }
+              })
+            }
+          }
+        } catch (e:any) {
+          log.error(`Error in checking invokeWithMiddleware in ${file}`)
+          throw new Error(e)
         }
+        fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
       })
-
-      if (errors > 0) {
-        collectedErrors.push({
-          message:
-            "\n invokeWithMiddleware is not supported. \n Use invokeWithCtx instead: https://canary.blitzjs.com/docs/resolver-server-utilities#invoke-with-ctx \n Fix the files above, then run the codemod again.",
-          step: stepIndex,
-        })
-
-        // Write to the migration file so the user can run the migration again from this point
-        failedAt = stepIndex + 1
-        fs.writeJsonSync(".migration.json", {
-          failedAt,
-        })
-      }
     },
   })
 
