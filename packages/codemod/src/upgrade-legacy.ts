@@ -1105,9 +1105,9 @@ const upgradeLegacy = async () => {
             addNamedImport(program, "gSP", "app/blitz-server")
           }
           fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
-        } catch (e) {
+        } catch (e:any) {
           log.error(`Error in wrapping getServerSideProps, getStaticProps in ${file}`)
-          log.error(e as string)
+          throw new Error(e)
         }
       })
 
@@ -1140,9 +1140,9 @@ const upgradeLegacy = async () => {
 
               fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
             }
-          } catch (e) {
+          } catch (e:any) {
             log.error(`Error in wrapping api in ${file}`)
-            log.error(e as string)
+            throw new Error(e)
           }
         })
       }
