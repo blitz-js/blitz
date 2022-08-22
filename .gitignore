@@ -48,6 +48,7 @@ tsconfig.tsbuildinfo
 .next
 dist
 .now
+
 # local env files
 **/.env.local
 **/.env.*.local
@@ -64,7 +65,6 @@ db.sqlite-journal
 **/db/db.sqlite
 test/integration/**/db.json
 test/**/*/out
-test/**/blitz-env.d.ts
-examples/**/blitz-env.d.ts
+test/**/next-env.d.ts
+examples/**/next-env.d.ts
 .blitz**
-
