@@ -1,5 +1,16 @@
 # @blitzjs/codemod
 
+## 2.0.0-beta.3
+
+### Patch Changes
+
+- 2313fa61: Fix upgrade-legacy codemod replacing identifiers with an invalid value. Previously new values were hardcoded to `NextApiRequest`. Now we're using correct values provided as `replaceIdentifiers` function argument.
+- 1bf185d6: Add a new codemod step to update the .eslintrc.js file
+- Updated dependencies [638f2319]
+- Updated dependencies [b72d1215]
+  - blitz@2.0.0-beta.3
+  - @blitzjs/generator@2.0.0-beta.3
+
 ## 2.0.0-beta.2
 
 ### Patch Changes
