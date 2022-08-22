@@ -95,7 +95,7 @@ const upgradeLegacy = async () => {
           "=",
           j.identifier("const { withBlitz }"),
           j.callExpression(j.identifier("require"), [j.identifier(`"@blitzjs/next"`)]),
-        )
+        ),
       )
       parsedProgram.value.program.body.unshift(importWithBlitz)
       config.remove()
@@ -112,7 +112,7 @@ const upgradeLegacy = async () => {
       fs.writeFileSync(path.resolve("next.config.js"), program.toSource())
     },
   })
-  
+
   steps.push({
     name: "update .eslintrc.js configuration",
     action: async (stepIndex) => {
@@ -129,11 +129,9 @@ const upgradeLegacy = async () => {
         )
         parsedProgram.value.program.body.push(moduleExport)
         fs.writeFileSync(path.resolve(".eslintrc.js"), program.toSource())
-      }
-      else{
+      } else {
         collectedErrors.push({
-          message:
-            ".eslintrc.js does not exist",
+          message: ".eslintrc.js does not exist",
           step: stepIndex,
         })
       }
@@ -303,7 +301,7 @@ const upgradeLegacy = async () => {
               ),
             )
         }
-        
+
         if (nextScript?.length) {
           nextScript.remove()
           program
@@ -311,7 +309,7 @@ const upgradeLegacy = async () => {
             .value.program.body.unshift(
               j.importDeclaration(
                 [j.importDefaultSpecifier(j.identifier("Script"))],
-                j.stringLiteral("next/script"), 
+                j.stringLiteral("next/script"),
               ),
             )
         }
@@ -1054,17 +1052,22 @@ const upgradeLegacy = async () => {
         // Remove the old import statements
         importStatements?.remove()
 
-        const documentHead = program
-          .find(j.JSXElement, (node) => node.openingElement.name.name === "DocumentHead")
-          .get()
+        const document = program.find(
+          j.JSXElement,
+          (node) => node.openingElement.name.name === "DocumentHead",
+        )
 
-        documentHead.value.openingElement.name.name = "Head"
-        if (documentHead.value.closingElement) {
-          documentHead.value.closingElement.name.name = "Head"
+        if (document.length) {
+          const documentHead = document.get()
+          documentHead.value.openingElement.name.name = "Head"
+          if (documentHead.value.closingElement) {
+            documentHead.value.closingElement.name.name = "Head"
+          }
+          const blitzScript = program
+            .find(j.Identifier, (node) => node.name === "BlitzScript")
+            .get()
+          blitzScript.value.name = "NextScript"
         }
-
-        const blitzScript = program.find(j.Identifier, (node) => node.name === "BlitzScript").get()
-        blitzScript.value.name = "NextScript"
 
         fs.writeFileSync(
           path.join(pagesDir, `_document.${isTypescript ? "tsx" : "jsx"}`),
@@ -1079,25 +1082,27 @@ const upgradeLegacy = async () => {
     action: async () => {
       const pagesDir = path.resolve("pages")
       getAllFiles(pagesDir, [], ["api"], [".ts", ".tsx", ".js", ".jsx"]).forEach((file) => {
-        const program = getCollectionFromSource(file)
-
-        // 1. getServerSideProps
-        const getServerSidePropsPath = findFunction(program, "getServerSideProps")
-        if (getServerSidePropsPath) {
-          getServerSidePropsPath.forEach((path) =>
-            wrapDeclaration(path, "getServerSideProps", "gSSP"),
-          )
-          addNamedImport(program, "gSSP", "app/blitz-server")
+        try {
+          const program = getCollectionFromSource(file)
+          // 1. getServerSideProps
+          const getServerSidePropsPath = findFunction(program, "getServerSideProps")
+          if (getServerSidePropsPath) {
+            getServerSidePropsPath.forEach((path) =>
+              wrapDeclaration(path, "getServerSideProps", "gSSP"),
+            )
+            addNamedImport(program, "gSSP", "app/blitz-server")
+          }
+          // 2. getStaticProps
+          const getStaticPropsPath = findFunction(program, "getStaticProps")
+          if (getStaticPropsPath) {
+            getStaticPropsPath.forEach((path) => wrapDeclaration(path, "getStaticProps", "gSP"))
+            addNamedImport(program, "gSP", "app/blitz-server")
+          }
+          fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
+        } catch (e:any) {
+          log.error(`Error in wrapping getServerSideProps, getStaticProps in ${file}`)
+          throw new Error(e)
         }
-
-        // 2. getStaticProps
-        const getStaticPropsPath = findFunction(program, "getStaticProps")
-        if (getStaticPropsPath) {
-          getStaticPropsPath.forEach((path) => wrapDeclaration(path, "getStaticProps", "gSP"))
-          addNamedImport(program, "gSP", "app/blitz-server")
-        }
-
-        fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
       })
 
       // 3. api
@@ -1108,22 +1113,25 @@ const upgradeLegacy = async () => {
           ["rpc"],
           [".ts", ".tsx", ".js", ".jsx"],
         ).forEach((file) => {
-          const program = getCollectionFromSource(file)
+          try {
+            const program = getCollectionFromSource(file)
+            const defaultExportPath = findDefaultExportPath(program)
+            if (defaultExportPath) {
+              const {node} = defaultExportPath
 
-          const defaultExportPath = findDefaultExportPath(program)
+              if (node.declaration.type === "Identifier") {
+                node.declaration = j.callExpression(j.identifier("api"), [node.declaration as any])
+                addNamedImport(program, "api", "app/blitz-server")
+              } else if (node.declaration.type === "FunctionDeclaration") {
+                node.declaration = j.template.expression`api(${node.declaration})`
+                addNamedImport(program, "api", "app/blitz-server")
+              }
 
-          if (defaultExportPath) {
-            const {node} = defaultExportPath
-
-            if (node.declaration.type === "Identifier") {
-              node.declaration = j.callExpression(j.identifier("api"), [node.declaration as any])
-              addNamedImport(program, "api", "app/blitz-server")
-            } else if (node.declaration.type === "FunctionDeclaration") {
-              node.declaration = j.template.expression`api(${node.declaration})`
-              addNamedImport(program, "api", "app/blitz-server")
+              fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
             }
-
-            fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
+          } catch (e:any) {
+            log.error(`Error in wrapping api in ${file}`)
+            throw new Error(e)
           }
         })
       }
