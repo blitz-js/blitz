@@ -1081,15 +1081,9 @@ const upgradeLegacy = async () => {
     name: "wrap getServerSideProps, getStaticProps and API handlers with gSSP, gSP, and api",
     action: async () => {
       const pagesDir = path.resolve("pages")
-      console.log("")
       getAllFiles(pagesDir, [], ["api"], [".ts", ".tsx", ".js", ".jsx"]).forEach((file) => {
         try {
           const program = getCollectionFromSource(file)
-
-          process.stdout.clearLine(0)
-          process.stdout.cursorTo(0)
-          process.stdout.write(`Processing Page ${file} ...`)
-
           // 1. getServerSideProps
           const getServerSidePropsPath = findFunction(program, "getServerSideProps")
           if (getServerSidePropsPath) {
@@ -1122,11 +1116,6 @@ const upgradeLegacy = async () => {
           try {
             const program = getCollectionFromSource(file)
             const defaultExportPath = findDefaultExportPath(program)
-            
-            process.stdout.clearLine(0)
-            process.stdout.cursorTo(0)
-            process.stdout.write(`Processing API ${file} ...`)
-
             if (defaultExportPath) {
               const {node} = defaultExportPath
 
