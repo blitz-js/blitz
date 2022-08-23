@@ -46,7 +46,6 @@ const buildWithBlitz = <TPlugins extends readonly ClientPlugin<object>[]>(plugin
       return (
         <BlitzProvider dehydratedState={props.pageProps?.dehydratedState}>
           <>
-            {/* @ts-ignore todo */}
             {props.Component.suppressFirstRenderFlicker && <NoPageFlicker />}
             <UserAppRoot {...props} Component={component} />
           </>

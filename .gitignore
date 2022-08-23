@@ -54,7 +54,6 @@ dist
 **/.envrc
 .blitz-*
 .blitz-cli-cache
-.vscode
 .tsbuildinfo
 .nvmrc
 **/.test*
