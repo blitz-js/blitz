@@ -48,7 +48,6 @@ export const codegenTasks = async () => {
       )
     }
     if (hasPrisma) {
-      //check if the prisma schema has been modified since the last time we ran the codegen
       const prismaStatus = await fs.readJson(join(tempDir, `blitz-${creationDate.birthtimeMs}prisma-status.json`))
       const lastModified = await fs.stat(join(tempDir, "db/schema.prisma"))
       if (prismaStatus.lastModified !== lastModified.mtimeMs) {
@@ -62,7 +61,6 @@ export const codegenTasks = async () => {
           console.log("\n" + result.stderr)
           process.exit(1)
         }
-        //update the prisma-status file with the last modified date of the prisma schema
         await fs.writeJson(join(process.cwd(), `blitz-${creationDate.birthtimeMs}prisma-status.json`), {
           lastModified: lastModified.mtimeMs,
         })
