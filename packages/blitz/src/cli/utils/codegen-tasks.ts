@@ -40,15 +40,15 @@ export const codegenTasks = async () => {
 
     const tempDir = os.tmpdir() 
     const creationDate = await fs.stat(process.cwd())
-    if (!fs.existsSync(join(tempDir, `blitz-${creationDate.birthtimeMs}prisma-status.json`))) {
+    if (!fs.existsSync(join(tempDir, `blitz-${creationDate.birthtimeMs}-prisma-client.json`))) {
       const lastModified = await fs.stat(join(process.cwd(), "db/schema.prisma"))
       await fs.writeFile(
-        join(tempDir, `blitz-${creationDate.birthtimeMs}prisma-status.json`),
+        join(tempDir, `blitz-${creationDate.birthtimeMs}-prisma-client.json`),
         JSON.stringify({lastModified: lastModified.mtimeMs}),
       )
     }
     if (hasPrisma) {
-      const prismaStatus = await fs.readJson(join(tempDir, `blitz-${creationDate.birthtimeMs}prisma-status.json`))
+      const prismaStatus = await fs.readJson(join(tempDir, `blitz-${creationDate.birthtimeMs}-prisma-client.json`))
       const lastModified = await fs.stat(join(process.cwd(), "db/schema.prisma"))
       if (prismaStatus.lastModified !== lastModified.mtimeMs) {
         let prismaSpinner = log.spinner(`Generating Prisma client`).start()
@@ -60,7 +60,7 @@ export const codegenTasks = async () => {
           console.log("\n" + result.stderr)
           process.exit(1)
         }
-        await fs.writeJson(join(process.cwd(), `blitz-${creationDate.birthtimeMs}prisma-status.json`), {
+        await fs.writeJson(join(process.cwd(), `blitz-${creationDate.birthtimeMs}-prisma-client.json`), {
           lastModified: lastModified.mtimeMs,
         })
       } else {
