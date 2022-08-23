@@ -1,6 +1,6 @@
 import {ErrorFallbackProps, ErrorComponent, ErrorBoundary, AppProps} from "@blitzjs/next"
 import {AuthenticationError, AuthorizationError} from "blitz"
-import {AppContext} from "next/app"
+import App, {AppContext} from "next/app"
 import React, {Suspense} from "react"
 import {withBlitz} from "../app/blitz-client"
 
@@ -35,8 +35,11 @@ function MyApp({Component, pageProps, testProp}: AppProps & {testProp: any}) {
 }
 
 MyApp.getInitialProps = async (context: AppContext) => {
+  const props = await App.getInitialProps(context)
+
   return {
-    testProp: "testing getInitialProps",
+    ...props,
+    testProp: "_app.tsx: testing getInitialProps",
   }
 }
 

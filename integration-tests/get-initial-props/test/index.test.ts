@@ -9,15 +9,26 @@ let appPort: number
 const appDir = join(__dirname, "../")
 
 const runTests = (mode?: string) => {
-  describe("getInitialProps in _app", () => {
+  describe("getInitialProps", () => {
     it(
-      "should render a custom prop provided in getInitialProps",
+      "should render a custom prop provided in getInitialProps in _app.tsx",
       async () => {
         const browser = await webdriver(appPort, "/")
         await browser.waitForElementByCss("#content", 0)
         const text = await browser.elementByCss("#content").text()
-        console.error({text})
-        expect(text).toMatch(/testing getInitialProps/)
+        expect(text).toMatch(/_app.tsx: testing getInitialProps/)
+        if (browser) await browser.close()
+      },
+      5000 * 60 * 2,
+    )
+    it(
+      "should render custom props provided in getInitialProps in both _app.tsx and index.tsx",
+      async () => {
+        const browser = await webdriver(appPort, "/")
+        await browser.waitForElementByCss("#content", 0)
+        const text = await browser.elementByCss("#content").text()
+        expect(text).toMatch(/_app.tsx: testing getInitialProps/)
+        expect(text).toMatch(/index.tsx: testing getInitialProps/)
         if (browser) await browser.close()
       },
       5000 * 60 * 2,

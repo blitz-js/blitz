@@ -1,6 +1,7 @@
+import {NextPage} from "next"
 import {Suspense} from "react"
 
-function Page(props) {
+const Page: NextPage = (props) => {
   return (
     <div id="page">
       <Suspense fallback={"Loading..."}>
@@ -8,6 +9,14 @@ function Page(props) {
       </Suspense>
     </div>
   )
+}
+
+Page.getInitialProps = async (context) => {
+  return {
+    props: {
+      anotherTestProp: "index.tsx: testing getInitialProps",
+    },
+  }
 }
 
 export default Page
