@@ -109,8 +109,8 @@ export function passportAuth(config: BlitzPassportConfig): ApiHandler {
       "No Passport strategies found! Please add at least one strategy.",
     )
 
-    // find the requested strategy based on the manual specified name
-    // or if name is not specified, based on the strategy name
+    // Find the requested strategy based on the manually specified name.
+    // Use default strategy name if a custom name is not specified.
     const blitzStrategy = configObject.strategies.find(({name, strategy}) =>
       name ? name == req.query?.auth?.[0] : strategy.name === req.query?.auth?.[0] ?? "",
     )
