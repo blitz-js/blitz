@@ -1214,19 +1214,6 @@ const upgradeLegacy = async () => {
               const resolverStatement = j.expressionStatement(resolverExpression)
               j(path).replaceWith(resolverStatement)
             })              
-                      
-            const getServerSidePropsPath = findCallExpression(program, "gSSP")
-            if (getServerSidePropsPath) {
-              getServerSidePropsPath.forEach((path) => {
-                const {node} = path
-                const {arguments: asyncFunction} = node
-                //@ts-ignore
-                const params = asyncFunction[0]?.params
-                if (params && params.length) {
-                  params[0].properties.push(j.identifier("ctx"))
-                }
-              })
-            }
           }
         } catch (e:any) {
           log.error(`Error in checking invokeWithMiddleware in ${file}`)
