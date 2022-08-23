@@ -34,6 +34,7 @@ const commands = {
   generate: () => import("./commands/generate").then((i) => i.generate),
   codegen: () => import("./commands/codegen").then((i) => i.codegen),
   db: () => import("./commands/db").then((i) => i.db),
+  install: () => import("./commands/install").then((i) => i.install),
 }
 
 const aliases: Record<string, keyof typeof commands> = {
@@ -41,7 +42,8 @@ const aliases: Record<string, keyof typeof commands> = {
   b: "build",
   s: "start",
   n: "new",
-  // g: "generate",
+  g: "generate",
+  i: "install",
 }
 
 type Command = keyof typeof commands
