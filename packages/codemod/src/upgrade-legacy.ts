@@ -1204,15 +1204,17 @@ const upgradeLegacy = async () => {
         try {
           const invokeWithMiddlewarePath = findCallExpression(program, "invokeWithMiddleware")
           if (invokeWithMiddlewarePath?.length) {
-            invokeWithMiddlewarePath.map((path) => {
-              const {node} = path
-              const {arguments: args} = node
-              args.pop() //remove {req,res}
-              args.push(j.identifier("ctx"))
-              return path
-            })
-            replaceIdentifiers(program, "invokeWithMiddleware", "invokeWithCtx")
-            addNamedImport(program, "invokeWithCtx", "@blitzjs/rpc")
+            invokeWithMiddlewarePath.forEach((path) => {
+              path.value.arguments.push(j.identifier("ctx"))
+              const resolverExpression = j.callExpression(
+                //@ts-ignore
+                j.identifier(path.value.arguments[0]?.name),
+                path.value.arguments.slice(1),
+              )
+              const resolverStatement = j.expressionStatement(resolverExpression)
+              j(path).replaceWith(resolverStatement)
+            })              
+                      
             const getServerSidePropsPath = findCallExpression(program, "gSSP")
             if (getServerSidePropsPath) {
               getServerSidePropsPath.forEach((path) => {
@@ -1234,7 +1236,6 @@ const upgradeLegacy = async () => {
       })
     },
   })
-
   // Loop through steps and run the action
   if ((failedAt && failedAt < steps.length) || failedAt !== "SUCCESS" || isLegacyBlitz) {
     for (let [index, step] of steps.entries()) {
