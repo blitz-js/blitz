@@ -234,8 +234,70 @@ const install: CliCommand = async () => {
         }),
         {},
       )
-    console.log(recipeInfo)
-    console.log(cliArgs)
+
+    const chalk = (await import("chalk")).default
+    if (recipeInfo.location === RecipeLocation.Remote) {
+      const apiUrl = recipeInfo.path.replace(GH_ROOT, API_ROOT)
+      const rawUrl = recipeInfo.path.replace(GH_ROOT, RAW_ROOT)
+      const repoInfo = await gotJSON(apiUrl)
+      const packageJsonPath = join(
+        `${rawUrl}`,
+        repoInfo.default_branch,
+        recipeInfo.subdirectory ?? "",
+        "package.json",
+      )
+
+      if (!(await isUrlValid(packageJsonPath))) {
+        debug("Url is invalid for ", packageJsonPath)
+        baseLogger({displayDateTime: false}).error(`Could not find recipe "${args._[1]}"\n`)
+        console.log(`${chalk.bold("Please provide one of the following:")}
+
+1. The name of a recipe to install (e.g. "tailwind")
+${chalk.dim(
+  "- Available recipes listed at https://github.com/blitz-js/legacy-framework/tree/canary/recipes",
+)}
+2. The full name of a GitHub repository (e.g. "blitz-js/example-recipe"),
+3. A full URL to a Github repository (e.g. "https://github.com/blitz-js/example-recipe"), or
+4. A file path to a locally-written recipe.\n`)
+        process.exit(1)
+      } else {
+        let spinner = log.spinner(`Cloning GitHub repository for ${selectedRecipe} recipe`).start()
+        const recipeRepoPath = await cloneRepo(
+          repoInfo.full_name,
+          repoInfo.default_branch,
+          recipeInfo.subdirectory,
+        )
+        spinner.stop()
+        spinner = log.spinner("Installing package.json dependencies").start()
+
+        let pkgManager = "npm"
+        let installArgs = ["install", "--legacy-peer-deps", "--ignore-scripts"]
+
+        if (checkLockFileExists("yarn.lock")) {
+          pkgManager = "yarn"
+          installArgs = ["install", "--ignore-scripts"]
+        } else if (checkLockFileExists("pnpm-lock.yaml")) {
+          pkgManager = "pnpm"
+          installArgs = ["install", "--ignore-scripts"]
+        }
+
+        await new Promise((resolve) => {
+          const installProcess = require("cross-spawn")(pkgManager, installArgs)
+          installProcess.on("exit", resolve)
+        })
+        spinner.stop()
+
+        const recipePackageMain = requireJSON("./package.json").main
+        const recipeEntry = resolve(recipePackageMain)
+        process.chdir(process.cwd())
+
+        // await installRecipeAtPath(recipeEntry, cliArgs, cliFlags)
+
+        require("rimraf").sync(recipeRepoPath)
+      }
+    } else {
+      // await installRecipeAtPath(resolve(args.recipe), cliArgs, cliFlags)
+    }
   }
 }
 
