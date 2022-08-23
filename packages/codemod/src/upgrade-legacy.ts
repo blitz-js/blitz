@@ -1205,7 +1205,6 @@ const upgradeLegacy = async () => {
           const invokeWithMiddlewarePath = findCallExpression(program, "invokeWithMiddleware")
           if (invokeWithMiddlewarePath?.length) {
             invokeWithMiddlewarePath.forEach((path) => {
-              path.value.arguments.push(j.identifier("ctx"))
               const resolverExpression = j.callExpression(
                 //@ts-ignore
                 j.identifier(path.value.arguments[0]?.name),
