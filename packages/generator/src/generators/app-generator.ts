@@ -41,14 +41,7 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
 
   filesToIgnore() {
     if (!this.options.useTs) {
-      return [
-        "tsconfig.json",
-        "next-env.d.ts",
-        "jest.config.ts",
-        "package.ts.json",
-        "pre-push-ts",
-        "types.ts",
-      ]
+      return ["tsconfig.json", "jest.config.ts", "package.ts.json", "pre-push-ts", "types.ts"]
     }
     return ["jsconfig.json", "package.js.json", "pre-push-js"]
   }

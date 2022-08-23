@@ -18,6 +18,7 @@ web_modules/
 .now
 .blitz**
 blitz-log.log
+next-env.d.ts
 
 # misc
 .DS_Store
