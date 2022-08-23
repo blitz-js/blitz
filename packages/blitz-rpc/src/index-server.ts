@@ -158,7 +158,7 @@ export function rpcHandler(config: RpcConfig) {
     const routePath = "/" + relativeRoutePath
 
     const log = baseLogger().getChildLogger({
-      prefix: [routePath.replace("/api/rpc/", "") + "()"],
+      prefix: [routePath.replace(/(\/api\/rpc)?\//, "") + "()"],
     })
     const customChalk = new chalk.Instance({
       level: log.settings.type === "json" ? 0 : chalk.level,
