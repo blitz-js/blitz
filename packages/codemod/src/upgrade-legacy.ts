@@ -196,7 +196,7 @@ const upgradeLegacy = async () => {
         InferGetServerSidePropsType: "next",
         GetServerSidePropsContext: "next",
         AuthenticatedMiddlewareCtx: "@blitz/rpc",
-        getAntiCSRFToken: "@blitzjs/rpc",
+        getAntiCSRFToken: "@blitzjs/auth",
         useSession: "@blitzjs/auth",
         useAuthenticatedSession: "@blitzjs/auth",
         useRedirectAuthenticated: "@blitzjs/auth",
