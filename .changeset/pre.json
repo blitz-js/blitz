@@ -15,6 +15,7 @@
     "@blitzjs/codemod": "2.0.0-beta.0",
     "template": "0.0.0",
     "toolkit-app": "1.0.0",
+    "toolkit-app-passportjs": "1.0.0",
     "test-qm": "0.0.0",
     "test-no-suspense": "0.0.0",
     "test-trailing-slash": "0.0.0",
