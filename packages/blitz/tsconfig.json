@@ -3,7 +3,8 @@
   "compilerOptions": {
     "lib": ["DOM", "ES2015"],
     "esModuleInterop": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "preserveSymlinks": true
   },
   "include": ["."],
   "exclude": ["dist", "build", "node_modules"]

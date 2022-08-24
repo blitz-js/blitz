@@ -7,6 +7,7 @@ const debug = require("debug")("blitz:cli")
 import {join, resolve} from "path"
 import {Stream} from "stream"
 import {promisify} from "util"
+import {RecipeCLIFlags, RecipeExecutor} from "../../installer"
 
 interface GlobalAgent {
   HTTP_PROXY?: string
@@ -23,9 +24,11 @@ const args = arg(
     // Types
     "--help": Boolean,
     "--env": String,
+    "--yes": Boolean,
 
     // Aliases
     "-e": "--env",
+    "-y": "--yes",
   },
   {
     permissive: true,
@@ -175,14 +178,14 @@ const cloneRepo = async (
   return recipeDir
 }
 
-// const installRecipeAtPath = async (
-//   recipePath: string,
-//   ...runArgs: Parameters<RecipeExecutor<any>["run"]>
-// ) => {
-//   const recipe = require(recipePath).default as RecipeExecutor<any>
+const installRecipeAtPath = async (
+  recipePath: string,
+  ...runArgs: Parameters<RecipeExecutor<any>["run"]>
+) => {
+  const recipe = require(recipePath).default as RecipeExecutor<any>
 
-//   await recipe.run(...runArgs)
-// }
+  await recipe.run(...runArgs)
+}
 
 const setupProxySupport = async () => {
   const httpProxy = process.env.http_proxy || process.env.HTTP_PROXY
@@ -234,6 +237,10 @@ const install: CliCommand = async () => {
         }),
         {},
       )
+
+    const cliFlags: RecipeCLIFlags = {
+      yesToAll: args["--yes"] || false,
+    }
 
     const chalk = (await import("chalk")).default
     if (recipeInfo.location === RecipeLocation.Remote) {
@@ -291,12 +298,19 @@ ${chalk.dim(
         const recipeEntry = resolve(recipePackageMain)
         process.chdir(process.cwd())
 
-        // await installRecipeAtPath(recipeEntry, cliArgs, cliFlags)
+        await installRecipeAtPath(recipeEntry, cliArgs, cliFlags)
 
         require("rimraf").sync(recipeRepoPath)
       }
     } else {
-      // await installRecipeAtPath(resolve(args.recipe), cliArgs, cliFlags)
+      try {
+        await installRecipeAtPath(resolve(`${args._[1]}`), cliArgs, cliFlags)
+      } catch (err) {
+        if (err instanceof Error) {
+          throw new Error(err.message)
+        }
+        console.log(err)
+      }
     }
   }
 }
