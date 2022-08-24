@@ -2,4 +2,4 @@
 "@blitzjs/codemod": patch
 ---
 
-Add AuthenticatedSessionContext to the codemod import map
+Add `AuthenticatedSessionContext` to the `upgrade-legacy` codemod import map
