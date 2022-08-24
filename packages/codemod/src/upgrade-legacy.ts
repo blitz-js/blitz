@@ -200,6 +200,7 @@ const upgradeLegacy = async () => {
         useSession: "@blitzjs/auth",
         useAuthenticatedSession: "@blitzjs/auth",
         useRedirectAuthenticated: "@blitzjs/auth",
+        AuthenticatedSessionContext: "@blitzjs/auth",
         SessionContext: "@blitzjs/auth",
         useAuthorize: "@blitzjs/auth",
         useQuery: "@blitzjs/rpc",
@@ -1099,7 +1100,7 @@ const upgradeLegacy = async () => {
             addNamedImport(program, "gSP", "app/blitz-server")
           }
           fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
-        } catch (e:any) {
+        } catch (e: any) {
           log.error(`Error in wrapping getServerSideProps, getStaticProps in ${file}`)
           throw new Error(e)
         }
@@ -1129,7 +1130,7 @@ const upgradeLegacy = async () => {
 
               fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
             }
-          } catch (e:any) {
+          } catch (e: any) {
             log.error(`Error in wrapping api in ${file}`)
             throw new Error(e)
           }
