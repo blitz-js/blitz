@@ -43,7 +43,7 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
     if (!this.options.useTs) {
       return [
         "tsconfig.json",
-        "blitz-env.d.ts",
+        "next-env.d.ts",
         "jest.config.ts",
         "package.ts.json",
         "pre-push-ts",
