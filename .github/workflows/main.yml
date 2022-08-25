@@ -17,7 +17,6 @@ jobs:
       matrix:
         os:
           - ubuntu-latest
-          - windows-latest 
         node_version:
           - 16
     name: Node ${{ matrix.node_version }} - ${{ matrix.os }}
@@ -34,6 +33,28 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm manypkg check
       - run: pnpm build
-      - run: pnpm lint
       - run: pnpm build:apps
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/cache@v1
+        id: restore-build
+        with:
+          path: '.'
+          key: ${{ github.sha }}
+      - run: pnpm lint
+  test:
+    name: Test 
+    runs-on: ubuntu-latest
+    needs: build
+    strategy:
+      fail-fast: false
+    steps:
+      - uses: actions/cache@v1
+        id: restore-build
+        with:
+          path: '.'
+          key: ${{ github.sha }}
       - run: pnpm test
