@@ -35,7 +35,7 @@ jobs:
       - run: pnpm manypkg check
       - run: pnpm build
       - run: pnpm build:apps
-      - uses: actions/cache@v1
+      - uses: actions/cache@v3
         id: cache-build
         with:
           path: '.'
@@ -47,7 +47,7 @@ jobs:
       - windows-latest
     needs: build
     steps:
-      - uses: actions/cache@v1
+      - uses: actions/cache@v3
         id: cache-build
         with:
           path: '.'
@@ -71,7 +71,7 @@ jobs:
     strategy:
       fail-fast: false
     steps:
-      - uses: actions/cache@v1
+      - uses: actions/cache@v3
         id: cache-build
         with:
           path: '.'
