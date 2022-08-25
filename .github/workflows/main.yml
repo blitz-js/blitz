@@ -40,10 +40,15 @@ jobs:
     needs: build
     steps:
       - uses: actions/cache@v1
-        id: restore-build
+      - uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
         with:
-          path: '.'
-          key: ${{ github.sha }}
+          version: 6.32.6
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node_version }}
+          cache: "pnpm"
+        id: restore-build
       - run: pnpm lint
   test:
     name: Test 
@@ -53,8 +58,13 @@ jobs:
       fail-fast: false
     steps:
       - uses: actions/cache@v1
-        id: restore-build
+      - uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
         with:
-          path: '.'
-          key: ${{ github.sha }}
+          version: 6.32.6
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node_version }}
+          cache: "pnpm"
+        id: restore-build
       - run: pnpm test
