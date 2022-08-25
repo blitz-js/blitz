@@ -78,7 +78,7 @@ jobs:
           node-version: ${{ matrix.node_version }}
           cache: "pnpm"
         id: restore-build
-      - run: pnpm dlx playwright --version
+      - run: pnpm dlx playwright install
       - run: pnpm test
 
   build-windows:
@@ -102,4 +102,9 @@ jobs:
       - run: pnpm manypkg check
       - run: pnpm build
       - run: pnpm build:apps
-      - run: pnpm test
+      - name: Cache
+        uses: actions/cache@v3.0.8
+        with:
+          path: '.'
+          key: ${{ runner.os }}-build-${{ github.sha }}
+      
