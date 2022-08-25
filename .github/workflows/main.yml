@@ -11,13 +11,16 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-linux:
-    runs-on:  ubuntu-latest
+  build:
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
         node_version:
           - 16
-    name: Build-ubuntu-latest
+    name: Node ${{ matrix.node_version }} - ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
       - uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
@@ -31,129 +34,6 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm manypkg check
       - run: pnpm build
-      - run: pnpm build:apps
-      - uses: actions/cache@v3
-        id: cache-build
-        with:
-          path: '.'
-          key: ${{ runner.os }}-build-${{ github.sha }}
-  
-  lint-linux:
-    name: Linux-Lint
-    runs-on: 
-      - ubuntu-latest
-    needs: build-linux
-    steps:
-      - uses: actions/cache@v3
-        id: cache-build
-        with:
-          path: '.'
-          key: ${{ runner.os }}-build-${{ github.sha }}
-      - uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
-        with:
-          version: 6.32.6
-      - name: Setup node
-        uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node_version }}
-          cache: "pnpm"
-        id: restore-build
       - run: pnpm lint
-      
-  test-linux:
-    name: Linux-Test 
-    runs-on: 
-      - ubuntu-latest
-    needs: build-linux
-    strategy:
-      fail-fast: false
-    steps:
-      - uses: actions/cache@v3
-        id: cache-build
-        with:
-          path: '.'
-          key: ${{ runner.os }}-build-${{ github.sha }}
-      - uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
-        with:
-          version: 6.32.6
-      - name: Setup node
-        uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node_version }}
-          cache: "pnpm"
-        id: restore-build
-      - run: pnpm test
-  
-  build-windows:
-    runs-on: windows-latest
-    strategy:
-      matrix:
-        node_version:
-          - 16
-    name: Build-windows-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
-        with:
-          version: 6.32.6
-      - name: Setup node
-        uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node_version }}
-          cache: "pnpm"
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm manypkg check
-      - run: pnpm build
       - run: pnpm build:apps
-      - uses: actions/cache@v3
-        id: cache-build
-        with:
-          path: '.'
-          key: ${{ runner.os }}-build-${{ github.sha }}
-          
-  lint-windows:
-    name: Windows-Lint
-    runs-on: 
-      - windows-latest
-    needs: build-windows
-    steps:
-      - uses: actions/cache@v3
-        id: cache-build
-        with:
-          path: '.'
-          key: ${{ runner.os }}-build-${{ github.sha }}
-      - uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
-        with:
-          version: 6.32.6
-      - name: Setup node
-        uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node_version }}
-          cache: "pnpm"
-        id: restore-build
-      - run: pnpm lint
-      
-  test-windows:
-    name: Windows-Test
-    runs-on: 
-      - windows-latest
-    needs: build-windows
-    strategy:
-      fail-fast: false
-    steps:
-      - uses: actions/cache@v3
-        id: cache-build
-        with:
-          path: '.'
-          key: ${{ runner.os }}-build-${{ github.sha }}
-      - uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
-        with:
-          version: 6.32.6
-      - name: Setup node
-        uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node_version }}
-          cache: "pnpm"
-        id: restore-build
       - run: pnpm test
-
