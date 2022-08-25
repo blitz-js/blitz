@@ -17,7 +17,7 @@ jobs:
       matrix:
         node_version:
           - 16
-    name: Build - ubuntu-latest
+    name: Build-ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
@@ -36,10 +36,10 @@ jobs:
         id: cache-build
         with:
           path: '.'
-          key:  ubuntu-latest-build-${{ github.sha }}
+          key: ${{ runner.os }}-build-${{ github.sha }}
   
   lint-linux:
-    name: Lint
+    name: Linux-Lint
     runs-on: 
       - ubuntu-latest
     needs: build-linux
@@ -61,7 +61,7 @@ jobs:
       - run: pnpm lint
       
   test-linux:
-    name: Test 
+    name: Linux-Test 
     runs-on: 
       - ubuntu-latest
     needs: build-linux
@@ -90,7 +90,7 @@ jobs:
       matrix:
         node_version:
           - 16
-    name: Build - windows-latest
+    name: Build-windows-latest
     steps:
       - uses: actions/checkout@v2
       - uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
@@ -109,10 +109,10 @@ jobs:
         id: cache-build
         with:
           path: '.'
-          key: windows-latest-build-${{ github.sha }}
+          key: ${{ runner.os }}-build-${{ github.sha }}
           
   lint-windows:
-    name: Windows Lint
+    name: Windows-Lint
     runs-on: 
       - windows-latest
     needs: build-windows
@@ -134,7 +134,7 @@ jobs:
       - run: pnpm lint
       
   test-windows:
-    name: Windows Test
+    name: Windows-Test
     runs-on: 
       - windows-latest
     needs: build-windows
