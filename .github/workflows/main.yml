@@ -78,7 +78,7 @@ jobs:
           node-version: ${{ matrix.node_version }}
           cache: "pnpm"
         id: restore-build
-      - run: pnpm dlx playwright 
+      - run: pnpm dlx playwright -v
       - run: pnpm test
 
   build-windows:
