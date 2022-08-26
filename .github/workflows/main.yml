@@ -21,6 +21,9 @@ jobs:
               uses: actions/setup-node@v2.1.5
               with:
                   node-version: 14
+            - uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
+              with:
+                version: 6.32.6
             - name: Restore node_modules cache
               uses: actions/cache@v2.1.5
               with:
@@ -40,7 +43,6 @@ jobs:
               run: pnpm lint
     tests:
         name: Unit tests
-        needs: build
         runs-on: ubuntu-latest
         steps:
             - name: Checkout repo
@@ -51,6 +53,9 @@ jobs:
               uses: actions/setup-node@v2.1.5
               with:
                   node-version: 14
+            - uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
+              with:
+                version: 6.32.6
             - name: Restore node_modules cache
               uses: actions/cache@v3
               with:
@@ -66,8 +71,6 @@ jobs:
                       turbo-${{ github.job }}-${{ github.ref_name }}-
             - name: Install packages
               run: pnpm install --frozen-lockfile
-            - name: Build Packages
-              run: pnpm build
             - name: All tests
               run: yarn test-coverage --cache-dir=".turbo"
     build:
@@ -82,6 +85,9 @@ jobs:
               uses: actions/setup-node@v3
               with:
                   node-version: 14
+            - uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
+              with:
+                version: 6.32.6
             - name: Restore node_modules cache
               uses: actions/cache@v3
               with:
