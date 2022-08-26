@@ -13,10 +13,11 @@ concurrency:
 jobs:
   lint:
     name: 'Lint: ${{ matrix.os }}'
+    needs: build
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        OS: [ubuntu-latest, windows-latest]
+        OS: [ubuntu-latest]
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
