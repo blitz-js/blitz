@@ -15,7 +15,7 @@ import {
 } from "../utils/transform"
 import {useEnterToContinue} from "../utils/use-enter-to-continue"
 import {useUserInput} from "../utils/use-user-input"
-import {Executor, executorArgument, ExecutorConfig, getExecutorArgument} from "./executor"
+import {IExecutor, executorArgument, ExecutorConfig, getExecutorArgument} from "./executor"
 import {filePrompt} from "./file-prompt"
 
 export interface Config extends ExecutorConfig {
@@ -33,7 +33,7 @@ export function isFileTransformExecutor(executor: ExecutorConfig): executor is C
 }
 
 export const type = "file-transform"
-export const Propose: Executor["Propose"] = ({cliArgs, cliFlags, onProposalAccepted, step}) => {
+export const Propose: IExecutor["Propose"] = ({cliArgs, cliFlags, onProposalAccepted, step}) => {
   const userInput = useUserInput(cliFlags)
   const [diff, setDiff] = React.useState<string | null>(null)
   const [error, setError] = React.useState<Error | null>(null)
@@ -154,7 +154,7 @@ const ProposeWithoutInput = ({
   )
 }
 
-export const Commit: Executor["Commit"] = ({onChangeCommitted, proposalData: filePath, step}) => {
+export const Commit: IExecutor["Commit"] = ({onChangeCommitted, proposalData: filePath, step}) => {
   React.useEffect(() => {
     void (async function () {
       const results = await transform(

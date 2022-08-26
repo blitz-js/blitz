@@ -6,7 +6,7 @@ import {Newline} from "../components/newline"
 import {RecipeCLIArgs} from "../types"
 import {useEnterToContinue} from "../utils/use-enter-to-continue"
 import {useUserInput} from "../utils/use-user-input"
-import {Executor, ExecutorConfig, getExecutorArgument} from "./executor"
+import {IExecutor, ExecutorConfig, getExecutorArgument} from "./executor"
 
 export type CliCommand = string | [string, ...string[]]
 
@@ -83,7 +83,7 @@ export async function executeCommand(input: CliCommand): Promise<void> {
   })
 }
 
-export const Commit: Executor["Commit"] = ({cliArgs, cliFlags, step, onChangeCommitted}) => {
+export const Commit: IExecutor["Commit"] = ({cliArgs, cliFlags, step, onChangeCommitted}) => {
   const userInput = useUserInput(cliFlags)
   const [commandInstalled, setCommandInstalled] = React.useState(false)
   const executorCommand = getExecutorArgument((step as Config).command, cliArgs)

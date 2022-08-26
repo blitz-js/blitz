@@ -5,7 +5,7 @@ import * as React from "react"
 import {EnterToContinue} from "../components/enter-to-continue"
 import {useEnterToContinue} from "../utils/use-enter-to-continue"
 import {useUserInput} from "../utils/use-user-input"
-import {Executor, executorArgument, ExecutorConfig, getExecutorArgument} from "./executor"
+import {IExecutor, executorArgument, ExecutorConfig, getExecutorArgument} from "./executor"
 
 export interface Config extends ExecutorConfig {
   targetDirectory?: executorArgument<string>
@@ -48,7 +48,7 @@ class TempGenerator extends Generator<TempGeneratorOptions> {
   }
 }
 
-export const Commit: Executor["Commit"] = ({cliArgs, cliFlags, onChangeCommitted, step}) => {
+export const Commit: IExecutor["Commit"] = ({cliArgs, cliFlags, onChangeCommitted, step}) => {
   const userInput = useUserInput(cliFlags)
   const generatorArgs = React.useMemo(
     () => ({

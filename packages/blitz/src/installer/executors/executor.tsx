@@ -12,7 +12,7 @@ export interface ExecutorConfig {
   explanation: string
 }
 
-export interface Executor {
+export interface IExecutor {
   type: string
   Propose?: React.FC<{
     step: ExecutorConfig

@@ -4,7 +4,7 @@ import getBabelOptions, {Overrides} from "recast/parsers/_babel_options"
 import * as babel from "recast/parsers/babel"
 import {Program} from "../types"
 
-export const customTsParser = {
+export const customTsParser: {} = {
   parse(source: string, options?: Overrides) {
     const babelOptions = getBabelOptions(options)
     babelOptions.plugins.push("typescript")

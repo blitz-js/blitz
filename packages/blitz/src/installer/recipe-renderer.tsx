@@ -1,9 +1,10 @@
 import {Box, Text, useApp, useInput} from "ink"
 import React from "react"
+import {assert} from "../index-server"
 import {EnterToContinue} from "./components/enter-to-continue"
 import {Newline} from "./components/newline"
 import * as AddDependencyExecutor from "./executors/add-dependency-executor"
-import {Executor, ExecutorConfig, Frontmatter} from "./executors/executor"
+import {ExecutorConfig, Frontmatter, IExecutor} from "./executors/executor"
 import * as FileTransformExecutor from "./executors/file-transform-executor"
 import * as NewFileExecutor from "./executors/new-file-executor"
 import * as PrintMessageExecutor from "./executors/print-message-executor"
@@ -28,7 +29,7 @@ enum Status {
   Committed,
 }
 
-const ExecutorMap: {[key: string]: Executor} = {
+const ExecutorMap: {[key: string]: IExecutor} = {
   [AddDependencyExecutor.type]: AddDependencyExecutor,
   [NewFileExecutor.type]: NewFileExecutor,
   [PrintMessageExecutor.type]: PrintMessageExecutor,
@@ -48,21 +49,22 @@ interface State {
 
 function recipeReducer(state: State, action: {type: Action; data?: any}) {
   const newState = {...state}
-
+  const step = newState.steps[newState.current]
+  assert(step, "Step is empty in recipeReducer function")
   switch (action.type) {
     case Action.ProposeChange:
-      newState.steps[newState.current]!.status = Status.Proposed
+      step.status = Status.Proposed
       break
     case Action.CommitApproved:
-      newState.steps[newState.current]!.status = Status.ReadyToCommit
-      newState.steps[newState.current]!.proposalData = action.data
+      step.status = Status.ReadyToCommit
+      step.proposalData = action.data
       break
     case Action.ApplyChange:
-      newState.steps[newState.current]!.status = Status.Committing
+      step.status = Status.Committing
       break
     case Action.CompleteChange:
-      newState.steps[newState.current]!.status = Status.Committed
-      newState.steps[newState.current]!.successMsg = action.data as string
+      step.status = Status.Committed
+      step.successMsg = action.data as string
       newState.current = Math.min(newState.current + 1, newState.steps.length - 1)
       break
     case Action.SkipStep:
@@ -141,7 +143,9 @@ function StepExecutor({
   cliFlags: RecipeCLIFlags
   proposalData?: any
 }) {
-  const {Propose, Commit}: Executor = ExecutorMap[step.stepType]!
+  const executor = ExecutorMap[step.stepType]
+  assert(executor, `Executor not found for ${step.stepType}`)
+  const {Propose, Commit}: IExecutor = executor
   const dispatch = React.useContext(DispatchContext)
 
   const handleProposalAccepted = React.useCallback(
@@ -246,6 +250,7 @@ function RecipeRendererWithInput({
 }: Omit<RecipeProps, "steps"> & {state: State}) {
   const {exit} = useApp()
   const dispatch = React.useContext(DispatchContext)
+  const step = state.steps[state.current]
 
   useInput((input, key) => {
     if (input === "c" && key.ctrl) {
@@ -261,14 +266,16 @@ function RecipeRendererWithInput({
       <StepMessages state={state} />
       {state.current === -1 ? (
         <WelcomeMessage recipeMeta={recipeMeta} />
-      ) : (
+      ) : step ? (
         <StepExecutor
           cliArgs={cliArgs}
           cliFlags={cliFlags}
           proposalData={state.steps[state.current]?.proposalData}
-          step={state.steps[state.current]?.executor as ExecutorConfig}
-          status={state.steps[state.current]?.status as Status}
+          step={step.executor}
+          status={step.status}
         />
+      ) : (
+        new Error("Step not found in RecipeRendererWithInput")
       )}
     </>
   )

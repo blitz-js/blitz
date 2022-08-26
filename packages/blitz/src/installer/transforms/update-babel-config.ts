@@ -1,4 +1,5 @@
 import type {ExpressionKind} from "ast-types/gen/kinds"
+import {namedTypes} from "ast-types"
 import j from "jscodeshift"
 import {JsonObject, JsonValue} from "../types"
 import {Program} from "../types"
@@ -29,27 +30,27 @@ function updateBabelConfig(program: Program, item: AddBabelItemDefinition, key: 
   findModuleExportsExpressions(program).forEach((moduleExportsExpression) => {
     j(moduleExportsExpression)
       .find(j.ObjectProperty, {key: {name: key}})
-      .forEach((items) => {
+      .forEach((items: namedTypes.ObjectProperty) => {
         // Don't add it again if it already exists,
         // that what this code does. For simplicity,
         // all the examples will be with key = 'presets'
 
         const itemName = Array.isArray(item) ? item[0] : item
 
-        if (items.node.value.type === "Literal" || items.node.value.type === "StringLiteral") {
+        if (items.value.type === "Literal" || items.value.type === "StringLiteral") {
           // {
           //   presets: "this-preset"
           // }
-          if (itemName !== items.node.value.value) {
-            items.node.value = j.arrayExpression([items.node.value, jsonValueToExpression(item)])
+          if (itemName !== items.value.value) {
+            items.value = j.arrayExpression([items.value, jsonValueToExpression(item)])
           }
-        } else if (items.node.value.type === "ArrayExpression") {
+        } else if (items.value.type === "ArrayExpression") {
           // {
           //   presets: ["this-preset", "maybe-another", ...]
           // }
           // Here, it will return if it find the preset inside the
           // array, so the last line doesn't push a duplicated preset
-          for (const [i, element] of items.node.value.elements.entries()) {
+          for (const [i, element] of items.value.elements.entries()) {
             if (!element) continue
 
             if (element.type === "Literal" || element.type === "StringLiteral") {
@@ -85,19 +86,19 @@ function updateBabelConfig(program: Program, item: AddBabelItemDefinition, key: 
                       )
                     }
 
-                    items.node.value.elements[i] = obj
+                    items.value.elements[i] = obj
                   }
                 } else {
                   // The preset has no config.
                   // Its ["this-preset"]
-                  items.node.value.elements[i] = jsonValueToExpression(item)
+                  items.value.elements[i] = jsonValueToExpression(item)
                 }
 
                 return
               }
             }
           }
-          items.node.value.elements.push(jsonValueToExpression(item))
+          items.value.elements.push(jsonValueToExpression(item))
         }
       })
   })

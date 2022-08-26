@@ -8,7 +8,7 @@ import {Newline} from "../components/newline"
 import {RecipeCLIArgs} from "../types"
 import {useEnterToContinue} from "../utils/use-enter-to-continue"
 import {useUserInput} from "../utils/use-user-input"
-import {Executor, executorArgument, ExecutorConfig, getExecutorArgument} from "./executor"
+import {IExecutor, executorArgument, ExecutorConfig, getExecutorArgument} from "./executor"
 
 interface NpmPackage {
   name: string
@@ -101,7 +101,7 @@ export async function installPackages(packages: NpmPackage[], isDev = false) {
   })
 }
 
-export const Commit: Executor["Commit"] = ({cliArgs, cliFlags, step, onChangeCommitted}) => {
+export const Commit: IExecutor["Commit"] = ({cliArgs, cliFlags, step, onChangeCommitted}) => {
   const userInput = useUserInput(cliFlags)
   const [depsInstalled, setDepsInstalled] = React.useState(false)
   const [devDepsInstalled, setDevDepsInstalled] = React.useState(false)
