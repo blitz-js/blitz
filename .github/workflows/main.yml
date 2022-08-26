@@ -45,42 +45,40 @@ jobs:
               run: pnpm install --frozen-lockfile
             - name: ESLint
               run: pnpm lint
-    tests:
-        name: Unit tests
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout repo
-              uses: actions/checkout@v2
-              with:
-                  fetch-depth: 0
-            - name: Setup node
-              uses: actions/setup-node@v2.1.5
-              with:
-                  node-version: 14
-            - uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
-              with:
-                version: 6.32.6
-            - name: Restore node_modules cache
-              uses: actions/cache@v3
-              with:
-                  path: '**/node_modules'
-                  key: ${{ runner.os }}-modules-${{ hashFiles('**/pnpm.yaml') }}
-                  restore-keys: |
-                    ${{ runner.os }}-modules-${{ hashFiles('**/pnpm.yaml') }}
-                    ${{ runner.os }}-modules-
-                    ${{ runner.os }}
-            - name: Turbo Cache
-              id: turbo-cache
-              uses: actions/cache@v3
-              with:
-                  path: .turbo
-                  key: turbo-${{ github.job }}-${{ github.ref_name }}-${{ github.sha }}
-                  restore-keys: |
-                      turbo-${{ github.job }}-${{ github.ref_name }}-
-            - name: Install packages
-              run: pnpm install --frozen-lockfile
-            - name: All tests
-              run: pnpm test
+#     tests:
+#         name: Unit tests
+#         runs-on: ubuntu-latest
+#         steps:
+#             - name: Checkout repo
+#               uses: actions/checkout@v2
+#               with:
+#                   fetch-depth: 0
+#             - name: Setup node
+#               uses: actions/setup-node@v2.1.5
+#               with:
+#                   node-version: 14
+#             - uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
+#               with:
+#                 version: 6.32.6
+#             - name: Restore node_modules cache
+#               uses: actions/cache@v3
+#               with:
+#                   path: '**/node_modules'
+#                   key: ${{ runner.os }}-modules-${{ hashFiles('**/pnpm.yaml') }}
+#                   restore-keys: |
+#                     ${{ runner.os }}-modules-${{ hashFiles('**/pnpm.yaml') }}
+#                     ${{ runner.os }}-modules-
+#                     ${{ runner.os }}
+#             - name: Turbo Cache
+#               id: turbo-cache
+#               uses: actions/cache@v3
+#               with:
+#                   path: .turbo
+#                   key: turbo-${{ github.job }}-${{ github.ref_name }}-${{ github.sha }}
+#                   restore-keys: |
+#                       turbo-${{ github.job }}-${{ github.ref_name }}-
+#             - name: Install packages
+#               run: pnpm install --frozen-lockfile
     build:
         name: Build
         runs-on: ubuntu-latest
@@ -109,6 +107,8 @@ jobs:
               run: pnpm install --frozen-lockfile
             - name: Build Packages
               run: pnpm build
+            - name: All tests
+              run: pnpm test
               
 
 # jobs:
