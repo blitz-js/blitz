@@ -29,6 +29,10 @@ jobs:
               with:
                   path: '**/node_modules'
                   key: ${{ runner.os }}-modules-${{ hashFiles('**/pnpm.yaml') }}
+                  restore-keys: |
+                    ${{ runner.os }}-modules-${{ hashFiles('**/pnpm.yaml') }}
+                    ${{ runner.os }}-modules-
+                    ${{ runner.os }}
             - name: Turbo Cache
               id: turbo-cache
               uses: actions/cache@v2
@@ -61,6 +65,10 @@ jobs:
               with:
                   path: '**/node_modules'
                   key: ${{ runner.os }}-modules-${{ hashFiles('**/pnpm.yaml') }}
+                  restore-keys: |
+                    ${{ runner.os }}-modules-${{ hashFiles('**/pnpm.yaml') }}
+                    ${{ runner.os }}-modules-
+                    ${{ runner.os }}
             - name: Turbo Cache
               id: turbo-cache
               uses: actions/cache@v3
@@ -93,6 +101,10 @@ jobs:
               with:
                   path: '**/node_modules'
                   key: ${{ runner.os }}-modules-${{ hashFiles('**/pnpm.yaml') }}
+                  restore-keys: |
+                    ${{ runner.os }}-modules-${{ hashFiles('**/pnpm.yaml') }}
+                    ${{ runner.os }}-modules-
+                    ${{ runner.os }}
             - name: Install packages
               run: pnpm install --frozen-lockfile
             - name: Build Packages
