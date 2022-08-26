@@ -28,29 +28,30 @@ const jsonValueToExpression = (value: JsonValue): ExpressionKind =>
 
 function updateBabelConfig(program: Program, item: AddBabelItemDefinition, key: string): Program {
   findModuleExportsExpressions(program).forEach((moduleExportsExpression) => {
-    j(moduleExportsExpression)
-      .find(j.ObjectProperty, {key: {name: key}})
-      .forEach((items: namedTypes.ObjectProperty) => {
+    const foundExpression: Program = j(moduleExportsExpression)
+    foundExpression
+      .find<j.ObjectProperty>(j.ObjectProperty, {key: {name: key}})
+      .forEach((items) => {
         // Don't add it again if it already exists,
         // that what this code does. For simplicity,
         // all the examples will be with key = 'presets'
 
         const itemName = Array.isArray(item) ? item[0] : item
 
-        if (items.value.type === "Literal" || items.value.type === "StringLiteral") {
+        if (items.node.value.type === "Literal" || items.node.value.type === "StringLiteral") {
           // {
           //   presets: "this-preset"
           // }
-          if (itemName !== items.value.value) {
+          if (itemName !== items.node.value.value) {
             items.value = j.arrayExpression([items.value, jsonValueToExpression(item)])
           }
-        } else if (items.value.type === "ArrayExpression") {
+        } else if (items.node.value.type === "ArrayExpression") {
           // {
           //   presets: ["this-preset", "maybe-another", ...]
           // }
           // Here, it will return if it find the preset inside the
           // array, so the last line doesn't push a duplicated preset
-          for (const [i, element] of items.value.elements.entries()) {
+          for (const [i, element] of items.node.value.elements.entries()) {
             if (!element) continue
 
             if (element.type === "Literal" || element.type === "StringLiteral") {
@@ -86,19 +87,19 @@ function updateBabelConfig(program: Program, item: AddBabelItemDefinition, key: 
                       )
                     }
 
-                    items.value.elements[i] = obj
+                    items.node.value.elements[i] = obj
                   }
                 } else {
                   // The preset has no config.
                   // Its ["this-preset"]
-                  items.value.elements[i] = jsonValueToExpression(item)
+                  items.node.value.elements[i] = jsonValueToExpression(item)
                 }
 
                 return
               }
             }
           }
-          items.value.elements.push(jsonValueToExpression(item))
+          items.node.value.elements.push(jsonValueToExpression(item))
         }
       })
   })
