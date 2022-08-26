@@ -72,7 +72,7 @@ jobs:
             - name: Install packages
               run: pnpm install --frozen-lockfile
             - name: All tests
-              run: pnpm test --cache-dir=".turbo"
+              run: pnpm test
     build:
         name: Build
         runs-on: ubuntu-latest
