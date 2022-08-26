@@ -12,8 +12,15 @@ concurrency:
 
 jobs:
     eslint:
-        name: Code quality
-        runs-on: ubuntu-latest
+        runs-on: ${{ matrix.os }}
+        strategy:
+          matrix:
+            os:
+              - ubuntu-latest
+              - windows-latest
+            node_version:
+              - 16
+        name: Eslint Node ${{ matrix.node_version }} - ${{ matrix.os }}
         steps:
             - name: Checkout repo
               uses: actions/checkout@v2
@@ -80,8 +87,15 @@ jobs:
 #             - name: Install packages
 #               run: pnpm install --frozen-lockfile
     build:
-        name: Build
-        runs-on: ubuntu-latest
+        runs-on: ${{ matrix.os }}
+        strategy:
+          matrix:
+            os:
+              - ubuntu-latest
+              - windows-latest
+            node_version:
+              - 16
+        name: Build Node ${{ matrix.node_version }} - ${{ matrix.os }}
         steps:
             - name: Checkout repo
               uses: actions/checkout@v3
