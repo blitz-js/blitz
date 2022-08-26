@@ -8,147 +8,93 @@ on:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-#   cancel-in-progress: true
+  cancel-in-progress: true
 
 jobs:
-    eslint:
-        runs-on: ${{ matrix.os }}
-        strategy:
-          matrix:
-            os:
-              - ubuntu-latest
-              - windows-latest
-            node_version:
-              - 16
-        name: Eslint Node ${{ matrix.node_version }} - ${{ matrix.os }}
-        steps:
-            - name: Checkout repo
-              uses: actions/checkout@v2
-            - name: Setup node
-              uses: actions/setup-node@v2.1.5
-              with:
-                  node-version: 14
-            - uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
-              with:
-                version: 6.32.6
-            - name: Restore node_modules cache
-              uses: actions/cache@v2.1.5
-              with:
-                  path: '**/node_modules'
-                  key: ${{ runner.os }}-modules-${{ hashFiles('**/pnpm.yaml') }}
-                  restore-keys: |
-                    ${{ runner.os }}-modules-${{ hashFiles('**/pnpm.yaml') }}
-                    ${{ runner.os }}-modules-
-                    ${{ runner.os }}
-            - name: Turbo Cache
-              id: turbo-cache
-              uses: actions/cache@v2
-              with:
-                  path: .turbo
-                  key: turbo-${{ github.job }}-${{ github.ref_name }}-${{ github.sha }}
-                  restore-keys: |
-                      turbo-${{ github.job }}-${{ github.ref_name }}-
-            - name: Install packages
-              run: pnpm install --frozen-lockfile
-            - name: ESLint
-              run: pnpm lint
-#     tests:
-#         name: Unit tests
-#         runs-on: ubuntu-latest
-#         steps:
-#             - name: Checkout repo
-#               uses: actions/checkout@v2
-#               with:
-#                   fetch-depth: 0
-#             - name: Setup node
-#               uses: actions/setup-node@v2.1.5
-#               with:
-#                   node-version: 14
-#             - uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
-#               with:
-#                 version: 6.32.6
-#             - name: Restore node_modules cache
-#               uses: actions/cache@v3
-#               with:
-#                   path: '**/node_modules'
-#                   key: ${{ runner.os }}-modules-${{ hashFiles('**/pnpm.yaml') }}
-#                   restore-keys: |
-#                     ${{ runner.os }}-modules-${{ hashFiles('**/pnpm.yaml') }}
-#                     ${{ runner.os }}-modules-
-#                     ${{ runner.os }}
-#             - name: Turbo Cache
-#               id: turbo-cache
-#               uses: actions/cache@v3
-#               with:
-#                   path: .turbo
-#                   key: turbo-${{ github.job }}-${{ github.ref_name }}-${{ github.sha }}
-#                   restore-keys: |
-#                       turbo-${{ github.job }}-${{ github.ref_name }}-
-#             - name: Install packages
-#               run: pnpm install --frozen-lockfile
-    build:
-        runs-on: ${{ matrix.os }}
-        strategy:
-          matrix:
-            os:
-              - ubuntu-latest
-              - windows-latest
-            node_version:
-              - 16
-        name: Build Node ${{ matrix.node_version }} - ${{ matrix.os }}
-        steps:
-            - name: Checkout repo
-              uses: actions/checkout@v3
-              with:
-                  fetch-depth: 0
-            - name: Setup node
-              uses: actions/setup-node@v3
-              with:
-                  node-version: 14
-            - uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
-              with:
-                version: 6.32.6
-            - name: Restore node_modules cache
-              uses: actions/cache@v3
-              with:
-                  path: '**/node_modules'
-                  key: ${{ runner.os }}-modules-${{ hashFiles('**/pnpm.yaml') }}
-                  restore-keys: |
-                    ${{ runner.os }}-modules-${{ hashFiles('**/pnpm.yaml') }}
-                    ${{ runner.os }}-modules-
-                    ${{ runner.os }}
-            - name: Install packages
-              run: pnpm install --frozen-lockfile
-            - name: Build Packages
-              run: pnpm build
-            - name: All tests
-              run: pnpm test
-              
+  lint:
+    name: 'Lint: ${{ matrix.os }}'
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        OS: [ubuntu-latest, windows-latest]
+        NODE_VERSION: [14]
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
 
-# jobs:
-#   build:
-#     runs-on: ${{ matrix.os }}
-#     strategy:
-#       matrix:
-#         os:
-#           - ubuntu-latest
-#           - windows-latest
-#         node_version:
-#           - 16
-#     name: Node ${{ matrix.node_version }} - ${{ matrix.os }}
-#     steps:
-#       - uses: actions/checkout@v2
-#       - uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
-#         with:
-#           version: 6.32.6
-#       - name: Setup node
-#         uses: actions/setup-node@v2
-#         with:
-#           node-version: ${{ matrix.node_version }}
-#           cache: "pnpm"
-#       - run: pnpm install --frozen-lockfile
-#       - run: pnpm manypkg check
-#       - run: pnpm build
-#       - run: pnpm lint
-#       - run: pnpm build:apps
-#       - run: pnpm test
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v2.2.1
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Lint
+        run: pnpm run lint
+
+  # Build primes out build caches for Turbo
+  build:
+    name: 'Build: ${{ matrix.os }}'
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        OS: [ubuntu-latest, windows-latest]
+        NODE_VERSION: [14]
+      fail-fast: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v2.2.1
+
+      - name: Setup node@${{ matrix.NODE_VERSION }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.NODE_VERSION }}
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install
+      
+      - name: Build Packages
+        run: pnpm run build
+
+  test:
+    name: 'Test: ${{ matrix.os }} (node@${{ matrix.NODE_VERSION }})'
+    runs-on: ${{ matrix.os }}
+    needs: build
+    strategy:
+      matrix:
+        OS: [ubuntu-latest, windows-latest]
+        NODE_VERSION: [14, 16]
+      fail-fast: false
+    env:
+      NODE_VERSION: ${{ matrix.NODE_VERSION }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v2.2.1
+
+      - name: Setup node@${{ matrix.NODE_VERSION }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.NODE_VERSION }}
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build Packages
+        run: pnpm run build
+
+      - name: Test
+        run: pnpm run test
+            
