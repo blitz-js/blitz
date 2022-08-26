@@ -33,13 +33,17 @@ jobs:
       - name: Install dependencies
         run: pnpm install
         
-      - name: Build 
-        run: pnpm build
+      - name: Turborepo local server
+        uses: felixmosh/turborepo-gh-artifacts@v1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          server-token: ${{ secrets.TURBO_SERVER_TOKEN }}
 
       - name: Lint
-        run: pnpm run lint
+        run: pnpm lint --api="http://127.0.0.1:9080" --token="${{ secrets.TURBO_SERVER_TOKEN }}" --team="foo"
+      - name: Build
+        run: pnpm build --api="http://127.0.0.1:9080" --token="${{ secrets.TURBO_SERVER_TOKEN }}" --team="foo"
 
-  # Build primes out build caches for Turbo
   build:
     name: 'Build: ${{ matrix.os }}'
     runs-on: ${{ matrix.os }}
@@ -63,8 +67,14 @@ jobs:
       - name: Install dependencies
         run: pnpm install
       
-      - name: Build Packages
-        run: pnpm run build
+      - name: Turborepo local server
+        uses: felixmosh/turborepo-gh-artifacts@v1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          server-token: ${{ secrets.TURBO_SERVER_TOKEN }}
+
+      - name: Build
+        run: pnpm build --api="http://127.0.0.1:9080" --token="${{ secrets.TURBO_SERVER_TOKEN }}" --team="foo"
 
   test:
     name: 'Test: ${{ matrix.os }} (node@${{ matrix.NODE_VERSION }})'
@@ -93,8 +103,14 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Build Packages
-        run: pnpm run build
+      - name: Turborepo local server
+        uses: felixmosh/turborepo-gh-artifacts@v1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          server-token: ${{ secrets.TURBO_SERVER_TOKEN }}
+
+      - name: Build
+        run: pnpm build --api="http://127.0.0.1:9080" --token="${{ secrets.TURBO_SERVER_TOKEN }}" --team="foo"
 
       - name: Test
         run: pnpm run test
