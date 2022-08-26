@@ -2,4 +2,4 @@
 "@blitzjs/codemod": patch
 ---
 
-Fix for codemod that removes types from the blitz config file
+Remove TypeScript type annotations from `next.config.js` (a JavaScript file) in the `upgrade-legacy` codemod.
