@@ -33,6 +33,11 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install
+        
+      - name: Build necessary packages
+        run: |
+          cd packages/blitz-next
+          pnpm build          
 
       - name: Lint
         run: pnpm run lint
@@ -43,7 +48,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        OS: [ubuntu-latest, windows-latest]
+        OS: [ubuntu-latest]
         NODE_VERSION: [14]
       fail-fast: true
     steps:
