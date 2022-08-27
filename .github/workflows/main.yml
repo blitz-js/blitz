@@ -75,8 +75,8 @@ jobs:
 
       - name: Build
         run: pnpm build --api="http://127.0.0.1:9080" --token="${{ secrets.TURBO_SERVER_TOKEN }}" --team="foo"
-      - name: Build Apps
-        run: pnpm build:apps --api="http://127.0.0.1:9080" --token="${{ secrets.TURBO_SERVER_TOKEN }}" --team="foo"
+#       - name: Build Apps
+#         run: pnpm build:apps --api="http://127.0.0.1:9080" --token="${{ secrets.TURBO_SERVER_TOKEN }}" --team="foo"
 
   test:
     name: 'Test: ${{ matrix.os }} (node@${{ matrix.NODE_VERSION }})'
