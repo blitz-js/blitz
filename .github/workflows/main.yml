@@ -13,7 +13,6 @@ concurrency:
 jobs:
   lint:
     name: 'Lint: ${{ matrix.os }}'
-    needs: build
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -101,7 +100,6 @@ jobs:
   test:
     name: 'Test: ${{ matrix.os }} (node@${{ matrix.NODE_VERSION }})'
     runs-on: ${{ matrix.os }}
-    needs: build
     strategy:
       matrix:
         OS: [ubuntu-latest, windows-latest]
