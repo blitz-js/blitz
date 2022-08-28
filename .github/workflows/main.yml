@@ -34,15 +34,10 @@ jobs:
         - name: Install dependencies
           run: pnpm install --no-frozen-lockfile
         - run: pnpm manypkg check
-        - name: Turborepo local server
-          uses: felixmosh/turborepo-gh-artifacts@v1
-          with:
-            repo-token: ${{ secrets.GITHUB_TOKEN }}
-            server-token: ${{ secrets.TURBO_SERVER_TOKEN }}
         - name: Build
-          run: pnpm build --api="http://127.0.0.1:9080" --token="${{ secrets.TURBO_SERVER_TOKEN }}" --team="foo"
+          run: pnpm build 
         - name: Lint
-          run: pnpm lint --api="http://127.0.0.1:9080" --token="${{ secrets.TURBO_SERVER_TOKEN }}" --team="foo"
+          run: pnpm lint
     
   build:
       runs-on: ${{ matrix.os }}
@@ -139,8 +134,8 @@ jobs:
           server-token: ${{ secrets.TURBO_SERVER_TOKEN }}
 
       - name: Build
-        run: pnpm build --api="http://127.0.0.1:9080" --token="${{ secrets.TURBO_SERVER_TOKEN }}" --team="foo"
+        run: pnpm build
 
       - name: Test
-        run: pnpm run test --api="http://127.0.0.1:9080" --token="${{ secrets.TURBO_SERVER_TOKEN }}" --team="foo"
+        run: pnpm test
             
