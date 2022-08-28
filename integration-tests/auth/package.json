@@ -2,6 +2,9 @@
   "name": "test-auth",
   "version": "0.0.0",
   "private": true,
+  "prisma": {
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
+ },
   "scripts": {
     "start:dev": "pnpm run prisma:start && next dev",
     "test": "pnpm run prisma:start && vitest run",
@@ -9,7 +12,7 @@
     "start": "next start",
     "lint": "next lint",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf .next",
-    "prisma:start": "prisma generate && prisma migrate deploy && blitz db seed",
+    "prisma:start": "prisma generate && prisma migrate dev && prisma db seed",
     "prisma:studio": "prisma studio"
   },
   "dependencies": {
@@ -25,6 +28,8 @@
     "react-dom": "18.2.0"
   },
   "devDependencies": {
+    "ts-node":"10.9.1",
+    "@types/node":"18.7.13",
     "@next/bundle-analyzer": "12.0.8",
     "@types/express": "4.17.13",
     "@types/fs-extra": "9.0.13",
