@@ -43,41 +43,66 @@ jobs:
         run: pnpm build --api="http://127.0.0.1:9080" --token="${{ secrets.TURBO_SERVER_TOKEN }}" --team="lin"
       - name: Lint
         run: pnpm lint --api="http://127.0.0.1:9080" --token="${{ secrets.TURBO_SERVER_TOKEN }}" --team="lin"
-
+    
   build:
-    name: 'Build: ${{ matrix.os }}'
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        OS: [ubuntu-latest]
-      fail-fast: true
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      runs-on: ${{ matrix.os }}
+      strategy:
+        matrix:
+          os:
+            - ubuntu-latest
+          node_version:
+            - 16
+      name: Node ${{ matrix.node_version }} - ${{ matrix.os }}
+      steps:
+        - uses: actions/checkout@v2
+        - uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
+          with:
+            version: 6.32.6
+        - name: Setup node
+          uses: actions/setup-node@v2
+          with:
+            node-version: ${{ matrix.node_version }}
+            cache: "pnpm"
+        - run: pnpm install --no-frozen-lockfile
+        - run: pnpm manypkg check
+        - run: pnpm build
+        - run: pnpm lint
+        - run: pnpm build:apps
 
-      - name: Setup PNPM
-        uses: pnpm/action-setup@v2.2.1
+#   build:
+#     name: 'Build: ${{ matrix.os }}'
+#     runs-on: ${{ matrix.os }}
+#     strategy:
+#       matrix:
+#         OS: [ubuntu-latest]
+#       fail-fast: true
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v3
 
-      - name: Setup node@${{ matrix.NODE_VERSION }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.NODE_VERSION }}
-          cache: 'pnpm'
+#       - name: Setup PNPM
+#         uses: pnpm/action-setup@v2.2.1
 
-      - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile
-      - run: pnpm manypkg check
+#       - name: Setup node@${{ matrix.NODE_VERSION }}
+#         uses: actions/setup-node@v3
+#         with:
+#           node-version: ${{ matrix.NODE_VERSION }}
+#           cache: 'pnpm'
+
+#       - name: Install dependencies
+#         run: pnpm install --no-frozen-lockfile
+#       - run: pnpm manypkg check
       
-      - name: Turborepo local server
-        uses: felixmosh/turborepo-gh-artifacts@v1
-        with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          server-token: ${{ secrets.TURBO_SERVER_TOKEN }}
+#       - name: Turborepo local server
+#         uses: felixmosh/turborepo-gh-artifacts@v1
+#         with:
+#           repo-token: ${{ secrets.GITHUB_TOKEN }}
+#           server-token: ${{ secrets.TURBO_SERVER_TOKEN }}
 
-      - name: Build
-        run: pnpm build
-      - name: Build Apps
-        run: pnpm build:apps
+#       - name: Build
+#         run: pnpm build
+#       - name: Build Apps
+#         run: pnpm build:apps
 
   test:
     name: 'Test: ${{ matrix.os }} (node@${{ matrix.NODE_VERSION }})'
