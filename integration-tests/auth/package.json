@@ -9,7 +9,7 @@
     "start": "next start",
     "lint": "next lint",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf .next",
-    "prisma:start": "prisma generate && prisma migrate deploy",
+    "prisma:start": "prisma generate && prisma migrate deploy && blitz db seed",
     "prisma:studio": "prisma studio"
   },
   "dependencies": {
