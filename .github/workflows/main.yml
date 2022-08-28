@@ -33,7 +33,7 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
-        
+      - run: pnpm manypkg check
       - name: Turborepo local server
         uses: felixmosh/turborepo-gh-artifacts@v1
         with:
@@ -66,6 +66,7 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
+      - run: pnpm manypkg check
       
       - name: Turborepo local server
         uses: felixmosh/turborepo-gh-artifacts@v1
@@ -75,8 +76,8 @@ jobs:
 
       - name: Build
         run: pnpm build --api="http://127.0.0.1:9080" --token="${{ secrets.TURBO_SERVER_TOKEN }}" --team="foo"
-#       - name: Build Apps
-#         run: pnpm build:apps --api="http://127.0.0.1:9080" --token="${{ secrets.TURBO_SERVER_TOKEN }}" --team="foo"
+      - name: Build Apps
+        run: pnpm build:apps --api="http://127.0.0.1:9080" --token="${{ secrets.TURBO_SERVER_TOKEN }}" --team="foo"
 
   test:
     name: 'Test: ${{ matrix.os }} (node@${{ matrix.NODE_VERSION }})'
@@ -104,6 +105,7 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
+      - run: pnpm manypkg check
 
       - name: Turborepo local server
         uses: felixmosh/turborepo-gh-artifacts@v1
