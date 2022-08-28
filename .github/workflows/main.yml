@@ -32,7 +32,7 @@ jobs:
           cache: 'pnpm'
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --no-frozen-lockfile
         
       - name: Turborepo local server
         uses: felixmosh/turborepo-gh-artifacts@v1
@@ -65,7 +65,7 @@ jobs:
           cache: 'pnpm'
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --no-frozen-lockfile
       
       - name: Turborepo local server
         uses: felixmosh/turborepo-gh-artifacts@v1
@@ -103,7 +103,7 @@ jobs:
           cache: 'pnpm'
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --no-frozen-lockfile
 
       - name: Turborepo local server
         uses: felixmosh/turborepo-gh-artifacts@v1
