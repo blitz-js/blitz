@@ -51,7 +51,7 @@ jobs:
             - ubuntu-latest
           node_version:
             - 16
-      name: Build ${{ matrix.node_version }} - ${{ matrix.os }}
+      name: Build - ${{ matrix.os }}
       steps:
         - uses: actions/checkout@v2
         - uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
