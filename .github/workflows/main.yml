@@ -114,5 +114,5 @@ jobs:
         run: pnpm run build -- --api="http://127.0.0.1:9080" --token="${{ secrets.TURBO_SERVER_TOKEN }}" --team="foo"
 
       - name: Test
-        run: pnpm run test
+        run: pnpm run test -- --api="http://127.0.0.1:9080" --token="${{ secrets.TURBO_SERVER_TOKEN }}" --team="foo"
             
