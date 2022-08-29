@@ -78,28 +78,28 @@ const runTests = (mode?: string) => {
     })
 
     describe("authenticated", () => {
-      it("should login successfully", async () => {
-        const res = await fetch(
-          `http://localhost:${appPort}/api/signin?email=test@test.com&password=abcd1234`,
-          {
-            method: "POST",
-            headers: {"Content-Type": "application/json; charset=utf-8"},
-          },
-        )
+//       it("should login successfully", async () => {
+//         const res = await fetch(
+//           `http://localhost:${appPort}/api/signin?email=test@test.com&password=abcd1234`,
+//           {
+//             method: "POST",
+//             headers: {"Content-Type": "application/json; charset=utf-8"},
+//           },
+//         )
 
-        expect(res.status).toBe(200)
-        expect(res.headers.get(HEADER_CSRF)).not.toBe(undefined)
+//         expect(res.status).toBe(200)
+//         expect(res.headers.get(HEADER_CSRF)).not.toBe(undefined)
 
-        const cookieHeader = res.headers.get("Set-Cookie")
-        const cookie = (name) => readCookie(cookieHeader, name)
-        expect(cookieHeader).not.toBe(undefined)
+//         const cookieHeader = res.headers.get("Set-Cookie")
+//         const cookie = (name) => readCookie(cookieHeader, name)
+//         expect(cookieHeader).not.toBe(undefined)
 
-        const publicDataStr = fromBase64(cookie(COOKIE_PUBLIC_DATA_TOKEN))
-        const publicData = JSON.parse(publicDataStr)
-        expect(publicData.userId).toBe(1)
+//         const publicDataStr = fromBase64(cookie(COOKIE_PUBLIC_DATA_TOKEN))
+//         const publicData = JSON.parse(publicDataStr)
+//         expect(publicData.userId).toBe(1)
 
-        expect(readCookie(cookieHeader, COOKIE_SESSION_TOKEN)).not.toBe(undefined)
-      })
+//         expect(readCookie(cookieHeader, COOKIE_SESSION_TOKEN)).not.toBe(undefined)
+//       })
 
       it("does not require CSRF header on HEAD requests", async () => {
         const res = await fetch(`http://localhost:${appPort}/api/noauth`, {
