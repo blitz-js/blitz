@@ -70,8 +70,12 @@ const upgradeLegacy = async () => {
 
       // Remove all typescript stuff
       let findTypes = program.find(j.TSType, (node) => node)
-      if (findTypes) {
-        findTypes.forEach((t) => j(t.parentPath).remove())
+      if (findTypes.length) {
+        findTypes.forEach((t) => {
+          if (t.name === "typeAnnotation") {
+            j(t.parentPath).remove()
+          }
+        })
       }
 
       let withBlitz = j.objectProperty(j.identifier("withBlitz"), j.identifier("withBlitz"))
