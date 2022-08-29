@@ -51,7 +51,7 @@ jobs:
             - ubuntu-latest
           node_version:
             - 16
-      name: Node ${{ matrix.node_version }} - ${{ matrix.os }}
+      name: Build ${{ matrix.node_version }} - ${{ matrix.os }}
       steps:
         - uses: actions/checkout@v2
         - uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
@@ -79,8 +79,11 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        OS: [ubuntu-latest, windows-latest]
-        node_version: [16]
+        os: 
+          - ubuntu-latest
+          - windows-latest
+        node_version: 
+          - 16
       fail-fast: false
     env:
       NODE_VERSION: ${{ matrix.NODE_VERSION }}
