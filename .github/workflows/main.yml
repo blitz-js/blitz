@@ -39,9 +39,9 @@ jobs:
             repo-token: ${{ secrets.GITHUB_TOKEN }}
             server-token: ${{ secrets.TURBO_SERVER_TOKEN }}
         - name: Build
-          run: pnpm run build --api="http://127.0.0.1:9080" --token="${{ secrets.TURBO_SERVER_TOKEN }}" --team="foo"
+          run: pnpm run build -- --api="http://127.0.0.1:9080" --token="${{ secrets.TURBO_SERVER_TOKEN }}" --team="foo"
         - name: Lint
-          run: pnpm run lint --api="http://127.0.0.1:9080" --token="${{ secrets.TURBO_SERVER_TOKEN }}" --team="foo"
+          run: pnpm run lint -- --api="http://127.0.0.1:9080" --token="${{ secrets.TURBO_SERVER_TOKEN }}" --team="foo"
     
   build:
       runs-on: ${{ matrix.os }}
@@ -70,9 +70,9 @@ jobs:
             repo-token: ${{ secrets.GITHUB_TOKEN }}
             server-token: ${{ secrets.TURBO_SERVER_TOKEN }}
         - name: Build
-          run: pnpm run build --api="http://127.0.0.1:9080" --token="${{ secrets.TURBO_SERVER_TOKEN }}" --team="foo"
+          run: pnpm run build -- --api="http://127.0.0.1:9080" --token="${{ secrets.TURBO_SERVER_TOKEN }}" --team="foo"
         - name: Build Apps
-          run: pnpm run build:apps --api="http://127.0.0.1:9080" --token="${{ secrets.TURBO_SERVER_TOKEN }}" --team="foo"
+          run: pnpm run build:apps -- --api="http://127.0.0.1:9080" --token="${{ secrets.TURBO_SERVER_TOKEN }}" --team="foo"
 
   test:
     name: 'Test: ${{ matrix.os }} (node@${{ matrix.NODE_VERSION }})'
@@ -111,7 +111,7 @@ jobs:
           server-token: ${{ secrets.TURBO_SERVER_TOKEN }}
 
       - name: Build
-        run: pnpm run build --api="http://127.0.0.1:9080" --token="${{ secrets.TURBO_SERVER_TOKEN }}" --team="foo"
+        run: pnpm run build -- --api="http://127.0.0.1:9080" --token="${{ secrets.TURBO_SERVER_TOKEN }}" --team="foo"
 
       - name: Test
         run: pnpm run test
