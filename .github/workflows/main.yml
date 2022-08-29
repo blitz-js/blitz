@@ -18,7 +18,6 @@ jobs:
       matrix:
         os:
           - ubuntu-latest
-          - windows-latest
         node_version:
           - 16
     steps:
