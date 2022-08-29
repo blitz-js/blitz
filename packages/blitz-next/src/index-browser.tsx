@@ -30,9 +30,10 @@ const buildWithBlitz = <TPlugins extends readonly ClientPlugin<object>[]>(plugin
   const providers = plugins.reduce((acc, plugin) => {
     return plugin.withProvider ? acc.concat(plugin.withProvider) : acc
   }, [] as BlitzProviderType[])
+
   const withPlugins = compose(...providers)
 
-  return function withBlitzAppRoot(UserAppRoot: React.ComponentType<any>) {
+  return function withBlitzAppRoot(UserAppRoot: React.ComponentType<AppProps>) {
     const BlitzOuterRoot = (props: AppProps) => {
       const component = React.useMemo(() => withPlugins(props.Component), [props.Component])
 
@@ -52,6 +53,8 @@ const buildWithBlitz = <TPlugins extends readonly ClientPlugin<object>[]>(plugin
         </BlitzProvider>
       )
     }
+
+    Object.assign(BlitzOuterRoot, UserAppRoot)
     return withSuperJSONPage(BlitzOuterRoot)
   }
 }
@@ -145,10 +148,9 @@ const setupBlitzClient = <TPlugins extends readonly ClientPlugin<object>[]>({
 
   // todo: finish this
   // Used to build BlitzPage type
-  const types = {} as {plugins: typeof plugins}
+  // const types = {} as {plugins: typeof plugins}
 
   return {
-    types,
     withBlitz,
     ...(exports as PluginsExports<TPlugins>),
   }

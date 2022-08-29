@@ -70,8 +70,12 @@ const upgradeLegacy = async () => {
 
       // Remove all typescript stuff
       let findTypes = program.find(j.TSType, (node) => node)
-      if (findTypes) {
-        findTypes.forEach((t) => j(t.parentPath).remove())
+      if (findTypes.length) {
+        findTypes.forEach((t) => {
+          if (t.name === "typeAnnotation") {
+            j(t.parentPath).remove()
+          }
+        })
       }
 
       let withBlitz = j.objectProperty(j.identifier("withBlitz"), j.identifier("withBlitz"))
@@ -195,11 +199,12 @@ const upgradeLegacy = async () => {
         GetServerSideProps: "next",
         InferGetServerSidePropsType: "next",
         GetServerSidePropsContext: "next",
-        AuthenticatedMiddlewareCtx: "@blitz/rpc",
-        getAntiCSRFToken: "@blitzjs/rpc",
+        AuthenticatedMiddlewareCtx: "@blitzjs/rpc",
+        getAntiCSRFToken: "@blitzjs/auth",
         useSession: "@blitzjs/auth",
         useAuthenticatedSession: "@blitzjs/auth",
         useRedirectAuthenticated: "@blitzjs/auth",
+        AuthenticatedSessionContext: "@blitzjs/auth",
         SessionContext: "@blitzjs/auth",
         useAuthorize: "@blitzjs/auth",
         useQuery: "@blitzjs/rpc",
@@ -1099,7 +1104,7 @@ const upgradeLegacy = async () => {
             addNamedImport(program, "gSP", "app/blitz-server")
           }
           fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
-        } catch (e:any) {
+        } catch (e: any) {
           log.error(`Error in wrapping getServerSideProps, getStaticProps in ${file}`)
           throw new Error(e)
         }
@@ -1129,7 +1134,7 @@ const upgradeLegacy = async () => {
 
               fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
             }
-          } catch (e:any) {
+          } catch (e: any) {
             log.error(`Error in wrapping api in ${file}`)
             throw new Error(e)
           }

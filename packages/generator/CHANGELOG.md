@@ -1,5 +1,11 @@
 # @blitzjs/generator
 
+## 2.0.0-beta.3
+
+### Patch Changes
+
+- b72d1215: Add vscode debugging configuration to new app templates
+
 ## 2.0.0-beta.2
 
 ### Patch Changes
