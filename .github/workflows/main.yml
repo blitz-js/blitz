@@ -31,7 +31,7 @@ jobs:
             node-version: ${{ matrix.node_version }}
             cache: "pnpm"
         - name: Install dependencies
-          run: pnpm install --no-frozen-lockfile
+          run: pnpm install  --frozen-lockfile
         - run: pnpm manypkg check
         - name: Turborepo local server
           uses: felixmosh/turborepo-gh-artifacts@v1
@@ -62,7 +62,7 @@ jobs:
           with:
             node-version: ${{ matrix.node_version }}
             cache: "pnpm"
-        - run: pnpm install --no-frozen-lockfile
+        - run: pnpm install --frozen-lockfile
         - run: pnpm manypkg check
         - name: Turborepo local server
           uses: felixmosh/turborepo-gh-artifacts@v1
@@ -102,7 +102,7 @@ jobs:
           cache: 'pnpm'
 
       - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile
+        run: pnpm install --frozen-lockfile
       - run: pnpm manypkg check
       - name: Turborepo local server
         uses: felixmosh/turborepo-gh-artifacts@v1
