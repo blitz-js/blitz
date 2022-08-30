@@ -105,6 +105,42 @@ const upgradeLegacy = async () => {
       )
       parsedProgram.value.program.body.unshift(importWithBlitz)
       config.remove()
+      
+      const findImports = program.find(j.ImportDeclaration, (node) => node)
+      if (findImports.length) {
+        findImports.forEach((i) => {
+          const defaultImport = i.value.specifiers?.find((s) => s.type === "ImportDefaultSpecifier")
+          const namedImports = i.value.specifiers?.filter((s) => s.type === "ImportSpecifier")
+          let flag=false
+          if (defaultImport && defaultImport.local) {
+            const importStatement = j.expressionStatement(
+              j.assignmentExpression(
+                "=",
+                j.identifier("const " + defaultImport.local.name),
+                j.callExpression(j.identifier("require"), [j.stringLiteral(i.value.source.value as string)]),
+              ),
+            )
+            parsedProgram.value.program.body.unshift(importStatement)
+            flag=true
+          }  
+          if(namedImports && namedImports.length){
+            const namedImportNames = namedImports.map((s) => s.local?.name as string)
+            const namedImportNamesString = namedImportNames.join(", ")
+            const importStatement = j.expressionStatement(
+              j.assignmentExpression(
+                "=",
+                j.identifier("const {" + namedImportNamesString + "}"),
+                j.callExpression(j.identifier("require"), [j.stringLiteral(i.value.source.value as string)]),
+              ),
+            )
+            parsedProgram.value.program.body.unshift(importStatement)
+            flag=true
+          }         
+          if(flag){
+            j(i).remove()
+          }
+        })
+      }
 
       let moduleExportStatement = j.expressionStatement(
         j.assignmentExpression(
