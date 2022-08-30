@@ -66,7 +66,8 @@ const upgradeLegacy = async () => {
             j(c.parentPath).remove()
           }
         })
-      }     
+      }
+      
       // Remove all typescript stuff
       let findTypes = program.find(j.TSType, (node) => node)
       if (findTypes.length) {
@@ -114,20 +115,20 @@ const upgradeLegacy = async () => {
               j.assignmentExpression(
                 "=",
                 j.identifier("const " + defaultImport.local.name),
-                j.callExpression(j.identifier("require"), [j.stringLiteral(i.value.source.value as string)]),
+                j.callExpression(j.identifier("require"), [j.stringLiteral(`${i.value.source.value}`)]),
               ),
             )
             parsedProgram.value.program.body.unshift(importStatement)
             flag=true
           }  
           if(namedImports && namedImports.length){
-            const namedImportNames = namedImports.map((s) => s.local?.name as string)
+            const namedImportNames = namedImports.map((s) => s.local?.name)
             const namedImportNamesString = namedImportNames.join(", ")
             const importStatement = j.expressionStatement(
               j.assignmentExpression(
                 "=",
                 j.identifier("const {" + namedImportNamesString + "}"),
-                j.callExpression(j.identifier("require"), [j.stringLiteral(i.value.source.value as string)]),
+                j.callExpression(j.identifier("require"), [j.stringLiteral(`${i.value.source.value}`)]),
               ),
             )
             parsedProgram.value.program.body.unshift(importStatement)
