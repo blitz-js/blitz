@@ -66,8 +66,7 @@ const upgradeLegacy = async () => {
             j(c.parentPath).remove()
           }
         })
-      }
-      
+      }     
       // Remove all typescript stuff
       let findTypes = program.find(j.TSType, (node) => node)
       if (findTypes.length) {
