@@ -1246,17 +1246,22 @@ const upgradeLegacy = async () => {
           const invokeWithMiddlewarePath = findCallExpression(program, "invokeWithMiddleware")
           if (invokeWithMiddlewarePath?.length) {
             invokeWithMiddlewarePath.forEach((path) => {
-             const resolverName = path.value.arguments.at(0) as Identifier
+             const resolverName = path.value.arguments.at(0)
+             if(resolverName?.type === "Identifier") {
               const resolverExpression = j.callExpression(
                 j.identifier(resolverName.name),
                 path.value.arguments.slice(1),
               )
               const resolverStatement = j.expressionStatement(resolverExpression)
               j(path).replaceWith(resolverStatement)
+             }
+             else{
+              throw new Error(`invokeWithMiddleware can only be used with a resolver as the first argument \nError at Line ${path?.value?.loc?.start.line}`)
+             }
             })              
           }
         } catch (e:any) {
-          log.error(`Error in checking invokeWithMiddleware in ${file}`)
+          log.error(`\nError in checking invokeWithMiddleware in ${file}`)
           throw new Error(e)
         }
         fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
