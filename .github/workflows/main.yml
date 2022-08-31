@@ -11,7 +11,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
+  lint:
+    name: 'Lint: ${{ matrix.os }}'
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -19,20 +20,99 @@ jobs:
           - ubuntu-latest
         node_version:
           - 16
-    name: Node ${{ matrix.node_version }} - ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v2
-      - uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
+        - uses: actions/checkout@v2
+        - uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
+          with:
+            version: 6.32.6
+        - name: Setup node
+          uses: actions/setup-node@v2
+          with:
+            node-version: ${{ matrix.node_version }}
+            cache: "pnpm"
+        - name: Install dependencies
+          run: pnpm install  --frozen-lockfile
+        - run: pnpm manypkg check
+        - name: Turborepo local server
+          uses: felixmosh/turborepo-gh-artifacts@v1
+          with:
+            repo-token: ${{ secrets.GITHUB_TOKEN }}
+            server-token: ${{ secrets.TURBO_SERVER_TOKEN }}
+        - name: Build
+          run: pnpm build -- --api="http://127.0.0.1:9080" --token="${{ secrets.TURBO_SERVER_TOKEN }}" --team="foo"
+        - name: Lint
+          run: pnpm lint -- --api="http://127.0.0.1:9080" --token="${{ secrets.TURBO_SERVER_TOKEN }}" --team="foo"
+    
+  build:
+      runs-on: ${{ matrix.os }}
+      strategy:
+        matrix:
+          os:
+            - ubuntu-latest
+          node_version:
+            - 16
+      name: Build - ${{ matrix.os }}
+      steps:
+        - uses: actions/checkout@v2
+        - uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
+          with:
+            version: 6.32.6
+        - name: Setup node
+          uses: actions/setup-node@v2
+          with:
+            node-version: ${{ matrix.node_version }}
+            cache: "pnpm"
+        - run: pnpm install --frozen-lockfile
+        - run: pnpm manypkg check
+        - name: Turborepo local server
+          uses: felixmosh/turborepo-gh-artifacts@v1
+          with:
+            repo-token: ${{ secrets.GITHUB_TOKEN }}
+            server-token: ${{ secrets.TURBO_SERVER_TOKEN }}
+        - name: Build
+          run: pnpm build -- --api="http://127.0.0.1:9080" --token="${{ secrets.TURBO_SERVER_TOKEN }}" --team="foo"
+        - name: Build Apps
+          run: pnpm build:apps -- --api="http://127.0.0.1:9080" --token="${{ secrets.TURBO_SERVER_TOKEN }}" --team="foo"
+
+  test:
+    name: 'Test: ${{ matrix.os }} (node@${{ matrix.NODE_VERSION }})'
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: 
+          - ubuntu-latest
+          - windows-latest
+        node_version: 
+          - 16
+      fail-fast: false
+    env:
+      NODE_VERSION: ${{ matrix.NODE_VERSION }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup PNPM
+        uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
         with:
           version: 6.32.6
-      - name: Setup node
+      - name: Setup node@${{ matrix.NODE_VERSION }}
         uses: actions/setup-node@v2
         with:
-          node-version: ${{ matrix.node_version }}
-          cache: "pnpm"
-      - run: pnpm install --frozen-lockfile
+          node-version: ${{ matrix.NODE_VERSION }}
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
       - run: pnpm manypkg check
-      - run: pnpm build
-      - run: pnpm lint
-      - run: pnpm build:apps
-      - run: pnpm test
+      - name: Turborepo local server
+        uses: felixmosh/turborepo-gh-artifacts@v1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          server-token: ${{ secrets.TURBO_SERVER_TOKEN }}
+
+      - name: Build
+        run: pnpm build -- --api="http://127.0.0.1:9080" --token="${{ secrets.TURBO_SERVER_TOKEN }}" --team="foo"
+
+      - name: Test
+        run: pnpm test -- --api="http://127.0.0.1:9080" --token="${{ secrets.TURBO_SERVER_TOKEN }}" --team="foo"
+            
