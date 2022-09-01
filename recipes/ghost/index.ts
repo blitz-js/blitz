@@ -52,7 +52,7 @@ export default RecipeBuilder()
     stepId: "ghostMiddleware",
     stepName: "Add default middleware to expose ghost",
     explanation: "Adds ghostapi to middleware so we can expose it in queries and mutations.",
-    singleFileSearch: paths.blitzConfig(),
+    singleFileSearch: paths.blitzServer(),
     transform(program) {
       // // import ghostApi from integrations/ghost
       const cssBaselineImport = j.importDeclaration(

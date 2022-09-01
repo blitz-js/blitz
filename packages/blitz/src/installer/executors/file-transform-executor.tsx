@@ -52,14 +52,14 @@ export const Propose: IExecutor["Propose"] = ({cliArgs, cliFlags, onProposalAcce
         globFilter: getExecutorArgument((step as Config).singleFileSearch, cliArgs),
         getChoices: (step as Config).selectTargetFiles,
       })
-      console.log(fileToTransform)
+
       setFilePath(fileToTransform)
       const originalFile = fs.readFileSync(fileToTransform).toString("utf-8")
-      console.log(originalFile)
+
       const newFile = await ((step as Config).transformPlain
         ? stringProcessFile(originalFile, (step as Config).transformPlain!)
         : processFile(originalFile, (step as Config).transform!))
-      console.log(newFile)
+
       return createPatch(fileToTransform, originalFile, newFile)
     }
 

@@ -1144,15 +1144,6 @@ importers:
       unbuild: 0.7.6
       watch: 1.0.2
 
-  recipes-test/tailwind:
-    specifiers:
-      "@types/jscodeshift": 0.11.2
-      jscodeshift: 0.13.0
-    dependencies:
-      jscodeshift: 0.13.0
-    devDependencies:
-      "@types/jscodeshift": 0.11.2
-
 packages:
   /@ampproject/remapping/2.2.0:
     resolution:
@@ -4055,7 +4046,7 @@ packages:
       }
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     dependencies:
-      "@sinclair/typebox": 0.24.32
+      "@sinclair/typebox": 0.24.34
     dev: true
 
   /@jest/source-map/27.5.1:
@@ -4709,10 +4700,10 @@ packages:
       }
     dev: false
 
-  /@sinclair/typebox/0.24.32:
+  /@sinclair/typebox/0.24.34:
     resolution:
       {
-        integrity: sha512-NWNTW284AOFhxgYofPef5IqDq6Y7ghZkZAkWJcUBp1r9ljfrFOKBDsiQJnLNp9tLcaSXFK9OgsS72W4RXe0jvw==,
+        integrity: sha512-x3ejWKw7rpy30Bvm6U0AQMOHdjqe2E3YJrBHlTxH0KFsp77bBa+MH324nJxtXZFpnTy/JW2h5HPYVm0vG2WPnw==,
       }
     dev: true
 
@@ -5181,7 +5172,7 @@ packages:
         integrity: sha512-ZUxbzKl0IfJILTS6t7ip5fQQM/J3TJYubDm3nMbgubNNYS62eXeUpoLUC8/7fJNiFYHTrGPQn7hspDUzIHX3UA==,
       }
     dependencies:
-      "@types/minimatch": 5.1.1
+      "@types/minimatch": 5.1.2
       "@types/node": 18.7.13
     dev: false
 
@@ -5191,7 +5182,7 @@ packages:
         integrity: sha512-l6NQsDDyQUVeoTynNpC9uRvCUint/gSUXQA2euwmTuWGvPY5LSDUu6tkCtJB2SvGQlJQzLaKqcGZP4//7EDveA==,
       }
     dependencies:
-      "@types/minimatch": 5.1.1
+      "@types/minimatch": 5.1.2
       "@types/node": 18.7.13
     dev: true
 
@@ -5374,10 +5365,10 @@ packages:
         integrity: sha512-Klz949h02Gz2uZCMGwDUSDS1YBlTdDDgbWHi+81l29tQALUtvz4rAYi5uoVhE5Lagoq6DeqAUlbrHvW/mXDgdQ==,
       }
 
-  /@types/minimatch/5.1.1:
+  /@types/minimatch/5.1.2:
     resolution:
       {
-        integrity: sha512-v55NF6Dz0wrj14Rn8iEABTWrhYRmgkJYuokduunSiq++t3hZ9VZ6dvcDt+850Pm5sGJZk8RaHzkFCXPxVINZ+g==,
+        integrity: sha512-K0VQKziLUWkVKiRVrx4a40iPaxTUefQmjtkQofBkYRcoaaL/8rhwDWww9qWbrgicNOgnpIsMxyNIUM4+n6dUIA==,
       }
 
   /@types/minimist/1.2.2:
@@ -7103,7 +7094,7 @@ packages:
     hasBin: true
     dependencies:
       caniuse-lite: 1.0.30001387
-      electron-to-chromium: 1.4.237
+      electron-to-chromium: 1.4.239
       node-releases: 2.0.6
       update-browserslist-db: 1.0.5_browserslist@4.21.3
 
@@ -8705,10 +8696,10 @@ packages:
         integrity: sha512-4eWebzDLd+hYLm4csbyMU2EbBnqhwl8Oe9eF/7CBDPWcRxFmqzx4izxvHH+lofQxzieg8UbB8ZuzNTxeukzfTg==,
       }
 
-  /electron-to-chromium/1.4.237:
+  /electron-to-chromium/1.4.239:
     resolution:
       {
-        integrity: sha512-vxVyGJcsgArNOVUJcXm+7iY3PJAfmSapEszQD1HbyPLl0qoCmNQ1o/EX3RI7Et5/88In9oLxX3SGF8J3orkUgA==,
+        integrity: sha512-XbhfzxPIFzMjJm17T7yUGZEyYh5XuUjrA/FQ7JUy2bEd4qQ7MvFTaKpZ6zXZog1cfVttESo2Lx0ctnf7eQOaAQ==,
       }
 
   /emittery/0.8.1:
@@ -12905,10 +12896,10 @@ packages:
       "@sideway/pinpoint": 2.0.0
     dev: false
 
-  /jose/4.9.1:
+  /jose/4.9.2:
     resolution:
       {
-        integrity: sha512-ETgCfJ2yxJavpJdVMgznN8ot3MJyZUiLyY2xiZ2sSNL/uEZh1EH74cmNYWhZgMSBwSdSz03ja5cMZU/9BSlqXg==,
+        integrity: sha512-EqKvu2PqJCD3Jrg3PvcYZVS7D21qMVLSYMDAFcOdGUEOpJSLNtJO7NjLANvu3SYHVl6pdP2ff7ve6EZW2nX7Nw==,
       }
     dev: false
 
@@ -12949,38 +12940,6 @@ packages:
     dependencies:
       argparse: 1.0.10
       esprima: 4.0.1
-
-  /jscodeshift/0.13.0:
-    resolution:
-      {
-        integrity: sha512-FNHLuwh7TeI0F4EzNVIRwUSxSqsGWM5nTv596FK4NfBnEEKFpIcyFeG559DMFGHSTIYA5AY4Fqh2cBrJx0EAwg==,
-      }
-    hasBin: true
-    peerDependencies:
-      "@babel/preset-env": ^7.1.6
-    dependencies:
-      "@babel/core": 7.18.2
-      "@babel/parser": 7.18.13
-      "@babel/plugin-proposal-class-properties": 7.18.6_@babel+core@7.18.2
-      "@babel/plugin-proposal-nullish-coalescing-operator": 7.18.6_@babel+core@7.18.2
-      "@babel/plugin-proposal-optional-chaining": 7.18.9_@babel+core@7.18.2
-      "@babel/plugin-transform-modules-commonjs": 7.18.6_@babel+core@7.18.2
-      "@babel/preset-flow": 7.18.6_@babel+core@7.18.2
-      "@babel/preset-typescript": 7.18.6_@babel+core@7.18.2
-      "@babel/register": 7.18.9_@babel+core@7.18.2
-      babel-core: 7.0.0-bridge.0_@babel+core@7.18.2
-      colors: 1.4.0
-      flow-parser: 0.185.2
-      graceful-fs: 4.2.10
-      micromatch: 3.1.10
-      neo-async: 2.6.2
-      node-dir: 0.1.17
-      recast: 0.20.5
-      temp: 0.8.4
-      write-file-atomic: 2.4.3
-    transitivePeerDependencies:
-      - supports-color
-    dev: false
 
   /jscodeshift/0.13.0_@babel+preset-env@7.12.10:
     resolution:
@@ -14904,7 +14863,7 @@ packages:
       }
     engines: {node: ^12.19.0 || ^14.15.0 || ^16.13.0}
     dependencies:
-      jose: 4.9.1
+      jose: 4.9.2
       lru-cache: 6.0.0
       object-hash: 2.2.0
       oidc-token-hash: 5.0.1
