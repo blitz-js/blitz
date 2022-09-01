@@ -1,6 +1,6 @@
 import type {ExpressionKind} from "ast-types/gen/kinds"
 import {namedTypes} from "ast-types"
-import j from "jscodeshift"
+import j, {ASTPath} from "jscodeshift"
 import {JsonObject, JsonValue} from "../types"
 import {Program} from "../types"
 import {findModuleExportsExpressions} from "./find-module-exports-expressions"
@@ -43,7 +43,7 @@ function updateBabelConfig(program: Program, item: AddBabelItemDefinition, key: 
           //   presets: "this-preset"
           // }
           if (itemName !== items.node.value.value) {
-            items.value = j.arrayExpression([items.value, jsonValueToExpression(item)])
+            items.node.value = j.arrayExpression([items.node.value, jsonValueToExpression(item)])
           }
         } else if (items.node.value.type === "ArrayExpression") {
           // {

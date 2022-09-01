@@ -8,6 +8,7 @@ import {join, resolve} from "path"
 import {Stream} from "stream"
 import {promisify} from "util"
 import {RecipeCLIFlags, RecipeExecutor} from "../../installer"
+import {setupTsnode} from "../utils/setup-ts-node"
 
 interface GlobalAgent {
   HTTP_PROXY?: string
@@ -98,7 +99,7 @@ interface GithubRepoAPITrees {
 }
 
 const getOfficialRecipeList = async (): Promise<string[]> => {
-  return await gotJSON(`${API_ROOT}blitz-js/blitz/git/trees/canary?recursive=1`).then(
+  return await gotJSON(`${API_ROOT}blitz-js/blitz/git/trees/main?recursive=1`).then(
     (release: GithubRepoAPITrees) =>
       release.tree.reduce((recipesList: string[], item) => {
         const filePath = item.path.split("/")
@@ -128,7 +129,7 @@ const normalizeRecipePath = (recipeArg: string): RecipeMeta => {
         repoUrl = recipeArg
         break
       case isNativeRecipe:
-        repoUrl = `${GH_ROOT}blitz-js/legacy-framework`
+        repoUrl = `${GH_ROOT}blitz-js/blitz`
         subdirectory = `recipes/${recipeArg}`
         break
       case isGitHubShorthandRecipe:
@@ -204,6 +205,8 @@ const setupProxySupport = async () => {
 }
 
 const install: CliCommand = async () => {
+  setupTsnode()
+
   let selectedRecipe: string | null = args._[1] ? `${args._[1]}` : null
   await setupProxySupport()
 

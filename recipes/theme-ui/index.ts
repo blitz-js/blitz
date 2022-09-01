@@ -5,7 +5,7 @@ import {
   RecipeBuilder,
   transformBlitzConfig,
   wrapBlitzConfig,
-} from "@blitzjs/installer"
+} from "blitz"
 import type {NodePath} from "ast-types/lib/node-path"
 import j from "jscodeshift"
 import {join} from "path"
@@ -33,7 +33,7 @@ function initializePlugin(program: Program, statement: j.Statement) {
   return program
 }
 
-// Copied from https://github.com/blitz-js/legacy-framework/pull/805, let's add this to the @blitzjs/installer
+// Copied from https://github.com/blitz-js/legacy-framework/pull/805, let's add this to the blitz
 function wrapComponentWithThemeProvider(program: Program) {
   program
     .find(j.JSXElement)

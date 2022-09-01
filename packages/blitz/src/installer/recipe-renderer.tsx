@@ -50,27 +50,30 @@ interface State {
 function recipeReducer(state: State, action: {type: Action; data?: any}) {
   const newState = {...state}
   const step = newState.steps[newState.current]
-  assert(step, "Step is empty in recipeReducer function")
+
+  // assert(step, "Step is empty in recipeReducer function")
+
   switch (action.type) {
     case Action.ProposeChange:
-      step.status = Status.Proposed
+      step!.status = Status.Proposed
       break
     case Action.CommitApproved:
-      step.status = Status.ReadyToCommit
-      step.proposalData = action.data
+      step!.status = Status.ReadyToCommit
+      step!.proposalData = action.data
       break
     case Action.ApplyChange:
-      step.status = Status.Committing
+      step!.status = Status.Committing
       break
     case Action.CompleteChange:
-      step.status = Status.Committed
-      step.successMsg = action.data as string
+      step!.status = Status.Committed
+      step!.successMsg = action.data as string
       newState.current = Math.min(newState.current + 1, newState.steps.length - 1)
       break
     case Action.SkipStep:
       newState.current += 1
       break
   }
+
   return newState
 }
 
@@ -199,18 +202,20 @@ function StepExecutor({
 export function RecipeRenderer({cliArgs, cliFlags, steps, recipeMeta}: RecipeProps) {
   const userInput = useUserInput(cliFlags)
   const {exit} = useApp()
-  const [state, dispatch] = React.useReducer(recipeReducer, {
-    current: userInput ? -1 : 0,
-    steps: steps.map((e) => ({
-      executor: e,
-      status: Status.Pending,
-      successMsg: "",
-    })),
-  })
+  const mappedSteps = steps.map((e) => ({
+    executor: e,
+    status: Status.Pending,
+    successMsg: "",
+  }))
 
   if (steps.length === 0) {
     exit(new Error("This recipe has no steps"))
   }
+
+  const [state, dispatch] = React.useReducer(recipeReducer, {
+    current: userInput ? -1 : 0,
+    steps: mappedSteps,
+  })
 
   React.useEffect(() => {
     if (

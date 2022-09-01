@@ -9,6 +9,7 @@ export const customTsParser: {} = {
     const babelOptions = getBabelOptions(options)
     babelOptions.plugins.push("typescript")
     babelOptions.plugins.push("jsx")
+
     return babel.parser.parse(source, babelOptions)
   },
 }

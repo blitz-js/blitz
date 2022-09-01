@@ -1,4 +1,4 @@
-import {addBabelPlugin, addImport, paths, Program, RecipeBuilder} from "@blitzjs/installer"
+import {addBabelPlugin, addImport, paths, Program, RecipeBuilder} from "blitz"
 import type {NodePath} from "ast-types/lib/node-path"
 import j from "jscodeshift"
 import {join} from "path"

@@ -74,8 +74,11 @@ const DependencyList = ({
 export function getPackageManager() {
   if (fs.existsSync(path.resolve("yarn.lock"))) {
     return "yarn"
+  } else if (fs.existsSync(path.resolve("pnpm-lock.yaml"))) {
+    return "pnpm"
+  } else {
+    return "npm"
   }
-  return "npm"
 }
 
 /**

@@ -24,6 +24,7 @@ interface TempGeneratorOptions extends GeneratorOptions {
   targetDirectory?: string
   templateRoot: string
   templateValues: any
+  run?: any
 }
 
 class TempGenerator extends Generator<TempGeneratorOptions> {

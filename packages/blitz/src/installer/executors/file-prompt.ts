@@ -1,6 +1,5 @@
 // import { prompt as enquirer } from 'enquirer'
 import prompts from "prompts"
-import {globby} from "globby"
 
 enum SearchType {
   file,
@@ -14,7 +13,8 @@ interface FilePromptOptions {
   context: any
 }
 
-function getMatchingFiles(filter: string = ""): Promise<string[]> {
+async function getMatchingFiles(filter: string = ""): Promise<string[]> {
+  let {globby} = await import("globby")
   return globby(filter, {expandDirectories: true})
 }
 

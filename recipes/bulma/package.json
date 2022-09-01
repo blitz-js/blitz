@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/blitz-js/legacy-framework#readme",
   "dependencies": {
-    "@blitzjs/installer": "0.45.5",
+    "blitz": "2.0.0-beta.3",
     "jscodeshift": "0.13.0"
   },
   "devDependencies": {

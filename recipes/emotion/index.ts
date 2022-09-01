@@ -1,29 +1,21 @@
-import {
-  addBabelPlugin,
-  addBabelPreset,
-  addImport,
-  paths,
-  Program,
-  RecipeBuilder,
-} from "@blitzjs/installer"
+import {addBabelPlugin, addBabelPreset, addImport, paths, Program, RecipeBuilder} from "blitz"
 import j from "jscodeshift"
 import {join} from "path"
 
 function applyGlobalStyles(program: Program) {
-  program.find(j.ExportDefaultDeclaration).forEach((exportPath) => {
-    j(exportPath)
-      .find(j.JSXElement, {openingElement: {name: {name: "ErrorBoundary"}}})
-      .forEach((elementPath) => {
-        if (Array.isArray(elementPath.node.children)) {
-          elementPath.node.children.splice(0, 0, j.literal("\n"))
-          elementPath.node.children.splice(
-            1,
-            0,
-            j.jsxExpressionContainer(j.identifier("globalStyles")),
-          )
-        }
-      })
-  })
+  program
+    .find(j.JSXElement, {openingElement: {name: {name: "ErrorBoundary"}}})
+    .forEach((elementPath) => {
+      if (Array.isArray(elementPath.node.children)) {
+        elementPath.node.children.splice(0, 0, j.literal("\n"))
+        elementPath.node.children.splice(
+          1,
+          0,
+          j.jsxExpressionContainer(j.identifier("globalStyles")),
+        )
+      }
+    })
+    .get().value.extra.parenthesized = false
 
   return program
 }
@@ -65,6 +57,14 @@ export default RecipeBuilder()
       addImport(program, stylesImport)
       return applyGlobalStyles(program)
     },
+  })
+  .addNewFilesStep({
+    stepId: "create babel file",
+    stepName: "Create babel file",
+    explanation: `Adding default babel file.`,
+    targetDirectory: "./babel.config.js",
+    templatePath: join(__dirname, "templates", "babel.config.js"),
+    templateValues: {},
   })
   .addTransformFilesStep({
     stepId: "updateBabelConfig",

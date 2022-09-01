@@ -1,8 +1,8 @@
-import {addImport, paths, Program, RecipeBuilder} from "@blitzjs/installer"
+import {addImport, paths, Program, RecipeBuilder} from "blitz"
 import type {NodePath} from "ast-types/lib/node-path"
 import j, {JSXIdentifier} from "jscodeshift"
 
-// Copied from https://github.com/blitz-js/legacy-framework/pull/805, let's add this to the @blitzjs/installer
+// Copied from https://github.com/blitz-js/legacy-framework/pull/805, let's add this to the blitz
 function wrapComponentWithChakraProvider(program: Program) {
   program
     .find(j.JSXElement)

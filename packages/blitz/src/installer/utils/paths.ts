@@ -7,19 +7,19 @@ function ext(jsx = false) {
 
 export const paths = {
   document() {
-    return `app/pages/_document${ext(true)}`
+    return `pages/_document${ext(true)}`
   },
   app() {
-    return `app/pages/_app${ext(true)}`
+    return `pages/_app${ext(true)}`
   },
   entry() {
-    return `app/pages/index${ext(true)}`
+    return `pages/index${ext(true)}`
+  },
+  nextConfig() {
+    return `next.config.js`
   },
   babelConfig() {
-    return "babel.config.js"
-  },
-  blitzConfig() {
-    return `blitz.config${ext()}`
+    return `babel.config.js`
   },
   packageJson() {
     return "package.json"

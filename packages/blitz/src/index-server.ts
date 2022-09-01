@@ -9,6 +9,7 @@ export * from "./middleware"
 export * from "./paginate"
 export {baseLogger, newLine, log} from "./logging"
 export {startWatcher, stopWatcher} from "./cli/utils/routes-manifest"
+export * from "./installer"
 
 export interface MiddlewareResponse<C extends Ctx = Ctx> extends ServerResponse {
   blitzCtx: C
