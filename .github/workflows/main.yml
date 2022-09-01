@@ -71,7 +71,7 @@ jobs:
             server-token: 05de0230f01174d1f8cb4845a01dc6c895ce28f04ebef2318ab11615791b871c35eabbf8
         - name: Build
           run: pnpm build -- --api="http://127.0.0.1:9080" --token="05de0230f01174d1f8cb4845a01dc6c895ce28f04ebef2318ab11615791b871c35eabbf8" --team="foo"
-        - name: Build Apps
+        - name: Build Apps 
           run: pnpm build:apps -- --api="http://127.0.0.1:9080" --token="05de0230f01174d1f8cb4845a01dc6c895ce28f04ebef2318ab11615791b871c35eabbf8" --team="foo"
 
   test:
