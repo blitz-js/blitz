@@ -12,6 +12,12 @@ export const paths = {
   app() {
     return `pages/_app${ext(true)}`
   },
+  blitzServer() {
+    return `app/blitz-server${ext(false)}`
+  },
+  blitzClient() {
+    return `app/blitz-client${ext(false)}`
+  },
   entry() {
     return `pages/index${ext(true)}`
   },
