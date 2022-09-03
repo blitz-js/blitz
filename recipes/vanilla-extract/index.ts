@@ -1,5 +1,6 @@
-import {addBabelPlugin, addImport, paths, Program, RecipeBuilder, wrapBlitzConfig} from "blitz"
+import {addBabelPlugin, paths, Program, RecipeBuilder, transformBlitzConfig} from "../../packages/blitz"
 import j from "jscodeshift"
+import {join} from "path"
 
 function initializePlugin(program: Program, statement: j.Statement) {
   const importStatementCount = program.find(j.ImportDeclaration).length
@@ -34,27 +35,23 @@ export default RecipeBuilder()
       {name: "@vanilla-extract/next-plugin", version: "^1"},
     ],
   })
-  .addTransformFilesStep({
-    stepId: "addBabelPlugin",
+  .addNewFilesStep({
+    stepId: "addConfig",
     stepName: "Add the '@vanilla-extract/babel-plugin' plugin to the babel config file",
     explanation: `Now we have to update our babel config to support vanilla-extract`,
-    singleFileSearch: paths.babelConfig(),
-    transform(program) {
-      return addBabelPlugin(program, "@vanilla-extract/babel-plugin")
-    },
+    targetDirectory: ".",
+    templatePath: join(__dirname, "templates", "config"),
+    templateValues: {},
   })
   .addTransformFilesStep({
     stepId: "modifyBlitzConfig",
     stepName: "Add the '@vanilla-extract/next-plugin' plugin to the blitz config file",
     explanation: `Now we have to update our blitz config to support vanilla-extract`,
-    singleFileSearch: paths.blitzConfig(),
+    singleFileSearch: paths.nextConfig(),
     transform(program) {
-      program = addImport(
-        program,
-        j.importDeclaration(
-          [j.importSpecifier(j.identifier("createVanillaExtractPlugin"))],
-          j.literal("@vanilla-extract/next-plugin"),
-        ),
+      transformBlitzConfig(program).addRequireStatement(
+        "createVanillaExtractPlugin",
+        "@vanilla-extract/next-plugin",
       )
 
       program = initializePlugin(
@@ -66,8 +63,8 @@ export default RecipeBuilder()
           ),
         ]),
       )
-
-      return wrapBlitzConfig(program, "withVanillaExtract")
+      transformBlitzConfig(program).wrapConfig("withVanillaExtract")
+      return program
     },
   })
   .build()
