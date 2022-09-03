@@ -1,4 +1,5 @@
-import {Head} from "blitz"
+import Head from "next/head"
+import React from "react"
 import {FC, ReactNode} from "react"
 import {Container} from "theme-ui"
 
