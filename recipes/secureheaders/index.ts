@@ -31,7 +31,7 @@ export default RecipeBuilder()
       if (
         program
           .find(j.ImportDeclaration)
-          .filter((path: any) => path.node.source.value === secureHeadersImport.source.value)
+          .filter((path) => path.node.source.value === secureHeadersImport.source.value)
           .length === 0
       ) {
         addImport(program, secureHeadersImport)
@@ -54,7 +54,7 @@ export default RecipeBuilder()
               ...addHttpMetaTag("Referrer-Policy", j.stringLiteral("origin-when-cross-origin")),
               j.literal("\n"),
               ...(path.node.children || [])
-                .filter((path: any) => {
+                .filter((path) => {
                   return !(
                     path.type === "JSXElement" &&
                     path.openingElement.name.type === "JSXIdentifier" &&
