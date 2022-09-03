@@ -1,4 +1,4 @@
-import {addBabelPlugin, paths, Program, RecipeBuilder, transformBlitzConfig} from "blitz"
+import {addBabelPlugin, paths, Program, RecipeBuilder, transformNextConfig} from "blitz"
 import j from "jscodeshift"
 import {join} from "path"
 
@@ -49,7 +49,7 @@ export default RecipeBuilder()
     explanation: `Now we have to update our blitz config to support vanilla-extract`,
     singleFileSearch: paths.nextConfig(),
     transform(program) {
-      transformBlitzConfig(program).addRequireStatement(
+      transformNextConfig(program).addRequireStatement(
         "createVanillaExtractPlugin",
         "@vanilla-extract/next-plugin",
       )
@@ -63,7 +63,7 @@ export default RecipeBuilder()
           ),
         ]),
       )
-      transformBlitzConfig(program).wrapConfig("withVanillaExtract")
+      transformNextConfig(program).wrapConfig("withVanillaExtract")
       return program
     },
   })

@@ -1,4 +1,4 @@
-import {addImport, paths, Program, RecipeBuilder, transformBlitzConfig} from "blitz"
+import {addImport, paths, Program, RecipeBuilder, transformNextConfig} from "blitz"
 import j from "jscodeshift"
 import {join} from "path"
 
@@ -127,7 +127,7 @@ const addHttpHeaders = (program: Program, headers: Array<{name: string; value: s
     ]),
   )
   headersFunction.async = true
-  const headersCollection = transformBlitzConfig(program).configObj.find(
+  const headersCollection = transformNextConfig(program).configObj.find(
     (value) =>
       // @ts-ignore
       value.type === "ObjectProperty" && value.key.type === "Identifier" && value.key.name === "headers",
@@ -136,12 +136,12 @@ const addHttpHeaders = (program: Program, headers: Array<{name: string; value: s
   if (headersCollection) {
     headersCollection.value = headersFunction
   } else {
-    transformBlitzConfig(program).pushToConfig(
+    transformNextConfig(program).pushToConfig(
       j.objectProperty(j.identifier("headers"), headersFunction),
     )
   }
 
-  const poweredByProp = transformBlitzConfig(program).configObj.find(
+  const poweredByProp = transformNextConfig(program).configObj.find(
     (value) =>
       // @ts-ignore
       value.type === "ObjectProperty" && value.key.type === "Identifier" && value.key.name === "poweredByHeader",
@@ -150,7 +150,7 @@ const addHttpHeaders = (program: Program, headers: Array<{name: string; value: s
   if (poweredByProp) {
     poweredByProp.value = j.booleanLiteral(false)
   } else {
-    transformBlitzConfig(program).pushToConfig(
+    transformNextConfig(program).pushToConfig(
       j.objectProperty(j.identifier("poweredByHeader"), j.booleanLiteral(false)),
     )
   }

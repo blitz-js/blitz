@@ -3,7 +3,7 @@ import {
   paths,
   Program,
   RecipeBuilder,
-  transformBlitzConfig,
+  transformNextConfig,
   wrapBlitzConfig,
 } from "blitz"
 import type {NodePath} from "ast-types/lib/node-path"
@@ -134,8 +134,8 @@ export default RecipeBuilder()
         j.literal("md"),
         j.literal("mdx"),
       ])
-      transformBlitzConfig(program).pushToConfig(j.objectProperty(j.identifier("pageExtensions"), arr))
-      transformBlitzConfig(program).wrapConfig(NEXT_MDX_PLUGIN_NAME)
+      transformNextConfig(program).pushToConfig(j.objectProperty(j.identifier("pageExtensions"), arr))
+      transformNextConfig(program).wrapConfig(NEXT_MDX_PLUGIN_NAME)
       return program
     },
   })
