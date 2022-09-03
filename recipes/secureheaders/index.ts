@@ -60,7 +60,7 @@ export default RecipeBuilder()
                     path.openingElement.name.type === "JSXIdentifier" &&
                     path.openingElement.name.name === "meta" &&
                     path.openingElement.attributes?.some(
-                      (attr: any) =>
+                      (attr) =>
                         attr.type === "JSXAttribute" &&
                         attr.name.type === "JSXIdentifier" &&
                         attr.name.name === "httpEquiv" &&
