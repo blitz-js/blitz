@@ -1,4 +1,4 @@
-import {addBabelPlugin, paths, Program, RecipeBuilder, transformBlitzConfig} from "../../packages/blitz"
+import {addBabelPlugin, paths, Program, RecipeBuilder, transformBlitzConfig} from "blitz"
 import j from "jscodeshift"
 import {join} from "path"
 
