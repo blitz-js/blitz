@@ -100,11 +100,11 @@ export default RecipeBuilder()
       {name: "@mdx-js/loader", version: "1.x"},
     ],
   })
-  .addTransformFilesStep({
+ .addTransformFilesStep({
     stepId: "createOrModifyBlitzConfig",
     stepName: "Add the '@next/mdx' plugin to the blitz config file",
     explanation: `Now we have to update our blitz config to support MDX`,
-    singleFileSearch: paths.blitzConfig(),
+    singleFileSearch: paths.nextConfig(),
 
     transform(program) {
       program = addImport(
@@ -126,34 +126,17 @@ export default RecipeBuilder()
           ),
         ]),
       )
-
-      program = transformBlitzConfig(program, (config) => {
-        const arr = j.arrayExpression([
-          j.literal("js"),
-          j.literal("jsx"),
-          j.literal("ts"),
-          j.literal("tsx"),
-          j.literal("md"),
-          j.literal("mdx"),
-        ])
-
-        const pageExtensionsProp = config.properties.find(
-          (value) =>
-            value.type === "ObjectProperty" &&
-            value.key.type === "Identifier" &&
-            value.key.name === "pageExtensions",
-        ) as j.ObjectProperty | undefined
-
-        if (pageExtensionsProp) {
-          pageExtensionsProp.value = arr
-        } else {
-          config.properties.push(j.objectProperty(j.identifier("pageExtensions"), arr))
-        }
-
-        return config
-      })
-
-      return wrapBlitzConfig(program, NEXT_MDX_PLUGIN_NAME)
+      const arr = j.arrayExpression([
+        j.literal("js"),
+        j.literal("jsx"),
+        j.literal("ts"),
+        j.literal("tsx"),
+        j.literal("md"),
+        j.literal("mdx"),
+      ])
+      transformBlitzConfig(program).pushToConfig(j.objectProperty(j.identifier("pageExtensions"), arr))
+      transformBlitzConfig(program).wrapConfig(NEXT_MDX_PLUGIN_NAME)
+      return program
     },
   })
   .addTransformFilesStep({
