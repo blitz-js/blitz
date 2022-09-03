@@ -82,7 +82,7 @@ export default RecipeBuilder()
     stepId: "customHeaders",
     stepName: "Set custom headers",
     explanation: `Insert custom headers into blitz.config.js and disable the "X-Powered-By: Next.js" header`,
-    singleFileSearch: paths.blitzConfig(),
+    singleFileSearch: paths.nextConfig(),
     transform(program) {
       return addHttpHeaders(program, [
         {name: "Strict-Transport-Security", value: "max-age=631138519"},
