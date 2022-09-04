@@ -1,5 +1,5 @@
 import {PostsOrPages} from "@tryghost/content-api"
-import {useQuery} from "blitz"
+import {useQuery} from "@blitzjs/rpc"
 import getPosts from "../queries/getPosts"
 
 const usePostsPage = (page: number, limit: number): [PostsOrPages, boolean] => {

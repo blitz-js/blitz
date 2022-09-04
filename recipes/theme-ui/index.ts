@@ -204,9 +204,9 @@ export default RecipeBuilder()
     stepId: "addMdxLayout",
     stepName: "Add an MDX page",
     explanation:
-      "Finally, we'll add a page to `app/pages` called `demo.mdx`. Notice the MDX components defined in `apps/core/theme/components.tsx` appear in place of their corresponding markdown elements.",
-    targetDirectory: "./app/core/layouts",
-    templatePath: join(__dirname, "templates", "layouts"),
+      "Finally, we'll add a page to `pages` called `demo.mdx`. Notice the MDX components defined in `apps/core/theme/components.tsx` appear in place of their corresponding markdown elements.",
+    targetDirectory: "./pages",
+    templatePath: join(__dirname, "templates", "pages"),
     templateValues: {},
   })
   .build()
