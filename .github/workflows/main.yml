@@ -9,6 +9,10 @@ on:
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
+  
+env:
+  TURBO_TOKEN: 05de0230f01174d1f8cb4845a01dc6c895ce28f04ebef2318ab11615791b871c35eabbf8
+  TURBO_TEAM: foo
 
 jobs:
   lint:
@@ -37,11 +41,11 @@ jobs:
           uses: felixmosh/turborepo-gh-artifacts@v1
           with:
             repo-token: ${{ secrets.GITHUB_TOKEN }}
-            server-token: ${{ secrets.TURBO_SERVER_TOKEN }}
+            server-token: ${{ env.TURBO_TOKEN }}
         - name: Build
-          run: pnpm build -- --api="http://127.0.0.1:9080" --token="${{ secrets.TURBO_SERVER_TOKEN }}" --team="foo"
+          run: pnpm build -- --api="http://127.0.0.1:9080"
         - name: Lint
-          run: pnpm lint -- --api="http://127.0.0.1:9080" --token="${{ secrets.TURBO_SERVER_TOKEN }}" --team="foo"
+          run: pnpm lint -- --api="http://127.0.0.1:9080"
     
   build:
       runs-on: ${{ matrix.os }}
@@ -68,11 +72,11 @@ jobs:
           uses: felixmosh/turborepo-gh-artifacts@v1
           with:
             repo-token: ${{ secrets.GITHUB_TOKEN }}
-            server-token: ${{ secrets.TURBO_SERVER_TOKEN }}
+            server-token: ${{ env.TURBO_TOKEN }}
         - name: Build
-          run: pnpm build -- --api="http://127.0.0.1:9080" --token="${{ secrets.TURBO_SERVER_TOKEN }}" --team="foo"
-        - name: Build Apps
-          run: pnpm build:apps -- --api="http://127.0.0.1:9080" --token="${{ secrets.TURBO_SERVER_TOKEN }}" --team="foo"
+          run: pnpm build -- --api="http://127.0.0.1:9080"
+        - name: Build Apps 
+          run: pnpm build:apps -- --api="http://127.0.0.1:9080"
 
   test:
     name: 'Test: ${{ matrix.os }} (node@${{ matrix.NODE_VERSION }})'
@@ -108,11 +112,11 @@ jobs:
         uses: felixmosh/turborepo-gh-artifacts@v1
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-          server-token: ${{ secrets.TURBO_SERVER_TOKEN }}
+          server-token: ${{ env.TURBO_TOKEN }}
 
       - name: Build
-        run: pnpm build -- --api="http://127.0.0.1:9080" --token="${{ secrets.TURBO_SERVER_TOKEN }}" --team="foo"
+        run: pnpm build -- --api="http://127.0.0.1:9080"
 
       - name: Test
-        run: pnpm test -- --api="http://127.0.0.1:9080" --token="${{ secrets.TURBO_SERVER_TOKEN }}" --team="foo"
+        run: pnpm test -- --api="http://127.0.0.1:9080"
             
