@@ -5,8 +5,7 @@
   "workspaces": [
     "apps/*",
     "packages/*",
-    "integration-tests/*",
-    "recipes-test/*"
+    "integration-tests/*"
   ],
   "scripts": {
     "preinstall": "npx only-allow pnpm",

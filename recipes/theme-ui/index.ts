@@ -1,11 +1,4 @@
-import {
-  addImport,
-  paths,
-  Program,
-  RecipeBuilder,
-  transformNextConfig,
-  wrapBlitzConfig,
-} from "blitz"
+import {addImport, paths, Program, RecipeBuilder, transformNextConfig} from "blitz"
 import type {NodePath} from "ast-types/lib/node-path"
 import j from "jscodeshift"
 import {join} from "path"
@@ -100,7 +93,7 @@ export default RecipeBuilder()
       {name: "@mdx-js/loader", version: "1.x"},
     ],
   })
- .addTransformFilesStep({
+  .addTransformFilesStep({
     stepId: "createOrModifyBlitzConfig",
     stepName: "Add the '@next/mdx' plugin to the blitz config file",
     explanation: `Now we have to update our blitz config to support MDX`,
@@ -134,7 +127,9 @@ export default RecipeBuilder()
         j.literal("md"),
         j.literal("mdx"),
       ])
-      transformNextConfig(program).pushToConfig(j.objectProperty(j.identifier("pageExtensions"), arr))
+      transformNextConfig(program).pushToConfig(
+        j.objectProperty(j.identifier("pageExtensions"), arr),
+      )
       transformNextConfig(program).wrapConfig(NEXT_MDX_PLUGIN_NAME)
       return program
     },
