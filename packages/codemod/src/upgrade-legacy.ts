@@ -316,7 +316,7 @@ const upgradeLegacy = async () => {
             }
           })
           fs.writeFileSync(path.resolve(appDir, filename), program.toSource())
-        } catch (e: any) {
+        } catch (e) {
           log.error(`Error updating imports in ${file}`)
           throw new Error(e)
         }
@@ -398,7 +398,7 @@ const upgradeLegacy = async () => {
           }
 
           fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
-        } catch (e: any) {
+        } catch (e) {
           log.error(`Error in updating next.js default imports in ${file}`)
           throw new Error(e)
         }
@@ -430,7 +430,7 @@ const upgradeLegacy = async () => {
           })
 
           fs.writeFileSync(path.resolve(appDir, file), program.toSource())
-        } catch (e: any) {
+        } catch (e) {
           log.error(`Error in changing queryClient to getQueryClient in ${file}`)
           throw new Error(e)
         }
@@ -450,7 +450,7 @@ const upgradeLegacy = async () => {
             replaceIdentifiers(program, "BlitzApiRequest", "NextApiRequest")
 
             fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
-          } catch (e: any) {
+          } catch (e) {
             log.error(`Error in changing BlitzApiRequest to NextApiRequest in ${file}`)
             throw new Error(e)
           }
@@ -471,7 +471,7 @@ const upgradeLegacy = async () => {
             replaceIdentifiers(program, "BlitzApiResponse", "NextApiResponse")
 
             fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
-          } catch (e: any) {
+          } catch (e) {
             log.error(`Error in changing BlitzApiResponse to NextApiResponse in ${file}`)
             throw new Error(e)
           }
@@ -492,7 +492,7 @@ const upgradeLegacy = async () => {
             replaceIdentifiers(program, "BlitzApiHandler", "NextApiHandler")
 
             fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
-          } catch (e: any) {
+          } catch (e) {
             log.error(`Error in changing BlitzApiHandler to NextApiHandler in ${file}`)
             throw new Error(e)
           }
@@ -955,7 +955,7 @@ const upgradeLegacy = async () => {
 
             fs.writeFileSync(filepath, program.toSource())
           }
-        } catch (e: any) {
+        } catch (e) {
           log.error(`Error in changing useRouterQuery to useRouter in ${file}`)
           throw new Error(e)
         }
@@ -1019,7 +1019,7 @@ const upgradeLegacy = async () => {
 
             fs.writeFileSync(filepath, program.toSource())
           }
-        } catch (e: any) {
+        } catch (e) {
           log.error(`Error in changing useRouterQuery to useRouter in ${file}`)
           throw new Error(e)
         }
@@ -1179,7 +1179,7 @@ const upgradeLegacy = async () => {
             addNamedImport(program, "gSP", "app/blitz-server")
           }
           fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
-        } catch (e: any) {
+        } catch (e) {
           log.error(`Error in wrapping getServerSideProps, getStaticProps in ${file}`)
           throw new Error(e)
         }
@@ -1209,7 +1209,7 @@ const upgradeLegacy = async () => {
 
               fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
             }
-          } catch (e: any) {
+          } catch (e) {
             log.error(`Error in wrapping api in ${file}`)
             throw new Error(e)
           }
