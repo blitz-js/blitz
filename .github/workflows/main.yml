@@ -10,6 +10,10 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  TURBO_TOKEN: 05de0230f01174d1f8cb4845a01dc6c895ce28f04ebef2318ab11615791b871c35eabbf8
+  TURBO_TEAM: foo
+
 jobs:
   lint:
     name: "Lint: ${{ matrix.os }}"
@@ -33,8 +37,13 @@ jobs:
       - name: Install dependencies
         run: pnpm install  --frozen-lockfile
       - run: pnpm manypkg check
+      - name: Turborepo local server
+        uses: felixmosh/turborepo-gh-artifacts@v1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          server-token: ${{ env.TURBO_TOKEN }}
       - name: Build
-        run: pnpm build
+        run: pnpm build --api="http://127.0.0.1:9080"
       - name: Lint
         run: pnpm lint
 
@@ -59,10 +68,15 @@ jobs:
           cache: "pnpm"
       - run: pnpm install --frozen-lockfile
       - run: pnpm manypkg check
+      - name: Turborepo local server
+        uses: felixmosh/turborepo-gh-artifacts@v1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          server-token: ${{ env.TURBO_TOKEN }}
       - name: Build
-        run: pnpm build
+        run: pnpm build --api="http://127.0.0.1:9080"
       - name: Build Apps
-        run: pnpm build:apps
+        run: pnpm build:apps --api="http://127.0.0.1:9080"
 
   test:
     name: "Test: ${{ matrix.os }} (node@${{ matrix.NODE_VERSION }})"
@@ -94,9 +108,13 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       - run: pnpm manypkg check
-
+      - name: Turborepo local server
+        uses: felixmosh/turborepo-gh-artifacts@v1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          server-token: ${{ env.TURBO_TOKEN }}
       - name: Build
-        run: pnpm build
+        run: pnpm build --api="http://127.0.0.1:9080"
 
       - name: Test
         run: pnpm test
