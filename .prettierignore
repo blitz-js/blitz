@@ -18,3 +18,4 @@ dist
 bin
 .github/ISSUE_TEMPLATE/bug_report.md
 packages/generator/templates/**
+pnpm-lock.yaml
