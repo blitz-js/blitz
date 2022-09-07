@@ -12,7 +12,7 @@
     "start": "next start",
     "lint": "next lint",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf .next",
-    "prisma:start": "rm prisma/db.sqlite && prisma generate && prisma migrate deploy && pnpm run prisma:seed",
+    "prisma:start": "prisma generate && prisma migrate deploy && pnpm run prisma:seed",
     "prisma:seed": "prisma db push --force-reset && prisma db seed",
     "prisma:studio": "prisma studio"
   },
