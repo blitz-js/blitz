@@ -94,31 +94,30 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        shell: bash
 
       - name: Setup PNPM
         uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
         with:
           version: 6.32.6
-        shell: bash
+
       - name: Setup node@${{ matrix.NODE_VERSION }}
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.NODE_VERSION }}
           cache: "pnpm"
-        shell: bash
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
         shell: bash
+
       - run: pnpm manypkg check
         shell: bash
+
       - name: Turborepo local server
         uses: felixmosh/turborepo-gh-artifacts@v1
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           server-token: ${{ env.TURBO_TOKEN }}
-        shell: bash
 
       - name: Build
         run: pnpm build -- --api="http://127.0.0.1:9080"
