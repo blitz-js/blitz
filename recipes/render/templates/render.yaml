@@ -1,0 +1,20 @@
+databases:
+  - name: blitzapp-db
+    plan: free
+
+services:
+  - type: web
+    name: blitzapp
+    env: node
+    plan: free
+    buildCommand: yarn --frozen-lockfile --prod=false && blitz build && blitz prisma migrate deploy
+    startCommand: blitz start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: blitzapp-db
+          property: connectionString
+      - key: SESSION_SECRET_KEY
+        generateValue: true
