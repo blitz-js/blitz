@@ -110,7 +110,7 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-        shell: basg
+        shell: bash
       - run: pnpm manypkg check
         shell: bash
       - name: Turborepo local server
