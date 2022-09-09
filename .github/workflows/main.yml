@@ -11,48 +11,28 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  test:
-    name: "Test: ${{ matrix.os }} (node@${{ matrix.NODE_VERSION }})"
+  build:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os:
           - ubuntu-latest
-          - windows-latest
         node_version:
           - 16
-    env:
-      NODE_VERSION: ${{ matrix.NODE_VERSION }}
+    name: Node ${{ matrix.node_version }} - ${{ matrix.os }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Setup PNPM
-        uses: pnpm/action-setup@v2.2.2
+      - uses: actions/checkout@v2
+      - uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
         with:
-          version: 7.4.1
-
-      - name: Setup node@${{ matrix.NODE_VERSION }}
+          version: 6.32.6
+      - name: Setup node
         uses: actions/setup-node@v2
         with:
-          node-version: ${{ matrix.NODE_VERSION }}
+          node-version: ${{ matrix.node_version }}
           cache: "pnpm"
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-        shell: bash
-
+      - run: pnpm install --frozen-lockfile
       - run: pnpm manypkg check
-        shell: bash
-
-      - name: Build
-        run: pnpm build
-        shell: bash
-
-      - name: Lint
-        run: pnpm lint
-        shell: bash
-
-      - name: Test
-        run: pnpm test
-        shell: bash
+      - run: pnpm build
+      - run: pnpm lint
+      - run: pnpm build:apps
+      - run: pnpm test
