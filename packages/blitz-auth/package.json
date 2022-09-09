@@ -6,7 +6,7 @@
     "predev": "wait-on -d 250 ../blitz/dist/index-server.d.ts",
     "dev": "pnpm run predev && watch unbuild src --wait=0.2",
     "lint": "eslint . --fix",
-    "test": "vitest run --watch false",
+    "test": "vitest run",
     "test-watch": "vitest",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },

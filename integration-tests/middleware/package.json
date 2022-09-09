@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start:dev": "next dev",
-    "test": "vitest run --watch false",
+    "test": "vitest run",
     "test-watch": "vitest",
     "start": "next start",
     "lint": "next lint",

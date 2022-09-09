@@ -6,7 +6,7 @@
     "build": "unbuild && pnpm build:templates",
     "build:templates": "cpx --clean --include-hidden \"templates/**\" dist/templates",
     "lint": "eslint . --fix",
-    "test": "vitest run -r ./test --allowOnly --watch false",
+    "test": "vitest run -r ./test --allowOnly",
     "test-watch": "vitest",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
