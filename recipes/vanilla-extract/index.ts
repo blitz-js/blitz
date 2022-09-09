@@ -4,7 +4,6 @@ import {
   paths,
   Program,
   RecipeBuilder,
-  wrapBlitzConfig,
   transformNextConfig
 } from "blitz/installer"
 import j from "jscodeshift"
