@@ -22,7 +22,7 @@ export default RecipeBuilder()
     stepName: "Set meta tags",
     explanation: `Inserts meta tags into the <head> element of _document.tsx`,
     singleFileSearch: paths.document(),
-    transform(program: Program) {
+    transform(program) {
       const secureHeadersImport = j.importDeclaration(
         [j.importSpecifier(j.identifier("computeCsp"))],
         j.literal("app/core/secureheaders"),
