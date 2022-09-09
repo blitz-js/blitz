@@ -14,7 +14,7 @@
     "build:apps": "turbo run buildapp --concurrency=1",
     "dev": "turbo run dev --no-cache --parallel",
     "lint": "turbo run lint",
-    "test": "turbo run test",
+    "test": "turbo run test -- --watch false",
     "clean": "turbo run clean && rm -rf node_modules",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "pre-publish": "changeset add && changeset version && pnpm build && git add . && git commit -v",
