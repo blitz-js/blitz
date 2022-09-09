@@ -1,4 +1,4 @@
-import {paths, RecipeBuilder} from "blitz"
+import {paths, RecipeBuilder} from "blitz/installer"
 import path from "path"
 
 export default RecipeBuilder()

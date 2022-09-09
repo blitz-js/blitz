@@ -1,4 +1,11 @@
-import {addBabelPlugin, addImport, paths, Program, RecipeBuilder, wrapBlitzConfig} from "blitz"
+import {
+  addBabelPlugin,
+  addImport,
+  paths,
+  Program,
+  RecipeBuilder,
+  wrapBlitzConfig,
+} from "blitz/installer"
 import j from "jscodeshift"
 
 function initializePlugin(program: Program, statement: j.Statement) {

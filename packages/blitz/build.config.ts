@@ -1,7 +1,7 @@
 import {BuildConfig} from "unbuild"
 
 const config: BuildConfig = {
-  entries: ["./src/index-browser", "./src/index-server", "./src/cli/index"],
+  entries: ["./src/index-browser", "./src/index-server", "./src/cli/index", "./src/installer"],
   externals: ["index-browser.cjs", "index-browser.mjs", "index.cjs", "zod", "react"],
   declaration: true,
   rollup: {

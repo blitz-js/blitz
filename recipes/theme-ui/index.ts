@@ -5,7 +5,7 @@ import {
   RecipeBuilder,
   transformBlitzConfig,
   wrapBlitzConfig,
-} from "blitz"
+} from "blitz/installer"
 import type {NodePath} from "ast-types/lib/node-path"
 import j from "jscodeshift"
 import {join} from "path"
