@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "test": "vitest --config ./vitest.config.ts run",
+    "test": "vitest --config ./vitest.config.ts run --watch false",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf .next"
   },
   "dependencies": {

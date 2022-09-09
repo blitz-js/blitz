@@ -6,7 +6,7 @@
     "dev": "pnpm predev && pnpm watch unbuild src --wait=0.2",
     "predev": "wait-on -d 250 ../blitz/dist/index-server.d.ts && wait-on -d 250 ../blitz-rpc/dist/index-server.d.ts",
     "lint": "eslint . --fix",
-    "test": "vitest run",
+    "test": "vitest run --watch false",
     "test-watch": "vitest",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
     "postinstall": "node scripts/postinstall.js"
