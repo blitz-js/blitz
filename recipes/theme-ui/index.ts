@@ -1,11 +1,4 @@
-import {
-  addImport,
-  paths,
-  Program,
-  RecipeBuilder,
-  transformBlitzConfig,
-  wrapBlitzConfig,
-} from "blitz"
+import {addImport, paths, Program, RecipeBuilder, transformNextConfig} from "blitz"
 import type {NodePath} from "ast-types/lib/node-path"
 import j from "jscodeshift"
 import {join} from "path"
@@ -104,7 +97,7 @@ export default RecipeBuilder()
     stepId: "createOrModifyBlitzConfig",
     stepName: "Add the '@next/mdx' plugin to the blitz config file",
     explanation: `Now we have to update our blitz config to support MDX`,
-    singleFileSearch: paths.blitzConfig(),
+    singleFileSearch: paths.nextConfig(),
 
     transform(program) {
       program = addImport(
@@ -126,34 +119,19 @@ export default RecipeBuilder()
           ),
         ]),
       )
-
-      program = transformBlitzConfig(program, (config) => {
-        const arr = j.arrayExpression([
-          j.literal("js"),
-          j.literal("jsx"),
-          j.literal("ts"),
-          j.literal("tsx"),
-          j.literal("md"),
-          j.literal("mdx"),
-        ])
-
-        const pageExtensionsProp = config.properties.find(
-          (value) =>
-            value.type === "ObjectProperty" &&
-            value.key.type === "Identifier" &&
-            value.key.name === "pageExtensions",
-        ) as j.ObjectProperty | undefined
-
-        if (pageExtensionsProp) {
-          pageExtensionsProp.value = arr
-        } else {
-          config.properties.push(j.objectProperty(j.identifier("pageExtensions"), arr))
-        }
-
-        return config
-      })
-
-      return wrapBlitzConfig(program, NEXT_MDX_PLUGIN_NAME)
+      const arr = j.arrayExpression([
+        j.literal("js"),
+        j.literal("jsx"),
+        j.literal("ts"),
+        j.literal("tsx"),
+        j.literal("md"),
+        j.literal("mdx"),
+      ])
+      transformNextConfig(program).pushToConfig(
+        j.objectProperty(j.identifier("pageExtensions"), arr),
+      )
+      transformNextConfig(program).wrapConfig(NEXT_MDX_PLUGIN_NAME)
+      return program
     },
   })
   .addTransformFilesStep({
@@ -221,9 +199,9 @@ export default RecipeBuilder()
     stepId: "addMdxLayout",
     stepName: "Add an MDX page",
     explanation:
-      "Finally, we'll add a page to `app/pages` called `demo.mdx`. Notice the MDX components defined in `apps/core/theme/components.tsx` appear in place of their corresponding markdown elements.",
-    targetDirectory: "./app/core/layouts",
-    templatePath: join(__dirname, "templates", "layouts"),
+      "Finally, we'll add a page to `pages` called `demo.mdx`. Notice the MDX components defined in `apps/core/theme/components.tsx` appear in place of their corresponding markdown elements.",
+    targetDirectory: "./pages",
+    templatePath: join(__dirname, "templates", "pages"),
     templateValues: {},
   })
   .build()

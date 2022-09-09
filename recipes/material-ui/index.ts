@@ -183,10 +183,17 @@ export default RecipeBuilder()
   .addNewFilesStep({
     stepId: "addFiles",
     stepName: "Add new files",
-    explanation:
-      "Add an updated _document, a theme file with all your customizations and a emotion cache file",
-    templatePath: join(__dirname, "templates"),
+    explanation: "Add a theme file with all your customizations and a emotion cache file",
+    templatePath: join(__dirname, "templates/core"),
     targetDirectory: "./app",
+    templateValues: {},
+  })
+  .addNewFilesStep({
+    stepId: "addFilesDocument",
+    stepName: "Add new files",
+    explanation: "Add an updated _document,",
+    templatePath: join(__dirname, "templates/pages"),
+    targetDirectory: "./pages",
     templateValues: {},
   })
   .build()

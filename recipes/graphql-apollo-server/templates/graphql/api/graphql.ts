@@ -16,7 +16,7 @@
  * }
  */
 
-import {getSession} from "blitz"
+import {getSession} from "@blitzjs/auth"
 import {makeSchema} from "nexus"
 import {ApolloServer} from "apollo-server-micro"
 import * as types from "../types"

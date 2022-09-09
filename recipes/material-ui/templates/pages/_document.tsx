@@ -1,12 +1,12 @@
 import {
-  BlitzScript,
+  NextScript,
   Document,
   DocumentContext,
   DocumentHead,
   DocumentInitialProps,
   Html,
   Main,
-} from "blitz"
+} from "next/document"
 import {Children} from "react"
 import createEmotionServer from "@emotion/server/create-instance"
 import theme from "app/core/styles/theme"
@@ -84,7 +84,7 @@ export default class MyDocument extends Document {
         </DocumentHead>
         <body>
           <Main />
-          <BlitzScript />
+          <NextScript />
         </body>
       </Html>
     )
