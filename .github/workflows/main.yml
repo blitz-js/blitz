@@ -11,59 +11,6 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  lint:
-    name: "Lint: ${{ matrix.os }}"
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os:
-          - ubuntu-latest
-        node_version:
-          - 16
-    steps:
-      - uses: actions/checkout@v2
-      - uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
-        with:
-          version: 6.32.6
-      - name: Setup node
-        uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node_version }}
-          cache: "pnpm"
-      - name: Install dependencies
-        run: pnpm install  --frozen-lockfile
-      - run: pnpm manypkg check
-      - name: Build
-        run: pnpm build
-      - name: Lint
-        run: pnpm lint
-
-  build:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os:
-          - ubuntu-latest
-        node_version:
-          - 16
-    name: Build - ${{ matrix.os }}
-    steps:
-      - uses: actions/checkout@v2
-      - uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
-        with:
-          version: 6.32.6
-      - name: Setup node
-        uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node_version }}
-          cache: "pnpm"
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm manypkg check
-      - name: Build
-        run: pnpm build
-      - name: Build Apps
-        run: pnpm build:apps
-
   test:
     name: "Test: ${{ matrix.os }} (node@${{ matrix.NODE_VERSION }})"
     runs-on: ${{ matrix.os }}
@@ -74,7 +21,6 @@ jobs:
           - windows-latest
         node_version:
           - 16
-      fail-fast: false
     env:
       NODE_VERSION: ${{ matrix.NODE_VERSION }}
     steps:
@@ -101,6 +47,14 @@ jobs:
 
       - name: Build
         run: pnpm build
+        shell: bash
+
+      - name: Lint
+        run: pnpm lint
+        shell: bash
+
+      - name: Build Apps
+        run: pnpm build:apps
         shell: bash
 
       - name: Test
