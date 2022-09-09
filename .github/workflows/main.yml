@@ -104,5 +104,5 @@ jobs:
         shell: bash
 
       - name: Test
-        run: pnpm test
+        run: pnpm test --watch false
         shell: bash
