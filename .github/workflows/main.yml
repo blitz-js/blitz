@@ -53,10 +53,6 @@ jobs:
         run: pnpm lint
         shell: bash
 
-      - name: Build Apps
-        run: pnpm build:apps
-        shell: bash
-
       - name: Test
         run: pnpm test
         shell: bash
