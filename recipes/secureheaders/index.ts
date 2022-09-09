@@ -1,6 +1,6 @@
-import {addImport, paths, Program, RecipeBuilder, transformNextConfig} from "blitz"
+import { addImport, paths, Program, RecipeBuilder, transformNextConfig } from "blitz"
 import j from "jscodeshift"
-import {join} from "path"
+import { join } from "path"
 
 export default RecipeBuilder()
   .setName("Secure Headers")
