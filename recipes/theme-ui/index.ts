@@ -1,4 +1,11 @@
-import {addImport, paths, Program, RecipeBuilder, transformNextConfig} from "blitz"
+import {
+  addImport,
+  paths,
+  Program,
+  RecipeBuilder,
+  transformNextConfig,
+  wrapBlitzConfig,
+} from "blitz/installer"
 import type {NodePath} from "ast-types/lib/node-path"
 import j from "jscodeshift"
 import {join} from "path"

@@ -1,4 +1,12 @@
-import {addBabelPlugin, paths, Program, RecipeBuilder, transformNextConfig} from "blitz"
+import {
+  addBabelPlugin,
+  addImport,
+  paths,
+  Program,
+  RecipeBuilder,
+  wrapBlitzConfig,
+  transformNextConfig
+} from "blitz/installer"
 import j from "jscodeshift"
 import {join} from "path"
 

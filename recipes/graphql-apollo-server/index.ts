@@ -1,4 +1,4 @@
-import {addPrismaGenerator, paths, RecipeBuilder} from "blitz"
+import {addPrismaGenerator, paths, RecipeBuilder} from "blitz/installer"
 import {join} from "path"
 
 export default RecipeBuilder()

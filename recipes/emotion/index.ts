@@ -1,4 +1,11 @@
-import {addBabelPlugin, addBabelPreset, addImport, paths, Program, RecipeBuilder} from "blitz"
+import {
+  addBabelPlugin,
+  addBabelPreset,
+  addImport,
+  paths,
+  Program,
+  RecipeBuilder,
+} from "blitz/installer"
 import j from "jscodeshift"
 import {join} from "path"
 

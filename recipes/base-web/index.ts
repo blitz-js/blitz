@@ -1,4 +1,4 @@
-import {addImport, paths, RecipeBuilder} from "blitz"
+import {addImport, paths, RecipeBuilder} from "blitz/installer"
 import j from "jscodeshift"
 import {join} from "path"
 
