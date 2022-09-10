@@ -1,5 +1,4 @@
 import {
-  addBabelPlugin,
   addImport,
   paths,
   Program,

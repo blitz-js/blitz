@@ -124,6 +124,7 @@ jobs:
       - name: Test
         run: pnpm test -- --api="http://127.0.0.1:9080" --filter=./packages/*
         shell: bash
+        
   Integration-Tests:
     name: "Integration Test: ${{ matrix.os }} (node@${{ matrix.NODE_VERSION }})"
     runs-on: ${{ matrix.os }}
