@@ -17,6 +17,7 @@ jobs:
       matrix:
         os:
           - ubuntu-latest
+          - windows-latest
         node_version:
           - 16
     name: Node ${{ matrix.node_version }} - ${{ matrix.os }}
@@ -31,8 +32,14 @@ jobs:
           node-version: ${{ matrix.node_version }}
           cache: "pnpm"
       - run: pnpm install --frozen-lockfile
+        shell: bash
       - run: pnpm manypkg check
+        shell: bash
       - run: pnpm build
+        shell: bash
       - run: pnpm lint
+        shell: bash
       - run: pnpm build:apps
+        shell: bash
       - run: pnpm test
+        shell: bash
