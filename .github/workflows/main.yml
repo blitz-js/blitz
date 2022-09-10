@@ -7,7 +7,7 @@ on:
     types: [opened, synchronize]
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.ref }} 
   cancel-in-progress: true
 
 env:
@@ -115,7 +115,7 @@ jobs:
 
       - name: Turborepo local server
         uses: felixmosh/turborepo-gh-artifacts@v1
-        with:
+        with: 
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           server-token: ${{ env.TURBO_TOKEN }}
 
