@@ -1,5 +1,3 @@
-# https://github.com/vercel/next.js/commits/canary/.github/workflows/build_test_deploy.yml
-
 name: CI
 
 on:
@@ -7,10 +5,46 @@ on:
     types: [opened, synchronize]
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }} 
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  TURBO_TOKEN: 05de0230f01174d1f8cb4845a01dc6c895ce28f04ebef2318ab11615791b871c35eabbf8
+  TURBO_TEAM: foo
+
 jobs:
+  lint:
+    name: "Lint: ${{ matrix.os }}"
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+        node_version:
+          - 16
+    steps:
+      - uses: actions/checkout@v2
+      - uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
+        with:
+          version: 6.32.6
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node_version }}
+          cache: "pnpm"
+      - name: Install dependencies
+        run: pnpm install  --frozen-lockfile
+      - run: pnpm manypkg check
+      - name: Turborepo local server
+        uses: felixmosh/turborepo-gh-artifacts@v1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          server-token: ${{ env.TURBO_TOKEN }}
+      - name: Build
+        run: pnpm build -- --api="http://127.0.0.1:9080"
+      - name: Lint
+        run: pnpm lint -- --api="http://127.0.0.1:9080"
+
   build:
     runs-on: ${{ matrix.os }}
     strategy:
@@ -19,7 +53,7 @@ jobs:
           - ubuntu-latest
         node_version:
           - 16
-    name: Node ${{ matrix.node_version }} - ${{ matrix.os }}
+    name: Build - ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
       - uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
@@ -79,7 +113,7 @@ jobs:
 
       - name: Turborepo local server
         uses: felixmosh/turborepo-gh-artifacts@v1
-        with: 
+        with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           server-token: ${{ env.TURBO_TOKEN }}
 
@@ -88,5 +122,5 @@ jobs:
         shell: bash
 
       - name: Test
-        run: pnpm test -- --api="http://127.0.0.1:9080"
+        run: pnpm test -- --api="http://127.0.0.1:9080" --concurrency=1
         shell: bash
