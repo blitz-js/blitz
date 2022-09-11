@@ -14,7 +14,7 @@ env:
 
 jobs:
   lint:
-    name: "Lint: ${{ matrix.os }}"
+    name: Lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -41,7 +41,7 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
-    name: Build - ${{ matrix.os }}
+    name: Build
     steps:
       - uses: actions/checkout@v2
       - uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
