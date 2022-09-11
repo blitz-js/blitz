@@ -15,13 +15,7 @@ env:
 jobs:
   lint:
     name: "Lint: ${{ matrix.os }}"
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os:
-          - ubuntu-latest
-        node_version:
-          - 16
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
@@ -30,7 +24,7 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v2
         with:
-          node-version: ${{ matrix.node_version }}
+          node-version: 16
           cache: "pnpm"
       - name: Install dependencies
         run: pnpm install  --frozen-lockfile
@@ -46,13 +40,7 @@ jobs:
         run: pnpm lint -- --api="http://127.0.0.1:9080"
 
   build:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os:
-          - ubuntu-latest
-        node_version:
-          - 16
+    runs-on: ubuntu-latest
     name: Build - ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
@@ -62,7 +50,7 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v2
         with:
-          node-version: ${{ matrix.node_version }}
+          node-version: 16
           cache: "pnpm"
       - run: pnpm install --frozen-lockfile
       - run: pnpm manypkg check
@@ -86,11 +74,9 @@ jobs:
         os:
           - ubuntu-latest
           - windows-latest
-        node_version:
-          - 16
       fail-fast: false
     env:
-      NODE_VERSION: ${{ matrix.NODE_VERSION }}
+      NODE_VERSION: 16
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -100,10 +86,10 @@ jobs:
         with:
           version: 6.32.6
 
-      - name: Setup node@${{ matrix.NODE_VERSION }}
+      - name: Setup node@16
         uses: actions/setup-node@v2
         with:
-          node-version: ${{ matrix.NODE_VERSION }}
+          node-version: 16
           cache: "pnpm"
 
       - name: Install dependencies
@@ -137,7 +123,7 @@ jobs:
     outputs:
       folders: ${{ steps.set-matrix.outputs.folders }}
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - id: set-matrix
         name: "Find all folders"
         shell: bash
@@ -148,7 +134,7 @@ jobs:
             echo "::set-output name=folders::$folders"
 
   Integration-Tests:
-    name: "Integration Test: ${{matrix.folder}} - ${{ matrix.os }} "
+    name: "Integration Test: ${{matrix.folder}} @ ${{ matrix.os }} "
     needs: [find-integration-tests]
     strategy:
       matrix:
