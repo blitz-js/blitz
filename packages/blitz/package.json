@@ -23,6 +23,9 @@
     "blitz": "bin/blitz"
   },
   "dependencies": {
+    "@babel/core": "7.12.10",
+    "@babel/plugin-syntax-jsx": "7.17.12",
+    "@babel/plugin-syntax-typescript": "7.17.12",
     "@blitzjs/generator": "2.0.0-beta.3",
     "arg": "5.0.1",
     "boxen": "7.0.0",
@@ -38,6 +41,7 @@
     "find-up": "4.1.0",
     "fs-extra": "10.0.1",
     "hasbin": "1.2.3",
+    "jscodeshift": "0.13.0",
     "node-fetch": "3.2.3",
     "npm-which": "3.0.1",
     "ora": "5.3.0",

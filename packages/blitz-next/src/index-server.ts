@@ -50,6 +50,10 @@ export type NextApiHandler<TResult> = (
 type SetupBlitzOptions = {
   plugins: BlitzServerPlugin<RequestMiddleware, Ctx>[]
   onError?: (err: Error) => void
+  log?: {
+    level?: "trace" | "debug" | "info" | "warn" | "error" | "fatal"
+    type?: "json" | "pretty" | "hidden"
+  }
 }
 
 export type Redirect =

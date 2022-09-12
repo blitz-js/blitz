@@ -3,6 +3,110 @@ import c from "chalk"
 import {Table} from "console-table-printer"
 import ora from "ora"
 import readline from "readline"
+import j, {Collection, CallExpression} from "jscodeshift"
+import {parseSync} from "@babel/core"
+import {join} from "path"
+import {readFileSync} from "fs"
+const debug = require("debug")("blitz:config")
+
+export type LogType = "json" | "pretty" | "hidden"
+
+export function loadConfigAtRuntime() {
+  if (!process.env.BLITZ_APP_DIR) {
+    return loadConfigProduction(process.cwd() + "/app")
+  }
+  return loadConfigProduction(process.env.BLITZ_APP_DIR)
+}
+
+export const BLITZ_SERVER_CONFIG_FILE = "/blitz-server.ts"
+
+export function loadConfigProduction(pagesDir: string) {
+  let userConfigModule
+  try {
+    const path = join(pagesDir, BLITZ_SERVER_CONFIG_FILE)
+    debug("Loading config from ", path)
+    const userConfigModuleSource = readFileSync(path, {encoding: "utf-8"})
+    userConfigModule = j(userConfigModuleSource, {
+      parser: {
+        parse: (source: string) =>
+          parseSync(source, {
+            configFile: false,
+            plugins: [require(`@babel/plugin-syntax-jsx`)],
+            overrides: [
+              {
+                test: [`**/*.ts`, `**/*.tsx`],
+                plugins: [[require(`@babel/plugin-syntax-typescript`), {isTSX: true}]],
+              },
+            ],
+            filename: path,
+            parserOpts: {
+              tokens: true, // recast uses this
+            },
+          }),
+      },
+    })
+  } catch {
+    debug("Did not find custom config file")
+    return {}
+  }
+  return assignDefaultsBase(userConfigModule) as any
+}
+
+export function findCallExpression(
+  program: Collection<any>,
+  declarationName: string,
+): Collection<CallExpression> | null {
+  const callExpression = program.find(
+    j.CallExpression,
+    (node) => node.callee.name === declarationName,
+  )
+
+  const paths = callExpression.length ? callExpression : null
+
+  return paths
+}
+
+export function assignDefaultsBase(userConfig: Collection<any>) {
+  if (!userConfig) {
+    return {}
+  }
+  const setupBlitzServer = findCallExpression(userConfig, "setupBlitzServer")
+  if (!setupBlitzServer) {
+    return {}
+  }
+  try {
+    const setupBlitzServerArgs = setupBlitzServer.get().value.arguments.at(0)
+    const configProperties = setupBlitzServerArgs.properties
+    const logProperty = configProperties.find(
+      (property: {key: {name: string}}) => property.key.name === "log",
+    )
+    const logProperties = logProperty.value.properties.map(
+      (property: {key: {name: any}}) => property.key.name,
+    )
+    let logLevelValue, logTypeValue
+    if (logProperties.includes("type")) {
+      const logType = logProperty.value.properties.find(
+        (property: {key: {name: string}}) => property.key.name === "type",
+      )
+      logTypeValue = logType.value.value
+    }
+    if (logProperties.includes("level")) {
+      const logLevel = logProperty.value.properties.find(
+        (property: {key: {name: string}}) => property.key.name === "level",
+      )
+      logLevelValue = logLevel.value.value
+    }
+    debug("Config loaded")
+    return {
+      log: {
+        type: logTypeValue,
+        level: logLevelValue,
+      },
+    }
+  } catch (e) {
+    return {}
+  }
+}
 
 export type LogLevel = "trace" | "debug" | "info" | "warn" | "error" | "fatal"
 
@@ -35,6 +139,8 @@ export const baseLogger = (options?: ISettingsParam): Logger => {
   let config
   try {
     config = loadConfigAtRuntime()
+    debug("Config loaded")
+    debug(config)
   } catch {
     config = {}
   }
@@ -175,7 +281,6 @@ const variable = (val: any) => {
  * If the DEBUG env var is set this will write to the console
  * @param str msg
  */
-const debug = require("debug")("blitz")
 
 export const log = {
   withBrand,
