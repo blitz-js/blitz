@@ -177,4 +177,4 @@ jobs:
 
       - name: Test Packages
         run: pnpm test -- --filter=./integration-tests/${{matrix.folder}}
-    
+        shell: bash
