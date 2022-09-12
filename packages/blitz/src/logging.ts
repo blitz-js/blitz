@@ -34,7 +34,7 @@ export const baseLogger = (options?: ISettingsParam): Logger => {
 
   let config
   try {
-    config = {} as any // todo: loadConfigAtRuntime()
+    config = loadConfigAtRuntime()
   } catch {
     config = {}
   }
