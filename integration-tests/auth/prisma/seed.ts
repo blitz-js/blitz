@@ -15,8 +15,6 @@ const seed = async () => {
       },
     })
     .catch(console.error)
-
-  process.exit(0)
 }
 
 export default seed
