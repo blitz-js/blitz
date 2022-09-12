@@ -188,7 +188,7 @@ export const setupBlitzServer = ({plugins, onError}: SetupBlitzOptions) => {
     async (req, res) => {
       try {
         middlewares.push((req, res) => handler(req, res, res.blitzCtx));
-        return await blitz.handleRequestWithMiddleware(req, res, middlewares);
+        return await handleRequestWithMiddleware(req, res, middlewares);
       } catch (error: any) {
         onError?.(error)
         return res.status(400).send(error)
