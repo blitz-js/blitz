@@ -128,7 +128,11 @@ describe("Auth Tests", () => {
       try {
         appPort = await findPort()
         app = await launchApp(appDir, appPort, {cwd: process.cwd()})
-        await seed()
+        try {
+          await seed()
+        } catch (err) {
+          console.log(err)
+        }
       } catch (error) {
         console.log(error)
       }
