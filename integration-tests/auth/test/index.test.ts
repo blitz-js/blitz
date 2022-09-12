@@ -140,6 +140,7 @@ describe("Auth Tests", () => {
   describe("server mode", () => {
     beforeAll(async () => {
       try {
+        await seed()
         await nextBuild(appDir)
         appPort = await findPort()
         app = await nextStart(appDir, appPort, {cwd: process.cwd()})
