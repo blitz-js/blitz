@@ -450,7 +450,7 @@ importers:
       "@vitejs/plugin-react": 1.3.0
       delay: 5.0.0
       eslint: 7.32.0
-      eslint-config-next: 12.2.5_hrkuebk64jiu2ut2d2sm4oylnu
+      eslint-config-next: 12.3.0_hrkuebk64jiu2ut2d2sm4oylnu
       eslint-plugin-testing-library: 5.0.1_hrkuebk64jiu2ut2d2sm4oylnu
       jsdom: 19.0.0
       typescript: 4.6.3
@@ -692,7 +692,7 @@ importers:
       react: 18.2.0
       resolve-cwd: 3.0.0
       resolve-from: 5.0.0
-      superjson: 1.8.0
+      superjson: 1.9.1
       supports-color: 8.1.1
       test-listen: 1.1.0
       ts-node: 10.7.0
@@ -728,7 +728,7 @@ importers:
       prompts: 2.4.2
       resolve-cwd: 3.0.0
       resolve-from: 5.0.0
-      superjson: 1.8.0_supports-color@8.1.1
+      superjson: 1.9.1
       supports-color: 8.1.1
       ts-node: 10.7.0_typescript@4.6.3
       tsconfig-paths: 4.0.0
@@ -851,7 +851,7 @@ importers:
       react: 18.2.0
       react-dom: 18.2.0
       resolve-from: 5.0.0
-      superjson: 1.8.0
+      superjson: 1.9.1
       supports-color: 8.1.1
       ts-jest: 27.1.4
       typescript: ^4.5.3
@@ -864,7 +864,7 @@ importers:
       debug: 4.3.3_supports-color@8.1.1
       fs-extra: 10.0.1
       hoist-non-react-statics: 3.3.2
-      superjson: 1.8.0_supports-color@8.1.1
+      superjson: 1.9.1
       supports-color: 8.1.1
     devDependencies:
       "@blitzjs/config": link:../config
@@ -905,7 +905,7 @@ importers:
       next: 12.2.5
       react: 18.2.0
       react-dom: 18.2.0
-      superjson: 1.8.0
+      superjson: 1.9.1
       supports-color: 8.1.1
       typescript: ^4.5.3
       unbuild: 0.7.6
@@ -918,7 +918,7 @@ importers:
       bad-behavior: 1.0.1
       chalk: 4.1.2
       debug: 4.3.3_supports-color@8.1.1
-      superjson: 1.8.0_supports-color@8.1.1
+      superjson: 1.9.1
       supports-color: 8.1.1
     devDependencies:
       "@blitzjs/config": link:../config
@@ -4227,10 +4227,10 @@ packages:
     dependencies:
       glob: 7.1.7
 
-  /@next/eslint-plugin-next/12.2.5:
+  /@next/eslint-plugin-next/12.3.0:
     resolution:
       {
-        integrity: sha512-VBjVbmqEzGiOTBq4+wpeVXt/KgknnGB6ahvC/AxiIGnN93/RCSyXhFRI4uSfftM2Ba3w7ZO7076bfKasZsA0fw==,
+        integrity: sha512-jVdq1qYTNDjUtulnE8/hkPv0pHILV4jMg5La99iaY/FFm20WxVnsAZtbNnMvlPbf8dc010oO304SX9yXbg5PAw==,
       }
     dependencies:
       glob: 7.1.7
@@ -7802,6 +7802,16 @@ packages:
       keygrip: 1.1.0
     dev: false
 
+  /copy-anything/3.0.2:
+    resolution:
+      {
+        integrity: sha512-CzATjGXzUQ0EvuvgOCI6A4BGOo2bcVx8B+eC2nF862iv9fopnPQwlrbACakNCHRIJbCSBj+J/9JeDf60k64MkA==,
+      }
+    engines: {node: ">=12.13"}
+    dependencies:
+      is-what: 4.1.7
+    dev: false
+
   /copy-descriptor/0.1.1:
     resolution:
       {
@@ -9690,10 +9700,10 @@ packages:
       - eslint-import-resolver-webpack
       - supports-color
 
-  /eslint-config-next/12.2.5_hrkuebk64jiu2ut2d2sm4oylnu:
+  /eslint-config-next/12.3.0_hrkuebk64jiu2ut2d2sm4oylnu:
     resolution:
       {
-        integrity: sha512-SOowilkqPzW6DxKp3a3SYlrfPi5Ajs9MIzp9gVfUDxxH9QFM5ElkR1hX5m/iICJuvCbWgQqFBiA3mCMozluniw==,
+        integrity: sha512-guHSkNyKnTBB8HU35COgAMeMV0E026BiYRYvyEVVaTOeFcnU3i1EI8/Da0Rl7H3Sgua5FEvoA0vYd2s8kdIUXg==,
       }
     peerDependencies:
       eslint: ^7.23.0 || ^8.0.0
@@ -9702,7 +9712,7 @@ packages:
       typescript:
         optional: true
     dependencies:
-      "@next/eslint-plugin-next": 12.2.5
+      "@next/eslint-plugin-next": 12.3.0
       "@rushstack/eslint-patch": 1.1.3
       "@typescript-eslint/parser": 5.28.0_hrkuebk64jiu2ut2d2sm4oylnu
       eslint: 7.32.0
@@ -12144,6 +12154,14 @@ packages:
     dependencies:
       call-bind: 1.0.2
 
+  /is-what/4.1.7:
+    resolution:
+      {
+        integrity: sha512-DBVOQNiPKnGMxRMLIYSwERAS5MVY1B7xYiGnpgctsOFvVDz9f9PFXXxMcTOHuoqYp4NK9qFYQaIC1NRRxLMpBQ==,
+      }
+    engines: {node: ">=12.13"}
+    dev: false
+
   /is-windows/1.0.2:
     resolution:
       {
@@ -13463,13 +13481,6 @@ packages:
     engines: {node: ">=10"}
     dependencies:
       p-locate: 5.0.0
-
-  /lodash.clonedeep/4.5.0:
-    resolution:
-      {
-        integrity: sha512-H5ZhCF25riFd9uB5UCkVKo61m3S/xZk1x4wA6yp/L3RFP6Z/eHH1ymQcGLo7J3GMPfm0V/7m1tryHuGVxpqEBQ==,
-      }
-    dev: false
 
   /lodash.includes/4.3.0:
     resolution:
@@ -17282,17 +17293,14 @@ packages:
       minimist: 1.2.6
     dev: true
 
-  /superjson/1.8.0_supports-color@8.1.1:
+  /superjson/1.9.1:
     resolution:
       {
-        integrity: sha512-8FWCa0T9JQ9kVax9nmRqEEebhbRGmU3IV1gevZWQGJRFmSNVN4hnyfb0858aWeEOoS3atwnhjYGleRQHTGI/lA==,
+        integrity: sha512-oT3HA2nPKlU1+5taFgz/HDy+GEaY+CWEbLzaRJVD4gZ7zMVVC4GDNFdgvAZt6/VuIk6D2R7RtPAiCHwmdzlMmg==,
       }
     engines: {node: ">=10"}
     dependencies:
-      debug: 4.3.4_supports-color@8.1.1
-      lodash.clonedeep: 4.5.0
-    transitivePeerDependencies:
-      - supports-color
+      copy-anything: 3.0.2
     dev: false
 
   /supports-color/5.5.0:

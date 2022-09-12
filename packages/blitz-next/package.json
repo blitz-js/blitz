@@ -30,7 +30,7 @@
     "debug": "4.3.3",
     "fs-extra": "10.0.1",
     "hoist-non-react-statics": "3.3.2",
-    "superjson": "1.8.0",
+    "superjson": "1.9.1",
     "supports-color": "8.1.1"
   },
   "devDependencies": {
