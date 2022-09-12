@@ -37,7 +37,10 @@ export const enhancePrisma = <TPrismaClientCtor extends Constructor>(
             )
           }
           const cwd = sh.pwd()
+          console.log("cwd", cwd)
+          console.log("process.cwd", process.cwd())
           const prismaBin = which(cwd).sync("prisma")
+          console.log("prismabin", prismaBin)
 
           await new Promise((res, rej) => {
             const process = spawn(prismaBin, ["migrate", "reset", "--force", "--skip-generate"], {
