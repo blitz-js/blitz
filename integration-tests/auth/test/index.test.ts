@@ -123,23 +123,19 @@ const runTests = (mode?: string) => {
 }
 
 describe("Auth Tests", () => {
-  describe("dev mode", () => {
-    beforeAll(async () => {
-      try {
-        appPort = await findPort()
-        app = await launchApp(appDir, appPort, {cwd: process.cwd()})
-        try {
-          await seed()
-        } catch (err) {
-          console.log(err)
-        }
-      } catch (error) {
-        console.log(error)
-      }
-    }, 5000 * 60 * 2)
-    afterAll(async () => await killApp(app))
-    runTests()
-  })
+  // describe("dev mode", () => {
+  //   beforeAll(async () => {
+  //     try {
+  //       appPort = await findPort()
+  //       app = await launchApp(appDir, appPort, {cwd: process.cwd()})
+  //       await seed()
+  //     } catch (error) {
+  //       console.log(error)
+  //     }
+  //   }, 5000 * 60 * 2)
+  //   afterAll(async () => await killApp(app))
+  //   runTests()
+  // })
 
   describe("server mode", () => {
     beforeAll(async () => {
