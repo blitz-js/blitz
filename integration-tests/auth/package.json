@@ -12,7 +12,8 @@
     "start": "next start",
     "lint": "next lint",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf .next",
-    "prisma:start": "prisma generate && prisma migrate dev",
+    "prisma:start": "prisma generate && prisma migrate dev && pnpm run prisma:seed",
+    "prisma:seed": "prisma migrate reset --force --skip-generate && prisma db seed",
     "prisma:studio": "prisma studio"
   },
   "dependencies": {
