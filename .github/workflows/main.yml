@@ -65,7 +65,7 @@ jobs:
         run: pnpm build:apps -- --api="http://127.0.0.1:9080"
 
   Unit-Tests:
-    name: "Unit Test: ${{ matrix.os }} (node@${{ matrix.NODE_VERSION }})"
+    name: "Unit Test: ${{ matrix.os }} (node@16)"
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
