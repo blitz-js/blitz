@@ -1,6 +1,7 @@
 import {spawn} from "cross-spawn"
-import sh from "shelljs"
 import which from "npm-which"
+import {exec} from "child_process"
+import path from "path"
 
 export interface Constructor<T = unknown> {
   new (...args: never[]): T
@@ -36,10 +37,8 @@ export const enhancePrisma = <TPrismaClientCtor extends Constructor>(
               "You are calling db.$reset() in a production environment. We think you probably didn't mean to do that, so we are throwing this error instead of destroying your life's work.",
             )
           }
-          const cwd = sh.pwd()
-          console.log("cwd", cwd)
-          console.log("process.cwd", process.cwd())
-          const prismaBin = which(cwd).sync("prisma")
+
+          const prismaBin = which(path.resolve(process.cwd(), "..")).sync("prisma")
           console.log("prismabin", prismaBin)
 
           await new Promise((res, rej) => {
