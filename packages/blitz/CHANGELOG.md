@@ -1,5 +1,19 @@
 # blitz
 
+## 2.0.0-beta.4
+
+### Patch Changes
+
+- c213d521: Fix issue with the route name that's generated for nested routes in @blitzjs/rpc. This was causing issues for windows users.
+- 0b94a450: Upgrade superjson to the latest version
+- 161270e3: Only run the prisma generate command when the schema file changes.
+- Updated dependencies [7498aef4]
+- Updated dependencies [22344d05]
+- Updated dependencies [8fa9a56f]
+- Updated dependencies [c53978d5]
+- Updated dependencies [a84b8de4]
+  - @blitzjs/generator@2.0.0-beta.4
+
 ## 2.0.0-beta.3
 
 ### Patch Changes
