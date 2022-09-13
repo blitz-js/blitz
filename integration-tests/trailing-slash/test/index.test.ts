@@ -8,6 +8,7 @@ import {
   runBlitzCommand,
   blitzLaunchApp,
   blitzBuild,
+  blitzStart,
 } from "../../utils/next-test-utils"
 import webdriver from "../../utils/next-webdriver"
 
@@ -56,7 +57,7 @@ describe("Trailing Slash Tests", () => {
         await runBlitzCommand(["prisma", "migrate", "deploy"])
         await blitzBuild()
         appPort = await findPort()
-        app = await nextStart(appPort, {cwd: process.cwd()})
+        app = await blitzStart(appPort, {cwd: process.cwd()})
       } catch (err) {
         console.log(err)
       }

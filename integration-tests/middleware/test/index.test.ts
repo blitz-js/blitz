@@ -8,6 +8,7 @@ import {
   fetchViaHTTP,
   blitzLaunchApp,
   blitzBuild,
+  blitzStart,
 } from "../../utils/next-test-utils"
 import {join} from "path"
 
@@ -62,7 +63,7 @@ describe("Middleware Tests", () => {
       try {
         await blitzBuild()
         appPort = await findPort()
-        app = await nextStart(appPort, {cwd: process.cwd()})
+        app = await blitzStart(appPort, {cwd: process.cwd()})
       } catch (err) {
         console.log(err)
       }
