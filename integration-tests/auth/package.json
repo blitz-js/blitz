@@ -12,7 +12,7 @@
     "start": "next start",
     "lint": "next lint",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf .next",
-    "prisma:start": "prisma generate && prisma migrate dev",
+    "prisma:start": "prisma generate && prisma db push --force-reset && prisma migrate dev",
     "prisma:studio": "prisma studio"
   },
   "dependencies": {
