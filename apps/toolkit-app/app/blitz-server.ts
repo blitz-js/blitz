@@ -11,6 +11,10 @@ const { gSSP, gSP, api } = setupBlitzServer({
       isAuthorized: simpleRolesIsAuthorized,
     }),
   ],
+  log: {
+    level: "debug",
+    type: "pretty",
+  },
 })
 
 export { gSSP, gSP, api }

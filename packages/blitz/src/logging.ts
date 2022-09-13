@@ -6,8 +6,18 @@ import readline from "readline"
 import j, {Collection, CallExpression} from "jscodeshift"
 import {join} from "path"
 import {readFileSync} from "fs"
-import { customTsParser } from "@blitzjs/generator"
+import * as babelParser from "recast/parsers/babel"
+import getBabelOptions, {Overrides} from "recast/parsers/_babel_options"
 const debug = require("debug")("blitz:config")
+
+const customTsParser: any = {
+  parse(source: string, options?: Overrides) {
+    const babelOptions = getBabelOptions(options)
+    babelOptions.plugins.push("typescript")
+    babelOptions.plugins.push("jsx")
+    return babelParser.parser.parse(source, babelOptions)
+  },
+}
 
 export type LogType = "json" | "pretty" | "hidden"
 
@@ -27,7 +37,6 @@ export function loadConfigProduction(pagesDir: string) {
     debug("Loading config from ", path)
     const userConfigModuleSource = readFileSync(path, {encoding: "utf-8"})
     userConfigModule = j(userConfigModuleSource, {parser: customTsParser})
-    console.log("userConfigModule", userConfigModule)
   } catch {
     debug("Did not find custom config file")
     return {}
