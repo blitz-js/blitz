@@ -235,7 +235,7 @@ importers:
       "@types/node-fetch": 2.6.1
       "@types/react": 18.0.17
       b64-lite: 1.4.0
-      blitz: workspace:*
+      blitz: workspace:2.0.0-beta.4
       eslint: 7.32.0
       fs-extra: 10.0.1
       get-port: 6.1.2
