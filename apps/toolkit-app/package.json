@@ -5,6 +5,7 @@
     "start:dev": "pnpm run prisma:start && blitz dev",
     "buildapp": "pnpm blitz codegen && pnpm prisma generate && next build",
     "start": "next start",
+    "lint": "next lint",
     "prisma:start": "prisma generate && prisma migrate deploy",
     "prisma:studio": "prisma studio",
     "test:local": "jest"
