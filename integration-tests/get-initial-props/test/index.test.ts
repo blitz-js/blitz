@@ -6,6 +6,8 @@ import {
   nextBuild,
   nextStart,
   runBlitzCommand,
+  blitzLaunchApp,
+  blitzBuild,
 } from "../../utils/next-test-utils"
 import webdriver from "../../utils/next-webdriver"
 
@@ -49,7 +51,7 @@ describe("getInitialProps Tests", () => {
       try {
         await runBlitzCommand(["prisma", "migrate", "reset", "--force"])
         appPort = await findPort()
-        app = await launchApp(appPort, {cwd: process.cwd()})
+        app = await blitzLaunchApp(appPort, {cwd: process.cwd()})
       } catch (error) {
         console.log(error)
       }
@@ -63,7 +65,7 @@ describe("getInitialProps Tests", () => {
       try {
         await runBlitzCommand(["prisma", "generate"])
         await runBlitzCommand(["prisma", "migrate", "deploy"])
-        await nextBuild()
+        await blitzBuild()
         appPort = await findPort()
         app = await nextStart(appPort, {cwd: process.cwd()})
       } catch (err) {
