@@ -147,6 +147,7 @@ describe("Auth Tests", () => {
   describe("server mode", () => {
     beforeAll(async () => {
       try {
+        await runBlitzCommand(["prisma", "generate"])
         await runBlitzCommand(["prisma", "migrate", "deploy"])
         await nextBuild()
         appPort = await findPort()
