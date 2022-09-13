@@ -110,11 +110,11 @@ jobs:
       - name: Test Packages
         run: pnpm test -- --filter=./packages/*
         shell: bash
-        
+
       - name: Test Apps
         run: pnpm test -- --filter=./apps/*
         shell: bash
-      
+
   find-integration-tests:
     name: "Find Integration Tests"
     runs-on: ubuntu-latest
@@ -126,10 +126,10 @@ jobs:
         name: "Find all folders"
         shell: bash
         run: |
-            cd ./integration-tests
-            tree -J -d -L 1 | jq -c  '.[0].contents | map(.name | tostring)'
-            folders=$(tree -J -d -L 1 | jq -c  '.[0].contents | map(.name | tostring)')
-            echo "::set-output name=folders::$folders"
+          cd ./integration-tests
+          tree -J -d -L 1 | jq -c  '.[0].contents | map(.name | tostring)'
+          folders=$(tree -J -d -L 1 | jq -c  '.[0].contents | map(.name | tostring)')
+          echo "::set-output name=folders::$folders"
 
   Integration-Tests:
     name: "Integration Test: ${{matrix.folder}} @ ${{ matrix.os }} "
@@ -137,11 +137,11 @@ jobs:
     strategy:
       matrix:
         folder: ${{fromJSON(needs.find-integration-tests.outputs.folders)}}
-        os :
+        os:
           - ubuntu-latest
           - windows-latest
       fail-fast: false
-    runs-on: ${{ matrix.os }}   
+    runs-on: ${{ matrix.os }}
     steps:
       - run: echo ${{matrix.folder}}
       - name: Checkout
@@ -177,3 +177,4 @@ jobs:
 
       - name: Test Packages
         run: pnpm test -- --filter=./integration-tests/${{matrix.folder}}
+        shell: bash
