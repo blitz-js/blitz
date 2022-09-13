@@ -1,5 +1,12 @@
 import {describe, it, expect, beforeAll, afterAll} from "vitest"
-import {killApp, findPort, launchApp, nextBuild, nextStart} from "../../utils/next-test-utils"
+import {
+  killApp,
+  findPort,
+  launchApp,
+  nextBuild,
+  nextStart,
+  runBlitzCommand,
+} from "../../utils/next-test-utils"
 import webdriver from "../../utils/next-webdriver"
 
 import {join} from "path"
@@ -140,6 +147,7 @@ describe("Auth Tests", () => {
   describe("server mode", () => {
     beforeAll(async () => {
       try {
+        await runBlitzCommand(["prisma", "migrate", "deploy"])
         await nextBuild()
         appPort = await findPort()
         app = await nextStart(appPort, {cwd: process.cwd()})
