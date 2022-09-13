@@ -46,7 +46,7 @@ describe("Middleware Tests", () => {
     beforeAll(async () => {
       try {
         appPort = await findPort()
-        app = await launchApp(appDir, appPort, {cwd: process.cwd()})
+        app = await launchApp(appPort, {cwd: process.cwd()})
       } catch (error) {
         console.log(error)
       }
@@ -58,9 +58,9 @@ describe("Middleware Tests", () => {
   describe("server mode", () => {
     beforeAll(async () => {
       try {
-        await nextBuild(appDir)
+        await nextBuild()
         appPort = await findPort()
-        app = await nextStart(appDir, appPort, {cwd: process.cwd()})
+        app = await nextStart(appPort, {cwd: process.cwd()})
       } catch (err) {
         console.log(err)
       }

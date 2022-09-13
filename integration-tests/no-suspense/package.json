@@ -2,6 +2,10 @@
   "name": "test-no-suspense",
   "version": "0.0.0",
   "private": true,
+  "prisma": {
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} db/seed.ts",
+    "schema": "db/schema.prisma"
+  },
   "scripts": {
     "start:dev": "pnpm run prisma:start && next dev",
     "test": "pnpm run prisma:start && vitest run",
