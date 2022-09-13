@@ -8,7 +8,7 @@
   },
   "scripts": {
     "start:dev": "pnpm run prisma:start && next dev",
-    "test": "pnpm run prisma:start && vitest run",
+    "test": "vitest run",
     "test-watch": "vitest",
     "start": "next start",
     "lint": "next lint",
