@@ -6,15 +6,17 @@ const seed = async () => {
 
   const hashedPassword = await SecurePassword.hash("abcd1234")
 
-  await prisma.user
-    .create({
+  try {
+    await prisma.user.create({
       data: {
         email: "test@test.com",
         hashedPassword,
         role: "user",
       },
     })
-    .catch(console.error)
+  } catch (err) {
+    console.log(err)
+  }
 
   process.exit(0)
 }
