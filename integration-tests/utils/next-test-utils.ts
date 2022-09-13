@@ -227,6 +227,7 @@ export function runBlitzCommandDev(argv, stdOut, opts: RunNextCommandDevOptions 
   const cwd = opts.cwd
   const env = {
     ...process.env,
+    NODE_ENV: undefined,
     __NEXT_TEST_MODE: "true",
     ...opts.env,
   }
