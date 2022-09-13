@@ -3,7 +3,6 @@ import {killApp, findPort, launchApp, nextBuild, nextStart} from "../../utils/ne
 import webdriver from "../../utils/next-webdriver"
 
 import {join} from "path"
-import seed from "../prisma/seed"
 import fetch from "node-fetch"
 import {fromBase64} from "b64-lite"
 
@@ -128,7 +127,6 @@ describe("Auth Tests", () => {
       try {
         appPort = await findPort()
         app = await launchApp(appDir, appPort, {cwd: process.cwd()})
-        // await seed()
       } catch (error) {
         console.log(error)
       }
