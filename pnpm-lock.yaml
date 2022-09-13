@@ -909,7 +909,7 @@ importers:
       next: 12.2.5
       react: 18.2.0
       react-dom: 18.2.0
-      superjson: 1.8.0
+      superjson: 1.9.1
       supports-color: 8.1.1
       typescript: ^4.5.3
       unbuild: 0.7.6
@@ -922,7 +922,7 @@ importers:
       bad-behavior: 1.0.1
       chalk: 4.1.2
       debug: 4.3.3_supports-color@8.1.1
-      superjson: 1.8.0_supports-color@8.1.1
+      superjson: 1.9.1
       supports-color: 8.1.1
     devDependencies:
       "@blitzjs/config": link:../config
@@ -13076,13 +13076,6 @@ packages:
     dependencies:
       p-locate: 5.0.0
 
-  /lodash.clonedeep/4.5.0:
-    resolution:
-      {
-        integrity: sha512-H5ZhCF25riFd9uB5UCkVKo61m3S/xZk1x4wA6yp/L3RFP6Z/eHH1ymQcGLo7J3GMPfm0V/7m1tryHuGVxpqEBQ==,
-      }
-    dev: false
-
   /lodash.includes/4.3.0:
     resolution:
       {
@@ -16781,17 +16774,14 @@ packages:
       minimist: 1.2.6
     dev: true
 
-  /superjson/1.8.0_supports-color@8.1.1:
+  /superjson/1.9.1:
     resolution:
       {
-        integrity: sha512-8FWCa0T9JQ9kVax9nmRqEEebhbRGmU3IV1gevZWQGJRFmSNVN4hnyfb0858aWeEOoS3atwnhjYGleRQHTGI/lA==,
+        integrity: sha512-oT3HA2nPKlU1+5taFgz/HDy+GEaY+CWEbLzaRJVD4gZ7zMVVC4GDNFdgvAZt6/VuIk6D2R7RtPAiCHwmdzlMmg==,
       }
     engines: {node: ">=10"}
     dependencies:
-      debug: 4.3.4_supports-color@8.1.1
-      lodash.clonedeep: 4.5.0
-    transitivePeerDependencies:
-      - supports-color
+      copy-anything: 3.0.2
     dev: false
 
   /superjson/1.9.1:
