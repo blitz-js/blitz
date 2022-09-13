@@ -158,6 +158,10 @@ jobs:
           node-version: ${{ matrix.NODE_VERSION }}
           cache: "pnpm"
 
+      - name: Link Blitz CLI
+        run: pnpm link ./packages/blitz
+        shell: bash
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
         shell: bash
