@@ -141,9 +141,9 @@ export function getCommandBin(
   return path.resolve(rootFolder, bin)
 }
 
-export function runNextCommand(argv, options: RunNextCommandOptions = {}) {
-  const nextnextbin = getCommandBin("next", options.cwd)
-  const nextBin = path.join(nextnextbin, "dist/bin/next")
+export function runBlitzCommand(argv, options: RunNextCommandOptions = {}) {
+  const nextnextbin = getCommandBin("blitz", options.cwd)
+  const blitzBin = path.join(nextnextbin, "dist/index.cjs")
   const cwd = options.cwd || process.cwd()
   // Let Next.js decide the environment
   const env = {
@@ -154,8 +154,8 @@ export function runNextCommand(argv, options: RunNextCommandOptions = {}) {
   }
 
   return new Promise((resolve, reject) => {
-    console.log(`Running command "next ${argv.join(" ")}"`)
-    const instance = spawn("node", [nextBin, ...argv], {
+    console.log(`Running command "blitz ${argv.join(" ")}"`)
+    const instance = spawn("node", [blitzBin, ...argv], {
       cwd,
       env,
       stdio: ["ignore", "pipe", "pipe"],
@@ -220,22 +220,19 @@ export function runNextCommand(argv, options: RunNextCommandOptions = {}) {
   })
 }
 
-export function runNextCommandDev(argv, stdOut, opts: RunNextCommandDevOptions = {}) {
-  const nextnextbin = getCommandBin("next", opts.cwd)
-  const nextDir = path.resolve(require.resolve("next/package"))
-  const nextBin = path.join(nextnextbin, "dist/bin/next")
+export function runBlitzCommandDev(argv, stdOut, opts: RunNextCommandDevOptions = {}) {
+  const nextnextbin = getCommandBin("blitz", opts.cwd)
+  const blitzBin = path.join(nextnextbin, "dist/index.cjs")
 
-  const cwd = opts.cwd || nextDir
+  const cwd = opts.cwd
   const env = {
     ...process.env,
-    NODE_ENV: undefined,
     __NEXT_TEST_MODE: "true",
     ...opts.env,
   }
 
-  const nodeArgs = opts.nodeArgs || []
   return new Promise<void>((resolve, reject) => {
-    const instance = spawn("node", [...nodeArgs, "--no-deprecation", nextBin, ...argv], {
+    const instance = spawn("node", [blitzBin, ...argv], {
       cwd,
       env,
     } as {})
@@ -296,28 +293,28 @@ export function runNextCommandDev(argv, stdOut, opts: RunNextCommandDevOptions =
 }
 
 // Launch the app in dev mode.
-export function launchApp(dir, port, opts: RunNextCommandDevOptions) {
-  return runNextCommandDev([dir, "-p", port], undefined, opts)
+export function launchApp(port, opts: RunNextCommandDevOptions) {
+  return runBlitzCommandDev(["dev", "-p", port], undefined, opts)
 }
 
-export function nextBuild(dir, args = [], opts = {}): any {
-  return runNextCommand(["build", dir, ...args], opts)
+export function nextBuild(args = [], opts = {}): any {
+  return runBlitzCommand(["build", ...args], opts)
 }
 
-export function nextExport(dir, {outdir}, opts = {}) {
-  return runNextCommand(["export", dir, "--outdir", outdir], opts)
+export function nextExport({outdir}, opts = {}) {
+  return runBlitzCommand(["export", "--outdir", outdir], opts)
 }
 
-export function nextExportDefault(dir, opts = {}) {
-  return runNextCommand(["export", dir], opts)
+export function nextExportDefault(opts = {}) {
+  return runBlitzCommand(["export"], opts)
 }
 
-export function nextLint(dir, args = [], opts = {}) {
-  return runNextCommand(["lint", dir, ...args], opts)
+export function nextLint(args = [], opts = {}) {
+  return runBlitzCommand(["lint", ...args], opts)
 }
 
-export function nextStart(dir, port, opts = {}) {
-  return runNextCommandDev(["start", "-p", port, dir], undefined, {
+export function nextStart(port, opts = {}) {
+  return runBlitzCommandDev(["start", "-p", port], undefined, {
     ...opts,
     nextStart: true,
   })
@@ -683,20 +680,20 @@ function runSuite(suiteName, context, options) {
       }
       if (env === "prod") {
         context.appPort = await findPort()
-        const {stdout, stderr, code} = await nextBuild(appDir, [], {
+        const {stdout, stderr, code} = await nextBuild([], {
           stderr: true,
           stdout: true,
         })
         context.stdout = stdout
         context.stderr = stderr
         context.code = code
-        context.server = await nextStart(context.appDir, context.appPort, {
+        context.server = await nextStart(context.appPort, {
           onStderr,
           onStdout,
         })
       } else if (env === "dev") {
         context.appPort = await findPort()
-        context.server = await launchApp(context.appDir, context.appPort, {
+        context.server = await launchApp(context.appPort, {
           onStderr,
           onStdout,
         })

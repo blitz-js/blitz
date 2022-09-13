@@ -5,8 +5,8 @@ import webdriver from "../../utils/next-webdriver"
 import {join} from "path"
 import fetch from "node-fetch"
 import {fromBase64} from "b64-lite"
-import seed from "../prisma/seed"
-import prisma from "../prisma"
+import seed from "../db/seed"
+import prisma from "../db"
 
 let app: any
 let appPort: number
@@ -127,10 +127,8 @@ describe("Auth Tests", () => {
   describe("dev mode", () => {
     beforeAll(async () => {
       try {
-        await prisma.$reset()
-        await seed()
         appPort = await findPort()
-        app = await launchApp(appDir, appPort, {cwd: process.cwd()})
+        app = await launchApp(appPort, {cwd: process.cwd()})
       } catch (error) {
         console.log(error)
       }
@@ -142,9 +140,9 @@ describe("Auth Tests", () => {
   describe("server mode", () => {
     beforeAll(async () => {
       try {
-        await nextBuild(appDir)
+        await nextBuild()
         appPort = await findPort()
-        app = await nextStart(appDir, appPort, {cwd: process.cwd()})
+        app = await nextStart(appPort, {cwd: process.cwd()})
       } catch (err) {
         console.log(err)
       }

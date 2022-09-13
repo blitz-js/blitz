@@ -1,5 +1,5 @@
 {
-  "name": "toolkit-app",
+  "name": "toolkit-app-passport",
   "version": "1.0.1-alpha.16",
   "scripts": {
     "start:dev": "pnpm run prisma:start && blitz dev",
