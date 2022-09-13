@@ -4,9 +4,9 @@ import {Table} from "console-table-printer"
 import ora from "ora"
 import readline from "readline"
 import j, {Collection, CallExpression} from "jscodeshift"
-import {parseSync} from "@babel/core"
 import {join} from "path"
 import {readFileSync} from "fs"
+import { customTsParser } from "@blitzjs/generator"
 const debug = require("debug")("blitz:config")
 
 export type LogType = "json" | "pretty" | "hidden"
@@ -26,25 +26,8 @@ export function loadConfigProduction(pagesDir: string) {
     const path = join(pagesDir, BLITZ_SERVER_CONFIG_FILE)
     debug("Loading config from ", path)
     const userConfigModuleSource = readFileSync(path, {encoding: "utf-8"})
-    userConfigModule = j(userConfigModuleSource, {
-      parser: {
-        parse: (source: string) =>
-          parseSync(source, {
-            configFile: false,
-            plugins: [require(`@babel/plugin-syntax-jsx`)],
-            overrides: [
-              {
-                test: [`**/*.ts`, `**/*.tsx`],
-                plugins: [[require(`@babel/plugin-syntax-typescript`), {isTSX: true}]],
-              },
-            ],
-            filename: path,
-            parserOpts: {
-              tokens: true, // recast uses this
-            },
-          }),
-      },
-    })
+    userConfigModule = j(userConfigModuleSource, {parser: customTsParser})
+    console.log("userConfigModule", userConfigModule)
   } catch {
     debug("Did not find custom config file")
     return {}
