@@ -41,7 +41,6 @@ const upgradeLegacy = async () => {
   if (blitzConfigFile === "") {
     throw new ExpectedError("Could not identify Legacy Blitz Config file")
   }
-  let isLegacyBlitz = true
   const appDir = path.resolve("app")
   let failedAt =
     fs.existsSync(path.resolve(".migration.json")) && fs.readJSONSync("./.migration.json").failedAt
@@ -1155,7 +1154,7 @@ const upgradeLegacy = async () => {
   })
 
   // Loop through steps and run the action
-  if ((failedAt && failedAt < steps.length) || failedAt !== "SUCCESS" || isLegacyBlitz) {
+  if ((failedAt && failedAt < steps.length) || failedAt !== "SUCCESS") {
     for (let [index, step] of steps.entries()) {
       // Ignore previous steps and continue at step that was failed
       if (failedAt && index + 1 < failedAt) {
