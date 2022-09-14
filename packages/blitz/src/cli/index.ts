@@ -41,7 +41,7 @@ const aliases: Record<string, keyof typeof commands> = {
   b: "build",
   s: "start",
   n: "new",
-  // g: "generate",
+  g: "generate",
 }
 
 type Command = keyof typeof commands
