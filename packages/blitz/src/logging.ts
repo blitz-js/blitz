@@ -10,7 +10,7 @@ import * as babelParser from "recast/parsers/babel"
 import getBabelOptions, {Overrides} from "recast/parsers/_babel_options"
 const debug = require("debug")("blitz:config")
 
-const customTsParser: any = {
+const customTsParser = {
   parse(source: string, options?: Overrides) {
     const babelOptions = getBabelOptions(options)
     babelOptions.plugins.push("typescript")
@@ -41,7 +41,7 @@ export function loadConfigProduction(pagesDir: string) {
     debug("Did not find custom config file")
     return {}
   }
-  return assignDefaultsBase(userConfigModule) as any
+  return assignDefaultsBase(userConfigModule)
 }
 
 export function findCallExpression(
