@@ -127,8 +127,8 @@ jobs:
         shell: bash
         run: |
           cd ./integration-tests
-          tree -J -d -L 1 | jq -c  '.[0].contents | map(.name | tostring)'
-          folders=$(tree -J -d -L 1 | jq -c  '.[0].contents | map(.name | tostring)')
+          tree -J -d -L 1 | jq -c  '.[0].contents | map(.name | tostring) | map(select(. != "utils"))'
+          folders=$(tree -J -d -L 1 | jq -c  '.[0].contents | map(.name | tostring) | map(select(. != "utils"))')
           echo "::set-output name=folders::$folders"
 
   Integration-Tests:
@@ -157,6 +157,10 @@ jobs:
         with:
           node-version: ${{ matrix.NODE_VERSION }}
           cache: "pnpm"
+
+      - name: Link Blitz CLI
+        run: pnpm link ./packages/blitz
+        shell: bash
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile

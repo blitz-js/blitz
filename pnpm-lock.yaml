@@ -235,7 +235,7 @@ importers:
       "@types/node-fetch": 2.6.1
       "@types/react": 18.0.17
       b64-lite: 1.4.0
-      blitz: workspace:*
+      blitz: workspace:2.0.0-beta.4
       eslint: 7.32.0
       fs-extra: 10.0.1
       get-port: 6.1.2
@@ -3253,7 +3253,7 @@ packages:
       semver: 5.7.1
     transitivePeerDependencies:
       - supports-color
-    dev: true
+    dev: false
 
   /@babel/preset-flow/7.17.12_@babel+core@7.18.2:
     resolution:
@@ -5742,7 +5742,7 @@ packages:
       typescript: 4.7.4
     transitivePeerDependencies:
       - supports-color
-    dev: true
+    dev: false
 
   /@typescript-eslint/experimental-utils/5.28.0_eslint@7.32.0+typescript@4.6.3:
     resolution:
@@ -9540,7 +9540,34 @@ packages:
       - supports-color
     dev: true
 
-  /eslint-config-next/12.3.0_eslint@7.32.0+typescript@4.6.3:
+  /eslint-config-next/12.2.0_typescript@4.6.3:
+    resolution:
+      {
+        integrity: sha512-QWzNegadFXjQ0h3hixnLacRM9Kot85vQefyNsA8IeOnERZMz0Gvays1W6DMCjSxJbnCwuWaMXj9DCpar5IahRA==,
+      }
+    peerDependencies:
+      eslint: ^7.23.0 || ^8.0.0
+      typescript: ">=3.3.1"
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+    dependencies:
+      "@next/eslint-plugin-next": 12.2.0
+      "@rushstack/eslint-patch": 1.1.3
+      "@typescript-eslint/parser": 5.28.0_typescript@4.6.3
+      eslint-import-resolver-node: 0.3.6
+      eslint-import-resolver-typescript: 2.7.1_fkfqfehjtk7sk2efaqbgxsuasa
+      eslint-plugin-import: 2.26.0_xtdmsd4adcznatktegie3poqce
+      eslint-plugin-jsx-a11y: 6.5.1
+      eslint-plugin-react: 7.30.0
+      eslint-plugin-react-hooks: 4.5.0
+      typescript: 4.6.3
+    transitivePeerDependencies:
+      - eslint-import-resolver-webpack
+      - supports-color
+    dev: false
+
+  /eslint-config-next/12.3.0_hrkuebk64jiu2ut2d2sm4oylnu:
     resolution:
       {
         integrity: sha512-guHSkNyKnTBB8HU35COgAMeMV0E026BiYRYvyEVVaTOeFcnU3i1EI8/Da0Rl7H3Sgua5FEvoA0vYd2s8kdIUXg==,
@@ -9566,6 +9593,16 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
+
+  /eslint-config-prettier/8.5.0:
+    resolution:
+      {
+        integrity: sha512-obmWKLUNCnhtQRKc+tmnYuQl0pFU1ibYJQ5BGhTVB08bHe9wC8qUeG7c08dj9XX+AuPj1YSGSQIHl1pnDHZR0Q==,
+      }
+    hasBin: true
+    peerDependencies:
+      eslint: ">=7.0.0"
+    dev: false
 
   /eslint-config-prettier/8.5.0_eslint@7.32.0:
     resolution:
@@ -11970,7 +12007,7 @@ packages:
       pretty-format: 27.5.1
       slash: 3.0.0
       strip-json-comments: 3.1.1
-      ts-node: 10.7.0_2dcdb8fdc9a6e6d9aaf2aac9443a7c28
+      ts-node: 10.7.0_fxg3r7oju3tntkxsvleuiot4fa
     transitivePeerDependencies:
       - bufferutil
       - canvas
@@ -17223,7 +17260,6 @@ packages:
       typescript: 4.7.4
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
-    dev: false
 
   /ts-node/10.7.0_typescript@4.6.3:
     resolution:

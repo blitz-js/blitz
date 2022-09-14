@@ -3,16 +3,17 @@
   "version": "0.0.0",
   "private": true,
   "prisma": {
-    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} db/seed.ts",
+    "schema": "db/schema.prisma"
   },
   "scripts": {
-    "start:dev": "pnpm run prisma:start && next dev",
-    "test": "pnpm run prisma:start && vitest run",
+    "start:dev": "pnpm run prisma:start && blitz dev",
+    "test": "vitest run",
     "test-watch": "vitest",
-    "start": "next start",
+    "start": "blitz start",
     "lint": "next lint",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf .next",
-    "prisma:start": "prisma generate && prisma migrate dev",
+    "prisma:start": "blitz prisma migrate deploy",
     "prisma:studio": "prisma studio"
   },
   "dependencies": {
@@ -20,7 +21,7 @@
     "@blitzjs/config": "workspace:*",
     "@blitzjs/next": "workspace:*",
     "@prisma/client": "4.0.0",
-    "blitz": "workspace:*",
+    "blitz": "workspace:2.0.0-beta.4",
     "lowdb": "3.0.0",
     "next": "12.2.5",
     "prisma": "4.0.0",
