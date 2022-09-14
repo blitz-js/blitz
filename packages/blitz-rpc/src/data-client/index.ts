@@ -7,6 +7,7 @@ export {
   invalidateQuery,
   setQueryData,
   getQueryClient,
+  getQueryData,
 } from "./react-query-utils"
 export {
   useQueryErrorResetBoundary,

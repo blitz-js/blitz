@@ -1,4 +1,9 @@
-import j, {ImportDeclaration} from "jscodeshift"
+import j, {
+  Expression,
+  ImportDeclaration,
+  ImportDefaultSpecifier,
+  ImportSpecifier,
+} from "jscodeshift"
 import * as fs from "fs-extra"
 import path from "path"
 import {
@@ -11,17 +16,26 @@ import {
   getAllFiles,
   getCollectionFromSource,
   wrapDeclaration,
-  findIdentifier,
   removeImport,
   replaceImport,
   replaceIdentifiers,
+  replaceBlitzPkgsVersions,
 } from "./utils"
-import {log} from "blitz"
+import { log } from "blitz"
+
+const CURRENT_BLITZ_TAG = "latest"
+
+class ExpectedError extends Error {
+  constructor(message: string) {
+    super(message)
+    this.name = "Expected Error"
+  }
+}
 
 const isInternalBlitzMonorepoDevelopment = fs.existsSync(
   path.join(__dirname, "../../../blitz-next"),
 )
-
+type Step = { name: string; action: (stepIndex: number) => Promise<void> }
 const upgradeLegacy = async () => {
   let isTypescript = fs.existsSync(path.resolve("tsconfig.json"))
   let blitzConfigFile = `blitz.config.${isTypescript ? "ts" : "js"}`
@@ -29,11 +43,8 @@ const upgradeLegacy = async () => {
   const appDir = path.resolve("app")
   let failedAt =
     fs.existsSync(path.resolve(".migration.json")) && fs.readJSONSync("./.migration.json").failedAt
-
-  let steps: {
-    name: string
-    action: () => Promise<void>
-  }[] = []
+  let collectedErrors: { message: string; step: number }[] = []
+  let steps: Step[] = []
 
   // Add steps in order
 
@@ -43,57 +54,138 @@ const upgradeLegacy = async () => {
       const program = getCollectionFromSource(blitzConfigFile)
       const parsedProgram = program.get()
 
-      // Clear file
-      parsedProgram.value.program.body = []
+      // Remove BlitzConfig type annotation
+      let findBlitzConfigType = program.find(j.Identifier, (node) => node.name === "BlitzConfig")
+      if (findBlitzConfigType) {
+        findBlitzConfigType.forEach((c) => {
+          if (c.name === "typeName") {
+            j(c.parentPath.parentPath).remove()
+          }
 
-      // We create an object property eg. {withBlitz: withBlitz}
+          if (c.name === "imported") {
+            j(c.parentPath).remove()
+          }
+        })
+      }
+
+      // Remove all typescript stuff
+      let findTypes = program.find(j.TSType, (node) => node)
+      if (findTypes.length) {
+        findTypes.forEach((t) => {
+          if (t.name === "typeAnnotation") {
+            j(t.parentPath).remove()
+          }
+        })
+      }
+
       let withBlitz = j.objectProperty(j.identifier("withBlitz"), j.identifier("withBlitz"))
-      // Then set the shorthand to true so we get {withBlitz}
       withBlitz.shorthand = true
-
-      /* Declare the variable using the object above that equals to a require expression, eg.
-        const {withBlitz} = require("@blitzjs/next")
-      */
-      let blitzDeclare = j.variableDeclaration("const", [
-        j.variableDeclarator(
-          j.objectPattern([withBlitz]),
-          j.callExpression(j.identifier("require"), [j.stringLiteral("@blitzjs/next")]),
+      let config = program.find(j.AssignmentExpression, {
+        left: {
+          type: "MemberExpression",
+          object: {
+            type: "Identifier",
+            name: "module",
+          },
+          property: {
+            type: "Identifier",
+            name: "exports",
+          },
+        },
+      })
+      let createdConfig = config.get().value.right
+      let importWithBlitz = j.expressionStatement(
+        j.assignmentExpression(
+          "=",
+          j.identifier("const { withBlitz }"),
+          j.callExpression(j.identifier("require"), [j.identifier(`"@blitzjs/next"`)]),
         ),
-      ])
-      parsedProgram.value.program.body.push(blitzDeclare)
+      )
+      parsedProgram.value.program.body.unshift(importWithBlitz)
+      config.remove()
 
-      // Create the module.exports with the withBlitz callExpression and empty arguments. Giving us module.exports = withBlitz()
-      let moduleExportExpression = j.expressionStatement(
+      const findImports = program.find(j.ImportDeclaration, (node) => node)
+      if (findImports.length) {
+        findImports.forEach((i) => {
+          const defaultImport = i.value.specifiers?.find((s) => s.type === "ImportDefaultSpecifier")
+          const namedImports = i.value.specifiers?.filter((s) => s.type === "ImportSpecifier")
+          let flag = false
+          if (defaultImport && defaultImport.local) {
+            const importStatement = j.expressionStatement(
+              j.assignmentExpression(
+                "=",
+                j.identifier("const " + defaultImport.local.name),
+                j.callExpression(j.identifier("require"), [j.stringLiteral(`${i.value.source.value}`)]),
+              ),
+            )
+            parsedProgram.value.program.body.unshift(importStatement)
+            flag = true
+          }
+          if (namedImports && namedImports.length) {
+            const namedImportNames = namedImports.map((s) => s.local?.name)
+            const namedImportNamesString = namedImportNames.join(", ")
+            const importStatement = j.expressionStatement(
+              j.assignmentExpression(
+                "=",
+                j.identifier("const {" + namedImportNamesString + "}"),
+                j.callExpression(j.identifier("require"), [j.stringLiteral(`${i.value.source.value}`)]),
+              ),
+            )
+            parsedProgram.value.program.body.unshift(importStatement)
+            flag = true
+          }
+          if (flag) {
+            j(i).remove()
+          }
+        })
+      }
+
+      let moduleExportStatement = j.expressionStatement(
         j.assignmentExpression(
           "=",
           j.memberExpression(j.identifier("module"), j.identifier("exports")),
-          j.callExpression(j.identifier("withBlitz"), [
-            j.objectExpression([j.objectProperty(j.identifier("blitz"), j.objectExpression([]))]),
-          ]),
+          j.callExpression(j.identifier("withBlitz"), [createdConfig]),
         ),
       )
-      parsedProgram.value.program.body.push(moduleExportExpression)
+      parsedProgram.value.program.body.push(moduleExportStatement)
 
       fs.writeFileSync(path.resolve("next.config.js"), program.toSource())
     },
   })
 
   steps.push({
+    name: "update .eslintrc.js configuration",
+    action: async (stepIndex) => {
+      if (fs.existsSync(path.resolve(".eslintrc.js"))) {
+        const program = getCollectionFromSource(".eslintrc.js")
+        const parsedProgram = program.get()
+        parsedProgram.value.program.body = []
+        const moduleExport = j.expressionStatement(
+          j.assignmentExpression(
+            "=",
+            j.memberExpression(j.identifier("module"), j.identifier("exports")),
+            j.callExpression(j.identifier("require"), [j.identifier(`"@blitzjs/next/eslint"`)]),
+          ),
+        )
+        parsedProgram.value.program.body.push(moduleExport)
+        fs.writeFileSync(path.resolve(".eslintrc.js"), program.toSource())
+      } else {
+        collectedErrors.push({
+          message: ".eslintrc.js does not exist",
+          step: stepIndex,
+        })
+      }
+    },
+  })
+
+  steps.push({
     name: "update dependencies in package.json",
     action: async () => {
-      let packageJsonPath = require(path.resolve("package.json"))
-      packageJsonPath.dependencies["react"] = "latest"
-      packageJsonPath.dependencies["react-dom"] = "latest"
-      packageJsonPath.dependencies["@blitzjs/next"] = "alpha"
-      packageJsonPath.dependencies["@blitzjs/rpc"] = "alpha"
-      packageJsonPath.dependencies["@blitzjs/auth"] = "alpha"
-      packageJsonPath.dependencies["blitz"] = "alpha"
-      packageJsonPath.dependencies["next"] = "latest"
-      packageJsonPath.dependencies["prisma"] = "latest"
-      packageJsonPath.dependencies["@prisma/client"] = "latest"
-      packageJsonPath.devDependencies["typescript"] = isTypescript && "latest"
+      const packageJson = require(path.resolve("package.json"))
 
-      fs.writeFileSync(path.resolve("package.json"), JSON.stringify(packageJsonPath, null, " "))
+      const newPackageJson = await replaceBlitzPkgsVersions(packageJson, CURRENT_BLITZ_TAG)
+
+      fs.writeFileSync(path.resolve("package.json"), JSON.stringify(newPackageJson, null, " "))
     },
   })
 
@@ -111,6 +203,8 @@ const upgradeLegacy = async () => {
 
         Document: "next/document",
         DocumentHead: "next/document",
+        DocumentProps: "next/document",
+        DocumentContext: "next/document",
         Html: "next/document",
         Main: "next/document",
         BlitzScript: "next/document",
@@ -141,11 +235,12 @@ const upgradeLegacy = async () => {
         GetServerSideProps: "next",
         InferGetServerSidePropsType: "next",
         GetServerSidePropsContext: "next",
-        AuthenticatedMiddlewareCtx: "@blitz/rpc",
-        getAntiCSRFToken: "@blitzjs/rpc",
+        AuthenticatedMiddlewareCtx: "@blitzjs/rpc",
+        getAntiCSRFToken: "@blitzjs/auth",
         useSession: "@blitzjs/auth",
         useAuthenticatedSession: "@blitzjs/auth",
         useRedirectAuthenticated: "@blitzjs/auth",
+        AuthenticatedSessionContext: "@blitzjs/auth",
         SessionContext: "@blitzjs/auth",
         useAuthorize: "@blitzjs/auth",
         useQuery: "@blitzjs/rpc",
@@ -189,37 +284,42 @@ const upgradeLegacy = async () => {
       }
 
       getAllFiles(appDir, [], [], [".ts", ".tsx", ".js", ".jsx"]).forEach((filename) => {
-        const program = getCollectionFromSource(path.resolve(appDir, filename))
-        const parsedProgram = program.get()
+        try {
+          const program = getCollectionFromSource(path.resolve(appDir, filename))
+          const parsedProgram = program.get()
 
-        parsedProgram.value.program.body.forEach((e: ImportDeclaration) => {
-          if (e.type === "ImportDeclaration") {
-            if (e.source.value === "blitz") {
-              e.specifiers?.slice().forEach((specifier: any) => {
-                const importedName =
-                  specifier.imported.type === "StringLiteral"
-                    ? specifier.imported.value
-                    : specifier.imported.name
-                if (importedName in specialImports) {
-                  addNamedImport(
-                    program,
-                    importedName,
-                    specialImports[importedName]!,
-                    undefined,
-                    renames[importedName],
-                  )
-                  removeImport(program, importedName, "blitz")
+          parsedProgram.value.program.body.forEach((e: ImportDeclaration) => {
+            if (e.type === "ImportDeclaration") {
+              if (e.source.value === "blitz") {
+                e.specifiers?.slice().forEach((specifier: any) => {
+                  const importedName =
+                    specifier.imported.type === "StringLiteral"
+                      ? specifier.imported.value
+                      : specifier.imported.name
+                  if (importedName in specialImports) {
+                    addNamedImport(
+                      program,
+                      importedName,
+                      specialImports[importedName]!,
+                      undefined,
+                      renames[importedName],
+                    )
+                    removeImport(program, importedName, "blitz")
+                  }
+                })
+                // Removed left over "import 'blitz';"
+                if (!e.specifiers?.length) {
+                  const index = parsedProgram.value.program.body.indexOf(e)
+                  parsedProgram.value.program.body.splice(index, 1)
                 }
-              })
-              // Removed left over "import 'blitz';"
-              if (!e.specifiers?.length) {
-                const index = parsedProgram.value.program.body.indexOf(e)
-                parsedProgram.value.program.body.splice(index, 1)
               }
             }
-          }
-        })
-        fs.writeFileSync(path.resolve(appDir, filename), program.toSource())
+          })
+          fs.writeFileSync(path.resolve(appDir, filename), program.toSource())
+        } catch (e) {
+          log.error(`Error updating imports in the ${file}`)
+          throw new Error(e)
+        }
       })
     },
   })
@@ -228,62 +328,80 @@ const upgradeLegacy = async () => {
     name: "update NextJS' default imports",
     action: async () => {
       getAllFiles(appDir, [], [], [".ts", ".tsx", ".js", ".jsx"]).forEach((file) => {
-        const program = getCollectionFromSource(file)
+        try {
+          const program = getCollectionFromSource(file)
 
-        const nextImage = findImport(program, "next/image")
-        const nextLink = findImport(program, "next/link")
-        const nextHead = findImport(program, "next/head")
-        const dynamic = findImport(program, "next/dynamic")
+          const nextImage = findImport(program, "next/image")
+          const nextLink = findImport(program, "next/link")
+          const nextHead = findImport(program, "next/head")
+          const dynamic = findImport(program, "next/dynamic")
+          const nextScript = findImport(program, "next/script")
 
-        if (nextImage?.length) {
-          nextImage.remove()
-          program
-            .get()
-            .value.program.body.unshift(
-              j.importDeclaration(
-                [j.importDefaultSpecifier(j.identifier("Image"))],
-                j.stringLiteral("next/image"),
-              ),
-            )
+          if (nextImage?.length) {
+            nextImage.remove()
+            program
+              .get()
+              .value.program.body.unshift(
+                j.importDeclaration(
+                  [j.importDefaultSpecifier(j.identifier("Image"))],
+                  j.stringLiteral("next/image"),
+                ),
+              )
+          }
+
+          if (nextScript?.length) {
+            nextScript.remove()
+            program
+              .get()
+              .value.program.body.unshift(
+                j.importDeclaration(
+                  [j.importDefaultSpecifier(j.identifier("Script"))],
+                  j.stringLiteral("next/script"),
+                ),
+              )
+          }
+
+          if (nextLink?.length) {
+            nextLink.remove()
+            program
+              .get()
+              .value.program.body.unshift(
+                j.importDeclaration(
+                  [j.importDefaultSpecifier(j.identifier("Link"))],
+                  j.stringLiteral("next/link"),
+                ),
+              )
+          }
+
+          if (nextHead?.length) {
+            nextHead.remove()
+            program
+              .get()
+              .value.program.body.unshift(
+                j.importDeclaration(
+                  [j.importDefaultSpecifier(j.identifier("Head"))],
+                  j.stringLiteral("next/head"),
+                ),
+              )
+          }
+
+          if (dynamic?.length) {
+            dynamic.remove()
+            program
+              .get()
+              .value.program.body.unshift(
+                j.importDeclaration(
+                  [j.importDefaultSpecifier(j.identifier("dynamic"))],
+                  j.stringLiteral("next/dynamic"),
+                ),
+              )
+          }
+
+          fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
+        } catch (e) {
+          log.error(`Error in updating next.js default imports in the ${file}`)
+          throw new Error(e)
         }
-
-        if (nextLink?.length) {
-          nextLink.remove()
-          program
-            .get()
-            .value.program.body.unshift(
-              j.importDeclaration(
-                [j.importDefaultSpecifier(j.identifier("Link"))],
-                j.stringLiteral("next/link"),
-              ),
-            )
-        }
-
-        if (nextHead?.length) {
-          nextHead.remove()
-          program
-            .get()
-            .value.program.body.unshift(
-              j.importDeclaration(
-                [j.importDefaultSpecifier(j.identifier("Head"))],
-                j.stringLiteral("next/head"),
-              ),
-            )
-        }
-
-        if (dynamic?.length) {
-          dynamic.remove()
-          program
-            .get()
-            .value.program.body.unshift(
-              j.importDeclaration(
-                [j.importDefaultSpecifier(j.identifier("dynamic"))],
-                j.stringLiteral("next/dynamic"),
-              ),
-            )
-        }
-
-        fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
       })
     },
   })
@@ -292,25 +410,30 @@ const upgradeLegacy = async () => {
     name: "change queryClient to getQueryClient()",
     action: async () => {
       getAllFiles(appDir, [], [], [".ts", ".tsx", ".js", ".jsx"]).forEach((file) => {
-        const filepath = path.resolve(appDir, file)
-        const program = getCollectionFromSource(filepath)
+        try {
+          const filepath = path.resolve(appDir, file)
+          const program = getCollectionFromSource(filepath)
 
-        const findQueryClient = () => {
-          return program.find(j.Identifier, (node) => node.name === "queryClient")
-        }
-
-        findQueryClient().forEach((q) => {
-          switch (q.name) {
-            case "imported":
-              q.value.name = "getQueryClient"
-              break
-            case "object":
-              j(q).replaceWith(j.callExpression(j.identifier("getQueryClient"), []))
-              break
+          const findQueryClient = () => {
+            return program.find(j.Identifier, (node) => node.name === "queryClient")
           }
-        })
 
-        fs.writeFileSync(path.resolve(appDir, file), program.toSource())
+          findQueryClient().forEach((q) => {
+            switch (q.name) {
+              case "imported":
+                q.value.name = "getQueryClient"
+                break
+              case "object":
+                j(q).replaceWith(j.callExpression(j.identifier("getQueryClient"), []))
+                break
+            }
+          })
+
+          fs.writeFileSync(path.resolve(appDir, file), program.toSource())
+        } catch (e) {
+          log.error(`Error in changing queryClient to getQueryClient in the ${file}`)
+          throw new Error(e)
+        }
       })
     },
   })
@@ -320,12 +443,17 @@ const upgradeLegacy = async () => {
     action: async () => {
       getAllFiles(path.join(appDir, "api"), [], [], [".ts", ".tsx", ".js", ".jsx"]).forEach(
         (file) => {
-          const program = getCollectionFromSource(file)
+          try {
+            const program = getCollectionFromSource(file)
 
-          replaceImport(program, "blitz", "BlitzApiRequest", "next", "NextApiRequest")
-          replaceIdentifiers(program, "BlitzApiRequest", "NextApiRequest")
+            replaceImport(program, "blitz", "BlitzApiRequest", "next", "NextApiRequest")
+            replaceIdentifiers(program, "BlitzApiRequest", "NextApiRequest")
 
-          fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
+            fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
+          } catch (e) {
+            log.error(`Error in changing BlitzApiRequest to NextApiRequest in the ${file}`)
+            throw new Error(e)
+          }
         },
       )
     },
@@ -336,12 +464,17 @@ const upgradeLegacy = async () => {
     action: async () => {
       getAllFiles(path.join(appDir, "api"), [], [], [".ts", ".tsx", ".js", ".jsx"]).forEach(
         (file) => {
-          const program = getCollectionFromSource(file)
+          try {
+            const program = getCollectionFromSource(file)
 
-          replaceImport(program, "blitz", "BlitzApiResponse", "next", "NextApiResponse")
-          replaceIdentifiers(program, "BlitzApiResponse", "NextApiResponse")
+            replaceImport(program, "blitz", "BlitzApiResponse", "next", "NextApiResponse")
+            replaceIdentifiers(program, "BlitzApiResponse", "NextApiResponse")
 
-          fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
+            fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
+          } catch (e) {
+            log.error(`Error in changing BlitzApiResponse to NextApiResponse in the ${file}`)
+            throw new Error(e)
+          }
         },
       )
     },
@@ -352,12 +485,17 @@ const upgradeLegacy = async () => {
     action: async () => {
       getAllFiles(path.join(appDir, "api"), [], [], [".ts", ".tsx", ".js", ".jsx"]).forEach(
         (file) => {
-          const program = getCollectionFromSource(file)
+          try {
+            const program = getCollectionFromSource(file)
 
-          replaceImport(program, "blitz", "BlitzApiHandler", "next", "NextApiHandler")
-          replaceIdentifiers(program, "BlitzApiHandler", "NextApiHandler")
+            replaceImport(program, "blitz", "BlitzApiHandler", "next", "NextApiHandler")
+            replaceIdentifiers(program, "BlitzApiHandler", "NextApiHandler")
 
-          fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
+            fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
+          } catch (e) {
+            log.error(`Error in changing BlitzApiHandler to NextApiHandler in the ${file}`)
+            throw new Error(e)
+          }
         },
       )
     },
@@ -401,14 +539,14 @@ const upgradeLegacy = async () => {
           replaceTemplateValues(blitzClient),
         )
       } else {
-        throw new Error("App directory doesn't exit")
+        throw new ExpectedError("App directory doesn't exit")
       }
     },
   })
 
   steps.push({
     name: "Add cookiePrefix to blitz server",
-    action: async () => {
+    action: async (stepIndex) => {
       const blitzConfigProgram = getCollectionFromSource(blitzConfigFile)
       const cookieIdentifier = blitzConfigProgram.find(
         j.Identifier,
@@ -416,19 +554,28 @@ const upgradeLegacy = async () => {
       )
       if (cookieIdentifier.length) {
         const cookiePrefix = cookieIdentifier.get().parentPath.value.value.value
-        const blitzClientProgram = getCollectionFromSource(
-          path.join(appDir, `blitz-client.${isTypescript ? "ts" : "js"}`),
-        )
-        const cookieIdentifierBlitzClient = blitzClientProgram.find(
-          j.Identifier,
-          (node) => node.name === "cookiePrefix",
-        )
-        cookieIdentifierBlitzClient.get().parentPath.value.value.value = cookiePrefix
+        if (cookiePrefix) {
+          const blitzClientProgram = getCollectionFromSource(
+            path.join(appDir, `blitz-client.${isTypescript ? "ts" : "js"}`),
+          )
+          const cookieIdentifierBlitzClient = blitzClientProgram.find(
+            j.Identifier,
+            (node) => node.name === "cookiePrefix",
+          )
+          cookieIdentifierBlitzClient.get().parentPath.value.value.value = cookiePrefix
 
-        fs.writeFileSync(
-          `${appDir}/blitz-client.${isTypescript ? "ts" : "js"}`,
-          blitzClientProgram.toSource(),
-        )
+          fs.writeFileSync(
+            `${appDir}/blitz-client.${isTypescript ? "ts" : "js"}`,
+            blitzClientProgram.toSource(),
+          )
+        } else {
+          // Show error at end of codemod
+          collectedErrors.push({
+            message:
+              "Detected cookiePrefix is undefined. Please set your cookie prefix manually in app/blitz-client",
+            step: stepIndex,
+          })
+        }
       } else {
         log.error("Cookie Prefix not found in blitz config file")
       }
@@ -456,7 +603,7 @@ const upgradeLegacy = async () => {
 
         pluginArray.get().parentPath.value.value.elements = [
           ...pluginArray.get().parentPath.value.value.elements,
-          ...middlewares,
+          ...middlewares.map((m: Node) => j.template.expression`BlitzServerMiddleware(${m})`),
         ]
 
         let importStatements = []
@@ -483,11 +630,21 @@ const upgradeLegacy = async () => {
         }
 
         importStatements.forEach((s) => blitzServerProgram.get().value.program.body.unshift(s))
+        addNamedImport(blitzServerProgram, "BlitzServerMiddleware", "blitz")
 
         fs.writeFileSync(
           `${appDir}/blitz-server.${isTypescript ? "ts" : "js"}`,
           blitzServerProgram.toSource(),
         )
+
+        // Remove middleware array from next.config.js
+        const nextConfigProgram = getCollectionFromSource(path.resolve("next.config.js"))
+        const nextConfigMiddlewareArray = nextConfigProgram.find(
+          j.Identifier,
+          (node) => node.name === "middleware",
+        )
+        j(nextConfigMiddlewareArray.get().parentPath).remove()
+        fs.writeFileSync(`next.config.js`, nextConfigProgram.toSource())
       } else {
         log.error("Middleware array not found in blit config file")
       }
@@ -509,7 +666,7 @@ const upgradeLegacy = async () => {
         .toString()
 
       if (!fs.existsSync(pagesDir)) {
-        fs.mkdirSync(pagesDir, {recursive: true})
+        fs.mkdirSync(pagesDir, { recursive: true })
       }
 
       fs.writeFileSync(
@@ -557,7 +714,7 @@ const upgradeLegacy = async () => {
         let files = fs.readdirSync(dirPath)
 
         const pageDir = files.reduce(
-          (arr: {model: string; path: string; subModel?: string}[], file: string) => {
+          (arr: { model: string; path: string; subModel?: string }[], file: string) => {
             if (fs.statSync(dirPath + "/" + file).isDirectory()) {
               let subs = fs.readdirSync(dirPath + "/" + file)
 
@@ -583,7 +740,7 @@ const upgradeLegacy = async () => {
                     }
                   } else {
                     arr.push({
-                      model: file,
+                      model: "",
                       path: dirPath + "/" + file + "/pages",
                     })
                     break
@@ -617,6 +774,7 @@ const upgradeLegacy = async () => {
           // If the directory exists without a sub model (sub page directory), loop through the directory manually move each file/directory
           if (fs.existsSync(path.join(path.resolve("pages"), pages.model))) {
             let subs = fs.readdirSync(pages.path)
+
             subs.forEach((sub) => {
               fs.moveSync(
                 path.join(pages.path, sub),
@@ -680,8 +838,7 @@ const upgradeLegacy = async () => {
 
           if (findBlitzCustomServerLiteral.length === 0) {
             log.error(
-              `Failed to find "blitz/custom-server" import in ${customServerDir}/index.${
-                isTypescript ? "ts" : "js"
+              `Failed to find "blitz/custom-server" import in ${customServerDir}/index.${isTypescript ? "ts" : "js"
               }. You will need to update your custom server manually.`,
             )
           } else {
@@ -747,114 +904,124 @@ const upgradeLegacy = async () => {
       //First check ./pages
       const pagesDir = path.resolve("pages")
       getAllFiles(pagesDir, [], [], [".ts", ".tsx", ".js", ".jsx"]).forEach((file) => {
-        const filepath = path.resolve(pagesDir, file)
-        const program = getCollectionFromSource(filepath)
+        try {
+          const filepath = path.resolve(pagesDir, file)
+          const program = getCollectionFromSource(filepath)
 
-        const parsedProgram = program.get()
+          const parsedProgram = program.get()
 
-        const findRouterQueryImport = findImport(program, "next/router")
+          const findRouterQueryImport = findImport(program, "next/router")
 
-        if (findRouterQueryImport?.length) {
-          findRouterQueryImport?.forEach((node) => {
-            const getNode = node.get()
-            getNode.value.specifiers.slice().forEach((specifier: any, index: number) => {
-              const importedName = (): string | null => {
-                if (specifier.imported) {
-                  if (specifier.imported.type === "StringLiteral") {
-                    return specifier.imported.value
-                  } else if (specifier.imported.type === "Identifier") {
-                    return specifier.imported.name
+          if (findRouterQueryImport?.length) {
+            findRouterQueryImport?.forEach((node) => {
+              const getNode = node.get()
+              getNode.value.specifiers.slice().forEach((specifier: any, index: number) => {
+                const importedName = (): string | null => {
+                  if (specifier.imported) {
+                    if (specifier.imported.type === "StringLiteral") {
+                      return specifier.imported.value
+                    } else if (specifier.imported.type === "Identifier") {
+                      return specifier.imported.name
+                    }
+                  }
+                  return null
+                }
+
+                if (importedName() && importedName() === "useRouterQuery") {
+                  addNamedImport(program, "useRouter", "next/router")
+                  getNode.value.specifiers.splice(index, 1)
+                  // Removed left overs
+                  if (!getNode.value.specifiers?.length) {
+                    const index = parsedProgram.value.program.body.indexOf(getNode.value)
+                    parsedProgram.value.program.body.splice(index, 1)
                   }
                 }
-                return null
-              }
-
-              if (importedName() && importedName() === "useRouterQuery") {
-                addNamedImport(program, "useRouter", "next/router")
-                getNode.value.specifiers.splice(index, 1)
-                // Removed left overs
-                if (!getNode.value.specifiers?.length) {
-                  const index = parsedProgram.value.program.body.indexOf(getNode.value)
-                  parsedProgram.value.program.body.splice(index, 1)
-                }
-              }
+              })
             })
-          })
 
-          const findCallUseRouterQuery = program.find(
-            j.CallExpression,
-            (node) => node.callee.name === "useRouterQuery",
-          )
-          findCallUseRouterQuery.forEach((call) => {
-            const nodePath = call.get()
-            nodePath.parentPath.value.init = j.expressionStatement(
-              j.memberExpression(
-                j.callExpression(j.identifier("useRouter"), []),
-                j.identifier("query"),
-              ),
+            const findCallUseRouterQuery = program.find(
+              j.CallExpression,
+              (node) => node.callee.name === "useRouterQuery",
             )
-          })
+            findCallUseRouterQuery.forEach((call) => {
+              const nodePath = call.get()
+              nodePath.parentPath.value.init = j.expressionStatement(
+                j.memberExpression(
+                  j.callExpression(j.identifier("useRouter"), []),
+                  j.identifier("query"),
+                ),
+              )
+            })
 
-          fs.writeFileSync(filepath, program.toSource())
+            fs.writeFileSync(filepath, program.toSource())
+          }
+        } catch (e) {
+          log.error(`Error in changing useRouterQuery to useRouter in the ${file}`)
+          throw new Error(e)
         }
       })
 
       getAllFiles(appDir, [], [], [".ts", ".tsx", ".js", ".jsx"]).forEach((file) => {
-        const filepath = path.resolve(appDir, file)
-        const program = getCollectionFromSource(filepath)
+        try {
+          const filepath = path.resolve(appDir, file)
+          const program = getCollectionFromSource(filepath)
 
-        const parsedProgram = program.get()
-        const findRouterQueryImport = program.find(
-          j.ImportDeclaration,
-          (node) => node.source.value === "next/router",
-        )
-        if (findRouterQueryImport?.length) {
-          findRouterQueryImport.forEach((node) => {
-            const getNode = node.get()
-            getNode.value.specifiers.slice().forEach((specifier: any, index: number) => {
-              const importedName = (): string | null => {
-                if (specifier.imported) {
-                  if (specifier.imported.type === "StringLiteral") {
-                    return specifier.imported.value
-                  } else if (specifier.imported.type === "Identifier") {
-                    return specifier.imported.name
+          const parsedProgram = program.get()
+          const findRouterQueryImport = program.find(
+            j.ImportDeclaration,
+            (node) => node.source.value === "next/router",
+          )
+          if (findRouterQueryImport?.length) {
+            findRouterQueryImport.forEach((node) => {
+              const getNode = node.get()
+              getNode.value.specifiers.slice().forEach((specifier: any, index: number) => {
+                const importedName = (): string | null => {
+                  if (specifier.imported) {
+                    if (specifier.imported.type === "StringLiteral") {
+                      return specifier.imported.value
+                    } else if (specifier.imported.type === "Identifier") {
+                      return specifier.imported.name
+                    }
+                  }
+                  return null
+                }
+
+                if (importedName() && importedName() === "useRouterQuery") {
+                  parsedProgram.value.program.body.unshift(
+                    j.importDeclaration(
+                      [j.importSpecifier(j.identifier("useRouter"))],
+                      j.stringLiteral("next/router"),
+                    ),
+                  )
+                  getNode.value.specifiers.splice(index, 1)
+                  // Removed left overs
+                  if (!getNode.value.specifiers?.length) {
+                    const index = parsedProgram.value.program.body.indexOf(getNode.value)
+                    parsedProgram.value.program.body.splice(index, 1)
                   }
                 }
-                return null
-              }
-
-              if (importedName() && importedName() === "useRouterQuery") {
-                parsedProgram.value.program.body.unshift(
-                  j.importDeclaration(
-                    [j.importSpecifier(j.identifier("useRouter"))],
-                    j.stringLiteral("next/router"),
-                  ),
-                )
-                getNode.value.specifiers.splice(index, 1)
-                // Removed left overs
-                if (!getNode.value.specifiers?.length) {
-                  const index = parsedProgram.value.program.body.indexOf(getNode.value)
-                  parsedProgram.value.program.body.splice(index, 1)
-                }
-              }
+              })
             })
-          })
 
-          const findCallUseRouterQuery = program.find(
-            j.CallExpression,
-            (node) => node.callee.name === "useRouterQuery",
-          )
-          findCallUseRouterQuery.forEach((call) => {
-            const nodePath = call.get()
-            nodePath.parentPath.value.init = j.expressionStatement(
-              j.memberExpression(
-                j.callExpression(j.identifier("useRouter"), []),
-                j.identifier("query"),
-              ),
+            const findCallUseRouterQuery = program.find(
+              j.CallExpression,
+              (node) => node.callee.name === "useRouterQuery",
             )
-          })
+            findCallUseRouterQuery.forEach((call) => {
+              const nodePath = call.get()
+              nodePath.parentPath.value.init = j.expressionStatement(
+                j.memberExpression(
+                  j.callExpression(j.identifier("useRouter"), []),
+                  j.identifier("query"),
+                ),
+              )
+            })
 
-          fs.writeFileSync(filepath, program.toSource())
+            fs.writeFileSync(filepath, program.toSource())
+          }
+        } catch (e) {
+          log.error(`Error in changing useRouterQuery to useRouter in the ${file}`)
+          throw new Error(e)
         }
       })
     },
@@ -878,7 +1045,7 @@ const upgradeLegacy = async () => {
 
       if (appFunction.length) {
         // Store the App function
-        const storeFunction = {...appFunction.get().value}
+        const storeFunction = { ...appFunction.get().value }
         // Create a new withBlitz call expresion with an empty argument
         const withBlitzFunction = (appFunction.get().parentPath.value.declaration =
           j.expressionStatement(j.callExpression(j.identifier("withBlitz"), []))) as any
@@ -888,7 +1055,7 @@ const upgradeLegacy = async () => {
         appIdentifier.forEach((a) => {
           switch (a.name) {
             case "declaration":
-              const storeFunction = {...a.get().value}
+              const storeFunction = { ...a.get().value }
               // Create a new withBlitz call expresion with an empty argument
               const withBlitzFunction = (a.get().parentPath.value.declaration =
                 j.expressionStatement(j.callExpression(j.identifier("withBlitz"), []))) as any
@@ -921,31 +1088,66 @@ const upgradeLegacy = async () => {
         )
 
         const importStatements = findImport(program, "next/document")
-        importStatements?.remove()
+
+        let nextDocumentImportPaths: (ImportSpecifier | ImportDefaultSpecifier)[] = []
+        importStatements?.forEach((path) => {
+          path.value.specifiers?.forEach((s) => {
+            if (s.type === "ImportSpecifier") {
+              // Go through the typical imports required for Next.js and build the correct import specifier
+              switch (s.imported.name) {
+                case "Document":
+                  nextDocumentImportPaths.unshift(
+                    j.importDefaultSpecifier(j.identifier("Document")),
+                  )
+                  break
+                case "BlitzScript":
+                  nextDocumentImportPaths.push(j.importSpecifier(j.identifier("NextScript")))
+                  break
+                case "Html":
+                  nextDocumentImportPaths.push(j.importSpecifier(j.identifier("Html")))
+                  break
+                case "Main":
+                  nextDocumentImportPaths.push(j.importSpecifier(j.identifier("Main")))
+                  break
+                case "DocumentHead":
+                  nextDocumentImportPaths.push(j.importSpecifier(j.identifier("Head")))
+                  break
+                case "DocumentProps":
+                  nextDocumentImportPaths.push(j.importSpecifier(j.identifier("DocumentProps")))
+                  break
+                case "DocumentContext":
+                  nextDocumentImportPaths.push(j.importSpecifier(j.identifier("DocumentContext")))
+                  break
+              }
+            }
+          })
+        })
+
+        // Add new import statement to the top of the _document page
         program
           .get()
           .value.program.body.unshift(
-            j.importDeclaration(
-              [
-                j.importDefaultSpecifier(j.identifier("Document")),
-                j.importSpecifier(j.identifier("Html")),
-                j.importSpecifier(j.identifier("Head")),
-                j.importSpecifier(j.identifier("Main")),
-                j.importSpecifier(j.identifier("NextScript")),
-              ],
-              j.stringLiteral("next/document"),
-            ),
+            j.importDeclaration([...nextDocumentImportPaths], j.stringLiteral("next/document")),
           )
+        // Remove the old import statements
+        importStatements?.remove()
 
-        const documentHead = program
-          .find(j.JSXElement, (node) => node.openingElement.name.name === "DocumentHead")
-          .get()
+        const document = program.find(
+          j.JSXElement,
+          (node) => node.openingElement.name.name === "DocumentHead",
+        )
 
-        documentHead.value.openingElement.name.name = "Head"
-        documentHead.value.closingElement.name.name = "Head"
-
-        const blitzScript = program.find(j.Identifier, (node) => node.name === "BlitzScript").get()
-        blitzScript.value.name = "NextScript"
+        if (document.length) {
+          const documentHead = document.get()
+          documentHead.value.openingElement.name.name = "Head"
+          if (documentHead.value.closingElement) {
+            documentHead.value.closingElement.name.name = "Head"
+          }
+          const blitzScript = program
+            .find(j.Identifier, (node) => node.name === "BlitzScript")
+            .get()
+          blitzScript.value.name = "NextScript"
+        }
 
         fs.writeFileSync(
           path.join(pagesDir, `_document.${isTypescript ? "tsx" : "jsx"}`),
@@ -960,25 +1162,27 @@ const upgradeLegacy = async () => {
     action: async () => {
       const pagesDir = path.resolve("pages")
       getAllFiles(pagesDir, [], ["api"], [".ts", ".tsx", ".js", ".jsx"]).forEach((file) => {
-        const program = getCollectionFromSource(file)
-
-        // 1. getServerSideProps
-        const getServerSidePropsPath = findFunction(program, "getServerSideProps")
-        if (getServerSidePropsPath) {
-          getServerSidePropsPath.forEach((path) =>
-            wrapDeclaration(path, "getServerSideProps", "gSSP"),
-          )
-          addNamedImport(program, "gSSP", "app/blitz-server")
+        try {
+          const program = getCollectionFromSource(file)
+          // 1. getServerSideProps
+          const getServerSidePropsPath = findFunction(program, "getServerSideProps")
+          if (getServerSidePropsPath) {
+            getServerSidePropsPath.forEach((path) =>
+              wrapDeclaration(path, "getServerSideProps", "gSSP"),
+            )
+            addNamedImport(program, "gSSP", "app/blitz-server")
+          }
+          // 2. getStaticProps
+          const getStaticPropsPath = findFunction(program, "getStaticProps")
+          if (getStaticPropsPath) {
+            getStaticPropsPath.forEach((path) => wrapDeclaration(path, "getStaticProps", "gSP"))
+            addNamedImport(program, "gSP", "app/blitz-server")
+          }
+          fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
+        } catch (e) {
+          log.error(`Error in wrapping getServerSideProps, getStaticProps in the ${file}`)
+          throw new Error(e)
         }
-
-        // 2. getStaticProps
-        const getStaticPropsPath = findFunction(program, "getStaticProps")
-        if (getStaticPropsPath) {
-          getStaticPropsPath.forEach((path) => wrapDeclaration(path, "getStaticProps", "gSP"))
-          addNamedImport(program, "gSP", "app/blitz-server")
-        }
-
-        fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
       })
 
       // 3. api
@@ -989,22 +1193,25 @@ const upgradeLegacy = async () => {
           ["rpc"],
           [".ts", ".tsx", ".js", ".jsx"],
         ).forEach((file) => {
-          const program = getCollectionFromSource(file)
+          try {
+            const program = getCollectionFromSource(file)
+            const defaultExportPath = findDefaultExportPath(program)
+            if (defaultExportPath) {
+              const { node } = defaultExportPath
 
-          const defaultExportPath = findDefaultExportPath(program)
+              if (node.declaration.type === "Identifier") {
+                node.declaration = j.callExpression(j.identifier("api"), [node.declaration as any])
+                addNamedImport(program, "api", "app/blitz-server")
+              } else if (node.declaration.type === "FunctionDeclaration") {
+                node.declaration = j.template.expression`api(${node.declaration})`
+                addNamedImport(program, "api", "app/blitz-server")
+              }
 
-          if (defaultExportPath) {
-            const {node} = defaultExportPath
-
-            if (node.declaration.type === "Identifier") {
-              node.declaration = j.callExpression(j.identifier("api"), [node.declaration as any])
-              addNamedImport(program, "api", "app/blitz-server")
-            } else if (node.declaration.type === "FunctionDeclaration") {
-              node.declaration = j.template.expression`api(${node.declaration})`
-              addNamedImport(program, "api", "app/blitz-server")
+              fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
             }
-
-            fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
+          } catch (e) {
+            log.error(`Error in wrapping api in the ${file}`)
+            throw new Error(e)
           }
         })
       }
@@ -1026,7 +1233,7 @@ const upgradeLegacy = async () => {
       })
 
       if (errors > 0) {
-        throw new Error("Local middleware is not supported")
+        throw new ExpectedError("Local middleware is not supported")
       }
     },
   })
@@ -1071,7 +1278,7 @@ const upgradeLegacy = async () => {
 
   steps.push({
     name: "check for usages of invokeWithMiddleware",
-    action: async () => {
+    action: async (stepIndex) => {
       let errors = 0
 
       getAllFiles(appDir, [], [], [".ts", ".tsx", ".js", ".jsx"]).forEach((file) => {
@@ -1093,57 +1300,20 @@ const upgradeLegacy = async () => {
       })
 
       if (errors > 0) {
-        throw new Error(
-          "\n invokeWithMiddleware is not supported. \n Use invokeWithCtx instead: https://canary.blitzjs.com/docs/resolver-server-utilities#invoke-with-ctx \n Fix the files above, then run the codemod again.",
-        )
+        collectedErrors.push({
+          message:
+            "\n invokeWithMiddleware is not supported. \n Use invokeWithCtx instead: https://canary.blitzjs.com/docs/resolver-server-utilities#invoke-with-ctx \n Fix the files above, then run the codemod again.",
+          step: stepIndex,
+        })
+
+        // Write to the migration file so the user can run the migration again from this point
+        failedAt = stepIndex + 1
+        fs.writeJsonSync(".migration.json", {
+          failedAt,
+        })
       }
     },
   })
-
-  // steps.push({
-  //   name: "Update invokeMiddleware to invoke",
-  //   action: async () => {
-  //     getAllFiles(appDir, [], [], [".css"]).forEach((file) => {
-  //       const program = getCollectionFromSource(file)
-  //       const importSpecifier = findImportSpecifier(program, "invokeWithMiddleware")
-  //       importSpecifier?.paths().forEach((path) => {
-  //         path.get().value.imported.name = "invoke"
-  //       })
-
-  //       const invokeWithMiddlewarePath = findCallExpression(program, "invokeWithMiddleware")
-  //       if (invokeWithMiddlewarePath?.length) {
-  //         invokeWithMiddlewarePath?.paths().forEach((path) => {
-  //           path.get().value.callee.name = "invoke"
-  //           if (path.get().value.arguments.length === 3) {
-  //             delete path.get().value.arguments[2]
-  //           }
-  //         })
-  //       }
-
-  //       fs.writeFileSync(path.resolve(file), program.toSource())
-  //     })
-
-  //     getAllFiles(path.resolve("pages"), [], [], [".css"]).forEach((file) => {
-  //       const program = getCollectionFromSource(file)
-  //       const importSpecifier = findImportSpecifier(program, "invokeWithMiddleware")
-  //       importSpecifier?.paths().forEach((path) => {
-  //         path.get().value.imported.name = "invoke"
-  //       })
-
-  //       const invokeWithMiddlewarePath = findCallExpression(program, "invokeWithMiddleware")
-  //       if (invokeWithMiddlewarePath?.length) {
-  //         invokeWithMiddlewarePath?.paths().forEach((path) => {
-  //           path.get().value.callee.name = "invoke"
-  //           if (path.get().value.arguments.length === 3) {
-  //             delete path.get().value.arguments[2]
-  //           }
-  //         })
-  //       }
-
-  //       fs.writeFileSync(path.resolve(file), program.toSource())
-  //     })
-  //   },
-  // })
 
   // Loop through steps and run the action
   if ((failedAt && failedAt < steps.length) || failedAt !== "SUCCESS" || isLegacyBlitz) {
@@ -1154,9 +1324,16 @@ const upgradeLegacy = async () => {
       }
       const spinner = log.spinner(log.withBrand(`Running ${step.name}...`)).start()
       try {
-        await step.action()
+        await step.action(index)
+        if (collectedErrors.filter((e) => e.step === index).length) {
+          // Soft stored error
+          spinner.fail(`${step.name}`)
+        } else {
+          spinner.succeed(`Successfully ran ${step.name}`)
+        }
       } catch (err) {
-        const error = err as {code: string} | string
+        // Hard exit error
+        const error = err as { code: string } | string
         spinner.fail(`${step.name}`)
         log.error(error as string)
 
@@ -1166,7 +1343,7 @@ const upgradeLegacy = async () => {
               "Don't panic, go to the file with the error & manually fix it. Then run the codemod again. It will continue where it left off.",
             ),
           )
-        } else {
+        } else if (!(err instanceof ExpectedError)) {
           log.error(
             log.withBrand(
               "This is an unexpected error. Please ask for help in the discord #general-help channel. https://discord.blitzjs.com",
@@ -1179,10 +1356,12 @@ const upgradeLegacy = async () => {
         })
         process.exit(1)
       }
-
-      spinner.succeed(`Successfully ran ${step.name}`)
     }
-
+    if (collectedErrors.length) {
+      for (const error of collectedErrors) {
+        log.error(`⚠️  ${error.message}`)
+      }
+    }
     fs.writeJsonSync(".migration.json", {
       failedAt: "SUCCESS",
     })
@@ -1195,4 +1374,4 @@ const upgradeLegacy = async () => {
   }
 }
 
-export {upgradeLegacy}
+export { upgradeLegacy }

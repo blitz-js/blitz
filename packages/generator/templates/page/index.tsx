@@ -1,4 +1,5 @@
 import {Suspense} from "react"
+import {Routes} from '@blitzjs/next'
 if (process.env.parentModel) {
   import Head from "next/head"
   import Link from 'next/link'
@@ -37,7 +38,7 @@ export const __ModelNames__List = () => {
         <ul>
           {__modelNames__.map((__modelName__) => (
             <li key={__modelName__.id}>
-              <Link href={{pathname: `/__modelName__s/[__modelId__]`, query: {__modelId__: __modelName__.id}}}>
+              <Link href={Routes.Show__ModelName__Page({ __modelId__: __modelName__.id })}>
                 <a>{__modelName__.name}</a>
               </Link>
             </li>
@@ -68,11 +69,11 @@ export const __ModelNames__List = () => {
           {__modelNames__.map((__modelName__) => (
             <li key={__modelName__.id}>
               <if condition="parentModel">
-                <Link href={{pathname: '/__parentModel__/[__parentModelId__]/__modelName__s/[__modelId__]', query: {__parentModelId__: __parentModelId__!, __modelId__: __modelName__.id}}}>
+                <Link href={Routes.Show__ModelName__Page({ __parentModelId__: __parentModelId__!, __modelId__: __modelName__.id })}>
                   <a>{__modelName__.name}</a>
                 </Link>               
                 <else>
-                  <Link href={{pathname: '/__modelName__s/[__modelId__]', query: {__modelId__: __modelName__.id}}}>
+                  <Link href={Routes.Show__ModelName__Page({ __modelId__: __modelName__.id })}>
                     <a>{__modelName__.name}</a>
                   </Link>
                 </else>
@@ -106,11 +107,11 @@ const __ModelNames__Page = () => {
       <div>
         <p>
           <if condition="parentModel">
-            <Link href={{pathname: '/__parentModel__/[__parentModelId__]/__modelName__s/new', query: {__parentModelId__: __parentModelId__!} }}>
+            <Link href={Routes.New__ModelName__Page({ __parentModelId__: __parentModelId__! })}>
               <a>Create __ModelName__</a>
             </Link>
             <else>
-              <Link href={{pathname: '/__modelName__s/new'}}>
+              <Link href={Routes.New__ModelName__Page()}>
                 <a>Create __ModelName__</a>
               </Link>
             </else>

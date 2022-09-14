@@ -2,6 +2,7 @@ import * as ast from "@mrleebo/prisma-ast"
 import {spawn} from "cross-spawn"
 import which from "npm-which"
 import path from "path"
+import {log} from "../utils/log"
 import {Generator, GeneratorOptions, SourceRootType} from "../generator"
 import {Field} from "../prisma/field"
 import {Model} from "../prisma/model"
@@ -88,8 +89,10 @@ export class ModelGenerator extends Generator<ModelGeneratorOptions> {
           dryRun ? "" : ` ${updatedOrCreated} in schema.prisma`
         }:\n`,
       )
-      ast.printSchema({type: "schema", list: [model]}).split("\n")
-      // .map(log.progress) // todo
+      ast
+        .printSchema({type: "schema", list: [model]})
+        .split("\n")
+        .map(log.progress)
       console.log("\n")
     }
   }

@@ -12,6 +12,8 @@ import j, {
   Identifier,
 } from "jscodeshift"
 import {parseSync} from "@babel/core"
+import {fetchDistTags} from "@blitzjs/generator"
+import {PromiseReturnType} from "blitz"
 
 export function findIdentifier(program: Collection<any>, name: string): Collection<Identifier> {
   return program.find(j.Identifier, (node) => node.name === name)
@@ -323,6 +325,33 @@ export function replaceIdentifiers(
   findIdentifier(program, identifier)
     .paths()
     .forEach((path) => {
-      path.value.name = "NextApiRequest"
+      path.value.name = newIdentifier
     })
+}
+
+export const replaceBlitzPkgsVersions = async (
+  packageJson: {dependencies?: Record<string, any>},
+  npmTag: string,
+) => {
+  let blitzPkgVersion = npmTag
+  const result = await fetchDistTags("blitz")
+  if (npmTag in result) {
+    blitzPkgVersion = result[npmTag]
+  }
+
+  if (!packageJson.dependencies) {
+    packageJson.dependencies = {}
+  }
+
+  packageJson.dependencies["@blitzjs/next"] = blitzPkgVersion
+  packageJson.dependencies["@blitzjs/rpc"] = blitzPkgVersion
+  packageJson.dependencies["@blitzjs/auth"] = blitzPkgVersion
+  packageJson.dependencies["blitz"] = blitzPkgVersion
+  packageJson.dependencies["next"] = "12.2.0"
+
+  // for zod, we want to use the latest version
+  const zodResult = await fetchDistTags("zod")
+  packageJson.dependencies["zod"] = zodResult["latest"] || "latest"
+
+  return packageJson
 }

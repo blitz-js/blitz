@@ -1,4 +1,3 @@
-import {loadEnvConfig} from "../../env-utils"
 import prompts from "prompts"
 import path from "path"
 import chalk from "chalk"
@@ -6,8 +5,10 @@ import hasbin from "hasbin"
 import {CliCommand} from "../index"
 import arg from "arg"
 import {AppGenerator, AppGeneratorOptions, getLatestVersion} from "@blitzjs/generator"
+import {loadEnvConfig} from "../../utils/env"
+import {runPrisma} from "../../utils/run-prisma"
 import {checkLatestVersion} from "../utils/check-latest-version"
-import {runPrisma} from "../../run-prisma"
+import {codegenTasks} from "../utils/codegen-tasks"
 
 type NotUndefined<T> = T extends undefined ? never : T
 const forms: Record<NotUndefined<AppGeneratorOptions["form"]>, string> = {
@@ -270,6 +271,10 @@ const newApp: CliCommand = async (argv) => {
           )
           const result = await runPrisma(["migrate", "dev", "--name", "Initial migration"], true)
           if (!result.success) throw new Error()
+
+          if (projectPkgManger === "yarn") {
+            await codegenTasks()
+          }
         } catch (error) {
           postInstallSteps.push(
             "blitz prisma migrate dev (when asked, you can name the migration anything)",
@@ -296,8 +301,10 @@ const newApp: CliCommand = async (argv) => {
       console.log(chalk.yellow(`   ${index + 1}. ${step}`))
     })
     console.log("") // new line
+    process.exit(0)
   } catch (error) {
     console.error(error)
+    process.exit(1)
   }
 }
 

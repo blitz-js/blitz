@@ -1,7 +1,7 @@
 import arg from "arg"
 import spawn from "cross-spawn"
 
-import {loadEnvConfig} from "../env-utils"
+import {loadEnvConfig} from "../utils/env"
 import {NON_STANDARD_NODE_ENV} from "./utils/constants"
 import {getCommandBin} from "./utils/config"
 import {readVersions} from "./utils/read-versions"
@@ -41,7 +41,7 @@ const aliases: Record<string, keyof typeof commands> = {
   b: "build",
   s: "start",
   n: "new",
-  g: "generate",
+  // g: "generate",
 }
 
 type Command = keyof typeof commands

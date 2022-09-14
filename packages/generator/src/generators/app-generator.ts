@@ -4,9 +4,9 @@ import {readJSONSync, writeJson} from "fs-extra"
 import {join} from "path"
 import username from "username"
 import {Generator, GeneratorOptions, SourceRootType} from "../generator"
+import {baseLogger, log} from "../utils/log"
 import {fetchLatestVersionsFor} from "../utils/fetch-latest-version-for"
 import {getBlitzDependencyVersion} from "../utils/get-blitz-dependency-version"
-import {baseLogger, log} from "../utils/log"
 
 function assert(condition: any, message: string): asserts condition {
   if (!condition) throw new Error(message)
@@ -27,7 +27,7 @@ export interface AppGeneratorOptions extends GeneratorOptions {
   version: string
   skipInstall: boolean
   skipGit: boolean
-  form?: "finalform" | "hookform" | "formik"
+  form: "finalform" | "hookform" | "formik"
   onPostInstall?: () => Promise<void>
 }
 
@@ -43,7 +43,7 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
     if (!this.options.useTs) {
       return [
         "tsconfig.json",
-        "blitz-env.d.ts",
+        "next-env.d.ts",
         "jest.config.ts",
         "package.ts.json",
         "pre-push-ts",
@@ -120,7 +120,7 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
     ] = await Promise.all([
       fetchLatestVersionsFor(pkg.dependencies),
       fetchLatestVersionsFor(pkg.devDependencies),
-      getBlitzDependencyVersion(this.options.version),
+      getBlitzDependencyVersion(),
     ])
 
     pkg.dependencies = newDependencies

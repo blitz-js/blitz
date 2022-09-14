@@ -9,6 +9,8 @@ export * from "./generators/form-generator"
 export * from "./generator"
 export * from "./conflict-checker"
 export {getLatestVersion} from "./utils/get-latest-version"
+export * from "./utils/npm-fetch"
+export * from "./utils/get-blitz-dependency-version"
 export {
   singleCamel,
   singlePascal,
