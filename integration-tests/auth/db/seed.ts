@@ -2,10 +2,7 @@ import prisma from "./index"
 import {SecurePassword} from "@blitzjs/auth"
 
 const seed = async () => {
-  await prisma.$reset()
-
   const hashedPassword = await SecurePassword.hash("abcd1234")
-
   await prisma.user.create({
     data: {
       email: "test@test.com",
@@ -13,6 +10,9 @@ const seed = async () => {
       role: "user",
     },
   })
+  process.exit(0)
 }
+
+seed()
 
 export default seed

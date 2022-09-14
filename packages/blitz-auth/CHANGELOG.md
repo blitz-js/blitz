@@ -1,5 +1,15 @@
 # @blitzjs/auth
 
+## 2.0.0-beta.4
+
+### Patch Changes
+
+- 713aead9: Allow specifying custom strategy name in Blitz's passport adapter
+- Updated dependencies [c213d521]
+- Updated dependencies [0b94a450]
+- Updated dependencies [161270e3]
+  - blitz@2.0.0-beta.4
+
 ## 2.0.0-beta.3
 
 ### Patch Changes
