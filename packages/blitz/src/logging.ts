@@ -52,9 +52,7 @@ export function findCallExpression(
     j.CallExpression,
     (node) => node.callee.name === declarationName,
   )
-
   const paths = callExpression.length ? callExpression : null
-
   return paths
 }
 
