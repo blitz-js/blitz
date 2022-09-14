@@ -1,5 +1,15 @@
 import {describe, it, expect, beforeAll, afterAll} from "vitest"
-import {killApp, findPort, launchApp, nextBuild, nextStart} from "../../utils/next-test-utils"
+import {
+  killApp,
+  findPort,
+  launchApp,
+  nextBuild,
+  nextStart,
+  runBlitzCommand,
+  blitzLaunchApp,
+  blitzBuild,
+  blitzStart,
+} from "../../utils/next-test-utils"
 import webdriver from "../../utils/next-webdriver"
 
 import {join} from "path"
@@ -30,8 +40,9 @@ describe("No Suspense Tests", () => {
   describe("dev mode", () => {
     beforeAll(async () => {
       try {
+        await runBlitzCommand(["prisma", "migrate", "reset", "--force"])
         appPort = await findPort()
-        app = await launchApp(appDir, appPort, {cwd: process.cwd()})
+        app = await blitzLaunchApp(appPort, {cwd: process.cwd()})
       } catch (error) {
         console.log(error)
       }
@@ -43,9 +54,11 @@ describe("No Suspense Tests", () => {
   describe("server mode", () => {
     beforeAll(async () => {
       try {
-        await nextBuild(appDir)
+        await runBlitzCommand(["prisma", "generate"])
+        await runBlitzCommand(["prisma", "migrate", "deploy"])
+        await blitzBuild()
         appPort = await findPort()
-        app = await nextStart(appDir, appPort, {cwd: process.cwd()})
+        app = await blitzStart(appPort, {cwd: process.cwd()})
       } catch (err) {
         console.log(err)
       }

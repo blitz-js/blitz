@@ -1,5 +1,5 @@
 import {api} from "../../app/blitz-server"
-import prisma from "../../prisma/index"
+import prisma from "../../db/index"
 import {SecurePassword} from "@blitzjs/auth"
 import {Role} from "../../types"
 

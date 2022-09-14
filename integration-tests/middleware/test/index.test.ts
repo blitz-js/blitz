@@ -6,6 +6,9 @@ import {
   nextBuild,
   nextStart,
   fetchViaHTTP,
+  blitzLaunchApp,
+  blitzBuild,
+  blitzStart,
 } from "../../utils/next-test-utils"
 import {join} from "path"
 
@@ -46,7 +49,7 @@ describe("Middleware Tests", () => {
     beforeAll(async () => {
       try {
         appPort = await findPort()
-        app = await launchApp(appDir, appPort, {cwd: process.cwd()})
+        app = await blitzLaunchApp(appPort, {cwd: process.cwd()})
       } catch (error) {
         console.log(error)
       }
@@ -58,9 +61,9 @@ describe("Middleware Tests", () => {
   describe("server mode", () => {
     beforeAll(async () => {
       try {
-        await nextBuild(appDir)
+        await blitzBuild()
         appPort = await findPort()
-        app = await nextStart(appDir, appPort, {cwd: process.cwd()})
+        app = await blitzStart(appPort, {cwd: process.cwd()})
       } catch (err) {
         console.log(err)
       }
