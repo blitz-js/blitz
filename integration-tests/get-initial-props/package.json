@@ -1,5 +1,5 @@
 {
-  "name": "test-trailing-slash",
+  "name": "test-get-initial-props",
   "version": "0.0.0",
   "private": true,
   "scripts": {
