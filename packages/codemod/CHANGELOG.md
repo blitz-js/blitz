@@ -1,5 +1,24 @@
 # @blitzjs/codemod
 
+## 2.0.0-beta.4
+
+### Patch Changes
+
+- d3403cf8: Show file path on error when running the upgrade legacy codemod.
+- 74a4ce8e: Add `AuthenticatedSessionContext` to the `upgrade-legacy` codemod import map
+- 43e65cfe: Remove TypeScript type annotations from `next.config.js` (a JavaScript file) in the `upgrade-legacy` codemod.
+- da914c92: Convert import statements to require when creating the next.config.js file in the codemod
+- Updated dependencies [7498aef4]
+- Updated dependencies [c213d521]
+- Updated dependencies [0b94a450]
+- Updated dependencies [22344d05]
+- Updated dependencies [8fa9a56f]
+- Updated dependencies [c53978d5]
+- Updated dependencies [a84b8de4]
+- Updated dependencies [161270e3]
+  - @blitzjs/generator@2.0.0-beta.4
+  - blitz@2.0.0-beta.4
+
 ## 2.0.0-beta.3
 
 ### Patch Changes

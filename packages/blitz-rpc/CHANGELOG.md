@@ -1,5 +1,15 @@
 # @blitzjs/rpc
 
+## 2.0.0-beta.4
+
+### Patch Changes
+
+- c213d521: Fix issue with the route name that's generated for nested routes in @blitzjs/rpc. This was causing issues for windows users.
+- 0b94a450: Upgrade superjson to the latest version
+- f6dac093: Improve RPC logging: print `resolverName()` insetad of `/resolverName()`
+- Updated dependencies [713aead9]
+  - @blitzjs/auth@2.0.0-beta.4
+
 ## 2.0.0-beta.3
 
 ### Patch Changes
