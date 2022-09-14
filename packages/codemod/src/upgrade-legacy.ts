@@ -1278,43 +1278,35 @@ const upgradeLegacy = async () => {
 
   steps.push({
     name: "check for usages of invokeWithMiddleware",
-    action: async (stepIndex) => {
-      let errors = 0
-
-      getAllFiles(appDir, [], [], [".ts", ".tsx", ".js", ".jsx"]).forEach((file) => {
-        const program = getCollectionFromSource(file)
-        const invokeWithMiddlewarePath = findCallExpression(program, "invokeWithMiddleware")
-        if (invokeWithMiddlewarePath?.length) {
-          log.error(`\n invokeWithMiddleware found at ${file}. \n`)
-          errors++
-        }
-      })
-
+    action: async () => {
       getAllFiles(path.resolve("pages"), [], [], [".ts", ".tsx", ".js", ".jsx"]).forEach((file) => {
         const program = getCollectionFromSource(file)
-        const invokeWithMiddlewarePath = findCallExpression(program, "invokeWithMiddleware")
-        if (invokeWithMiddlewarePath?.length) {
-          log.error(`\n invokeWithMiddleware found at ${file}. \n`)
-          errors++
+        try {
+          const invokeWithMiddlewarePath = findCallExpression(program, "invokeWithMiddleware")
+          if (invokeWithMiddlewarePath?.length) {
+            invokeWithMiddlewarePath.forEach((path) => {
+             const resolverName = path.value.arguments.at(0)
+             if(resolverName?.type === "Identifier") {
+              const resolverExpression = j.callExpression(
+                j.identifier(resolverName.name),
+                path.value.arguments.slice(1),
+              )
+              const resolverStatement = j.expressionStatement(resolverExpression)
+              j(path).replaceWith(resolverStatement)
+             }
+             else{
+              throw new Error(`invokeWithMiddleware can only be used with a resolver as the first argument \nError at Line ${path?.value?.loc?.start.line}`)
+             }
+            })              
+          }
+        } catch (e:any) {
+          log.error(`\nError in checking invokeWithMiddleware in ${file}`)
+          throw new Error(e)
         }
+        fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
       })
-
-      if (errors > 0) {
-        collectedErrors.push({
-          message:
-            "\n invokeWithMiddleware is not supported. \n Use invokeWithCtx instead: https://canary.blitzjs.com/docs/resolver-server-utilities#invoke-with-ctx \n Fix the files above, then run the codemod again.",
-          step: stepIndex,
-        })
-
-        // Write to the migration file so the user can run the migration again from this point
-        failedAt = stepIndex + 1
-        fs.writeJsonSync(".migration.json", {
-          failedAt,
-        })
-      }
     },
   })
-
   // Loop through steps and run the action
   if ((failedAt && failedAt < steps.length) || failedAt !== "SUCCESS" || isLegacyBlitz) {
     for (let [index, step] of steps.entries()) {
