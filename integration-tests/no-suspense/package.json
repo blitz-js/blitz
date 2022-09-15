@@ -2,9 +2,12 @@
   "name": "test-no-suspense",
   "version": "0.0.0",
   "private": true,
+  "prisma": {
+    "schema": "db/schema.prisma"
+  },
   "scripts": {
     "start:dev": "pnpm run prisma:start && next dev",
-    "test": "pnpm run prisma:start && vitest run",
+    "test": "vitest run",
     "test-watch": "vitest",
     "start": "next start",
     "lint": "next lint",
