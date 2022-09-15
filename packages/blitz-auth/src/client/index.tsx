@@ -248,6 +248,11 @@ export function getAuthValues<TProps = any>(
 function withBlitzAuthPlugin<TProps = any>(Page: ComponentType<TProps> | BlitzPage<TProps>) {
   const AuthRoot = (props: ComponentProps<any>) => {
     useSession({suspense: false})
+    const [mounted, setMounted] = useState<boolean>(false)
+
+    useEffect(() => {
+      setMounted(true)
+    }, [])
 
     let {authenticate, redirectAuthenticatedTo} = getAuthValues(Page, props)
 
@@ -274,9 +279,11 @@ function withBlitzAuthPlugin<TProps = any>(Page: ComponentType<TProps> | BlitzPa
               : formatWithValidation(redirectAuthenticatedTo)
 
           debug("[BlitzAuthInnerRoot] redirecting to", redirectUrl)
-          const error = new RedirectError(redirectUrl)
-          error.stack = null!
-          throw error
+          if (mounted) {
+            const error = new RedirectError(redirectUrl)
+            error.stack = null!
+            throw error
+          }
         }
       } else {
         debug("[BlitzAuthInnerRoot] logged out")
@@ -289,9 +296,11 @@ function withBlitzAuthPlugin<TProps = any>(Page: ComponentType<TProps> | BlitzPa
           const url = new URL(redirectTo, window.location.href)
           url.searchParams.append("next", window.location.pathname)
           debug("[BlitzAuthInnerRoot] redirecting to", url.toString())
-          const error = new RedirectError(url.toString())
-          error.stack = null!
-          throw error
+          if (mounted) {
+            const error = new RedirectError(url.toString())
+            error.stack = null!
+            throw error
+          }
         }
       }
     }
