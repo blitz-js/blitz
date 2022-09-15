@@ -1,5 +1,82 @@
 # blitz
 
+## 2.0.0-beta.4
+
+### Patch Changes
+
+- c213d521: Fix issue with the route name that's generated for nested routes in @blitzjs/rpc. This was causing issues for windows users.
+- 0b94a450: Upgrade superjson to the latest version
+- 161270e3: Only run the prisma generate command when the schema file changes.
+- Updated dependencies [7498aef4]
+- Updated dependencies [22344d05]
+- Updated dependencies [8fa9a56f]
+- Updated dependencies [c53978d5]
+- Updated dependencies [a84b8de4]
+  - @blitzjs/generator@2.0.0-beta.4
+
+## 2.0.0-beta.3
+
+### Patch Changes
+
+- 638f2319: Prevent `Minified react error #419` in production
+- Updated dependencies [b72d1215]
+  - @blitzjs/generator@2.0.0-beta.3
+
+## 2.0.0-beta.2
+
+### Patch Changes
+
+- db7233db: Bump react, react-dom, @types/react and next versions
+
+  This fixes a console warning: `Warning: Received`true`for a non-boolean attribute`global`.` when using `styled-jsx`. Versions bump also fixes React Hydration error that happens on and off when using `redirectAuthenticatedTo`.
+
+- 0936cb38: Patch Next.js Suspense issue in all node environments. Previously we only patched it in the `development` environment, but now we make sure it gets patched in the `production` env (with the `blitz build` command) as well.
+- 3f9fe8f0: Exit CLI process after `blitz new` command is finished
+- Updated dependencies [db7233db]
+- Updated dependencies [eb971568]
+- Updated dependencies [8ada2c26]
+  - @blitzjs/generator@2.0.0-beta.2
+
+## 2.0.0-beta.1
+
+### Patch Changes
+
+- Updated dependencies [0f4926fd]
+  - @blitzjs/generator@2.0.0-beta.1
+
+## 2.0.0-beta.72
+
+### Patch Changes
+
+- 2cc888ef: Beta release
+- Updated dependencies [2cc888ef]
+  - @blitzjs/generator@2.0.0-beta.72
+
+## 2.0.0-alpha.71
+
+### Patch Changes
+
+- Updated dependencies [176c7b8b]
+  - @blitzjs/generator@2.0.0-alpha.71
+
+## 2.0.0-alpha.70
+
+### Patch Changes
+
+- Updated dependencies [4656e6ec]
+- Updated dependencies [1e0ec7a9]
+  - @blitzjs/generator@2.0.0-alpha.70
+
+## 2.0.0-alpha.69
+
+### Patch Changes
+
+- fd31e56b: Add back blitz generate command
+- Updated dependencies [fd31e56b]
+- Updated dependencies [6baab190]
+- Updated dependencies [37623a4f]
+  - @blitzjs/generator@2.0.0-alpha.69
+
 ## 2.0.0-alpha.68
 
 ### Patch Changes

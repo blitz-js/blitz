@@ -92,8 +92,6 @@ __name__
 │   │   ├── components/
 │   │   │   ├── Form.tsx
 │   │   │   └── LabeledTextField.tsx
-│   │   ├── hooks/
-│   │   │   └── useCurrentUser.ts
 │   │   └── layouts/
 │   │       └── Layout.tsx
 │   ├── pages/
@@ -103,6 +101,8 @@ __name__
 │   │   ├── index.test.tsx
 │   │   └── index.tsx
 │   └── users/
+│       ├── hooks/
+│       │   └── useCurrentUser.ts
 │       └── queries/
 │           └── getCurrentUser.ts
 ├── db/

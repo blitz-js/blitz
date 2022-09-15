@@ -67,7 +67,7 @@ export function assignDefaultsBase(userConfig: {[key: string]: any}) {
 export function loadConfigProduction(pagesDir: string) {
   let userConfigModule
   try {
-    const path = join(pagesDir, "next.confi.js")
+    const path = join(pagesDir, "next.config.js")
     debug("Loading config from ", path)
     // eslint-disable-next-line no-eval -- block webpack from following this module path
     userConfigModule = eval("require")(path)

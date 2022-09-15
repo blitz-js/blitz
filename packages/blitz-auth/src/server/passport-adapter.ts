@@ -39,6 +39,7 @@ export type BlitzPassportConfigCallback = ({
 export type BlitzPassportConfig = BlitzPassportConfigObject | BlitzPassportConfigCallback
 
 export type BlitzPassportStrategy = {
+  name?: string
   authenticateOptions?: AuthenticateOptions
   strategy: Strategy
 }
@@ -108,15 +109,19 @@ export function passportAuth(config: BlitzPassportConfig): ApiHandler {
       "No Passport strategies found! Please add at least one strategy.",
     )
 
-    const blitzStrategy = configObject.strategies.find(
-      ({strategy}) => strategy.name === req.query?.auth?.[0] ?? "",
+    // Find the requested strategy based on the manually specified name.
+    // Use default strategy name if a custom name is not specified.
+    const blitzStrategy = configObject.strategies.find(({name, strategy}) =>
+      name ? name == req.query?.auth?.[0] : strategy.name === req.query?.auth?.[0] ?? "",
     )
     assert(blitzStrategy, `A passport strategy was not found for: ${req.query.auth[0]}`)
 
-    const {strategy, authenticateOptions} = blitzStrategy
+    const {name, strategy, authenticateOptions} = blitzStrategy
 
-    passport.use(strategy)
-    const strategyName = strategy.name as string
+    assert(typeof strategy.name  !== "undefined", `A passport strategy name was not found for: ${req.query.auth[0]}`)
+    
+    const strategyName = name || strategy.name
+    passport.use(strategyName, strategy)
 
     if (req.query.auth.length === 1) {
       console.info(`Starting authentication via ${strategyName}...`)

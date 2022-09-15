@@ -325,7 +325,7 @@ export function replaceIdentifiers(
   findIdentifier(program, identifier)
     .paths()
     .forEach((path) => {
-      path.value.name = "NextApiRequest"
+      path.value.name = newIdentifier
     })
 }
 

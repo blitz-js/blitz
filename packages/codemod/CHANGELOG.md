@@ -1,5 +1,102 @@
 # @blitzjs/codemod
 
+## 2.0.0-beta.4
+
+### Patch Changes
+
+- d3403cf8: Show file path on error when running the upgrade legacy codemod.
+- 74a4ce8e: Add `AuthenticatedSessionContext` to the `upgrade-legacy` codemod import map
+- 43e65cfe: Remove TypeScript type annotations from `next.config.js` (a JavaScript file) in the `upgrade-legacy` codemod.
+- da914c92: Convert import statements to require when creating the next.config.js file in the codemod
+- Updated dependencies [7498aef4]
+- Updated dependencies [c213d521]
+- Updated dependencies [0b94a450]
+- Updated dependencies [22344d05]
+- Updated dependencies [8fa9a56f]
+- Updated dependencies [c53978d5]
+- Updated dependencies [a84b8de4]
+- Updated dependencies [161270e3]
+  - @blitzjs/generator@2.0.0-beta.4
+  - blitz@2.0.0-beta.4
+
+## 2.0.0-beta.3
+
+### Patch Changes
+
+- 2313fa61: Fix upgrade-legacy codemod replacing identifiers with an invalid value. Previously new values were hardcoded to `NextApiRequest`. Now we're using correct values provided as `replaceIdentifiers` function argument.
+- 1bf185d6: Add a new codemod step to update the .eslintrc.js file
+- Updated dependencies [638f2319]
+- Updated dependencies [b72d1215]
+  - blitz@2.0.0-beta.3
+  - @blitzjs/generator@2.0.0-beta.3
+
+## 2.0.0-beta.2
+
+### Patch Changes
+
+- db7233db: Bump react, react-dom, @types/react and next versions
+
+  This fixes a console warning: `Warning: Received`true`for a non-boolean attribute`global`.` when using `styled-jsx`. Versions bump also fixes React Hydration error that happens on and off when using `redirectAuthenticatedTo`.
+
+- a3b5fdd0: Change ES6 import for `withBlitz` during the codemod to the require syntax.
+- ebfb562b: Add `Script` as a default import from next.js during the codemod.
+- Updated dependencies [db7233db]
+- Updated dependencies [eb971568]
+- Updated dependencies [0936cb38]
+- Updated dependencies [8ada2c26]
+- Updated dependencies [3f9fe8f0]
+  - blitz@2.0.0-beta.2
+  - @blitzjs/generator@2.0.0-beta.2
+
+## 2.0.0-beta.1
+
+### Patch Changes
+
+- 0f4926fd: Set current Blitz tag to latest
+- Updated dependencies [0f4926fd]
+  - @blitzjs/generator@2.0.0-beta.1
+  - blitz@2.0.0-beta.1
+
+## 2.0.0-beta.72
+
+### Patch Changes
+
+- 2cc888ef: Beta release
+- Updated dependencies [2cc888ef]
+  - blitz@2.0.0-beta.72
+  - @blitzjs/generator@2.0.0-beta.72
+
+## 2.0.0-alpha.71
+
+### Patch Changes
+
+- Updated dependencies [176c7b8b]
+  - @blitzjs/generator@2.0.0-alpha.71
+  - blitz@2.0.0-alpha.71
+
+## 2.0.0-alpha.70
+
+### Patch Changes
+
+- f88702c1: Remove trailing comma when removing BlitzConfig from next.config.js & Fix codemod so if route (eg. `app/auth/pages`) convert to (eg. `pages/`) instead of (eg. `pages/auth`)
+- Updated dependencies [4656e6ec]
+- Updated dependencies [1e0ec7a9]
+  - @blitzjs/generator@2.0.0-alpha.70
+  - blitz@2.0.0-alpha.70
+
+## 2.0.0-alpha.69
+
+### Patch Changes
+
+- 86af6dec: Wrap middlewares with BlitzServerMiddleware function with codemod
+- 72a332e0: Wrap `blitz.config.ts` with the `withBlitz` function during the codemod step instead of creating a blank `next.config.js` file.
+- 2d1482fc: Allow codemod to finish if `cookiePrefix` is undefined. Then show error at the end of running the codemod.
+- Updated dependencies [fd31e56b]
+- Updated dependencies [6baab190]
+- Updated dependencies [37623a4f]
+  - blitz@2.0.0-alpha.69
+  - @blitzjs/generator@2.0.0-alpha.69
+
 ## 2.0.0-alpha.68
 
 ### Patch Changes

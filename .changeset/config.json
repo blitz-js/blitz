@@ -2,10 +2,21 @@
   "$schema": "https://unpkg.com/@changesets/config@2.0.0/schema.json",
   "changelog": "@changesets/cli/changelog",
   "commit": false,
-  "fixed": [["blitz"], ["@blitzjs/*"]],
+  "fixed": [
+    [
+      "blitz"
+    ],
+    [
+      "@blitzjs/*"
+    ]
+  ],
   "linked": [],
   "access": "restricted",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
-  "ignore": ["web", "test-*", "toolkit-app"]
+  "ignore": [
+    "web",
+    "test-*",
+    "toolkit-*"
+  ]
 }
