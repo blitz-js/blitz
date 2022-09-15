@@ -1,4 +1,5 @@
-import {Link, BlitzPage, Routes} from "blitz"
+import {BlitzPage, Routes} from "@blitzjs/next"
+import Link from "next/link"
 import GhostLayout from "app/ghost/layouts/GhostLayout"
 import usePostsPage from "app/ghost/hooks/usePostsPage"
 

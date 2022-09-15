@@ -8,6 +8,10 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  TURBO_TOKEN: 05de0230f01174d1f8cb4845a01dc6c895ce28f04ebef2318ab11615791b871c35eabbf8
+  TURBO_TEAM: foo
+
 jobs:
   lint:
     name: Lint

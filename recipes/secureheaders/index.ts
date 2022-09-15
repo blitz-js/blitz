@@ -1,4 +1,4 @@
-import {addImport, paths, Program, RecipeBuilder, transformBlitzConfig} from "blitz/installer"
+import {addImport, paths, Program, RecipeBuilder, transformNextConfig} from "blitz/installer"
 import j from "jscodeshift"
 import {join} from "path"
 
@@ -82,13 +82,14 @@ export default RecipeBuilder()
     stepId: "customHeaders",
     stepName: "Set custom headers",
     explanation: `Insert custom headers into blitz.config.js and disable the "X-Powered-By: Next.js" header`,
-    singleFileSearch: paths.blitzConfig(),
+    singleFileSearch: paths.nextConfig(),
     transform(program) {
       return addHttpHeaders(program, [
-        {name: "Strict-Transport-Security", value: "max-age=631138519"},
+        {name: "Strict-Transport-Security", value: "max-age=631138519; includeSubDomains; preload"},
         {name: "X-Frame-Options", value: "sameorigin"},
         {name: "X-Content-Type-Options", value: "nosniff"},
         {name: "Permissions-Policy", value: "default 'none'"},
+        {name: "Content-Security-Policy", value: "frame-ancestors 'self'"},
       ])
     },
   })
@@ -110,52 +111,59 @@ function addHttpMetaTag(name: string, value: j.JSXExpressionContainer | j.String
   ]
 }
 
-const addHttpHeaders = (program: Program, headers: Array<{name: string; value: string}>) =>
-  transformBlitzConfig(program, (config) => {
-    let headersFunction = j.arrowFunctionExpression(
-      [],
-      j.blockStatement([
-        j.returnStatement(
-          j.arrayExpression(
-            headers.map(({name, value}) =>
-              j.objectExpression([
-                j.objectProperty(j.identifier("key"), j.stringLiteral(name)),
-                j.objectProperty(j.identifier("value"), j.stringLiteral(value)),
-              ]),
+const addHttpHeaders = (program: Program, headers: Array<{name: string; value: string}>) => {
+  let headersFunction = j.arrowFunctionExpression(
+    [],
+    j.blockStatement([
+      j.returnStatement(
+        j.arrayExpression([
+          j.objectExpression([
+            j.objectProperty(j.identifier("source"), j.stringLiteral("/(.*)")),
+            j.objectProperty(
+              j.identifier("headers"),
+              j.arrayExpression(
+                headers.map(({name, value}) =>
+                  j.objectExpression([
+                    j.objectProperty(j.identifier("key"), j.stringLiteral(name)),
+                    j.objectProperty(j.identifier("value"), j.stringLiteral(value)),
+                  ]),
+                ),
+              ),
             ),
-          ),
-        ),
-      ]),
+          ]),
+        ]),
+      ),
+    ]),
+  )
+  headersFunction.async = true
+  const headersCollection = transformNextConfig(program).configObj.find(
+    (value) =>
+      value.type === "ObjectProperty" &&
+      value.key.type === "Identifier" &&
+      value.key.name === "headers",
+  ) as j.ObjectProperty | undefined
+
+  if (headersCollection) {
+    headersCollection.value = headersFunction
+  } else {
+    transformNextConfig(program).pushToConfig(
+      j.objectProperty(j.identifier("headers"), headersFunction),
     )
-    headersFunction.async = true
+  }
 
-    const poweredByProp = config.properties.find(
-      (value) =>
-        value.type === "ObjectProperty" &&
-        value.key.type === "Identifier" &&
-        value.key.name === "poweredByHeader",
-    ) as j.ObjectProperty | undefined
+  const poweredByProp = transformNextConfig(program).configObj.find(
+    (value) =>
+      value.type === "ObjectProperty" &&
+      value.key.type === "Identifier" &&
+      value.key.name === "poweredByHeader",
+  ) as j.ObjectProperty | undefined
 
-    if (poweredByProp) {
-      poweredByProp.value = j.booleanLiteral(false)
-    } else {
-      config.properties.push(
-        j.objectProperty(j.identifier("poweredByHeader"), j.booleanLiteral(false)),
-      )
-    }
-
-    const headersCollection = config.properties.find(
-      (value) =>
-        value.type === "ObjectProperty" &&
-        value.key.type === "Identifier" &&
-        value.key.name === "headers",
-    ) as j.ObjectProperty | undefined
-
-    if (headersCollection) {
-      headersCollection.value = headersFunction
-    } else {
-      config.properties.push(j.objectProperty(j.identifier("headers"), headersFunction))
-    }
-
-    return config
-  })
+  if (poweredByProp) {
+    poweredByProp.value = j.booleanLiteral(false)
+  } else {
+    transformNextConfig(program).pushToConfig(
+      j.objectProperty(j.identifier("poweredByHeader"), j.booleanLiteral(false)),
+    )
+  }
+  return program
+}

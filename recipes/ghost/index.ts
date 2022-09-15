@@ -48,6 +48,14 @@ export default RecipeBuilder()
     templatePath: path.join(__dirname, "templates", "app"),
     templateValues: {},
   })
+  .addNewFilesStep({
+    stepId: "addDefaultPages",
+    stepName: "Add default pages",
+    explanation: "Create default pages to show usage of ghost in blitz.",
+    targetDirectory: "pages",
+    templatePath: path.join(__dirname, "templates", "pages"),
+    templateValues: {},
+  })
   .addTransformFilesStep({
     stepId: "ghostMiddleware",
     stepName: "Add default middleware to expose ghost",

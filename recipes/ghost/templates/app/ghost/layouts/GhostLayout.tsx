@@ -1,5 +1,6 @@
 import {ReactNode, Suspense} from "react"
-import {Head, useQuery} from "blitz"
+import Head from "next/head"
+import {useQuery} from "@blitzjs/rpc"
 import getSettings from "../queries/getSettings"
 
 type LayoutProps = {

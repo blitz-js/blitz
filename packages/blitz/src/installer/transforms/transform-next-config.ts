@@ -2,7 +2,7 @@ import j from "jscodeshift"
 import {assert} from "../../index-server"
 import {Program} from "../types"
 
-export function transformBlitzConfig(program: Program): {
+export function transformNextConfig(program: Program): {
   program: Program
   configObj: []
   pushToConfig: (property: j.ObjectProperty) => void
