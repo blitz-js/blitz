@@ -1,6 +1,6 @@
 import {addImport, paths, Program, RecipeBuilder, transformNextConfig} from "blitz/installer"
 import j from "jscodeshift"
-import { join } from "path"
+import {join} from "path"
 
 export default RecipeBuilder()
   .setName("Secure Headers")
@@ -85,10 +85,11 @@ export default RecipeBuilder()
     singleFileSearch: paths.nextConfig(),
     transform(program) {
       return addHttpHeaders(program, [
-        {name: "Strict-Transport-Security", value: "max-age=631138519"},
+        {name: "Strict-Transport-Security", value: "max-age=631138519; includeSubDomains; preload"},
         {name: "X-Frame-Options", value: "sameorigin"},
         {name: "X-Content-Type-Options", value: "nosniff"},
         {name: "Permissions-Policy", value: "default 'none'"},
+        {name: "Content-Security-Policy", value: "frame-ancestors 'self'"},
       ])
     },
   })
@@ -115,14 +116,22 @@ const addHttpHeaders = (program: Program, headers: Array<{name: string; value: s
     [],
     j.blockStatement([
       j.returnStatement(
-        j.arrayExpression(
-          headers.map(({name, value}) =>
-            j.objectExpression([
-              j.objectProperty(j.identifier("key"), j.stringLiteral(name)),
-              j.objectProperty(j.identifier("value"), j.stringLiteral(value)),
-            ]),
-          ),
-        ),
+        j.arrayExpression([
+          j.objectExpression([
+            j.objectProperty(j.identifier("source"), j.stringLiteral("/(.*)")),
+            j.objectProperty(
+              j.identifier("headers"),
+              j.arrayExpression(
+                headers.map(({name, value}) =>
+                  j.objectExpression([
+                    j.objectProperty(j.identifier("key"), j.stringLiteral(name)),
+                    j.objectProperty(j.identifier("value"), j.stringLiteral(value)),
+                  ]),
+                ),
+              ),
+            ),
+          ]),
+        ]),
       ),
     ]),
   )
