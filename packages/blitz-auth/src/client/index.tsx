@@ -248,10 +248,12 @@ export function getAuthValues<TProps = any>(
 function withBlitzAuthPlugin<TProps = any>(Page: ComponentType<TProps> | BlitzPage<TProps>) {
   const AuthRoot = (props: ComponentProps<any>) => {
     useSession({suspense: false})
-    const [mounted, setMounted] = useState<boolean>(false)
+    const [mounted, setMounted] = useState(false)
 
     useEffect(() => {
       setMounted(true)
+
+      return () => setMounted(false)
     }, [])
 
     let {authenticate, redirectAuthenticatedTo} = getAuthValues(Page, props)
