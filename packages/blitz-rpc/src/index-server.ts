@@ -88,7 +88,7 @@ export function installWebpackConfig({
   webpackConfig.resolve.alias["npm-which"] = false
   webpackConfig.resolve.alias["cross-spawn"] = false
   webpackConfig.module.rules.push({
-    test: /[\\/]\[\[\.\.\.blitz]]\.[jt]sx?$/,
+    test: /[\\/]\[\[\.\.\.blitz]]?.+\.[jt]sx?$/,
     use: [
       {
         loader: loaderServer,
