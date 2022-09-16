@@ -165,7 +165,15 @@ export const useSession = (options: UseSessionOptions = {}): ClientSession => {
 }
 
 export const useAuthorizeIf = (condition?: boolean) => {
-  if (isClient && condition && !getPublicDataStore().getData().userId) {
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+
+    return () => setMounted(false)
+  }, [])
+
+  if (isClient && condition && !getPublicDataStore().getData().userId && mounted) {
     const error = new AuthenticationError()
     error.stack = null!
     throw error
@@ -184,7 +192,15 @@ export const useAuthenticatedSession = (
 }
 
 export const useRedirectAuthenticated = (to: UrlObject | string) => {
-  if (isClient && getPublicDataStore().getData().userId) {
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+
+    return () => setMounted(false)
+  }, [])
+
+  if (isClient && getPublicDataStore().getData().userId && mounted) {
     const error = new RedirectError(to)
     error.stack = null!
     throw error
@@ -280,8 +296,8 @@ function withBlitzAuthPlugin<TProps = any>(Page: ComponentType<TProps> | BlitzPa
               ? redirectAuthenticatedTo
               : formatWithValidation(redirectAuthenticatedTo)
 
-          debug("[BlitzAuthInnerRoot] redirecting to", redirectUrl)
           if (mounted) {
+            debug("[BlitzAuthInnerRoot] redirecting to", redirectUrl)
             const error = new RedirectError(redirectUrl)
             error.stack = null!
             throw error
@@ -297,8 +313,9 @@ function withBlitzAuthPlugin<TProps = any>(Page: ComponentType<TProps> | BlitzPa
 
           const url = new URL(redirectTo, window.location.href)
           url.searchParams.append("next", window.location.pathname)
-          debug("[BlitzAuthInnerRoot] redirecting to", url.toString())
+
           if (mounted) {
+            debug("[BlitzAuthInnerRoot] redirecting to", url.toString())
             const error = new RedirectError(url.toString())
             error.stack = null!
             throw error
