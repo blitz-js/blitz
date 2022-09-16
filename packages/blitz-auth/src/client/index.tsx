@@ -169,8 +169,6 @@ export const useAuthorizeIf = (condition?: boolean) => {
 
   useEffect(() => {
     setMounted(true)
-
-    return () => setMounted(false)
   }, [])
 
   if (isClient && condition && !getPublicDataStore().getData().userId && mounted) {
@@ -196,8 +194,6 @@ export const useRedirectAuthenticated = (to: UrlObject | string) => {
 
   useEffect(() => {
     setMounted(true)
-
-    return () => setMounted(false)
   }, [])
 
   if (isClient && getPublicDataStore().getData().userId && mounted) {
@@ -268,8 +264,6 @@ function withBlitzAuthPlugin<TProps = any>(Page: ComponentType<TProps> | BlitzPa
 
     useEffect(() => {
       setMounted(true)
-
-      return () => setMounted(false)
     }, [])
 
     let {authenticate, redirectAuthenticatedTo} = getAuthValues(Page, props)
