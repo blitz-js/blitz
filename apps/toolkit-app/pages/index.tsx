@@ -271,4 +271,6 @@ const Home: BlitzPage = () => {
   )
 }
 
+Home.authenticate = true
+
 export default Home
