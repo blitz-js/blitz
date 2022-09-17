@@ -88,7 +88,7 @@ export function installWebpackConfig({
   webpackConfig.resolve.alias["npm-which"] = false
   webpackConfig.resolve.alias["cross-spawn"] = false
   webpackConfig.module.rules.push({
-    test: /[\\/]\[\[\.\.\.blitz]]\.[jt]sx?$/,
+    test: /[\\/]\[\[\.\.\.blitz]]?.+\.[jt]sx?$/,
     use: [
       {
         loader: loaderServer,
@@ -158,7 +158,7 @@ export function rpcHandler(config: RpcConfig) {
     const routePath = "/" + relativeRoutePath
 
     const log = baseLogger().getChildLogger({
-      prefix: [routePath.replace("/api/rpc/", "") + "()"],
+      prefix: [routePath.replace(/(\/api\/rpc)?\//, "") + "()"],
     })
     const customChalk = new chalk.Instance({
       level: log.settings.type === "json" ? 0 : chalk.level,

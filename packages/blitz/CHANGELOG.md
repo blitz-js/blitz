@@ -1,5 +1,42 @@
 # blitz
 
+## 2.0.0-beta.4
+
+### Patch Changes
+
+- c213d521: Fix issue with the route name that's generated for nested routes in @blitzjs/rpc. This was causing issues for windows users.
+- 0b94a450: Upgrade superjson to the latest version
+- 161270e3: Only run the prisma generate command when the schema file changes.
+- Updated dependencies [7498aef4]
+- Updated dependencies [22344d05]
+- Updated dependencies [8fa9a56f]
+- Updated dependencies [c53978d5]
+- Updated dependencies [a84b8de4]
+  - @blitzjs/generator@2.0.0-beta.4
+
+## 2.0.0-beta.3
+
+### Patch Changes
+
+- 638f2319: Prevent `Minified react error #419` in production
+- Updated dependencies [b72d1215]
+  - @blitzjs/generator@2.0.0-beta.3
+
+## 2.0.0-beta.2
+
+### Patch Changes
+
+- db7233db: Bump react, react-dom, @types/react and next versions
+
+  This fixes a console warning: `Warning: Received`true`for a non-boolean attribute`global`.` when using `styled-jsx`. Versions bump also fixes React Hydration error that happens on and off when using `redirectAuthenticatedTo`.
+
+- 0936cb38: Patch Next.js Suspense issue in all node environments. Previously we only patched it in the `development` environment, but now we make sure it gets patched in the `production` env (with the `blitz build` command) as well.
+- 3f9fe8f0: Exit CLI process after `blitz new` command is finished
+- Updated dependencies [db7233db]
+- Updated dependencies [eb971568]
+- Updated dependencies [8ada2c26]
+  - @blitzjs/generator@2.0.0-beta.2
+
 ## 2.0.0-beta.1
 
 ### Patch Changes

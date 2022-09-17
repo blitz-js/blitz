@@ -1,5 +1,35 @@
 # @blitzjs/auth
 
+## 2.0.0-beta.4
+
+### Patch Changes
+
+- 713aead9: Allow specifying custom strategy name in Blitz's passport adapter
+- Updated dependencies [c213d521]
+- Updated dependencies [0b94a450]
+- Updated dependencies [161270e3]
+  - blitz@2.0.0-beta.4
+
+## 2.0.0-beta.3
+
+### Patch Changes
+
+- Updated dependencies [638f2319]
+  - blitz@2.0.0-beta.3
+
+## 2.0.0-beta.2
+
+### Patch Changes
+
+- db7233db: Bump react, react-dom, @types/react and next versions
+
+  This fixes a console warning: `Warning: Received`true`for a non-boolean attribute`global`.` when using `styled-jsx`. Versions bump also fixes React Hydration error that happens on and off when using `redirectAuthenticatedTo`.
+
+- Updated dependencies [db7233db]
+- Updated dependencies [0936cb38]
+- Updated dependencies [3f9fe8f0]
+  - blitz@2.0.0-beta.2
+
 ## 2.0.0-beta.1
 
 ### Patch Changes
