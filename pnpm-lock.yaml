@@ -1143,10 +1143,10 @@ importers:
   recipes/base-web:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: 2.0.0-beta.3
+      blitz: "workspace: 2.0.0-beta.4"
       jscodeshift: 0.13.0
     dependencies:
-      blitz: 2.0.0-beta.3
+      blitz: link:../../packages/blitz
       jscodeshift: 0.13.0
     devDependencies:
       "@types/jscodeshift": 0.11.2
@@ -1154,10 +1154,10 @@ importers:
   recipes/bulma:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: 2.0.0-beta.3
+      blitz: "workspace: 2.0.0-beta.4"
       jscodeshift: 0.13.0
     dependencies:
-      blitz: 2.0.0-beta.3
+      blitz: link:../../packages/blitz
       jscodeshift: 0.13.0
     devDependencies:
       "@types/jscodeshift": 0.11.2
@@ -1166,10 +1166,10 @@ importers:
     specifiers:
       "@types/jscodeshift": 0.11.2
       ast-types: 0.14.2
-      blitz: 2.0.0-beta.3
+      blitz: "workspace: 2.0.0-beta.4"
       jscodeshift: 0.13.0
     dependencies:
-      blitz: 2.0.0-beta.3
+      blitz: link:../../packages/blitz
       jscodeshift: 0.13.0
     devDependencies:
       "@types/jscodeshift": 0.11.2
@@ -1179,10 +1179,10 @@ importers:
     specifiers:
       "@types/jscodeshift": 0.11.2
       ast-types: 0.14.2
-      blitz: 2.0.0-beta.3
+      blitz: "workspace: 2.0.0-beta.4"
       jscodeshift: 0.13.0
     dependencies:
-      blitz: 2.0.0-beta.3
+      blitz: link:../../packages/blitz
       jscodeshift: 0.13.0
     devDependencies:
       "@types/jscodeshift": 0.11.2
@@ -1191,33 +1191,33 @@ importers:
   recipes/emotion:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: 2.0.0-beta.3
+      blitz: "workspace: 2.0.0-beta.4"
       jscodeshift: 0.13.0
     dependencies:
-      blitz: 2.0.0-beta.3
+      blitz: link:../../packages/blitz
       jscodeshift: 0.13.0
     devDependencies:
       "@types/jscodeshift": 0.11.2
 
   recipes/gh-action-yarn-mariadb:
     specifiers:
-      blitz: 2.0.0-beta.3
+      blitz: "workspace: 2.0.0-beta.4"
     dependencies:
-      blitz: 2.0.0-beta.3
+      blitz: link:../../packages/blitz
 
   recipes/gh-action-yarn-postgres:
     specifiers:
-      blitz: 2.0.0-beta.3
+      blitz: "workspace: 2.0.0-beta.4"
     dependencies:
-      blitz: 2.0.0-beta.3
+      blitz: link:../../packages/blitz
 
   recipes/ghost:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: 2.0.0-beta.3
+      blitz: "workspace: 2.0.0-beta.4"
       jscodeshift: 0.13.0
     dependencies:
-      blitz: 2.0.0-beta.3
+      blitz: link:../../packages/blitz
       jscodeshift: 0.13.0
     devDependencies:
       "@types/jscodeshift": 0.11.2
@@ -1225,11 +1225,11 @@ importers:
   recipes/graphql-apollo-server:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: 2.0.0-beta.3
+      blitz: "workspace: 2.0.0-beta.4"
       jscodeshift: 0.13.0
       uuid: ^8.3.1
     dependencies:
-      blitz: 2.0.0-beta.3
+      blitz: link:../../packages/blitz
       jscodeshift: 0.13.0
       uuid: 8.3.2
     devDependencies:
@@ -1237,17 +1237,17 @@ importers:
 
   recipes/logrocket:
     specifiers:
-      blitz: 2.0.0-beta.3
+      blitz: "workspace: 2.0.0-beta.4"
     dependencies:
-      blitz: 2.0.0-beta.3
+      blitz: link:../../packages/blitz
 
   recipes/material-ui:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: 2.0.0-beta.3
+      blitz: "workspace: 2.0.0-beta.4"
       jscodeshift: 0.13.0
     dependencies:
-      blitz: 2.0.0-beta.3
+      blitz: link:../../packages/blitz
       jscodeshift: 0.13.0
     devDependencies:
       "@types/jscodeshift": 0.11.2
@@ -1256,10 +1256,10 @@ importers:
     specifiers:
       "@types/jscodeshift": 0.11.2
       ast-types: 0.14.2
-      blitz: 2.0.0-beta.3
+      blitz: "workspace: 2.0.0-beta.4"
       jscodeshift: 0.13.0
     dependencies:
-      blitz: 2.0.0-beta.3
+      blitz: link:../../packages/blitz
       jscodeshift: 0.13.0
     devDependencies:
       "@types/jscodeshift": 0.11.2
@@ -1267,24 +1267,24 @@ importers:
 
   recipes/passenger:
     specifiers:
-      blitz: 2.0.0-beta.3
+      blitz: "workspace: 2.0.0-beta.4"
     dependencies:
-      blitz: 2.0.0-beta.3
+      blitz: link:../../packages/blitz
 
   recipes/quirrel:
     specifiers:
-      blitz: 2.0.0-beta.3
+      blitz: "workspace: 2.0.0-beta.4"
     dependencies:
-      blitz: 2.0.0-beta.3
+      blitz: link:../../packages/blitz
 
   recipes/reflexjs:
     specifiers:
       "@types/jscodeshift": 0.11.2
       ast-types: 0.14.2
-      blitz: 2.0.0-beta.3
+      blitz: "workspace: 2.0.0-beta.4"
       jscodeshift: 0.13.0
     dependencies:
-      blitz: 2.0.0-beta.3
+      blitz: link:../../packages/blitz
       jscodeshift: 0.13.0
     devDependencies:
       "@types/jscodeshift": 0.11.2
@@ -1292,18 +1292,18 @@ importers:
 
   recipes/render:
     specifiers:
-      blitz: 2.0.0-beta.3
+      blitz: "workspace: 2.0.0-beta.4"
     dependencies:
-      blitz: 2.0.0-beta.3
+      blitz: link:../../packages/blitz
 
   recipes/secureheaders:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: 2.0.0-beta.3
+      blitz: "workspace: 2.0.0-beta.4"
       jscodeshift: 0.13.0
       uuid: ^8.3.1
     dependencies:
-      blitz: 2.0.0-beta.3
+      blitz: link:../../packages/blitz
       jscodeshift: 0.13.0
       uuid: 8.3.2
     devDependencies:
@@ -1312,10 +1312,10 @@ importers:
   recipes/stitches:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: 2.0.0-beta.3
+      blitz: "workspace: 2.0.0-beta.4"
       jscodeshift: 0.13.0
     dependencies:
-      blitz: 2.0.0-beta.3
+      blitz: link:../../packages/blitz
       jscodeshift: 0.13.0
     devDependencies:
       "@types/jscodeshift": 0.11.2
@@ -1324,10 +1324,10 @@ importers:
     specifiers:
       "@types/jscodeshift": 0.11.2
       ast-types: 0.14.2
-      blitz: 2.0.0-beta.3
+      blitz: "workspace: 2.0.0-beta.4"
       jscodeshift: 0.13.0
     dependencies:
-      blitz: 2.0.0-beta.3
+      blitz: link:../../packages/blitz
       jscodeshift: 0.13.0
     devDependencies:
       "@types/jscodeshift": 0.11.2
@@ -1348,10 +1348,10 @@ importers:
     specifiers:
       "@types/jscodeshift": 0.11.2
       ast-types: 0.14.2
-      blitz: 2.0.0-beta.3
+      blitz: "workspace: 2.0.0-beta.4"
       jscodeshift: 0.13.0
     dependencies:
-      blitz: 2.0.0-beta.3
+      blitz: link:../../packages/blitz
       jscodeshift: 0.13.0
     devDependencies:
       "@types/jscodeshift": 0.11.2
@@ -1360,10 +1360,10 @@ importers:
   recipes/vanilla-extract:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: 2.0.0-beta.3
+      blitz: "workspace: 2.0.0-beta.4"
       jscodeshift: 0.13.0
     dependencies:
-      blitz: 2.0.0-beta.3
+      blitz: link:../../packages/blitz
       jscodeshift: 0.13.0
     devDependencies:
       "@types/jscodeshift": 0.11.2
@@ -1559,7 +1559,7 @@ packages:
       "@babel/core": ^7.0.0
     dependencies:
       "@babel/compat-data": 7.17.10
-      "@babel/core": 7.18.2
+      "@babel/core": 7.18.2_supports-color@8.1.1
       "@babel/helper-validator-option": 7.16.7
       browserslist: 4.20.3
       semver: 6.3.0
@@ -2153,7 +2153,7 @@ packages:
     peerDependencies:
       "@babel/core": ^7.0.0-0
     dependencies:
-      "@babel/core": 7.18.2
+      "@babel/core": 7.18.2_supports-color@8.1.1
       "@babel/helper-plugin-utils": 7.17.12
       "@babel/plugin-syntax-nullish-coalescing-operator": 7.8.3_@babel+core@7.18.2
     dev: false
@@ -2223,7 +2223,7 @@ packages:
     peerDependencies:
       "@babel/core": ^7.0.0-0
     dependencies:
-      "@babel/core": 7.18.2
+      "@babel/core": 7.18.2_supports-color@8.1.1
       "@babel/helper-plugin-utils": 7.17.12
       "@babel/helper-skip-transparent-expression-wrappers": 7.16.0
       "@babel/plugin-syntax-optional-chaining": 7.8.3_@babel+core@7.18.2
@@ -2359,7 +2359,7 @@ packages:
     peerDependencies:
       "@babel/core": ^7.0.0-0
     dependencies:
-      "@babel/core": 7.18.2
+      "@babel/core": 7.18.2_supports-color@8.1.1
       "@babel/helper-plugin-utils": 7.17.12
     dev: false
 
@@ -2463,7 +2463,7 @@ packages:
     peerDependencies:
       "@babel/core": ^7.0.0-0
     dependencies:
-      "@babel/core": 7.18.2
+      "@babel/core": 7.18.2_supports-color@8.1.1
       "@babel/helper-plugin-utils": 7.17.12
 
   /@babel/plugin-syntax-numeric-separator/7.10.4_@babel+core@7.12.10:
@@ -2551,7 +2551,7 @@ packages:
     peerDependencies:
       "@babel/core": ^7.0.0-0
     dependencies:
-      "@babel/core": 7.18.2
+      "@babel/core": 7.18.2_supports-color@8.1.1
       "@babel/helper-plugin-utils": 7.17.12
 
   /@babel/plugin-syntax-top-level-await/7.14.5_@babel+core@7.12.10:
@@ -2600,7 +2600,7 @@ packages:
     peerDependencies:
       "@babel/core": ^7.0.0-0
     dependencies:
-      "@babel/core": 7.18.2
+      "@babel/core": 7.18.2_supports-color@8.1.1
       "@babel/helper-plugin-utils": 7.17.12
 
   /@babel/plugin-transform-arrow-functions/7.17.12_@babel+core@7.12.10:
@@ -2786,7 +2786,7 @@ packages:
     peerDependencies:
       "@babel/core": ^7.0.0-0
     dependencies:
-      "@babel/core": 7.18.2
+      "@babel/core": 7.18.2_supports-color@8.1.1
       "@babel/helper-plugin-utils": 7.17.12
       "@babel/plugin-syntax-flow": 7.17.12_@babel+core@7.18.2
     dev: false
@@ -3476,7 +3476,7 @@ packages:
     peerDependencies:
       "@babel/core": ^7.0.0-0
     dependencies:
-      "@babel/core": 7.18.2
+      "@babel/core": 7.18.2_supports-color@8.1.1
       "@babel/helper-plugin-utils": 7.17.12
       "@babel/helper-validator-option": 7.16.7
       "@babel/plugin-transform-flow-strip-types": 7.17.12_@babel+core@7.18.2
@@ -3540,7 +3540,7 @@ packages:
     peerDependencies:
       "@babel/core": ^7.0.0-0
     dependencies:
-      "@babel/core": 7.18.2
+      "@babel/core": 7.18.2_supports-color@8.1.1
       clone-deep: 4.0.1
       find-cache-dir: 2.1.0
       make-dir: 2.1.0
@@ -3662,38 +3662,6 @@ packages:
       {
         integrity: sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==,
       }
-
-  /@blitzjs/generator/2.0.0-beta.3:
-    resolution:
-      {
-        integrity: sha512-sqFFZsylSDPs0FlkBaVJ6ZRwmOB68vAbWANbInudgKnU6U1lL+1xbjNSKgZUGRYad7fU9cHy+vPkfwmTFACOIA==,
-      }
-    dependencies:
-      "@babel/core": 7.12.10_supports-color@8.1.1
-      "@babel/plugin-transform-typescript": 7.12.1_ps3yxa7qdojvlda5ukda3zlwie
-      "@babel/preset-env": 7.12.10_ps3yxa7qdojvlda5ukda3zlwie
-      "@babel/types": 7.12.10
-      "@mrleebo/prisma-ast": 0.2.6
-      chalk: 4.1.2
-      console-table-printer: 2.10.0
-      cross-spawn: 7.0.3
-      diff: 5.0.0
-      enquirer: 2.3.6
-      fs-extra: 10.0.1
-      got: 11.8.1
-      jscodeshift: 0.13.0_slgjdbbopna4ebnpdn2nkn3v2a
-      mem-fs: 1.2.0
-      mem-fs-editor: 8.0.0
-      npm-which: 3.0.1
-      ora: 5.3.0
-      pluralize: 8.0.0
-      prettier: 2.6.2
-      recast: 0.20.5
-      supports-color: 8.1.1
-      tslog: 3.3.1
-      username: 5.1.0
-      vinyl: 2.2.1
-    dev: false
 
   /@blitzjs/manypkg/0.19.1:
     resolution:
@@ -7013,7 +6981,7 @@ packages:
     peerDependencies:
       "@babel/core": ^7.0.0-0
     dependencies:
-      "@babel/core": 7.18.2
+      "@babel/core": 7.18.2_supports-color@8.1.1
     dev: false
 
   /babel-jest/27.5.1_@babel+core@7.18.2:
@@ -7195,50 +7163,6 @@ packages:
       buffer: 5.7.1
       inherits: 2.0.4
       readable-stream: 3.6.0
-    dev: false
-
-  /blitz/2.0.0-beta.3:
-    resolution:
-      {
-        integrity: sha512-IHh17uzXCsjqSv1zcp0xymDnbGlVdPpEh8j0568828oJ0Bx4Oso8vibhStOIf3tvvAyRjqCmM+iWU2bWQvthOQ==,
-      }
-    hasBin: true
-    dependencies:
-      "@blitzjs/generator": 2.0.0-beta.3
-      arg: 5.0.1
-      boxen: 7.0.0
-      chalk: 4.1.2
-      console-table-printer: 2.10.0
-      cross-spawn: 7.0.3
-      debug: 4.3.3_supports-color@8.1.1
-      detect-port: 1.3.0_supports-color@8.1.1
-      dotenv: 16.0.0
-      dotenv-expand: 8.0.3
-      envinfo: 7.8.1
-      esbuild: 0.14.34
-      find-up: 4.1.0
-      fs-extra: 10.0.1
-      hasbin: 1.2.3
-      node-fetch: 3.2.3
-      npm-which: 3.0.1
-      ora: 5.3.0
-      os-name: 5.0.1
-      p-event: 4.2.0
-      pkg-dir: 5.0.0
-      prompts: 2.4.2
-      resolve-cwd: 3.0.0
-      resolve-from: 5.0.0
-      superjson: 1.8.0_supports-color@8.1.1
-      supports-color: 8.1.1
-      ts-node: 10.7.0
-      tsconfig-paths: 4.0.0
-      tslog: 3.3.1
-      watchpack: 2.1.1
-    transitivePeerDependencies:
-      - "@swc/core"
-      - "@swc/wasm"
-      - "@types/node"
-      - typescript
     dev: false
 
   /body-parser/1.19.2:
@@ -12619,7 +12543,7 @@ packages:
       pretty-format: 27.5.1
       slash: 3.0.0
       strip-json-comments: 3.1.1
-      ts-node: 10.7.0_fxg3r7oju3tntkxsvleuiot4fa
+      ts-node: 10.7.0_typescript@4.6.3
     transitivePeerDependencies:
       - bufferutil
       - canvas
@@ -13763,13 +13687,6 @@ packages:
     engines: {node: ">=10"}
     dependencies:
       p-locate: 5.0.0
-
-  /lodash.clonedeep/4.5.0:
-    resolution:
-      {
-        integrity: sha512-H5ZhCF25riFd9uB5UCkVKo61m3S/xZk1x4wA6yp/L3RFP6Z/eHH1ymQcGLo7J3GMPfm0V/7m1tryHuGVxpqEBQ==,
-      }
-    dev: false
 
   /lodash.includes/4.3.0:
     resolution:
@@ -17704,19 +17621,6 @@ packages:
       minimist: 1.2.6
     dev: true
 
-  /superjson/1.8.0_supports-color@8.1.1:
-    resolution:
-      {
-        integrity: sha512-8FWCa0T9JQ9kVax9nmRqEEebhbRGmU3IV1gevZWQGJRFmSNVN4hnyfb0858aWeEOoS3atwnhjYGleRQHTGI/lA==,
-      }
-    engines: {node: ">=10"}
-    dependencies:
-      debug: 4.3.4_supports-color@8.1.1
-      lodash.clonedeep: 4.5.0
-    transitivePeerDependencies:
-      - supports-color
-    dev: false
-
   /superjson/1.9.1:
     resolution:
       {
@@ -18115,38 +18019,6 @@ packages:
       yargs-parser: 20.2.9
     dev: true
 
-  /ts-node/10.7.0:
-    resolution:
-      {
-        integrity: sha512-TbIGS4xgJoX2i3do417KSaep1uRAW/Lu+WAL2doDHC0D6ummjirVOXU5/7aiZotbQ5p1Zp9tP7U6cYhA0O7M8A==,
-      }
-    hasBin: true
-    peerDependencies:
-      "@swc/core": ">=1.2.50"
-      "@swc/wasm": ">=1.2.50"
-      "@types/node": "*"
-      typescript: ">=2.7"
-    peerDependenciesMeta:
-      "@swc/core":
-        optional: true
-      "@swc/wasm":
-        optional: true
-    dependencies:
-      "@cspotcode/source-map-support": 0.7.0
-      "@tsconfig/node10": 1.0.9
-      "@tsconfig/node12": 1.0.10
-      "@tsconfig/node14": 1.0.2
-      "@tsconfig/node16": 1.0.3
-      acorn: 8.7.1
-      acorn-walk: 8.2.0
-      arg: 4.1.3
-      create-require: 1.1.1
-      diff: 4.0.2
-      make-error: 1.3.6
-      v8-compile-cache-lib: 3.0.1
-      yn: 3.1.1
-    dev: false
-
   /ts-node/10.7.0_6sxvnwysvlo53egjnie7htsx5a:
     resolution:
       {
@@ -18213,6 +18085,7 @@ packages:
       typescript: 4.6.3
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
+    dev: false
 
   /ts-node/10.7.0_typescript@4.6.3:
     resolution:
@@ -18245,7 +18118,6 @@ packages:
       typescript: 4.6.3
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
-    dev: false
 
   /ts-node/10.9.1_kakyiqi62sfonxvjmz3ft5vt7y:
     resolution:
