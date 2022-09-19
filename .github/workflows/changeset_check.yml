@@ -24,4 +24,4 @@ jobs:
       - name: Install dependencies
         run: pnpm install  --frozen-lockfile
       - name: Check if changeset is added
-        run: changeset status
+        run: pnpm exec changeset status
