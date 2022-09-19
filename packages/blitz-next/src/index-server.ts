@@ -187,7 +187,10 @@ export const setupBlitzServer = ({plugins, onError}: SetupBlitzOptions) => {
     ): NextApiHandler<TResult | void> =>
     async (req, res) => {
       try {
-     return await handleRequestWithMiddleware(req, res, [...middlewares, (req, res) => handler(req, res, res.blitzCtx)]);
+        return await handleRequestWithMiddleware(req, res, [
+          ...middlewares,
+          (req, res) => handler(req, res, res.blitzCtx),
+        ])
       } catch (error: any) {
         onError?.(error)
         return res.status(400).send(error)
