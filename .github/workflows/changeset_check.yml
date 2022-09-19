@@ -27,4 +27,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install  --frozen-lockfile
       - name: Check if changeset is added
-        run: pnpm exec changeset status
+        run: |
+          git checkout ${{ github.event.pull_request.head.sha }}
+          pnpm exec changeset status --since=origin/main
