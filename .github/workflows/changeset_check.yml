@@ -21,4 +21,4 @@ jobs:
           node-version: 16
       - name: Check if changeset is added
         run: |
-          npx @changesets/cli status --since=origin/main
+          npx @changesets/cli status --since=main
