@@ -13,20 +13,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@main
+        uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
-        with:
-          version: 6.32.6
       - name: Setup node
         uses: actions/setup-node@v2
         with:
           node-version: 16
-          cache: "pnpm"
-      - name: Install dependencies
-        run: pnpm install  --frozen-lockfile
       - name: Check if changeset is added
         run: |
           git checkout ${{ github.event.pull_request.head.sha }}
-          pnpm exec changeset status --since=origin/main
+          npx changeset status --since=origin/main
