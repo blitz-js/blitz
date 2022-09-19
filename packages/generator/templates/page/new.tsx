@@ -38,7 +38,7 @@ const New__ModelName__Page = () => {
                 ? {...values, __parentModelId__: __parentModelId__!}
                 : values,
             )
-            router.push(
+            await router.push(
               process.env.parentModel
                 ? Routes.Show__ModelName__Page({ __parentModelId__: __parentModelId__!, __modelId__: __modelName__.id })
                 : Routes.Show__ModelName__Page({ __modelId__: __modelName__.id }),

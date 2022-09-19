@@ -51,7 +51,7 @@ export const Edit__ModelName__ = () => {
                 ...values
               })
               await setQueryData(updated)
-              router.push(
+              await router.push(
                 process.env.parentModel
                   ? Routes.Show__ModelName__Page({ __parentModelId__: __parentModelId__!, __modelId__: updated.id })
                   : Routes.Show__ModelName__Page({ __modelId__: updated.id })
