@@ -44,6 +44,7 @@
     "fs-extra": "10.0.1",
     "global-agent": "3.0.0",
     "globby": "13.1.2",
+    "got": "^11.8.1",
     "hasbin": "1.2.3",
     "ink": "3.2.0",
     "ink-spinner": "4.0.3",

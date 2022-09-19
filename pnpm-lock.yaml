@@ -688,6 +688,7 @@ importers:
       fs-extra: 10.0.1
       global-agent: 3.0.0
       globby: 13.1.2
+      got: ^11.8.1
       hasbin: 1.2.3
       ink: 3.2.0
       ink-spinner: 4.0.3
@@ -736,6 +737,7 @@ importers:
       fs-extra: 10.0.1
       global-agent: 3.0.0
       globby: 13.1.2
+      got: 11.8.1
       hasbin: 1.2.3
       ink: 3.2.0_ug65io7jkbhmo4fihdmbrh3ina
       ink-spinner: 4.0.3_ink@3.2.0+react@18.2.0
@@ -5152,7 +5154,7 @@ packages:
     dependencies:
       "@types/http-cache-semantics": 4.0.1
       "@types/keyv": 3.1.4
-      "@types/node": 17.0.24
+      "@types/node": 18.7.13
       "@types/responselike": 1.0.0
     dev: false
 
@@ -5453,7 +5455,7 @@ packages:
         integrity: sha512-BQ5aZNSCpj7D6K2ksrRCTmKRLEpnPvWDiLPfoGyhZ++8YtiK9d/3DBKPJgry359X/P1PfruyYwvnvwFjuEiEIg==,
       }
     dependencies:
-      "@types/node": 17.0.24
+      "@types/node": 18.7.13
     dev: false
 
   /@types/mem-fs-editor/7.0.1:
@@ -5540,7 +5542,6 @@ packages:
       {
         integrity: sha512-46yIhxSe5xEaJZXWdIBP7GU4HDTG8/eo0qd9atdiL+lFpA03y8KS+lkTN834TWJj5767GbWv4n/P6efyTFt1Dw==,
       }
-    dev: true
 
   /@types/nodemailer/6.4.4:
     resolution:
@@ -5703,7 +5704,7 @@ packages:
         integrity: sha512-85Y2BjiufFzaMIlvJDvTTB8Fxl2xfLo4HgmHzVBz08w4wDePCTjYw66PdrolO0kzli3yam/YCgRufyo1DdQVTA==,
       }
     dependencies:
-      "@types/node": 17.0.24
+      "@types/node": 18.7.13
     dev: false
 
   /@types/rimraf/3.0.2:

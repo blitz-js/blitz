@@ -263,9 +263,7 @@ const install: CliCommand = async () => {
         console.log(`${chalk.bold("Please provide one of the following:")}
 
 1. The name of a recipe to install (e.g. "tailwind")
-${chalk.dim(
-  "- Available recipes listed at https://github.com/blitz-js/legacy-framework/tree/canary/recipes",
-)}
+${chalk.dim("- Available recipes listed at https://github.com/blitz-js/blitz/tree/main/recipes")}
 2. The full name of a GitHub repository (e.g. "blitz-js/example-recipe"),
 3. A full URL to a Github repository (e.g. "https://github.com/blitz-js/example-recipe"), or
 4. A file path to a locally-written recipe.\n`)

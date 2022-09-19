@@ -1,28 +1,5 @@
-import {addImport, paths, Program, RecipeBuilder} from "blitz/installer"
-import type {NodePath} from "ast-types/lib/node-path"
+import {addImport, paths, Program, RecipeBuilder, wrapAppReturnStatement} from "blitz/installer"
 import j, {JSXIdentifier} from "jscodeshift"
-
-// Copied from https://github.com/blitz-js/legacy-framework/pull/805, let's add this to the blitz
-function wrapComponentWithChakraProvider(program: Program) {
-  program
-    .find(j.JSXElement)
-    .filter(
-      (path) =>
-        path.parent?.parent?.parent?.value?.id?.name === "App" &&
-        path.parent?.value.type === j.ReturnStatement.toString(),
-    )
-    .forEach((path: NodePath) => {
-      const {node} = path
-      path.replace(
-        j.jsxElement(
-          j.jsxOpeningElement(j.jsxIdentifier("ChakraProvider")),
-          j.jsxClosingElement(j.jsxIdentifier("ChakraProvider")),
-          [j.jsxText("\n"), node, j.jsxText("\n")],
-        ),
-      )
-    })
-  return program
-}
 
 function updateLabeledTextFieldWithInputComponent(program: Program) {
   program
@@ -155,7 +132,7 @@ export default RecipeBuilder()
       )
 
       addImport(program, stylesImport)
-      return wrapComponentWithChakraProvider(program)
+      return wrapAppReturnStatement(program, "ChakraProvider")
     },
   })
   .addTransformFilesStep({

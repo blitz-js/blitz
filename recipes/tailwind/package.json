@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/blitz-js/legacy-framework.git"
+    "url": "https://github.com/blitz-js/blitz.git"
   },
   "keywords": [
     "blitz",
@@ -18,9 +18,9 @@
   "author": "aem <adam@markon.codes>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/blitz-js/legacy-framework/issues"
+    "url": "https://github.com/blitz-js/blitz/issues"
   },
-  "homepage": "https://github.com/blitz-js/legacy-framework#readme",
+  "homepage": "https://github.com/blitz-js/blitz#readme",
   "dependencies": {
     "blitz": "workspace: 2.0.0-beta.4",
     "jscodeshift": "0.13.0"
