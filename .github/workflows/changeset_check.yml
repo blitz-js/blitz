@@ -1,6 +1,6 @@
 name: Changeset
 
-on:
+on: 
   pull_request:
     types: [opened, synchronize, labeled]
 
