@@ -46,9 +46,9 @@ export const __ModelName__ = () => {
             if (window.confirm("This will be deleted")) {
               await delete__ModelName__Mutation({id: __modelName__.id})
               if (process.env.parentModel) {
-                router.push(Routes.__ModelNames__Page({ __parentModelId__: __parentModelId__! }))
+                await router.push(Routes.__ModelNames__Page({ __parentModelId__: __parentModelId__! }))
               } else {
-                router.push(Routes.__ModelNames__Page())
+                await router.push(Routes.__ModelNames__Page())
               }
             }
           }}
