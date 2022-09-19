@@ -74,7 +74,7 @@ export const setCookie = (name: string, value: string, expires: string) => {
 }
 export const deleteCookie = (name: string) => setCookie(name, "", "Thu, 01 Jan 1970 00:00:01 GMT")
 
-export function compose(middleware: RequestMiddleware<any, any>[]) {
+export function compose(middleware: RequestMiddleware<any, any, any>[]) {
   if (!Array.isArray(middleware)) {
     throw new TypeError("Middleware stack must be an array!")
   }
