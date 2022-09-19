@@ -10,6 +10,7 @@ concurrency:
 
 jobs:
   changeset:
+    if: ${{ github.event.label.name != 'no-changeset' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
