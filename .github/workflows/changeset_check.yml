@@ -22,6 +22,5 @@ jobs:
           node-version: 16
       - name: Check if changeset is added
         run: |
-          git checkout ${{ github.event.pull_request.head.sha }}
           npm i -g @changesets/cli
           npx changeset status --since=origin/main
