@@ -1,0 +1,140 @@
+[
+  {
+    "title": {
+      "title": "Introduction",
+      "iconPath": "/img/introduction.svg",
+      "iconDarkPath": "/img/introduction-white.svg"
+    },
+    "pages": [
+      "why-blitz",
+      "get-started",
+      "learning-path",
+      "tutorial",
+      "blitz-with-next",
+      "upgrading-from-framework",
+      "stickers"
+    ]
+  },
+  {
+    "title": {
+      "title": "Community",
+      "iconPath": "/img/people-purple.svg",
+      "iconDarkPath": "/img/people-white.svg"
+    },
+    "pages": [
+      "how-the-community-operates",
+      "manifesto",
+      "community-history",
+      "contributing",
+      "maintainers",
+      "code-of-conduct",
+      "translations"
+    ]
+  },
+  {
+    "title": {
+      "title": "Basics",
+      "iconPath": "/img/basics.svg",
+      "iconDarkPath": "/img/basics-white.svg"
+    },
+    "pages": [
+      "file-structure",
+      "custom-environments",
+      "error-handling",
+      "testing",
+      "middleware",
+      "utilities",
+      "client-and-server",
+      "troubleshooting"
+    ]
+  },
+  {
+    "title": {
+      "title": "Framework Adapters",
+      "iconPath": "/img/pages.svg",
+      "iconDarkPath": "/img/pages-white.svg"
+    },
+    "pages": ["blitzjs-next"]
+  },
+  {
+    "title": {
+      "title": "@blitzjs/auth",
+      "iconPath": "/img/shield-purple.svg",
+      "iconDarkPath": "/img/shield-white.svg"
+    },
+    "pages": [
+      "auth",
+      "auth-setup",
+      "session-management",
+      "authorization",
+      "passportjs",
+      "auth-utils",
+      "impersonation"
+    ]
+  },
+  {
+    "title": {
+      "title": "@blitzjs/rpc",
+      "iconPath": "/img/queries.svg",
+      "iconDarkPath": "/img/queries-white.svg"
+    },
+    "pages": [
+      "rpc-overview",
+      "rpc-setup",
+      "query-resolvers",
+      "query-usage",
+      "mutation-resolvers",
+      "mutation-usage",
+      "resolver-client-utilities",
+      "resolver-server-utilities",
+      "use-query",
+      "use-paginated-query",
+      "use-infinite-query",
+      "use-mutation",
+      "rpc-specification"
+    ]
+  },
+  {
+    "title": {
+      "title": "Backend Architecture",
+      "iconPath": "/img/mutations.svg",
+      "iconDarkPath": "/img/mutations-white.svg"
+    },
+    "pages": ["multitenancy"]
+  },
+  {
+    "title": {
+      "title": "Database",
+      "iconPath": "/img/database.svg",
+      "iconDarkPath": "/img/database-white.svg"
+    },
+    "pages": ["database-overview", "postgres", "database-seeds", "prisma"]
+  },
+  {
+    "title": {
+      "title": "CLI",
+      "iconPath": "/img/terminal-purple.svg",
+      "iconDarkPath": "/img/terminal-white.svg"
+    },
+    "pages": [
+      "cli-overview",
+      "cli-new",
+      "cli-dev",
+      "cli-start",
+      "cli-build",
+      "cli-export",
+      "cli-prisma",
+      "cli-generate",
+      "cli-codegen",
+      "cli-routes"
+    ]
+  },
+  {
+    "title": {
+      "title": "Templates",
+      "iconPath": "/img/template-purple.svg",
+      "iconDarkPath": "/img/template-white.svg"
+    },
+    "pages": ["templates"]
+  }
+]

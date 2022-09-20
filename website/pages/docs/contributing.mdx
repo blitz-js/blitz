@@ -1,0 +1,216 @@
+---
+title: How to Contribute
+sidebar_label: How to Contribute
+---
+
+👋 We're so excited you're interested in helping with Blitz! We happy to
+help you get started, even if you don't have any previous open-source
+experience :)
+
+## First Things First {#first-things-first}
+
+1. New to open source? take a look at
+   [How to Contribute to an Open Source Project on GitHub](https://egghead.io/courses/how-to-contribute-to-an-open-source-project-on-github)
+2. Familiarize yourself with the
+   [Blitz Code of Conduct](./code-of-conduct)
+3. Learn [how the community operates](./how-the-community-operates)
+
+## What to Work On? {#what-to-work-on}
+
+Issues with the label
+[`status/ready-to-work-on`](https://github.com/blitz-js/blitz/labels/status%2Fready-to-work-on)
+are the best place to start.
+
+We also label issues as `good first issue` and `good second issue` when
+appropriate.
+
+If you find one that looks interesting and no one else is already working
+on it, comment in the issue that you are going to work on it. But only
+claim an issue if you can start work on it within a couple days.
+
+Please ask as many questions as you need, either directly in the issue or
+in Discord. We're happy to help!
+
+The Blitzjs.com website and documentation repo also has issues with
+[`ready to work on | help wanted`](https://github.com/blitz-js/blitzjs.com/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc+label%3A%22ready+to+work+on+%7C+help+wanted%22).
+
+### Things that are ALWAYS welcome {#things-that-are-always-welcome}
+
+- Adding tests
+- Improved documentation
+- Improved error messages
+- Improved logging (i.e. more clear, more beautiful)
+- Performance or security improvements
+- Educational content like blogs, videos, courses
+
+If there's some other way you'd like to contribute, ask us about it in
+Discord!
+
+After you contribute in any way, please add yourself as a contributor via
+the
+[@all-contributors bot](https://allcontributors.org/docs/en/bot/usage)!
+
+## Our Codebase is a Garden {#our-codebase-is-a-garden}
+
+The Blitz codebase is like a community garden. There's a lot of beautiful
+plants and vegetables, but it won't take long until you find some weeds!
+When you find weeds, please remove them :) Minor refactoring is always
+encouraged. If you'd like to do some major refactoring, it's best to first
+either open an issue or check with us in Discord. Most likely we'll agree
+with you.
+
+## What to Expect After Submitting a PR {#what-to-expect-after-submitting-a-pr}
+
+A Blitz maintainer will review your PR, usually within a couple days.
+
+If your PR changes user facing code, make sure you also made a PR to the
+docs repo, otherwise this will block your PR from being merged.
+
+You also need to add tests to cover the changes you made.
+
+Once all the requirements are met and the maintainer is happy with your
+code, they will merge it to the canary branch. It will then be included in
+the next Blitz release.
+
+Lastly, you will be added the all-contributors list as an official Blitz
+contributor. **Congratulations!!**
+
+## Project Management {#project-management}
+
+We use a
+[GitHub Project Board](https://github.com/blitz-js/blitz/projects/4) to
+track all issues and PRs.
+
+## Commit Access {#commit-access}
+
+We give liberal commit access to the Blitz repo to anyone who is a
+half-way regular contributor. This allows you to push branches directly to
+the Blitz repo without using a fork.
+
+We'll often give someone access if we notice they are regularly
+contributing. But you're also welcome to ask for access if you are
+regularly helping but haven't been given access yet.
+
+In the main Blitz repo, code reviews by code owners are required to merge
+PRs.
+
+But in the docs repo, anyone can merge PRs once someone else has approved
+the PR.
+
+## Development Setup {#development-setup}
+
+Make sure you're using Node 14 — Next uses `node-sass` which does not work
+with newer Node versions.
+
+**1.** Fork [the blitz repo](https://github.com/blitz-js/blitz)
+
+**2.** Clone your forked repo
+
+```sh
+# replace USERNAME below with your GitHub username
+git clone git@github.com:USERNAME/blitz.git
+cd blitz
+```
+
+**3.** (Optional, macOS only) Install required packages for
+`sodium-native`
+
+If you spot any issues related to `sodium-native`, run the following
+command to fix it:
+
+```sh
+brew install autoconf automake
+```
+
+**4.** Install dependencies
+
+```sh
+pnpm i
+```
+
+**5.** Start the package server. This **must be running** for any package
+development or example development
+
+```sh
+pnpm dev
+```
+
+## Running Tests {#running-tests}
+
+### Blitz.js Tests {#blitz-tests}
+
+#### Unit Tests
+
+Most Blitz packages in `packages/` have jest unit tests.
+
+- Run tests in a single package by running `pnpm test` inside that package
+  folder (like `packages/blitz-next`)
+- Run all unit tests from the repo root by running `pnpm test`. (Make sure
+  you have ran `pnpm build` or `pnpm dev` prior to running this). Note:
+  this will run all tests, including integration tests.
+
+#### Integration Tests
+
+Blitz integration tests are inside the root `integration-tests/` folder.
+
+Make sure you have `chromedriver` installed for your Chrome version. You
+can install it with
+
+- `brew install --cask chromedriver` on Mac OS X
+- `chocolatey install chromedriver` on Windows
+- Or manually download the version that matches your installed chrome
+  version (if there's no match, download a version under it, but not
+  above) from the
+  [chromedriver repo](https://chromedriver.storage.googleapis.com/index.html)
+  and add the binary to `<blitz-repo>/node_modules/.bin`
+
+You can run all tests (both unit tests and integration tests) by running
+`pnpm test` from the repo root.
+
+You can manually run the integration app by running `blitz dev` inside the
+integration test folder, like `integration-tests/auth/`.
+
+### Testing Development Version of Blitz Inside an App {#testing-development-version-of-blitz}
+
+<Card type="info">
+
+Currently, to test the local dev version of Blitz, you can test an app
+inside the `blitz/apps/` folder. In there, the blitz dependency will
+automatically use the local dev version. We use it for development
+testing. You must also make sure you are running `pnpm dev` in the `blitz`
+folder at the same time.
+
+</Card>
+
+#### Link the Blitz CLI (Optional)
+
+The following will link the development CLI as a local binary so you can
+use it anywhere for testing.
+
+```sh
+pnpm link ./packages/blitz
+```
+
+## Troubleshooting {#troubleshooting}
+
+If you run into issues that should be documented here, please submit a PR!
+❤️
+
+#### Git errors
+
+Are you unable to commit? Do you get errors like `command not found` or
+`stdin is not a tty`? That's probably a Husky error! Try checking their
+[troubleshoot guide](https://typicode.github.io/husky/#/?id=troubleshoot).
+
+#### Preconstruct errors
+
+If you run into symlink and EPERM errors when trying to run Preconstruct
+on Windows, you may need to enable
+[Windows Developer Mode](https://www.howtogeek.com/292914/what-is-developer-mode-in-windows-10/)
+so that Preconstruct can create symlinks.
+
+#### Missing files in Windows
+
+If you have errors about missing files even after you run `pnpm build`,
+try cloning again your repository with the configuration `core.symlinks`
+set to `true` like this: `git clone -c core.symlinks=true <URL>`.

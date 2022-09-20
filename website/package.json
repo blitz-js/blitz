@@ -1,0 +1,74 @@
+{
+  "name": "blitz-site-v2",
+  "version": "1.0.0",
+  "private": true,
+  "volta": {
+    "node": "14.18.1",
+    "yarn": "1.22.17"
+  },
+  "scripts": {
+    "start:dev": "next dev",
+    "clean": "rm -rf node_modules && rm -rf .turbo && rm -rf .next",
+    "start": "next start",
+    "build": "next build",
+    "lint": "pnpm lint:code && pnpm lint:docs",
+    "lint:code": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
+    "lint:docs": "alex app/pages/docs/**/*.mdx",
+    "english-slugify": "node scripts/english-slugify.mjs"
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx}": [
+      "eslint --fix"
+    ]
+  },
+  "dependencies": {
+    "@blitzjs/config": "workspace:*",
+    "@blitzjs/next": "workspace:*",
+    "@docsearch/react": "3.0.0-alpha.42",
+    "@octokit/rest": "18.12.0",
+    "@reach/rect": "0.16.0",
+    "@sindresorhus/slugify": "2.1.0",
+    "@visx/hierarchy": "2.1.2",
+    "@visx/responsive": "2.4.1",
+    "blitz": "workspace: *",
+    "clsx": "1.1.1",
+    "fathom-client": "3.2.0",
+    "focus-visible": "5.2.0",
+    "gray-matter": "4.0.3",
+    "next": "12.2.5",
+    "next-themes": "0.0.15",
+    "prismjs": "1.27.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-icons": "4.3.1",
+    "react-player": "2.9.0",
+    "react-select": "5.2.1",
+    "ts-node": "10.7.0",
+    "typeface-libre-franklin": "1.1.13",
+    "typeface-roboto": "1.1.13",
+    "typeface-roboto-mono": "1.1.13",
+    "typescript": "4.5.2",
+    "unist-util-visit": "2.0.3"
+  },
+  "devDependencies": {
+    "@mdx-js/loader": "1.6.22",
+    "@next/bundle-analyzer": "11.1.2",
+    "@svgr/webpack": "6.1.1",
+    "@tailwindcss/typography": "0.4.1",
+    "alex": "10.0.0",
+    "autoprefixer": "10.4.0",
+    "babel-plugin-preval": "5.0.0",
+    "eslint": "7.32.0",
+    "eslint-plugin-simple-import-sort": "7.0.0",
+    "file-loader": "6.2.0",
+    "husky": "7.0.4",
+    "lint-staged": "12.1.2",
+    "minimatch": "3.0.4",
+    "postcss": "8.4.4",
+    "postcss-nested": "5.0.6",
+    "prettier": "2.5.1",
+    "pretty-quick": "3.1.2",
+    "simple-functional-loader": "1.2.1",
+    "tailwindcss": "2.2.19"
+  }
+}

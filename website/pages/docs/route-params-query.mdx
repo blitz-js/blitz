@@ -1,0 +1,114 @@
+---
+title: URL Params & Query
+sidebar_label: URL Params & Query
+---
+
+## `useParams` {#use-params}
+
+This hook returns all the [parameters](./routing#dynamic-route-segments)
+for the current route as an object. The default parameter type is
+`undefined | string | string[]`, but you can optionally provide a type
+argument to narrow the parameters and types that are returned.
+
+```tsx
+import { useParams } from "blitz"
+
+const params = useParams()
+// ReturnType: Record<string, undefined | string | string[]>
+
+const params = useParams("string")
+// ReturnType: Record<string, string>
+
+const params = useParams("number")
+// ReturnType: Record<string, number>
+
+const params = useParams("array")
+// ReturnType: Record<string, string[]>
+```
+
+### Example Usage {#example-usage}
+
+```tsx
+// File: app/products/pages/products/[id].tsx
+// URL: /products/2
+import { useParams } from "blitz"
+
+const params = useParams()
+// params = {id: "2"}
+```
+
+```tsx
+// File: app/pages/blog/[category]/[...slug].tsx
+// URL: /blog/tech/2020/1
+import { useParams } from "blitz"
+
+const params = useParams()
+// params = {category: "tech", slug: ["2020", "1"]}
+
+const params = useParams("string")
+// params = {category: "tech"}
+
+const params = useParams("array")
+// params = {slug: ["2020", "1"]}
+```
+
+## `useParam` {#use-param}
+
+This hook returns a single [parameter](./routing#dynamic-route-segments)
+for the current route. The default return type is
+`undefined | string | string[]`, but you can optionally provide a type
+argument to cast the return type.
+
+```tsx
+import { useParam } from "blitz"
+
+const param = useParam("id")
+// ReturnType: undefined | string | string[]
+
+const param = useParam("id", "string")
+// ReturnType: undefined | string
+
+const param = useParam("id", "number")
+// ReturnType: undefined | number
+
+const param = useParam("id", "array")
+// ReturnType: undefined | string[]
+```
+
+### Example Usage {#example-usage-1}
+
+```tsx
+// File: app/locations/pages/locations/[id]/[[...zipcode]].tsx
+// URL: /locations/2/02137
+import { useParam } from "blitz"
+
+const id = useParam("id", "number")
+// id = 2
+const zipcodes = useParam("zipcode", "array")
+// zipcodes = ["02137"]
+```
+
+```tsx
+// File: app/pages/blog/[slug].tsx
+// URL: /blog/hello-world
+import { useParam } from "blitz"
+
+const slug = useParam("slug", "string")
+// slug = "hello-world"
+```
+
+## `useRouterQuery` {#use-router-query}
+
+This hook returns all the query parameters from the URL as an object.
+Using query parameters, you can pass key-value pairs via the URL with the
+pattern`?key1=value1&key2=value2`. Parameter type is always `string`.
+
+```tsx
+// URL: /products?sort=asc&limit=10
+
+import { useRouterQuery } from "blitz"
+
+const query = useRouterQuery()
+
+// query = {sort: "asc", limit: "10"}
+```

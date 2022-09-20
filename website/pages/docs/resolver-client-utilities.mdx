@@ -1,0 +1,267 @@
+---
+title: Client Utilities
+sidebar_label: Client Utilities
+---
+
+## `invoke` {#invoke}
+
+This is for imperatively invoking queries or mutations from your
+components.
+
+### Example {#example}
+
+```tsx
+import { invoke } from "@blitzjs/rpc"
+import getProducts from "app/products/queries/getProducts"
+
+const Page = function ({ products }) {
+  return (
+    <div>
+      <button
+        onClick={async () => {
+          const products = await invoke(getProducts, {
+            where: { orgId: 1 },
+          })
+        }}
+      >
+        Get Products
+      </button>
+    </div>
+  )
+}
+export default Page
+```
+
+## API {#api}
+
+```js
+const results = await invoke(resolver, resolverInputArguments)
+```
+
+### Arguments {#arguments}
+
+- `resolver:` A Blitz [query resolver](./query-resolvers) or
+  [mutation resolver](./mutation-resolvers)
+  - **Required**
+- `resolverInputArguments`
+  - **Required**
+  - The arguments that will be passed to `resolver`
+
+### Returns {#returns}
+
+- `results`
+  - The exact results returned from the resolver
+
+## `invalidateQuery` {#invalidate-query}
+
+This allows you to invalidate a specific query. Use `invalidateQuery` if
+you know for sure that a query's data is stale and you don't want to wait
+for the automatic refetch.
+
+### Example {#example-1}
+
+```tsx
+import { invalidateQuery } from "@blitzjs/rpc" // highlight-line
+import getProducts from "app/products/queries/getProducts"
+
+const Page = function ({ products }) {
+  return (
+    <div>
+      <button
+        onClick={() => {
+          invalidateQuery(getProducts) // highlight-line
+        }}
+      >
+        Invalidate
+      </button>
+    </div>
+  )
+}
+export default Page
+```
+
+## API {#api-1}
+
+```js
+const refetchedQueries = await invalidateQuery(resolver, inputArgs?)
+```
+
+### Arguments {#arguments-1}
+
+- `resolver:` A Blitz [query resolver](./query-resolvers) or
+  [mutation resolver](./mutation-resolvers)
+  - **Required**
+- `inputArgs`
+  - Optional
+  - The arguments that will be passed to `resolver`
+  - If you don't provide this, it will invalidate all `resolver` queries
+  - If you do provide this, it will only invalidate queries for `resolver`
+    with matching `inputArgs`
+
+### Returns {#returns-1}
+
+This function returns a promise that will resolve when all of the queries
+are done being refetched.
+
+## `getQueryKey` {#get-query-key}
+
+This allows you to get the query key for a query. The `queryClient`
+manages query based on query keys. For a more detailed explanation, see
+the [`React Query`](https://react-query.tanstack.com/guides/query-keys)
+documentation.
+
+### Example {#example-2}
+
+```tsx
+import { getQueryKey, getQueryClient } from "@blitzjs/rpc"
+import getProducts from "app/products/queries/getProducts"
+
+const Page = function ({ products }) {
+  return (
+    <div>
+      <button
+        onClick={async () => {
+          const queryKey = getQueryKey(getProducts)
+          getQueryClient().invalidateQueries(queryKey)
+
+          const queryKey = getQueryKey(getProducts, {
+            where: { ordId: 1 },
+          })
+          getQueryClient().invalidateQueries(queryKey)
+        }}
+      >
+        Invalidate
+      </button>
+    </div>
+  )
+}
+export default Page
+```
+
+## `getInfiniteQueryKey` {#get-infinite-query-key}
+
+This allows you to get the query key for an **infinite** query. The
+`queryClient` manages query based on query keys. For a more detailed
+explanation, see the
+[`React Query`](https://react-query.tanstack.com/guides/query-keys)
+documentation.
+
+### Example {#example-3}
+
+```tsx
+import { getQueryKey, getQueryClient } from "@blitzjs/rpc"
+import getInfiniteProducts from "app/products/queries/getInfiniteProducts"
+
+const Page = function ({ products }) {
+  return (
+    <div>
+      <button
+        onClick={async () => {
+          const queryKey = getInfiniteQueryKey(getInfiniteProducts)
+          getQueryClient().invalidateQueries(queryKey)
+        }}
+      >
+        Invalidate
+      </button>
+    </div>
+  )
+}
+export default Page
+```
+
+## API {#api-2}
+
+```js
+const queryKey = getQueryKey(resolver, inputArgs?)
+```
+
+### Arguments {#arguments-2}
+
+- `resolver:` A Blitz [query resolver](./query-resolvers) or
+  [mutation resolver](./mutation-resolvers)
+  - **Required**
+- `inputArgs`
+  - Optional
+  - The arguments that will be passed to `resolver`
+  - If you don't provide this, it will return the base query key for all
+    `resolver` queries
+  - If you do provide this, it will return the specific query key for the
+    `resolver` and `inputArgs` combination
+
+### Returns {#returns-2}
+
+- `results`
+  - The exact results returned from the resolver
+
+## `setQueryData` {#set-query-data}
+
+Works the same as the
+[setQueryData returned by useQuery](./use-query#setQueryData). The
+difference is that it's not bound to the useQuery and expects the
+`resolver` and the `inputArgs` instead. It will also invalidate the query
+causing a refetch. Disable refetch by passing an options object
+`{refetch: false}` as the `opts` argument.
+
+### Example {#example-4}
+
+```tsx
+import { setQueryData } from "@blitzjs/rpc"
+
+export default function (props: { query: { id: number } }) {
+  const [product] = useQuery(getProduct, {
+    where: { id: props.query.id },
+  })
+  const [updateProjectMutation] = useMutation(updateProject)
+
+  return (
+    <Formik
+      initialValues={product}
+      onSubmit={async (values) => {
+        try {
+          const product = await updateProjectMutation(values)
+          setQueryData(
+            getProduct,
+            { where: { id: props.query.id } },
+            product
+          )
+        } catch (error) {
+          alert("Error saving product")
+        }
+      }}
+    >
+      {/* ... */}
+    </Formik>
+  )
+}
+```
+
+## API {#api-3}
+
+```js
+const promise = setQueryData(resolver, inputArgs, newData, opts?)
+```
+
+### Arguments {#arguments-3}
+
+- `resolver:` A Blitz [query resolver](./query-resolvers).
+  - **Required**
+- `inputArgs`
+  - **Required**
+  - The arguments that will be passed to `resolver`
+  - It will set the data for the specified `resolver` and `inputArgs`
+    combination
+- `newData`
+  - **Required**
+  - If non-function is passed, the data will be updated to this value
+  - If a function is passed, it will receive the old data value and be
+    expected to return a new one.
+- `opts`
+  - Optional
+  - An object with additional options.
+  - Disable refetch by passing an options object `{refetch: false}`.
+
+### Returns {#returns-3}
+
+- `results`
+  - Returns a promise that will be resolved when the new data is
+    refetched.

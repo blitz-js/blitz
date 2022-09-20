@@ -1,0 +1,634 @@
+---
+title: Writing Your Own Recipes
+sidebar_label: Writing Recipes
+---
+
+The incredible power of Blitz Recipes isn't limited to the official
+recipes in the Blitz repo. The API for building recipes is a public API
+(although one that is subject to change) exposed via the
+[`@blitzjs/installer`](https://npm.im/@blitzjs/installer) package, which
+can be installed into your own scripts to write a completely custom
+recipe. Combined with the power of
+[`jscodeshift`](https://github.com/facebook/jscodeshift) for transforming
+existing files, fully automated code migrations are first-class citizens
+in the Blitz ecosystem. In fact, in the future we hope that upgrading
+Blitz will actually be possible with a quick `blitz install blitz@1.0.0`.
+
+### Setup {#setup}
+
+To author your own recipe, you'll want to create a new package and install
+a couple of dependencies. You'll only need the `jscodeshift` dependencies
+if you're using a **transform** step to modify an existing file. If you're
+only creating new files or adding dependencies you'll only need
+`@blitzjs/installer`.
+
+If you're going to be writing tests for your recipe you'll need a build
+and test setup. We recommend [`tsdx`](https://github.com/jaredpalmer/tsdx)
+and Jest for building and running tests.
+
+```bash
+yarn add -EL @blitzjs/installer jscodeshift @types/jscodeshift
+```
+
+The Recipe API all revolves around the `RecipeBuilder` factory. Blitz
+assumes that the file referenced in the `main` field of your
+`package.json` has a recipe as its default export, so we can go ahead and
+set that up.
+
+```json
+// package.json
+{
+  "main": "index.ts"
+}
+```
+
+```typescript
+// index.ts
+import { RecipeBuilder } from "@blitzjs/installer"
+
+export default RecipeBuilder().build()
+```
+
+### Adding Metadata {#adding-metadata}
+
+In addition to the actual steps of the recipe, we require that the
+developer supply metadata about the recipe. This allows us to display some
+information to the user about what they're installing, as well as where
+they can look for support if they need it.
+
+```typescript
+RecipeBuilder()
+  .setName("My Package")
+  .setDescription(
+    "A little bit of information about what exactly is being installed."
+  )
+  .setOwner("Fake Author <blitz@blitzjs.com>")
+  .setRepoLink("https://github.com/fake-author/my-recipe")
+  .build()
+```
+
+This is a pretty good start, and is actually all we need to create an
+executable recipe that a user can run via `blitz install`. However, it's
+not very useful because we don't actually have any steps for the installer
+framework to execute. Keep reading to learn about the different actions we
+can execute.
+
+### Common API {#common-api}
+
+Each action type has a shared interface for defining a "step" in the
+recipe. This ensures consistency in the user experience and enables us to
+provide a pleasant installation experience. Each step that gets added must
+have a string ID that's used to internally track the progress of the
+installation, a display name, and an explanation for what the step is
+doing.
+
+```typescript
+interface Config {
+  stepId: string
+  stepName: string
+  explanation: string
+}
+```
+
+Eventually we expect to provide hooks into the recipe lifecycle, making
+some of the metadata like `stepId` critical.
+
+### Adding Dependencies {#adding-dependencies}
+
+The first action we can take is adding dependencies to the user's
+application. This step type will automatically detect whether the user is
+using `yarn` or `npm` and use the proper tool. The configuration is very
+straightforward — it accepts a list of packages, their versions, and
+whether or not they should be installed as a `devDependency`.
+
+```typescript
+builder.addAddDependenciesStep({
+  stepId: "addDeps",
+  stepName: "Add npm dependencies",
+  explanation: `We'll install the Tailwind library itself, as well as PostCSS for removing unused styles from our production bundles.`,
+  packages: [
+    { name: "tailwindcss", version: "1" },
+    { name: "postcss-preset-env", version: "latest", isDevDep: true },
+  ],
+})
+```
+
+### Adding files {#adding-files}
+
+One incredibly powerful part of recipes is the ability to generate files
+from templates.
+
+We use a custom templating language that's natural to both read and write.
+[Read our template documentation to learn how to write templates](templates).
+
+By supplying the `templateValues` configuration, you can either supply a
+hard-coded object for values to interpolate in the template or a function
+that returns an object. The function will be passed any additional
+arguments passed to `blitz install` (e.g.
+`blitz install myrecipe --someConfig=false`). The template files can go
+anywhere in your recipe's file structure, you supply the path as a part of
+the recipe definition.
+
+```typescript
+import { join } from "path"
+
+builder.addNewFilesStep({
+  stepId: "addStyles",
+  stepName: "Add base Tailwind CSS styles",
+  explanation: `Next, we need to actually create some stylesheets! These stylesheets can either be modified to include global styles for your app, or you can stick to using classnames in your components.`,
+  targetDirectory: "./app",
+  templatePath: join(__dirname, "templates", "styles"),
+  templateValues: {},
+})
+```
+
+### Modifying existing files {#modifying-existing-files}
+
+Arguably the most powerful part of Blitz recipes, using JSCodeShift you
+can write a transform that will modify an existing file. The transform
+function is passed the AST representing the selected file, an object for
+building new nodes, and an object to assist with typechecking and
+assertions on nodes. [ASTExplorer](https://astexplorer.net) is a great
+place to get familiar with the AST structures and to play around with
+transforms. For best results, use the `@babel/parser` for the parser
+setting, and `jscodeshift` for the transform setting.
+
+Blitz supplies some predefined transforms for you for the most common
+cases, but you can always write a custom transform to modify any
+JavaScript file you want. We also provide a convenience utility for
+accessing common files like `_app.tsx` or `blitz.config.js`. If the file
+path is a glob pattern, the installer process will prompt the user to
+select a file matching the pattern.
+
+```typescript
+import { addImport, paths } from "@blitzjs/installer"
+import j from "jscodeshift"
+
+builder.addTransformFilesStep({
+  stepId: "importStyles",
+  stepName: "Import stylesheets",
+  explanation: `Finaly, we can import the stylesheets we created, into our application. For now we'll put them in document.tsx, but if you'd like to only style a part of your app with tailwind you could import the styles lower down in your component tree.`,
+  singleFileSearch: paths.app(),
+  transform(program: j.Collection<j.Program>) {
+    const stylesImport = j.importDeclaration(
+      [],
+      j.literal("app/styles/index.css")
+    )
+    return addImport(program, stylesImport)!
+  },
+})
+```
+
+Because transforms are self-contained functions that execute on ASTs, you
+can actually unit test this part of your installer, which is incredibly
+helpful for reliability. Using `jscodeshift` directly along with snapshot
+testing, the tests are quick to write:
+
+```typescript
+import j from "jscodeshift"
+import { addImport, customTsParser } from "@blitzjs/installer"
+
+const sampleFile = `export default function Comp() {
+  return <div>hello!</div>;
+})`
+expect(
+  addImport(
+    j(sampleFile, {
+      parser: customTsParser,
+    }),
+    newImport
+  ).toSource()
+).toMatchSnapshot()
+```
+
+#### Modifying Non-JS files
+
+Not all modifications can be performed using `jscodeshift`. For any other
+transformations, you can use `transformPlain`:
+
+```ts
+builder.addTransformFilesStep({
+  // ...
+  singleFileSearch: "README.md",
+  transformPlain(readme: string) {
+    return readme + "\n" + "Paul Plain was here!"
+  },
+})
+```
+
+This step would append "Paul Plain was here!" to the user's README.md
+
+#### Creating a custom message
+
+Sometimes you need to print a simple message, or give some instructions,
+you can achieve that with `printMessage`
+
+```ts
+builder.printMessage({
+  successIcon: "ℹ️",
+  stepId: "oops",
+  stepName: "Contributors needed!",
+  message: "If you like this recipe, consider helping out!",
+})
+```
+
+This step would print "If you like this recipe, consider helping out!" to
+terminal and wait for the user to go to the next step.
+
+#### Custom step icons
+
+If you want to customize your recipe even further, you can pass an
+optional `successIcon` param to your steps.
+
+```ts
+builder.addTransformFilesStep({
+  successIcon: "🔧",
+  // ...
+})
+```
+
+#### Modifying Prisma schemas
+
+A lot of recipes may need to add or modify models in the schema.prisma
+file in order to apply the recipe's effects. You can attempt to manipulate
+the schema using plain string transformations in `transformPlain`, but a
+lot of recipes may require the ability to query something about the schema
+first. For example, to determine the model on the other end of a
+[Relation](https://www.prisma.io/docs/concepts/components/prisma-schema/relations/),
+or to detect if a field already exists.
+
+For your convenience, there are several pre-written utilities for common
+schema modifications:
+
+##### Create an Enum
+
+```ts
+singleFileSearch: paths.prismaSchema(),
+transformPlain(source: string) {
+  // Create the enum Role with two values, USER and ADMIN
+  return addPrismaEnum(source, {
+    type: "enum",
+    name: "Role",
+    enumerators: [
+      {type: "enumerator", name: "USER"},
+      {type: "enumerator", name: "ADMIN"},
+    ],
+  })
+}
+```
+
+##### Add a Field to a Model
+
+```ts
+singleFileSearch: paths.prismaSchema(),
+transformPlain(source: string) {
+  // Add a field "name String @unique" to the "Project" model
+  return addPrismaField(source, "Project", {
+    type: "field",
+    name: "name",
+    fieldType: "String",
+    optional: false,
+    attributes: [{type: "attribute", kind: "field", name: "unique"}],
+  })
+}
+```
+
+##### Create a Generator
+
+```ts
+singleFileSearch: paths.prismaSchema(),
+transformPlain(source: string) {
+  // Create a prisma generator for nexus-prisma
+  return addPrismaGenerator(source, {
+    type: "generator",
+    name: "nexusPrisma",
+    assignments: [
+      {type: "assignment", key: "provider", value: '"nexus-prisma"'},
+    ],
+  })
+}
+```
+
+##### Create a Model
+
+```ts
+singleFileSearch: paths.prismaSchema(),
+transformPlain(source: string) {
+  // Create a prisma model called Project
+  return addPrismaModel(source, {
+    type: "model",
+    name: "Project",
+    properties: [{type: "field", name: "name", fieldType: "String"}],
+  })
+}
+```
+
+##### Add an Attribute such as an Index to a Model
+
+```ts
+singleFileSearch: paths.prismaSchema(),
+transformPlain(source: string) {
+  // Creates an index attribute on the Project model "@@index([name])"
+  return addPrismaModelAttribute(source, "Project", {
+    type: "attribute",
+    kind: "model",
+    name: "index",
+    args: [
+      {type: "attributeArgument", value: {type: "array", args: ["name"]}},
+    ],
+  })
+}
+```
+
+##### Set the schema's Datasource
+
+Since a prisma schema can only have one data source, there is no "add"
+utility, this will replace the schema's current data source.
+
+```ts
+singleFileSearch: paths.prismaSchema(),
+transformPlain(source: string) {
+  // Set the datasource to postgresql
+  return setPrismaDataSource(source, {
+    type: "datasource",
+    name: "db",
+    assignments: [
+      {type: "assignment", key: "provider", value: '"postgresql"'},
+      {
+        type: "assignment",
+        key: "url",
+        value: {type: "function", name: "env", params: ['"DATABASE_URL"']},
+      },
+    ],
+  })
+}
+```
+
+##### Custom Schema Transformations with produceSchema
+
+If the provided helpers aren't flexible enough for your recipe, you can
+use the `produceSchema` utility function to parse the prisma schema file
+and apply custom transformations. It will convert the schema into a JSON
+object format that you can modify using JavaScript, then print the schema
+(with your changes applied) back out to a string. All of the above helpers
+are implemented using `produceSchema`.
+
+```ts
+builder.addTransformFilesStep({
+  // ...
+  singleFileSearch: paths.prismaSchema(),
+  transformPlain(source: string) {
+    return produceSchema(source, (schema) => {
+      // find a model named "User"
+      const model = schema.list.find(function (item): item is Model {
+        return item.type === "model" && item.name === "User"
+      }) as Model
+      if (!model) return
+
+      // find a field on the "User" model named "email"
+      const field = model.properties.find(function (
+        property
+      ): property is Field {
+        return property.type === "attribute" && property.name === "email"
+      })
+      if (!field) return
+
+      // add the "@unique" attribute to "email"
+      field.attributes?.push({
+        type: "attribute",
+        kind: "field",
+        name: "unique",
+      })
+    })
+  },
+})
+```
+
+It is a best practice for schema transformations to be idempotent, meaning
+that the function should not attempt to make a change to the schema if
+that change already has been made. For instance, do not add a field to a
+model if that field already exists.
+
+To see how the schema file is parsed,
+[click here](https://github.com/MrLeebo/prisma-ast).
+
+### Modifying Blitz config {#modifying-blitz-config}
+
+Some recipes may require modifying the existing Blitz config file. We are
+fortunate enough to be able to use the `paths` provided by the
+`@blitzjs/installer` package. You can pass this into your
+`singleFileSearch` and use `jscodeshift` to modify it.
+
+```ts
+builder.addTransformFilesStep({
+  // ...
+  singleFileSearch: paths.blitzConfig(),
+  transform(program: j.Collection<j.Program>) {
+    // Perform your transformation here!
+  },
+})
+```
+
+#### Transforming the config
+
+The `transformBlitzConfig` function can be imported from the
+`@blitzjs/installer` package. It looks for the configuration object and
+lets you modify it. It takes a `program` and a callback. The callback
+takes the config `j.ObjectExpression` and has to return another
+`j.ObjectExpression`.
+
+```ts
+builder.addTransformFilesStep({
+  // ...
+  singleFileSearch: paths.blitzConfig(),
+  transform(program: j.Collection<j.Program>) {
+    program = transformBlitzConfig(program, (config) => {
+      // perform your transformation
+      return config
+    })
+  },
+})
+```
+
+#### Wrapping the config
+
+There are cases when you want to wrap the configuration object with
+another function, like this:
+
+```ts
+import { createVanillaExtractPlugin } from "@vanilla-extract/next-plugin"
+
+const config = {
+  /* ... */
+}
+
+module.export = createVanillaExtractPlugin(config)
+```
+
+The `wrapBlitzConfig` function can be imported from the
+`@blitzjs/installer` package. It looks for the configuration object and
+lets you modify it. It takes the `program` and the name of the function.
+Note that you still need to create the import statement - you can use
+`addImport` for this.
+
+```ts
+builder.addTransformFilesStep({
+  // ...
+  singleFileSearch: paths.blitzConfig(),
+  transform(program: j.Collection<j.Program>) {
+    program = addImport(
+      program,
+      j.importDeclaration(
+        [j.importSpecifier(j.identifier("createVanillaExtractPlugin"))],
+        j.literal("@vanilla-extract/next-plugin")
+      )
+    )
+    return wrapBlitzConfig(program, "createVanillaExtractPlugin")
+  },
+})
+```
+
+#### Adding a middleware {#adding-blitz-middleware}
+
+Using the transform function `addBlitzMiddleware` you can add new
+middleware from a recipe.
+
+The `addBlitzMiddleware` function can be imported from the
+`@blitzjs/installer` package.
+
+```ts
+import { addBlitzMiddleware } from "@blitzjs/installer"
+```
+
+This function takes two arguments `program` and `middleware`. `program`
+being the jscodeshift object we are modifying, and `middleware` being a
+function we want to add as middleware.
+
+Using a transformation step, we can take advantage of `singleFileSearch`,
+construct our middleware, and add it.
+
+```ts
+builder.addTransformFilesStep({
+  // ...
+  singleFileSearch: paths.blitzConfig(),
+  transform(program: j.Collection<j.Program>) {
+    // This is the middleware we want to add
+    const newMiddleware = j.arrowFunctionExpression(
+      [j.identifier("req"), j.identifier("res"), j.identifier("next")],
+      j.blockStatement([
+        j.expressionStatement(
+          j.assignmentExpression(
+            "=",
+            j.memberExpression(
+              j.identifier("res"),
+              j.identifier("blitzCtx.foo")
+            ),
+            j.identifier("bar")
+          )
+        ),
+        j.returnStatement(j.callExpression(j.identifier("next"), [])),
+      ])
+    )
+
+    addBlitzMiddleware(program, newMiddleware)
+
+    return program
+  },
+})
+```
+
+In this case, the resulting middleware is added to your blitz config:
+
+```ts
+const config = {
+  // ...
+  middleware: [
+    // ...
+    (req, res, next) => {
+      res.blitzCtx.foo = bar
+      return next()
+    },
+  ],
+}
+```
+
+### Modifying Babel config {#modifying-babel-config}
+
+Some recipes may require modifying the existing Babel config file. We are
+fortunate enough to be able to use the `paths` provided by the
+`@blitzjs/installer` package. You can pass this into your
+`singleFileSearch` and use `jscodeshift` to modify it.
+
+```ts
+builder.addTransformFilesStep({
+  // ...
+  singleFileSearch: paths.babelConfig(),
+  transform(program: j.Collection<j.Program>) {
+    // Perform your transformation here!
+  },
+})
+```
+
+The `@blitzjs/installer` package provides two transformers:
+`addBabelPlugin` and `addBabelPreset`. Both take the `program` and the
+plugin/preset. You don't need to worry about jscodeshift stuff, you only
+need to provide a valid JSON object and it will be transformed. This
+argument has to be either the name of the plugin/preset (as a string) or a
+array with two elements: the name of the plugin/preset and its
+configuration.
+
+```ts
+builder.addTransformFilesStep({
+  // ...
+  singleFileSearch: paths.babelConfig(),
+  transform(program: j.Collection<j.Program>) {
+    program = addBabelPlugin(program, "@emotion")
+    program = addBabelPreset(program, [
+      "preset-react",
+      { runtime: "automatic", importSource: "@emotion/react" },
+    ])
+    return program
+  },
+})
+```
+
+### Running an external command {#running-an-external-command}
+
+In case you have a recipe which should run an external command like
+`blitz prisma generate`, you can use `addRunCommandStep`.
+
+Example usage:
+
+```ts
+builder.addRunCommandStep({
+  stepId: "runCommand",
+  stepName: "Generate prisma client",
+  explanation:
+    "Since we added a new generator to the prisma schema, we have to update the prisma client",
+  command: "blitz prisma generate",
+})
+```
+
+<Card type="info">
+  We have suppressed the command output, so the user will not see the
+  result of the executed command.
+</Card>
+
+### Publishing {#publishing}
+
+That's all you need to build a recipe! At this point, you can commit and
+push up to GitHub, and your recipe is available to the world. Users can
+install your recipe by passing your full repository name to
+`blitz install` - for example:
+
+```bash
+blitz install some-githubuser/my-awesome-recipe
+```
+
+### Testing locally {#testing-locally}
+
+To test your recipe locally without publishing it you can run
+
+```bash
+blitz install /path/to/your/recipes/index.ts
+```

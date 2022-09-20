@@ -1,0 +1,69 @@
+---
+title: Mutation Resolvers
+sidebar_label: Mutation Resolvers
+---
+
+Blitz mutations are plain, asynchronous JavaScript functions that always
+run on the server.
+
+**1. Mutations must be inside a `mutations` folder. All of the following
+are valid:**
+
+- `app/mutations/createProject.ts`
+- `app/projects/mutations/createProject.ts`
+- `app/admin/projects/mutations/createProject.ts`
+
+**2. Mutations must export a function as the default export**
+
+You can write any normal Node.js code here, including database access and
+fetching from third-party APIs.
+
+#### Arguments
+
+- `input: any`
+  - The first argument is anything you need for your mutation. There are
+    no special requirements.
+- `ctx: Ctx`
+  - This context object is automatically provided by Blitz at run time.
+    This is used by [HTTP Middleware](./middleware) to provide data or
+    functions to your mutation. For example, authentication middleware can
+    provide `ctx.session` with all the data about the current user
+    session.
+
+#### Example Mutation
+
+```ts
+// app/products/mutations/createProduct.tsx
+import { Ctx } from "blitz"
+import db from "db"
+import * as z from "zod"
+
+const CreateProject = z
+  .object({
+    name: z.string(),
+  })
+  .nonstrict()
+
+export default async function createProject(
+  input: z.infer<typeof CreateProject>,
+  ctx: Ctx
+) {
+  // Validate input - very important for security
+  const data = CreateProject.parse(input)
+
+  // Require user to be logged in
+  ctx.session.$authorize()
+
+  const project = await db.project.create({ data })
+
+  // Can do any processing, fetching from other APIs, etc
+
+  return project
+}
+```
+
+_We automatically alias the root of your project, so `import db from 'db'`
+is importing `<project_root>/db/index.ts`_
+
+Next, [read these docs](./mutation-usage) to see how to use these
+mutations in your components.

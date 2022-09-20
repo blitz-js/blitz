@@ -1,0 +1,146 @@
+@import "base.css";
+
+/*! purgecss start ignore */
+@import "docsearch.css";
+@import "prism.css";
+@import "bar-of-progress.css";
+/*! purgecss end ignore */
+
+@tailwind components;
+@import "utilities.css";
+
+html {
+  font-family: "Libre Franklin", sans-serif;
+  scroll-behavior: smooth;
+}
+
+.player-wrapper {
+  position: relative;
+  padding-top: 56.25%;
+}
+
+.react-player {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.background-to-video {
+  margin-top: calc((100vw - 3rem) * (-9 / 16) * 0.5);
+}
+
+.features-grid {
+  grid-template-columns: repeat(4, 70vw);
+}
+
+.icon {
+  width: 0.9375rem;
+  height: 0.9375rem;
+}
+
+.icon-large {
+  width: 1rem;
+  height: 1rem;
+}
+
+.icon-background {
+  width: 1.5625rem;
+  height: 1.5625rem;
+}
+
+.icon-expanded .icon-background {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.icon-expanded .icon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.architecture-diagram {
+  width: 800px;
+}
+
+.hand {
+  pointer-events: none;
+  --color-stop: theme("colors.purple.light");
+  --page-bg-color: theme("colors.white");
+}
+
+.dark .hand {
+  --color-stop: theme("colors.purple.dark");
+  --page-bg-color: theme("colors.black");
+}
+
+@screen sm {
+  .features-grid {
+    grid-template-columns: repeat(4, 25rem);
+  }
+  .architecture-diagram {
+    width: 1000px;
+  }
+}
+
+@screen md {
+  .architecture-diagram {
+    width: 1230px;
+  }
+}
+
+@screen lg {
+  .icon {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .icon-background {
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+
+  .icon-large {
+    width: 1.4rem;
+    height: 1.4rem;
+  }
+
+  .background-to-video {
+    margin-top: calc((100vw - 4.25rem) * (-9 / 16) * 0.25);
+  }
+
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .architecture-diagram {
+    width: 100%;
+  }
+}
+
+@screen xl {
+  .background-to-video {
+    margin-top: calc((1280px - 4.25rem) * (-9 / 16) * 0.25);
+  }
+
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+code::before,
+code::after {
+  content: "" !important;
+}
+
+code {
+  @apply rounded-sm;
+  padding: 2px 5px;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+}

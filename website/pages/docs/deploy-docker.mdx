@@ -1,0 +1,51 @@
+---
+title: Deploy Using Docker
+sidebar_label: Using Docker
+---
+
+[Docker](https://www.docker.com/) is a platform that enables developers to
+package their apps into standardized containers. These containers can be
+deployed to lots of PaaS (like Azure, Google Cloud Platform, AWS, etc.) or
+even to your own servers.
+
+## A very basic Dockerfile {#basic}
+
+This is a simple
+[Dockerfile](https://docs.docker.com/engine/reference/builder/) aimed only
+to be used in production. This Dockerfile will build your app, migrate
+your database and start your app on port 3000 (or whatever port you pass
+through a build argument).
+
+```dockerfile
+FROM node:16
+
+ARG DATABASE_URL
+ARG PORT=3000
+ENV DATABASE_URL ${DATABASE_URL}
+
+WORKDIR /usr/src/app
+
+COPY package.json yarn.lock ./
+COPY db/ ./db/
+RUN yarn install --frozen-lockfile
+RUN yarn blitz prisma migrate deploy
+
+COPY . .
+RUN yarn build
+
+EXPOSE ${PORT}
+
+CMD yarn start -p ${PORT}
+```
+
+Along with your `Dockerfile`, remember to create a `.dockerignore`. We
+recommend to copy and paste your `.gitignore`.
+
+## Optimized Dockerfiles {#advanced}
+
+Check out
+[`LoriKarikari/blitz-docker`](https://github.com/LoriKarikari/blitz-docker#readme).
+There are some examples of Dockerfiles following good practices and
+optimized for generating a small-sized image. Also, there are Dockerfiles
+that can be used both in development and deployment plus some
+`docker-compose.yml`.

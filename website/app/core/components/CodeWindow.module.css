@@ -1,0 +1,11 @@
+.root {
+  height: 28rem;
+  max-height: 60vh;
+}
+
+@screen md {
+  .root {
+    height: 34rem;
+    max-height: none;
+  }
+}

@@ -1,0 +1,97 @@
+---
+title: Font Optimization
+sidebar_label: Font Optimization
+---
+
+By default, Blitz.js will automatically inline font CSS at build time,
+eliminating an extra round trip to fetch font declarations. This results
+in improvements to [First Contentful Paint (FCP)](https://web.dev/fcp/)
+and
+[Largest Contentful Paint (LCP)](https://vercel.com/blog/core-web-vitals#largest-contentful-paint).
+
+For example:
+
+```jsx
+// Before
+<link
+  href="https://fonts.googleapis.com/css2?family=Inter"
+  rel="stylesheet"
+/>
+
+// After
+<style data-href="https://fonts.googleapis.com/css2?family=Inter">
+  @font-face{font-family:'Inter';font-style:normal...
+</style>
+```
+
+## Usage {#usage}
+
+To add a web font to your Blitz.js application, use `<Head>`. You can add
+a font to a specific page like this:
+
+```jsx
+// pages/index.js
+
+import { Head } from "blitz"
+
+export default function IndexPage() {
+  return (
+    <div>
+      <Head>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Inter"
+          rel="stylesheet"
+        />
+      </Head>
+      <p>Hello world!</p>
+    </div>
+  )
+}
+```
+
+or to your entire application with a
+[Custom `Document`](./document-component).
+
+```jsx
+// pages/_document.js
+
+import { Document, Html, DocumentHead, Main, BlitzScript } from "blitz"
+
+class MyDocument extends Document {
+  render() {
+    return (
+      <Html>
+        <DocumentHead>
+          <link
+            href="https://fonts.googleapis.com/css2?family=Inter"
+            rel="stylesheet"
+          />
+        </DocumentHead>
+        <body>
+          <Main />
+          <BlitzScript />
+        </body>
+      </Html>
+    )
+  }
+}
+
+export default MyDocument
+```
+
+Automatic Webfont Optimization currently supports Google Fonts and Typekit
+with support for other font providers coming soon. We're also planning to
+add control
+over [loading strategies](https://github.com/vercel/next.js/issues/21555) and `font-display` values.
+
+## Disabling Optimization {#disabling-optimization}
+
+If you do not want Blitz.js to optimize your fonts, you can opt-out.
+
+```js
+// blitz.config.js
+
+module.exports = {
+  optimizeFonts: false,
+}
+```

@@ -1,0 +1,391 @@
+---
+title: Multitenancy
+sidebar_label: Multitenancy
+---
+
+Multitenancy is a software architecture where a single app can serve
+multiple different users or organizations whose data is kept private from
+the other users of the system. One way to do this is have a totally
+separate database for each user, but that has a high operations overhead.
+The most common way is to store all user data in a single database and use
+foreign keys to keep data private.
+
+This guide shows you a good way to implement a multitenant Blitz app.
+
+## Data Model {#data-model}
+
+We recommend implementing the data model
+[as described by Andrew Culver of Bullet Train](https://blog.bullettrain.co/teams-should-be-an-mvp-feature/).
+
+- The `Organization` is the "God" model which owns everything for an
+  account
+- An `Organization` **has many** `User`s **through** `Membership`
+- Every other model in the system has an `organizationId` to indicate who
+  owns it.
+- A `User` can have access to multiple `Organization`s
+- When assigning an entity to a user, like a task, assign the task to the
+  user's `Membership` instead of directly to the user. See the Bullet
+  Train blog post linked above for more explanation on this.
+
+The prisma schema looks like this:
+
+```prisma
+model Organization {
+  id         Int @id @default(autoincrement())
+  name       String
+
+  membership Membership[]
+}
+
+model Membership {
+  id             Int @id @default(autoincrement())
+  role           MembershipRole
+
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  organizationId Int
+
+  user           User? @relation(fields: [userId], references: [id])
+  userId         Int?
+
+  // When the user joins, we will clear out the name and email and set the user.
+  invitedName  String?
+  invitedEmail String?
+
+  @@unique([organizationId, invitedEmail])
+}
+
+enum MembershipRole {
+  OWNER
+  ADMIN
+  USER
+}
+
+// The owners of the SaaS (you) can have a SUPERADMIN role to access all data
+enum GlobalRole {
+  SUPERADMIN
+  CUSTOMER
+}
+
+model User {
+  id             Int      @id @default(autoincrement())
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  name           String?
+  email          String   @unique
+  role           GlobalRole
+
+  memberships Membership[]
+}
+```
+
+Then you will need to update your `signup` mutation to also create an
+organization and membership at the same time as you create the user. Like
+this:
+
+```ts
+const user = await db.user.create({
+  data: {
+    // ...
+    memberships: {
+      create: {
+        role: "OWNER",
+        organization: {
+          create: {
+            name: organizationName,
+          },
+        },
+      },
+    },
+  },
+  include: { memberships: true },
+})
+```
+
+## User Sessions {#sessions}
+
+The above data model allows a single user to be in multiple organizations.
+So how can we track which organization a user is currently accessing or
+modifying?
+
+The best way is to only let a user access one organization at a time. And
+then provide a menu in the UI that let's them switch which organization
+they are accessing.
+
+To do that, first add an `orgId` field to the
+[session `PublicData`](./session-management#change-session-public-data-of-current-user).
+
+Update `types.ts` like this:
+
+```diff
++import { GlobalRole, MembershipRole, Organization } from "db"
+
+-export type Role = "ADMIN" | "USER"
++ type Role = MembershipRole | GlobalRole
+
+declare module "@blitzjs/auth" {
+  export interface Session {
+    isAuthorized: SimpleRolesIsAuthorized<Role>
+    PublicData: {
+       userId: User["id"]
++      roles: Array<Role>
++      orgId?: Organization["id"]
+    }
+  }
+}
+```
+
+and then update all places where you call `ctx.session.$create()`. You
+will need to add `orgId` and update `roles`.
+
+It will look something like this:
+
+```ts
+await session.$create({
+  userId: user.id,
+  roles: [user.role, user.memberships[0].role],
+  orgId: user.memberships[0].organizationId,
+})
+```
+
+Then you can use `ctx.session.orgId` in queries and mutations to filter
+your queries based on the current organization.
+
+## Queries {#queries}
+
+You must filter all your queries by `organizationId` to ensure one user
+cannot see another user's private data.
+
+```ts
+import db from "db"
+
+// If you accept only the `id` as input
+const project = await db.project.findFirst({
+  where: {
+    id: input.id,
+    organizationId: ctx.session.orgId,
+  },
+})
+
+// If you accept `where` as input
+const projects = await db.project.findMany({
+  where: {
+    ...input.where,
+    organizationId: ctx.session.orgId,
+  },
+})
+```
+
+## Mutations {#mutations}
+
+When creating new entities, make sure you attach them to the current
+organization. Here's an example of how to do that:
+
+```ts
+import { resolver } from "@blitzjs/rpc"
+import db from "db"
+import * as z from "zod"
+
+const CreateProject = z
+  .object({
+    name: z.string(),
+  })
+  .nonstrict()
+
+export default resolver.pipe(
+  resolver.zod(CreateProject),
+  resolver.authorize(),
+  async (input, ctx) => {
+    const project = await db.project.create({
+      data: {
+        ...input,
+        organizationId: ctx.session.orgId,
+      },
+    })
+
+    return project
+  }
+)
+```
+
+You must also filter update and delete mutations by `organizationId` to
+ensure another user's data can't be changed.
+
+Here's an example where a mutation accepts `id` that could be the id of an
+entity belonging to a different organization. You could first make a
+`db.project.findFirst()` query for that id and then manually verify that
+`organizationId` is correct. But the easier way shown here is by adding
+`organizationId` to the `db.update` `where` input. This update call will
+fail if the organizationId doesn't match.
+
+```ts
+import { resolver } from "@blitzjs/rpc"
+import db from "db"
+import * as z from "zod"
+
+const UpdateProject = z
+  .object({
+    id: z.number(),
+    name: z.string(),
+  })
+  .nonstrict()
+
+export default resolver.pipe(
+  resolver.zod(UpdateProject),
+  resolver.authorize(),
+  async ({ id, ...data }, ctx) => {
+    if (!ctx.session.orgId) throw new Error("Missing session.orgId")
+
+    // Looks for both `id` and `organizationId`
+    const project = await db.project.findFirst({
+      where: { id, organizationId: ctx.session.orgId },
+    })
+    if (!project) throw new NotFoundError()
+
+    const project = await db.project.update({ where: { id }, data })
+    return project
+  }
+)
+```
+
+## Advanced Authorization {#authorization}
+
+You can do more advanced things like calling `ctx.session.$authorize()`
+inside an if/else
+
+```ts
+import { resolver } from "@blitzjs/rpc"
+import db, { GlobalRole, MembershipRole } from "db"
+import * as z from "zod"
+
+const UpdateProject = z
+  .object({
+    id: z.number(),
+    organizationId: z.number(),
+    name: z.string(),
+  })
+  .nonstrict()
+
+export default resolver.pipe(
+  resolver.zod(UpdateProject),
+  // Ensure all users are logged in
+  resolver.authorize(),
+  async ({ id, organizationId, ...data }, ctx) => {
+    // if organizationId doesn't match current organization
+    if (organizationId !== ctx.session.orgId) {
+      // Require SUPERADMIN role
+      ctx.session.$authorize(GlobalRole.SUPERADMIN)
+    } else if (!ctx.session.accessibleProjects.includes(id)) {
+      // If user doesn't have specific access to this project,
+      // require them to be a project manager
+      ctx.session.$authorize(MembershipRole.PROJECT_MANAGER)
+    }
+
+    // Looks for both `id` and `organizationId`
+    const project = await db.project.findFirst({
+      where: { id, organizationId },
+    })
+    if (!project) throw new NotFoundError()
+
+    const project = await db.project.update({ where: { id }, data })
+
+    return project
+  }
+)
+```
+
+#### Utilities
+
+Here's some advanced utilities that allow you to do authorization in a way
+that allows SUPERADMINs to access all organizations but only permits
+regular users to access the organization they are currently logged in to.
+
+```ts
+// app/orders/queries/getOrder.ts
+import { NotFoundError } from "blitz"
+import { resolver } from "@blitzjs/rpc"
+import db from "db"
+import * as z from "zod"
+import {
+  enforceAdminOrProctorIfNotCurrentOrganization,
+  setDefaultOrganizationId,
+} from "app/core/utils"
+
+const GetOrder = z.object({
+  id: z.number(),
+  organizationId: z.number().optional(),
+})
+
+export default resolver.pipe(
+  resolver.zod(GetOrder),
+  // Ensure user is logged in
+  resolver.authorize(), //highlight-line
+  // Set input.organizationId to the current organization if one is not set
+  // This allows SUPERADMINs to pass in a specific organizationId
+  setDefaultOrganizationId, //highlight-line
+  // But now we need to enforce input.organizationId matches
+  // session.orgId unless user is a SUPERADMIN
+  enforceSuperAdminIfNotCurrentOrganization, //highlight-line
+  async ({ id, organizationId }) => {
+    const order = await db.getOrder({
+      where: {
+        id,
+        // Now we can safely use organizationId to filter queries
+        organizationId,
+      },
+    })
+    if (!order) throw new NotFoundError()
+    return order
+  }
+)
+```
+
+```ts
+// app/core/utils.ts
+import { Ctx } from "blitz"
+import { Prisma, GlobalRole } from "db"
+
+export default function assert(
+  condition: any,
+  message: string
+): asserts condition {
+  if (!condition) throw new Error(message)
+}
+
+export const setDefaultOrganizationId = <T extends Record<any, any>>(
+  input: T,
+  { session }: Ctx
+): T & { organizationId: Prisma.IntNullableFilter | number } => {
+  assert(
+    session.orgId,
+    "Missing session.orgId in setDefaultOrganizationId"
+  )
+  if (input.organizationId) {
+    // Pass through the input
+    return input as T & { organizationId: number }
+  } else if (session.roles?.includes(GlobalRole.SUPERADMIN)) {
+    // Allow viewing any organization
+    return { ...input, organizationId: { not: 0 } }
+  } else {
+    // Set organizationId to session.orgId
+    return { ...input, organizationId: session.orgId }
+  }
+}
+
+export const enforceSuperAdminIfNotCurrentOrganization = <
+  T extends Record<any, any>
+>(
+  input: T,
+  ctx: Ctx
+): T => {
+  assert(ctx.session.orgId, "missing session.orgId")
+  assert(input.organizationId, "missing input.organizationId")
+
+  if (input.organizationId !== ctx.session.orgId) {
+    ctx.session.$authorize(GlobalRole.SUPERADMIN)
+  }
+  return input
+}
+```
+
+If you want to do more advanced authorization, check out
+[Blitz Guard](https://github.com/ntgussoni/blitz-guard).

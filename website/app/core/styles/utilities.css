@@ -1,0 +1,184 @@
+@tailwind utilities;
+
+.scrollbar-none {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none !important;
+  }
+}
+
+.scrollbar-w-2::-webkit-scrollbar {
+  @apply w-2 h-2 !important;
+}
+
+.scrollbar-track-gray-lighter::-webkit-scrollbar-track {
+  @apply bg-gray-300 !important;
+}
+
+.scrollbar-thumb-gray::-webkit-scrollbar-thumb {
+  @apply bg-gray-400 !important;
+}
+
+.scrollbar-thumb-rounded::-webkit-scrollbar-thumb {
+  @apply rounded !important;
+}
+
+@supports (position: sticky) {
+  @media (min-width: theme("screens.lg")) {
+    .sticky\?lg\:h-screen {
+      height: 100vh !important;
+    }
+    .sticky\?lg\:h-\(screen-18\) {
+      height: calc(100vh - theme("spacing.18"));
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .motion-reduce\:transform-none:hover {
+    transform: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .motion-safe\:hover\:-translate-y-1:hover {
+    --transform-translate-y: -0.25rem !important;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .motion-safe\:hover\:scale-110:hover {
+    --transform-scale-x: 1.1 !important;
+    --transform-scale-y: 1.1 !important;
+  }
+}
+
+.focus\:bg-gray-600:focus {
+  @apply bg-gray-600 !important;
+}
+
+.focus\:text-white:focus {
+  @apply text-white !important;
+}
+
+.group:hover .group-hover\:text-white {
+  @apply text-white !important;
+}
+
+.focus-within\:border-teal-500:focus-within {
+  @apply border-teal-500 !important;
+}
+
+.focus-visible\:underline:focus-visible {
+  @apply underline !important;
+}
+
+.focus-visible\:underline.focus-visible {
+  @apply underline !important;
+}
+
+.active\:bg-blue-700:active {
+  @apply bg-blue-700 !important;
+}
+
+.checked\:bg-blue-600:checked {
+  @apply bg-blue-600 !important;
+}
+
+.checked\:border-transparent:checked {
+  @apply border-transparent !important;
+}
+
+.appearance-none::-ms-expand {
+  display: none !important;
+}
+
+.bg-checkered {
+  background-image: url("data:image/svg+xml,%0A%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%23F0F0F0' d='M0 0h8v8H0zm8 8h8v8H8z'/%3E%3C/svg%3E");
+  background-size: 16px 16px;
+}
+
+.after\:hash::after {
+  content: "#";
+}
+
+.code-highlight {
+  border-radius: 0.1875rem;
+  padding: 0.0625rem 0.1875rem;
+  margin: 0 -0.1875rem;
+}
+
+body.cursor-grabbing * {
+  cursor: grabbing !important;
+}
+
+.mono-active > div:not(.not-mono) > span {
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.mono > div > span {
+  transition-duration: 0.5s;
+  transition-property: background-color, border-color, color, fill, stroke;
+}
+
+.form-tick:checked {
+  background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M5.707 7.293a1 1 0 0 0-1.414 1.414l2 2a1 1 0 0 0 1.414 0l4-4a1 1 0 0 0-1.414-1.414L7 8.586 5.707 7.293z'/%3e%3c/svg%3e");
+  border-color: transparent;
+  background-color: currentColor;
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.topic-select .topic-select__placeholder,
+.topic-select .topic-select__menu-list,
+.topic-select .topic-select__single-value {
+  @apply text-black dark:text-dark-mode-text font-medium;
+}
+
+.topic-select .topic-select__menu,
+.topic-select .topic-select__control {
+  @apply rounded-none border border-blue-light dark:border-purple-off-black;
+}
+
+.topic-select .topic-select__control,
+.topic-select .topic-select__menu-list {
+  @apply dark:bg-purple-off-black;
+}
+
+.topic-select .topic-select__control {
+  @apply py-1 px-2 shadow-none;
+}
+
+.topic-select .topic-select__option {
+  @apply py-3 px-4;
+}
+
+.topic-select .topic-select__menu-list {
+  @apply py-2;
+}
+
+.topic-select .topic-select__menu {
+  @apply shadow-none;
+}
+
+.topic-select .topic-select__indicator-separator {
+  @apply hidden;
+}
+
+.topic-select .topic-select__dropdown-indicator {
+  @apply flex-wrap flex w-7;
+}
+
+.showcase-block {
+  @apply cursor-pointer w-full p-2;
+}
+.showcase-block div {
+  @apply w-full rounded-md shadow-md transition ease-in-out duration-300;
+}
+.showcase-block:hover div {
+  @apply shadow-xl transform -translate-y-2;
+}
+.showcase-block:hover .showcase-block-title {
+  @apply underline text-purple-light dark:text-purple-extralight;
+}

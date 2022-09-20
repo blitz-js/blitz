@@ -1,0 +1,126 @@
+.token.tag,
+.token.class-name,
+.token.selector,
+.token.selector .class,
+.token.function {
+  @apply text-purple-light;
+}
+
+.dark .token.tag,
+.dark .token.class-name,
+.dark .token.selector,
+.dark .token.selector .class,
+.dark .token.function {
+  @apply text-purple-extralight;
+}
+
+.token.attr-name,
+.token.keyword,
+.token.rule,
+.token.operator,
+.token.pseudo-class,
+.token.important {
+  @apply text-purple-light;
+}
+
+.dark .token.attr-name,
+.dark .token.keyword,
+.dark .token.rule,
+.dark .token.operator,
+.dark .token.pseudo-class,
+.dark .token.important {
+  @apply text-purple-extralight;
+}
+
+.token.attr-value,
+.token.class,
+.token.string,
+.token.number,
+.token.unit,
+.token.color {
+  @apply text-black;
+}
+
+.dark .token.attr-value,
+.dark .token.class,
+.dark .token.string,
+.dark .token.number,
+.dark .token.unit,
+.dark .token.color {
+  @apply text-white;
+}
+
+.token.punctuation,
+.token.module,
+.token.property {
+  @apply text-purple-mid;
+}
+
+.dark .token.punctuation,
+.dark .token.module,
+.dark .token.property {
+  @apply text-purple-extralight;
+}
+
+.token.atapply .token:not(.rule):not(.important) {
+  color: inherit;
+}
+
+.language-shell .token:not(.comment) {
+  color: inherit;
+}
+
+.language-css .token.function {
+  color: inherit;
+}
+
+.token.comment {
+  @apply text-gray-600;
+}
+
+.token.deleted:not(.prefix) {
+  @apply relative block px-4 -mx-4;
+}
+
+.token.deleted:not(.prefix)::after {
+  content: "";
+  @apply absolute inset-0 block bg-opacity-25 pointer-events-none bg-rose-400;
+}
+
+.token.deleted.prefix {
+  @apply text-gray-400 select-none;
+}
+
+.token.inserted:not(.prefix) {
+  @apply block bg-green-600 bg-opacity-25 px-4 -mx-4;
+}
+
+.token.inserted.prefix {
+  @apply text-green-600 text-opacity-75 select-none;
+}
+
+.token.inserted .token.comment {
+  @apply text-blue-dark;
+}
+
+.token.highlighted:not(.prefix) {
+  @apply block bg-purple-light bg-opacity-25 -mx-4 px-4 -mb-4;
+}
+.token.highlighted:not(.prefix).not(:first-child) {
+  margin-top: -1.5em;
+}
+.token.highlighted:not(.prefix).not(:last-child) {
+  margin-bottom: -1.5em;
+}
+
+.token.highlighted:not(.prefix) > .comment:first-child {
+  height: 0;
+  display: block;
+  overflow: hidden;
+  margin-top: 0rem;
+  margin-bottom: -1.4em;
+}
+
+.token.highlighted.highlighted-line {
+  @apply -mx-6;
+}

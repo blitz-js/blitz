@@ -1,0 +1,67 @@
+---
+title: Query Resolvers
+sidebar_label: Query Resolvers
+---
+
+Blitz queries are plain, asynchronous JavaScript functions that always run
+on the server.
+
+**1. Queries must be inside a `queries` folder. All of the following are
+valid:**
+
+- `app/queries/getProject.ts`
+- `app/projects/queries/getProject.ts`
+- `app/admin/projects/queries/getProject.ts`
+
+**2. Queries must export a function as the default export**
+
+You can write any normal Node.js code here, including database access and
+fetching from third-party APIs.
+
+#### Arguments
+
+- `input: any`
+  - The first argument is anything you need for your query. There are no
+    special requirements.
+- `ctx: Ctx`
+  - This context object is automatically provided by Blitz at run time.
+    This is used by [HTTP Middleware](./middleware) to provide data or
+    functions to your query. For example, authentication middleware can
+    provide `ctx.session` with all the data about the current user
+    session.
+
+#### Example Query
+
+```ts
+// app/products/queries/getProduct.tsx
+import { Ctx } from "blitz"
+import db from "db"
+import * as z from "zod"
+
+const GetProject = z.object({
+  id: z.number(),
+})
+
+export default async function getProject(
+  input: z.infer<typeof GetProject>,
+  ctx: Ctx
+) {
+  // Validate the input
+  const data = GetProject.parse(input)
+
+  // Require user to be logged in
+  ctx.session.$authorize()
+
+  const project = await db.project.findOne({ where: { id: data.id } })
+
+  // Can do any processing, fetching from other APIs, etc
+
+  return project
+}
+```
+
+_We automatically alias the root of your project, so `import db from 'db'`
+is importing `<project_root>/db/index.ts`_
+
+Next, [read these docs](./query-usage) to see how to use these queries in
+your components.

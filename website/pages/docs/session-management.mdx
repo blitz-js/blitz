@@ -1,0 +1,454 @@
+---
+title: Session Management
+sidebar_label: Session Management
+---
+
+Blitz has built in session management that can be used with any type of
+authentication or identity providers.
+
+Session management performs the following functions:
+
+1. Tracking whether a user is logged in or not
+2. Attribute multiple requests to the same user, even when they are logged
+   out
+3. Protection against CSRF attacks
+
+## TLDR {#tldr}
+
+You login, logout, and otherwise modify the session via the
+[`SessionContext`](#sessioncontext) object which is
+[accessible anywhere on the server](#access-session-on-the-server).
+
+### Login {#login}
+
+For login you will have form component in your UI that will submit a login
+mutation like the one shown below.
+
+```ts
+// app/auth/mutations/login.ts
+import { Ctx } from "blitz"
+
+export default async function login(input: SomeTSInputType, ctx: Ctx) {
+  // 1. Validate input data
+  // 2. Validate user credentials
+  // 3. Fetch user data
+
+  // 4. Create a new session (log in)
+  await ctx.session.$create({ userId: user.id, role: user.role }) // highlight-line
+}
+```
+
+### Logout {#logout}
+
+For logout you will have a button in your UI that will submit a logout
+mutation like the one shown below.
+
+Revoking a session will immediately delete all client-side query cache
+causing all queries on the page to be refetched. This ensures any
+sensitive data in the cache is deleted.
+
+```ts
+// app/auth/mutations/logout.ts
+import { Ctx } from "blitz"
+
+export default async function logout(_: any, ctx: Ctx) {
+  // 1. Revoke the current user session, logging them out.
+  return await ctx.session.$revoke() // highlight-line
+}
+```
+
+### Change Session PublicData of Current User {#change-session-public-data-of-current-user}
+
+Each session has [`PublicData`](#publicdata), data which is available on
+the client and has the potential to be read by third-parties because it's
+stored in a cookie readable by any Javascript code. This is usually used
+to store the current user id, user role, and perhaps current organization
+id.
+
+You can change the session public data in any query or mutation like this:
+
+```ts
+// app/mutations/someMutation.ts
+import { Ctx } from "blitz"
+
+export default async function someMutation(input: any, ctx: Ctx) {
+  // This merges the input data with whatever is already in current publicData
+  await ctx.session.$setPublicData({ orgId: 1 }) // highlight-line
+}
+```
+
+### Session Expiration / Auto-refresh {#session-expiration-and-auto-refresh}
+
+A session is automatically refreshed after 1/4th of the expiry time has
+passed. The default expiry time is 30 days. If you change the session’s
+[`PublicData`](#publicdata) the session is also automatically refreshed.
+You will need to update tokens (access and anti-CSRF) after a session
+refresh, if you use them (e.g. in a mobile app).
+
+## Access Session on the Server {#access-session-on-the-server}
+
+### In Queries & Mutations {#in-queries-and-mutations}
+
+[`SessionContext`](#sessioncontext) is available off of `ctx` which is
+provided as the second parameter to all queries and mutations because of
+the `sessionMiddleware` that's in `blitz.config.js`.
+
+```ts
+// app/queries/someQuery.ts
+import { Ctx } from "blitz"
+
+export default async function someQuery(input: any, ctx: Ctx) {
+  // Access the SessionContext class
+  ctx.session.userId
+  ctx.session.role
+  ctx.session.$create(/*...*/)
+
+  return
+}
+```
+
+### In `getServerSideProps` or API Routes {#in-get-server-side-props-or-api-routes}
+
+You can also get the session context inside `getServerSideProps` or inside
+API routes with `getSession` like this:
+
+```ts
+import { getSession } from "@blitzjs/auth"
+
+export const getServerSideProps = async ({ req, res }) => {
+  const session = await getSession(req, res)
+  console.log("User ID:", session.userId)
+
+  return { props: {} }
+}
+```
+
+## Access Session on the Client {#access-session-on-the-client}
+
+Blitz provides a `useSession()` hook that returns
+[`PublicData`](#publicdata) with `isLoading` property. This hook can be
+used anywhere in your application.
+
+Note: `useSession()` uses suspense by default, so you need a `<Suspense>`
+component above it in the tree. Or you can set
+`useSession({suspense: false})` to disable suspense.
+
+```ts
+import { useSession } from "@blitzjs/auth"
+
+function SomeComponent() {
+  const session = useSession()
+
+  session.userId
+  session.role
+
+  return /*... */
+}
+```
+
+If you are using [`getServerSideProps`](./get-server-side-props), then you
+can pass the session public data to `useSession()` with the
+`initialPublicData` option.
+
+```ts
+import { useSession, getSession } from "@blitzjs/auth"
+import { gSSP } from "app/blitz-server"
+
+export const getServerSideProps = gSSP(async ({
+  req,
+  res,
+}) => {
+  const session = await getSession(req, res)
+
+  return { props: { initialPublicData: session.$publicData } }
+})
+
+const SomePage: BlitzPage = ({ initialPublicData }) => {
+  const session = useSession({ initialPublicData })
+
+  return /*... */
+}
+```
+
+## Production Deployment Requirements {#production-deployment-requirements}
+
+In production, you must provide the `SESSION_SECRET_KEY` environment
+variable with at least 32 characters. This is your private key for signing
+JWT tokens.
+
+On macOS and Linux, you can generate it by running `openssl rand -hex 16`
+in your terminal.
+
+## Anonymous Sessions {#anonymous-sessions}
+
+If a user is not logged in, an anonymous session will automatically be
+created for them. You can use `ctx.session.$setPublicData()` and
+`ctx.session.$setPrivateData()` for anonymous sessions the same as for
+logged in users. Any data you set for an anonymous session will
+automatically be transferred to an authentication session when a user logs
+in.
+
+Anonymous sessions are JWT tokens that are stored on the client as an
+httpOnly cookie that never expires.
+
+`PublicData` for anonymous sessions is kept in the session JWT and not
+stored in the database. Anonymous sessions will only be saved in your
+database if you call `session.$setPrivateData()`.
+
+The anonymous session will be created on the first network request,
+whether SSR or via an API. This will happen as long as `sessionMiddleware`
+is in your middleware chain for that request.
+
+One use case for this is saving shopping cart items for anonymous users.
+If an anonymous user later signs up or logs in, the anonymous session data
+can be merged into their new authenticated session.
+
+Anonymous session `PublicData` looks like this:
+
+```
+{
+  userId: null,
+}
+```
+
+## Customize Session Public Data in TypeScript {#customize-session-public-data-in-typescript}
+
+If using TypeScript, first update the `Session.PublicData` type in
+`types.ts` like this:
+
+```diff
+import {SessionContext, SimpleRolesIsAuthorized} from "@blitzjs/auth"
+import {User} from "db"
+
+// Note: You should switch to Postgres and then use a DB enum for role type
+export type Role = "ADMIN" | "USER"
+
+declare module "@blitzjs/auth" {
+  export interface Session {
+    isAuthorized: SimpleRolesIsAuthorized<Role>
+    PublicData: {
+      userId: User["id"]
+      role: Role
++     orgId: number
+    }
+  }
+}
+```
+
+Then change all uses of `ctx.session.$create()` to pass in the new fields.
+
+```ts
+ctx.session.$create({ userId: 1, role: "ADMIN", orgId: 1 })
+```
+
+You can also use `ctx.session.$setPublicData()` to update session data for
+an already logged in user. This will _merge_ values with the existing
+public data.
+
+```ts
+ctx.session.$setPublicData({ orgId: 1 })
+```
+
+To access public data on the client:
+
+```ts
+import { useSession } from "@blitzjs/auth"
+
+function SomeComponent() {
+  const session = useSession()
+
+  session.orgId
+
+  return /*... */
+}
+```
+
+To access public data on the server:
+
+```ts
+// app/queries/someQuery.ts
+import { Ctx } from "blitz"
+
+export default async function someQuery(input: any, ctx: Ctx) {
+  // Access the SessionContext class
+  ctx.session.orgId
+
+  return
+}
+```
+
+## Session Configuration {#session-configuration}
+
+You can customize session management by passing an object to the
+`sessionMiddleware` factory function.
+
+```js
+// blitz.config.js
+const { sessionMiddleware, simpleRolesIsAuthorized } = require("blitz")
+
+module.exports = {
+  middleware: [
+    sessionMiddleware({
+      // highlight-start
+      cookiePrefix: "my-app",
+      sessionExpiryMinutes: 1234,
+      isAuthorized: simpleRolesIsAuthorized,
+      // highlight-end
+    }),
+  ],
+}
+```
+
+Available options:
+
+```ts
+type SessionConfig = {
+  cookiePrefix?: string /* Default: 'blitz' */
+  sessionExpiryMinutes?: number /* Default: 30 days */
+  sameSite?: "strict" | "lax" | "none" /* Default: 'lax'. 
+    If you set this to 'none', you also have to set `secureCookies: true`. 
+    See: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie/SameSite */
+  method?: "essential" | "advanced" /* Default: 'essential' */
+  secureCookies?: boolean /* Default: undefined. This flag is skipped if running app on hostname `localhost` */
+  domain?: string /* Default: undefined. Can set as `.yourDomain.com` to work across subdomains */
+  publicDataKeysToSyncAcrossSessions?: string[] /* Default: ['role', 'roles'] */
+  getSession: (handle: string) => Promise<SessionModel | null>
+  getSessions: (userId: string | number) => Promise<SessionModel[]>
+  createSession: (session: SessionModel) => Promise<SessionModel>
+  updateSession: (
+    handle: string,
+    session: Partial<SessionModel>
+  ) => Promise<SessionModel>
+  deleteSession: (handle: string) => Promise<SessionModel>
+  isAuthorized: ({ ctx: any, args: [...unknown] }) => boolean
+}
+```
+
+```ts
+interface SessionModel extends Record<any, any> {
+  handle: string
+  userId?: string | number
+  expiresAt?: Date
+  hashedSessionToken?: string
+  antiCSRFToken?: string
+  publicData?: string
+  privateData?: string
+}
+```
+
+## Customize Session Persistence & Database Access {#customize-session-persistence-and-database-access}
+
+By default, session persistence is zero-config with Prisma. However, you
+can customize this to save sessions somewhere else, like Redis. You can
+also customize this if you have Prisma but want to customize the attribute
+names on the user or session model.
+
+Customize session persistence by overriding the database access functions
+defined above in `SessionConfig`. The functions can do anything, but they
+must conform to the defined input and outputs types.
+
+For reference, here's
+[the default config that works with Prisma](https://github.com/blitz-js/blitz/blob/canary/nextjs/packages/next/stdlib-server/auth-sessions.ts#L74).
+
+## Manual API Requests {#manual-api-requests}
+
+When making a request from the client to an API route, you need to include
+the anti-CSRF token in the `anti-csrf` header like this:
+
+```ts
+import { getAntiCSRFToken } from "@blitzjs/auth"
+
+const antiCSRFToken = getAntiCSRFToken()
+
+if (antiCSRFToken) {
+  // Set fetch request header["anti-csrf"] = antiCSRFToken
+}
+```
+
+And then you can get the sessionContext in the API route like this:
+
+```ts
+import { getSession } from "@blitzjs/auth"
+
+export default async function ({ req, res }) {
+  const session = await getSession(req, res)
+  console.log("User ID:", session.userId)
+
+  res.json({ userId })
+}
+```
+
+## Technical Details of How it Works {#technical-details-of-how-it-works}
+
+Authenticated sessions use opaque tokens that are stored in the database.
+
+### Implementation Details {#implementation-details}
+
+#### Session Creation
+
+- At login, the server creates two opaque tokens:
+  - An access token.
+  - An anti-csrf token.
+- Both are a 32 character long `string`.
+- The access token is sent to the frontend via an `httpOnly`, `secure`
+  cookie.
+- The anti-csrf token is sent to the frontend via a normal, `secure`
+  cookie that can be read from Javascript.
+- The SHA256 hash of the access token will be stored in the database. This
+  token has the following properties mapped to it:
+  - userId
+  - expiry time
+  - session data
+- The anti-csrf token is stored alongside the access token.
+- Creating a new session while another one exists results in the headers /
+  cookies changing. However, the older session will still be alive.
+- For serious production apps, a cronjob is needed to remove all expired
+  tokens on a regular basis.
+
+#### Session Verification
+
+- For each request that requires CSRF protection, the frontend sends the
+  anti-csrf token in the request header.
+- An incoming access token is verified by checking that it's in the db and
+  that it has not expired. After each verification, the expiry time of the
+  access token is updated.
+- CSRF attacks are prevented by checking that the incoming anti-csrf token
+  (from the header) is the one associated with the session.
+
+#### Session Revocation/Logout
+
+- This is done by deleting the session from the database.
+- Logout additionally clears the cookies, and a header is sent signaling
+  the frontend to remove the anti-csrf token from the localstorage
+
+## Types {#types}
+
+#### `SessionContext`
+
+```ts
+interface SessionContext extends PublicData {
+  /**
+   * null if anonymous
+   */
+  userId: unknown
+  $handle: string | null
+  $publicData: PublicData
+  $authorize(
+    ...args: IsAuthorizedArgs
+  ): asserts this is AuthenticatedSessionContext
+  $isAuthorized: (
+    ...args: IsAuthorizedArgs
+  ) => this is AuthenticatedSessionContext
+  $create: (
+    publicData: PublicData,
+    privateData?: Record<any, any>
+  ) => Promise<void>
+  $revoke: () => Promise<void>
+  $revokeAll: () => Promise<void>
+  $getPrivateData: () => Promise<Record<any, any>>
+  $setPrivateData: (data: Record<any, any>) => Promise<void>
+  $setPublicData: (
+    data: Partial<Omit<PublicData, "userId">>
+  ) => Promise<void>
+}
+```

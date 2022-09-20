@@ -1,0 +1,160 @@
+---
+title: How To Impersonate Other Users
+sidebar_label: How To Impersonate Other Users
+---
+
+Impersonation is often a critical tool for SaaS applications as it allows
+admins to view the application from the perspective of a specific user
+without knowing their credentials.
+
+Here's an example of what your final result should look like:
+![Screenshot of what it looks like](https://pbs.twimg.com/media/EsWuHShXcAEgEtw?format=jpg&name=large)
+
+First, add a `impersonatingFromUserId` type to your
+[session](/docs/session-management#customize-session-public-data-in-typescript).
+
+```ts
+// types.ts
+import { SessionContext } from "@blitzjs/auth"
+import { User } from "db"
+
+import { SimpleRolesIsAuthorized } from "@blitzjs/auth"
+import { User } from "db"
+
+declare module "@blitzjs/auth" {
+  export interface Session {
+    isAuthorized: SimpleRolesIsAuthorized<Role>
+    PublicData: {
+    role: "admin" | "customer"
+    userId: User["id"]
+    orgId: User["orgId"]
+    impersonatingFromUserId?: number
+  }
+}
+```
+
+Create the following two mutations which will give you the ability to
+start the impersonation as well as stopping it.
+
+```ts
+// app/auth/mutations/impersonateUser.ts
+import { resolver } from "@blitzjs/rpc"
+import db from "db"
+import * as z from "zod"
+
+export const ImpersonateUserInput = z.object({
+  userId: z.number(),
+})
+
+export default resolver.pipe(
+  resolver.zod(ImpersonateUserInput),
+  resolver.authorize(),
+  async ({ userId }, ctx) => {
+    const user = await db.user.findFirst({ where: { id: userId } })
+    if (!user) throw new Error("Could not find user id " + userId)
+
+    await ctx.session.$create({
+      userId: user.id,
+      role: user.role,
+      orgId: user.organizationId,
+      impersonatingFromUserId: ctx.session.userId,
+    })
+
+    return user
+  }
+)
+```
+
+```ts
+// app/auth/mutations/stopImpersonating.ts
+import { resolver } from "@blitzjs/rpc"
+import db from "db"
+
+export default resolver.pipe(resolver.authorize(), async (_, ctx) => {
+  const userId = ctx.session.$publicData.impersonatingFromUserId
+  if (!userId) {
+    console.log("Already not impersonating anyone")
+    return
+  }
+
+  const user = await db.user.findFirst({
+    where: { id: userId },
+  })
+  if (!user) throw new Error("Could not find user id " + userId)
+
+  await ctx.session.$create({
+    userId: user.id,
+    role: user.role,
+    orgId: user.organizationId,
+    impersonatingFromUserId: undefined,
+  })
+
+  return user
+})
+```
+
+Add a form similar to this in order to switch users.
+
+```tsx
+import { useMutation, queryClient } from "@blitzjs/rpc"
+import impersonateUser, {
+  ImpersonateUserInput,
+} from "app/auth/mutations/impersonateUser"
+import { Form, FORM_ERROR } from "app/core/components/Form"
+import LabeledTextField from "app/core/components/LabeledTextField"
+
+export const ImpersonateUserForm = () => {
+  const [impersonateUserMutation] = useMutation(impersonateUser)
+
+  return (
+    <Form
+      schema={ImpersonateUserInput}
+      submitText="Switch to User"
+      onSubmit={async (values) => {
+        try {
+          await impersonateUserMutation(values)
+          queryClient.clear()
+        } catch (error) {
+          return {
+            [FORM_ERROR]:
+              "Sorry, we had an unexpected error. Please try again. - " +
+              error.toString(),
+          }
+        }
+      }}
+    >
+      <LabeledTextField name="userId" type="number" label="User ID" />
+    </Form>
+  )
+}
+```
+
+Lastly, add the following component at the top of your Layout(s).
+
+```tsx
+// app/core/components/ImpersonatingUserNotice.tsx
+import { invoke, useSession, queryClient } from "@blitzjs/rpc"
+import stopImpersonating from "app/auth/mutations/stopImpersonating"
+
+export const ImpersonatingUserNotice = () => {
+  const session = useSession()
+  if (!session.impersonatingFromUserId) return null
+
+  return (
+    <div className="bg-yellow-400 px-2 py-1 text-center font-semibold">
+      Currently impersonating user {session.userId}{" "}
+      <button
+        className="appearance-none bg-transparent text-black uppercase"
+        onClick={async () => {
+          await invoke(stopImpersonating, {})
+          queryClient.clear()
+        }}
+      >
+        Exit
+      </button>
+    </div>
+  )
+}
+```
+
+You're done! You are now able to impersonate a user and stop again.

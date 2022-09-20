@@ -1,0 +1,133 @@
+---
+title: Deploy to a Server on Railway
+sidebar_label: To Railway
+---
+
+## If you don't have a Railway account {#signup}
+
+Sign up for an account on [Railway](https://railway.app) - they have a
+free tier that is sufficient for small applications.
+
+![Screen Shot 2021-05-04 at 6 11 09 PM](https://user-images.githubusercontent.com/19371989/117007314-13ee3580-ad1c-11eb-9705-2ca9b5f545bd.png)
+
+## Set up a new project {#setup}
+
+1. Create a new project (via your
+   [Dashboard](https://railway.app/dashboard) or `⌘ + /` shortcut)
+
+![Screen Shot 2021-05-04 at 5 19 28 PM](https://user-images.githubusercontent.com/19371989/117007376-28323280-ad1c-11eb-90a5-9fa5c165f5df.png)
+
+2. If a database is required, select **Provision PostgreSQL** (or
+   MongoDB/MySQL/Redis - whichever flavour your app requires). Once the
+   database is provisioned, you will see the Project Setup page.
+
+![Screen Shot 2021-05-04 at 6 01 16 PM](https://user-images.githubusercontent.com/19371989/117007600-6deefb00-ad1c-11eb-876c-22a374c1f535.png)
+
+If a database is not required, select **Deploy From Repo**.
+
+There are two ways to set up your project on Railway:
+
+1. [Via the command line interface (CLI)](#cli)
+2. [Via Railway's user interface (GUI)](#gui)
+
+### Via CLI {#cli}
+
+1. Install Railway
+
+```bash
+npm i -g @railway/cli
+# or
+yarn global add @railway/cli
+```
+
+2. Login to Railway
+
+```
+railway login
+```
+
+3. Go to your project folder and link to Railway
+
+```
+cd /path/to/project
+railway link your-project-id
+```
+
+The project ID is taken from the **Project Setup** page.
+
+4. Enter your required environment variables
+
+Set the `SESSION_SECRET_KEY` variable to a random string of 32 characters
+and the `PORT` variable to `3000`:
+
+```
+railway variables set SESSION_SECRET_KEY=<your_key>
+railway variables set PORT=3000
+```
+
+Instead of setting the `PORT` here, you could also modify the `start`
+script in the `package.json` file to `blitz start --port ${PORT-3000}`.
+
+Enter other environment variables that you require. The `DATABASE_URL`
+variable will be automatically set by Railway if you provision a
+PostgreSQL database.
+
+Verify that the variables are set correctly via your linked project:
+
+```
+railway variables
+```
+
+5. Change your build script in package.json to be
+   `NODE_ENV=production blitz build && blitz prisma migrate deploy` so
+   that the production DB will be migrated on each deploy
+
+6. Deploy your project
+
+```
+railway up
+```
+
+Once the build is successful and deployment is completed, you will receive
+the URL for your application that is now accessible via the internet. To
+get the URL, go to the **Deployments** section in the project's dashboard
+and the URL will be listed under a successful deployment.
+
+![Screen Shot 2021-05-04 at 8 49 57 PM](https://user-images.githubusercontent.com/19371989/117007722-8e1eba00-ad1c-11eb-9a9e-91908e4c281c.png)
+
+You may also view your app logs by running
+
+```
+railway logs
+```
+
+In order to set Railway to build + deploy automatically when you push to a
+branch on your GitHub repository, connect your GitHub repository by
+following the [GUI](#gui) steps below from Step 2 onward.
+
+### Via GUI {#gui}
+
+1. Enter your required environment variables
+
+Blitz requires the `SESSION_SECRET_KEY` variable to be set. Go to your
+project on the GUI, select the **Variables** link and enter
+`SESSION_SECRET_KEY` as the name of the variable and a random 32-key
+secret as its value. Click **Add** to add the variable.
+
+Set a variable `PORT` to `3000`.
+
+Enter other environment variables that you require. The `DATABASE_URL`
+variable will be automatically set by Railway if you provision a database.
+
+2. Go to the **Deployments** section. If your project is on GitHub, you
+   can click on **Connect GitHub** to deploy and connect directly to your
+   repositories on GitHub. Otherwise, you will have to use the [CLI](#cli)
+   to deploy your application.
+
+3. Select the repository and the branch to deploy from and click
+   **Connect + Deploy**
+
+![Screen Shot 2021-05-04 at 8 55 36 PM](https://user-images.githubusercontent.com/19371989/117007814-a5f63e00-ad1c-11eb-84d6-d75019930ea1.png)
+
+4. Railway will now build and deploy your app on every push to this branch
+   on your selected repository.

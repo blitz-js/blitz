@@ -1,0 +1,460 @@
+---
+title: Authorization & Security
+sidebar_label: Authorization & Security
+---
+
+Authorization is the act of allowing or disallowing access to data and
+pages in your application.
+
+## Secure Your Data {#secure-your-data}
+
+You secure data by calling
+[`ctx.session.$authorize()`](#ctxsessionauthorize) inside all the queries
+and mutations that you want secured. (Or if using
+[`resolver.pipe`](./resolver-server-utilities#resolverpipe), by using
+[`resolver.authorize`](./resolver-server-utilities#resolverauthorize)).
+You can also secure [API routes](./api-routes) the same way.
+
+Those will throw `AuthenticationError` if the user is not logged in, and
+it will throw `AuthorizationError` if the user is logged in but doesn't
+have the required permissions.
+
+```ts
+import { resolver } from "@blitzjs/rpc"
+import db from "db"
+import * as z from "zod"
+
+const CreateProject = z
+  .object({
+    name: z.string(),
+  })
+  .nonstrict()
+
+export default resolver.pipe(
+  resolver.zod(CreateProject),
+  // highlight-start
+  resolver.authorize(),
+  // highlight-end
+  async (input, ctx) => {
+    // *: in multi-tenant app, you must add validation to ensure correct tenant
+    const projects = await db.projects.create({ data: input })
+    return projects
+  }
+)
+```
+
+or
+
+```ts
+import {Ctx} from "blitz"
+import db from "db"
+import * as z from "zod"
+
+const CreateProject = z
+  .object({
+    name: z.string(),
+  }).nonstrict()
+type CreateProjectType = z.infer<typeof CreateProject>
+
+export default function createProject(input: CreateProjectType, ctx: Ctx) {
+  const data = CreateProject.parse(input)
+
+  // highlight-start
+  ctx.session.$authorize(),
+  // highlight-end
+
+  // *: in multi-tenant app, you must add validation to ensure correct tenant
+  const projects = await db.projects.create({data})
+  return projects
+}
+```
+
+### Input Validation {#input-validation}
+
+For security, it's very important to validate all input values in your
+mutations. We recommended using [zod](https://github.com/colinhacks/zod),
+which we include in all our code generation templates. Without this, users
+may be able to access data or perform actions that are forbidden.
+
+```ts
+import { resolver } from "@blitzjs/rpc"
+import db from "db"
+import * as z from "zod"
+
+// highlight-start
+const CreateProject = z
+  .object({
+    name: z.string(),
+  })
+  .nonstrict()
+// highlight-end
+
+export default resolver.pipe(
+  // highlight-start
+  resolver.zod(CreateProject),
+  // highlight-end
+  resolver.authorize(),
+  async (input, ctx) => {
+    // *: in multi-tenant app, you must add validation to ensure correct tenant
+    const projects = await db.projects.create({ data: input })
+    return projects
+  }
+)
+```
+
+## Secure Your Pages {#secure-your-pages}
+
+Set `Page.authenticate = true` on all pages that require a user to be
+logged in. If a user is not logged in, an `AuthenticationError` will be
+thrown and caught by your top level Error Boundary.
+
+Or if instead you want to redirect the user, set
+`Page.authenticate = {redirectTo: '/login'}`
+
+```tsx
+const Page: BlitzPage = () => {
+  return <div>{/* ... */}</div>
+}
+
+// highlight-start
+Page.authenticate = true
+// or Page.authenticate = {redirectTo: '/login'}
+// or Page.authenticate = {redirectTo: Routes.Login()}
+// highlight-end
+
+export default Page
+```
+
+### Redirecting Logged In Users {#redirecting-logged-in-users}
+
+For pages that are only for logged out users, such as login and signup
+pages, set `Page.redirectAuthenticatedTo = '/'` to automatically redirect
+logged in users to another page.
+
+```tsx
+import { Routes } from "@blitzjs/next"
+
+const Page: BlitzPage = () => {
+  return <div>{/* ... */}</div>
+}
+
+// highlight-start
+// using full path
+Page.redirectAuthenticatedTo = "/"
+// using route manifest
+Page.redirectAuthenticatedTo = Routes.Home()
+// using function
+Page.redirectAuthenticatedTo = ({ session }) =>
+  session.role === "admin" ? "/admin" : Routes.Home()
+// highlight-end
+
+export default Page
+```
+
+### Secure Layouts {#secure-layouts}
+
+You can secure layouts as you secure pages:
+
+```tsx
+const Layout = ({ children }) => {
+  return <div>{children}</div>
+}
+
+// highlight-start
+Layout.authenticate = true
+// or Layout.authenticate = {redirectTo: '/login'}
+// or Layout.authenticate = {redirectTo: Routes.Login()}
+// or Layout.redirectAuthenticatedTo = Routes.Home()
+// highlight-end
+
+const Page = () => {
+  return <div>{/* ... */}</div>
+}
+
+Page.getLayout = (page) => <Layout>{page}</Layout>
+
+export default Page
+```
+
+Blitz will take the first component it finds from the response of
+`getLayout` with either a `authenticate` key or a
+`redirectAuthenticatedTo` key and uses its values for authentication.
+
+These values can be overwritten in a per-page basis with
+`Page.authenticate` or `Page.redirectAuthenticatedTo`:
+
+```tsx
+const Layout: BlitzLayout = ({ children }) => {
+  return <div>{children}</div>
+}
+
+Layout.authenticate = true
+
+const Page: BlitzPage = () => {
+  return <div>{/* ... */}</div>
+}
+
+Page.getLayout = (page) => <Layout>{page}</Layout>
+// highlight-start
+Page.authenticate = false
+// highlight-end
+
+export default Page
+```
+
+## UX for Unauthorized Users {#ux-for-unauthorized-users}
+
+While you can use redirects to and from a `/login` page, we recommended to
+use Error Boundaries instead of redirects.
+
+In React, the way you catch errors in your UI is to use an
+[error boundary](https://reactjs.org/docs/error-boundaries.html).
+
+You should have a top level error boundary inside `_app.tsx` so that these
+errors are handled from everywhere in our app. And then if you need, you
+can also place more error boundaries at other places in your app.
+
+The default error handling setup in new Blitz apps is as follows:
+
+- If `AuthenticationError` is thrown, directly show the user a login form
+  instead of redirecting to a separate route. This prevents the need to
+  manage redirect URLs. Once the user logs in, the error boundary will
+  reset and the user can access the original page they wanted to access.
+- If `AuthorizationError` is thrown, display an error stating such.
+
+And here's the default `RootErrorFallback` that's in `app/pages/_app.tsx`.
+You can customize it as required for your needs.
+
+```tsx
+import { AuthenticationError, AuthorizationError } from "blitz"
+import { ErrorComponent, ErrorFallbackProps } from "@blitzjs/next"
+
+function RootErrorFallback({
+  error,
+  resetErrorBoundary,
+}: ErrorFallbackProps) {
+  if (error instanceof AuthenticationError) {
+    return <LoginForm onSuccess={resetErrorBoundary} />
+  } else if (error instanceof AuthorizationError) {
+    return (
+      <ErrorComponent
+        statusCode={error.statusCode}
+        title="Sorry, you are not authorized to access this"
+      />
+    )
+  } else {
+    return (
+      <ErrorComponent
+        statusCode={error.statusCode || 400}
+        title={error.message || error.name}
+      />
+    )
+  }
+}
+```
+
+For more information on error handling in Blitz, see the
+[Error Handling documentation](./error-handling).
+
+## Displaying Different Content Based on User Role {#displaying-different-content-based-on-user-role}
+
+There's two approaches you can use to check the user role in your UI.
+
+#### `useSession()`
+
+The first way is to use the
+[`useSession()`](./session-management#session-on-the-client) hook to read
+the user role from the session's `publicData`.
+
+This is available on the client without making a network call to the
+backend, so it's available faster than the `useCurrentUser()` approach
+described below.
+
+Note: due to the nature of static pre-rendering, the `session` will not
+exist on the very first render on the client. This causes a quick "flash"
+on first load. You can fix that by setting
+[`Page.suppressFirstRenderFlicker = true`](./pages##automatic-static-optimization)
+
+```tsx
+import { useSession } from "@blitzjs/auth"
+
+const session = useSession()
+
+if (session.role === "admin") {
+  return /* admin stuff */
+} else {
+  return /* normal stuff */
+}
+```
+
+#### `useCurrentUser()`
+
+The second way is to use the `useCurrentUser()` hook. New Blitz apps by
+default have a `useCurrentUser()` hook and a corresponding
+`getCurrentUser` query. Unlike the `useSession()` approach above,
+`useCurrentUser()` will require a network call and thus be slower.
+However, if you need access to user data that would be insecure to store
+in the session's `publicData`, you would need to use `useCurrentUser()`
+instead of `useSession()`.
+
+```tsx
+import { useCurrentUser } from "app/users/hooks/useCurrentUser"
+
+const user = useCurrentUser()
+
+if (user.isFunny) {
+  return /* funny stuff */
+} else {
+  return /* normal stuff */
+}
+```
+
+## `isAuthorized` Adapters {#is-authorized-adapters}
+
+The implementation of `ctx.session.$isAuthorized()` and
+`ctx.session.$authorize()` are defined by an adapter which you set in the
+`sessionMiddleware()` config.
+
+##### `ctx.session.$isAuthorized()`
+
+Always returns a boolean indicating if user is authorized
+
+##### `ctx.session.$authorize()`
+
+**Throws an error** if the user is not authorized. This is what you most
+commonly use to secure your queries and mutations.
+
+```ts
+import { Ctx } from "blitz"
+import { GetUserInput } from "./somewhere"
+
+export default async function getUser({ where }: GetUserInput, ctx: Ctx) {
+  // highlight-start
+  ctx.session.$authorize("admin")
+  // highlight-end
+
+  return await db.user.findOne({ where })
+}
+```
+
+#### `simpleRolesIsAuthorized` (default in new apps)
+
+##### Setup
+
+To use, add it to your `sessionMiddleware` configuration (this is already
+set up by default in new apps).
+
+```js
+// blitz.config.js
+const { sessionMiddleware, simpleRolesIsAuthorized } = require("blitz")
+
+module.exports = {
+  middleware: [
+    sessionMiddleware({
+      // highlight-start
+      isAuthorized: simpleRolesIsAuthorized,
+      // highlight-end
+    }),
+  ],
+}
+```
+
+And if using TypeScript, set the type in `types.ts` like this:
+
+```ts
+import { SimpleRolesIsAuthorized } from "@blitzjs/auth"
+
+type Role = "ADMIN" | "USER"
+
+declare module "@blitzjs/auth" {
+  // highlight-start
+  export interface Session {
+    isAuthorized: SimpleRolesIsAuthorized<Role>
+  }
+  // highlight-end
+}
+```
+
+##### `ctx.session.$isAuthorized(roleOrRoles?: string | string[])`
+
+Example usage:
+
+```ts
+// User not logged in
+ctx.session.$isAuthorized() // false
+
+// User logged in with 'customer' role
+ctx.session.$isAuthorized() // true
+ctx.session.$isAuthorized("customer") // true
+ctx.session.$isAuthorized("admin") // false
+```
+
+##### `ctx.session.$authorize(roleOrRoles?: string | string[])`
+
+Example usage:
+
+```ts
+// User not logged in
+ctx.session.$authorize() // throws AuthenticationError
+
+// User logged in with 'customer' role
+ctx.session.$authorize() // success - no error
+ctx.session.$authorize("customer") // success - no error
+ctx.session.$authorize("admin") // throws AuthorizationError
+ctx.session.$authorize(["admin", "customer"]) // success - no error
+```
+
+### Making a Custom Adapter {#making-a-custom-adapter}
+
+An `isAuthorized` adapter must conform to the following function
+signature.
+
+```ts
+type CustomIsAuthorizedArgs = {
+  ctx: any
+  args: [/* args that you want for session.$authorize(...args) */]
+}
+export function customIsAuthorized({
+  ctx,
+  args,
+}: CustomIsAuthorizedArgs) {
+  // can access ctx.session, ctx.session.userId, etc
+}
+```
+
+##### Example
+
+Here's the source code for the `simpleRolesIsAuthorized` adapter include
+in Blitz core as of Jan 26, 2021.
+
+```ts
+type SimpleRolesIsAuthorizedArgs = {
+  ctx: any
+  args: [roleOrRoles?: string | string[]]
+}
+
+export function simpleRolesIsAuthorized({
+  ctx,
+  args,
+}: SimpleRolesIsAuthorizedArgs) {
+  const [roleOrRoles, options = {}] = args
+  const condition = options.if ?? true
+
+  // No roles required, so all roles allowed
+  if (!roleOrRoles) return true
+  // Don't enforce the roles if condition is false
+  if (!condition) return true
+
+  const rolesToAuthorize = []
+  if (Array.isArray(roleOrRoles)) {
+    rolesToAuthorize.push(...roleOrRoles)
+  } else if (roleOrRoles) {
+    rolesToAuthorize.push(roleOrRoles)
+  }
+  for (const role of rolesToAuthorize) {
+    if ((ctx.session as SessionContext).$publicData.roles!.includes(role))
+      return true
+  }
+  return false
+}
+```

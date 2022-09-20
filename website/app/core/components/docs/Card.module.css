@@ -1,0 +1,33 @@
+.container {
+  @apply p-5 my-4 rounded-xl;
+
+  a {
+    @apply !text-purple-light !font-medium !no-underline hover:!underline;
+  }
+
+  a:hover {
+    text-decoration: underline !important;
+  }
+}
+
+.heading {
+  @apply mt-0 mb-4 capitalize font-bold flex items-center text-black;
+}
+
+.icon {
+  @apply inline-block align-middle mr-2;
+
+  svg {
+    @apply block w-4 h-4 stroke-0;
+  }
+}
+
+.content {
+  * {
+    @apply text-black;
+  }
+
+  strong {
+    color: inherit !important;
+  }
+}

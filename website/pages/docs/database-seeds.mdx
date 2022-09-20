@@ -1,0 +1,67 @@
+---
+title: Database Seeds
+sidebar_label: Seeds
+---
+
+## About {#about}
+
+By default, Blitz has a `db/seeds.ts`, where you can add test data to
+quickly seed your environment.
+
+This is useful for rebuilding your DB after you messed it up or simply
+when it's full of old test data. Good seeds can also make onboarding new
+people to the project a lot friendlier (no more, go to this page and
+create a new user, then create some tasks for them but make sure to create
+at least one project...). Only requirement is that this file makes a
+default export.
+
+## Example {#example}
+
+0. Let's say this is your example `db/schema.prisma`:
+
+```prisma
+model Project {
+  id        Int      @default(autoincrement()) @id
+  name      String
+  tasks     Task[]
+}
+
+model Task {
+  id          Int      @default(autoincrement()) @id
+  name        String
+  project     Project  @relation(fields: [projectId], references: [id])
+  projectId   Int
+}
+```
+
+1. Add `db/seeds.ts`
+
+```ts
+import db from "./index"
+
+const seed = async () => {
+  const project = await db.project.create({ data: { name: "FooBar" } })
+
+  for (let i = 0; i < 5; i++) {
+    await db.task.create({
+      data: {
+        name: `Task: ${i}`,
+        project: {
+          connect: {
+            id: project.id,
+          },
+        },
+      },
+    })
+  }
+}
+
+export default seed
+```
+
+2. Now simply run `blitz db seed` and you're done. You should be all
+   set with fresh new data in your database.
+
+> TIP: Use a library like [chance](https://chancejs.com/) or
+> [faker](https://fakerjs.dev/) to have more realistic data (names,
+> addresses, emails, places, dates, even lorem ipsusm)

@@ -1,0 +1,70 @@
+---
+title: Setup
+sidebar_label: Setup
+---
+
+### Blitz RPC with Next.js {#setup-nextjs}
+
+1. Install `@blitzjs/rpc` plugin with:
+
+```bash
+npm i @blitzjs/rpc # yarn add @blitzjs/rpc # pnpm add @blitzjs/rpc
+```
+
+2. Add the following to your `blitz-client.ts` file:
+
+```typescript
+import { setupClient } from "@blitzjs/next"
+import { BlitzRpcPlugin } from "@blitzjs/rpc"
+
+const { withBlitz } = setupClient({
+  plugins: [BlitzRpcPlugin()],
+})
+
+export { withBlitz }
+```
+
+You can configure the `@blitzjs/rpc` plugin to use different react-query
+options:
+
+```typescript
+import { setupClient } from "@blitzjs/next"
+import { BlitzRpcPlugin } from "@blitzjs/rpc"
+
+const { withBlitz } = setupClient({
+  plugins: [
+    BlitzRpcPlugin({
+      reactQueryOptions: {
+        queries: {
+          staleTime: 7000,
+        },
+      },
+    }),
+  ],
+})
+
+export { withBlitz }
+```
+
+You can read more about `react-query`'s `QueryClient` options
+[here](https://react-query.tanstack.com/reference/QueryClient).
+
+3. Add Blitz RPC API Route:
+
+Create an `pages/api/rpc` directory in your app root with
+`[[...blitz]].ts` file, and add the following lines:
+
+```ts
+// pages/api/rpc/[[...blitz]].ts
+
+import { rpcHandler } from "@blitzjs/rpc"
+import { api } from "app/blitz-server"
+
+export default api(rpcHandler({}))
+```
+
+---
+
+Follow the [Query Resolvers](/docs/query-resolvers) and
+[Mutation Resolvers](/docs/mutation-resolvers) docs to learn how to use
+the `@blitzjs/rpc` plugin's features.
