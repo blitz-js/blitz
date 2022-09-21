@@ -40,21 +40,24 @@ export const codegenTasks = async () => {
 
     if (hasPrisma) {
       const foundPrismaClient = resolveFrom.silent(process.cwd(), "@prisma/client")
+      const foundDotPrismaClient = resolveFrom.silent(process.cwd(), ".prisma")
+
       if (
         !foundPrismaClient ||
-        (foundPrismaClient && !fs.existsSync(join(foundPrismaClient, "../../..", ".prisma")))
+        (foundPrismaClient && !fs.existsSync(join(foundPrismaClient, "../../..", ".prisma"))) ||
+        (foundDotPrismaClient && !foundDotPrismaClient)
       ) {
         let prismaSpinner = log.spinner(`Generating Prisma client`).start()
         const result = await runPrisma(["generate"], true)
-        if (result.success) {
-          prismaSpinner.succeed(log.greenText("Generated Prisma client"))
-        } else {
-          prismaSpinner.fail()
-          console.log("\n" + result.stderr)
-          process.exit(1)
+        if (typeof result === "object") {
+          if (result.success) {
+            prismaSpinner.succeed(log.greenText("Generated Prisma client"))
+          } else {
+            prismaSpinner.fail()
+            console.log("\n" + result.stderr)
+            process.exit(1)
+          }
         }
-      } else {
-        log.success("Prisma client was up to date")
       }
     }
   } catch (err) {
