@@ -50,6 +50,7 @@ export async function checkLatestVersion() {
         } else if (
           versionType === "localVersions" &&
           typeof versionValue === "object" &&
+          versionValue.blitz &&
           versionValue.blitz !== ""
         ) {
           if (remoteBlitzVersions["latest"] !== versionValue.blitz) {
