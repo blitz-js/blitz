@@ -26,6 +26,7 @@ export async function checkLatestVersion() {
     const fetch = await import("node-fetch")
     const boxen = await import("boxen")
     const versions = readVersions()
+    const versionsArray = Object.entries(versions)
 
     let shouldRun = true
 
@@ -35,11 +36,30 @@ export async function checkLatestVersion() {
         const blitzResponse = await fetch.default(returnNpmEndpoint("blitz"))
         const remoteBlitzVersions = (await blitzResponse.json()) as Record<string, string>
 
-        for (const version of Object.entries(versions)) {
-          if (version[0] === "globalVersion") {
-            if (remoteBlitzVersions["latest"] !== version[1]) {
+        for (const version of versionsArray) {
+          const versionType: string = version[0]
+          const versionValue: typeof version[1] = version[1]
+
+          if (
+            versionType === "globalVersion" &&
+            typeof versionValue === "string" &&
+            versionValue !== ""
+          ) {
+            if (remoteBlitzVersions["latest"] !== versionValue) {
               errors.push({
-                message: `blitz(global) (current) ${version[1]} -> (latest) ${remoteBlitzVersions["latest"]}`,
+                message: `blitz(global) (current) ${versionValue} -> (latest) ${remoteBlitzVersions["latest"]}`,
+                instructions: `${getUpdateString("blitz", "latest", true)}`,
+              })
+            }
+          } else if (
+            versionType === "localVersions" &&
+            typeof versionValue === "object" &&
+            versionValue.blitz !== ""
+          ) {
+            console.log(versionValue)
+            if (remoteBlitzVersions["latest"] !== versionValue.blitz) {
+              errors.push({
+                message: `blitz(current) ${versionValue.blitz} -> (latest) ${remoteBlitzVersions["latest"]}`,
                 instructions: `${getUpdateString("blitz", "latest", true)}`,
               })
             }
