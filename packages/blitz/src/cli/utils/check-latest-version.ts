@@ -1,5 +1,5 @@
 import {readVersions} from "./read-versions"
-import {getGlobalPkgManager, getPkgManager} from "./helpers"
+import {getGlobalPkgManager} from "./helpers"
 
 import {isInternalBlitzMonorepoDevelopment} from "./helpers"
 
@@ -8,7 +8,6 @@ const returnNpmEndpoint = (packageName: string) => {
 }
 
 function getUpdateString(packageName: string, tag: string, isGlobal?: boolean) {
-  // const pkgManager = getPkgManager()
   const globalPkgManager = getGlobalPkgManager()
 
   switch (globalPkgManager) {
@@ -28,63 +27,58 @@ export async function checkLatestVersion() {
     const versions = readVersions()
     const versionsArray = Object.entries(versions)
 
-    let shouldRun = true
+    let errors: {message: string; instructions: string}[] = []
+    try {
+      const blitzResponse = await fetch.default(returnNpmEndpoint("blitz"))
+      const remoteBlitzVersions = (await blitzResponse.json()) as Record<string, string>
 
-    if (shouldRun) {
-      let errors: {message: string; instructions: string}[] = []
-      try {
-        const blitzResponse = await fetch.default(returnNpmEndpoint("blitz"))
-        const remoteBlitzVersions = (await blitzResponse.json()) as Record<string, string>
+      for (const version of versionsArray) {
+        const versionType: string = version[0]
+        const versionValue = version[1]
 
-        for (const version of versionsArray) {
-          const versionType: string = version[0]
-          const versionValue: typeof version[1] = version[1]
-
-          if (
-            versionType === "globalVersion" &&
-            typeof versionValue === "string" &&
-            versionValue !== ""
-          ) {
-            if (remoteBlitzVersions["latest"] !== versionValue) {
-              errors.push({
-                message: `blitz(global) (current) ${versionValue} -> (latest) ${remoteBlitzVersions["latest"]}`,
-                instructions: `${getUpdateString("blitz", "latest", true)}`,
-              })
-            }
-          } else if (
-            versionType === "localVersions" &&
-            typeof versionValue === "object" &&
-            versionValue.blitz !== ""
-          ) {
-            console.log(versionValue)
-            if (remoteBlitzVersions["latest"] !== versionValue.blitz) {
-              errors.push({
-                message: `blitz(current) ${versionValue.blitz} -> (latest) ${remoteBlitzVersions["latest"]}`,
-                instructions: `${getUpdateString("blitz", "latest", true)}`,
-              })
-            }
+        if (
+          versionType === "globalVersion" &&
+          typeof versionValue === "string" &&
+          versionValue !== ""
+        ) {
+          if (remoteBlitzVersions["latest"] !== versionValue) {
+            errors.push({
+              message: `blitz(global) (current) ${versionValue} -> (latest) ${remoteBlitzVersions["latest"]}`,
+              instructions: `${getUpdateString("blitz", "latest", true)}`,
+            })
+          }
+        } else if (
+          versionType === "localVersions" &&
+          typeof versionValue === "object" &&
+          versionValue.blitz !== ""
+        ) {
+          if (remoteBlitzVersions["latest"] !== versionValue.blitz) {
+            errors.push({
+              message: `blitz(current) ${versionValue.blitz} -> (latest) ${remoteBlitzVersions["latest"]}`,
+              instructions: `${getUpdateString("blitz", "latest", true)}`,
+            })
           }
         }
+      }
 
-        if (errors.length) {
-          console.log(
-            boxen.default(
-              `You are running outdated blitz packages\n\n ${errors
-                .map((e) => e.message)
-                .join("\n")} \n\n Run the following to update:\n ${errors
-                .map((e) => e.instructions)
-                .join("\n")}`,
-              {padding: 1},
-            ),
-          )
-        }
-      } catch (err) {
-        if (err instanceof fetch.FetchError) {
-          // TODO: Check if network error and throw otherwise
-          // pass fetch error
-        } else {
-          console.log(err)
-        }
+      if (errors.length) {
+        console.log(
+          boxen.default(
+            `You are running outdated blitz packages\n\n ${errors
+              .map((e) => e.message)
+              .join("\n")} \n\n Run the following to update:\n ${errors
+              .map((e) => e.instructions)
+              .join("\n")}`,
+            {padding: 1},
+          ),
+        )
+      }
+    } catch (err) {
+      if (err instanceof fetch.FetchError) {
+        // TODO: Check if network error and throw otherwise
+        // pass fetch error
+      } else {
+        console.log(err)
       }
     }
   }
