@@ -14,9 +14,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
         with:
-          ref: ${{github.event.pull_request.head.sha}}
           fetch-depth: 0
       - name: Setup node
         uses: actions/setup-node@v2
@@ -24,5 +23,9 @@ jobs:
           node-version: 16
       - name: Check if changeset is added
         run: |
-          npx @changesets/cli status --since=origin/main --verbose
+          git fetch origin ${GITHUB_HEAD_REF}
+          git fetch origin ${GITHUB_BASE_REF}
+          git checkout ${GITHUB_HEAD_REF}
+          npx @changesets/cli status --since=origin/${GITHUB_BASE_REF}
+          git checkout ${GITHUB_SHA}
           
