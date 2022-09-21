@@ -2,4 +2,4 @@
 "@blitzjs/generator": patch
 ---
 
-Remove random user git config when generating a new project & commiting.
+Remove the random user (noop@blitzjs.com) & use user's default git account when commiting a new generated blitz project.
