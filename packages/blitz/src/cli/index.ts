@@ -41,7 +41,7 @@ const aliases: Record<string, keyof typeof commands> = {
   b: "build",
   s: "start",
   n: "new",
-  // g: "generate",
+  g: "generate",
 }
 
 type Command = keyof typeof commands
@@ -164,10 +164,7 @@ async function main() {
         console.log(err)
       })
   } else {
-    if (args["--help"] && args._.length === 0) {
-      // TODO: add back the generate command description once it's working
-      // generate, g     Generate new files for your Blitz project 🤠
-
+    if (args["--help"] && forwardedArgs.length === 1 && forwardedArgs[0] === "--help") {
       console.log(`
       Usage
         $ blitz <command>
@@ -177,6 +174,7 @@ async function main() {
         build, b        Create a production build 🏗️
         start, s        Start the production server 🐎
         new, n          Create a new Blitz project ✨
+        generate, g     Generate new files for your Blitz project 🤠
         codegen         Run the blitz codegen 🤖
         db              Run database commands 🗄️
         
