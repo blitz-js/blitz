@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@main
+        uses: actions/checkout@v2
         with:
           fetch-depth: 0
       - name: Setup node
@@ -23,6 +23,5 @@ jobs:
           node-version: 16
       - name: Check if changeset is added
         run: |
-          git fetch origin ${GITHUB_BASE_REF}
           npx @changesets/cli@2.12.0 status --since=origin/${GITHUB_BASE_REF}
           
