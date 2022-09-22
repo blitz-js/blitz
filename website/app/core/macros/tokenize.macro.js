@@ -1,9 +1,8 @@
 const {createMacro} = require("babel-plugin-macros")
 const Prism = require("prismjs")
+require("prismjs/components/prism-jsx")
 const {parseExpression} = require("@babel/parser")
 const generate = require("@babel/generator").default
-
-module.exports = createMacro(tokenizeMacro)
 
 function simplify(token) {
   if (typeof token === "string") return token
@@ -37,7 +36,9 @@ function tokenizeMacro({references, babel: {types: t}}) {
       }
 
       const codeTransformerNode = path.parentPath.parentPath.node.arguments[2]
+
       let code = originalCode
+
       if (codeTransformerNode) {
         const codeTransformer = eval(generate(codeTransformerNode).code)
         code = codeTransformer(code, args)
@@ -159,3 +160,4 @@ function normalizeTokens(tokens) {
   normalizeEmptyLines(currentLine)
   return acc
 }
+module.exports = createMacro(tokenizeMacro)

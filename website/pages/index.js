@@ -9,7 +9,7 @@ import {FeatureIcon} from "@/components/home/FeatureIcon"
 import {FeatureIconTitle} from "@/components/home/FeatureIconTitle"
 import {Footer} from "@/components/home/Footer"
 import {Hand} from "@/components/home/Hand"
-// import {HeroCode} from "@/components/home/HeroCode"
+import {HeroCode} from "@/components/home/HeroCode"
 import {StyledLink} from "@/components/home/StyledLink"
 import {VideoPlayer} from "@/components/home/VideoPlayer"
 import Scrollbar from "@/components/Scrollbar"
@@ -96,7 +96,7 @@ const Home = ({randomContributors}) => {
                     style={{top: "26.6rem", right: "-2.2em"}}
                     className="z-20 hidden lg:block"
                   />
-                  {/* <HeroCode className="z-10" /> */}
+                  <HeroCode className="z-10" />
                 </div>
               </div>
             </div>
