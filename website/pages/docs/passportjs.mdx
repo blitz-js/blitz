@@ -1,0 +1,363 @@
+---
+title: Third Party Login with Passport.js
+sidebar_label: Third Party Login w/Passport.js
+---
+
+Blitz provides an adapter that lets you use an existing
+[Passport.js authentication strategy](http://www.passportjs.org/).
+
+Currently only passport strategies that use a `verify` callback are
+supported. In the Twitter example below, the second argument to
+`TwitterStrategy()` is the `verify` callback.
+
+## Setup {#setup}
+
+### 1. Add the Passport.js API Route {#1-add-the-passport-js-api-route}
+
+Add a new api route at `app/api/auth/[...auth].ts` with the following
+contents.
+
+```ts
+// app/api/auth/[...auth].ts
+import {passportAuth} from "@blitzjs/auth"
+import {api} from "app/blitz-server"
+import db from "db"
+
+export default api(
+  passportAuth({
+    successRedirectUrl: "/",
+    errorRedirectUrl: "/",
+    strategies: [
+      {
+        strategy: new PassportStrategy(), // Provide initialized passport strategy here
+      },
+    ],
+  }),
+)
+```
+
+If you need, you can place the api route at a different path but the
+filename must be `[...auth].js` or `[...auth].ts`.
+
+#### URLs
+
+The `passportAuth` adapter adds two API endpoints for each installed
+strategy.
+
+With the handler at `app/api/auth/[...auth].ts`, it adds the following:
+
+1. `/api/auth/[strategyName]` - URL to initiate login
+2. `/api/auth/[strategyName]/callback` - Callback URL to complete login
+
+For example with `passport-twitter` strategy, the URLs for Twitter will
+be:
+
+1. `/api/auth/twitter` - URL to initiate login
+2. `/api/auth/twitter/callback` - Callback URL to complete login
+
+You can determine the `strategyName` in the strategy's documentation by
+looking for this: `passport.authenticate('github')`. So in this case, the
+`strategyName` is `github`.
+
+#### SSL Proxy Configuration
+
+You may need to set `secureProxy` option to `true` in case your app is
+located behind SSL proxy (Nginx). Proxy should be set to manage
+`forwarded` or `x-forwarded-proto` header correctly.
+
+```ts
+// app/api/auth/[...auth].ts
+import {passportAuth} from "@blitzjs/auth"
+import {api} from "app/blitz-server"
+import db from "db"
+
+export default api(
+  passportAuth({
+    successRedirectUrl: "/",
+    errorRedirectUrl: "/",
+    secureProxy: true, // highlight-line
+    strategies: [
+      /*...*/
+    ],
+  }),
+)
+```
+
+#### Access Middleware Context, Request and Response objects
+
+You can access the middleware context and request and response objects by
+providing a callback to the `passportAuth` adapter. The argument of the
+callback is an object with the properties `ctx`, `req` and `res`. You can
+then access the session context via `ctx.session` or the request object if
+you need to include custom parameters in your passport strategies (e.g.,
+invitation codes, referal codes).
+
+```ts
+// app/api/auth/[...auth].ts
+import {passportAuth} from "@blitzjs/auth"
+import {api} from "app/blitz-server"
+import db from "db"
+
+export default api(
+  passportAuth(({ctx, req, res}) => ({
+    successRedirectUrl: "/",
+    errorRedirectUrl: "/",
+    strategies: [
+      {
+        strategy: new TwitterStrategy({
+          consumerKey: process.env.TWITTER_CONSUMER_KEY as string,
+          consumerSecret: process.env.TWITTER_CONSUMER_SECRET as string,
+          /*...*/
+        }),
+      },
+    ],
+  })),
+)
+```
+
+Note: If your environment variables are not typed, you must add a type
+assertion to each environment variable when using the callback (as shown
+in the example above).
+
+### 2. Add a Passport Strategy {#2-add-a-passport-strategy}
+
+Add a strategy to the `strategies` array argument for `passportAuth` in
+the API route, and then follow the strategy's documentation for setup.
+
+Here's an example of adding `passport-twitter`.
+
+Note that the `callbackURL` uses the callback endpoint as described above
+(`/api/auth/twitter/callback`)
+
+```ts
+import {passportAuth} from "@blitzjs/auth"
+import {api} from "app/blitz-server"
+import db from "db"
+import {Strategy as TwitterStrategy} from "passport-twitter"
+
+export default api(
+  passportAuth({
+    successRedirectUrl: "/",
+    errorRedirectUrl: "/",
+    strategies: [
+      // highlight-start
+      {
+        strategy: new TwitterStrategy(
+          {
+            consumerKey: process.env.TWITTER_CONSUMER_KEY,
+            consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
+            callbackURL:
+              process.env.NODE_ENV === "production"
+                ? "https://example.com/api/auth/twitter/callback"
+                : "http://localhost:3000/api/auth/twitter/callback",
+            includeEmail: true,
+          },
+          async function (_token, _tokenSecret, profile, done) {
+            const email = profile.emails && profile.emails[0]?.value
+
+            if (!email) {
+              // This can happen if you haven't enabled email access in your twitter app permissions
+              return done(new Error("Twitter OAuth response doesn't have email."))
+            }
+
+            const user = await db.user.upsert({
+              where: {email},
+              create: {
+                email,
+                name: profile.displayName,
+              },
+              update: {email},
+            })
+
+            const publicData = {
+              userId: user.id,
+              roles: [user.role],
+              source: "twitter",
+            }
+            done(undefined, {publicData})
+          },
+        ),
+      },
+      // highlight-end
+    ],
+  }),
+)
+```
+
+Note: The above `passport-twitter` example requires your `User` prisma
+model to have `email String @unique` and `name String`.
+
+### 3. Log in with this Passport Strategy {#3-log-in-with-this-passport-strategy}
+
+Add a link to your app with URL format of `/api/auth/[strategyName]`.
+
+For the above twitter example, the link would be like this:
+
+```tsx
+<a href="/api/auth/twitter">Log In With Twitter</a>
+```
+
+## Detailed Usage Instructions {#detailed-usage-instructions}
+
+Upon successful authentication with the third-party, the user will be
+redirected back to the above auth API route. When that happens, the
+`verify` callback will be called.
+
+When the `verify` callback is called, the user has been authenticated with
+the third-party, but **a session has not yet been created for your Blitz
+app**.
+
+### Create a Session {#create-a-session}
+
+**To create a new Blitz session**, you need to call the `done()` function
+from your `verify` callback.
+
+```ts
+done(undefined, result)
+```
+
+where `result` is an object of type `VerifyCallbackResult`
+
+```ts
+export type VerifyCallbackResult = {
+  publicData: PublicData
+  privateData?: Record<string, any>
+  redirectUrl?: string
+}
+```
+
+The Blitz adapter will then call `session.$create()` for you and redirect
+the user back to the correct place in your application.
+
+### Return an Error {#return-an-error}
+
+If instead, you want to prevent creating a session because of some error,
+then call `done()` with an error as the first argument. The user will then
+be redirected back to the correct location.
+
+```ts
+return done(new Error("it broke"))
+```
+
+### Showing the Error to the User {#showing-the-error-to-the-user}
+
+Any error during this process will be provided as the `authError` query
+parameter.
+
+For example with `errorRedirectUrl = '/'` and
+`done(new Error("it broke"))`, the user will be redirected to:
+
+```
+/?authError=it broke
+```
+
+### Post Authentication Redirects {#post-authentication-redirects}
+
+There are four different ways to determine the redirect URL where a user
+should be sent after they are authenticated. They are listed here in order
+of priority. A URL provided with method #1 will override all other URLs.
+
+1. Add `redirectUrl` to the `verify` callback result
+   - Example: `done(undefined, {publicData, redirectUrl: '/'})`
+2. Add a `redirectUrl` query parameter to the "initiate login" url
+   - Example: `example.com/api/auth/twitter?redirectUrl=/dashboard`
+   - Example:
+     `example.com/api/auth/twitter?redirectUrl=${router.pathname}`
+3. Via the config passed to `passportAuth`
+   - If success, it will use `config.successRedirectUrl`
+   - If error, it will use `config.errorRedirectUrl`
+4. If none of the above are provided, it will redirect to `/`
+
+Note: If there is an error, methods #1 and #2 will override
+`config.errorRedirectUrl`
+
+This should give you maximum flexibility to do anything you need. If this
+doesn't meet your needs, please open an issue on GitHub!
+
+### `authenticateOptions` {#authenticate-options}
+
+Some strategies have to call an option like `scope` or `successMessage`
+inside the `passport.authenticate()` method. Add these options to the
+`passportAuth` object like this:
+
+```ts
+import {passportAuth} from "@blitzjs/auth"
+import {api} from "app/blitz-server"
+import db from "db"
+import {Strategy as Auth0Strategy} from "passport-auth0"
+
+export default api(
+  passportAuth({
+    successRedirectUrl: "/",
+    errorRedirectUrl: "/",
+    strategies: [
+      {
+        // highlight-start
+        authenticateOptions: {scope: "openid email profile"},
+        // highlight-end
+        strategy: new Auth0Strategy(
+          {
+            domain: process.env.AUTH0_DOMAIN,
+            clientID: process.env.AUTH0_CLIENT_ID,
+            clientSecret: process.env.AUTH0_CLIENT_SECRET,
+            callbackURL:
+              process.env.NODE_ENV === "production"
+                ? "https://example.com/api/auth/auth0/callback"
+                : "http://localhost:3000/api/auth/auth0/callback",
+          },
+          async function (_token, _tokenSecret, extraParams, profile, done) {
+            const email = profile.emails && profile.emails[0]?.value
+
+            if (!email) {
+              // This can happen if you haven't enabled email access in your Auth0 app permissions
+              return done(new Error("Auth response doesn't have email."))
+            }
+
+            const user = await db.user.upsert({
+              where: {email},
+              create: {
+                email,
+                name: profile.displayName,
+              },
+              update: {email},
+            })
+
+            const publicData = {
+              userId: user.id,
+              roles: [user.role],
+              source: "auth0",
+            }
+            done(undefined, {publicData})
+          },
+        ),
+      },
+    ],
+  }),
+)
+```
+
+Note: Without the `authenticateOptions` the `profile` parameter inside the
+`verify` function would not contain any values.
+
+### Custom strategy name {#custom-strategy-name}
+
+When creating auth API routes, Blitz will use a default strategy's name.
+For example, for a Twitter startegy, the API routes will be:
+`/api/auth/twitter` and `api/auth/twitter/callback`. If you want to
+override the name and provide a custom one, you can specify a `name`
+parameter:
+
+```ts
+export default api(
+  passportAuth({
+    successRedirectUrl: "/",
+    errorRedirectUrl: "/",
+    strategies: [
+      {
+        name: "custom-name", // highlight-line
+        strategy: new TwitterStrategy(
+          // ...
+```
+
+The above configuration will result in `example.com/api/auth/custom-name`
+and `api/auth/custom-name/callback` API routes.

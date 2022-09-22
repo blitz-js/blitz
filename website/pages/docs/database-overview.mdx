@@ -1,0 +1,73 @@
+---
+title: Database Overview
+sidebar_label: Overview
+---
+
+<Card type="info">
+
+If you are totally new to Databases, check out
+[Prisma's Data Guide](https://www.prisma.io/dataguide/) which covers the
+very large majority of everything you might want to know.
+
+</Card>
+
+By default, Blitz uses [Prisma](https://prisma.io) which is a strongly
+typed database client.
+
+> Prisma is not required for Blitz. You can use anything you want, such as
+> Mongo, TypeORM, etc.
+
+##### [Read the Prisma documentation here](https://www.prisma.io/docs/understand-prisma/introduction)
+
+## Add a Database Table {#add-a-database-table}
+
+1. Open `db/schema.prisma` and add your model(s) like as follows:
+
+```prisma
+model Project {
+  id        Int      @default(autoincrement()) @id
+  name      String
+  tasks     Task[]
+}
+
+model Task {
+  id          Int      @default(autoincrement()) @id
+  name        String
+  project     Project  @relation(fields: [projectId], references: [id])
+  projectId   Int
+}
+```
+
+> If you need,
+> [reference the Prisma Schema documentation](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-schema/data-model)
+
+2. Then run `blitz prisma migrate dev` in your terminal to apply the
+   changes
+3. Now you can import `db` from `db/index.ts` and create a model like
+   this:
+   - `db.project.create({data: {name: 'Hello'}})`
+
+## Switch to PostgreSQL {#switch-to-postgre-sql}
+
+By default, a Blitz app is created with a local SQLite database. If you
+want to use PostgreSQL instead, you need to perform the following steps:
+
+1. [Install and run Postgres locally](./postgres).
+1. Open `db/schema.prisma` and change the db provider value from
+   `"sqlite"` to `"postgres"` as follows:
+
+```prisma
+datasource db {
+  provider = "postgres"
+  url      = env("DATABASE_URL")
+}
+```
+
+2. In `.env.local`, change `DATABASE_URL`. For convenience, there is a
+   commented-out PostgreSQL `DATABASE_URL` there already. Depending on
+   your setup, you may need to modify the URL.
+3. Update `.env.test.local` as well to use PostgreSQL in your test runs.
+   (It has to point to different database than your `.env.local`)
+4. Delete the `db/migrations` folder
+5. Run `blitz prisma migrate dev`. This command will create the database
+   (if it does not already exist) and tables based on your schema.

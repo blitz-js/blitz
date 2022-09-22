@@ -1,0 +1,52 @@
+---
+title: Deploy to a Server on Qovery
+sidebar_label: To Qovery
+---
+
+[Qovery](https://qovery.com) is a fully-managed cloud platform that runs
+on your AWS, GCP, Azure and Digital Ocean account where you can host
+static sites, backend APIs, databases, cron jobs, and all your other apps
+in one place.
+
+1. Visit the [Qovery dashboard](https://console.qovery.com) to create an
+   account if you don't already have one.
+2. Click on "Create a new project" and give a name to your project.
+3. Click on "Create an application" then choose "I have an application"
+   and select your GitHub or GitLab repository where your Blitz app is
+   located.
+4. Select "PostgreSQL" as a service.
+5. Select a version and give a name to your database.
+6. Click on "Deploy".
+7. Click on "master" environment then "blitz" application and "Environment
+   Variables" tab.
+8. Click "Add", enter `SESSION_SECRET_KEY` as the name, then click on
+   "Save all".
+
+**In your Blitz application:**
+
+1. Configure the application to use postgres instead of the default sqlite
+   by following the
+   [“Switch to PostgreSQL” guide](/docs/database-overview#switch-to-postgresql).
+2. In your package.json add a `start:production` and an `build` command.
+   We'll call the start script in the `Procfile` below. And Heroku will
+   run the `build` script for you on deploy.
+
+```diff
+"scripts": {
++ "start:production": "blitz start --port $PORT",
++ "build": "blitz build"
+}
+```
+
+3. Create a `Procfile` file inside the root of your project with the
+   following content.
+
+```
+release: npx blitz prisma migrate deploy
+web: npm run start:production
+```
+
+#### Support
+
+Chat with Qovery developers on [Discord](https://discord.qovery.com) if
+you need help.

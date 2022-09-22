@@ -1,0 +1,47 @@
+---
+title: Route Manifest
+sidebar_label: Route Manifest
+---
+
+Blitz generates a _Route Manifest_ for you. It allows you to refer to a
+page by _name_ instead of _location_:
+
+```tsx
+// Assume you have a page at app/pages/products/[productId].tsx
+export default function ProductsPage() { ...
+
+// You can then use Routes...
+import { Link, Routes } from "blitz"
+
+// ...to refer to it by name...
+<Link href={Routes.ProductsPage({ productId: 123 })} />
+
+// ...instead of looking up the location!
+<Link href={`/products/${123}`} />
+```
+
+The _Route Manifest_ is a purely optional feature. It has some advantages,
+though:
+
+- improved expressiveness
+- simplifies moving pages to new locations
+
+## Query Parameters {#query-parameters}
+
+Query parameters can be specified together with route parameters.
+
+```tsx
+// instead of ...
+<Link href={`/products/${pid}?offerCode=capybara`} />
+
+// ... you can do:
+<Link href={Routes.Product({ pid, offerCode: "capybara" })} />
+```
+
+## Generating the Manifest {#generating}
+
+The Route Manifest is generated into `node_modules/.blitz` directly from
+your source code. Both [`blitz build`](./cli-build) and
+[`blitz dev`](./cli-dev) will automatically keep it up-to-date.  
+If you need to manually generate the route manifest (for example for a
+typecheck in CI) use [`blitz codegen`](./cli-codegen).

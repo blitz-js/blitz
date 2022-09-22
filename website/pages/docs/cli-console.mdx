@@ -1,0 +1,42 @@
+---
+title: blitz console
+sidebar_label: blitz console
+---
+
+**Alias: `blitz c`**
+
+Starts a Node.js REPL with your [database](./database-overview) and all
+your [queries](./query-resolvers) and [mutations](./mutation-resolvers)
+preloaded.
+
+This makes it very simple to read or write to your database and run
+one-off commands using your queries or mutations. It's also great for
+testing and rapid prototype exploration.
+
+#### Options
+
+| Option  | Shorthand | Description                                                                           | Default |
+| ------- | --------- | ------------------------------------------------------------------------------------- | ------- |
+| `--env` | `-e`      | Set app environment name. [Read more](/docs/custom-environments#custom-environments). | None    |
+
+#### Examples
+
+```bash
+> blitz console
+
+You have entered the Blitz console
+Tips: - Exit by typing .exit or pressing Ctrl-D
+      - Use your db like this: await db.project.findMany()
+      - Use your queries/mutations like this: await getProjects()
+✔ Loading your code
+
+⚡ > await db.question.findMany()
+[
+  {
+    id: 1,
+    createdAt: 2020-06-15T15:06:14.959Z,
+    updatedAt: 2020-06-15T15:06:14.959Z,
+    text: "What's up?"
+  }
+]
+```

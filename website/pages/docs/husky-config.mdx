@@ -1,0 +1,43 @@
+---
+title: Custom Husky Config
+sidebar_label: Husky Config
+---
+
+[Husky](https://typicode.github.io/husky/#/) is a tool that helps improve
+your commits.
+
+You can use it to lint your commit messages, run tests, lint code, and
+more when you commit or push using
+[Git hooks](https://git-scm.com/docs/githooks).
+
+For example, a `pre-commit` hook is triggered right before a commit is
+created.
+
+## Default Blitz config {#blitz-config}
+
+By default, new Blitz apps install a pre-commit and pre-push hook inside
+`.husky/` in the project root. You can view these hooks
+[here](https://github.com/blitz-js/blitz/tree/canary/packages/generator/templates/app/.husky).
+
+Husky is installed after you use NPM or Yarn to install your dependencies
+following this instruction in the `package.json` file:
+
+```json
+{
+  "scripts": {
+    "prepare": "husky install"
+  }
+}
+```
+
+Note that if you use Yarn 2, Husky needs to be installed differently. Yarn
+2 doesn't support the `prepare` lifecycle script. See
+[Yarn 2 install](https://typicode.github.io/husky/#/?id=yarn-2).
+
+## Troubleshooting Husky {#troubleshooting}
+
+If you are having problems commiting or pushing, check out the Husky
+[troubleshooting guide](https://typicode.github.io/husky/#/?id=troubleshoot).
+
+To optionally bypass checks, you can run
+`git commit -m "message" --no-verify` or `git push --no-verify`.

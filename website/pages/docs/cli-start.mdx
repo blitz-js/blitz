@@ -1,0 +1,45 @@
+---
+title: blitz start
+sidebar_label: blitz start
+---
+
+**Alias: `blitz s`**
+
+Starts the Blitz production server.
+
+This is a super thin wrapper over Next CLI to improve environment variable
+loading.
+
+```bash
+blitz dev -e staging
+```
+
+It does the following:
+
+1. Loads correct `.env.X` and `.env.X.local` files based on the `-e X`
+   flag that you specify. Ex: `-e staging` loads `.env.staging`.
+2. Sets `process.env.APP_ENV` to the env name. Ex: `-e staging` =>
+   `APP_ENV=staging`.
+3. Passes all other arguments directly to the next build command
+
+#### Options
+
+| Option       | Shorthand | Description                                                                           | Default       |
+| ------------ | --------- | ------------------------------------------------------------------------------------- | ------------- |
+| `--hostname` | `-H`      | Set the hostname to use for the server.                                               | `"localhost"` |
+| `--port`     | `-p`      | Set the port you'd like the server to listen on.                                      | `3000`        |
+| `--inspect`  |           | Enable the Node.js inspector                                                          | `false`       |
+| `--env`      | `-e`      | Set app environment name. [Read more](/docs/custom-environments#custom-environments). | None          |
+
+#### Examples
+
+<Card type="note">
+
+Make sure to run `blitz build` before running `blitz start`
+
+</Card>
+
+```bash
+blitz start
+blitz start -H 127.0.0.1 -p 5632
+```

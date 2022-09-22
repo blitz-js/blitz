@@ -1,0 +1,110 @@
+---
+title: Custom Server
+sidebar_label: Custom Server
+---
+
+You can use the custom server feature if you need websocket support or
+some other direct control over the web server itself.
+
+### How {#how}
+
+1. Add a `server.ts` or `server.js` file in your project root. Or you can
+   use `server/index.js` or `server/index.ts`. See below for an example
+   server.
+2. Now `blitz dev` and `blitz start` will automatically detect and use
+   your custom server.
+
+### Example {#example}
+
+Here's an example custom server:
+
+```ts
+// server.ts
+import blitz from "blitz/custom-server"
+import {createServer} from "http"
+import {parse} from "url"
+import {log} from "next/dist/server/lib/logging"
+
+const {PORT = "3000"} = process.env
+const dev = process.env.NODE_ENV !== "production"
+const app = blitz({dev})
+const handle = app.getRequestHandler()
+
+app.prepare().then(() => {
+  createServer((req, res) => {
+    // Be sure to pass `true` as the second argument to `url.parse`.
+    // This tells it to parse the query portion of the URL.
+    const parsedUrl = parse(req.url!, true)
+    const {pathname} = parsedUrl
+
+    if (pathname === "/hello") {
+      res.writeHead(200).end("world")
+      return
+    }
+
+    if (pathname === "/a") {
+      // renders app/pages/a.tsx
+      app.render(req, res, "/a", query)
+      return
+    }
+
+    handle(req, res, parsedUrl)
+  }).listen(PORT, () => {
+    log.success(`Ready on http://localhost:${PORT}`)
+  })
+})
+```
+
+---
+
+The above `blitz/custom-server` import is a function that receives an
+object with the following options:
+
+- `dev`: `Boolean` - Whether or not to launch Blitz in dev mode. Defaults
+  to `false`
+- `dir`: `String` - Location of the Blitz project. Defaults to `'.'`
+- `quiet`: `Boolean` - Hide error messages containing server information.
+  Defaults to `false`
+- `conf`: `object` - Defaults to `{}`
+
+The returned `app` can then be used to let Blitz handle requests as
+required.
+
+## Disabling file-system routing {#disabling-file-system-routing}
+
+By default, `blitz` will serve each file `pages` folders under a pathname
+matching the filename. If your project uses a custom server, this behavior
+may result in the same content being served from multiple paths, which can
+present problems with SEO and UX.
+
+To disable this behavior and prevent routing based on files in `pages`,
+open `blitz.config.js` and disable the `useFileSystemPublicRoutes` config:
+
+```js
+module.exports = {
+  useFileSystemPublicRoutes: false,
+}
+```
+
+> Note that `useFileSystemPublicRoutes` disables filename routes from SSR;
+> client-side routing may still access those paths. When using this
+> option, you should guard against navigation to routes you do not want
+> programmatically.
+
+> You may also wish to configure the client-side router to disallow
+> client-side redirects to filename routes; for that refer to
+> [`router.beforePopState`](./router#router-object).
+
+## Disabling hot reloading in development {#disabling-hot-reloading}
+
+The default value for `customServer.hotReload` is `true`. Should you need
+to disable hot reloading for your custom server, you can change the value
+of it to `false`.
+
+```js
+module.exports = {
+  customServer: {
+    hotReload: false,
+  },
+}
+```

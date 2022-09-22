@@ -1,0 +1,103 @@
+---
+title: Deploy Serverless to Vercel
+sidebar_label: To Vercel
+---
+
+<Card type="info">
+  Blitz itself runs great on Vercel. But be aware that Vercel is a platform optimized for frontend
+  deployments, not fullstack. Because of Vercel's serverless nature, you have to do extra work for
+  it to work well with SQL databases. Carefully read through the below database information.
+</Card>
+
+## Serverless Peculiarities for SQL Databases {#peculiarities}
+
+There are three main issues when it comes to using SQL databases in a
+serverless environment:
+
+### Problem 1: Separate Locations for App and Database {#locations}
+
+Because Vercel doesn't provide databases, you will use a separate platform
+for your database. And therefore people accidentally deploy their app to a
+different region than their database.
+
+**Solution:** Deploy your app and database to the same region. By default
+Vercel apps are deployed to Washington D.C., so your database should be as
+close as possible to that.
+
+### Problem 2: Idle Connections {#idle-connections}
+
+Ideally you will set up your database client and database connection
+outside your API handler (this is the default setup in Blitz apps). This
+optimizes performance because subsequent requests to the same lambda
+already have an active database connection.
+
+However, this can result in a large number of idle connections, larger
+than what your database can support. For reference, the lowest database
+tier on Digital Ocean has a limit of 22 connections.
+
+**Solution:** Use a connection pool in front of your database. PgBouncer
+is the most popular connection pool for PostgreSQL. Both Digital Ocean and
+Heroku have a feature to simply add PgBouncer.
+
+### Problem 3: Database Throughput {#database-throughput}
+
+PgBouncer for PostgreSQL is advertised as allowing you to have
+5,000-10,000 active database connections, but **it's critical to
+understand that those are idle connections.** **PgBouncer does not
+increase your core database capacity.** If your database has a max of 22
+connections, then you can only have 22 simultaneous transactions,
+regardless of whether you have PgBouncer in front of it or not.
+
+**Solution:** Increase your database size to meet the traffic needs for
+your app. But be aware this can become very expensive.
+
+Note: Slow database transactions will greatly decrease your throughput. If
+it seems you are running out of connections before you should, based on
+your app traffic, then turn on logging for your database queries and look
+for long transactions.
+
+## Databases to Consider {#databases}
+
+1. PostgreSQL + PgBouncer
+2. [PlanetScaleDB](https://www.planetscale.com) - This is MySQL but seems
+   to have solved the connection limit issue for serverless environments
+
+## Guide for Using Digital Ocean with Vercel {#digitalocean}
+
+This assumes your Blitz app is already set up for Postgres. If it's not,
+first
+[follow these instructions](./database-overview#switch-to-postgre-sql)
+
+This also assumes you already have a [Vercel](https://vercel.com) account.
+
+1. You need a production Postgres database. It's straightforward to set
+   this up on
+   [Digital Ocean](https://www.digitalocean.com/products/managed-databases-postgresql/?refcode=eab6549a2fed).
+   1. **It's extremely important that you choose the DB location to be in
+      the same region as your Vercel deployment**. By default Vercel
+      deployments are in Washington D.C., so you should choose the closest
+      Digital Ocean location which is New York City.
+2. You also need a connection pool. This is also relatively
+   straightforward to set up on Digital Ocean.
+   1. [Read the Digital Ocean docs on setting up your connection pool](https://www.digitalocean.com/docs/databases/postgresql/how-to/manage-connection-pools/#creating-a-connection-pool?refcode=466ad3d3063d)
+   2. Ensure you set your "Pool Mode" to be "Transaction"
+3. You need your entire database connection string. If you need,
+   [read the Prisma docs on this](https://www.prisma.io/docs/reference/database-connectors/postgresql#connection-details).
+   1. Make sure you get the connection string to your connection pool, not
+      directly to the DB.
+   2. If using PgBouncer (default connection pool on Digital Ocean), you
+      must add `&pgbouncer=true` to the end of your connection string for
+      Prisma to work correctly.
+4. Change your build script in package.json to be
+   `NODE_ENV=production blitz build && blitz prisma migrate deploy` so
+   that the production DB will be migrated on each deploy
+5. Add your DB url as a secret environment variable
+   [using the UI](https://vercel.com/blog/custom-environments-ui) or by
+   running `vercel env add DATABASE_URL`
+6. Add your `SESSION_SECRET_KEY` environment variable (It needs to be 32
+   characters long)
+   - On macOS and Linux, you can generate it by running
+     `openssl rand -hex 16` in your terminal.
+7. Run `git push` if using the
+   [Git Integration](https://vercel.com/docs/v2/git-integrations) or
+   `vercel` if using Vercel CLI

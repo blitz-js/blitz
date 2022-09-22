@@ -1,0 +1,32 @@
+---
+title: blitz db
+sidebar_label: blitz db
+---
+
+<Card type="caution">
+
+This command is now deprecated in favor of using the `blitz prisma`
+command. The `blitz db seed` command still works until Prisma finishes
+adding their native seeding functionatily.
+
+</Card>
+
+### `blitz db seed` {#blitz-db-seed}
+
+This will run a script provided with the optional `file` flag. If omitted,
+it defaults to `db/seeds`. This is often used to quickly set up the
+development environment. For examples check [seeds docs](database-seeds)
+
+#### Options
+
+| Argument | Short | Description                                                                                                                  | Default  |
+| -------- | ----- | ---------------------------------------------------------------------------------------------------------------------------- | -------- |
+| `--file` | `-f`  | Path to the seeds file, relative to the project root folder. Examples: db/seeds, db/seeds.ts, db/seeds/index.ts, db/my-seeds | db/seeds |
+| `--env`  | `-e`  | Set app environment name. [Read more](/docs/custom-environments#custom-environments).                                        | None     |
+
+#### Examples
+
+```bash
+blitz db seed
+blitz db seed -f=db/path-to-seeds-script
+```

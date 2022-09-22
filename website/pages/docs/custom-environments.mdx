@@ -1,0 +1,39 @@
+---
+title: Custom Environment Variables
+sidebar_label: Custom Environments
+---
+
+## Using custom environments {#custom-environments}
+
+The three default environments in Next.js are `production`, `development`,
+and `test`. However, sometimes, you need an additional environment, e.g.
+`staging`, to store env variables for it in a separate file. You can
+provide an app environment name by passing `-e` (`--env`) flag or setting
+`APP_ENV` directly. For example:
+
+```
+APP_ENV=staging blitz build    // loads .env.staging
+
+blitz prisma generate -e staging  // loads .env.staging
+
+blitz dev --env staging  // loads .env.staging
+
+// it also solves the problem of loading production env variables in dev mode
+blitz dev --e production
+```
+
+This will load additional env files: `.env.<APP_ENV>` and
+`.env.<APP_ENV>.local`.
+
+If you need to load multiple env files, you can pass all the environments
+as comma-separated strings. For example:
+
+```bash
+blitz dev --env staging,production
+# Loaded .env.staging.local
+# Loaded .env.staging
+# Loaded .env.production.local
+# Loaded .env.production
+# Loaded .env.local
+# Loaded .env
+```

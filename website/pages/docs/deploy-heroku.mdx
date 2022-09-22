@@ -1,0 +1,99 @@
+---
+title: Deploy to a Server on Heroku
+sidebar_label: To Heroku
+---
+
+<Card type="info">
+
+This guide assumes the following:
+
+1. That you already have an Heroku account
+2. That you’ll be using the Heroku Postgres addon (since Heroku does not
+   provide sqlite as a suitable addon)
+3. That the application is a completely new application created using the
+   [Blitz CLI](/docs/cli-new).
+4. That deployments will be made with git and the
+   [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli).
+
+</Card>
+
+**In Heroku:**
+
+1. Create a new application in your desired region
+2. Attach the
+   [Heroku Postgres addon](https://elements.heroku.com/addons/heroku-postgresql)
+   to your application.
+
+**In your terminal:**
+
+1. Login to Heroku using
+
+```
+heroku login
+```
+
+2. Add your Heroku app as a git remote with the following command
+   replacing `<APP_NAME>` with the name you provided or that was given to
+   you when creating the Heroku app.
+
+```
+heroku git:remote --app <APP_NAME>
+```
+
+**In your Blitz application:**
+
+1. Configure the application to use postgres instead of the default sqlite
+   by following the
+   [“Switch to PostgreSQL” guide](/docs/database-overview#switch-to-postgresql).
+2. In your package.json add a `start:production` and a `build` command.
+   We'll call the start script in the `Procfile` below. And Heroku will
+   run the `build` script for you on deploy.
+
+```diff
+"scripts": {
++ "start:production": "blitz start --port $PORT",
++ "build": "blitz build"
+}
+```
+
+3. Create a `Procfile` file inside the root of your project with the
+   following content.
+
+```
+release: npx blitz prisma migrate deploy
+web: npm run start:production
+```
+
+**Deploy using git:**
+
+With these changes committed, to deploy your application, run:
+
+```
+git push heroku main
+```
+
+Once built you can open your application with the following command in
+your terminal
+
+```
+heroku open
+```
+
+_Note:_ While the application should now be working you will not be able
+to use authentication until you provide Heroku with a `SESSION_SECRET_KEY`
+envivonment variable. You can do this with the following command replacing
+`<MY_SECRET>` with your secret (at least 32 characters long). On macOS and
+Linux, you can generate it by running `openssl rand -hex 16` in your
+terminal.
+
+```
+heroku config:set SESSION_SECRET_KEY=<SESSION_SECRET_KEY>
+```
+
+#### SSL Certificates
+
+On the free tier, Heroku does not supply you with SSL certificates. These
+are crucial for secure authentication, though - and Blitz' built-in
+authentication won't work without. You can use
+[Cloudflare SSL](https://support.cloudflare.com/hc/en-us/articles/205893698-Configure-Cloudflare-and-Heroku-over-HTTPS)
+to get free SSL certificates.

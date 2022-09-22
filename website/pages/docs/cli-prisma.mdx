@@ -1,0 +1,26 @@
+---
+title: blitz prisma
+sidebar_label: blitz prisma
+---
+
+**Alias: `blitz p`**
+
+This loads all your environment variables and then proxies all arguments
+to
+[the Prisma CLI](https://www.prisma.io/docs/reference/api-reference/command-reference).
+
+Hopefully Prisma adds full env support so we can eventually remove this :)
+
+#### Options
+
+| Option  | Shorthand | Description                                                                           | Default |
+| ------- | --------- | ------------------------------------------------------------------------------------- | ------- |
+| `--env` | `-e`      | Set app environment name. [Read more](/docs/custom-environments#custom-environments). | None    |
+
+#### Examples
+
+```
+blitz prisma generate
+blitz prisma migrate dev
+blitz prisma migrate deploy
+```

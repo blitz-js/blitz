@@ -1,0 +1,194 @@
+---
+id: rpc-specification
+title: RPC Specification
+sidebar_label: RPC Specification
+---
+
+<Card type="caution">
+
+This is documentation for using Blitz queries and mutations in a non-Blitz
+app. For example, from a mobile application or some other app.
+
+**For using queries and mutations in your app, refer to
+[Using Queries](./query-usage) and [Using Mutations](./mutation-usage).**
+
+**If you want to access your app e.g. as an external API, take a look at
+[API Routes](./api-routes) instead.**
+
+</Card>
+
+## URL {#url}
+
+There are three options to determine how the RPC path is resolved during
+build.
+
+- `queries|mutations` (default)
+  - Use the `queries` or `mutations` folder as the root
+- `root`
+  - Uses the path starting from the root of the project
+- Custom function
+  - This function gets called for every file path that needs to be
+    resolved.
+
+Example:
+
+```
+File: app/products/queries/getProduct.ts
+"queries|mutations" URL: /api/rpc/getProduct
+"root" URL: app/products/queries/getProduct
+
+File: app/products/mutations/createProduct.ts
+"queries|mutations" URL: /api/rpc/createProduct
+"root" URL: app/products/mutations/createProduct
+
+File: app/products/mutations/v2/createProduct.ts
+"queries|mutations" URL: /api/rpc/v2/createProduct
+"root" URL: app/products/mutations/v2/createProduct
+```
+
+#### Changing resolverPath option
+
+To change how every file path is resolved, you can set the `resolverPath`
+option inside next.config.js to one the three previously mentioned
+options:
+
+```ts
+module.exports = withBlitz({
+  blitz: {
+    resolverPath: "queries|mutations",
+  },
+})
+
+// Or with a custom function
+module.exports = withBlitz({
+  blitz: {
+    resolverPath: (filePath) => {
+      return filePath.replace("app/", "") // Removes `app/` from the path
+    },
+  },
+})
+```
+
+## Request Details {#request-details}
+
+From an HTTP perspective there is no difference between a query and
+mutation. They are both function calls that get transformed into POST
+requests.
+
+## HEAD {#head}
+
+Warms up the lambda. For example, when a component renders on the client
+that uses a mutation, it will issue a HEAD request to the mutation
+endpoint immediately on page load so that there's a much higher chance the
+actual mutation request will hit a warm lambda.
+
+Must always return HTTP `200 OK`
+
+### HEAD Responses {#head-responses}
+
+```http
+HTTP/1.1 200 OK
+```
+
+## POST {#post}
+
+Executes the query or mutation.
+
+Request body must be JSON with the following keys:
+
+- params (required) - This will be provided as the first argument to the
+  query or mutation
+- version (optional) - String containing the version of the built RPC
+  client
+
+Response body is JSON with the following keys:
+
+- result - the exact result returned from the query/mutation function or
+  null if there was an error
+- error - null if success, otherwise an object.
+
+**Example POST body:**
+
+```json
+{
+  "params": {
+    "where": {
+      "id": 1
+    }
+  }
+}
+```
+
+### POST Responses {#post-responses}
+
+#### Success
+
+```http
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "result": {
+    "name": "Hello World",
+    "description": "This is awesome :)"
+  },
+  "error": null
+}
+```
+
+#### Bad Request (Not JSON)
+
+```http
+HTTP/1.1 400 Bad Request
+Content-Type: application/json
+
+{
+  "result": null,
+  "error": {
+    "message": "Request body is not valid JSON"
+  }
+}
+```
+
+#### Bad Request (Missing params)
+
+```http
+HTTP/1.1 400 Bad Request
+Content-Type: application/json
+
+{
+  "result": null,
+  "error": {
+    "message": "Request body is missing the 'params' key"
+  }
+}
+```
+
+#### Not Found (Wrong method)
+
+```http
+HTTP/1.1 404 Not Found
+```
+
+## Versioning {#versioning}
+
+Any time you have client-server communication, there is a very real risk
+of the client & server code becoming out of sync and causing an error. For
+example, let's say you have a mutation function whose input is a single
+object. You decide to change the mutation input to be a single array. You
+make the change and deploy it. Your server code is now updated, but all
+your users still have the old client code running in the browser. So it's
+likely you now have client code sending an object to your mutation which
+is going to error because it's expecting an array.
+
+Now one solution is to only make changes that are backwards compatible,
+but sometimes you can't do this.
+
+The other solution is to track the version of your client code and your
+server code. If there is a version mismatch, you can display a friendly
+message to the user, telling them they need to reload the webpage to
+continue.
+
+```js
+// *: example of an RPC call shielded by a friendly message to the user
+```

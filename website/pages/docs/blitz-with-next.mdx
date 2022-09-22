@@ -1,0 +1,110 @@
+---
+title: Add Blitz.js to an Existing Next.js Project
+sidebar_label: With Existing Next.js App
+---
+
+If you have an existing Next.js project and would like to use some or all
+of Blitz Toolkit, this page will provide you with information on setting
+it up. A few steps are required, and we'll go through them one by one.
+
+## Adding required dependencies {#adding-dependencies}
+
+```sh
+yarn add blitz @blitzjs/next
+
+# or
+
+pnpm add blitz @blitzjs/next
+
+# or
+
+npm i blitz @blitzjs/next
+```
+
+## Blitz server setup {#blitz-server-setup}
+
+If you want to use Blitz's server functionalities like auth, middlewares,
+rpc, you'd need to create a `blitz-server.ts` file somewhere in your
+project, e.g. in `app/blitz-server.ts`. We'll cover how to add plugins
+later.
+
+```ts
+import {setupBlitzServer} from "@blitzjs/next"
+
+const {
+  /* plugins' exports */
+} = setupBlitzServer({
+  plugins: [
+    // plugins will go here
+  ],
+})
+```
+
+## Blitz client setup {#blitz-client-setup}
+
+Now, if you want Blitz's client functionalities, you'll have to create a
+`blitz-client.ts` file. It can be next to the `blitz-server.ts` in
+`app/blitz-client.ts`.
+
+```ts
+import {setupBlitzClient} from "@blitzjs/next"
+
+export const {withBlitz} = setupBlitzClient({
+  plugins: [
+    // plugins will go here
+  ],
+})
+```
+
+The `withBlitz` function will be needed to wrap your components with
+Blitz's client side functionality.
+
+## Use `withBlitz` in your App component {#use-withblitz-in-app-component}
+
+To use Blitz on the client, you also have to use the `withBlitz` function
+in your App component.
+
+```ts
+import {withBlitz} from "app/blitz-client"
+
+function App({Component, pageProps}: AppProps) {
+  return <Component {...pageProps} />
+}
+
+export default withBlitz(App)
+```
+
+## Modifying `next.config.js` file {#modifying-next-config-file}
+
+Next.js requires you to manually type out page locations. Blitz comes with
+a [Route Manifest](./route-manifest), so you can do:
+
+```tsx
+<Link href={Routes.ProductsPage({ productId: 123 })} />
+// instead of
+<Link href={`/products/${123}`} />
+```
+
+To enable it, you have to wrap your config with `withBlitz` in the
+`next.config.js` file:
+
+```js
+const {withBlitz} = require("@blitzjs/next")
+
+module.exports = withBlitz()
+```
+
+## Adding plugins {#adding-plugins}
+
+Now that you're all set with the basic setup, you can add plugins that you
+want to use in your app. There are a few places to check out:
+
+1. [`@blitzjs/auth`](./auth-setup) — it covers how to setup auth plugin as
+   well as how to use Blitz auth system.
+2. [`@blitzjs/rpc`](./rpc-setup) — check it out to learn how to set up
+   Blitz's Zero API Layer and to learn more about it.
+
+Finally, you can check out more detailed information about the
+[`@blitzjs/next` adapter](./blitzjs-next) to learn how to use Blitz
+functionalities inside of `getServerSideProps`, `getStaticProps`, Next API
+Routes, and other places.
