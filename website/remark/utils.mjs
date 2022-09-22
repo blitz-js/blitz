@@ -1,10 +1,10 @@
 import Prism from "prismjs"
 global.Prism = Prism
 
-import loadLanguages from "prismjs/components/index"
+import loadLanguages from "prismjs/components/index.js"
 loadLanguages()
 
-import {prismDiffHighlight} from "./prism-diff-highlight"
+import {prismDiffHighlight} from "./prism-diff-highlight.mjs"
 // import {prismLineNumbers} from "./prism-line-numbers"
 
 prismDiffHighlight(Prism)

@@ -1,6 +1,6 @@
-import {addImport} from "./utils"
+import {addImport} from "./utils.mjs"
 
-export default withBlitzLinks = () => {
+export const withBlitzLinks = () => {
   return (tree) => {
     const component = addImport(tree, "blitz", "Link")
 

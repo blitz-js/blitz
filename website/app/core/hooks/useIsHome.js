@@ -1,4 +1,4 @@
-import {useRouter} from "blitz"
+import {useRouter} from "next/router"
 
 export function useIsHome() {
   return useRouter().pathname === "/"

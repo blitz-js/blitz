@@ -2,7 +2,7 @@ import clsx from "clsx"
 import {useContext, useEffect, useRef} from "react"
 
 import {useTop} from "@/hooks/useTop"
-import {ContentsContext} from "@/layouts/ContentsLayout"
+import {ContentsContext} from "../layouts/ContentsLayout"
 
 export function Heading({
   level,
@@ -17,6 +17,7 @@ export function Heading({
   ...props
 }) {
   let Component = `h${level}`
+
   const {registerHeading, unregisterHeading} = useContext(ContentsContext)
 
   let ref = useRef()
@@ -35,7 +36,7 @@ export function Heading({
     <Component
       className={clsx("group flex whitespace-pre-wrap", className)}
       id={id}
-      ref={ref}
+      // ref={ref}
       style={{...(hidden ? {marginBottom: 0} : {}), ...style}}
       {...props}
     >

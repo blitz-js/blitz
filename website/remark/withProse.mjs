@@ -8,7 +8,7 @@ const isJsNode = (node) => {
   )
 }
 
-export default withProse = () => {
+export const withProse = () => {
   return (tree) => {
     let insideProse = false
     tree.children = tree.children.flatMap((node, i) => {

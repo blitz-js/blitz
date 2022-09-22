@@ -1,14 +1,14 @@
 import Link from "next/link"
 import {useRouter} from "next/router"
 import clsx from "clsx"
-import {createContext, Fragment, useCallback, useEffect, useState} from "react"
+import {createContext, Fragment, useCallback, useContext, useEffect, useState} from "react"
 import {BiChevronLeft} from "react-icons/bi"
 import {BsArrowLeft, BsArrowRight, BsCaretDownFill, BsCaretUpFill} from "react-icons/bs"
 import {FaGithub} from "react-icons/fa"
 import Select, {components} from "react-select"
 
-import {PageHeader} from "@/components/PageHeader"
-import {usePrevNext} from "@/hooks/usePrevNext"
+import {PageHeader} from "../components/PageHeader"
+import {usePrevNext} from "../hooks/usePrevNext"
 
 export const ContentsContext = createContext()
 

@@ -1,4 +1,4 @@
-import {addExport, addImport} from "./utils"
+import {addExport, addImport} from "./utils.mjs"
 
 /**
  * Extract slug
@@ -13,7 +13,7 @@ function extractSlug(headingText) {
   return [title, rest.substr(0, rest.length - 1)]
 }
 
-export default withTableOfContents = () => {
+export const withTableOfContents = () => {
   return (tree) => {
     const component = addImport(tree, "@/components/Heading", "Heading")
     const contents = []

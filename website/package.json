@@ -7,13 +7,13 @@
     "yarn": "1.22.17"
   },
   "scripts": {
-    "start:dev": "blitz dev",
+    "start:dev": "next dev",
     "clean": "rm -rf node_modules && rm -rf .turbo && rm -rf .next",
     "start": "blitz start",
     "build": "blitz build",
     "lint": "pnpm lint:code && pnpm lint:docs",
     "lint:code": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
-    "lint:docs": "alex app/pages/docs/**/*.mdx",
+    "lint:docs": "alex pages/docs/**/*.mdx",
     "english-slugify": "node scripts/english-slugify.mjs"
   },
   "lint-staged": {
@@ -25,6 +25,7 @@
     "@blitzjs/config": "workspace:*",
     "@blitzjs/next": "workspace:*",
     "@docsearch/react": "3.0.0-alpha.42",
+    "@mdx-js/loader": "1.6.22",
     "@octokit/rest": "18.12.0",
     "@reach/rect": "0.16.0",
     "@sindresorhus/slugify": "2.1.0",
@@ -43,6 +44,7 @@
     "react-icons": "4.3.1",
     "react-player": "2.9.0",
     "react-select": "5.2.1",
+    "remark-custom-heading-id": "1.0.0",
     "ts-node": "10.7.0",
     "typeface-libre-franklin": "1.1.13",
     "typeface-roboto": "1.1.13",
@@ -53,7 +55,6 @@
   "devDependencies": {
     "@babel/generator": "7.19.0",
     "@babel/parser": "7.19.1",
-    "@mdx-js/loader": "1.6.22",
     "@next/bundle-analyzer": "11.1.2",
     "@svgr/webpack": "6.1.1",
     "@tailwindcss/typography": "0.4.1",

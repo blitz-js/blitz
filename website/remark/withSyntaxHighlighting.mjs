@@ -1,8 +1,8 @@
 import visit from "unist-util-visit"
 
-import {highlightCode} from "./utils"
+import {highlightCode} from "./utils.mjs"
 
-export default withSyntaxHighlighting = () => {
+export const withSyntaxHighlighting = () => {
   return (tree) => {
     visit(tree, "code", (node) => {
       let lang = node.lang || "bash"

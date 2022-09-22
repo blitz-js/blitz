@@ -1,4 +1,4 @@
-import {useRouter} from "blitz"
+import {useRouter} from "next/router"
 import {useContext} from "react"
 
 import {SidebarContext} from "@/layouts/SidebarLayout"
