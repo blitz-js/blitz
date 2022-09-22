@@ -2,8 +2,7 @@ name: CI
 
 on:
   pull_request:
-    types: [opened]
-#     types: [opened, synchronize] just for testing
+    types: [opened, synchronize]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
