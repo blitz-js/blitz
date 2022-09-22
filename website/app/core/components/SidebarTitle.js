@@ -1,4 +1,4 @@
-import {Image} from "blitz"
+import Image from "next/image"
 
 export const SidebarTitle = ({title, iconPath, iconDarkPath}) => (
   <div className="px-3 mb-5 flex">

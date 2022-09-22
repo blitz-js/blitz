@@ -1,4 +1,4 @@
-import {Link} from "blitz"
+import Link from "next/link"
 
 const NavLink = ({className = "", href, children, ...props}) => {
   return (

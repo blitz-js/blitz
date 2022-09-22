@@ -31,5 +31,6 @@ const ButtonLink = React.forwardRef(({className, children, variant = "solid", ..
     </a>
   )
 })
+ButtonLink.displayName = "ButtonLink"
 
 export {ButtonLink}

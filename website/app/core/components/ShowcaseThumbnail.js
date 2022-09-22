@@ -1,4 +1,4 @@
-import {Image} from "blitz"
+import Image from "next/image"
 
 export function ShowcaseThumbnail({title, thumbnail, URL}) {
   return (

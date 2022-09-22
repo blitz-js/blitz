@@ -1,4 +1,5 @@
-import {Link, useRouter} from "blitz"
+import Link from "next/link"
+import {useRouter} from "next/router"
 import clsx from "clsx"
 import {createContext, Fragment, useCallback, useEffect, useState} from "react"
 import {BiChevronLeft} from "react-icons/bi"

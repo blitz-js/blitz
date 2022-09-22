@@ -1,5 +1,7 @@
 import {DocSearchModal, useDocSearchKeyboardEvents} from "@docsearch/react"
-import {Head, Link, useRouter} from "blitz"
+import Head from "next/head"
+import Link from "next/link"
+import {useRouter} from "next/router"
 import {useCallback, useEffect, useRef, useState} from "react"
 import {createPortal} from "react-dom"
 import {BiSearch} from "react-icons/bi"

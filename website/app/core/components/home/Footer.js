@@ -1,4 +1,4 @@
-import {Link} from "blitz"
+import Link from "next/link"
 import clsx from "clsx"
 import {IoLogoVercel} from "react-icons/io5"
 
@@ -89,7 +89,7 @@ export function Footer({className, hasDarkMode}) {
                 </Link>
               </LinkList>
             </div>
-         
+
             <div
               className={clsx("text-xs font-secondary", {
                 "text-off-white": !hasDarkMode,

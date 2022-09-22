@@ -1,4 +1,5 @@
-import {Link, useRouter} from "blitz"
+import Link from "next/link"
+import {useRouter} from "next/router"
 import clsx from "clsx"
 import {createContext, forwardRef, Fragment, useEffect, useRef} from "react"
 
@@ -29,6 +30,8 @@ const NavItem = forwardRef(({href, children, isActive, isPublished, fallbackHref
     </li>
   )
 })
+
+NavItem.displayName = "NavItem"
 
 function Nav({nav, children, fallbackHref, toc}) {
   const router = useRouter()

@@ -7,10 +7,10 @@
     "yarn": "1.22.17"
   },
   "scripts": {
-    "start:dev": "next dev",
+    "start:dev": "blitz dev",
     "clean": "rm -rf node_modules && rm -rf .turbo && rm -rf .next",
-    "start": "next start",
-    "build": "next build",
+    "start": "blitz start",
+    "build": "blitz build",
     "lint": "pnpm lint:code && pnpm lint:docs",
     "lint:code": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
     "lint:docs": "alex app/pages/docs/**/*.mdx",

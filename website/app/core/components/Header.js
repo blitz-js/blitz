@@ -1,5 +1,5 @@
-import {Link} from "blitz"
-import {useRouter} from "blitz"
+import Link from "next/link"
+import {useRouter} from "next/router"
 import {useEffect, useState} from "react"
 import {AiOutlineClose, AiOutlineMenu} from "react-icons/ai"
 import {FaDiscord, FaGithub, FaTwitter} from "react-icons/fa"

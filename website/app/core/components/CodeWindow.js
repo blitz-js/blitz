@@ -88,6 +88,8 @@ CodeWindow.Code = forwardRef(({tokens, initialLineNumber = 1, ...props}, ref) =>
   )
 })
 
+CodeWindow.Code.displayName = "CodeWindow"
+
 export function getClassNameForToken({types, empty}) {
   const typesSize = types.length
   if (typesSize === 1 && types[0] === "plain") {

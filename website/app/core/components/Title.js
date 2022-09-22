@@ -1,4 +1,4 @@
-import {Head} from "blitz"
+import Head from "next/head"
 
 export function Title({children}) {
   let title = children + (!children?.match(/blitz/i) ? ` - Blitz.js` : "")

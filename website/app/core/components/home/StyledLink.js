@@ -8,4 +8,6 @@ const StyledLink = React.forwardRef(({href, children, className, ...props}, ref)
   )
 })
 
+StyledLink.displayName = "StyledLink"
+
 export {StyledLink}

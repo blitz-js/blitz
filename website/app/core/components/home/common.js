@@ -1,4 +1,4 @@
-import {Link as BlitzLink} from "blitz"
+import {default as BlitzLink} from "next/link"
 
 export function IconContainer({as: Component = "div", color, className = "", ...props}) {
   return (

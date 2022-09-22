@@ -1,7 +1,7 @@
 import {Octokit} from "@octokit/rest"
-import {Image, Link} from "blitz"
+import Link from "next/link"
+import Image from "next/image"
 import {useEffect, useState} from "react"
-
 import {ButtonLink} from "@/components/ButtonLink"
 import {Header} from "@/components/Header"
 import {Feature} from "@/components/home/Feature"
@@ -9,7 +9,7 @@ import {FeatureIcon} from "@/components/home/FeatureIcon"
 import {FeatureIconTitle} from "@/components/home/FeatureIconTitle"
 import {Footer} from "@/components/home/Footer"
 import {Hand} from "@/components/home/Hand"
-import {HeroCode} from "@/components/home/HeroCode"
+// import {HeroCode} from "@/components/home/HeroCode"
 import {StyledLink} from "@/components/home/StyledLink"
 import {VideoPlayer} from "@/components/home/VideoPlayer"
 import Scrollbar from "@/components/Scrollbar"
@@ -96,7 +96,7 @@ const Home = ({randomContributors}) => {
                     style={{top: "26.6rem", right: "-2.2em"}}
                     className="z-20 hidden lg:block"
                   />
-                  <HeroCode className="z-10" />
+                  {/* <HeroCode className="z-10" /> */}
                 </div>
               </div>
             </div>
@@ -401,7 +401,7 @@ const Home = ({randomContributors}) => {
   )
 }
 
-const getStaticProps = async () => {
+export const getStaticProps = async () => {
   const MAX_CONTRIBUTORS = 30
 
   const octokit = new Octokit({
@@ -436,4 +436,3 @@ Home.meta = {
 }
 
 export default Home
-export {getStaticProps}
