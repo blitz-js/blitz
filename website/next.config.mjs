@@ -129,8 +129,10 @@ const config = withBlitz(
             },
           },
           createLoader(function (source) {
+            console.log("hello", this.resourceQuery)
             let {meta: fields} = querystring.parse(this.resourceQuery.substr(1))
             let {data: meta, content: body} = matter(source)
+
             if (fields) {
               for (let field in meta) {
                 if (!fields.split(",").includes(field)) {
@@ -162,9 +164,9 @@ const config = withBlitz(
               // Until MDX v2 is available, all content inside a component must
               // have extra spaces. Here are added just in case.
               // https://mdxjs.com/guides/markdown-in-components
-              body = body
-                .replace(/<Card .+?>\n*/g, (tag) => tag.trimEnd() + "\n\n")
-                .replace(/\n*<\/Card>/g, (tag) => "\n\n" + tag.trimStart())
+              // body = body
+              //   .replace(/<Card .+?>\n*/g, (tag) => tag.trimEnd() + "\n\n")
+              //   .replace(/\n*<\/Card>/g, (tag) => "\n\n" + tag.trimStart())
             }
 
             return [

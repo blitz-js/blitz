@@ -2,7 +2,7 @@ import {addImport} from "./utils.mjs"
 
 export const withBlitzLinks = () => {
   return (tree) => {
-    const component = addImport(tree, "blitz", "Link")
+    const component = addImport(tree, "next/link", "Link")
 
     function walk(root) {
       if (!root.children) return

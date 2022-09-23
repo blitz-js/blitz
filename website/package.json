@@ -9,8 +9,8 @@
   "scripts": {
     "start:dev": "next dev",
     "clean": "rm -rf node_modules && rm -rf .turbo && rm -rf .next",
-    "start": "blitz start",
-    "build": "blitz build",
+    "start": "next start",
+    "build": "next build",
     "lint": "pnpm lint:code && pnpm lint:docs",
     "lint:code": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
     "lint:docs": "alex pages/docs/**/*.mdx",
