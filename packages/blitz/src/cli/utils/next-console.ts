@@ -60,8 +60,13 @@ export async function getBlitzModulePaths() {
   return [...paths.map((p: string) => path.join(projectRoot, p))]
 }
 
-export const loadBlitz = async () => {
-  const paths = await getBlitzModulePaths()
+export const loadBlitz = async (skipPreload: boolean) => {
+  let paths = await getBlitzModulePaths()
+
+  if (skipPreload) {
+    // remove all paths except db
+    paths = paths.filter((p) => p.includes("db"))
+  }
 
   const percentage = new ProgressBar("Loading Modules :current/:total", {
     total: paths.length,
@@ -105,8 +110,8 @@ const loadBlitzModules = (repl: REPLServer, modules: any) => {
   Object.assign(repl.context, modules)
 }
 
-const loadModules = async (repl: REPLServer) => {
-  loadBlitzModules(repl, await loadBlitz())
+const loadModules = async (repl: REPLServer, skipPreload: boolean) => {
+  loadBlitzModules(repl, await loadBlitz(skipPreload))
 }
 
 const commands = {
@@ -115,7 +120,7 @@ const commands = {
     async action(this: REPLServer) {
       this.clearBufferedCommand()
       console.log("Reloading all modules...")
-      await loadModules(this)
+      await loadModules(this, false)
       this.displayPrompt()
     },
   },
@@ -161,9 +166,9 @@ const setupHistory = (repl: any) => {
   }
 }
 
-const initializeRepl = async (replOptions: REPL.ReplOptions) => {
+const initializeRepl = async (replOptions: REPL.ReplOptions, skipPreload: boolean) => {
   debug("initializeRepl")
-  const modules = await loadBlitz()
+  const modules = await loadBlitz(skipPreload)
 
   debug("Starting REPL...")
   const repl = REPL.start(replOptions)
@@ -180,18 +185,18 @@ const setupFileWatchers = async (repl: REPLServer) => {
   const watchers = [
     watch(await getBlitzModulePaths(), {
       ignoreInitial: true,
-    }).on("all", () => loadModules(repl)),
+    }).on("all", () => loadModules(repl, false)),
   ]
 
   repl.on("reset", async () => {
     debug("Reset, so reloading modules...")
-    await loadModules(repl)
+    await loadModules(repl, false)
   })
   repl.on("exit", () => watchers.forEach((watcher) => watcher.close()))
 }
 
-const runRepl = async (replOptions: REPL.ReplOptions) => {
-  const repl = await initializeRepl(replOptions)
+const runRepl = async (replOptions: REPL.ReplOptions, skipPreload: boolean) => {
+  const repl = await initializeRepl(replOptions, skipPreload)
   repl.on("exit", () => process.exit())
   await setupFileWatchers(repl)
 }

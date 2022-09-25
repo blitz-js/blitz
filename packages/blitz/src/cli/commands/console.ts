@@ -1,5 +1,5 @@
 import {CliCommand} from "../index"
-// import arg from "arg"
+import arg from "arg"
 // import {join} from "path"
 import {REGISTER_INSTANCE} from "ts-node"
 import chalk from "chalk"
@@ -9,22 +9,18 @@ import {runRepl} from "../utils/next-console"
 const projectRoot = require("pkg-dir").sync() || process.cwd()
 const isTypeScript = require("fs").existsSync(require("path").join(projectRoot, "tsconfig.json"))
 
-// const args = arg(
-//   {
-//     // Types
-//     "--help": Boolean,
-//     "--env": String,
-//     "--file": String,
+const args = arg(
+  {
+    // Types
+    "--skip-preload": Boolean,
 
-//     // Aliases
-//     "-h": "--help",
-//     "-e": "--env",
-//     "-f": "--file",
-//   },
-//   {
-//     permissive: true,
-//   },
-// )
+    // Aliases
+    "-s": "--skip-preload",
+  },
+  {
+    permissive: true,
+  },
+)
 
 const replOptions = {
   prompt: "⚡️ > ",
@@ -38,14 +34,21 @@ const consoleREPL: CliCommand = async () => {
   console.log(chalk.yellow("      - Use your db like this: await db.project.findMany()"))
   console.log(chalk.yellow("      - Use your queries/mutations like this: await getProjects({})"))
 
-  if (isTypeScript) {
-    if (!process[REGISTER_INSTANCE]) {
-      require("ts-node").register({compilerOptions: {module: "commonjs"}})
-    }
-    require("tsconfig-paths/register")
-  }
+  //   require("esbuild-runner/register")
+  const {register} = require("esbuild-register/dist/node")
 
-  await runRepl(replOptions)
+  const {unregister} = register({
+    target: "es6",
+  })
+
+  const skipPreload = args["--skip-preload"] as boolean
+  if (skipPreload) {
+    console.log(chalk.green("Pre-loading only db module"))
+  }
+  await runRepl(replOptions, skipPreload)
+
+  // Unregister the require hook if you don't need it anymore
+  unregister()
 }
 
 export {consoleREPL}
