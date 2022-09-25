@@ -103,7 +103,6 @@ export const loadBlitz = async (skipPreload: boolean) => {
   const modules: Record<string, any>[] = Object.assign(
     {},
     ...paths.map((modulePath) => {
-      const time = Date.now()
       let name = path.parse(modulePath).name
       if (name === "index") {
         const dirs = path.dirname(modulePath).split(path.sep)
@@ -117,7 +116,6 @@ export const loadBlitz = async (skipPreload: boolean) => {
         // debug("ContextObj", contextObj)
 
         percentage.tick()
-        console.log(`Loaded ${name} in ${Date.now() - time}ms`)
         //TODO: include all exports here, not just default
         return {
           [name]: contextObj,
