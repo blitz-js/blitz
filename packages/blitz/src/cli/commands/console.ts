@@ -1,13 +1,8 @@
 import {CliCommand} from "../index"
 import arg from "arg"
-// import {join} from "path"
-import {REGISTER_INSTANCE} from "ts-node"
 import chalk from "chalk"
 import {log} from "../../logging"
-import {runRepl} from "../utils/next-console"
-
-const projectRoot = require("pkg-dir").sync() || process.cwd()
-const isTypeScript = require("fs").existsSync(require("path").join(projectRoot, "tsconfig.json"))
+import {runRepl, getDbFolder} from "../utils/next-console"
 
 const args = arg(
   {
@@ -31,7 +26,9 @@ const consoleREPL: CliCommand = async () => {
   process.env.CLI_COMMAND_CONSOLE = "true"
   log.branded("You have entered the Blitz console")
   console.log(chalk.yellow("Tips: - Exit by typing .exit or pressing Ctrl-D"))
-  console.log(chalk.yellow("      - Use your db like this: await db.project.findMany()"))
+  console.log(
+    chalk.yellow(`      - Use your db like this: await ${getDbFolder()}.project.findMany()`),
+  )
   console.log(chalk.yellow("      - Use your queries/mutations like this: await getProjects({})"))
 
   //   require("esbuild-runner/register")
@@ -43,7 +40,7 @@ const consoleREPL: CliCommand = async () => {
 
   const skipPreload = args["--skip-preload"] as boolean
   if (skipPreload) {
-    console.log(chalk.green("Pre-loading only db module"))
+    console.log(chalk.green(`Pre-loading ${getDbFolder()} module`))
   }
   await runRepl(replOptions, skipPreload)
 

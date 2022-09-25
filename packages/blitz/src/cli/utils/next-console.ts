@@ -8,6 +8,23 @@ const debug = require("debug")("blitz:repl")
 import ProgressBar from "progress"
 import {log} from "../../logging"
 
+export function getDbFolder() {
+  if (fs.existsSync(path.join(process.cwd(), "db"))) {
+    return "db"
+  }
+  const packageJsonPath = path.join(process.cwd(), "package.json")
+  const packageJson = fs.readFileSync(packageJsonPath, "utf8")
+  const packageJsonObj = JSON.parse(packageJson)
+  const prismaSchemaPath = path.join(process.cwd(), packageJsonObj.prisma.schema)
+  if (!fs.existsSync(prismaSchemaPath)) {
+    throw new Error(
+      "db folder does not exist and Prisma schema not found in package.json. Please either create the db folder or add the prisma schema path to the package.json",
+    )
+  }
+  const folder = packageJsonObj.prisma.schema.split("/")[0] as string
+  return folder
+}
+
 export function getProjectRootSync() {
   return path.dirname(getConfigSrcPath())
 }
@@ -54,7 +71,7 @@ export async function getBlitzModulePaths() {
     ],
     {cwd: projectRoot, gitignore: true},
   )
-  paths.push("db")
+  paths.push(getDbFolder())
   debug("Paths", paths)
 
   return [...paths.map((p: string) => path.join(projectRoot, p))]
@@ -65,7 +82,7 @@ export const loadBlitz = async (skipPreload: boolean) => {
 
   if (skipPreload) {
     // remove all paths except db
-    paths = paths.filter((p) => p.includes("db"))
+    paths = paths.filter((p) => p.includes(getDbFolder()))
   }
 
   const percentage = new ProgressBar("Loading Modules :current/:total", {
@@ -75,6 +92,7 @@ export const loadBlitz = async (skipPreload: boolean) => {
   const modules: Record<string, any>[] = Object.assign(
     {},
     ...paths.map((modulePath) => {
+      const time = Date.now()
       let name = path.parse(modulePath).name
       if (name === "index") {
         const dirs = path.dirname(modulePath).split(path.sep)
@@ -88,7 +106,7 @@ export const loadBlitz = async (skipPreload: boolean) => {
         // debug("ContextObj", contextObj)
 
         percentage.tick()
-
+        console.log(`Loaded ${name} in ${Date.now() - time}ms`)
         //TODO: include all exports here, not just default
         return {
           [name]: contextObj,
