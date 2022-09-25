@@ -34,7 +34,6 @@ const consoleREPL: CliCommand = async () => {
   console.log(chalk.yellow("      - Use your db like this: await db.project.findMany()"))
   console.log(chalk.yellow("      - Use your queries/mutations like this: await getProjects({})"))
 
-  //   require("esbuild-runner/register")
   const {register} = require("esbuild-register/dist/node")
 
   const {unregister} = register({
@@ -47,7 +46,6 @@ const consoleREPL: CliCommand = async () => {
   }
   await runRepl(replOptions, skipPreload)
 
-  // Unregister the require hook if you don't need it anymore
   unregister()
 }
 
