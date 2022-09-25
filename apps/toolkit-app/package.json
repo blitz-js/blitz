@@ -11,7 +11,7 @@
     "test:local": "jest"
   },
   "prisma": {
-    "schema": "prismas/schema.prisma"
+    "schema": "db/schema.prisma"
   },
   "prettier": {
     "semi": false,
