@@ -92,7 +92,6 @@ export const loadBlitz = async (skipPreload: boolean) => {
   let paths = await getBlitzModulePaths()
 
   if (skipPreload) {
-    // remove all paths except db
     paths = paths.filter((p) => p.includes(getDbFolder()))
   }
 
