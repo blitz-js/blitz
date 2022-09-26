@@ -59,6 +59,10 @@ const invalidateCache = (module: string) => {
 
 export const forceRequire = (modulePath: string) => {
   invalidateCache(modulePath)
+  const {register} = require("esbuild-register/dist/node")
+  register({
+    target: "es6",
+  })
 
   if (isTypeScript) {
     return require(modulePath)
@@ -88,11 +92,16 @@ export async function getBlitzModulePaths() {
   return [...paths.map((p: string) => path.join(projectRoot, p))]
 }
 
-export const loadBlitz = async (skipPreload: boolean) => {
+export const loadBlitz = async (skipPreload: boolean, module="") => {
   let paths = await getBlitzModulePaths()
 
   if (skipPreload) {
     paths = paths.filter((p) => p.includes(getDbFolder()))
+  }
+
+  if (module) {
+
+    paths = paths.filter((p) => module.includes(p) || p.includes(module))
   }
 
   const percentage = new ProgressBar("Loading Modules :current/:total", {
@@ -136,8 +145,8 @@ const loadBlitzModules = (repl: REPLServer, modules: any) => {
   Object.assign(repl.context, modules)
 }
 
-const loadModules = async (repl: REPLServer, skipPreload: boolean) => {
-  loadBlitzModules(repl, await loadBlitz(skipPreload))
+const loadModules = async (repl: REPLServer, skipPreload: boolean, module="") => {
+  loadBlitzModules(repl, await loadBlitz(skipPreload,module))
 }
 
 const commands = {
@@ -211,7 +220,14 @@ const setupFileWatchers = async (repl: REPLServer) => {
   const watchers = [
     watch(await getBlitzModulePaths(), {
       ignoreInitial: true,
-    }).on("all", () => loadModules(repl, false)),
+    }).on(
+      "all",
+      async (event:string, path: string) => {
+        const modulePath = path
+        const modules = await loadBlitz(false, modulePath)
+        loadBlitzModules(repl, modules)
+      }
+    )
   ]
 
   repl.on("reset", async () => {
