@@ -230,6 +230,7 @@ const generate: CliCommand = async () => {
     for (const GeneratorClass of generators) {
       const generator = new GeneratorClass({
         destinationRoot: require("path").resolve(),
+        templateDir: blitzConfig.codegen?.templateDir,
         extraArgs: args["_"].slice(3) as string[],
         modelName: singularRootContext,
         modelNames: modelNames(singularRootContext),
