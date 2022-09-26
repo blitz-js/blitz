@@ -226,7 +226,6 @@ const createCustomTemplates = async () => {
       process.exit(0)
     }
     const customTemplatesPath = require("path").join(process.cwd(), "app")
-    //copy the templates folder in the @blitzjs/generator package to the app folder
     const fsExtra = await import("fs-extra")
     const blitzGeneratorPath = require.resolve("@blitzjs/generator")
     const templateFolder = ["form", "page", "query", "mutation", "queries", "mutations"]
