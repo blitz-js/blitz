@@ -16,6 +16,7 @@ import {
   ModelGenerator,
   QueryGenerator,
 } from "@blitzjs/generator"
+import {log} from "../../logging"
 
 const getIsTypeScript = async () =>
   require("fs").existsSync(require("path").join(process.cwd(), "tsconfig.json"))
@@ -72,6 +73,7 @@ const args = arg(
     "--parent": String,
     "--dry-run": Boolean,
     "--env": String,
+    "--generate-custom-templates": Boolean,
 
     // Aliases
     "-e": "--env",
@@ -213,8 +215,35 @@ const getHelp = async () => {
   }
 }
 
+const createCustomTemplates = async () => {
+  if (args["--generate-custom-templates"]) {
+    const continuePrompt = await prompts({
+      type: "confirm",
+      name: "value",
+      message: `This will copy the default templates to your app/templates folder. Do you want to continue?`,
+    })
+    if (!continuePrompt.value) {
+      process.exit(0)
+    }
+    const customTemplatesPath = require("path").join(process.cwd(), "app")
+    //copy the templates folder in the @blitzjs/generator package to the app folder
+    const fsExtra = await import("fs-extra")
+    const blitzGeneratorPath = require.resolve("@blitzjs/generator")
+    const templateFolder = ["form", "page", "query", "mutation", "queries", "mutations"]
+    for (const template of templateFolder) {
+      await fsExtra.copy(
+        require("path").join(blitzGeneratorPath, "..", "templates", template),
+        require("path").join(customTemplatesPath, "templates", template),
+      )
+    }
+    log.success("🚀 Custom templates created in app/templates directory")
+    process.exit(0)
+  }
+}
+
 const generate: CliCommand = async () => {
   await getHelp()
+  await createCustomTemplates()
   await determineType()
   if (!selectedModelName) {
     await determineName()
@@ -227,10 +256,20 @@ const generate: CliCommand = async () => {
 
     const generators = generatorMap[selectedType as keyof typeof generatorMap]
 
+    const isTypeScript = await getIsTypeScript()
+    const blitzServerPath = isTypeScript ? "app/blitz-server.ts" : "app/blitz-server.js"
+    const blitzServer = require("path").join(process.cwd(), blitzServerPath)
+    const {register} = require("esbuild-register/dist/node")
+    const {unregister} = register({
+      target: "es6",
+    })
+    const blitzConfig = require(blitzServer).default
+    unregister()
+
     for (const GeneratorClass of generators) {
       const generator = new GeneratorClass({
         destinationRoot: require("path").resolve(),
-        templateDir: blitzConfig.codegen?.templateDir,
+        templateDir: blitzConfig?.customTemplates,
         extraArgs: args["_"].slice(3) as string[],
         modelName: singularRootContext,
         modelNames: modelNames(singularRootContext),
