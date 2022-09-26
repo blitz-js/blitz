@@ -60,15 +60,19 @@ const invalidateCache = (module: string) => {
 export const forceRequire = (modulePath: string) => {
   invalidateCache(modulePath)
   const {register} = require("esbuild-register/dist/node")
-  register({
+  const {unregister} = register({
     target: "es6",
   })
 
   if (isTypeScript) {
-    return require(modulePath)
+    const module = require(modulePath)
+    unregister()
+    return module
   } else {
     const esmRequire = require("esm")(module)
-    return esmRequire(modulePath)
+    const moduleEsm = esmRequire(modulePath)
+    unregister()
+    return moduleEsm
   }
 }
 
