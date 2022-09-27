@@ -15,6 +15,7 @@ import {
   MutationsGenerator,
   ModelGenerator,
   QueryGenerator,
+  addCustomTemplatesBlitzConfig,
 } from "@blitzjs/generator"
 import {log} from "../../logging"
 
@@ -225,15 +226,23 @@ const createCustomTemplates = async () => {
     if (!continuePrompt.value) {
       process.exit(0)
     }
-    const customTemplatesPath = require("path").join(process.cwd(), "app")
-    //copy the templates folder in the @blitzjs/generator package to the app folder
+    const templatesPath = await prompts({
+      type: "text",
+      name: "value",
+      message: `Enter the path to save the custom templates folder`,
+      initial: "app/templates",
+    })
+    const templatesPathValue: string = templatesPath.value
+    const isTypeScript = await getIsTypeScript()
+    addCustomTemplatesBlitzConfig(templatesPathValue, isTypeScript)
+    const customTemplatesPath = require("path").join(process.cwd(), templatesPathValue)
     const fsExtra = await import("fs-extra")
     const blitzGeneratorPath = require.resolve("@blitzjs/generator")
     const templateFolder = ["form", "page", "query", "mutation", "queries", "mutations"]
     for (const template of templateFolder) {
       await fsExtra.copy(
         require("path").join(blitzGeneratorPath, "..", "templates", template),
-        require("path").join(customTemplatesPath, "templates", template),
+        require("path").join(customTemplatesPath, template),
       )
     }
     log.success("🚀 Custom templates created in app/templates directory")

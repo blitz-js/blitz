@@ -16,6 +16,68 @@ import {readdirRecursive} from "./utils/readdir-recursive"
 import prettier from "prettier"
 const debug = require("debug")("blitz:generator")
 
+export const addCustomTemplatesBlitzConfig = (
+  customTemplatesPath: string,
+  isTypeScript: boolean,
+) => {
+  const blitzServerPath = require("path").join(process.cwd(), "app/blitz-server.ts")
+  const userConfigModuleSource = fs.readFileSync(blitzServerPath, {encoding: "utf-8"})
+  const userConfigModule = j(userConfigModuleSource, {parser: customTsParser})
+  const program = userConfigModule.get()
+  const defaultDeclaration = userConfigModule.find(j.ExportDefaultDeclaration)
+  const defaultConfig = defaultDeclaration.paths()[0]?.value
+  if (!defaultConfig) {
+    const config = j.identifier("config")
+    const configVariable = j.variableDeclaration("const", [
+      j.variableDeclarator(
+        config,
+        j.objectExpression([
+          j.objectProperty(j.identifier("customTemplates"), j.literal(customTemplatesPath)),
+        ]),
+      ),
+    ])
+    if (isTypeScript) {
+      const type = j.tsTypeAnnotation(j.tsTypeReference(j.identifier("BlitzServerConfig")))
+      const declaration: any = configVariable?.declarations
+      declaration[0].id.typeAnnotation = type
+      const typeImport = j.importDeclaration(
+        [j.importSpecifier(j.identifier("BlitzServerConfig"))],
+        j.literal("blitz"),
+      )
+      typeImport.importKind = "type"
+      program.node.program.body.unshift(typeImport)
+    }
+    const defaultConfig = j.exportDefaultDeclaration(j.identifier("config"))
+    program.node.program.body.push(configVariable)
+    program.node.program.body.push(defaultConfig)
+  } else {
+    const config = defaultConfig.declaration
+    if (config.type === "Identifier") {
+      const configVariable = userConfigModule.find(j.VariableDeclarator, {id: {name: config.name}})
+      const customTemplates = configVariable.find(j.ObjectProperty, {
+        key: {name: "customTemplates"},
+      })
+      customTemplates.remove()
+      configVariable
+        .find(j.ObjectExpression)
+        .get()
+        .node.properties.push(
+          j.objectProperty(j.identifier("customTemplates"), j.literal(customTemplatesPath)),
+        )
+    } else if (config.type === "ObjectExpression") {
+      const customTemplates = userConfigModule.find(j.ObjectProperty, {
+        key: {name: "customTemplates"},
+      })
+      customTemplates.remove()
+      config.properties.push(
+        j.objectProperty(j.identifier("customTemplates"), j.literal(customTemplatesPath)),
+      )
+    }
+  }
+  const newSource = userConfigModule.toSource()
+  fs.writeFileSync(blitzServerPath, newSource)
+}
+
 export const customTsParser = {
   parse(source: string, options?: Overrides) {
     const babelOptions = getBabelOptions(options)
