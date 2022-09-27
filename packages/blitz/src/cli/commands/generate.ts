@@ -201,6 +201,11 @@ const getHelp = async () => {
       For example, this command generates pages under pages/projects/[projectId]/tasks/
 
         > blitz generate all tasks --parent=projects
+      
+      # The '--generate-custom-templates' flag will copy the default templates to your app. 
+      This is useful if you want to customize the templates for your app
+        
+        > blitz generate --generate-custom-templates
 
       # Database models can also be generated directly from the CLI.
         Model fields can be specified with any generator that generates a database model ("all", "model", "resource").
@@ -235,6 +240,7 @@ const createCustomTemplates = async () => {
     const templatesPathValue: string = templatesPath.value
     const isTypeScript = await getIsTypeScript()
     addCustomTemplatesBlitzConfig(templatesPathValue, isTypeScript)
+    log.success(`🚀 Custom templates path added/updated in app/blitz-server file`)
     const customTemplatesPath = require("path").join(process.cwd(), templatesPathValue)
     const fsExtra = await import("fs-extra")
     const blitzGeneratorPath = require.resolve("@blitzjs/generator")
@@ -245,7 +251,7 @@ const createCustomTemplates = async () => {
         require("path").join(customTemplatesPath, template),
       )
     }
-    log.success("🚀 Custom templates created in app/templates directory")
+    log.success(`🚀 Custom templates created in ${templatesPathValue} directory`)
     process.exit(0)
   }
 }
