@@ -20,7 +20,8 @@ export const addCustomTemplatesBlitzConfig = (
   customTemplatesPath: string,
   isTypeScript: boolean,
 ) => {
-  const blitzServerPath = require("path").join(process.cwd(), "app/blitz-server.ts")
+  const blitzServer = isTypeScript ? "app/blitz-server.ts" : "app/blitz-server.js"
+  const blitzServerPath = require("path").join(process.cwd(), blitzServer)
   const userConfigModuleSource = fs.readFileSync(blitzServerPath, {encoding: "utf-8"})
   const userConfigModule = j(userConfigModuleSource, {parser: customTsParser})
   const program = userConfigModule.get()
