@@ -2,4 +2,4 @@
 "blitz": patch
 ---
 
-Migrate console
+Add `blitz console` CLI command back to toolkit
