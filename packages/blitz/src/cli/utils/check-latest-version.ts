@@ -65,9 +65,9 @@ export async function checkLatestVersion() {
       if (errors.length) {
         console.log(
           boxen.default(
-            `You are running outdated blitz packages\n\n ${errors
+            `You are running outdated blitz packages\n\n${errors
               .map((e) => e.message)
-              .join("\n")} \n\n Run the following to update:\n ${errors
+              .join("\n")} \n\nRun the following to update:\n${errors
               .map((e) => e.instructions)
               .join("\n")}`,
             {padding: 1},
