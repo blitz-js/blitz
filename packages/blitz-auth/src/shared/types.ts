@@ -4,10 +4,20 @@ export interface Session {
   // isAuthorize can be injected here
   // PublicData can be injected here
 }
+/**
+ * XOR is needed to have a real mutually exclusive union type
+ * https://stackoverflow.com/a/53229567/5608461
+ */
+type Without<T, U> = { [P in Exclude<keyof T, keyof U>]?: never };
+type XOR<T, U> =
+ T extends object ?
+ U extends object ?
+   (Without<T, U> & U) | (Without<U, T> & T)
+ : U : T
 
 export type PublicData = Session extends {PublicData: unknown}
   ? Session["PublicData"]
-  : {userId: unknown}
+  : {userId: XOR<number,string>}
 
 export interface EmptyPublicData extends Partial<Omit<PublicData, "userId">> {
   userId: PublicData["userId"] | null
