@@ -27,9 +27,9 @@ const consoleREPL: CliCommand = async () => {
   log.branded("You have entered the Blitz console")
   console.log(chalk.yellow("Tips: - Exit by typing .exit or pressing Ctrl-D"))
   console.log(
-    chalk.yellow(`      - Use your db like this: await ${getDbFolder()}.project.findMany()`),
+    chalk.yellow(`      - Use your db like this: ${getDbFolder()}.project.findMany()`),
   )
-  console.log(chalk.yellow("      - Use your queries/mutations like this: await getProjects({})"))
+  console.log(chalk.yellow("      - Use your queries/mutations like this: getProjects({})"))
 
   const {register} = require("esbuild-register/dist/node")
 
