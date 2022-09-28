@@ -96,7 +96,7 @@ export async function getBlitzModulePaths() {
   return [...paths.map((p: string) => path.join(projectRoot, p))]
 }
 
-export const loadBlitz = async (skipPreload: boolean, module="") => {
+export const loadBlitz = async (skipPreload: boolean, module = "") => {
   let paths = await getBlitzModulePaths()
 
   if (skipPreload) {
@@ -104,7 +104,6 @@ export const loadBlitz = async (skipPreload: boolean, module="") => {
   }
 
   if (module) {
-
     paths = paths.filter((p) => module.includes(p) || p.includes(module))
   }
 
@@ -149,8 +148,8 @@ const loadBlitzModules = (repl: REPLServer, modules: any) => {
   Object.assign(repl.context, modules)
 }
 
-const loadModules = async (repl: REPLServer, skipPreload: boolean, module="") => {
-  loadBlitzModules(repl, await loadBlitz(skipPreload,module))
+const loadModules = async (repl: REPLServer, skipPreload: boolean, module = "") => {
+  loadBlitzModules(repl, await loadBlitz(skipPreload, module))
 }
 
 const commands = {
@@ -212,6 +211,28 @@ const initializeRepl = async (replOptions: REPL.ReplOptions, skipPreload: boolea
   debug("Starting REPL...")
   const repl = REPL.start(replOptions)
 
+  // always await promises.
+  // source: https://github.com/nodejs/node/issues/13209#issuecomment-619526317
+  // using @ts-ignore because the types do not allow to override the eval function
+  const defaultEval = repl.eval
+  //@ts-ignore
+  repl.eval = (cmd, context, filename, callback) => {
+    //@ts-ignore
+    defaultEval(cmd, context, filename, async (err, result) => {
+      if (err) {
+        // propagate errors from the eval
+        callback(err)
+      } else {
+        // awaits the promise and either return result or error
+        try {
+          callback(null, await Promise.resolve(result))
+        } catch (err) {
+          callback(err)
+        }
+      }
+    })
+  }
+
   loadBlitzModules(repl, modules)
   defineCommands(repl, commands)
   setupHistory(repl)
@@ -224,14 +245,11 @@ const setupFileWatchers = async (repl: REPLServer) => {
   const watchers = [
     watch(await getBlitzModulePaths(), {
       ignoreInitial: true,
-    }).on(
-      "all",
-      async (event:string, path: string) => {
-        const modulePath = path
-        const modules = await loadBlitz(false, modulePath)
-        loadBlitzModules(repl, modules)
-      }
-    )
+    }).on("all", async (event: string, path: string) => {
+      const modulePath = path
+      const modules = await loadBlitz(false, modulePath)
+      loadBlitzModules(repl, modules)
+    }),
   ]
 
   repl.on("reset", async () => {
