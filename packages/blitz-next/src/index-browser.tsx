@@ -1,10 +1,5 @@
 import "./global"
-import type {
-  ClientPlugin,
-  BlitzProvider as BlitzProviderType,
-  UnionToIntersection,
-  Simplify,
-} from "blitz"
+import type {ClientPlugin, BlitzProviderComponentType, UnionToIntersection, Simplify} from "blitz"
 import Head from "next/head"
 import React, {ReactNode} from "react"
 import {QueryClient, QueryClientProvider, Hydrate, HydrateOptions} from "@tanstack/react-query"
@@ -22,14 +17,14 @@ export * from "./router-context"
 export {Routes} from ".blitz"
 
 const compose =
-  (...rest: BlitzProviderType[]) =>
+  (...rest: BlitzProviderComponentType[]) =>
   (x: React.ComponentType<any>) =>
     rest.reduceRight((y, f) => f(y), x)
 
 const buildWithBlitz = <TPlugins extends readonly ClientPlugin<object>[]>(plugins: TPlugins) => {
   const providers = plugins.reduce((acc, plugin) => {
     return plugin.withProvider ? acc.concat(plugin.withProvider) : acc
-  }, [] as BlitzProviderType[])
+  }, [] as BlitzProviderComponentType[])
 
   const withPlugins = compose(...providers)
 
