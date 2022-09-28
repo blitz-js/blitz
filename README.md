@@ -77,6 +77,9 @@ Your financial contributions help ensure Blitz continues to be developed and mai
  <td><a aria-label="MeetKai" href="https://meetkai.com/?ref=blitzjs">
 <img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/main/assets/meetkai.png" width="40px"/>
 </a></td>
+ <td><a aria-label="Simon Lammes" href="https://github.com/simon-lammes">
+<img alt="" src="https://avatars.githubusercontent.com/u/46446421?v=4" width="40px"/>
+</a></td>
   </tr>
 </table>
 
