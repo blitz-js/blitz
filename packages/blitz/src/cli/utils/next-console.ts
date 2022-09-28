@@ -96,10 +96,10 @@ export async function getBlitzModulePaths() {
   return [...paths.map((p: string) => path.join(projectRoot, p))]
 }
 
-export const loadBlitz = async (skipPreload: boolean, module = "") => {
+export const loadBlitz = async (onlyDb: boolean, module = "") => {
   let paths = await getBlitzModulePaths()
 
-  if (skipPreload) {
+  if (onlyDb) {
     paths = paths.filter((p) => p.includes(getDbFolder()))
   }
 
@@ -148,8 +148,8 @@ const loadBlitzModules = (repl: REPLServer, modules: any) => {
   Object.assign(repl.context, modules)
 }
 
-const loadModules = async (repl: REPLServer, skipPreload: boolean, module = "") => {
-  loadBlitzModules(repl, await loadBlitz(skipPreload, module))
+const loadModules = async (repl: REPLServer, onlyDb: boolean, module = "") => {
+  loadBlitzModules(repl, await loadBlitz(onlyDb, module))
 }
 
 const commands = {
@@ -204,9 +204,9 @@ const setupHistory = (repl: any) => {
   }
 }
 
-const initializeRepl = async (replOptions: REPL.ReplOptions, skipPreload: boolean) => {
+const initializeRepl = async (replOptions: REPL.ReplOptions, onlyDb: boolean) => {
   debug("initializeRepl")
-  const modules = await loadBlitz(skipPreload)
+  const modules = await loadBlitz(onlyDb)
 
   debug("Starting REPL...")
   const repl = REPL.start(replOptions)
@@ -259,8 +259,8 @@ const setupFileWatchers = async (repl: REPLServer) => {
   repl.on("exit", () => watchers.forEach((watcher) => watcher.close()))
 }
 
-const runRepl = async (replOptions: REPL.ReplOptions, skipPreload: boolean) => {
-  const repl = await initializeRepl(replOptions, skipPreload)
+const runRepl = async (replOptions: REPL.ReplOptions, onlyDb: boolean) => {
+  const repl = await initializeRepl(replOptions, onlyDb)
   repl.on("exit", () => process.exit())
   await setupFileWatchers(repl)
 }

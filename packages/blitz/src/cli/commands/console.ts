@@ -7,10 +7,10 @@ import {runRepl, getDbFolder} from "../utils/next-console"
 const args = arg(
   {
     // Types
-    "--skip-preload": Boolean,
+    "--only-db": Boolean,
 
     // Aliases
-    "-s": "--skip-preload",
+    "-d": "--only-db",
   },
   {
     permissive: true,
@@ -37,11 +37,11 @@ const consoleREPL: CliCommand = async () => {
     target: "es6",
   })
 
-  const skipPreload = args["--skip-preload"] as boolean
-  if (skipPreload) {
-    console.log(chalk.green(`Pre-loading ${getDbFolder()} module`))
+  const onlyDb = args["--only-db"] as boolean
+  if (onlyDb) {
+    console.log(chalk.green(`Loading only ${getDbFolder()} module`))
   }
-  await runRepl(replOptions, skipPreload)
+  await runRepl(replOptions, onlyDb)
 
   unregister()
 }
