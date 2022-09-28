@@ -21,7 +21,7 @@ import {
   replaceIdentifiers,
   replaceBlitzPkgsVersions,
 } from "./utils"
-import { log } from "blitz"
+import {log} from "blitz"
 
 const CURRENT_BLITZ_TAG = "latest"
 
@@ -35,7 +35,7 @@ class ExpectedError extends Error {
 const isInternalBlitzMonorepoDevelopment = fs.existsSync(
   path.join(__dirname, "../../../blitz-next"),
 )
-type Step = { name: string; action: (stepIndex: number) => Promise<void> }
+type Step = {name: string; action: (stepIndex: number) => Promise<void>}
 const upgradeLegacy = async () => {
   let isTypescript = fs.existsSync(path.resolve("tsconfig.json"))
   let existingBlitzConfigFiles = ["ts", "js"]
@@ -49,7 +49,7 @@ const upgradeLegacy = async () => {
   const appDir = path.resolve("app")
   let failedAt =
     fs.existsSync(path.resolve(".migration.json")) && fs.readJSONSync("./.migration.json").failedAt
-  let collectedErrors: { message: string; step: number }[] = []
+  let collectedErrors: {message: string; step: number}[] = []
   let steps: Step[] = []
 
   // Add steps in order
@@ -121,7 +121,9 @@ const upgradeLegacy = async () => {
               j.assignmentExpression(
                 "=",
                 j.identifier("const " + defaultImport.local.name),
-                j.callExpression(j.identifier("require"), [j.stringLiteral(`${i.value.source.value}`)]),
+                j.callExpression(j.identifier("require"), [
+                  j.stringLiteral(`${i.value.source.value}`),
+                ]),
               ),
             )
             parsedProgram.value.program.body.unshift(importStatement)
@@ -134,7 +136,9 @@ const upgradeLegacy = async () => {
               j.assignmentExpression(
                 "=",
                 j.identifier("const {" + namedImportNamesString + "}"),
-                j.callExpression(j.identifier("require"), [j.stringLiteral(`${i.value.source.value}`)]),
+                j.callExpression(j.identifier("require"), [
+                  j.stringLiteral(`${i.value.source.value}`),
+                ]),
               ),
             )
             parsedProgram.value.program.body.unshift(importStatement)
@@ -323,8 +327,9 @@ const upgradeLegacy = async () => {
           })
           fs.writeFileSync(path.resolve(appDir, filename), program.toSource())
         } catch (e) {
-          log.error(`Error updating imports in the ${file}`)
-          throw new Error(e)
+          const error = e as string
+          log.error(`Error updating imports in the ${filename}`)
+          throw new Error(error)
         }
       })
     },
@@ -405,8 +410,9 @@ const upgradeLegacy = async () => {
 
           fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
         } catch (e) {
+          const error = e as string
           log.error(`Error in updating next.js default imports in the ${file}`)
-          throw new Error(e)
+          throw new Error(error)
         }
       })
     },
@@ -437,8 +443,9 @@ const upgradeLegacy = async () => {
 
           fs.writeFileSync(path.resolve(appDir, file), program.toSource())
         } catch (e) {
+          const error = e as string
           log.error(`Error in changing queryClient to getQueryClient in the ${file}`)
-          throw new Error(e)
+          throw new Error(error)
         }
       })
     },
@@ -457,8 +464,9 @@ const upgradeLegacy = async () => {
 
             fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
           } catch (e) {
+            const error = e as string
             log.error(`Error in changing BlitzApiRequest to NextApiRequest in the ${file}`)
-            throw new Error(e)
+            throw new Error(error)
           }
         },
       )
@@ -478,8 +486,9 @@ const upgradeLegacy = async () => {
 
             fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
           } catch (e) {
+            const error = e as string
             log.error(`Error in changing BlitzApiResponse to NextApiResponse in the ${file}`)
-            throw new Error(e)
+            throw new Error(error)
           }
         },
       )
@@ -499,8 +508,9 @@ const upgradeLegacy = async () => {
 
             fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
           } catch (e) {
+            const error = e as string
             log.error(`Error in changing BlitzApiHandler to NextApiHandler in the ${file}`)
-            throw new Error(e)
+            throw new Error(error)
           }
         },
       )
@@ -672,7 +682,7 @@ const upgradeLegacy = async () => {
         .toString()
 
       if (!fs.existsSync(pagesDir)) {
-        fs.mkdirSync(pagesDir, { recursive: true })
+        fs.mkdirSync(pagesDir, {recursive: true})
       }
 
       fs.writeFileSync(
@@ -720,7 +730,7 @@ const upgradeLegacy = async () => {
         let files = fs.readdirSync(dirPath)
 
         const pageDir = files.reduce(
-          (arr: { model: string; path: string; subModel?: string }[], file: string) => {
+          (arr: {model: string; path: string; subModel?: string}[], file: string) => {
             if (fs.statSync(dirPath + "/" + file).isDirectory()) {
               let subs = fs.readdirSync(dirPath + "/" + file)
 
@@ -844,7 +854,8 @@ const upgradeLegacy = async () => {
 
           if (findBlitzCustomServerLiteral.length === 0) {
             log.error(
-              `Failed to find "blitz/custom-server" import in ${customServerDir}/index.${isTypescript ? "ts" : "js"
+              `Failed to find "blitz/custom-server" import in ${customServerDir}/index.${
+                isTypescript ? "ts" : "js"
               }. You will need to update your custom server manually.`,
             )
           } else {
@@ -962,8 +973,9 @@ const upgradeLegacy = async () => {
             fs.writeFileSync(filepath, program.toSource())
           }
         } catch (e) {
+          const error = e as string
           log.error(`Error in changing useRouterQuery to useRouter in the ${file}`)
-          throw new Error(e)
+          throw new Error(error)
         }
       })
 
@@ -1026,8 +1038,9 @@ const upgradeLegacy = async () => {
             fs.writeFileSync(filepath, program.toSource())
           }
         } catch (e) {
+          const error = e as string
           log.error(`Error in changing useRouterQuery to useRouter in the ${file}`)
-          throw new Error(e)
+          throw new Error(error)
         }
       })
     },
@@ -1051,7 +1064,7 @@ const upgradeLegacy = async () => {
 
       if (appFunction.length) {
         // Store the App function
-        const storeFunction = { ...appFunction.get().value }
+        const storeFunction = {...appFunction.get().value}
         // Create a new withBlitz call expresion with an empty argument
         const withBlitzFunction = (appFunction.get().parentPath.value.declaration =
           j.expressionStatement(j.callExpression(j.identifier("withBlitz"), []))) as any
@@ -1061,7 +1074,7 @@ const upgradeLegacy = async () => {
         appIdentifier.forEach((a) => {
           switch (a.name) {
             case "declaration":
-              const storeFunction = { ...a.get().value }
+              const storeFunction = {...a.get().value}
               // Create a new withBlitz call expresion with an empty argument
               const withBlitzFunction = (a.get().parentPath.value.declaration =
                 j.expressionStatement(j.callExpression(j.identifier("withBlitz"), []))) as any
@@ -1186,8 +1199,9 @@ const upgradeLegacy = async () => {
           }
           fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
         } catch (e) {
+          const error = e as string
           log.error(`Error in wrapping getServerSideProps, getStaticProps in the ${file}`)
-          throw new Error(e)
+          throw new Error(error)
         }
       })
 
@@ -1203,7 +1217,7 @@ const upgradeLegacy = async () => {
             const program = getCollectionFromSource(file)
             const defaultExportPath = findDefaultExportPath(program)
             if (defaultExportPath) {
-              const { node } = defaultExportPath
+              const {node} = defaultExportPath
 
               if (node.declaration.type === "Identifier") {
                 node.declaration = j.callExpression(j.identifier("api"), [node.declaration as any])
@@ -1216,8 +1230,9 @@ const upgradeLegacy = async () => {
               fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
             }
           } catch (e) {
+            const error = e as string
             log.error(`Error in wrapping api in the ${file}`)
-            throw new Error(e)
+            throw new Error(error)
           }
         })
       }
@@ -1291,21 +1306,22 @@ const upgradeLegacy = async () => {
           const invokeWithMiddlewarePath = findCallExpression(program, "invokeWithMiddleware")
           if (invokeWithMiddlewarePath?.length) {
             invokeWithMiddlewarePath.forEach((path) => {
-             const resolverName = path.value.arguments.at(0)
-             if(resolverName?.type === "Identifier") {
-              const resolverExpression = j.callExpression(
-                j.identifier(resolverName.name),
-                path.value.arguments.slice(1),
-              )
-              const resolverStatement = j.expressionStatement(resolverExpression)
-              j(path).replaceWith(resolverStatement)
-             }
-             else{
-              throw new Error(`invokeWithMiddleware can only be used with a resolver as the first argument \nError at Line ${path?.value?.loc?.start.line}`)
-             }
-            })              
+              const resolverName = path.value.arguments.at(0)
+              if (resolverName?.type === "Identifier") {
+                const resolverExpression = j.callExpression(
+                  j.identifier(resolverName.name),
+                  path.value.arguments.slice(1),
+                )
+                const resolverStatement = j.expressionStatement(resolverExpression)
+                j(path).replaceWith(resolverStatement)
+              } else {
+                throw new Error(
+                  `invokeWithMiddleware can only be used with a resolver as the first argument \nError at Line ${path?.value?.loc?.start.line}`,
+                )
+              }
+            })
           }
-        } catch (e:any) {
+        } catch (e: any) {
           log.error(`\nError in checking invokeWithMiddleware in ${file}`)
           throw new Error(e)
         }
@@ -1331,7 +1347,7 @@ const upgradeLegacy = async () => {
         }
       } catch (err) {
         // Hard exit error
-        const error = err as { code: string } | string
+        const error = err as {code: string} | string
         spinner.fail(`${step.name}`)
         log.error(error as string)
 
@@ -1368,8 +1384,7 @@ const upgradeLegacy = async () => {
       log.withBrand("Migration already successful")
       process.exit(0)
     }
-    log.error("Legacy blitz config file not found")
   }
 }
 
-export { upgradeLegacy }
+export {upgradeLegacy}
