@@ -30,9 +30,7 @@ export function getDbFolder() {
     const folder = packageJsonObj.prisma.schema.split("/")[0] as string
     return folder
   } catch (e) {
-    throw new Error(
-      "db folder does not exist and Prisma schema not found in package.json. Please either create the db folder or add the prisma schema path to the package.json",
-    )
+    throw new Error(e)
   }
 }
 

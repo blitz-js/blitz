@@ -1,0 +1,5 @@
+---
+"blitz": patch
+---
+
+Migrate console
