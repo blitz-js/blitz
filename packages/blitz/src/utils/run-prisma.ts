@@ -27,6 +27,8 @@ export const runPrisma = async (args: string[], silent = false) => {
       stderr: silent ? cp_stderr.join("") : undefined,
     }
   } else {
-    log.error("Prisma bin not found")
+    return {
+      success: false,
+    }
   }
 }
