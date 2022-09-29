@@ -1,4 +1,4 @@
-import {addImport, paths, Program, RecipeBuilder, wrapAppReturnStatement} from "blitz/installer"
+import {addImport, paths, Program, RecipeBuilder, wrapAppWithProvider} from "blitz/installer"
 import j, {JSXIdentifier} from "jscodeshift"
 
 function updateLabeledTextFieldWithInputComponent(program: Program) {
@@ -132,7 +132,7 @@ export default RecipeBuilder()
       )
 
       addImport(program, stylesImport)
-      return wrapAppReturnStatement(program, "ChakraProvider")
+      return wrapAppWithProvider(program, "ChakraProvider")
     },
   })
   .addTransformFilesStep({

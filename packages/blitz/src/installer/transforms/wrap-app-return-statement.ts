@@ -3,7 +3,7 @@ import j from "jscodeshift"
 import {assert} from "../../index-server"
 import {Program} from "../types"
 
-export function wrapAppReturnStatement(program: Program, element: string): Program {
+export function wrapAppWithProvider(program: Program, element: string): Program {
   const findMyApp = program.find(j.FunctionDeclaration, (node) => node.id.name === "MyApp")
   assert(findMyApp.length, "MyApp function not found")
 

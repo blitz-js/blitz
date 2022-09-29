@@ -1,10 +1,4 @@
-import {
-  addImport,
-  paths,
-  Program,
-  RecipeBuilder,
-  transformNextConfig
-} from "blitz/installer"
+import {addImport, paths, Program, RecipeBuilder, transformNextConfig} from "blitz/installer"
 import j from "jscodeshift"
 import {join} from "path"
 
@@ -54,12 +48,7 @@ export default RecipeBuilder()
     stepName: "Add the '@vanilla-extract/next-plugin' plugin to the blitz config file",
     explanation: `Now we have to update our blitz config to support vanilla-extract`,
     singleFileSearch: paths.nextConfig(),
-    transform(program) {
-      transformNextConfig(program).addRequireStatement(
-        "createVanillaExtractPlugin",
-        "@vanilla-extract/next-plugin",
-      )
-
+    async transform(program) {
       program = initializePlugin(
         program,
         j.variableDeclaration("const", [
@@ -68,6 +57,10 @@ export default RecipeBuilder()
             j.callExpression(j.identifier("createVanillaExtractPlugin"), []),
           ),
         ]),
+      )
+      transformNextConfig(program).addRequireStatement(
+        "createVanillaExtractPlugin",
+        "@vanilla-extract/next-plugin",
       )
       transformNextConfig(program).wrapConfig("withVanillaExtract")
       return program
