@@ -51,11 +51,11 @@ export const addCustomTemplatesBlitzConfig = (
       ),
     ])
     if (isTypeScript) {
-      const type = j.tsTypeAnnotation(j.tsTypeReference(j.identifier("BlitzServerConfig")))
+      const type = j.tsTypeAnnotation(j.tsTypeReference(j.identifier("BlitzCliConfig")))
       const declaration: any = configVariable?.declarations
       declaration[0].id.typeAnnotation = type
       const typeImport = j.importDeclaration(
-        [j.importSpecifier(j.identifier("BlitzServerConfig"))],
+        [j.importSpecifier(j.identifier("BlitzCliConfig"))],
         j.literal("blitz"),
       )
       typeImport.importKind = "type"

@@ -1,4 +1,4 @@
-import type { BlitzServerConfig } from "blitz"
+import type { BlitzCliConfig } from "blitz"
 import { setupBlitzServer } from "@blitzjs/next"
 import { AuthServerPlugin, PrismaStorage } from "@blitzjs/auth"
 import db from "db"
@@ -16,6 +16,6 @@ const { gSSP, gSP, api } = setupBlitzServer({
 
 export { gSSP, gSP, api }
 
-export const cliConfig: BlitzServerConfig = {
+export const cliConfig: BlitzCliConfig = {
   customTemplates: "app/templates",
 }

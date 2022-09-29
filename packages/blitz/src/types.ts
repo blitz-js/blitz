@@ -6,7 +6,7 @@ export interface RouteUrlObject extends Pick<UrlObject, "pathname" | "query"> {
   pathname: string
 }
 
-export type BlitzServerConfig = {
+export type BlitzCliConfig = {
   customTemplates?: string
 }
 
