@@ -20,8 +20,9 @@ export type MiddlewareNext = (error?: Error) => Promise<void> | void
 export type RequestMiddleware<
   TRequest extends IncomingMessage = IncomingMessage,
   TResponse = ServerResponse,
+  TResult = Promise<void> | void,
 > = {
-  (req: TRequest, res: TResponse, next: MiddlewareNext): Promise<void> | void
+  (req: TRequest, res: TResponse, next: MiddlewareNext): TResult
   type?: string
   config?: Record<any, any>
 }

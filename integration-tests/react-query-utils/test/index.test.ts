@@ -36,8 +36,25 @@ const runTests = (mode?: string) => {
       },
       5000 * 60 * 2,
     )
-  })
+  }),
+    describe("prefetch infinite query", () => {
+      it(
+        "should work",
+        async () => {
+          const browser = await webdriver(appPort, "/page-with-prefetch-inf-query")
+
+          browser.waitForElementByCss("#data", 0)
+          const newText = await browser.elementByCss("#data").text()
+          expect(newText).not.toMatch("no-data")
+          expect(newText).toMatch("thanks")
+
+          if (browser) await browser.close()
+        },
+        5000 * 60 * 2,
+      )
+    })
 }
+
 describe("React Query Utils Tests", () => {
   describe("dev mode", () => {
     beforeAll(async () => {

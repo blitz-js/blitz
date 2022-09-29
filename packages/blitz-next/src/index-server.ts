@@ -116,8 +116,13 @@ const prefetchQueryFactory = (
         queryClient = new QueryClient({defaultOptions})
       }
 
-      const queryKey = infinite ? getInfiniteQueryKey(fn, input) : getQueryKey(fn, input)
-      await queryClient.prefetchQuery(queryKey, () => fn(input, ctx))
+      if (infinite) {
+        await queryClient.prefetchInfiniteQuery(getInfiniteQueryKey(fn, input), () =>
+          fn(input, ctx),
+        )
+      } else {
+        await queryClient.prefetchQuery(getQueryKey(fn, input), () => fn(input, ctx))
+      }
     },
   }
 }
@@ -140,7 +145,8 @@ export const setupBlitzServer = ({plugins, onError}: SetupBlitzOptions) => {
       const {getClient, prefetchQuery} = prefetchQueryFactory(ctx)
 
       ctx.prefetchQuery = prefetchQuery
-      ctx.prefetchInfiniteQuery = (...args) => prefetchQuery(...args, true)
+      ctx.prefetchInfiniteQuery = (fn, input, defaultOptions = {}) =>
+        prefetchQuery(fn, input, defaultOptions, true)
 
       try {
         const result = await handler({req, res, ctx, ...rest})
@@ -187,8 +193,10 @@ export const setupBlitzServer = ({plugins, onError}: SetupBlitzOptions) => {
     ): NextApiHandler<TResult | void> =>
     async (req, res) => {
       try {
-        await handleRequestWithMiddleware(req, res, middlewares)
-        return handler(req, res, res.blitzCtx)
+        return await handleRequestWithMiddleware(req, res, [
+          ...middlewares,
+          (req, res) => handler(req, res, res.blitzCtx),
+        ])
       } catch (error: any) {
         onError?.(error)
         return res.status(400).send(error)
