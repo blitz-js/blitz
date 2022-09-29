@@ -70,9 +70,14 @@ export const addCustomTemplatesBlitzConfig = (
       if (config?.type === "VariableDeclarator") {
         const configProperties = config.init
         if (configProperties?.type === "ObjectExpression") {
-          const customTemplatesProperty = configProperties.properties.find(
-            (property: any) => property.key.name === "customTemplates",
-          )
+          const customTemplatesProperty = configProperties.properties.find((property) => {
+            if (property.type === "ObjectProperty") {
+              const key = property.key
+              if (key.type === "Identifier") {
+                return key.name === "customTemplates"
+              }
+            }
+          })
           if (!customTemplatesProperty) {
             configProperties.properties.push(
               j.objectProperty(j.identifier("customTemplates"), j.literal(customTemplatesPath)),
