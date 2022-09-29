@@ -5,8 +5,8 @@ import {join} from "path"
 import fs from "fs-extra"
 import {getPackageJson} from "./get-package-json"
 import {runPrisma} from "../../utils/run-prisma"
-import os from "os"
 
+import resolveFrom from "resolve-from"
 export const codegenTasks = async () => {
   try {
     /* 
@@ -39,33 +39,26 @@ export const codegenTasks = async () => {
     )
 
     if (hasPrisma) {
-        const tempDir = os.tmpdir()
-        const creationDate = await fs.stat(process.cwd())
-        if (!fs.existsSync(join(tempDir, `blitz-${creationDate.birthtimeMs}-prisma-client.json`))) {
-            const lastModified = await fs.stat(join(process.cwd(), "db/schema.prisma"))
-            await fs.writeFile(
-                join(tempDir, `blitz-${creationDate.birthtimeMs}-prisma-client.json`),
-                JSON.stringify({ lastModified: lastModified.mtimeMs }),
-            )
+      const foundPrismaClient = resolveFrom.silent(process.cwd(), "@prisma/client")
+      const foundDotPrismaClient = resolveFrom.silent(process.cwd(), ".prisma")
+
+      if (
+        !foundPrismaClient ||
+        (foundPrismaClient && !fs.existsSync(join(foundPrismaClient, "../../..", ".prisma"))) ||
+        (foundDotPrismaClient && !foundDotPrismaClient)
+      ) {
+        let prismaSpinner = log.spinner(`Generating Prisma client`).start()
+        const result = await runPrisma(["generate"], true)
+        if (typeof result === "object") {
+          if (result.success) {
+            prismaSpinner.succeed(log.greenText("Generated Prisma client"))
+          } else {
+            prismaSpinner.fail()
+            console.log("\n" + result.stderr)
+            process.exit(1)
+          }
         }
-        const prismaStatus = await fs.readJson(join(tempDir, `blitz-${creationDate.birthtimeMs}-prisma-client.json`))
-        const lastModified = await fs.stat(join(process.cwd(), "db/schema.prisma"))
-        if (prismaStatus.lastModified !== lastModified.mtimeMs) {
-            let prismaSpinner = log.spinner(`Generating Prisma client`).start()
-            const result = await runPrisma(["generate"], true)
-            if (result.success) {
-                prismaSpinner.succeed(log.greenText("Generated Prisma client"))
-            } else {
-                prismaSpinner.fail()
-                console.log("\n" + result.stderr)
-                process.exit(1)
-            }
-            await fs.writeJson(join(process.cwd(), `blitz-${creationDate.birthtimeMs}-prisma-client.json`), {
-                lastModified: lastModified.mtimeMs,
-            })
-        } else {
-            log.success("Prisma client was up to date")
-        }
+      }
     }
   } catch (err) {
     log.error(JSON.stringify(err, null, 2))
