@@ -25,10 +25,23 @@ export const addCustomTemplatesBlitzConfig = (
   const userConfigModuleSource = fs.readFileSync(blitzServerPath, {encoding: "utf-8"})
   const userConfigModule = j(userConfigModuleSource, {parser: customTsParser})
   const program = userConfigModule.get()
-  const defaultDeclaration = userConfigModule.find(j.ExportDefaultDeclaration)
-  const defaultConfig = defaultDeclaration.paths()[0]?.value
-  if (!defaultConfig) {
-    const config = j.identifier("config")
+  const cliConfigDeclaration = userConfigModule
+    .find(j.ExportNamedDeclaration, {
+      declaration: {
+        type: "VariableDeclaration",
+        declarations: [
+          {
+            id: {
+              name: "cliConfig",
+            },
+          },
+        ],
+      },
+    })
+    .paths()
+    .at(0)
+  if (!cliConfigDeclaration) {
+    const config = j.identifier("cliConfig")
     const configVariable = j.variableDeclaration("const", [
       j.variableDeclarator(
         config,
@@ -48,31 +61,32 @@ export const addCustomTemplatesBlitzConfig = (
       typeImport.importKind = "type"
       program.node.program.body.unshift(typeImport)
     }
-    const defaultConfig = j.exportDefaultDeclaration(j.identifier("config"))
-    program.node.program.body.push(configVariable)
-    program.node.program.body.push(defaultConfig)
+    const exportConfig = j.exportNamedDeclaration(configVariable)
+    program.node.program.body.push(exportConfig)
   } else {
-    const config = defaultConfig.declaration
-    if (config.type === "Identifier") {
-      const configVariable = userConfigModule.find(j.VariableDeclarator, {id: {name: config.name}})
-      const customTemplates = configVariable.find(j.ObjectProperty, {
-        key: {name: "customTemplates"},
-      })
-      customTemplates.remove()
-      configVariable
-        .find(j.ObjectExpression)
-        .get()
-        .node.properties.push(
-          j.objectProperty(j.identifier("customTemplates"), j.literal(customTemplatesPath)),
-        )
-    } else if (config.type === "ObjectExpression") {
-      const customTemplates = userConfigModule.find(j.ObjectProperty, {
-        key: {name: "customTemplates"},
-      })
-      customTemplates.remove()
-      config.properties.push(
-        j.objectProperty(j.identifier("customTemplates"), j.literal(customTemplatesPath)),
-      )
+    const configType = cliConfigDeclaration.value.declaration?.type
+    if (configType === "VariableDeclaration") {
+      const config = cliConfigDeclaration.value.declaration.declarations[0]
+      if (config?.type === "VariableDeclarator") {
+        const configProperties = config.init
+        if (configProperties?.type === "ObjectExpression") {
+          const customTemplatesProperty = configProperties.properties.find(
+            (property: any) => property.key.name === "customTemplates",
+          )
+          if (!customTemplatesProperty) {
+            configProperties.properties.push(
+              j.objectProperty(j.identifier("customTemplates"), j.literal(customTemplatesPath)),
+            )
+          } else {
+            if (customTemplatesProperty.type === "ObjectProperty") {
+              const customValue = customTemplatesProperty.value
+              if (customValue.type === "StringLiteral") {
+                customValue.value = customTemplatesPath
+              }
+            }
+          }
+        }
+      }
     }
   }
   const newSource = userConfigModule.toSource()

@@ -32,6 +32,7 @@ enum ResourceType {
   Mutations = "mutations",
   Mutation = "mutation",
   Resource = "resource",
+  CustomTemplates = "custom-templates",
 }
 
 function modelName(input: string = "") {
@@ -45,6 +46,39 @@ function ModelName(input: string = "") {
 }
 function ModelNames(input: string = "") {
   return pluralPascal(input)
+}
+
+const createCustomTemplates = async () => {
+  const continuePrompt = await prompts({
+    type: "confirm",
+    name: "value",
+    message: `This will copy the default templates to your app/templates folder. Do you want to continue?`,
+  })
+  if (!continuePrompt.value) {
+    process.exit(0)
+  }
+  const templatesPath = await prompts({
+    type: "text",
+    name: "value",
+    message: `Enter the path to save the custom templates folder`,
+    initial: "app/templates",
+  })
+  const templatesPathValue: string = templatesPath.value
+  const isTypeScript = await getIsTypeScript()
+  addCustomTemplatesBlitzConfig(templatesPathValue, isTypeScript)
+  log.success(`🚀 Custom templates path added/updated in app/blitz-server file`)
+  const customTemplatesPath = require("path").join(process.cwd(), templatesPathValue)
+  const fsExtra = await import("fs-extra")
+  const blitzGeneratorPath = require.resolve("@blitzjs/generator")
+  const templateFolder = ["form", "page", "query", "mutation", "queries", "mutations"]
+  for (const template of templateFolder) {
+    await fsExtra.copy(
+      require("path").join(blitzGeneratorPath, "..", "templates", template),
+      require("path").join(customTemplatesPath, template),
+    )
+  }
+  log.success(`🚀 Custom templates created in ${templatesPathValue} directory`)
+  process.exit(0)
 }
 
 const generatorMap = {
@@ -63,6 +97,7 @@ const generatorMap = {
   [ResourceType.Mutations]: [MutationsGenerator],
   [ResourceType.Mutation]: [MutationGenerator],
   [ResourceType.Resource]: [QueriesGenerator, MutationsGenerator, ModelGenerator],
+  [ResourceType.CustomTemplates]: [],
 }
 
 const args = arg(
@@ -74,7 +109,6 @@ const args = arg(
     "--parent": String,
     "--dry-run": Boolean,
     "--env": String,
-    "--generate-custom-templates": Boolean,
 
     // Aliases
     "-e": "--env",
@@ -201,11 +235,13 @@ const getHelp = async () => {
       For example, this command generates pages under pages/projects/[projectId]/tasks/
 
         > blitz generate all tasks --parent=projects
-      
-      # The '--generate-custom-templates' flag will copy the default templates to your app. 
-      This is useful if you want to customize the templates for your app
+
+      # To customize the templates used by the blitz generate command,
         
-        > blitz generate --generate-custom-templates
+        > blitz generate custom-templates
+
+        This command will copy the default templates to your app and update the app/blitz-server file to enable
+        the custom templating feature of the blitz CLI
 
       # Database models can also be generated directly from the CLI.
         Model fields can be specified with any generator that generates a database model ("all", "model", "resource").
@@ -221,45 +257,12 @@ const getHelp = async () => {
   }
 }
 
-const createCustomTemplates = async () => {
-  if (args["--generate-custom-templates"]) {
-    const continuePrompt = await prompts({
-      type: "confirm",
-      name: "value",
-      message: `This will copy the default templates to your app/templates folder. Do you want to continue?`,
-    })
-    if (!continuePrompt.value) {
-      process.exit(0)
-    }
-    const templatesPath = await prompts({
-      type: "text",
-      name: "value",
-      message: `Enter the path to save the custom templates folder`,
-      initial: "app/templates",
-    })
-    const templatesPathValue: string = templatesPath.value
-    const isTypeScript = await getIsTypeScript()
-    addCustomTemplatesBlitzConfig(templatesPathValue, isTypeScript)
-    log.success(`🚀 Custom templates path added/updated in app/blitz-server file`)
-    const customTemplatesPath = require("path").join(process.cwd(), templatesPathValue)
-    const fsExtra = await import("fs-extra")
-    const blitzGeneratorPath = require.resolve("@blitzjs/generator")
-    const templateFolder = ["form", "page", "query", "mutation", "queries", "mutations"]
-    for (const template of templateFolder) {
-      await fsExtra.copy(
-        require("path").join(blitzGeneratorPath, "..", "templates", template),
-        require("path").join(customTemplatesPath, template),
-      )
-    }
-    log.success(`🚀 Custom templates created in ${templatesPathValue} directory`)
-    process.exit(0)
-  }
-}
-
 const generate: CliCommand = async () => {
   await getHelp()
-  await createCustomTemplates()
   await determineType()
+  if (selectedType === "custom-templates") {
+    await createCustomTemplates()
+  }
   if (!selectedModelName) {
     await determineName()
   }
@@ -278,13 +281,14 @@ const generate: CliCommand = async () => {
     const {unregister} = register({
       target: "es6",
     })
-    const blitzConfig = require(blitzServer).default
+    const blitzConfig = require(blitzServer)
+    const {cliConfig} = blitzConfig
     unregister()
 
     for (const GeneratorClass of generators) {
       const generator = new GeneratorClass({
         destinationRoot: require("path").resolve(),
-        templateDir: blitzConfig?.customTemplates,
+        templateDir: cliConfig?.customTemplates,
         extraArgs: args["_"].slice(3) as string[],
         modelName: singularRootContext,
         modelNames: modelNames(singularRootContext),
