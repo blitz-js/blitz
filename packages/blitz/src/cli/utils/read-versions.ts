@@ -2,7 +2,7 @@ import {join} from "path"
 import pkgDir from "pkg-dir"
 import resolveFrom from "resolve-from"
 
-const globalBlitzPath = resolveFrom(__dirname, "blitz")
+const globalBlitzPath = resolveFrom.silent(__dirname, "blitz")
 const localBlitzPath = resolveFrom.silent(process.cwd(), "blitz")
 const localBlitzAuthPath = resolveFrom.silent(process.cwd(), "@blitzjs/auth")
 const localBlitzRpcPath = resolveFrom.silent(process.cwd(), "@blitzjs/rpc")
