@@ -32,7 +32,6 @@ describe("PageGenerator", () => {
   describe("#getTemplateValues", () => {
     it("returns object with correct template values", async () => {
       const values = await generator.getTemplateValues()
-      console.log(values)
       expect(values).toEqual({
         ModelName: "project",
         ModelNames: "projects",
