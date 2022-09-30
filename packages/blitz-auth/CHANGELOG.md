@@ -1,5 +1,120 @@
 # @blitzjs/auth
 
+## 2.0.0-beta.4
+
+### Patch Changes
+
+- 713aead9: Allow specifying custom strategy name in Blitz's passport adapter
+- Updated dependencies [c213d521]
+- Updated dependencies [0b94a450]
+- Updated dependencies [161270e3]
+  - blitz@2.0.0-beta.4
+
+## 2.0.0-beta.3
+
+### Patch Changes
+
+- Updated dependencies [638f2319]
+  - blitz@2.0.0-beta.3
+
+## 2.0.0-beta.2
+
+### Patch Changes
+
+- db7233db: Bump react, react-dom, @types/react and next versions
+
+  This fixes a console warning: `Warning: Received`true`for a non-boolean attribute`global`.` when using `styled-jsx`. Versions bump also fixes React Hydration error that happens on and off when using `redirectAuthenticatedTo`.
+
+- Updated dependencies [db7233db]
+- Updated dependencies [0936cb38]
+- Updated dependencies [3f9fe8f0]
+  - blitz@2.0.0-beta.2
+
+## 2.0.0-beta.1
+
+### Patch Changes
+
+- 0f4926fd: Set current Blitz tag to latest
+  - blitz@2.0.0-beta.1
+
+## 2.0.0-beta.72
+
+### Patch Changes
+
+- 2cc888ef: Beta release
+- Updated dependencies [2cc888ef]
+  - blitz@2.0.0-beta.72
+
+## 2.0.0-alpha.71
+
+### Patch Changes
+
+- blitz@2.0.0-alpha.71
+
+## 2.0.0-alpha.70
+
+### Patch Changes
+
+- blitz@2.0.0-alpha.70
+
+## 2.0.0-alpha.69
+
+### Patch Changes
+
+- Updated dependencies [fd31e56b]
+  - blitz@2.0.0-alpha.69
+
+## 2.0.0-alpha.68
+
+### Patch Changes
+
+- Updated dependencies [271c58ac]
+- Updated dependencies [630c7181]
+- Updated dependencies [f0ca738d]
+- Updated dependencies [41608c4c]
+  - blitz@2.0.0-alpha.68
+
+## 2.0.0-alpha.67
+
+### Patch Changes
+
+- blitz@2.0.0-alpha.67
+
+## 2.0.0-alpha.66
+
+### Patch Changes
+
+- a3e6c49c: Fixes the supports-color warning for pnpm
+- Updated dependencies [928e840b]
+- Updated dependencies [240f3f34]
+- Updated dependencies [55b1cb20]
+- Updated dependencies [4d7d126d]
+- Updated dependencies [890b0c0c]
+- Updated dependencies [807a2b56]
+- Updated dependencies [a3e6c49c]
+  - blitz@2.0.0-alpha.66
+
+## 2.0.0-alpha.65
+
+### Patch Changes
+
+- Updated dependencies [dd5f5174]
+  - blitz@2.0.0-alpha.65
+
+## 2.0.0-alpha.64
+
+### Patch Changes
+
+- Updated dependencies [54db8a46]
+- Updated dependencies [62bf12b5]
+  - blitz@2.0.0-alpha.64
+
+## 2.0.0-alpha.63
+
+### Patch Changes
+
+- blitz@2.0.0-alpha.63
+
 ## 2.0.0-alpha.62
 
 ### Patch Changes

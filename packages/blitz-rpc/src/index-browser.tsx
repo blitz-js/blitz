@@ -1,6 +1,6 @@
 import "./global"
 import {createClientPlugin} from "blitz"
-import {DefaultOptions, QueryClient} from "react-query"
+import {DefaultOptions, QueryClient} from "@tanstack/react-query"
 
 export * from "./data-client/index"
 
@@ -21,7 +21,7 @@ export const BlitzRpcPlugin = createClientPlugin<BlitzRpcOptions, {queryClient: 
           ...reactQueryOptions,
           queries: {
             ...(typeof window === "undefined" && {cacheTime: 0}),
-            retry: (failureCount, error: any) => {
+            retry: (failureCount: number, error: any) => {
               if (process.env.NODE_ENV !== "production") return false
 
               // Retry (max. 3 times) only if network error detected

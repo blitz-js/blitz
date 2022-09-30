@@ -4,9 +4,9 @@ import {readJSONSync, writeJson} from "fs-extra"
 import {join} from "path"
 import username from "username"
 import {Generator, GeneratorOptions, SourceRootType} from "../generator"
+import {baseLogger, log} from "../utils/log"
 import {fetchLatestVersionsFor} from "../utils/fetch-latest-version-for"
 import {getBlitzDependencyVersion} from "../utils/get-blitz-dependency-version"
-import {baseLogger, log} from "../utils/log"
 
 function assert(condition: any, message: string): asserts condition {
   if (!condition) throw new Error(message)
@@ -27,7 +27,7 @@ export interface AppGeneratorOptions extends GeneratorOptions {
   version: string
   skipInstall: boolean
   skipGit: boolean
-  form?: "React Final Form" | "React Hook Form" | "Formik"
+  form: "finalform" | "hookform" | "formik"
   onPostInstall?: () => Promise<void>
 }
 
@@ -43,7 +43,7 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
     if (!this.options.useTs) {
       return [
         "tsconfig.json",
-        "blitz-env.d.ts",
+        "next-env.d.ts",
         "jest.config.ts",
         "package.ts.json",
         "pre-push-ts",
@@ -120,12 +120,15 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
     ] = await Promise.all([
       fetchLatestVersionsFor(pkg.dependencies),
       fetchLatestVersionsFor(pkg.devDependencies),
-      getBlitzDependencyVersion(this.options.version),
+      getBlitzDependencyVersion(),
     ])
 
     pkg.dependencies = newDependencies
     pkg.devDependencies = newDevDependencies
     pkg.dependencies.blitz = blitzDependencyVersion
+    pkg.dependencies["@blitzjs/next"] = blitzDependencyVersion
+    pkg.dependencies["@blitzjs/rpc"] = blitzDependencyVersion
+    pkg.dependencies["@blitzjs/auth"] = blitzDependencyVersion
 
     const fallbackUsed = dependenciesUsedFallback || devDependenciesUsedFallback
 
@@ -264,17 +267,7 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
       ["git", ["add", "."], {stdio: "ignore"}],
       [
         "git",
-        [
-          "-c",
-          "user.name='Blitz.js CLI'",
-          "-c",
-          "user.email='noop@blitzjs.com'",
-          "commit",
-          "--no-gpg-sign",
-          "--no-verify",
-          "-m",
-          "Brand new Blitz app!",
-        ],
+        ["commit", "--no-verify", "-m", "Brand new Blitz app!"],
         {stdio: "ignore", timeout: 10000},
       ],
     ]
@@ -299,21 +292,18 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
     assert(pkg, "couldn't find package.json")
 
     const ext = this.options.useTs ? "tsx" : "js"
-    let type: string = ""
 
-    switch (this.options.form) {
-      case "React Final Form":
-        type = "finalform"
+    const type = this.options.form
+    switch (type) {
+      case "finalform":
         pkg.dependencies["final-form"] = "4.x"
         pkg.dependencies["react-final-form"] = "6.x"
         break
-      case "React Hook Form":
-        type = "hookform"
+      case "hookform":
         pkg.dependencies["react-hook-form"] = "7.x"
         pkg.dependencies["@hookform/resolvers"] = "2.x"
         break
-      case "Formik":
-        type = "formik"
+      case "formik":
         pkg.dependencies["formik"] = "2.x"
         break
     }

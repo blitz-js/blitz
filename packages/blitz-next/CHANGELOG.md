@@ -1,5 +1,114 @@
 # @blitzjs/next
 
+## 2.0.0-beta.4
+
+### Patch Changes
+
+- 69fb2803: Allow setting static page properties (e.g. `getInitialProps`) on the App component
+- 0b94a450: Upgrade superjson to the latest version
+- Updated dependencies [c213d521]
+- Updated dependencies [0b94a450]
+- Updated dependencies [f6dac093]
+  - @blitzjs/rpc@2.0.0-beta.4
+
+## 2.0.0-beta.3
+
+### Patch Changes
+
+- @blitzjs/rpc@2.0.0-beta.3
+
+## 2.0.0-beta.2
+
+### Patch Changes
+
+- db7233db: Bump react, react-dom, @types/react and next versions
+
+  This fixes a console warning: `Warning: Received`true`for a non-boolean attribute`global`.` when using `styled-jsx`. Versions bump also fixes React Hydration error that happens on and off when using `redirectAuthenticatedTo`.
+
+- Updated dependencies [db7233db]
+  - @blitzjs/rpc@2.0.0-beta.2
+
+## 2.0.0-beta.1
+
+### Patch Changes
+
+- 0f4926fd: Set current Blitz tag to latest
+- Updated dependencies [0f4926fd]
+  - @blitzjs/rpc@2.0.0-beta.1
+
+## 2.0.0-beta.72
+
+### Patch Changes
+
+- 2cc888ef: Beta release
+- Updated dependencies [2cc888ef]
+  - @blitzjs/rpc@2.0.0-beta.72
+
+## 2.0.0-alpha.71
+
+### Patch Changes
+
+- @blitzjs/rpc@2.0.0-alpha.71
+
+## 2.0.0-alpha.70
+
+### Patch Changes
+
+- @blitzjs/rpc@2.0.0-alpha.70
+
+## 2.0.0-alpha.69
+
+### Patch Changes
+
+- a3c92cb8: Allow using `RouteUrlObject` as `redirect.destination` in `getStaticProps` and `getServerSideProps`
+- Updated dependencies [49028024]
+  - @blitzjs/rpc@2.0.0-alpha.69
+
+## 2.0.0-alpha.68
+
+### Patch Changes
+
+- Updated dependencies [630c7181]
+  - @blitzjs/rpc@2.0.0-alpha.68
+
+## 2.0.0-alpha.67
+
+### Patch Changes
+
+- @blitzjs/rpc@2.0.0-alpha.67
+
+## 2.0.0-alpha.66
+
+### Patch Changes
+
+- ccb1af8d: Avoid `invalid config detected` warnings by deleting `"blitz"` key from next config object
+- 807a2b56: Fixes peer dependency warnings
+- a3e6c49c: Fixes the supports-color warning for pnpm
+- Updated dependencies [807a2b56]
+- Updated dependencies [a3e6c49c]
+- Updated dependencies [9620ef6b]
+  - @blitzjs/rpc@2.0.0-alpha.66
+
+## 2.0.0-alpha.65
+
+### Patch Changes
+
+- @blitzjs/rpc@2.0.0-alpha.65
+
+## 2.0.0-alpha.64
+
+### Patch Changes
+
+- @blitzjs/rpc@2.0.0-alpha.64
+
+## 2.0.0-alpha.63
+
+### Patch Changes
+
+- f52ca398: Upgrade react-query to v4
+- Updated dependencies [f52ca398]
+  - @blitzjs/rpc@2.0.0-alpha.63
+
 ## 2.0.0-alpha.62
 
 ### Patch Changes

@@ -11,7 +11,7 @@
     "preinstall": "npx only-allow pnpm",
     "prepare": "husky install",
     "build": "turbo run build",
-    "build:apps": "turbo run buildapp",
+    "build:apps": "turbo run buildapp --concurrency=1",
     "dev": "turbo run dev --no-cache --parallel",
     "lint": "turbo run lint",
     "test": "turbo run test",
@@ -28,15 +28,20 @@
     "husky": "7.0.4",
     "jsdom": "^19.0.0",
     "lint-staged": "12.1.7",
-    "next": "12.2.0",
+    "next": "12.2.5",
     "only-allow": "1.1.0",
     "prettier": "^2.5.1",
     "prettier-plugin-prisma": "3.8.0",
     "pretty-quick": "3.1.3",
-    "turbo": "1.1.5",
+    "turbo": "1.4.2",
     "vitest": "0.8.2",
     "wait-on": "6.0.1"
   },
   "npmClient": "pnpm",
-  "packageManager": "pnpm@7.4.0-1"
+  "packageManager": "pnpm@7.4.0-1",
+  "manypkg": {
+    "ignoredRules": [
+      "EXTERNAL_MISMATCH"
+    ]
+  }
 }

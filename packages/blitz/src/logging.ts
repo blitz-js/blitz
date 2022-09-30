@@ -92,6 +92,10 @@ const withProgress = (str: string) => {
   return withCaret(str)
 }
 
+const greenText = (str: string) => {
+  return `${c.green(str)}`
+}
+
 /**
  * Logs a branded purple message to stdout.
  *
@@ -182,6 +186,7 @@ export const log = {
   progress,
   spinner,
   success,
+  greenText,
   error,
   variable,
   debug,

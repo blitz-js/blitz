@@ -13,10 +13,11 @@ const revalidateFn =
 export async function handleRequestWithMiddleware<
   Req extends IncomingMessage = IncomingMessage,
   Res extends ServerResponse = ServerResponse,
+  MiddlewareResult = void | Promise<void>,
 >(
   req: Req,
   res: Res,
-  middleware: RequestMiddleware<Req, Res>[],
+  middleware: RequestMiddleware<Req, Res, MiddlewareResult>[],
   {
     throwOnError = true,
     stackPrintOnError = true,

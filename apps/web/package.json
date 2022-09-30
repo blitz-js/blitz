@@ -3,10 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "blitz start",
-    "start:dev": "pnpm run prisma:start && blitz dev",
+    "start": "next start",
+    "start:dev": "pnpm run prisma:start && next dev",
     "start:full": "pnpm buildapp && pnpm start",
-    "buildapp": "NODE_ENV=production pnpm blitz codegen && pnpm prisma generate && next build",
+    "buildapp": "pnpm blitz codegen && pnpm prisma generate && next build",
     "lint": "next lint",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf .next",
     "prisma:start": "prisma generate && prisma migrate deploy",
@@ -26,17 +26,17 @@
     "@types/passport-twitter": "1.0.37",
     "blitz": "workspace:*",
     "jest": "27.5.1",
-    "next": "12.2.0",
+    "next": "12.2.5",
     "passport-mock-strategy": "2.0.0",
     "passport-twitter": "1.0.4",
     "prisma": "4.0.0",
-    "react": "18.0.0",
-    "react-dom": "18.0.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
     "ts-node": "10.7.0"
   },
   "devDependencies": {
     "@next/bundle-analyzer": "12.0.8",
-    "@types/react": "18.0.1",
+    "@types/react": "18.0.17",
     "eslint": "7.32.0",
     "typescript": "^4.5.3"
   }

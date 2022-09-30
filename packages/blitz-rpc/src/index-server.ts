@@ -1,7 +1,8 @@
-import {assert, Ctx, prettyMs} from "blitz"
+import {assert, baseLogger, Ctx, newLine, prettyMs} from "blitz"
 import {NextApiRequest, NextApiResponse} from "next"
 import {deserialize, serialize as superjsonSerialize} from "superjson"
 import {resolve} from "path"
+import chalk from "chalk"
 
 // TODO - optimize end user server bundles by not exporting all client stuff here
 export * from "./index-browser"
@@ -68,6 +69,11 @@ interface WebpackRule {
 
 export interface InstallWebpackConfigOptions {
   webpackConfig: {
+    resolve: {
+      alias: {
+        [key: string]: boolean
+      }
+    }
     module: {
       rules: WebpackRule[]
     }
@@ -79,8 +85,10 @@ export function installWebpackConfig({
   webpackConfig,
   webpackRuleOptions,
 }: InstallWebpackConfigOptions) {
+  webpackConfig.resolve.alias["npm-which"] = false
+  webpackConfig.resolve.alias["cross-spawn"] = false
   webpackConfig.module.rules.push({
-    test: /[\\/]\[\[\.\.\.blitz]]\.[jt]sx?$/,
+    test: /[\\/]\[\[\.\.\.blitz]]?.+\.[jt]sx?$/,
     use: [
       {
         loader: loaderServer,
@@ -149,6 +157,13 @@ export function rpcHandler(config: RpcConfig) {
     const relativeRoutePath = (req.query.blitz as string[])?.join("/")
     const routePath = "/" + relativeRoutePath
 
+    const log = baseLogger().getChildLogger({
+      prefix: [routePath.replace(/(\/api\/rpc)?\//, "") + "()"],
+    })
+    const customChalk = new chalk.Instance({
+      level: log.settings.type === "json" ? 0 : chalk.level,
+    })
+
     const loadableResolver = resolverMap?.[routePath]
     if (!loadableResolver) {
       throw new Error("No resolver for path: " + routePath)
@@ -168,7 +183,7 @@ export function rpcHandler(config: RpcConfig) {
 
       if (typeof req.body.params === "undefined") {
         const error = {message: "Request body is missing the `params` key"}
-        console.error(error.message)
+        log.error(error.message)
         res.status(400).json({
           result: null,
           error,
@@ -182,11 +197,11 @@ export function rpcHandler(config: RpcConfig) {
           meta: req.body.meta?.params,
         })
 
-        console.info("Starting with input:", data ? data : JSON.stringify(data))
+        log.info(customChalk.dim("Starting with input:"), data ? data : JSON.stringify(data))
         const startTime = Date.now()
         const result = await resolver(data, (res as any).blitzCtx)
         const resolverDuration = Date.now() - startTime
-        console.debug("Result:", result ? result : JSON.stringify(result))
+        log.debug(customChalk.dim("Result:"), result ? result : JSON.stringify(result))
 
         const serializerStartTime = Date.now()
         const serializedResult = superjsonSerialize(result)
@@ -200,16 +215,22 @@ export function rpcHandler(config: RpcConfig) {
             result: serializedResult.meta,
           },
         })
-        console.debug(`Next.js serialization:${prettyMs(Date.now() - nextSerializerStartTime)}`)
+        log.debug(
+          customChalk.dim(
+            `Next.js serialization:${prettyMs(Date.now() - nextSerializerStartTime)}`,
+          ),
+        )
         const serializerDuration = Date.now() - serializerStartTime
         const duration = Date.now() - startTime
 
-        console.info(
-          `Finished: resolver:${prettyMs(resolverDuration)} serializer:${prettyMs(
-            serializerDuration,
-          )} total:${prettyMs(duration)}`,
+        log.info(
+          customChalk.dim(
+            `Finished: resolver:${prettyMs(resolverDuration)} serializer:${prettyMs(
+              serializerDuration,
+            )} total:${prettyMs(duration)}`,
+          ),
         )
-        console.log("\n")
+        newLine()
 
         return
       } catch (error: any) {
@@ -219,8 +240,8 @@ export function rpcHandler(config: RpcConfig) {
 
         config.onError?.(error)
 
-        console.error(error)
-        console.log("\n")
+        log.error(error)
+        newLine()
 
         if (!error.statusCode) {
           error.statusCode = 500
@@ -239,7 +260,7 @@ export function rpcHandler(config: RpcConfig) {
       }
     } else {
       // Everything else is error
-      console.warn(`${req.method} method not supported`)
+      log.warn(`${req.method} method not supported`)
       res.status(404).end()
       return
     }
