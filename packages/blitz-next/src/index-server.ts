@@ -98,7 +98,7 @@ export type BlitzGSPHandler<
 > = ({
   ctx,
   ...args
-}: Parameters<GetStaticProps<TProps, Query, PD>>[0] & {ctx: Ctx}) =>
+}: Parameters<GetStaticProps<TProps, Query, PD>>[0] & {ctx: Omit<Ctx, "revalidatePage">}) =>
   | Promise<BlitzGSPResult<TProps>>
   | BlitzGSPResult<TProps>
 

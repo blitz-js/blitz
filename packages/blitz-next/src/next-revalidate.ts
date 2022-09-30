@@ -17,10 +17,8 @@ export function ensureMiddlewareResponse(
 
 export function ensureResponseHasRevalidate(
   res: ServerResponse & {[key: string]: any},
-): asserts res is ServerResponse & {revalidate: NextApiResponse["revalidate"]} {
-  if (!("revalidate" in res)) {
-    throw new Error("res.revalidate isn't available, you might be running old version of next.js")
-  }
+): res is ServerResponse & {revalidate: NextApiResponse["revalidate"]} {
+  return !("revalidate" in res)
 }
 
 export const revalidateMiddleware: RequestMiddleware<
@@ -29,7 +27,9 @@ export const revalidateMiddleware: RequestMiddleware<
   void | Promise<void>
 > = (req, res, next) => {
   ensureMiddlewareResponse(res)
-  ensureResponseHasRevalidate(res)
+  if (!ensureResponseHasRevalidate(res)) {
+    return next()
+  }
 
   if (!("revalidatePage" in res.blitzCtx)) {
     res.blitzCtx.revalidatePage = (
