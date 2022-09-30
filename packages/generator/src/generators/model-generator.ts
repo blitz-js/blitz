@@ -24,8 +24,6 @@ export class ModelGenerator extends Generator<ModelGeneratorOptions> {
   static subdirectory = "../.."
   unsafe_disableConflictChecker = true
 
-  // async getTemplateValues() {}
-
   getTargetDirectory() {
     return ""
   }

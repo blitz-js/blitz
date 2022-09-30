@@ -60,13 +60,6 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
     return ["jsconfig.json", "package.js.json", "pre-push-js"]
   }
 
-  // async getTemplateValues() {
-  //   return {
-  //     name: this.options.appName,
-  //     safeNameSlug: this.options.appName.replace(/[^a-zA-Z0-9-_]/g, "-"),
-  //     username: await username(),
-  //   }
-  // }
   templateValuesBuilder = new AppValuesBuilder(this.fs)
 
   getTargetDirectory() {

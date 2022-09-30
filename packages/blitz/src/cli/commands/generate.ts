@@ -36,19 +36,6 @@ enum ResourceType {
   Resource = "resource",
 }
 
-// function modelName(input: string = "") {
-//   return singleCamel(input)
-// }
-// function modelNames(input: string = "") {
-//   return pluralCamel(input)
-// }
-// function ModelName(input: string = "") {
-//   return singlePascal(input)
-// }
-// function ModelNames(input: string = "") {
-//   return pluralPascal(input)
-// }
-
 const generatorMap = {
   [ResourceType.All]: [
     PageGenerator,
