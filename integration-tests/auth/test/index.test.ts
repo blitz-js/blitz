@@ -151,6 +151,7 @@ describe("Auth Tests", () => {
   describe("server mode", () => {
     beforeAll(async () => {
       try {
+        await new Promise((resolve) => setTimeout(resolve, 1000))
         await runBlitzCommand(["prisma", "generate"])
         await runBlitzCommand(["prisma", "migrate", "deploy"])
         await blitzBuild()
