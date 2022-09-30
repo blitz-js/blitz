@@ -2,7 +2,8 @@ import spawn from "cross-spawn"
 import chalk from "chalk"
 import {readJSONSync, writeJson} from "fs-extra"
 import {join} from "path"
-import username from "username"
+// import username from "username"
+import {AppValuesBuilder} from "./template-builders/app-values-builder"
 import {Generator, GeneratorOptions, SourceRootType} from "../generator"
 import {baseLogger, log} from "../utils/log"
 import {fetchLatestVersionsFor} from "../utils/fetch-latest-version-for"
@@ -10,6 +11,12 @@ import {getBlitzDependencyVersion} from "../utils/get-blitz-dependency-version"
 
 function assert(condition: any, message: string): asserts condition {
   if (!condition) throw new Error(message)
+}
+
+export interface AppTemplateValues {
+  name: string
+  safeNameSlug: string
+  username: string | undefined
 }
 
 type TemplateConfig = {
@@ -53,13 +60,14 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
     return ["jsconfig.json", "package.js.json", "pre-push-js"]
   }
 
-  async getTemplateValues() {
-    return {
-      name: this.options.appName,
-      safeNameSlug: this.options.appName.replace(/[^a-zA-Z0-9-_]/g, "-"),
-      username: await username(),
-    }
-  }
+  // async getTemplateValues() {
+  //   return {
+  //     name: this.options.appName,
+  //     safeNameSlug: this.options.appName.replace(/[^a-zA-Z0-9-_]/g, "-"),
+  //     username: await username(),
+  //   }
+  // }
+  templateValuesBuilder = new AppValuesBuilder(this.fs)
 
   getTargetDirectory() {
     return ""

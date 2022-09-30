@@ -2,6 +2,20 @@ import {UrlObject} from "url"
 // Context for plugins to declaration merge stuff into
 export interface Ctx {}
 
+export type CodegenField = {
+  component: string
+  inputType: string
+  zodType: string
+  prismaType: string
+  default?: string
+  [index: string]: string | undefined
+}
+
+export type CodegenConfig = {
+  templateDir?: string
+  fieldTypeMap?: Record<string, CodegenField>
+}
+
 export interface RouteUrlObject extends Pick<UrlObject, "pathname" | "query"> {
   pathname: string
 }

@@ -5,6 +5,10 @@ export function plural(input: string): string {
   return pluralize.isPlural(input) ? input : pluralize.plural(input)
 }
 
+export function addSpaceBeforeCapitals(input: string): string {
+  return singleCamel(input).replace(/(?!^)([A-Z])/g, " $1")
+}
+
 export function singular(input: string): string {
   return pluralize.isSingular(input) ? input : pluralize.singular(input)
 }

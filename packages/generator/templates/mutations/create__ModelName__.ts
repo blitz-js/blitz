@@ -4,12 +4,12 @@ import {z} from "zod"
 
 if (process.env.parentModel) {
   const Create__ModelName__ = z.object({
-    name: z.string(),
-    __parentModelId__: z.number()
+    __parentModelId__: z.__parentModelIdZodType__(),
+    // template: __fieldName__: z.__zodType__(),
   })
 } else {
   const Create__ModelName__ = z.object({
-    name: z.string(),
+     // template: __fieldName__: z.__zodType__(),
   })
 }
 

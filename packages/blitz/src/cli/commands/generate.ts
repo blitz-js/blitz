@@ -15,6 +15,10 @@ import {
   MutationsGenerator,
   ModelGenerator,
   QueryGenerator,
+  ModelName,
+  modelName,
+  ModelNames,
+  modelNames,
 } from "@blitzjs/generator"
 
 const getIsTypeScript = async () =>
@@ -32,18 +36,18 @@ enum ResourceType {
   Resource = "resource",
 }
 
-function modelName(input: string = "") {
-  return singleCamel(input)
-}
-function modelNames(input: string = "") {
-  return pluralCamel(input)
-}
-function ModelName(input: string = "") {
-  return singlePascal(input)
-}
-function ModelNames(input: string = "") {
-  return pluralPascal(input)
-}
+// function modelName(input: string = "") {
+//   return singleCamel(input)
+// }
+// function modelNames(input: string = "") {
+//   return pluralCamel(input)
+// }
+// function ModelName(input: string = "") {
+//   return singlePascal(input)
+// }
+// function ModelNames(input: string = "") {
+//   return pluralPascal(input)
+// }
 
 const generatorMap = {
   [ResourceType.All]: [
@@ -235,6 +239,7 @@ const generate: CliCommand = async () => {
         modelNames: modelNames(singularRootContext),
         ModelName: ModelName(singularRootContext),
         ModelNames: ModelNames(singularRootContext),
+        rawParentModelName: args["--parent"],
         parentModel: modelName(selectedParent),
         parentModels: modelNames(selectedParent),
         ParentModel: ModelName(selectedParent),

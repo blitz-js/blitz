@@ -7,6 +7,7 @@ import {Generator, GeneratorOptions, SourceRootType} from "../generator"
 import {Field} from "../prisma/field"
 import {Model} from "../prisma/model"
 import {getTemplateRoot} from "../utils/get-template-root"
+import {getPrismaSchema} from "../utils/get-prisma-schema"
 
 export interface ModelGeneratorOptions extends GeneratorOptions {
   modelName: string
@@ -23,7 +24,7 @@ export class ModelGenerator extends Generator<ModelGeneratorOptions> {
   static subdirectory = "../.."
   unsafe_disableConflictChecker = true
 
-  async getTemplateValues() {}
+  // async getTemplateValues() {}
 
   getTargetDirectory() {
     return ""
@@ -41,25 +42,26 @@ export class ModelGenerator extends Generator<ModelGeneratorOptions> {
 
   // eslint-disable-next-line require-await
   async write() {
-    const schemaPath = path.resolve("db/schema.prisma")
-    if (!this.fs.exists(schemaPath)) {
-      throw new Error("Prisma schema file was not found")
-    }
+    // const schemaPath = path.resolve("db/schema.prisma")
+    // if (!this.fs.exists(schemaPath)) {
+    //   throw new Error("Prisma schema file was not found")
+    // }
 
-    let schema: ast.Schema
-    try {
-      schema = ast.getSchema(this.fs.read(schemaPath))
-    } catch (err) {
-      console.error("Failed to parse db/schema.prisma file")
-      throw err
-    }
+    // let schema: ast.Schema
+    // try {
+    //   schema = ast.getSchema(this.fs.read(schemaPath))
+    // } catch (err) {
+    //   console.error("Failed to parse db/schema.prisma file")
+    //   throw err
+    // }
+    const {schema, schemaPath} = getPrismaSchema(this.fs)
     const {modelName, extraArgs, dryRun} = this.options
     let updatedOrCreated = "created"
 
-    let fields = (
+    let fieldPromises = (
       extraArgs.length === 1 && extraArgs[0]?.includes(" ") ? extraArgs[0]?.split(" ") : extraArgs
-    ).flatMap((input) => Field.parse(input, schema))
-
+    ).map((input) => Field.parse(input, schema))
+    let fields = (await Promise.all(fieldPromises)).flatMap((fieldArray) => fieldArray)
     const modelDefinition = new Model(modelName, fields)
 
     let model: ast.Model | undefined
@@ -98,10 +100,13 @@ export class ModelGenerator extends Generator<ModelGeneratorOptions> {
   }
 
   async postWrite() {
+    const prismaBin = which(process.cwd()).sync("prisma")
+    //@ts-ignore
+    spawn.sync(prismaBin, ["format"], {stdio: "inherit"})
     const shouldMigrate = await this.prismaMigratePrompt()
     if (shouldMigrate) {
       await new Promise<void>((res, rej) => {
-        const prismaBin = which(process.cwd()).sync("prisma")
+        // const prismaBin = which(process.cwd()).sync("prisma")
         const child = spawn(prismaBin, ["migrate", "dev"], {stdio: "inherit"})
         child.on("exit", (code) => (code === 0 ? res() : rej()))
       })

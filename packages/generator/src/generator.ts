@@ -5,6 +5,9 @@ import Enquirer from "enquirer"
 import {EventEmitter} from "events"
 import * as fs from "fs-extra"
 import j from "jscodeshift"
+import {escapePath} from "fast-glob"
+import {IBuilder} from "./generators/template-builders/builder"
+import {NullBuilder} from "./generators/template-builders/null-builder"
 import {create as createStore, Store} from "mem-fs"
 import {create as createEditor, Editor} from "mem-fs-editor"
 import * as path from "path"
@@ -161,7 +164,17 @@ export abstract class Generator<
     if (!this.options.destinationRoot) this.options.destinationRoot = process.cwd()
   }
 
-  abstract getTemplateValues(): Promise<any>
+  // abstract getTemplateValues(): Promise<any>
+  public templateValuesBuilder: IBuilder<T, any> = NullBuilder
+
+  async getTemplateValues(): Promise<any> {
+    const values = await this.templateValuesBuilder.getTemplateValues(this.options)
+    return values
+  }
+
+  public fieldTemplateRegExp: RegExp = new RegExp(
+    /({?\/\*\s*template: (.*) \*\/}?|\s*\/\/\s*template: (.*))/g,
+  )
 
   abstract getTargetDirectory(): string
 
@@ -213,6 +226,21 @@ export abstract class Generator<
     if (codeFileExtensions.test(pathEnding)) {
       templatedFile = this.replaceConditionals(inputStr, templateValues, prettierOptions || {})
     }
+    const fieldTemplateString = templatedFile
+      ?.match(this.fieldTemplateRegExp)
+      ?.at(0)
+      ?.replace(this.fieldTemplateRegExp, "$2$3")
+
+    if (fieldTemplateString) {
+      const fieldTemplatePosition = templatedFile.search(this.fieldTemplateRegExp)
+      templatedFile = [
+        templatedFile.slice(0, fieldTemplatePosition),
+        ...(templateValues.fieldTemplateValues?.map((values: any) =>
+          this.replaceTemplateValues(fieldTemplateString, values),
+        ) || []),
+        templatedFile.slice(fieldTemplatePosition),
+      ].join("")
+    }
     templatedFile = this.replaceTemplateValues(templatedFile, templateValues)
     if (!this.useTs && tsExtension.test(pathEnding)) {
       templatedFile =
@@ -258,7 +286,6 @@ export abstract class Generator<
         let pathSuffix = filePath
         pathSuffix = path.join(this.getTargetDirectory(), pathSuffix)
         const templateValues = await this.getTemplateValues()
-
         let templatedPathSuffix = this.replaceTemplateValues(pathSuffix, templateValues)
 
         const newContent = this.process(

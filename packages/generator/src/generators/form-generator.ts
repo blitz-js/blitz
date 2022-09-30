@@ -1,17 +1,20 @@
-import {Generator, GeneratorOptions, SourceRootType} from "../generator"
+// import {Generator, GeneratorOptions, SourceRootType} from "../generator"
 import {getTemplateRoot} from "../utils/get-template-root"
 import {camelCaseToKebabCase} from "../utils/inflector"
+import {FieldValuesBuilder, ResourceGeneratorOptions} from ".."
+import {Generator, SourceRootType} from "../generator"
 
-export interface FormGeneratorOptions extends GeneratorOptions {
-  ModelName: string
-  ModelNames: string
-  modelName: string
-  modelNames: string
-  parentModel?: string
-  parentModels?: string
-  ParentModel?: string
-  ParentModels?: string
-}
+// export interface FormGeneratorOptions extends GeneratorOptions {
+//   ModelName: string
+//   ModelNames: string
+//   modelName: string
+//   modelNames: string
+//   parentModel?: string
+//   parentModels?: string
+//   ParentModel?: string
+//   ParentModels?: string
+// }
+export interface FormGeneratorOptions extends ResourceGeneratorOptions {}
 
 export class FormGenerator extends Generator<FormGeneratorOptions> {
   sourceRoot: SourceRootType
@@ -22,33 +25,34 @@ export class FormGenerator extends Generator<FormGeneratorOptions> {
 
   static subdirectory = "queries"
 
-  private getId(input: string = "") {
-    if (!input) return input
-    return `${input}Id`
-  }
+  // private getId(input: string = "") {
+  //   if (!input) return input
+  //   return `${input}Id`
+  // }
 
-  private getParam(input: string = "") {
-    if (!input) return input
-    return `[${input}]`
-  }
+  // private getParam(input: string = "") {
+  //   if (!input) return input
+  //   return `[${input}]`
+  // }
 
-  // eslint-disable-next-line require-await
-  async getTemplateValues() {
-    return {
-      parentModelId: this.getId(this.options.parentModel),
-      parentModelParam: this.getParam(this.getId(this.options.parentModel)),
-      parentModel: this.options.parentModel,
-      parentModels: this.options.parentModels,
-      ParentModel: this.options.ParentModel,
-      ParentModels: this.options.ParentModels,
-      modelId: this.getId(this.options.modelName),
-      modelIdParam: this.getParam(this.getId(this.options.modelName)),
-      modelName: this.options.modelName,
-      modelNames: this.options.modelNames,
-      ModelName: this.options.ModelName,
-      ModelNames: this.options.ModelNames,
-    }
-  }
+  // // eslint-disable-next-line require-await
+  // async getTemplateValues() {
+  //   return {
+  //     parentModelId: this.getId(this.options.parentModel),
+  //     parentModelParam: this.getParam(this.getId(this.options.parentModel)),
+  //     parentModel: this.options.parentModel,
+  //     parentModels: this.options.parentModels,
+  //     ParentModel: this.options.ParentModel,
+  //     ParentModels: this.options.ParentModels,
+  //     modelId: this.getId(this.options.modelName),
+  //     modelIdParam: this.getParam(this.getId(this.options.modelName)),
+  //     modelName: this.options.modelName,
+  //     modelNames: this.options.modelNames,
+  //     ModelName: this.options.ModelName,
+  //     ModelNames: this.options.ModelNames,
+  //   }
+  // }
+  templateValuesBuilder = new FieldValuesBuilder()
 
   getTargetDirectory() {
     const context = this.options.context ? `${camelCaseToKebabCase(this.options.context)}/` : ""

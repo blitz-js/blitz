@@ -3,7 +3,7 @@ import db from "db"
 import {z} from "zod"
 
 const Delete__ModelName__ = z.object({
-  id: z.number(),
+  id: z.__modelIdZodType__(),
 })
 
 export default resolver.pipe(
