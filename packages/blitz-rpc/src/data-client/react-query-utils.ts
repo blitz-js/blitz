@@ -125,7 +125,10 @@ export const sanitizeQuery = sanitize("query")
 export const sanitizeMutation = sanitize("mutation")
 
 type BlitzQueryKey = [string] | [string, any]
-export const getQueryKeyFromUrlAndParams = (url: string, ...params: [unknown]): BlitzQueryKey => {
+export const getQueryKeyFromUrlAndParams = (
+  url: string,
+  ...params: [unknown] | []
+): BlitzQueryKey => {
   const queryKey: BlitzQueryKey = [url]
   if (params.length === 1) {
     const param = params[0]
@@ -137,7 +140,7 @@ export const getQueryKeyFromUrlAndParams = (url: string, ...params: [unknown]): 
 
 export function getQueryKey<TInput, TResult, T extends AsyncFunc>(
   resolver: T | Resolver<TInput, TResult> | RpcClient<TInput, TResult>,
-  ...params: [TInput]
+  ...params: [TInput] | []
 ) {
   if (typeof resolver === "undefined") {
     throw new Error("getQueryKey is missing the first argument - it must be a resolver function")
@@ -160,10 +163,16 @@ export function getInfiniteQueryKey<TInput, TResult, T extends AsyncFunc>(
   return [...queryKey, "infinite"]
 }
 
-export function invalidateQuery<TInput, TResult, T extends AsyncFunc>(
+type InvalidateQueryTypeWithParams = <TInput, TResult, T extends AsyncFunc>(
   resolver: T | Resolver<TInput, TResult> | RpcClient<TInput, TResult>,
   ...params: [TInput]
-) {
+) => Promise<void>
+type InvalidateQueryTypeAllQueries = <TInput, TResult, T extends AsyncFunc>(
+  resolver: T | Resolver<TInput, TResult> | RpcClient<TInput, TResult>,
+) => Promise<void>
+type InvalidateQueryType = InvalidateQueryTypeWithParams & InvalidateQueryTypeAllQueries
+
+export const invalidateQuery: InvalidateQueryType = (resolver, ...params: []) => {
   if (typeof resolver === "undefined") {
     throw new Error(
       "invalidateQuery is missing the first argument - it must be a resolver function",

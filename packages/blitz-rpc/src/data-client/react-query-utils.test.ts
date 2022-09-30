@@ -36,7 +36,6 @@ describe("react-query-utils", () => {
     })
 
     it("if no argument is passed it returns only url", () => {
-      // @ts-expect-error - missing param not passed to invalidate query
       const queryKey = getQueryKeyFromUrlAndParams(API_ENDPOINT)
       expect(queryKey).toEqual([API_ENDPOINT])
     })
@@ -71,7 +70,6 @@ describe("react-query-utils", () => {
     })
 
     it("if no argument is passed it returns only url", () => {
-      // @ts-expect-error - missing param not passed to invalidate query
       const queryKey = getQueryKey(query)
       expect(queryKey).toEqual([API_ENDPOINT])
     })
