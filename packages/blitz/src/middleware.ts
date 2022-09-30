@@ -1,14 +1,5 @@
 import {IncomingMessage, ServerResponse} from "http"
-import {compose, Ctx, RequestMiddleware, MiddlewareNext, MiddlewareResponse} from "./index-server"
-import {UrlObject} from "url"
-import {NextApiResponse} from "next"
-import {resolveHref} from "next/dist/shared/lib/router/router"
-
-const revalidateFn =
-  (res: NextApiResponse) =>
-  (url: UrlObject | string, opts?: Parameters<NextApiResponse["revalidate"]>[1]) => {
-    return res.revalidate(resolveHref({} as any, url, false), opts)
-  }
+import {compose, RequestMiddleware, MiddlewareNext, MiddlewareResponse} from "./index-server"
 
 export async function handleRequestWithMiddleware<
   Req extends IncomingMessage = IncomingMessage,
@@ -26,11 +17,6 @@ export async function handleRequestWithMiddleware<
     stackPrintOnError?: boolean
   } = {},
 ) {
-  if (!(res as unknown as MiddlewareResponse).blitzCtx) {
-    ;(res as unknown as MiddlewareResponse).blitzCtx = {
-      revalidatePage: revalidateFn(res as unknown as NextApiResponse),
-    }
-  }
   if (!(res as any)._blitz) {
     ;(res as any)._blitz = {}
   }
