@@ -110,12 +110,13 @@ export const getCodegen = async () => {
       target: "es6",
     })
     const blitzConfig = require(blitzServer)
-    const config = blitzConfig?.codegen
+    const config = blitzConfig
+    const {cliConfig} = config
     unregister()
 
-    if (config.codegen !== undefined) {
+    if (cliConfig.codegen !== undefined) {
       // TODO: potentially verify that codegen is well formed using zod
-      return config.codegen
+      return cliConfig.codegen
     }
     return defaultCodegenConfig
   } catch (ex) {
