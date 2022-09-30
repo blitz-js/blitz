@@ -77,6 +77,9 @@ Your financial contributions help ensure Blitz continues to be developed and mai
  <td><a aria-label="MeetKai" href="https://meetkai.com/?ref=blitzjs">
 <img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/main/assets/meetkai.png" width="40px"/>
 </a></td>
+ <td><a aria-label="Simon Lammes" href="https://github.com/simon-lammes">
+<img alt="" src="https://avatars.githubusercontent.com/u/46446421?v=4" width="40px"/>
+</a></td>
   </tr>
 </table>
 
@@ -192,6 +195,14 @@ _Issue triage, pull request triage, community encouragement and moderation, etc_
       <img src="https://avatars.githubusercontent.com/damilolarandolph" width="100px;" alt="Damilola Randolph avatar" /><br />
         <sub>
           <b>Damilola Randolph</b>
+        </sub>
+      </a>
+    </td>
+      <td align="center">
+     <a href="https://siddharthsuresh.vercel.app/">
+      <img src="https://avatars.githubusercontent.com/u/83594610?v=4" width="100px;" alt="Siddharth Suresh avatar" /><br />
+        <sub>
+          <b>Siddharth Suresh</b>
         </sub>
       </a>
     </td>
@@ -712,7 +723,7 @@ Thanks to these wonderful people ([emoji key](https://allcontributors.org/docs/e
     <td align="center"><a href="https://chaiwattsw.com/"><img src="https://avatars.githubusercontent.com/u/30198386?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Chaiwat Trisuwan</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=chaiwattsw" title="Documentation">📖</a> <a href="https://github.com/blitz-js/blitz/commits?author=chaiwattsw" title="Code">💻</a></td>
     <td align="center"><a href="oltdaniel.eu"><img src="https://avatars.githubusercontent.com/u/53529846?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Daniel Oltmanns</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=oltdaniel" title="Documentation">📖</a> <a href="https://github.com/blitz-js/blitz/commits?author=oltdaniel" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/edrickleong"><img src="https://avatars.githubusercontent.com/u/10529706?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Edrick Leong</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=edrickleong" title="Documentation">📖</a> <a href="https://github.com/blitz-js/blitz/commits?author=edrickleong" title="Code">💻</a> <a href="https://github.com/blitz-js/blitz/commits?author=edrickleong" title="Tests">⚠️</a></td>
-    <td align="center"><a href="https://github.com/siddhsuresh"><img src="https://avatars.githubusercontent.com/u/83594610?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Siddharth Suresh</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=siddhsuresh" title="Documentation">📖</a> <a href="https://github.com/blitz-js/blitz/commits?author=siddhsuresh" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/siddhsuresh"><img src="https://avatars.githubusercontent.com/u/83594610?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Siddharth Suresh</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=siddhsuresh" title="Documentation">📖</a> <a href="https://github.com/blitz-js/blitz/commits?author=siddhsuresh" title="Code">💻</a><a href="https://github.com/blitz-js/blitz/commits?author=siddhsuresh" title="Tests">⚠️</a> <a href="#maintenance-siddhsuresh" title="Maintenance">🚧</a></td>
     <td align="center"><a href="http://jins.dev"><img src="https://avatars.githubusercontent.com/u/39466936?v=4?s=100" width="100px;" alt=""/><br /><sub><b>JH.Lee</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=orionmiz" title="Code">💻</a> <a href="https://github.com/blitz-js/blitz/commits?author=orionmiz" title="Tests">⚠️</a> <a href="#maintenance-orionmiz" title="Maintenance">🚧</a> <a href="https://github.com/blitz-js/blitz/commits?author=orionmiz" title="Documentation">📖</a></td>
   </tr>
   <tr>

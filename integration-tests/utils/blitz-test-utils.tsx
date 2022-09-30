@@ -57,6 +57,7 @@ const BlitzProvider = ({
 
   return children
 }
+
 const compose =
   (...rest) =>
   (x: React.ComponentType<any>) =>
