@@ -5,7 +5,7 @@ import {UrlObject} from "url"
 
 import {Ctx, RequestMiddleware} from "blitz"
 import {NextApiResponse} from "next"
-import {resolveHref} from "next/dist/shared/lib/router/router"
+import {NextRouter, resolveHref} from "next/dist/shared/lib/router/router"
 
 export function ensureMiddlewareResponse(
   res: ServerResponse & {[key: string]: any},
@@ -35,7 +35,7 @@ export const revalidateMiddleware: RequestMiddleware<
     res.blitzCtx.revalidatePage = (
       url: UrlObject | string,
       opts?: Parameters<NextApiResponse["revalidate"]>[1],
-    ) => res.revalidate(resolveHref({} as any, url, false), opts)
+    ) => res.revalidate(resolveHref({} as NextRouter, url, false), opts)
   }
 
   return next()
