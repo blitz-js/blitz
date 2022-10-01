@@ -1,7 +1,7 @@
 import arg from "arg"
 import spawn from "cross-spawn"
 
-import {loadEnvConfig} from "../env-utils"
+import {loadEnvConfig} from "../utils/env"
 import {NON_STANDARD_NODE_ENV} from "./utils/constants"
 import {getCommandBin} from "./utils/config"
 import {readVersions} from "./utils/read-versions"
@@ -34,6 +34,7 @@ const commands = {
   generate: () => import("./commands/generate").then((i) => i.generate),
   codegen: () => import("./commands/codegen").then((i) => i.codegen),
   db: () => import("./commands/db").then((i) => i.db),
+  console: () => import("./commands/console").then((i) => i.consoleREPL),
 }
 
 const aliases: Record<string, keyof typeof commands> = {
@@ -42,6 +43,7 @@ const aliases: Record<string, keyof typeof commands> = {
   s: "start",
   n: "new",
   g: "generate",
+  c: "console",
 }
 
 type Command = keyof typeof commands
@@ -63,6 +65,7 @@ async function runCommandFromBin() {
     process.exit(1)
   }
   let commandBin: string | null = null
+
   try {
     commandBin = await getCommandBin(args._[0])
   } catch (e: any) {
@@ -73,7 +76,7 @@ async function runCommandFromBin() {
     process.exit(1)
   }
 
-  const result = spawn.sync(commandBin, process.argv.slice(3), {stdio: "inherit"})
+  const result = spawn.sync(commandBin, args._.slice(1), {stdio: "inherit"})
   process.exit(result.status || 0)
 }
 
@@ -120,15 +123,13 @@ async function printEnvInfo() {
 }
 
 async function main() {
-  loadEnvConfig(process.cwd(), undefined, {error: console.error, info: console.info})
+  if (args["--env"]) {
+    process.env.APP_ENV = args["--env"]
+  }
 
   // Version is inlined into the file using taskr build pipeline
   if (args["_"].length === 0 && args["--version"]) {
     await printEnvInfo()
-  }
-
-  if (args["--env"]) {
-    process.env.APP_ENV = args["--env"]
   }
 
   if (args["--help"]) {
@@ -145,7 +146,7 @@ async function main() {
   }
 
   process.env.NODE_ENV = process.env.NODE_ENV || defaultEnv
-
+  loadEnvConfig(process.cwd(), undefined, {error: console.error, info: console.info})
   // Make sure commands gracefully respect termination signals (e.g. from Docker)
   process.on("SIGTERM", () => process.exit(0))
   process.on("SIGINT", () => process.exit(0))
@@ -165,10 +166,7 @@ async function main() {
         console.log(err)
       })
   } else {
-    if (args["--help"] && args._.length === 0) {
-      // TODO: add back the generate command description once it's working
-      // generate, g     Generate new files for your Blitz project 🤠
-
+    if (args["--help"] && forwardedArgs.length === 1 && forwardedArgs[0] === "--help") {
       console.log(`
       Usage
         $ blitz <command>
@@ -178,6 +176,7 @@ async function main() {
         build, b        Create a production build 🏗️
         start, s        Start the production server 🐎
         new, n          Create a new Blitz project ✨
+        generate, g     Generate new files for your Blitz project 🤠
         codegen         Run the blitz codegen 🤖
         db              Run database commands 🗄️
         

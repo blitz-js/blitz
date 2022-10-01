@@ -1,16 +1,14 @@
-import {Fallbackable} from "./fallbackable"
 import {logFailedVersionFetch} from "./get-latest-version"
 import {fetchDistTags} from "./npm-fetch"
 
-export const getBlitzDependencyVersion = async (
-  cliVersion: string,
-): Promise<Fallbackable<string>> => {
-  try {
-    // TODO: Need to update this to handle alpha, beta and major
-    const {alpha} = await fetchDistTags("blitz")
+const CURRENT_BLITZ_TAG = "latest"
 
-    if (alpha) {
-      return {value: alpha}
+export const getBlitzDependencyVersion = async () => {
+  try {
+    const result = await fetchDistTags("blitz")
+
+    if (CURRENT_BLITZ_TAG in result) {
+      return {value: result[CURRENT_BLITZ_TAG]}
     }
 
     logFailedVersionFetch("blitz")

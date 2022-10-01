@@ -1,4 +1,4 @@
-import {QueryClient, QueryKey} from "react-query"
+import {QueryClient, QueryFilters} from "@tanstack/react-query"
 import {serialize} from "superjson"
 import {isClient, isServer, AsyncFunc} from "blitz"
 import {ResolverType, RpcClient} from "./rpc"
@@ -94,7 +94,7 @@ export const validateQueryFn = <TInput, TResult>(
 ) => {
   if (isClient && !isRpcClient(queryFn) && isNotInUserTestEnvironment()) {
     throw new Error(
-      `Either the file path to your resolver is incorrect (must be in a "queries" or "mutations" folder that isn't nested inside "pages" or "api") or you are trying to use Blitz's useQuery to fetch from third-party APIs (to do that, import useQuery directly from "react-query")`,
+      `Either the file path to your resolver is incorrect (must be in a "queries" or "mutations" folder that isn't nested inside "pages" or "api") or you are trying to use Blitz's useQuery to fetch from third-party APIs (to do that, import useQuery directly from "@tanstack/react-query").`,
     )
   }
 }
@@ -169,14 +169,7 @@ export function invalidateQuery<TInput, TResult, T extends AsyncFunc>(
   }
 
   const fullQueryKey = getQueryKey(resolver, params)
-  let queryKey: QueryKey
-  if (params) {
-    queryKey = fullQueryKey
-  } else {
-    // Params not provided, only use first query key item (url)
-    queryKey = fullQueryKey[0]
-  }
-  return getQueryClient().invalidateQueries(queryKey)
+  return getQueryClient().invalidateQueries(fullQueryKey)
 }
 
 export function setQueryData<TInput, TResult, T extends AsyncFunc>(
@@ -205,4 +198,16 @@ export function setQueryData<TInput, TResult, T extends AsyncFunc>(
       res(result)
     }
   })
+}
+
+export function getQueryData<TInput, TResult, T extends AsyncFunc>(
+  resolver: T | Resolver<TInput, TResult> | RpcClient<TInput, TResult>,
+  params: TInput,
+): TResult | undefined {
+  if (typeof resolver === "undefined") {
+    throw new Error("getQueryData is missing the first argument - it must be a resolver function")
+  }
+  const queryKey = getQueryKey(resolver, params)
+
+  return getQueryClient().getQueryData(queryKey)
 }

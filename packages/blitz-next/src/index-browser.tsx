@@ -1,14 +1,8 @@
 import "./global"
-import type {
-  ClientPlugin,
-  BlitzProvider as BlitzProviderType,
-  UnionToIntersection,
-  Simplify,
-} from "blitz"
+import type {ClientPlugin, BlitzProviderComponentType, UnionToIntersection, Simplify} from "blitz"
 import Head from "next/head"
 import React, {ReactNode} from "react"
-import {QueryClient, QueryClientProvider} from "react-query"
-import {Hydrate, HydrateOptions} from "react-query/hydration"
+import {QueryClient, QueryClientProvider, Hydrate, HydrateOptions} from "@tanstack/react-query"
 import {withSuperJSONPage} from "./superjson"
 import {Ctx} from "blitz"
 import {UrlObject} from "url"
@@ -19,20 +13,22 @@ import {RouterContext} from "./router-context"
 export * from "./error-boundary"
 export * from "./error-component"
 export * from "./use-params"
+export * from "./router-context"
 export {Routes} from ".blitz"
 
 const compose =
-  (...rest: BlitzProviderType[]) =>
+  (...rest: BlitzProviderComponentType[]) =>
   (x: React.ComponentType<any>) =>
     rest.reduceRight((y, f) => f(y), x)
 
 const buildWithBlitz = <TPlugins extends readonly ClientPlugin<object>[]>(plugins: TPlugins) => {
   const providers = plugins.reduce((acc, plugin) => {
     return plugin.withProvider ? acc.concat(plugin.withProvider) : acc
-  }, [] as BlitzProviderType[])
+  }, [] as BlitzProviderComponentType[])
+
   const withPlugins = compose(...providers)
 
-  return function withBlitzAppRoot(UserAppRoot: React.ComponentType<any>) {
+  return function withBlitzAppRoot(UserAppRoot: React.ComponentType<AppProps>) {
     const BlitzOuterRoot = (props: AppProps) => {
       const component = React.useMemo(() => withPlugins(props.Component), [props.Component])
 
@@ -46,13 +42,14 @@ const buildWithBlitz = <TPlugins extends readonly ClientPlugin<object>[]>(plugin
       return (
         <BlitzProvider dehydratedState={props.pageProps?.dehydratedState}>
           <>
-            {/* @ts-ignore todo */}
             {props.Component.suppressFirstRenderFlicker && <NoPageFlicker />}
             <UserAppRoot {...props} Component={component} />
           </>
         </BlitzProvider>
       )
     }
+
+    Object.assign(BlitzOuterRoot, UserAppRoot)
     return withSuperJSONPage(BlitzOuterRoot)
   }
 }
@@ -146,10 +143,9 @@ const setupBlitzClient = <TPlugins extends readonly ClientPlugin<object>[]>({
 
   // todo: finish this
   // Used to build BlitzPage type
-  const types = {} as {plugins: typeof plugins}
+  // const types = {} as {plugins: typeof plugins}
 
   return {
-    types,
     withBlitz,
     ...(exports as PluginsExports<TPlugins>),
   }

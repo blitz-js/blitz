@@ -8,18 +8,20 @@ import {
   buildCustomServer,
 } from "./next-utils"
 import {checkLatestVersion} from "./check-latest-version"
-import {readBlitzConfig} from "../../server-utils"
+import {readBlitzConfig} from "../../utils/server"
+import {codegenTasks} from "./codegen-tasks"
 
 export async function build(config: ServerConfig) {
   const {rootFolder, nextBin, watch} = await normalize(config)
-
+  await codegenTasks()
   await nextBuild(nextBin, rootFolder, {} as any, config)
   if (customServerExists()) await buildCustomServer({watch})
 }
 
 export async function dev(config: ServerConfig) {
   const {rootFolder, nextBin} = await normalize({...config, env: "dev"})
-  void checkLatestVersion()
+  await codegenTasks()
+  // void checkLatestVersion()
   if (customServerExists()) {
     console.log("Using your custom server")
 

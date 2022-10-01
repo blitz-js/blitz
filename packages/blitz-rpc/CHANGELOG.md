@@ -1,5 +1,156 @@
 # @blitzjs/rpc
 
+## 2.0.0-beta.4
+
+### Patch Changes
+
+- c213d521: Fix issue with the route name that's generated for nested routes in @blitzjs/rpc. This was causing issues for windows users.
+- 0b94a450: Upgrade superjson to the latest version
+- f6dac093: Improve RPC logging: print `resolverName()` insetad of `/resolverName()`
+- Updated dependencies [713aead9]
+  - @blitzjs/auth@2.0.0-beta.4
+
+## 2.0.0-beta.3
+
+### Patch Changes
+
+- @blitzjs/auth@2.0.0-beta.3
+
+## 2.0.0-beta.2
+
+### Patch Changes
+
+- db7233db: Bump react, react-dom, @types/react and next versions
+
+  This fixes a console warning: `Warning: Received`true`for a non-boolean attribute`global`.` when using `styled-jsx`. Versions bump also fixes React Hydration error that happens on and off when using `redirectAuthenticatedTo`.
+
+- Updated dependencies [db7233db]
+  - @blitzjs/auth@2.0.0-beta.2
+
+## 2.0.0-beta.1
+
+### Patch Changes
+
+- 0f4926fd: Set current Blitz tag to latest
+- Updated dependencies [0f4926fd]
+  - @blitzjs/auth@2.0.0-beta.1
+
+## 2.0.0-beta.72
+
+### Patch Changes
+
+- 2cc888ef: Beta release
+- Updated dependencies [2cc888ef]
+  - @blitzjs/auth@2.0.0-beta.72
+
+## 2.0.0-alpha.71
+
+### Patch Changes
+
+- @blitzjs/auth@2.0.0-alpha.71
+
+## 2.0.0-alpha.70
+
+### Patch Changes
+
+- @blitzjs/auth@2.0.0-alpha.70
+
+## 2.0.0-alpha.69
+
+### Patch Changes
+
+- 49028024: Add `getQueryData` utility to get an existing query's cached data
+  - @blitzjs/auth@2.0.0-alpha.69
+
+## 2.0.0-alpha.68
+
+### Patch Changes
+
+- 630c7181: Use internal branded blitz logger for @blitzjs/rpc
+  - @blitzjs/auth@2.0.0-alpha.68
+
+## 2.0.0-alpha.67
+
+### Patch Changes
+
+- @blitzjs/auth@2.0.0-alpha.67
+
+## 2.0.0-alpha.66
+
+### Patch Changes
+
+- 807a2b56: Fixes peer dependency warnings
+- a3e6c49c: Fixes the supports-color warning for pnpm
+- 9620ef6b: moves zod to devDependencies
+- Updated dependencies [a3e6c49c]
+  - @blitzjs/auth@2.0.0-alpha.66
+
+## 2.0.0-alpha.65
+
+### Patch Changes
+
+- Updated dependencies [dd5f5174]
+  - blitz@2.0.0-alpha.65
+  - @blitzjs/auth@2.0.0-alpha.65
+
+## 2.0.0-alpha.64
+
+### Patch Changes
+
+- Updated dependencies [54db8a46]
+- Updated dependencies [62bf12b5]
+  - blitz@2.0.0-alpha.64
+  - @blitzjs/auth@2.0.0-alpha.64
+
+## 2.0.0-alpha.63
+
+### Patch Changes
+
+- f52ca398: Upgrade react-query to v4
+  - @blitzjs/auth@2.0.0-alpha.63
+  - blitz@2.0.0-alpha.63
+
+## 2.0.0-alpha.62
+
+### Patch Changes
+
+- Updated dependencies [365e6709]
+  - blitz@2.0.0-alpha.62
+  - @blitzjs/auth@2.0.0-alpha.62
+
+## 2.0.0-alpha.61
+
+### Patch Changes
+
+- Updated dependencies [240f378b]
+  - blitz@2.0.0-alpha.61
+  - @blitzjs/auth@2.0.0-alpha.61
+
+## 2.0.0-alpha.60
+
+### Patch Changes
+
+- Updated dependencies [1d863f35]
+  - blitz@2.0.0-alpha.60
+  - @blitzjs/auth@2.0.0-alpha.60
+
+## 2.0.0-alpha.59
+
+### Patch Changes
+
+- 3b213a35: Remove debug console.log
+  - @blitzjs/auth@2.0.0-alpha.59
+  - blitz@2.0.0-alpha.59
+
+## 2.0.0-alpha.58
+
+### Patch Changes
+
+- c721c104: Pass `signal` from useQuery to Blitz internal rpc client to be able to cancel queries on unmount
+- Updated dependencies [83b35590]
+  - blitz@2.0.0-alpha.58
+  - @blitzjs/auth@2.0.0-alpha.58
+
 ## 2.0.0-alpha.57
 
 ### Patch Changes

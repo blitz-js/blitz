@@ -166,7 +166,13 @@ export const useSession = (options: UseSessionOptions = {}): ClientSession => {
 }
 
 export const useAuthorizeIf = (condition?: boolean) => {
-  if (isClient && condition && !getPublicDataStore().getData().userId) {
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (isClient && condition && !getPublicDataStore().getData().userId && mounted) {
     const error = new AuthenticationError()
     error.stack = null!
     throw error
@@ -185,7 +191,13 @@ export const useAuthenticatedSession = (
 }
 
 export const useRedirectAuthenticated = (to: UrlObject | string) => {
-  if (isClient && getPublicDataStore().getData().userId) {
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (isClient && getPublicDataStore().getData().userId && mounted) {
     const error = new RedirectError(to)
     error.stack = null!
     throw error
@@ -246,11 +258,19 @@ export function getAuthValues<TProps = any>(
   return {authenticate, redirectAuthenticatedTo}
 }
 
-const withBlitzAuthPluginFactory = (hooks: AuthPluginClientOptions["hooks"]) =>
-  function withBlitzAuthPlugin<TProps = any>(Page: ComponentType<TProps> | BlitzPage<TProps>) {
+const withBlitzAuthPluginFactory = (hooks: AuthPluginClientOptions["hooks"]) => {
+  return function withBlitzAuthPlugin<TProps = any>(
+    Page: ComponentType<TProps> | BlitzPage<TProps>,
+  ) {
     const AuthRoot = (props: ComponentProps<any>) => {
       useSession({suspense: false})
       hooks?.onAuthorize?.(getPublicDataStore().getData() as any)
+
+      const [mounted, setMounted] = useState(false)
+
+      useEffect(() => {
+        setMounted(true)
+      }, [])
 
       let {authenticate, redirectAuthenticatedTo} = getAuthValues(Page, props)
 
@@ -276,10 +296,12 @@ const withBlitzAuthPluginFactory = (hooks: AuthPluginClientOptions["hooks"]) =>
                 ? redirectAuthenticatedTo
                 : formatWithValidation(redirectAuthenticatedTo)
 
-            debug("[BlitzAuthInnerRoot] redirecting to", redirectUrl)
-            const error = new RedirectError(redirectUrl)
-            error.stack = null!
-            throw error
+            if (mounted) {
+              debug("[BlitzAuthInnerRoot] redirecting to", redirectUrl)
+              const error = new RedirectError(redirectUrl)
+              error.stack = null!
+              throw error
+            }
           }
         } else {
           debug("[BlitzAuthInnerRoot] logged out")
@@ -291,27 +313,31 @@ const withBlitzAuthPluginFactory = (hooks: AuthPluginClientOptions["hooks"]) =>
 
             const url = new URL(redirectTo, window.location.href)
             url.searchParams.append("next", window.location.pathname)
-            debug("[BlitzAuthInnerRoot] redirecting to", url.toString())
-            const error = new RedirectError(url.toString())
-            error.stack = null!
-            throw error
+
+            if (mounted) {
+              debug("[BlitzAuthInnerRoot] redirecting to", url.toString())
+              const error = new RedirectError(url.toString())
+              error.stack = null!
+              throw error
+            }
           }
         }
+
+        return <Page {...props} />
       }
 
-      return <Page {...props} />
-    }
+      for (let [key, value] of Object.entries(Page)) {
+        // @ts-ignore
+        AuthRoot[key] = value
+      }
+      if (process.env.NODE_ENV !== "production") {
+        AuthRoot.displayName = `BlitzAuthInnerRoot`
+      }
 
-    for (let [key, value] of Object.entries(Page)) {
-      // @ts-ignore
-      AuthRoot[key] = value
+      return AuthRoot
     }
-    if (process.env.NODE_ENV !== "production") {
-      AuthRoot.displayName = `BlitzAuthInnerRoot`
-    }
-
-    return AuthRoot
   }
+}
 
 export interface AuthPluginClientOptions {
   cookiePrefix: string

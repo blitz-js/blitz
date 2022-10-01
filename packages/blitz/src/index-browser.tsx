@@ -3,7 +3,7 @@ import {ComponentType} from "react"
 import {IncomingMessage, ServerResponse} from "http"
 import {AuthenticationError, AuthorizationError, NotFoundError, RedirectError} from "./errors"
 
-export type BlitzProvider = <TProps = any>(
+export type BlitzProviderComponentType = <TProps = any>(
   component: ComponentType<TProps>,
 ) => {
   (props: TProps): JSX.Element
@@ -29,7 +29,7 @@ export interface ClientPlugin<Exports extends object> {
     ) => void
   }
   exports: () => Exports
-  withProvider?: BlitzProvider
+  withProvider?: BlitzProviderComponentType
 }
 
 export function createClientPlugin<TPluginOptions, TPluginExports extends object>(
@@ -79,7 +79,7 @@ if (typeof window !== "undefined" && process.env.NODE_ENV === "development") {
 }
 
 export * from "./utils"
-export * from "./ts-utils"
 export * from "./types"
 export * from "./errors"
-export * from "./zod-utils"
+export * from "./utils/zod"
+export * from "./utils/prisma"

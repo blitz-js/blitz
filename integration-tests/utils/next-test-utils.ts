@@ -141,6 +141,180 @@ export function getCommandBin(
   return path.resolve(rootFolder, bin)
 }
 
+export function runBlitzCommand(argv, options: RunNextCommandOptions = {}) {
+  const nextnextbin = getCommandBin("blitz", options.cwd)
+  const blitzBin = path.join(nextnextbin, "dist/index.cjs")
+  const cwd = options.cwd || process.cwd()
+  // Let Next.js decide the environment
+  const env = {
+    ...process.env,
+    NODE_ENV: "production" as const,
+    __NEXT_TEST_MODE: "true",
+    ...options.env,
+  }
+
+  return new Promise((resolve, reject) => {
+    console.log(`Running command "blitz ${argv.join(" ")}"`)
+    const instance = spawn("node", [blitzBin, ...argv], {
+      cwd,
+      env,
+      stdio: ["ignore", "pipe", "pipe"],
+    })
+
+    if (typeof options.instance === "function") {
+      options.instance(instance)
+    }
+
+    let mergedStdio = ""
+
+    let stderrOutput = ""
+    if (options.stderr) {
+      instance.stderr?.on("data", function (chunk) {
+        mergedStdio += chunk
+        stderrOutput += chunk
+
+        if (options.stderr === "log") {
+          console.log(chunk.toString())
+        }
+      })
+    } else {
+      instance.stderr?.on("data", function (chunk) {
+        mergedStdio += chunk
+      })
+    }
+
+    let stdoutOutput = ""
+    if (options.stdout) {
+      instance.stdout?.on("data", function (chunk) {
+        mergedStdio += chunk
+        stdoutOutput += chunk
+
+        if (options.stdout === "log") {
+          console.log(chunk.toString())
+        }
+      })
+    } else {
+      instance.stdout?.on("data", function (chunk) {
+        mergedStdio += chunk
+      })
+    }
+
+    instance.on("close", (code, signal) => {
+      if (!options.stderr && !options.stdout && !options.ignoreFail && code !== 0) {
+        return reject(new Error(`command failed with code ${code}\n${mergedStdio}`))
+      }
+
+      resolve({
+        code,
+        signal,
+        stdout: stdoutOutput,
+        stderr: stderrOutput,
+      })
+    })
+
+    instance.on("error", (err: any) => {
+      err.stdout = stdoutOutput
+      err.stderr = stderrOutput
+      reject(err)
+    })
+  })
+}
+
+export function runBlitzCommandDev(argv, stdOut, opts: RunNextCommandDevOptions = {}) {
+  const nextnextbin = getCommandBin("blitz", opts.cwd)
+  const blitzBin = path.join(nextnextbin, "dist/index.cjs")
+
+  const cwd = opts.cwd
+  const env = {
+    ...process.env,
+    NODE_ENV: undefined,
+    __NEXT_TEST_MODE: "true",
+    ...opts.env,
+  }
+
+  return new Promise<void>((resolve, reject) => {
+    const instance = spawn("node", [blitzBin, ...argv], {
+      cwd,
+      env,
+    } as {})
+    let didResolve = false
+
+    function handleStdout(data) {
+      const message = data.toString()
+      const bootupMarkers = {
+        dev: /compiled .*successfully/i,
+        start: /started server/i,
+      }
+      if (
+        (opts.bootupMarker && opts.bootupMarker.test(message)) ||
+        bootupMarkers[opts.nextStart || stdOut ? "start" : "dev"].test(message)
+      ) {
+        if (!didResolve) {
+          didResolve = true
+          resolve(stdOut ? message : instance)
+        }
+      }
+
+      if (typeof opts.onStdout === "function") {
+        opts.onStdout(message)
+      }
+
+      if (opts.stdout !== false) {
+        process.stdout.write(message)
+      }
+    }
+
+    function handleStderr(data) {
+      const message = data.toString()
+      if (typeof opts.onStderr === "function") {
+        opts.onStderr(message)
+      }
+
+      if (opts.stderr !== false) {
+        process.stderr.write(message)
+      }
+    }
+
+    instance.stdout?.on("data", handleStdout)
+    instance.stderr?.on("data", handleStderr)
+
+    instance.on("close", () => {
+      instance.stdout?.removeListener("data", handleStdout)
+      instance.stderr?.removeListener("data", handleStderr)
+      if (!didResolve) {
+        didResolve = true
+        resolve()
+      }
+    })
+
+    instance.on("error", (err) => {
+      reject(err)
+    })
+  })
+}
+
+// Blitz Utils
+export function blitzLaunchApp(port, opts: RunNextCommandDevOptions) {
+  return runBlitzCommandDev(["dev", "-p", port], undefined, opts)
+}
+
+export function blitzBuild(args = [], opts = {}): any {
+  return runBlitzCommand(["build", ...args], opts)
+}
+
+export function nextLint(args = [], opts = {}) {
+  return runBlitzCommand(["lint", ...args], opts)
+}
+
+export function blitzStart(port, opts = {}) {
+  return runBlitzCommandDev(["start", "-p", port], undefined, {
+    ...opts,
+    nextStart: true,
+  })
+}
+
+//Next Utils
+
 export function runNextCommand(argv, options: RunNextCommandOptions = {}) {
   const nextnextbin = getCommandBin("next", options.cwd)
   const nextBin = path.join(nextnextbin, "dist/bin/next")
@@ -295,7 +469,6 @@ export function runNextCommandDev(argv, stdOut, opts: RunNextCommandDevOptions =
   })
 }
 
-// Launch the app in dev mode.
 export function launchApp(dir, port, opts: RunNextCommandDevOptions) {
   return runNextCommandDev([dir, "-p", port], undefined, opts)
 }
@@ -310,10 +483,6 @@ export function nextExport(dir, {outdir}, opts = {}) {
 
 export function nextExportDefault(dir, opts = {}) {
   return runNextCommand(["export", dir], opts)
-}
-
-export function nextLint(dir, args = [], opts = {}) {
-  return runNextCommand(["lint", dir, ...args], opts)
 }
 
 export function nextStart(dir, port, opts = {}) {
@@ -683,20 +852,20 @@ function runSuite(suiteName, context, options) {
       }
       if (env === "prod") {
         context.appPort = await findPort()
-        const {stdout, stderr, code} = await nextBuild(appDir, [], {
+        const {stdout, stderr, code} = await blitzBuild([], {
           stderr: true,
           stdout: true,
         })
         context.stdout = stdout
         context.stderr = stderr
         context.code = code
-        context.server = await nextStart(context.appDir, context.appPort, {
+        context.server = await blitzStart(context.appPort, {
           onStderr,
           onStdout,
         })
       } else if (env === "dev") {
         context.appPort = await findPort()
-        context.server = await launchApp(context.appDir, context.appPort, {
+        context.server = await blitzLaunchApp(context.appPort, {
           onStderr,
           onStdout,
         })

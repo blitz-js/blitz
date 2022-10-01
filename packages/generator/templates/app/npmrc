@@ -3,7 +3,7 @@ legacy-peer-deps=true
 strict-peer-dependencies=false
 side-effects-cache=false
 
-public-hoist-pattern[]=react-query
+public-hoist-pattern[]=@tanstack/react-query
 public-hoist-pattern[]=next
 public-hoist-pattern[]=secure-password
 public-hoist-pattern[]=*jest*

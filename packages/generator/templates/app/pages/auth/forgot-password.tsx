@@ -4,8 +4,9 @@ import { Form, FORM_ERROR } from "app/core/components/Form"
 import { ForgotPassword } from "app/auth/validations"
 import forgotPassword from "app/auth/mutations/forgotPassword"
 import { useMutation } from "@blitzjs/rpc"
+import { BlitzPage } from "@blitzjs/next"
 
-const ForgotPasswordPage = () => {
+const ForgotPasswordPage: BlitzPage = () => {
   const [forgotPasswordMutation, { isSuccess }] = useMutation(forgotPassword)
 
   return (

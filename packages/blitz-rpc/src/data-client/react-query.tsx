@@ -9,7 +9,7 @@ import {
   useMutation as useReactQueryMutation,
   UseMutationOptions,
   UseMutationResult,
-} from "react-query"
+} from "@tanstack/react-query"
 import {useSession} from "@blitzjs/auth"
 import {isServer, FirstParam, PromiseReturnType, AsyncFunc} from "blitz"
 import {
@@ -85,14 +85,14 @@ export function useQuery<
   const {data, ...queryRest} = useReactQuery({
     queryKey: routerIsReady ? queryKey : ["_routerNotReady_"],
     queryFn: routerIsReady
-      ? () => enhancedResolverRpcClient(params, {fromQueryHook: true})
+      ? ({signal}) => enhancedResolverRpcClient(params, {fromQueryHook: true}, signal)
       : (emptyQueryFn as any),
     ...options,
     enabled,
   })
 
   if (
-    queryRest.isIdle &&
+    queryRest.fetchStatus === "idle" &&
     isServer &&
     suspenseEnabled !== false &&
     !data &&
@@ -170,7 +170,7 @@ export function usePaginatedQuery<
   const {data, ...queryRest} = useReactQuery({
     queryKey: routerIsReady ? queryKey : ["_routerNotReady_"],
     queryFn: routerIsReady
-      ? () => enhancedResolverRpcClient(params, {fromQueryHook: true})
+      ? ({signal}) => enhancedResolverRpcClient(params, {fromQueryHook: true}, signal)
       : (emptyQueryFn as any),
     ...options,
     keepPreviousData: true,
@@ -178,7 +178,7 @@ export function usePaginatedQuery<
   })
 
   if (
-    queryRest.isIdle &&
+    queryRest.fetchStatus === "idle" &&
     isServer &&
     suspenseEnabled !== false &&
     !data &&
@@ -267,17 +267,15 @@ export function useInfiniteQuery<
     // Without this cache for usePaginatedQuery and this will conflict and break.
     queryKey: routerIsReady ? queryKey : ["_routerNotReady_"],
     queryFn: routerIsReady
-      ? ({pageParam}) =>
-          enhancedResolverRpcClient(getQueryParams(pageParam), {
-            fromQueryHook: true,
-          })
+      ? ({pageParam, signal}) =>
+          enhancedResolverRpcClient(getQueryParams(pageParam), {fromQueryHook: true}, signal)
       : (emptyQueryFn as any),
     ...options,
     enabled,
   })
 
   if (
-    queryRest.isIdle &&
+    queryRest.fetchStatus === "idle" &&
     isServer &&
     suspenseEnabled !== false &&
     !data &&

@@ -1,4 +1,3 @@
-import {loadEnvConfig} from "../../env-utils"
 import prompts from "prompts"
 import path from "path"
 import chalk from "chalk"
@@ -6,20 +5,21 @@ import hasbin from "hasbin"
 import {CliCommand} from "../index"
 import arg from "arg"
 import {AppGenerator, AppGeneratorOptions, getLatestVersion} from "@blitzjs/generator"
-import {runPrisma} from "../../prisma-utils"
+import {loadEnvConfig} from "../../utils/env"
+import {runPrisma} from "../../utils/run-prisma"
 import {checkLatestVersion} from "../utils/check-latest-version"
+import {codegenTasks} from "../utils/codegen-tasks"
 
-const forms = {
-  "react-final-form": "React Final Form" as const,
-  "react-hook-form": "React Hook Form" as const,
-  formik: "Formik" as const,
+type NotUndefined<T> = T extends undefined ? never : T
+const forms: Record<NotUndefined<AppGeneratorOptions["form"]>, string> = {
+  finalform: "React Final Form (recommended)",
+  hookform: "React Hook Form",
+  formik: "Formik",
 }
-
-type TForms = keyof typeof forms
 
 const language = {
   typescript: "TypeScript",
-  javascript: "Javascript",
+  javascript: "JavaScript",
 }
 
 type TLanguage = keyof typeof language
@@ -75,7 +75,7 @@ const args = arg(
 let projectName: string = ""
 let projectPath: string = ""
 let projectLanguage: string | TLanguage = ""
-let projectFormLib: AppGeneratorOptions["form"] = undefined
+let projectFormLib: AppGeneratorOptions["form"] = "finalform"
 let projectTemplate: AppGeneratorOptions["template"] = templates.full
 let projectPkgManger: TPkgManager = PREFERABLE_PKG_MANAGER
 let shouldInstallDeps: boolean = true
@@ -110,7 +110,7 @@ const determineLanguage = async () => {
     const res = await prompts({
       type: "select",
       name: "language",
-      message: "Pick which language you'd like to use for your new blitz project",
+      message: "Pick a new project's language",
       initial: 0,
       choices: Object.entries(language).map((c) => {
         return {title: c[1], value: c[1]}
@@ -129,16 +129,16 @@ const determineFormLib = async () => {
     const res = await prompts({
       type: "select",
       name: "form",
-      message: "Pick which form you'd like to use for your new blitz project",
+      message: "Pick a form library (you can switch to something else later if you want)",
       initial: 0,
       choices: Object.entries(forms).map((c) => {
-        return {title: c[1], value: c[1]}
+        return {value: c[0], title: c[1]}
       }),
     })
 
     projectFormLib = res.form
   } else {
-    projectFormLib = forms[args["--form"] as TForms]
+    projectFormLib = args["--form"] as AppGeneratorOptions["form"]
   }
 }
 
@@ -148,14 +148,17 @@ const determineTemplate = async () => {
     !args["--template"] ||
     (args["--template"] && !Object.keys(templates).includes(args["--template"].toLowerCase()))
   ) {
+    const choices: Array<{value: keyof typeof templates; title: string}> = [
+      {value: "full", title: "Full - includes DB and auth (Recommended)"},
+      {value: "minimal", title: "Minimal — no DB, no auth"},
+    ]
+
     const res = await prompts({
       type: "select",
       name: "template",
-      message: "Pick which template you'd like to use for your new blitz project",
+      message: "Pick your new app template",
       initial: 0,
-      choices: Object.entries(templates).map((c) => {
-        return {title: c[0], value: c[0]}
-      }),
+      choices,
     })
 
     projectTemplate = templates[res.template as TTemplate]
@@ -199,11 +202,15 @@ const determinePkgManagerToInstallDeps = async () => {
           {title: "npm", value: "npm"},
           {title: "yarn", value: "yarn", disabled: !IS_YARN_INSTALLED},
           {title: "pnpm", value: "pnpm", disabled: !IS_PNPM_INSTALLED},
-          {title: "skip"},
+          {title: "skip", value: "skip"},
         ],
       })
 
-      projectPkgManger = res.pkgManager
+      if (res.pkgManager === "skip") {
+        projectPkgManger = PREFERABLE_PKG_MANAGER
+      } else {
+        projectPkgManger = res.pkgManager
+      }
 
       shouldInstallDeps = res.pkgManager !== "skip"
     } else {
@@ -219,7 +226,7 @@ const determinePkgManagerToInstallDeps = async () => {
 }
 
 const newApp: CliCommand = async (argv) => {
-  const shouldUpgrade = false // !args["--skip-upgrade"]
+  const shouldUpgrade = !args["--skip-upgrade"]
   if (shouldUpgrade) {
     await checkLatestVersion()
   }
@@ -264,6 +271,10 @@ const newApp: CliCommand = async (argv) => {
           )
           const result = await runPrisma(["migrate", "dev", "--name", "Initial migration"], true)
           if (!result.success) throw new Error()
+
+          if (projectPkgManger === "yarn") {
+            await codegenTasks()
+          }
         } catch (error) {
           postInstallSteps.push(
             "blitz prisma migrate dev (when asked, you can name the migration anything)",
@@ -290,8 +301,10 @@ const newApp: CliCommand = async (argv) => {
       console.log(chalk.yellow(`   ${index + 1}. ${step}`))
     })
     console.log("") // new line
+    process.exit(0)
   } catch (error) {
     console.error(error)
+    process.exit(1)
   }
 }
 

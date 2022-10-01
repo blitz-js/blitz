@@ -2,7 +2,7 @@ import {join} from "path"
 import pkgDir from "pkg-dir"
 import resolveFrom from "resolve-from"
 
-const globalBlitzPath = resolveFrom(__dirname, "blitz")
+const globalBlitzPath = resolveFrom.silent(__dirname, "blitz")
 const localBlitzPath = resolveFrom.silent(process.cwd(), "blitz")
 const localBlitzAuthPath = resolveFrom.silent(process.cwd(), "@blitzjs/auth")
 const localBlitzRpcPath = resolveFrom.silent(process.cwd(), "@blitzjs/rpc")
@@ -58,17 +58,19 @@ export function readVersions() {
   return versions
 }
 
-export function resolveVersionType(version: string) {
+export function resolveVersionType(
+  version: string,
+): "alpha" | "beta" | "canary" | "stable" | "danger" | "latest" {
   if (version.includes("alpha")) {
-    return "alpha" as const
+    return "alpha"
   }
 
   if (version.includes("beta")) {
-    return "beta" as const
+    return "beta"
   }
 
   if (version.includes("danger")) {
-    return "danger" as const
+    return "danger"
   }
 
   if (version.includes("canary")) {

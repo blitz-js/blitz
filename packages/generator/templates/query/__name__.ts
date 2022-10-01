@@ -1,13 +1,17 @@
-import {Ctx} from "blitz"
+import { resolver } from "@blitzjs/rpc"
+import db from "db"
 import {z} from "zod"
 
 const __Name__ = z.object({
   id: z.number(),
 })
 
-export default async function __Name__(input, ctx: Ctx) {
-  __Name__.parse(input)
-  ctx.session.$isAuthorized()
+export default resolver.pipe(
+  resolver.zod(__Name__),
+  resolver.authorize(),
+  async (input) => {
 
+    // Do your stuff :)
 
-}
+  }
+)

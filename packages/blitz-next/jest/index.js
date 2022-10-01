@@ -21,6 +21,7 @@ function createJestConfigForNext(options) {
         // This ensures any path aliases in tsconfig also work in jest
         ...pathsToModuleNameMapper(
           (tsConfig && tsConfig.compilerOptions && tsConfig.compilerOptions.paths) || {},
+          {prefix: "<rootDir>/"},
         ),
         "\\.(jpg|jpeg|png|gif|webp|ico)$": path.resolve(__dirname, "./jest-preset/image-mock.js"),
       },
