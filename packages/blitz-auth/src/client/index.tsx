@@ -264,9 +264,9 @@ const withBlitzAuthPluginFactory = (hooks: AuthPluginClientOptions["hooks"]) => 
   ) {
     const AuthRoot = (props: ComponentProps<any>) => {
       useSession({suspense: false})
-      hooks?.onAuthorize?.(getPublicDataStore().getData() as any)
 
       const [mounted, setMounted] = useState(false)
+      mounted && hooks?.onAuthorize?.(getPublicDataStore().getData() as any)
 
       useEffect(() => {
         setMounted(true)
@@ -322,20 +322,20 @@ const withBlitzAuthPluginFactory = (hooks: AuthPluginClientOptions["hooks"]) => 
             }
           }
         }
-
-        return <Page {...props} />
       }
 
-      for (let [key, value] of Object.entries(Page)) {
-        // @ts-ignore
-        AuthRoot[key] = value
-      }
-      if (process.env.NODE_ENV !== "production") {
-        AuthRoot.displayName = `BlitzAuthInnerRoot`
-      }
-
-      return AuthRoot
+      return <Page {...props} />
     }
+
+    for (let [key, value] of Object.entries(Page)) {
+      // @ts-ignore
+      AuthRoot[key] = value
+    }
+    if (process.env.NODE_ENV !== "production") {
+      AuthRoot.displayName = `BlitzAuthInnerRoot`
+    }
+
+    return AuthRoot
   }
 }
 
