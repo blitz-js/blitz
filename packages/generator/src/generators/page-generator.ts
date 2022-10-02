@@ -1,4 +1,3 @@
-// import {Generator, GeneratorOptions, SourceRootType} from "../generator"
 import {FieldValuesBuilder, ResourceGeneratorOptions} from ".."
 import {Generator, SourceRootType} from "../generator"
 import {getTemplateRoot} from "../utils/get-template-root"
@@ -6,16 +5,6 @@ import {camelCaseToKebabCase} from "../utils/inflector"
 import {spawn} from "cross-spawn"
 import which from "npm-which"
 
-// export interface PageGeneratorOptions extends GeneratorOptions {
-//   ModelName: string
-//   ModelNames: string
-//   modelName: string
-//   modelNames: string
-//   parentModel?: string
-//   parentModels?: string
-//   ParentModel?: string
-//   ParentModels?: string
-// }
 export interface PageGeneratorOptions extends ResourceGeneratorOptions {}
 
 export class PageGenerator extends Generator<PageGeneratorOptions> {

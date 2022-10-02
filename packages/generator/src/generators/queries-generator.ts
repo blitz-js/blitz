@@ -1,4 +1,3 @@
-// import {Generator, GeneratorOptions, SourceRootType} from "../generator"
 import {FieldValuesBuilder, ResourceGeneratorOptions} from ".."
 import {Generator, SourceRootType} from "../generator"
 import {getTemplateRoot} from "../utils/get-template-root"

@@ -1,4 +1,3 @@
-// import {Generator, GeneratorOptions, SourceRootType} from "../generator"
 import {getTemplateRoot} from "../utils/get-template-root"
 import {camelCaseToKebabCase} from "../utils/inflector"
 import {FieldValuesBuilder, ResourceGeneratorOptions} from ".."
