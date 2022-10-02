@@ -1,6 +1,7 @@
 import * as babel from "@babel/core"
 // @ts-ignore TS wants types for this module but none exist
 import babelTransformTypescript from "@babel/plugin-transform-typescript"
+import {escapePath} from "fast-glob"
 import Enquirer from "enquirer"
 import {EventEmitter} from "events"
 import * as fs from "fs-extra"
@@ -16,6 +17,7 @@ import {ConflictChecker} from "./conflict-checker"
 import {pipe} from "./utils/pipe"
 import {readdirRecursive} from "./utils/readdir-recursive"
 import prettier from "prettier"
+import {log} from "./utils/log"
 const debug = require("debug")("blitz:generator")
 
 export const customTsParser = {
@@ -277,32 +279,44 @@ export abstract class Generator<
       const additionalFilesToIgnore = this.filesToIgnore()
       return ![...alwaysIgnoreFiles, ...additionalFilesToIgnore].includes(name)
     })
-
     const prettierOptions = await this.prettier?.resolveConfig(sourcePath)
-
     for (let filePath of paths) {
       try {
         let pathSuffix = filePath
         pathSuffix = path.join(this.getTargetDirectory(), pathSuffix)
         const templateValues = await this.getTemplateValues()
+
+        let sourcePath = this.sourcePath(filePath)
+        let destinationPath = this.destinationPath(pathSuffix)
+
         let templatedPathSuffix = this.replaceTemplateValues(pathSuffix, templateValues)
-
-        const newContent = this.process(
-          this.fs.read(this.sourcePath(filePath), {raw: true}) as any,
-          pathSuffix,
-          templateValues,
-          prettierOptions ?? undefined,
-        )
-        this.fs.write(this.destinationPath(pathSuffix), newContent)
-
         if (!this.useTs && tsExtension.test(this.destinationPath(pathSuffix))) {
           templatedPathSuffix = templatedPathSuffix.replace(tsExtension, ".js")
         }
-        if (templatedPathSuffix !== pathSuffix) {
-          this.fs.move(this.destinationPath(pathSuffix), this.destinationPath(templatedPathSuffix))
+        let templatedDestinationPath = this.destinationPath(templatedPathSuffix)
+
+        const destinationExists = fs.existsSync(templatedDestinationPath)
+
+        if (destinationExists) {
+          const newContent = this.process(
+            this.fs.read(templatedDestinationPath, {raw: true}) as any,
+            pathSuffix,
+            templateValues,
+            prettierOptions ?? undefined,
+          )
+          this.fs.write(templatedDestinationPath, newContent)
+        } else {
+          this.fs.copy(escapePath(sourcePath), escapePath(destinationPath), {
+            process: (input) =>
+              this.process(input, pathSuffix, templateValues, prettierOptions ?? undefined),
+          })
+
+          if (templatedPathSuffix !== pathSuffix) {
+            this.fs.move(destinationPath, templatedDestinationPath)
+          }
         }
       } catch (error) {
-        console.error(`Error generating ${filePath}`)
+        log.branded(`Error generating ${filePath}`)
         throw error
       }
     }

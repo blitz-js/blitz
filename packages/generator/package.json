@@ -30,6 +30,7 @@
     "cross-spawn": "7.0.3",
     "diff": "5.0.0",
     "enquirer": "2.3.6",
+    "fast-glob": "3.2.12",
     "fs-extra": "10.0.1",
     "got": "^11.8.1",
     "jscodeshift": "0.13.0",

@@ -5,9 +5,6 @@ import fs from "fs"
 import path from "path"
 
 function getDbFolder() {
-  if (fs.existsSync(path.join(process.cwd(), "db"))) {
-    return "db"
-  }
   try {
     const packageJsonPath = path.join(process.cwd(), "package.json")
     const packageJson = fs.readFileSync(packageJsonPath, "utf8")
@@ -20,12 +17,15 @@ function getDbFolder() {
     const prismaSchemaPath = path.join(process.cwd(), packageJsonObj.prisma.schema)
     if (!fs.existsSync(prismaSchemaPath)) {
       throw new Error(
-        "prisma.schema file not found. Please either create the db folder or add the prisma schema path to the package.json",
+        "prisma.schema file not found. Please either create the db/schema.prisma file or add the prisma schema path to the package.json",
       )
     }
     const folder = packageJsonObj.prisma.schema.split("/")[0] as string
     return folder
   } catch (e) {
+    if (fs.existsSync(path.join(process.cwd(), "db/schema.prisma"))) {
+      return "db"
+    }
     throw e
   }
 }
