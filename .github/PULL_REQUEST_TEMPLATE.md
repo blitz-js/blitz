@@ -23,4 +23,4 @@ Closes: ?
 
 - [ ] Changeset added (run `pnpm changeset` in the root directory)
 - [ ] Integration test added (see [test docs](https://blitzjs.com/docs/contributing#running-tests) if needed)
-- [ ] Documentation added/updated (submit PR to [blitzjs.com repo `canary` branch](https://github.com/blitz-js/blitzjs.com/tree/canary))
+- [ ] Documentation added/updated (submit PR to [blitzjs.com repo `main` branch](https://github.com/blitz-js/blitzjs.com))
