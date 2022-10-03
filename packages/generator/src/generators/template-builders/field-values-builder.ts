@@ -18,7 +18,7 @@ export class FieldValuesBuilder extends Builder<ResourceGeneratorOptions, Common
 
   // eslint-disable-next-line require-await
   public async getTemplateValues(options: ResourceGeneratorOptions): Promise<CommonTemplateValues> {
-    const values: CommonTemplateValues = {
+    let values: CommonTemplateValues = {
       parentModelId: this.getId(options.parentModel),
       parentModelIdZodType: undefined,
       parentModelParam: this.getParam(this.getId(options.parentModel)),
@@ -57,6 +57,7 @@ export class FieldValuesBuilder extends Builder<ResourceGeneratorOptions, Common
           options.parentModels = modelNames(typeName)
           options.ParentModel = ModelName(typeName)
           options.ParentModels = ModelNames(typeName)
+          values.parentModelId = this.getId(modelName(typeName))
         }
       })
       await Promise.all(processSpecialArgs)
