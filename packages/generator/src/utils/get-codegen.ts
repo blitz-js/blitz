@@ -7,7 +7,6 @@ export type CodegenField = {
   zodType: string
   prismaType: string
   default?: string
-  [index: string]: string | undefined
 }
 
 export type CodegenConfig = {
@@ -28,7 +27,6 @@ export type CodegenConfig = {
 
 const CodegenSchema = z.object({
   fieldTypeMap: z.record(
-    // the key has to be one of the following
     z.union([
       z.literal("string"),
       z.literal("boolean"),
@@ -157,7 +155,6 @@ export const getCodegen = async () => {
         log.error("Failed parsing codegen config. Check if it is well formed. Using default config")
         return defaultCodegenConfig
       }
-      console.log(result)
       return cliConfig.codegen
     }
     return defaultCodegenConfig

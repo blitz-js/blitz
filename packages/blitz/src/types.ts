@@ -8,7 +8,6 @@ export type CodegenField = {
   zodType: string
   prismaType: string
   default?: string
-  [index: string]: string | undefined
 }
 
 export type BlitzCliConfig = {
