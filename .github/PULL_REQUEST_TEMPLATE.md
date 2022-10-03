@@ -7,6 +7,7 @@ To make sure your PR is handled as smoothly as possible please:
 Please make sure to add a changeset. Run `pnpm changeset` in the root directory to do so.
 Then select updated Blitz packages when prompted, and add a short message describing the changes. 
 The message should be user-facing — explain **what** was changed, not **how**.
+Ignore if there are no user-facing changes.
 -->
 
 Closes: ?
