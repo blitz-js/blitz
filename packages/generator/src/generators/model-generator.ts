@@ -42,7 +42,7 @@ export class ModelGenerator extends Generator<ModelGeneratorOptions> {
   // eslint-disable-next-line require-await
   async write() {
     const pkgJson = this.fs.readJSON("package.json", {}) as {[key: string]: any}
-    const rawSchemaPath = pkgJson?.["prisma"]?.["schema"] || "db/schema.prisma"
+    const rawSchemaPath = pkgJson?.prisma?.schema || "db/schema.prisma"
 
     const schemaPath = path.resolve(rawSchemaPath)
     if (!this.fs.exists(schemaPath)) {
