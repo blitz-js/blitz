@@ -328,7 +328,9 @@ const upgradeLegacy = async () => {
           fs.writeFileSync(path.resolve(appDir, filename), program.toSource())
         } catch (e) {
           log.error(`Error updating imports in the ${filename}`)
-          throw new Error(e as string)
+          if (typeof e === "string") {
+            throw new Error(e)
+          }
         }
       })
     },
@@ -410,7 +412,9 @@ const upgradeLegacy = async () => {
           fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
         } catch (e) {
           log.error(`Error in updating next.js default imports in the ${file}`)
-          throw new Error(e as string)
+          if (typeof e === "string") {
+            throw new Error(e)
+          }
         }
       })
     },
@@ -442,7 +446,9 @@ const upgradeLegacy = async () => {
           fs.writeFileSync(path.resolve(appDir, file), program.toSource())
         } catch (e) {
           log.error(`Error in changing queryClient to getQueryClient in the ${file}`)
-          throw new Error(e as string)
+          if (typeof e === "string") {
+            throw new Error(e)
+          }
         }
       })
     },
@@ -462,7 +468,9 @@ const upgradeLegacy = async () => {
             fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
           } catch (e) {
             log.error(`Error in changing BlitzApiRequest to NextApiRequest in the ${file}`)
-            throw new Error(e as string)
+            if (typeof e === "string") {
+              throw new Error(e)
+            }
           }
         },
       )
@@ -483,7 +491,9 @@ const upgradeLegacy = async () => {
             fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
           } catch (e) {
             log.error(`Error in changing BlitzApiResponse to NextApiResponse in the ${file}`)
-            throw new Error(e as string)
+            if (typeof e === "string") {
+              throw new Error(e)
+            }
           }
         },
       )
@@ -504,7 +514,9 @@ const upgradeLegacy = async () => {
             fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
           } catch (e) {
             log.error(`Error in changing BlitzApiHandler to NextApiHandler in the ${file}`)
-            throw new Error(e as string)
+            if (typeof e === "string") {
+              throw new Error(e)
+            }
           }
         },
       )
@@ -968,7 +980,9 @@ const upgradeLegacy = async () => {
           }
         } catch (e) {
           log.error(`Error in changing useRouterQuery to useRouter in the ${file}`)
-          throw new Error(e as string)
+          if (typeof e === "string") {
+            throw new Error(e)
+          }
         }
       })
 
@@ -1032,7 +1046,9 @@ const upgradeLegacy = async () => {
           }
         } catch (e) {
           log.error(`Error in changing useRouterQuery to useRouter in the ${file}`)
-          throw new Error(e as string)
+          if (typeof e === "string") {
+            throw new Error(e)
+          }
         }
       })
     },
@@ -1192,7 +1208,9 @@ const upgradeLegacy = async () => {
           fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
         } catch (e) {
           log.error(`Error in wrapping getServerSideProps, getStaticProps in the ${file}`)
-          throw new Error(e as string)
+          if (typeof e === "string") {
+            throw new Error(e)
+          }
         }
       })
 
@@ -1222,7 +1240,9 @@ const upgradeLegacy = async () => {
             }
           } catch (e) {
             log.error(`Error in wrapping api in the ${file}`)
-            throw new Error(e as string)
+            if (typeof e === "string") {
+              throw new Error(e)
+            }
           }
         })
       }
@@ -1311,9 +1331,11 @@ const upgradeLegacy = async () => {
               }
             })
           }
-        } catch (e: any) {
+        } catch (e) {
           log.error(`\nError in checking invokeWithMiddleware in ${file}`)
-          throw new Error(e)
+          if (typeof e === "string") {
+            throw new Error(e)
+          }
         }
         fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
       })
