@@ -83,12 +83,7 @@ export abstract class Builder<T, U> implements IBuilder<T, U> {
 
   public fs: Editor | undefined
 
-  public defaultFieldConfig: CodegenField = {
-    component: "LabeledTextField",
-    inputType: "text",
-    zodType: "string",
-    prismaType: "String",
-  }
+  public defaultFieldConfig = defaultFieldConfig
 
   public getId(input: string = "") {
     if (!input) return input
