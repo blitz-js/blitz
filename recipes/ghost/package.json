@@ -1,0 +1,32 @@
+{
+  "name": "@blitzjs/recipe-ghost",
+  "private": true,
+  "version": "0.40.0-canary.9",
+  "description": "Use Ghost in blitz",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"No tests yet\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/blitz-js/blitz.git"
+  },
+  "keywords": [
+    "blitz",
+    "blitzjs",
+    "ghost"
+  ],
+  "author": "Mark Hughes <m@rkhugh.es>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/blitz-js/blitz/issues"
+  },
+  "homepage": "https://github.com/blitz-js/blitz#readme",
+  "dependencies": {
+    "blitz": "workspace: 2.0.0-beta.4",
+    "jscodeshift": "0.13.0"
+  },
+  "devDependencies": {
+    "@types/jscodeshift": "0.11.2"
+  }
+}
