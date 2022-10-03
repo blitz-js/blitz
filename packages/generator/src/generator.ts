@@ -315,6 +315,21 @@ export abstract class Generator<
           )
           templateValues.fieldTemplateValues.push(newFieldTemplateValues)
         }
+        if (templatedPathSuffix.match(/mutations|queries/g)) {
+          if (this.fs.exists(templatedPathSuffix)) {
+            const program = j(this.fs.read(templatedPathSuffix, {raw: true}) as any, {
+              parser: customTsParser,
+            })
+            const importDb = program.find(j.ImportDeclaration).filter((path) => {
+              return path.value.source.value === "db"
+            })
+            importDb.replaceWith((path) => {
+              path.value.source.value = "__prismaFolder__"
+              return path.value
+            })
+            this.fs.write(templatedPathSuffix, program.toSource())
+          }
+        }
         if (!this.useTs && tsExtension.test(this.destinationPath(pathSuffix))) {
           templatedPathSuffix = templatedPathSuffix.replace(tsExtension, ".js")
         }
