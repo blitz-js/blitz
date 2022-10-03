@@ -665,6 +665,7 @@ importers:
       "@types/jscodeshift": 0.11.2
       "@types/node-fetch": 2.6.1
       "@types/npm-which": 3.0.1
+      "@types/progress": 2.0.5
       "@types/prompts": 2.0.14
       "@types/react": 18.0.17
       "@types/react-dom": 17.0.14
@@ -674,6 +675,7 @@ importers:
       ast-types: 0.14.2
       boxen: 7.0.0
       chalk: ^4.1.0
+      chokidar: 3.5.3
       console-table-printer: 2.10.0
       cross-spawn: 7.0.3
       debug: 4.3.3
@@ -683,6 +685,7 @@ importers:
       dotenv-expand: 8.0.3
       envinfo: 7.8.1
       esbuild: 0.14.34
+      esbuild-register: 3.3.3
       express: 4.17.3
       find-up: 4.1.0
       fs-extra: 10.0.1
@@ -699,6 +702,7 @@ importers:
       os-name: 5.0.1
       p-event: 4.2.0
       pkg-dir: 5.0.0
+      progress: 2.0.3
       prompts: 2.4.2
       react: 18.2.0
       recast: 0.20.5
@@ -724,6 +728,7 @@ importers:
       ast-types: 0.14.2
       boxen: 7.0.0
       chalk: 4.1.2
+      chokidar: 3.5.3
       console-table-printer: 2.10.0
       cross-spawn: 7.0.3
       debug: 4.3.3_supports-color@8.1.1
@@ -733,6 +738,7 @@ importers:
       dotenv-expand: 8.0.3
       envinfo: 7.8.1
       esbuild: 0.14.34
+      esbuild-register: 3.3.3_esbuild@0.14.34
       find-up: 4.1.0
       fs-extra: 10.0.1
       global-agent: 3.0.0
@@ -748,6 +754,7 @@ importers:
       os-name: 5.0.1
       p-event: 4.2.0
       pkg-dir: 5.0.0
+      progress: 2.0.3
       prompts: 2.4.2
       recast: 0.20.5
       resolve-cwd: 3.0.0
@@ -772,6 +779,7 @@ importers:
       "@types/jscodeshift": 0.11.2
       "@types/node-fetch": 2.6.1
       "@types/npm-which": 3.0.1
+      "@types/progress": 2.0.5
       "@types/prompts": 2.0.14
       "@types/react": 18.0.17
       "@types/react-dom": 17.0.14
@@ -5625,6 +5633,15 @@ packages:
       "@types/nodemailer": 6.4.4
     dev: true
 
+  /@types/progress/2.0.5:
+    resolution:
+      {
+        integrity: sha512-ZYYVc/kSMkhH9W/4dNK/sLNra3cnkfT2nJyOAIDY+C2u6w72wa0s1aXAezVtbTsnN8HID1uhXCrLwDE2ZXpplg==,
+      }
+    dependencies:
+      "@types/node": 18.7.13
+    dev: true
+
   /@types/prompts/2.0.14:
     resolution:
       {
@@ -7153,7 +7170,6 @@ packages:
         integrity: sha512-jDctJ/IVQbZoJykoeHbhXpOlNBqGNcwXJKJog42E5HDPUwQTSdjCHdihjj0DlnheQ7blbT6dHOafNAiS8ooQKA==,
       }
     engines: {node: ">=8"}
-    dev: true
 
   /bl/4.1.0:
     resolution:
@@ -7647,7 +7663,6 @@ packages:
       readdirp: 3.6.0
     optionalDependencies:
       fsevents: 2.3.2
-    dev: true
 
   /chownr/2.0.0:
     resolution:
@@ -9431,6 +9446,17 @@ packages:
     os: [openbsd]
     requiresBuild: true
     optional: true
+
+  /esbuild-register/3.3.3_esbuild@0.14.34:
+    resolution:
+      {
+        integrity: sha512-eFHOkutgIMJY5gc8LUp/7c+LLlDqzNi9T6AwCZ2WKKl3HmT+5ef3ZRyPPxDOynInML0fgaC50yszPKfPnjC0NQ==,
+      }
+    peerDependencies:
+      esbuild: ">=0.12 <1"
+    dependencies:
+      esbuild: 0.14.34
+    dev: false
 
   /esbuild-sunos-64/0.14.34:
     resolution:
@@ -11914,7 +11940,6 @@ packages:
     engines: {node: ">=8"}
     dependencies:
       binary-extensions: 2.2.0
-    dev: true
 
   /is-boolean-object/1.1.2:
     resolution:
@@ -16283,7 +16308,6 @@ packages:
     engines: {node: ">=8.10.0"}
     dependencies:
       picomatch: 2.3.1
-    dev: true
 
   /recast/0.20.5:
     resolution:
