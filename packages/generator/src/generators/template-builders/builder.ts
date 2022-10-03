@@ -13,6 +13,35 @@ export interface IBuilder<T, U> {
   getTemplateValues(Options: T): Promise<U>
 }
 
+const defaultFieldConfig: CodegenField = {
+  component: "LabeledTextField",
+  inputType: "text",
+  zodType: "string",
+  prismaType: "String",
+}
+
+export async function createFieldTemplateValues(
+  valueName: string | undefined,
+  typeName: string | undefined,
+): Promise<{[x: string]: any}> {
+  {
+    let values = {
+      attributeName: singleCamel(valueName),
+      fieldName: singleCamel(valueName),
+      FieldName: singlePascal(valueName),
+      field_name: addSpaceBeforeCapitals(`${valueName}`).toLocaleLowerCase(), // field name
+      Field_name: singlePascal(addSpaceBeforeCapitals(`${valueName}`).toLocaleLowerCase()), // Field name
+      Field_Name: singlePascal(addSpaceBeforeCapitals(`${valueName}`)), // Field Name
+    }
+    const codegen = await getCodegen()
+    // iterate over resources defined for this field type
+    const fieldConfig =
+      codegen.fieldTypeMap?.[typeName as keyof typeof codegen.fieldTypeMap] || defaultFieldConfig
+    values = {...values, ...fieldConfig}
+    return values
+  }
+}
+
 export interface ResourceGeneratorOptions extends GeneratorOptions {
   ModelName: string
   ModelNames: string
@@ -91,7 +120,6 @@ export abstract class Builder<T, U> implements IBuilder<T, U> {
   public async getInputType(type: string = "") {
     return getResourceValueFromCodegen(type, "inputType")
   }
-
   // eslint-disable-next-line require-await
   public async getFieldTemplateValues(args: string[]) {
     const argsPromises = args.map(async (arg: string) => {
@@ -99,20 +127,7 @@ export abstract class Builder<T, U> implements IBuilder<T, U> {
       if (typeName?.includes("?")) {
         typeName = typeName.replace("?", "")
       }
-      let values = {
-        attributeName: singleCamel(valueName),
-        fieldName: singleCamel(valueName),
-        FieldName: singlePascal(valueName),
-        field_name: addSpaceBeforeCapitals(`${valueName}`).toLocaleLowerCase(), // field name
-        Field_name: singlePascal(addSpaceBeforeCapitals(`${valueName}`).toLocaleLowerCase()), // Field name
-        Field_Name: singlePascal(addSpaceBeforeCapitals(`${valueName}`)), // Field Name
-      }
-      const codegen = await getCodegen()
-      // iterate over resources defined for this field type
-      const fieldConfig =
-        codegen.fieldTypeMap?.[typeName as keyof typeof codegen.fieldTypeMap] ||
-        this.defaultFieldConfig
-      values = {...values, ...fieldConfig}
+      const values = await createFieldTemplateValues(valueName, typeName)
       return values
     })
     return Promise.all(argsPromises)

@@ -6,7 +6,7 @@ import Enquirer from "enquirer"
 import {EventEmitter} from "events"
 import * as fs from "fs-extra"
 import j from "jscodeshift"
-import {IBuilder} from "./generators/template-builders/builder"
+import {createFieldTemplateValues, IBuilder} from "./generators/template-builders/builder"
 import {NullBuilder} from "./generators/template-builders/null-builder"
 import {create as createStore, Store} from "mem-fs"
 import {create as createEditor, Editor} from "mem-fs-editor"
@@ -128,6 +128,7 @@ function replaceJsxConditionals(program: j.Collection<j.Program>, templateValues
 export abstract class Generator<
   T extends GeneratorOptions = GeneratorOptions,
 > extends EventEmitter {
+  [x: string]: any
   private readonly store: Store
 
   protected readonly fs: Editor
@@ -283,13 +284,41 @@ export abstract class Generator<
     for (let filePath of paths) {
       try {
         let pathSuffix = filePath
+        let templateValues = await this.getTemplateValues()
         pathSuffix = path.join(this.getTargetDirectory(), pathSuffix)
-        const templateValues = await this.getTemplateValues()
-
         let sourcePath = this.sourcePath(filePath)
         let destinationPath = this.destinationPath(pathSuffix)
 
         let templatedPathSuffix = this.replaceTemplateValues(pathSuffix, templateValues)
+        //wrap the existing directory with the parent model
+        if (templatedPathSuffix.includes("pages") && templateValues.parentModelId) {
+          const modelPages = fs.existsSync(`pages/${templateValues.modelNames}`)
+          if (modelPages) {
+            if (
+              !fs.existsSync(
+                `pages/${templateValues.parentModels}/${templateValues.parentModelParam}/${templateValues.modelNames}`,
+              )
+            ) {
+              fs.moveSync(
+                `pages/${templateValues.modelNames}`,
+                `pages/${templateValues.parentModels}/${templateValues.parentModelParam}/${templateValues.modelNames}`,
+              )
+            }
+          }
+        }
+        //check if the templatedPathSuffix is a component is a create
+        if (
+          (templatedPathSuffix.match(/components/g) ||
+            templatedPathSuffix.match(/.*mutations.*create.*/g)) &&
+          templateValues.parentModelId
+        ) {
+          //add new value to the templateValues.fieldTemplateValues
+          const newFieldTemplateValues = await createFieldTemplateValues(
+            templateValues.parentModelId,
+            templateValues.parentModelIdZodType,
+          )
+          templateValues.fieldTemplateValues.push(newFieldTemplateValues)
+        }
         if (!this.useTs && tsExtension.test(this.destinationPath(pathSuffix))) {
           templatedPathSuffix = templatedPathSuffix.replace(tsExtension, ".js")
         }
