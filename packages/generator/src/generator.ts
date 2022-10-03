@@ -289,7 +289,6 @@ export abstract class Generator<
         let destinationPath = this.destinationPath(pathSuffix)
 
         let templatedPathSuffix = this.replaceTemplateValues(pathSuffix, templateValues)
-        //wrap the existing directory with the parent model
         if (templatedPathSuffix.includes("pages") && templateValues.parentModelId) {
           const modelPages = fs.existsSync(`pages/${templateValues.modelNames}`)
           if (modelPages) {
@@ -305,13 +304,11 @@ export abstract class Generator<
             }
           }
         }
-        //check if the templatedPathSuffix is a component is a create
         if (
           (templatedPathSuffix.match(/components/g) ||
             templatedPathSuffix.match(/.*mutations.*create.*/g)) &&
           templateValues.parentModelId
         ) {
-          //add new value to the templateValues.fieldTemplateValues
           const newFieldTemplateValues = await createFieldTemplateValues(
             templateValues.parentModelId,
             templateValues.parentModelIdZodType,

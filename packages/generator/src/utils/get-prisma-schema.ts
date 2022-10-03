@@ -30,7 +30,9 @@ function getDbFolder() {
   }
 }
 
-export const getPrismaSchema = (memFsEditor: Editor): {schema: ast.Schema; schemaPath: string} => {
+export const getPrismaSchema = (
+  memFsEditor: Editor,
+): {schema: ast.Schema; schemaPath: string; dbFolder: string} => {
   const dbFolder = getDbFolder()
   const schemaPath = path.join(process.cwd(), dbFolder, "schema.prisma")
 
@@ -41,5 +43,5 @@ export const getPrismaSchema = (memFsEditor: Editor): {schema: ast.Schema; schem
     log.debug("Failed to parse db/schema.prisma file")
     throw err
   }
-  return {schema, schemaPath}
+  return {schema, schemaPath, dbFolder}
 }

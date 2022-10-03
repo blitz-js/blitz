@@ -56,6 +56,7 @@ export interface ResourceGeneratorOptions extends GeneratorOptions {
 }
 
 export interface CommonTemplateValues {
+  prismaFolder?: string
   parentModelId: string
   parentModelParam: string
   parentModel?: string

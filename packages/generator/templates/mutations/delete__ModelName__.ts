@@ -1,5 +1,5 @@
 import { resolver } from "@blitzjs/rpc"
-import db from "db"
+import db from "__prismaFolder__"
 import {z} from "zod"
 
 const Delete__ModelName__ = z.object({

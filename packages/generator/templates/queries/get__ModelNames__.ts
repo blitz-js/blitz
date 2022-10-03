@@ -1,6 +1,6 @@
 import {paginate} from "blitz"
 import { resolver } from "@blitzjs/rpc"
-import db, {Prisma} from "db"
+import db, {Prisma} from "__prismaFolder__"
 
 interface Get__ModelNames__Input
   extends Pick<Prisma.__ModelName__FindManyArgs, "where" | "orderBy" | "skip" | "take"> {}

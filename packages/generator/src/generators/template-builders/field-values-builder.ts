@@ -19,6 +19,7 @@ export class FieldValuesBuilder extends Builder<ResourceGeneratorOptions, Common
   // eslint-disable-next-line require-await
   public async getTemplateValues(options: ResourceGeneratorOptions): Promise<CommonTemplateValues> {
     let values: CommonTemplateValues = {
+      prismaFolder: getPrismaSchema(this.getEditor()).dbFolder,
       parentModelId: this.getId(options.parentModel),
       parentModelIdZodType: undefined,
       parentModelParam: this.getParam(this.getId(options.parentModel)),

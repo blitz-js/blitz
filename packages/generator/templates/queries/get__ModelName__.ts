@@ -1,6 +1,6 @@
 import {NotFoundError} from "blitz"
 import { resolver } from "@blitzjs/rpc"
-import db  from "db"
+import db  from "__prismaFolder__"
 import {z} from "zod"
 
 const Get__ModelName__ = z.object({
