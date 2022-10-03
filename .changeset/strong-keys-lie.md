@@ -2,4 +2,4 @@
 "@blitzjs/generator": patch
 ---
 
-Removed views from Session PublicData
+Remove `views` property from `Session.PublicData` in `types.ts` file
