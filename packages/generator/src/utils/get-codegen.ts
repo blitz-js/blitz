@@ -1,4 +1,5 @@
 import {log} from "../utils/log"
+import * as z from "zod"
 
 export type CodegenField = {
   component: string
@@ -10,9 +11,45 @@ export type CodegenField = {
 }
 
 export type CodegenConfig = {
-  templateDir?: string
-  fieldTypeMap?: Record<string, CodegenField>
+  fieldTypeMap?: Record<
+    | "string"
+    | "boolean"
+    | "int"
+    | "number"
+    | "bigint"
+    | "float"
+    | "decimal"
+    | "datetime"
+    | "uuid"
+    | "json",
+    CodegenField
+  >
 }
+
+const CodegenSchema = z.object({
+  fieldTypeMap: z.record(
+    // the key has to be one of the following
+    z.union([
+      z.literal("string"),
+      z.literal("boolean"),
+      z.literal("int"),
+      z.literal("number"),
+      z.literal("bigint"),
+      z.literal("float"),
+      z.literal("decimal"),
+      z.literal("datetime"),
+      z.literal("uuid"),
+      z.literal("json"),
+    ]),
+    z.object({
+      component: z.string(),
+      inputType: z.string(),
+      zodType: z.string(),
+      prismaType: z.string(),
+      default: z.string().optional(),
+    }),
+  ),
+})
 
 export const defaultCodegenConfig: CodegenConfig = {
   fieldTypeMap: {
@@ -115,7 +152,12 @@ export const getCodegen = async () => {
     unregister()
 
     if (cliConfig.codegen !== undefined) {
-      // TODO: potentially verify that codegen is well formed using zod
+      const result = CodegenSchema.safeParse(cliConfig.codegen)
+      if (!result.success) {
+        log.error("Failed parsing codegen config. Check if it is well formed. Using default config")
+        return defaultCodegenConfig
+      }
+      console.log(result)
       return cliConfig.codegen
     }
     return defaultCodegenConfig

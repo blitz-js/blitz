@@ -1,7 +1,6 @@
 import * as ast from "@mrleebo/prisma-ast"
 import {spawn} from "cross-spawn"
 import which from "npm-which"
-import path from "path"
 import {log} from "../utils/log"
 import {Generator, GeneratorOptions, SourceRootType} from "../generator"
 import {Field} from "../prisma/field"

@@ -128,7 +128,6 @@ function replaceJsxConditionals(program: j.Collection<j.Program>, templateValues
 export abstract class Generator<
   T extends GeneratorOptions = GeneratorOptions,
 > extends EventEmitter {
-  [x: string]: any
   private readonly store: Store
 
   protected readonly fs: Editor

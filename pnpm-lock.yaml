@@ -1079,6 +1079,7 @@ importers:
       username: 5.1.0
       vinyl: 2.2.1
       watch: 1.0.2
+      zod: 3.17.3
     dependencies:
       "@babel/core": 7.12.10_supports-color@8.1.1
       "@babel/plugin-transform-typescript": 7.12.1_7cb78b83f01b93558c1da2860de57641
@@ -1105,6 +1106,7 @@ importers:
       tslog: 3.3.1
       username: 5.1.0
       vinyl: 2.2.1
+      zod: 3.17.3
     devDependencies:
       "@blitzjs/config": link:../config
       "@juanm04/cpx": 2.0.1_supports-color@8.1.1
@@ -2627,7 +2629,7 @@ packages:
     peerDependencies:
       "@babel/core": ^7.0.0-0
     dependencies:
-      "@babel/core": 7.12.10
+      "@babel/core": 7.12.10_supports-color@8.1.1
       "@babel/helper-plugin-utils": 7.17.12
     dev: false
 
@@ -10124,7 +10126,7 @@ packages:
     peerDependencies:
       eslint: ">=5"
     dependencies:
-      eslint: 7.32.0
+      eslint: 7.32.0_supports-color@8.1.1
       eslint-visitor-keys: 2.1.0
 
   /eslint-visitor-keys/1.3.0:
