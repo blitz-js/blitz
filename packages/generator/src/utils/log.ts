@@ -3,90 +3,16 @@ import c from "chalk"
 import {Table} from "console-table-printer"
 import ora from "ora"
 import readline from "readline"
-import {join} from "path"
-import {defaultConfig} from "./default-config"
 
-// eslint-disable-next-line
+export type LogLevel = "trace" | "debug" | "info" | "warn" | "error" | "fatal"
+
 declare module globalThis {
   let _blitz_baseLogger: Logger
   let _blitz_logLevel: LogLevel
 }
 
-export type LogLevel = "trace" | "debug" | "info" | "warn" | "error" | "fatal"
-
-export function normalizeConfig(phase: string, config: any) {
-  if (typeof config === "function") {
-    config = config(phase, {defaultConfig})
-
-    if (typeof config.then === "function") {
-      throw new Error(
-        "> Promise returned in blitz config. https://nextjs.org/docs/messages/promise-in-next-config",
-      )
-    }
-  }
-  return config
-}
-
-export function loadConfigAtRuntime() {
-  if (!process.env.BLITZ_APP_DIR) {
-    throw new Error("Internal Blitz Error: process.env.BLITZ_APP_DIR is not set")
-  }
-  return loadConfigProduction(process.env.BLITZ_APP_DIR)
-}
-
-export function assignDefaultsBase(userConfig: {[key: string]: any}) {
-  const config = Object.keys(userConfig).reduce<{[key: string]: any}>((currentConfig, key) => {
-    const value = userConfig[key]
-
-    if (value === undefined || value === null) {
-      return currentConfig
-    }
-
-    // Copied from assignDefaults in server/config.ts
-    if (!!value && value.constructor === Object) {
-      currentConfig[key] = {
-        ...defaultConfig[key],
-        ...Object.keys(value).reduce<any>((c, k) => {
-          const v = value[k]
-          if (v !== undefined && v !== null) {
-            c[k] = v
-          }
-          return c
-        }, {}),
-      }
-    } else {
-      currentConfig[key] = value
-    }
-
-    return currentConfig
-  }, {})
-  const result = {...defaultConfig, ...config}
-  return result
-}
-
-export function loadConfigProduction(pagesDir: string) {
-  let userConfigModule
-  try {
-    const path = join(pagesDir, "next.config.js")
-    debug("Loading config from ", path)
-    // eslint-disable-next-line no-eval -- block webpack from following this module path
-    userConfigModule = eval("require")(path)
-  } catch {
-    debug("Did not find custom config file")
-    // In case user does not have custom config
-    userConfigModule = {}
-  }
-  let userConfig = normalizeConfig(
-    "phase-production-server",
-    userConfigModule.default || userConfigModule,
-  )
-  return assignDefaultsBase(userConfig) as any
-}
-
-export const newline = () => {
-  globalThis._blitz_logLevel = globalThis._blitz_logLevel ?? loadConfigAtRuntime().log?.level
-
-  const logLevel = globalThis._blitz_logLevel
+export const newLine = () => {
+  const logLevel: LogLevel = globalThis._blitz_logLevel
 
   switch (logLevel) {
     case "trace":
@@ -108,14 +34,14 @@ export const baseLogger = (options?: ISettingsParam): Logger => {
 
   let config
   try {
-    config = loadConfigAtRuntime()
+    config = {} as any // todo: loadConfigAtRuntime()
   } catch {
     config = {}
   }
 
   globalThis._blitz_baseLogger = new Logger({
-    minLevel: config.log?.level || "info",
-    type: config.log?.type || "pretty",
+    minLevel: config?.log?.level || "info",
+    type: config?.log?.type || "pretty",
     dateTimePattern:
       process.env.NODE_ENV === "production"
         ? "year-month-day hour:minute:second.millisecond"
@@ -133,7 +59,6 @@ export const baseLogger = (options?: ISettingsParam): Logger => {
       bigint: "blue",
       boolean: "blue",
     },
-    colorizePrettyLogs: process.env.FORCE_COLOR === "0" ? false : true,
     maskValuesOfKeys: ["password", "passwordConfirmation"],
     exposeErrorCodeFrame: process.env.NODE_ENV !== "production",
     ...options,
@@ -165,6 +90,10 @@ const withCheck = (str: string) => {
 
 const withProgress = (str: string) => {
   return withCaret(str)
+}
+
+const greenText = (str: string) => {
+  return `${c.green(str)}`
 }
 
 /**
@@ -225,6 +154,15 @@ const success = (msg: string) => {
 }
 
 /**
+ * Logs a red error message to stdout.
+ *
+ * @param {string} msg
+ */
+const error = (msg: string) => {
+  console.log(`${c.red(msg)}`)
+}
+
+/**
  * Colorizes a variable for display.
  *
  * @param {string} val
@@ -248,6 +186,8 @@ export const log = {
   progress,
   spinner,
   success,
+  greenText,
+  error,
   variable,
   debug,
   Table,

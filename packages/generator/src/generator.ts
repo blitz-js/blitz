@@ -267,7 +267,7 @@ export abstract class Generator<
       try {
         templatedFile = this.prettier.format(templatedFile, options)
       } catch (error) {
-        console.warn(`Failed trying to run prettier: ` + error)
+        console.error(`Failed trying to run prettier: ` + error)
       }
     }
     return templatedFile
@@ -345,7 +345,7 @@ export abstract class Generator<
           }
         }
       } catch (error) {
-        log.branded(`Error generating ${filePath}`)
+        log.error(`Error generating ${filePath}`)
         throw error
       }
     }
