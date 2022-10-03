@@ -47,6 +47,7 @@ describe("PageGenerator", () => {
         parentModelId: "",
         parentModelParam: "",
         parentModels: undefined,
+        prismaFolder: "db",
       })
     })
 
