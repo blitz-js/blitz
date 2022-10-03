@@ -11,6 +11,24 @@ export type CodegenField = {
   [index: string]: string | undefined
 }
 
+export type BlitzCliConfig = {
+  codegen?: {
+    fieldTypeMap?: Record<
+      | "string"
+      | "boolean"
+      | "int"
+      | "number"
+      | "bigint"
+      | "float"
+      | "decimal"
+      | "datetime"
+      | "uuid"
+      | "json",
+      CodegenField
+    >
+  }
+}
+
 export type CodegenConfig = {
   templateDir?: string
   fieldTypeMap?: Record<string, CodegenField>

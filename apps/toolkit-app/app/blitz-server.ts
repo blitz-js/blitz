@@ -2,6 +2,7 @@ import { setupBlitzServer } from "@blitzjs/next"
 import { AuthServerPlugin, PrismaStorage } from "@blitzjs/auth"
 import db from "db"
 import { simpleRolesIsAuthorized } from "@blitzjs/auth"
+import type { BlitzCliConfig } from "blitz"
 
 const { gSSP, gSP, api } = setupBlitzServer({
   plugins: [
@@ -15,13 +16,13 @@ const { gSSP, gSP, api } = setupBlitzServer({
 
 export { gSSP, gSP, api }
 
-export const cliConfig = {
+export const cliConfig: BlitzCliConfig = {
   codegen: {
     fieldTypeMap: {
       string: {
         component: "LabeledTextField",
         inputType: "text",
-        zodType: "any",
+        zodType: "string",
         prismaType: "String",
       },
       boolean: {
