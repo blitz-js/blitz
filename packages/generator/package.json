@@ -24,7 +24,7 @@
     "@babel/plugin-transform-typescript": "7.12.1",
     "@babel/preset-env": "7.12.10",
     "@babel/types": "7.12.10",
-    "@mrleebo/prisma-ast": "0.2.6",
+    "@mrleebo/prisma-ast": "0.4.1",
     "chalk": "^4.1.0",
     "console-table-printer": "2.10.0",
     "cross-spawn": "7.0.3",
