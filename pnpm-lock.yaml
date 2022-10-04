@@ -1038,7 +1038,7 @@ importers:
       "@babel/types": 7.12.10
       "@blitzjs/config": 2.0.0-beta.4
       "@juanm04/cpx": 2.0.1
-      "@mrleebo/prisma-ast": 0.2.6
+      "@mrleebo/prisma-ast": 0.4.1
       "@types/babel__core": 7.1.19
       "@types/diff": 5.0.2
       "@types/fs-extra": 9.0.13
@@ -1083,7 +1083,7 @@ importers:
       "@babel/plugin-transform-typescript": 7.12.1_ps3yxa7qdojvlda5ukda3zlwie
       "@babel/preset-env": 7.12.10_ps3yxa7qdojvlda5ukda3zlwie
       "@babel/types": 7.12.10
-      "@mrleebo/prisma-ast": 0.2.6
+      "@mrleebo/prisma-ast": 0.4.1
       chalk: 4.1.2
       console-table-printer: 2.10.0
       cross-spawn: 7.0.3
@@ -4427,6 +4427,16 @@ packages:
         integrity: sha512-Df0gAGmws3sxNMmLviTarBL9znf84QVlVhlx4EPgArrnaVBy8tNQZAI9aSTJHzH0JGj9BVGa0Qz1g3hPt12Kxw==,
       }
     engines: {node: ">=10"}
+    dependencies:
+      chevrotain: 9.1.0
+    dev: false
+
+  /@mrleebo/prisma-ast/0.4.1:
+    resolution:
+      {
+        integrity: sha512-vk1JBunTocQ8xaVqjgVnDVZ63d8Vm/HpOrFXATsKZI5ufC6ZG7FmRtWwyljLXHzW9C/pLp3kJAKc24oSPOYXgw==,
+      }
+    engines: {node: ">=12"}
     dependencies:
       chevrotain: 9.1.0
     dev: false
@@ -12595,7 +12605,7 @@ packages:
       pretty-format: 27.5.1
       slash: 3.0.0
       strip-json-comments: 3.1.1
-      ts-node: 10.7.0_typescript@4.6.3
+      ts-node: 10.7.0_fxg3r7oju3tntkxsvleuiot4fa
     transitivePeerDependencies:
       - bufferutil
       - canvas
@@ -18136,7 +18146,6 @@ packages:
       typescript: 4.6.3
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
-    dev: false
 
   /ts-node/10.7.0_typescript@4.6.3:
     resolution:
@@ -18169,6 +18178,7 @@ packages:
       typescript: 4.6.3
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
+    dev: false
 
   /ts-node/10.9.1_kakyiqi62sfonxvjmz3ft5vt7y:
     resolution:
