@@ -35,8 +35,6 @@ export class FieldValuesBuilder extends Builder<ResourceGeneratorOptions, Common
       ModelName: options.ModelName,
       ModelNames: options.ModelNames,
       modelNamesPath: this.getModelNamesPath(options.context, options.modelNames),
-      importInputs: options.parentModel + "s",
-      getInput: "get" + options.parentModel + "s",
     }
     if (options.extraArgs) {
       // specialArgs - these are arguments like 'id' or 'belongsTo', which are not meant to

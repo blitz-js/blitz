@@ -26,7 +26,7 @@ export async function createFieldTemplateValues(
   parent = false,
 ): Promise<{[x: string]: any}> {
   {
-    let values: any = {
+    let values: {[x: string]: any} = {
       attributeName: singleCamel(valueName),
       fieldName: '"' + singleCamel(valueName) + '"',
       FieldName: '"' + singlePascal(valueName) + '"',
@@ -41,7 +41,6 @@ export async function createFieldTemplateValues(
       codegen.fieldTypeMap?.[typeName as keyof typeof codegen.fieldTypeMap] || defaultFieldConfig
     values = {...values, ...fieldConfig}
     if (parent) {
-      values.inputType = "{" + singleCamel(valueName).replace("Id", "s") + "}"
       values.component = "LabeledSelectField"
       values.fieldName = '"id"'
       return values
@@ -82,8 +81,6 @@ export interface CommonTemplateValues {
   ModelNames: string
   modelNamesPath: string
   fieldTemplateValues?: {[x: string]: any}
-  getInput?: string
-  importInputs?: string
 }
 
 export abstract class Builder<T, U> implements IBuilder<T, U> {
