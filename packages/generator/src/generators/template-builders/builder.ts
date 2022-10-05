@@ -41,6 +41,7 @@ export async function createFieldTemplateValues(
       codegen.fieldTypeMap?.[typeName as keyof typeof codegen.fieldTypeMap] || defaultFieldConfig
     values = {...values, ...fieldConfig}
     if (parent) {
+      values.inputType = "{" + singleCamel(valueName).replace("Id", "s") + "}"
       values.component = "LabeledSelectField"
       values.fieldName = '"id"'
       return values
