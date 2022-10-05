@@ -5,7 +5,7 @@ import {escapePath} from "fast-glob"
 import Enquirer from "enquirer"
 import {EventEmitter} from "events"
 import * as fs from "fs-extra"
-import j from "jscodeshift"
+import j, {ImportSpecifier} from "jscodeshift"
 import {createFieldTemplateValues, IBuilder} from "./generators/template-builders/builder"
 import {NullBuilder} from "./generators/template-builders/null-builder"
 import {create as createStore, Store} from "mem-fs"
@@ -18,6 +18,7 @@ import {pipe} from "./utils/pipe"
 import {readdirRecursive} from "./utils/readdir-recursive"
 import prettier from "prettier"
 import {log} from "./utils/log"
+import {capitalize, singleCamel} from "./utils/inflector"
 const debug = require("debug")("blitz:generator")
 
 export const customTsParser = {
@@ -202,7 +203,15 @@ export abstract class Generator<
 
   replaceTemplateValues(input: string, templateValues: any) {
     let result = input
+    // console.log("templateValues", templateValues)
     for (let templateKey in templateValues) {
+      const token = `__${templateKey}__`
+      if (result.includes(token)) {
+        result = result.replace(new RegExp(token, "g"), templateValues[templateKey])
+      }
+    }
+    // console.log(templateValues.fieldTemplateValues)
+    for (let templateKey in templateValues.fieldTemplateValues) {
       const token = `__${templateKey}__`
       if (result.includes(token)) {
         result = result.replace(new RegExp(token, "g"), templateValues[templateKey])
@@ -287,8 +296,9 @@ export abstract class Generator<
         pathSuffix = path.join(this.getTargetDirectory(), pathSuffix)
         let sourcePath = this.sourcePath(filePath)
         let destinationPath = this.destinationPath(pathSuffix)
-
         let templatedPathSuffix = this.replaceTemplateValues(pathSuffix, templateValues)
+        let templatedDestinationPath = this.destinationPath(templatedPathSuffix)
+        const destinationExists = fs.existsSync(templatedDestinationPath)
         if (templatedPathSuffix.includes("pages") && templateValues.parentModelId) {
           const modelPages = fs.existsSync(`pages/${templateValues.modelNames}`)
           if (modelPages) {
@@ -312,12 +322,17 @@ export abstract class Generator<
           const newFieldTemplateValues = await createFieldTemplateValues(
             templateValues.parentModelId,
             templateValues.parentModelIdZodType,
+            true,
           )
-          templateValues.fieldTemplateValues.push(newFieldTemplateValues)
+          if (templateValues.fieldTemplateValues) {
+            templateValues.fieldTemplateValues.push(newFieldTemplateValues)
+          } else {
+            templateValues.fieldTemplateValues = [newFieldTemplateValues]
+          }
         }
         if (templatedPathSuffix.match(/mutations|queries/g)) {
           if (this.fs.exists(templatedPathSuffix)) {
-            const program = j(this.fs.read(templatedPathSuffix, {raw: true}) as any, {
+            const program = j(this.fs.read(templatedPathSuffix) as any, {
               parser: customTsParser,
             })
             const importDb = program.find(j.ImportDeclaration).filter((path) => {
@@ -333,9 +348,6 @@ export abstract class Generator<
         if (!this.useTs && tsExtension.test(this.destinationPath(pathSuffix))) {
           templatedPathSuffix = templatedPathSuffix.replace(tsExtension, ".js")
         }
-        let templatedDestinationPath = this.destinationPath(templatedPathSuffix)
-
-        const destinationExists = fs.existsSync(templatedDestinationPath)
 
         if (destinationExists) {
           const newContent = this.process(
@@ -353,6 +365,115 @@ export abstract class Generator<
 
           if (templatedPathSuffix !== pathSuffix) {
             this.fs.move(destinationPath, templatedDestinationPath)
+          }
+        }
+        if (templatedPathSuffix.match(/components/g) && templateValues.parentModelId) {
+          let program = j(this.fs.read(templatedDestinationPath), {
+            parser: customTsParser,
+          })
+          const importExists = program
+            .find(j.ImportDeclaration)
+            .filter((path) => path.node.source.value === "app/core/components/LabelSelectField")
+            .size()
+          if (!importExists) {
+            program
+              .find(j.ImportDeclaration)
+              .at(-1)
+              .insertAfter(
+                j.importDeclaration(
+                  [j.importSpecifier(j.identifier("LabeledSelectField"))],
+                  j.literal("app/core/components/LabelSelectField"),
+                ),
+              )
+          }
+          program
+            .find(j.ImportDeclaration)
+            .at(-1)
+            .insertAfter(
+              j.importDeclaration(
+                [
+                  j.importDefaultSpecifier(
+                    j.identifier(
+                      singleCamel("get" + capitalize(templateValues.parentModelId)).replace(
+                        "Id",
+                        "s",
+                      ),
+                    ),
+                  ),
+                ],
+                j.literal(
+                  `app/${templateValues.parentModelId.replace("Id", "s")}/queries/${
+                    "get" + capitalize(templateValues.parentModelId).replace("Id", "s")
+                  }`,
+                ),
+              ),
+            )
+          // add import {usePaginatedQuery} from "@blitzjs/rpc" if it doesn't exist
+          const importPaginatedQuery = program
+            .find(j.ImportDeclaration)
+            .filter((path) => {
+              if (path.node.specifiers) {
+                return (
+                  path.node.source.value === "@blitzjs/rpc" &&
+                  path.node.specifiers.filter((specifier) => {
+                    if (specifier.type === "ImportSpecifier") {
+                      return specifier.imported.name === "usePaginatedQuery"
+                    } else {
+                      return false
+                    }
+                  }).length > 0
+                )
+              } else {
+                return false
+              }
+            })
+            .size()
+          if (!importPaginatedQuery) {
+            program
+              .find(j.ImportDeclaration)
+              .at(-1)
+              .insertAfter(
+                j.importDeclaration(
+                  [j.importSpecifier(j.identifier("usePaginatedQuery"))],
+                  j.literal("@blitzjs/rpc"),
+                ),
+              )
+          }
+          const projectFormSuspense = program.find(j.FunctionDeclaration).filter((path) => {
+            return path.node.id?.name === "ProjectFormSuspense"
+          })
+          if (projectFormSuspense.size()) {
+            projectFormSuspense
+              .find(j.ReturnStatement)
+              .at(-1)
+              .insertBefore(
+                j.variableDeclaration("const", [
+                  j.variableDeclarator(
+                    j.arrayPattern([
+                      j.objectPattern([
+                        j.objectProperty(
+                          j.identifier(`${templateValues.parentModelId.replace("Id", "s")}`),
+                          j.identifier(`${templateValues.parentModelId.replace("Id", "s")}`),
+                        ),
+                      ]),
+                    ]),
+                    j.callExpression(j.identifier("usePaginatedQuery"), [
+                      j.identifier(
+                        "get" + capitalize(templateValues.parentModelId).replace("Id", "s"),
+                      ),
+                      j.objectExpression([
+                        j.objectProperty(
+                          j.identifier("orderBy"),
+                          j.objectExpression([
+                            j.objectProperty(j.identifier("id"), j.stringLiteral("asc")),
+                          ]),
+                        ),
+                      ]),
+                    ]),
+                  ),
+                ]),
+              )
+            this.fs.write(templatedPathSuffix, program.toSource())
           }
         }
       } catch (error) {

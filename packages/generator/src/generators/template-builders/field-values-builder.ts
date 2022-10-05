@@ -35,6 +35,8 @@ export class FieldValuesBuilder extends Builder<ResourceGeneratorOptions, Common
       ModelName: options.ModelName,
       ModelNames: options.ModelNames,
       modelNamesPath: this.getModelNamesPath(options.context, options.modelNames),
+      importInputs: options.parentModel + "s",
+      getInput: "get" + options.parentModel + "s",
     }
     if (options.extraArgs) {
       // specialArgs - these are arguments like 'id' or 'belongsTo', which are not meant to
@@ -48,9 +50,6 @@ export class FieldValuesBuilder extends Builder<ResourceGeneratorOptions, Common
           specialArgs[arg] = "present"
         }
         if (valueName === "belongsTo") {
-          // TODO: Determine how this is done. The model will generate with a field with the id name
-          // and type of the parent of this model, and forms etc. should
-          // In addition, need to do the same logic that the options.parentModel != undefined below does
           specialArgs[arg] = "present"
           process.env.parentModel = typeName
           options.rawParentModelName = typeName
