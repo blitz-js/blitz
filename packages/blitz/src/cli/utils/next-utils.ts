@@ -224,10 +224,10 @@ export function nextBuild(
 
 export function nextExport(nextBin: string, config: ServerConfig) {
   const spawnEnv = getSpawnEnv(config)
-  let args = ["export"]
+  const args = ["export"]
 
   if (config.outdir) {
-    args = args.concat(["-o", `${config.outdir}`])
+    args.push("-o", `${config.outdir}`)
   }
 
   return new Promise<void>((res, rej) => {
