@@ -49,7 +49,13 @@ export const BlitzLogger = (settings: BlitzLoggerSettings = {}) => {
   return baseLogger
 }
 
-export const initializeLogger = ({logger, logLevel}: {logger: Logger; logLevel: BlitzLogLevel}) => {
+export const initializeLogger = ({
+  logger,
+  logLevel,
+}: {
+  logger: Logger
+  logLevel?: BlitzLogLevel
+}) => {
   globalThis._blitz_baseLogger = logger
   globalThis._blitz_logLevel = logLevel || "info"
 }
