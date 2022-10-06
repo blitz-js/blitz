@@ -6,6 +6,7 @@ const config: BuildConfig = {
   declaration: true,
   rollup: {
     emitCJS: true,
+    esbuild: {target: "es2017"},
   },
 }
 export default config
