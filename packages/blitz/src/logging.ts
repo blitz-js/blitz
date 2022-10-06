@@ -20,7 +20,7 @@ export const baseLogger = (options: BlitzLoggerSettings = {}): Logger => {
   return globalThis._blitz_baseLogger
 }
 
-export const BlitzLogger = (settings: BlitzLoggerSettings) => {
+export const BlitzLogger = (settings: BlitzLoggerSettings = {}) => {
   const baseLogger = new Logger({
     minLevel: "info",
     type: "pretty",
