@@ -2,6 +2,7 @@ import {CliCommand} from "../index"
 import {log, newLine} from "../../logging"
 import {collectAllRoutes, loadConfig} from "../utils/routes-manifest"
 import chalk from "chalk"
+import {prettyMs} from "../../utils"
 
 const getColor = (type: string) => {
   switch (type) {
@@ -49,17 +50,19 @@ const routes: CliCommand = async () => {
     routes.forEach(({filePath, route, verb, type}: any) => {
       table.addRow(
         {
-          [table.table.columns[0].name]: verb.toUpperCase(),
-          [table.table.columns[1].name]: filePath,
-          [table.table.columns[2].name]: route,
-          [table.table.columns[3].name]: type.toUpperCase(),
+          [table.table.columns[0]!.name]: verb.toUpperCase(),
+          [table.table.columns[1]!.name]: filePath,
+          [table.table.columns[2]!.name]: route,
+          [table.table.columns[3]!.name]: type.toUpperCase(),
         },
         {color: getColor(type)},
       )
     })
     console.log(table.render())
     newLine()
-    console.log(`✨ Done ` + chalk.hex("#8a3df0").bold("in ") + `${Date.now() - startTime}ms`)
+    console.log(
+      `✨ Done ` + chalk.hex("#8a3df0").bold("in ") + `${prettyMs(Date.now() - startTime)}`,
+    )
     process.exit(0)
   } catch (err) {
     console.error(err)
