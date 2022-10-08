@@ -9,9 +9,6 @@ import ProgressBar from "progress"
 import {log} from "../../logging"
 
 export function getDbFolder() {
-  if (fs.existsSync(path.join(process.cwd(), "db"))) {
-    return "db"
-  }
   try {
     const packageJsonPath = path.join(process.cwd(), "package.json")
     const packageJson = fs.readFileSync(packageJsonPath, "utf8")
@@ -30,7 +27,10 @@ export function getDbFolder() {
     const folder = packageJsonObj.prisma.schema.split("/")[0] as string
     return folder
   } catch (e) {
-    throw new Error(e)
+    if (fs.existsSync(path.join(process.cwd(), "db/schema.prisma"))) {
+      return "db"
+    }
+    throw e
   }
 }
 
@@ -39,13 +39,8 @@ export function getProjectRootSync() {
 }
 
 export function getConfigSrcPath() {
-  const tsPath = path.resolve(path.join(process.cwd(), "next.config.ts"))
-  if (fs.existsSync(tsPath)) {
-    return tsPath
-  } else {
-    const jsPath = path.resolve(path.join(process.cwd(), "next.config.js"))
-    return jsPath
-  }
+  const jsPath = path.resolve(path.join(process.cwd(), "next.config.js"))
+  return jsPath
 }
 
 const projectRoot = getProjectRootSync()
