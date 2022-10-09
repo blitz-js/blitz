@@ -8,7 +8,7 @@ import {
   toPosixPath,
 } from "./loader-utils"
 import {posix} from "path"
-import type {ResolverConfig} from "blitz"
+import {log, ResolverConfig} from "blitz"
 
 // Subset of `import type { LoaderDefinitionFunction } from 'webpack'`
 
@@ -45,17 +45,20 @@ export async function transformBlitzRpcResolverClient(
   const routePath = convertPageFilePathToRoutePath(resolverFilePath, options?.resolverPath)
   const resolverName = convertFilePathToResolverName(resolverFilePath)
   const resolverType = convertFilePathToResolverType(resolverFilePath)
-
-  const {register} = require("esbuild-register/dist/node")
-  const {unregister} = register({
-    target: "es6",
-  })
-  let rpcConfig = require(id).config as ResolverConfig
-  unregister()
-
-  if (!rpcConfig || resolverType === "mutation") {
-    rpcConfig = {
-      httpMethod: "POST",
+  const resolverConfig: ResolverConfig = {
+    httpMethod: "POST",
+  }
+  if (resolverType === "query") {
+    try {
+      const {register} = require("esbuild-register/dist/node")
+      const {unregister} = register({
+        target: "es6",
+      })
+      const _rpcConfig = require(id).config as ResolverConfig
+      resolverConfig.httpMethod = _rpcConfig.httpMethod
+      unregister()
+    } catch (e) {
+      log.error(e as string)
     }
   }
 
@@ -66,7 +69,7 @@ export async function transformBlitzRpcResolverClient(
       resolverName: "${resolverName}",
       resolverType: "${resolverType}",
       routePath: "${routePath}",
-      httpMethod: "${rpcConfig.httpMethod}",
+      httpMethod: "${resolverConfig.httpMethod}",
     });
   `
 

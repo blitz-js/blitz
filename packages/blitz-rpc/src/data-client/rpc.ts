@@ -103,8 +103,7 @@ export function __internal_buildRpcClient({
     })
 
     if (httpMethod === "GET") {
-      fullRoutePath =
-        fullRoutePath +
+      fullRoutePath +=
         "?" +
         new URLSearchParams({
           params: stringify(serialized.json),
