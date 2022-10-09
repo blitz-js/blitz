@@ -63,3 +63,10 @@ model Token {
 // enum TokenType {
 //   RESET_PASSWORD
 // }
+
+model Project {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String
+}

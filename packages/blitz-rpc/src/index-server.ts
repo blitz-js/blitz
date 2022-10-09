@@ -1,6 +1,6 @@
 import {assert, baseLogger, Ctx, newLine, prettyMs} from "blitz"
 import {NextApiRequest, NextApiResponse} from "next"
-import {deserialize, serialize as superjsonSerialize} from "superjson"
+import {deserialize, serialize as superjsonSerialize, parse} from "superjson"
 import {resolve} from "path"
 import chalk from "chalk"
 
@@ -178,10 +178,18 @@ export function rpcHandler(config: RpcConfig) {
       // We used to initiate database connection here
       res.status(200).end()
       return
-    } else if (req.method === "POST") {
-      // Handle RPC call
-
-      if (typeof req.body.params === "undefined") {
+    } else if (req.method === "POST" || req.method === "GET") {
+      if (req.method === "GET") {
+        if (!req.query) {
+          const error = {message: "Request params are missing"}
+          log.error(error.message)
+          res.status(400).json({
+            result: null,
+            error,
+          })
+          return
+        }
+      } else if (typeof req.body.params === "undefined") {
         const error = {message: "Request body is missing the `params` key"}
         log.error(error.message)
         res.status(400).json({
@@ -192,11 +200,22 @@ export function rpcHandler(config: RpcConfig) {
       }
 
       try {
-        const data = deserialize({
-          json: req.body.params,
-          meta: req.body.meta?.params,
-        })
-
+        let data
+        if (req.method === "POST") {
+          data = deserialize({
+            json: req.body.params,
+            meta: req.body.meta?.params,
+          })
+        } else {
+          let meta = req.query.meta
+          if (Array.isArray(meta)) {
+            meta = meta[meta.length - 1]
+          }
+          data = deserialize({
+            json: parse(req.query.params as string),
+            meta: parse(meta as string),
+          })
+        }
         log.info(customChalk.dim("Starting with input:"), data ? data : JSON.stringify(data))
         const startTime = Date.now()
         const result = await resolver(data, (res as any).blitzCtx)

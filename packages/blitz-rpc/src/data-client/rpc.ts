@@ -4,6 +4,7 @@ import {deserialize, serialize} from "superjson"
 import {SuperJSONResult} from "superjson/dist/types"
 import {CSRFTokenMismatchError, isServer} from "blitz"
 import {getQueryKeyFromUrlAndParams, getQueryClient} from "./react-query-utils"
+import {stringify} from "superjson"
 import {
   getAntiCSRFToken,
   getPublicDataStore,
@@ -23,6 +24,7 @@ export interface BuildRpcClientParams {
   resolverName: string
   resolverType: ResolverType
   routePath: string
+  httpMethod: string
 }
 
 export interface RpcOptions {
@@ -54,9 +56,9 @@ export function __internal_buildRpcClient({
   resolverName,
   resolverType,
   routePath,
+  httpMethod,
 }: BuildRpcClientParams): RpcClient {
-  const fullRoutePath = normalizeApiRoute("/api/rpc" + routePath)
-
+  let fullRoutePath = normalizeApiRoute("/api/rpc" + routePath)
   const httpClient: RpcClientBase = async (params, opts = {}, signal = undefined) => {
     const debug = (await import("debug")).default("blitz:rpc")
     if (!opts.fromQueryHook && !opts.fromInvoke) {
@@ -93,18 +95,35 @@ export function __internal_buildRpcClient({
       serialized = serialize(params)
     }
 
+    const body = JSON.stringify({
+      params: serialized.json,
+      meta: {
+        params: serialized.meta,
+      },
+    })
+
+    if (httpMethod === "GET") {
+      fullRoutePath =
+        fullRoutePath +
+        "?" +
+        new URLSearchParams({
+          params: stringify(serialized.json),
+          meta: stringify(serialized.meta),
+        })
+      if (fullRoutePath.length > 2083) {
+        console.warn(
+          "URL length is greater than 2083 characters. This may cause issues in some browsers. Consider using POST instead of GET.",
+        )
+      }
+    }
+
     const promise = window
       .fetch(fullRoutePath, {
-        method: "POST",
+        method: httpMethod,
         headers,
         credentials: "include",
         redirect: "follow",
-        body: JSON.stringify({
-          params: serialized.json,
-          meta: {
-            params: serialized.meta,
-          },
-        }),
+        body: httpMethod === "POST" ? body : undefined,
         signal,
       })
       .then(async (response) => {
