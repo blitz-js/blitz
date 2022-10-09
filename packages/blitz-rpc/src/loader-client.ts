@@ -55,7 +55,9 @@ export async function transformBlitzRpcResolverClient(
         target: "es6",
       })
       const _rpcConfig = require(id).config as ResolverConfig
-      resolverConfig.httpMethod = _rpcConfig.httpMethod
+      if (_rpcConfig) {
+        resolverConfig.httpMethod = _rpcConfig.httpMethod
+      }
       unregister()
     } catch (e) {
       log.error(e as string)
