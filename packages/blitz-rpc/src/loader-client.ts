@@ -3,6 +3,7 @@ import {
   convertFilePathToResolverName,
   convertFilePathToResolverType,
   convertPageFilePathToRoutePath,
+  getHttpMethodFromResolverConfig,
   Loader,
   LoaderOptions,
   toPosixPath,
@@ -50,15 +51,10 @@ export async function transformBlitzRpcResolverClient(
   }
   if (resolverType === "query") {
     try {
-      const {register} = require("esbuild-register/dist/node")
-      const {unregister} = register({
-        target: "es6",
-      })
-      const _rpcConfig = require(id).config as ResolverConfig
+      const _rpcConfig = getHttpMethodFromResolverConfig(id)
       if (_rpcConfig) {
-        resolverConfig.httpMethod = _rpcConfig.httpMethod
+        resolverConfig.httpMethod = _rpcConfig
       }
-      unregister()
     } catch (e) {
       log.error(e as string)
     }

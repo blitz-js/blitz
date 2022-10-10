@@ -5,6 +5,7 @@ import {
   buildPageExtensionRegex,
   convertFilePathToResolverType,
   convertPageFilePathToRoutePath,
+  getHttpMethodFromResolverConfig,
   getIsRpcFile,
   Loader,
   LoaderOptions,
@@ -58,10 +59,6 @@ export async function transformBlitzRpcServer(
   // No break line between `blitzImport` and `src` in order to preserve the source map's line mapping
   let code = blitzImport + src
   code += "\n\n"
-  const {register} = require("esbuild-register/dist/node")
-  const {unregister} = register({
-    target: "es6",
-  })
   for (let resolverFilePath of resolvers) {
     const relativeResolverPath = slash(relative(dirname(id), join(root, resolverFilePath)))
     const resolverType = convertFilePathToResolverType(resolverFilePath)
@@ -71,9 +68,9 @@ export async function transformBlitzRpcServer(
     }
     if (resolverType === "query") {
       try {
-        const _rpcConfig = require(join(root, resolverFilePath)).config as ResolverConfig
+        const _rpcConfig = getHttpMethodFromResolverConfig(join(root, resolverFilePath))
         if (_rpcConfig) {
-          _resolverConfig.httpMethod = _rpcConfig.httpMethod
+          _resolverConfig.httpMethod = _rpcConfig
         }
       } catch (e) {
         log.error(e as string)
@@ -83,7 +80,6 @@ export async function transformBlitzRpcServer(
     code += `__internal_addBlitzRpcResolver('${routePath}',${resolverConfig}, () => import('${relativeResolverPath}'));`
     code += "\n"
   }
-  unregister()
   // console.log("NEW CODE", code)
   return code
 }

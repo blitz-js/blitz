@@ -11,3 +11,7 @@ export default async function getCurrentUser(_ = null, { session }: Ctx) {
 
   return user
 }
+
+export const config = {
+  httpMethod: "GET",
+}

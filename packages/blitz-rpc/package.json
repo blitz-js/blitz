@@ -26,8 +26,8 @@
     "bad-behavior": "1.0.1",
     "chalk": "^4.1.0",
     "debug": "4.3.3",
-    "esbuild": "0.14.34",
-    "esbuild-register": "3.3.3",
+    "jscodeshift": "0.13.0",
+    "recast": "0.20.5",
     "superjson": "1.9.1",
     "supports-color": "8.1.1"
   },
