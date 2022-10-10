@@ -2,12 +2,18 @@ import {UrlObject} from "url"
 // Context for plugins to declaration merge stuff into
 export interface Ctx {}
 
-export interface RouteUrlObject extends Pick<UrlObject, "pathname" | "query"> {
+export interface RouteUrlObject extends Pick<UrlObject, "pathname" | "query" | "href"> {
   pathname: string
 }
 
 export const isRouteUrlObject = (x: any): x is RouteUrlObject => {
-  return typeof x === "object" && "pathname" in x && typeof x.pathname === "string"
+  return (
+    typeof x === "object" &&
+    "pathname" in x &&
+    typeof x.pathname === "string" &&
+    "href" in x &&
+    typeof x.href === "string"
+  )
 }
 
 export type AsyncFunc = (...args: any) => Promise<any>
