@@ -1,4 +1,4 @@
-import {assert, baseLogger, Ctx, newLine, prettyMs} from "blitz"
+import {assert, baseLogger, Ctx, newLine, prettyMs, ResolverConfig} from "blitz"
 import {NextApiRequest, NextApiResponse} from "next"
 import {deserialize, serialize as superjsonSerialize, parse} from "superjson"
 import {resolve} from "path"
@@ -37,16 +37,31 @@ const g = getGlobalObject<{blitzRpcResolverFilesLoaded: ResolverFiles | null}>(
   },
 )
 
+const gConfig = getGlobalObject<{
+  blitzRpcResolverConfig: Record<string, ResolverConfig> | null
+}>("__internal_blitzRpcResolverConfig", {
+  blitzRpcResolverConfig: null,
+})
+
 export function loadBlitzRpcResolverFilesWithInternalMechanism() {
   return g.blitzRpcResolverFilesLoaded
 }
 
+async function getResolverConfig(): Promise<Record<string, ResolverConfig> | null | undefined> {
+  if (gConfig.blitzRpcResolverConfig) {
+    return gConfig.blitzRpcResolverConfig
+  }
+}
+
 export function __internal_addBlitzRpcResolver(
   routePath: string,
+  resolverConfig: ResolverConfig,
   resolver: () => Promise<{default?: Resolver}>,
 ) {
   g.blitzRpcResolverFilesLoaded = g.blitzRpcResolverFilesLoaded || {}
   g.blitzRpcResolverFilesLoaded[routePath] = resolver
+  gConfig.blitzRpcResolverConfig = gConfig.blitzRpcResolverConfig || {}
+  gConfig.blitzRpcResolverConfig[routePath] = resolverConfig
   return resolver
 }
 
@@ -148,7 +163,9 @@ interface RpcConfig {
 export function rpcHandler(config: RpcConfig) {
   return async function handleRpcRequest(req: NextApiRequest, res: NextApiResponse, ctx: Ctx) {
     const resolverMap = await getResolverMap()
+    const resolverConfig = await getResolverConfig()
     assert(resolverMap, "No query or mutation resolvers found")
+    assert(resolverConfig, "No query or mutation config found")
     assert(
       Array.isArray(req.query.blitz),
       "It seems your Blitz RPC endpoint file is not named [[...blitz]].(jt)s. Please ensure it is",
@@ -174,13 +191,21 @@ export function rpcHandler(config: RpcConfig) {
       throw new Error("No default export for resolver path: " + routePath)
     }
 
+    const resolverConfigForRoute = resolverConfig?.[routePath]
+    if (!resolverConfigForRoute) {
+      throw new Error("No config for resolver path: " + routePath)
+    }
+
     if (req.method === "HEAD") {
       // We used to initiate database connection here
       res.status(200).end()
       return
-    } else if (req.method === "POST" || req.method === "GET") {
+    } else if (
+      req.method === "POST" ||
+      (req.method === "GET" && resolverConfigForRoute.httpMethod === "GET")
+    ) {
       if (req.method === "GET") {
-        if (!req.query) {
+        if (Object.keys(req.query).length === 1 && req.query.blitz) {
           const error = {message: "Request params are missing"}
           log.error(error.message)
           res.status(400).json({

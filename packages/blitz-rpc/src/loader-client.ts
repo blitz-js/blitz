@@ -57,6 +57,8 @@ export async function transformBlitzRpcResolverClient(
       const _rpcConfig = require(id).config as ResolverConfig
       if (_rpcConfig) {
         resolverConfig.httpMethod = _rpcConfig.httpMethod
+        if (_rpcConfig.httpMethod === "GET") {
+        }
       }
       unregister()
     } catch (e) {
