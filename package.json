@@ -5,7 +5,8 @@
   "workspaces": [
     "apps/*",
     "packages/*",
-    "integration-tests/*"
+    "integration-tests/*",
+    "recipes/*"
   ],
   "scripts": {
     "preinstall": "npx only-allow pnpm",
@@ -38,7 +39,7 @@
     "wait-on": "6.0.1"
   },
   "npmClient": "pnpm",
-  "packageManager": "pnpm@7.4.0-1",
+  "packageManager": "pnpm@7.11.0",
   "manypkg": {
     "ignoredRules": [
       "EXTERNAL_MISMATCH"

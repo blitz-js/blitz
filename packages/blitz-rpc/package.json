@@ -3,7 +3,7 @@
   "version": "2.0.0-beta.4",
   "scripts": {
     "build": "unbuild",
-    "predev": "wait-on -d 250 ../blitz/dist/index-server.d.ts && wait-on -d 250 ../blitz-auth/dist/index-browser.d.ts",
+    "predev": "wait-on -d 400 ../blitz/dist/index-server.d.ts && wait-on -d 400 ../blitz-auth/dist/index-browser.d.ts",
     "dev": "pnpm run predev && watch unbuild src --wait=0.2",
     "lint": "eslint . --fix",
     "test": "vitest run",
