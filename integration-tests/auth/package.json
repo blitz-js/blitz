@@ -21,7 +21,7 @@
     "@blitzjs/config": "workspace:*",
     "@blitzjs/next": "workspace:*",
     "@prisma/client": "4.0.0",
-    "blitz": "workspace:2.0.0-beta.4",
+    "blitz": "workspace:2.0.0-beta.5",
     "lowdb": "3.0.0",
     "next": "12.2.5",
     "prisma": "4.0.0",
