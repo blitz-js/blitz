@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/recipe-vanilla-extract",
   "private": true,
-  "version": "2.0.0-beta.10",
+  "version": "2.0.0-beta.11",
   "description": "The Blitz Recipe for installing vanilla-extract",
   "main": "index.ts",
   "scripts": {
@@ -25,7 +25,7 @@
   },
   "homepage": "https://github.com/blitz-js/blitz#readme",
   "dependencies": {
-    "blitz": "workspace:2.0.0-beta.5",
+    "blitz": "workspace:2.0.0-beta.11",
     "jscodeshift": "0.13.0"
   },
   "devDependencies": {
