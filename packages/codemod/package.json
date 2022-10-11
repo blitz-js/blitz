@@ -27,7 +27,7 @@
     "@babel/plugin-syntax-typescript": "7.17.12",
     "@blitzjs/generator": "2.0.0-beta.11",
     "arg": "5.0.1",
-    "blitz": "2.0.0-beta.6",
+    "blitz": "2.0.0-beta.11",
     "chalk": "^4.1.0",
     "cross-spawn": "7.0.3",
     "debug": "4.3.3",
