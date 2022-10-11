@@ -27,12 +27,17 @@ type _ResolverType = "GET" | "POST"
 
 export function getHttpMethodFromResolverConfig(path: string): _ResolverType {
   const collection = getCollectionFromSource(path)
-  const config = collection.find(j.ExportNamedDeclaration).filter((p) => {
-    return (
-      p.value.declaration?.type === "VariableDeclaration" &&
-      //@ts-ignore
-      p.value.declaration.declarations[0].id.name === "config"
-    )
+  const config = collection.find(j.ExportNamedDeclaration, {
+    declaration: {
+      type: "VariableDeclaration",
+      declarations: [
+        {
+          id: {
+            name: "config",
+          },
+        },
+      ],
+    },
   })
   const configValue = config.find(j.ObjectExpression).filter((p) => {
     return p.value.properties.some((prop) => {

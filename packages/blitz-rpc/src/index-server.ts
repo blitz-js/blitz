@@ -206,7 +206,7 @@ export function rpcHandler(config: RpcConfig) {
     ) {
       if (req.method === "GET") {
         if (Object.keys(req.query).length === 1 && req.query.blitz) {
-          const error = {message: "Request params are missing"}
+          const error = {message: "Request params and meta are missing"}
           log.error(error.message)
           res.status(400).json({
             result: null,
