@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/recipe-passenger",
   "private": true,
-  "version": "0.34.0-canary.0",
+  "version": "2.0.0-beta.10",
   "description": "The Blitz Recipe for adding passenger.js",
   "main": "index.ts",
   "scripts": {
@@ -23,6 +23,6 @@
   },
   "homepage": "https://github.com/blitz-js/blitz#readme",
   "dependencies": {
-    "blitz": "workspace: 2.0.0-beta.4"
+    "blitz": "workspace:2.0.0-beta.5"
   }
 }

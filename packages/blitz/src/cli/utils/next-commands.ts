@@ -3,6 +3,7 @@ import {
   nextBuild,
   nextStart,
   nextStartDev,
+  nextExport,
   customServerExists,
   startCustomServer,
   buildCustomServer,
@@ -43,4 +44,9 @@ export async function prod(config: ServerConfig) {
   } else {
     await nextStart(nextBin, rootFolder, config)
   }
+}
+
+export async function blitzExport(config: ServerConfig) {
+  const {nextBin} = await normalize(config)
+  await nextExport(nextBin, config)
 }
