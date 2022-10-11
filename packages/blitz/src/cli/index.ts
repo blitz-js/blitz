@@ -37,6 +37,7 @@ const commands = {
   db: () => import("./commands/db").then((i) => i.db),
   install: () => import("./commands/install").then((i) => i.install),
   console: () => import("./commands/console").then((i) => i.consoleREPL),
+  routes: () => import("./commands/routes").then((i) => i.routes),
 }
 
 const aliases: Record<string, keyof typeof commands> = {
@@ -48,6 +49,7 @@ const aliases: Record<string, keyof typeof commands> = {
   g: "generate",
   i: "install",
   c: "console",
+  r: "routes",
 }
 
 type Command = keyof typeof commands
