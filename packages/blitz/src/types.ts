@@ -26,6 +26,7 @@ export type BlitzCliConfig = {
       CodegenField
     >
   }
+  customTemplates?: string
 }
 
 export type CodegenConfig = {
@@ -35,10 +36,6 @@ export type CodegenConfig = {
 
 export interface RouteUrlObject extends Pick<UrlObject, "pathname" | "query"> {
   pathname: string
-}
-
-export type BlitzCliConfig = {
-  customTemplates?: string
 }
 
 export const isRouteUrlObject = (x: any): x is RouteUrlObject => {
