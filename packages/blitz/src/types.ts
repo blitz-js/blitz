@@ -6,6 +6,10 @@ export interface RouteUrlObject extends Pick<UrlObject, "pathname" | "query"> {
   pathname: string
 }
 
+export type BlitzCliConfig = {
+  customTemplates?: string
+}
+
 export const isRouteUrlObject = (x: any): x is RouteUrlObject => {
   return typeof x === "object" && "pathname" in x && typeof x.pathname === "string"
 }
