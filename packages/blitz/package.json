@@ -17,6 +17,7 @@
   "sideEffects": false,
   "license": "MIT",
   "files": [
+    "installer.*",
     "dist/**",
     "bin/**"
   ],
