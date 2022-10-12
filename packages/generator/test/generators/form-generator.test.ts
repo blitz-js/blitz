@@ -13,11 +13,11 @@ describe("Form Generator", () => {
 
   it("Correctly generates field names", async () => {
     const templateValues = await generator.getTemplateValues()
-    expect(templateValues.fieldTemplateValues[0].fieldName).toEqual("myProjectName")
-    expect(templateValues.fieldTemplateValues[0].FieldName).toEqual("MyProjectName")
-    expect(templateValues.fieldTemplateValues[0].field_name).toEqual("my project name")
-    expect(templateValues.fieldTemplateValues[0].Field_name).toEqual("My project name")
-    expect(templateValues.fieldTemplateValues[0].Field_Name).toEqual("My Project Name")
+    expect(templateValues.fieldTemplateValues[0].fieldName).toEqual('"myProjectName"')
+    expect(templateValues.fieldTemplateValues[0].FieldName).toEqual('"MyProjectName"')
+    expect(templateValues.fieldTemplateValues[0].field_name).toEqual('"my project name"')
+    expect(templateValues.fieldTemplateValues[0].Field_name).toEqual('"My project name"')
+    expect(templateValues.fieldTemplateValues[0].Field_Name).toEqual('"My Project Name"')
   })
 
   it("matches template comments correctly", () => {
