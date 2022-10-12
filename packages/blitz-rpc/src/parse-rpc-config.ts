@@ -4,24 +4,21 @@ import fs from "fs"
 import LRU from "lru-cache"
 import {createHash} from "crypto"
 
-const cache = new LRU<string, Module>({max: 500, ttl: 1000 * 60 * 5})
+const cache = new LRU<string, ResolverConfig>({max: 500, ttl: 1000 * 60 * 5})
 
-function parseResolverWithCache(content: string, fileName: string): Module {
+export function getResolverConfig(filePath: string): ResolverConfig {
+  const content = fs.readFileSync(filePath, {encoding: "utf-8"})
   const key = createHash("sha256").update(content).digest("hex")
   let p = cache.get(key)
   if (!p) {
-    // console.log("Cache Miss! Parsing:", fileName)
-    const resolver = parseSync(content, {
-      syntax: "typescript",
-      target: "es2020",
-    })
-    p = resolver
-    cache.set(key, resolver)
-    // } else{
-    // console.log("Cache Hit!!")
-    //print all the keys
-    //   }
+    // console.log("Cache Miss! "+filePath)
+    const resolverConfig = parseResolverCacheMiss(content)
+    p = resolverConfig
+    cache.set(key, resolverConfig)
   }
+  // else {
+  //   console.log("Cache Hit!! "+filePath)
+  // }
   return p
 }
 
@@ -31,10 +28,13 @@ const defaultResolverConfig: ResolverConfig = {
   httpMethod: "POST",
 }
 
-export function getResolverConfig(pathPath: string): ResolverConfig {
-  // console.time("getResolverConfig " + pathPath)
+function parseResolverCacheMiss(content: string): ResolverConfig {
+  // console.time("getResolverConfig ")
   const resolverConfig = defaultResolverConfig
-  const resolver = parseResolverWithCache(fs.readFileSync(pathPath, {encoding: "utf-8"}), pathPath)
+  const resolver = parseSync(content, {
+    syntax: "typescript",
+    target: "es2020",
+  })
   const exportDelaration = resolver.body.find((node) => node.type === "ExportDeclaration")
   if (exportDelaration && exportDelaration.type == "ExportDeclaration") {
     const declaration = exportDelaration.declaration
@@ -64,6 +64,6 @@ export function getResolverConfig(pathPath: string): ResolverConfig {
       }
     }
   }
-  // console.timeEnd("getResolverConfig " + pathPath)
+  // console.timeEnd("getResolverConfig ")
   return resolverConfig
 }
