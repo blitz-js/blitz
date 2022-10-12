@@ -1,4 +1,4 @@
-import {Module, parseSync} from "@swc/core"
+import {parseSync} from "@swc/core"
 import {ResolverConfig} from "blitz"
 import fs from "fs"
 import LRU from "lru-cache"
