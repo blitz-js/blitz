@@ -1,3 +1,4 @@
+import type { BlitzCliConfig } from "blitz"
 import { setupBlitzServer } from "@blitzjs/next"
 import { AuthServerPlugin, PrismaStorage } from "@blitzjs/auth"
 import db from "db"
@@ -81,4 +82,5 @@ export const cliConfig: BlitzCliConfig = {
       },
     },
   },
+  customTemplates: "app/templates",
 }
