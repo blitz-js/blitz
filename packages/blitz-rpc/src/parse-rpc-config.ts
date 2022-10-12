@@ -8,7 +8,7 @@ const cache = new LRU<string, ResolverConfig>({max: 500, ttl: 1000 * 60 * 5})
 
 export function getResolverConfig(filePath: string): ResolverConfig {
   const content = fs.readFileSync(filePath, {encoding: "utf-8"})
-  const key = createHash("sha256").update(filePath.concat(content)).digest("hex")
+  const key = createHash("sha256").update(content).digest("hex")
   let p = cache.get(key)
   if (!p) {
     // console.log("Cache Miss! "+filePath)
