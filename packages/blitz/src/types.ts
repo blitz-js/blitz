@@ -10,6 +10,10 @@ export type ResolverConfig = {
   httpMethod: "GET" | "POST"
 }
 
+export type BlitzCliConfig = {
+  customTemplates?: string
+}
+
 export const isRouteUrlObject = (x: any): x is RouteUrlObject => {
   return typeof x === "object" && "pathname" in x && typeof x.pathname === "string"
 }
