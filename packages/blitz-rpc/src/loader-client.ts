@@ -3,13 +3,13 @@ import {
   convertFilePathToResolverName,
   convertFilePathToResolverType,
   convertPageFilePathToRoutePath,
-  getHttpMethodFromResolverConfig,
   Loader,
   LoaderOptions,
   toPosixPath,
 } from "./loader-utils"
 import {posix} from "path"
 import {log, ResolverConfig} from "blitz"
+import {getResolverConfig} from "./parse-rpc-config"
 
 // Subset of `import type { LoaderDefinitionFunction } from 'webpack'`
 
@@ -51,9 +51,9 @@ export async function transformBlitzRpcResolverClient(
   }
   if (resolverType === "query") {
     try {
-      const _rpcConfig = getHttpMethodFromResolverConfig(id)
-      if (_rpcConfig) {
-        resolverConfig.httpMethod = _rpcConfig
+      const {httpMethod} = getResolverConfig(id)
+      if (httpMethod) {
+        resolverConfig.httpMethod = httpMethod
       }
     } catch (e) {
       log.error(e as string)

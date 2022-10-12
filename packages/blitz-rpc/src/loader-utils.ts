@@ -1,59 +1,6 @@
 import {assert} from "blitz"
 import {posix, sep, win32} from "path"
 import {ResolverPathOptions} from "./index-server"
-import j from "jscodeshift"
-import getBabelOptions, {Overrides} from "recast/parsers/_babel_options"
-import * as babelParser from "recast/parsers/babel"
-import fs from "fs"
-import path from "path"
-
-export const customTsParser: any = {
-  parse(source: string, options?: Overrides) {
-    const babelOptions = getBabelOptions(options)
-    babelOptions.plugins.push("typescript")
-    babelOptions.plugins.push("jsx")
-    return babelParser.parser.parse(source, babelOptions)
-  },
-}
-
-export function getCollectionFromSource(filename: string) {
-  const fileSource = fs.readFileSync(path.resolve(filename), {encoding: "utf-8"})
-  return j(fileSource, {
-    parser: customTsParser,
-  })
-}
-
-type _ResolverType = "GET" | "POST"
-
-export function getHttpMethodFromResolverConfig(path: string): _ResolverType {
-  const collection = getCollectionFromSource(path)
-  const config = collection.find(j.ExportNamedDeclaration, {
-    declaration: {
-      type: "VariableDeclaration",
-      declarations: [
-        {
-          id: {
-            name: "config",
-          },
-        },
-      ],
-    },
-  })
-  const configValue = config.find(j.ObjectExpression).filter((p) => {
-    return p.value.properties.some((prop) => {
-      if (prop.type === "ObjectProperty" && prop.key.type === "Identifier") {
-        return prop.key.name === "httpMethod"
-      }
-    })
-  })
-  const httpMethod = configValue.find(j.StringLiteral).filter((p) => {
-    return p.value.value === "GET" || p.value.value === "POST"
-  })
-  if (httpMethod.length > 0) {
-    return httpMethod.get().value.value
-  }
-  return "POST"
-}
 
 export interface LoaderOptions {
   resolverPath: ResolverPathOptions

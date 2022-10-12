@@ -5,13 +5,13 @@ import {
   buildPageExtensionRegex,
   convertFilePathToResolverType,
   convertPageFilePathToRoutePath,
-  getHttpMethodFromResolverConfig,
   getIsRpcFile,
   Loader,
   LoaderOptions,
   topLevelFoldersThatMayContainResolvers,
   toPosixPath,
 } from "./loader-utils"
+import {getResolverConfig} from "./parse-rpc-config"
 import {log, ResolverConfig} from "blitz"
 
 // Subset of `import type { LoaderDefinitionFunction } from 'webpack'`
@@ -55,7 +55,6 @@ export async function transformBlitzRpcServer(
   assertPosixPath(root)
 
   const blitzImport = 'import { __internal_addBlitzRpcResolver } from "@blitzjs/rpc";'
-
   // No break line between `blitzImport` and `src` in order to preserve the source map's line mapping
   let code = blitzImport + src
   code += "\n\n"
@@ -68,9 +67,9 @@ export async function transformBlitzRpcServer(
     }
     if (resolverType === "query") {
       try {
-        const _rpcConfig = getHttpMethodFromResolverConfig(join(root, resolverFilePath))
-        if (_rpcConfig) {
-          _resolverConfig.httpMethod = _rpcConfig
+        const {httpMethod} = getResolverConfig(join(root, resolverFilePath))
+        if (httpMethod) {
+          _resolverConfig.httpMethod = httpMethod
         }
       } catch (e) {
         log.error(e as string)
