@@ -490,7 +490,6 @@ export abstract class Generator<
                 ),
               ),
             )
-          // add import {usePaginatedQuery} from "@blitzjs/rpc" if it doesn't exist
           const importPaginatedQuery = program
             .find(j.ImportDeclaration)
             .filter((path) => {
@@ -555,6 +554,22 @@ export abstract class Generator<
                   ),
                 ]),
               )
+            projectFormSuspense
+              .find(j.JSXElement)
+              .filter((path) => {
+                return (
+                  path.node.openingElement.name.type === "JSXIdentifier" &&
+                  path.node.openingElement.name.name === "LabeledSelectField"
+                )
+              })
+              .forEach((path) => {
+                console.log(path.node)
+                path.node.openingElement.attributes?.forEach((attribute) => {
+                  if (attribute.type === "JSXAttribute" && attribute.name.name === "type") {
+                    attribute.name.name = "options"
+                  }
+                })
+              })
             this.fs.write(templatedPathSuffix, program.toSource())
           }
         }

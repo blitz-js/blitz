@@ -7,13 +7,13 @@ export interface LabeledSelectFieldProps extends PropsWithoutRef<JSX.IntrinsicEl
   /** Field label. */
   label: string
   /** Field type. Doesn't include radio buttons and checkboxes */
-  type: any
+  options: any
   outerProps?: PropsWithoutRef<JSX.IntrinsicElements["div"]>
   labelProps?: ComponentPropsWithoutRef<"label">
 }
 
 export const LabeledSelectField = forwardRef<HTMLSelectElement, LabeledSelectFieldProps>(
-  ({ label, outerProps, labelProps, name, type, ...props }, ref) => {
+  ({ label, outerProps, labelProps, name, options, ...props }, ref) => {
     const {
       register,
       formState: { isSubmitting, errors },
@@ -26,7 +26,7 @@ export const LabeledSelectField = forwardRef<HTMLSelectElement, LabeledSelectFie
         <label {...labelProps}>
           {label}
         <select  {...register(name)} disabled={isSubmitting} {...props}>
-          {type && type.map((value) => (
+          {options && options.map((value) => (
             <option value={value.id}>
                {value[name]}
             </option>
