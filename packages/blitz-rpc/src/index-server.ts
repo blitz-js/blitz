@@ -173,15 +173,13 @@ export function rpcHandler(config: RpcConfig) {
       throw new Error("No resolver for path: " + routePath)
     }
 
-    const resolver = (await loadableResolver()).default
+    const {default: resolver, config: resolverConfig} = await loadableResolver()
+
     if (!resolver) {
       throw new Error("No default export for resolver path: " + routePath)
     }
 
-    let resolverConfig = (await loadableResolver()).config
-    if (!resolverConfig) {
-      resolverConfig = defaultConfig
-    }
+    const resolverConfigWithDefaults = {...defaultConfig, ...resolverConfig}
 
     if (req.method === "HEAD") {
       // We used to initiate database connection here
@@ -189,7 +187,7 @@ export function rpcHandler(config: RpcConfig) {
       return
     } else if (
       req.method === "POST" ||
-      (req.method === "GET" && resolverConfig?.httpMethod === "GET")
+      (req.method === "GET" && resolverConfigWithDefaults.httpMethod === "GET")
     ) {
       if (req.method === "GET") {
         if (Object.keys(req.query).length === 1 && req.query.blitz) {

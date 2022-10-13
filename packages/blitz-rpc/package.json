@@ -27,7 +27,6 @@
     "bad-behavior": "1.0.1",
     "chalk": "^4.1.0",
     "debug": "4.3.3",
-    "lru-cache": "7.14.0",
     "superjson": "1.9.1",
     "supports-color": "8.1.1"
   },

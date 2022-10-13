@@ -937,7 +937,6 @@ importers:
       blitz: 2.0.0-beta.12
       chalk: ^4.1.0
       debug: 4.3.3
-      lru-cache: 7.14.0
       next: 12.2.5
       react: 18.2.0
       react-dom: 18.2.0
@@ -955,7 +954,6 @@ importers:
       bad-behavior: 1.0.1
       chalk: 4.1.2
       debug: 4.3.3_supports-color@8.1.1
-      lru-cache: 7.14.0
       superjson: 1.9.1
       supports-color: 8.1.1
     devDependencies:
@@ -14130,14 +14128,6 @@ packages:
     engines: {node: ">=10"}
     dependencies:
       yallist: 4.0.0
-
-  /lru-cache/7.14.0:
-    resolution:
-      {
-        integrity: sha512-EIRtP1GrSJny0dqb50QXRUNBxHJhcpxHC++M5tD7RYbvLLn5KVWKsbyswSSqDuU15UFi3bgTQIY8nhDMeF6aDQ==,
-      }
-    engines: {node: ">=12"}
-    dev: false
 
   /lz-string/1.4.4:
     resolution:

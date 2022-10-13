@@ -1,20 +1,5 @@
 import {parseSync} from "@swc/core"
 import {ResolverConfig} from "blitz"
-import LRU from "lru-cache"
-import {createHash} from "crypto"
-
-const cache = new LRU<string, ResolverConfig>({max: 500, ttl: 1000 * 60 * 5})
-
-export function getResolverConfig(content: string): ResolverConfig {
-  const key = createHash("sha256").update(content).digest("hex")
-  let p = cache.get(key)
-  if (!p) {
-    const resolverConfig = parseResolverCacheMiss(content)
-    p = resolverConfig
-    cache.set(key, resolverConfig)
-  }
-  return p
-}
 
 type _ResolverType = "GET" | "POST"
 
@@ -22,7 +7,7 @@ const defaultResolverConfig: ResolverConfig = {
   httpMethod: "POST",
 }
 
-function parseResolverCacheMiss(content: string): ResolverConfig {
+export function getResolverConfig(content: string): ResolverConfig {
   const resolverConfig = defaultResolverConfig
   const resolver = parseSync(content, {
     syntax: "typescript",
