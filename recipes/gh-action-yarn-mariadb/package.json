@@ -24,6 +24,6 @@
   },
   "homepage": "https://github.com/blitz-js/blitz#readme",
   "dependencies": {
-    "blitz": "workspace:2.0.0-beta.11"
+    "blitz": "workspace:2.0.0-beta.12"
   }
 }
