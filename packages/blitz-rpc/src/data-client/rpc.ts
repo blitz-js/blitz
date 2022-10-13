@@ -109,11 +109,6 @@ export function __internal_buildRpcClient({
           params: stringify(serialized.json),
           meta: stringify(serialized.meta),
         })
-      if (fullRoutePath.length > 2083) {
-        console.warn(
-          "URL length is greater than 2083 characters. This may cause issues in some browsers. Consider using POST instead of GET.",
-        )
-      }
     }
 
     const promise = window

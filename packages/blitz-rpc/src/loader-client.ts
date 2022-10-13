@@ -51,7 +51,7 @@ export async function transformBlitzRpcResolverClient(
   }
   if (resolverType === "query") {
     try {
-      const {httpMethod} = getResolverConfig(id)
+      const {httpMethod} = getResolverConfig(_src)
       if (httpMethod) {
         resolverConfig.httpMethod = httpMethod
       }

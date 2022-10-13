@@ -14,6 +14,10 @@ function isObject(value: unknown): value is Record<string | symbol, unknown> {
   return typeof value === "object" && value !== null
 }
 
+const defaultConfig: ResolverConfig = {
+  httpMethod: "POST",
+}
+
 function getGlobalObject<T extends Record<string, unknown>>(key: string, defaultValue: T): T {
   assert(key.startsWith("__internal_blitz"), "unsupported key")
   if (typeof global === "undefined") {
@@ -25,7 +29,7 @@ function getGlobalObject<T extends Record<string, unknown>>(key: string, default
 }
 
 type Resolver = (...args: unknown[]) => Promise<unknown>
-type ResolverFiles = Record<string, () => Promise<{default?: Resolver}>>
+type ResolverFiles = Record<string, () => Promise<{default?: Resolver; config?: ResolverConfig}>>
 export type ResolverPathOptions = "queries|mutations" | "root" | ((path: string) => string)
 
 // We define `global.__internal_blitzRpcResolverFiles` to ensure we use the same global object.
@@ -37,31 +41,16 @@ const g = getGlobalObject<{blitzRpcResolverFilesLoaded: ResolverFiles | null}>(
   },
 )
 
-const gConfig = getGlobalObject<{
-  blitzRpcResolverConfig: Record<string, ResolverConfig> | null
-}>("__internal_blitzRpcResolverConfig", {
-  blitzRpcResolverConfig: null,
-})
-
 export function loadBlitzRpcResolverFilesWithInternalMechanism() {
   return g.blitzRpcResolverFilesLoaded
 }
 
-async function getResolverConfig(): Promise<Record<string, ResolverConfig> | null | undefined> {
-  if (gConfig.blitzRpcResolverConfig) {
-    return gConfig.blitzRpcResolverConfig
-  }
-}
-
 export function __internal_addBlitzRpcResolver(
   routePath: string,
-  resolverConfig: ResolverConfig,
-  resolver: () => Promise<{default?: Resolver}>,
+  resolver: () => Promise<{default?: Resolver; config?: ResolverConfig}>,
 ) {
   g.blitzRpcResolverFilesLoaded = g.blitzRpcResolverFilesLoaded || {}
   g.blitzRpcResolverFilesLoaded[routePath] = resolver
-  gConfig.blitzRpcResolverConfig = gConfig.blitzRpcResolverConfig || {}
-  gConfig.blitzRpcResolverConfig[routePath] = resolverConfig
   return resolver
 }
 
@@ -163,9 +152,7 @@ interface RpcConfig {
 export function rpcHandler(config: RpcConfig) {
   return async function handleRpcRequest(req: NextApiRequest, res: NextApiResponse, ctx: Ctx) {
     const resolverMap = await getResolverMap()
-    const resolverConfig = await getResolverConfig()
     assert(resolverMap, "No query or mutation resolvers found")
-    assert(resolverConfig, "No query or mutation config found")
     assert(
       Array.isArray(req.query.blitz),
       "It seems your Blitz RPC endpoint file is not named [[...blitz]].(jt)s. Please ensure it is",
@@ -191,9 +178,9 @@ export function rpcHandler(config: RpcConfig) {
       throw new Error("No default export for resolver path: " + routePath)
     }
 
-    const resolverConfigForRoute = resolverConfig?.[routePath]
-    if (!resolverConfigForRoute) {
-      throw new Error("No config for resolver path: " + routePath)
+    let resolverConfig = (await loadableResolver()).config
+    if (!resolverConfig) {
+      resolverConfig = defaultConfig
     }
 
     if (req.method === "HEAD") {
@@ -202,7 +189,7 @@ export function rpcHandler(config: RpcConfig) {
       return
     } else if (
       req.method === "POST" ||
-      (req.method === "GET" && resolverConfigForRoute.httpMethod === "GET")
+      (req.method === "GET" && resolverConfig?.httpMethod === "GET")
     ) {
       if (req.method === "GET") {
         if (Object.keys(req.query).length === 1 && req.query.blitz) {

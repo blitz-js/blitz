@@ -1,9 +1,8 @@
-import {dirname, join, posix, relative} from "path"
+import {dirname, join, relative} from "path"
 import {promises} from "fs"
 import {
   assertPosixPath,
   buildPageExtensionRegex,
-  convertFilePathToResolverType,
   convertPageFilePathToRoutePath,
   getIsRpcFile,
   Loader,
@@ -11,8 +10,6 @@ import {
   topLevelFoldersThatMayContainResolvers,
   toPosixPath,
 } from "./loader-utils"
-import {getResolverConfig} from "./parse-rpc-config"
-import {log, ResolverConfig} from "blitz"
 
 // Subset of `import type { LoaderDefinitionFunction } from 'webpack'`
 
@@ -60,23 +57,8 @@ export async function transformBlitzRpcServer(
   code += "\n\n"
   for (let resolverFilePath of resolvers) {
     const relativeResolverPath = slash(relative(dirname(id), join(root, resolverFilePath)))
-    const resolverType = convertFilePathToResolverType(resolverFilePath)
     const routePath = convertPageFilePathToRoutePath(resolverFilePath, options?.resolverPath)
-    const _resolverConfig: ResolverConfig = {
-      httpMethod: "POST",
-    }
-    if (resolverType === "query") {
-      try {
-        const {httpMethod} = getResolverConfig(join(root, resolverFilePath))
-        if (httpMethod) {
-          _resolverConfig.httpMethod = httpMethod
-        }
-      } catch (e) {
-        log.error(e as string)
-      }
-    }
-    const resolverConfig = JSON.stringify(_resolverConfig)
-    code += `__internal_addBlitzRpcResolver('${routePath}',${resolverConfig}, () => import('${relativeResolverPath}'));`
+    code += `__internal_addBlitzRpcResolver('${routePath}',() => import('${relativeResolverPath}'));`
     code += "\n"
   }
   // console.log("NEW CODE", code)

@@ -1,24 +1,18 @@
 import {parseSync} from "@swc/core"
 import {ResolverConfig} from "blitz"
-import fs from "fs"
 import LRU from "lru-cache"
 import {createHash} from "crypto"
 
 const cache = new LRU<string, ResolverConfig>({max: 500, ttl: 1000 * 60 * 5})
 
-export function getResolverConfig(filePath: string): ResolverConfig {
-  const content = fs.readFileSync(filePath, {encoding: "utf-8"})
+export function getResolverConfig(content: string): ResolverConfig {
   const key = createHash("sha256").update(content).digest("hex")
   let p = cache.get(key)
   if (!p) {
-    // console.log("Cache Miss! "+filePath)
     const resolverConfig = parseResolverCacheMiss(content)
     p = resolverConfig
     cache.set(key, resolverConfig)
   }
-  // else {
-  //   console.log("Cache Hit!! "+filePath)
-  // }
   return p
 }
 
@@ -29,13 +23,23 @@ const defaultResolverConfig: ResolverConfig = {
 }
 
 function parseResolverCacheMiss(content: string): ResolverConfig {
-  // console.time("getResolverConfig ")
   const resolverConfig = defaultResolverConfig
   const resolver = parseSync(content, {
     syntax: "typescript",
     target: "es2020",
   })
-  const exportDelaration = resolver.body.find((node) => node.type === "ExportDeclaration")
+  const exportDelaration = resolver.body.find((node) => {
+    if (node.type === "ExportDeclaration") {
+      if (node.declaration.type === "VariableDeclaration") {
+        if (node.declaration.declarations[0]?.id.type === "Identifier") {
+          if (node.declaration.declarations[0].id.value === "config") {
+            return true
+          }
+        }
+      }
+    }
+    return false
+  })
   if (exportDelaration && exportDelaration.type == "ExportDeclaration") {
     const declaration = exportDelaration.declaration
     if (declaration && declaration.type == "VariableDeclaration") {
@@ -64,6 +68,5 @@ function parseResolverCacheMiss(content: string): ResolverConfig {
       }
     }
   }
-  // console.timeEnd("getResolverConfig ")
   return resolverConfig
 }
