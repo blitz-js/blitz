@@ -1,5 +1,29 @@
 # @blitzjs/rpc
 
+## 2.0.0-beta.12
+
+### Patch Changes
+
+- @blitzjs/auth@2.0.0-beta.12
+
+## 2.0.0-beta.11
+
+### Patch Changes
+
+- 1476a577: Fix release
+- Updated dependencies [1476a577]
+  - @blitzjs/auth@2.0.0-beta.11
+
+## 2.0.0-beta.10
+
+### Patch Changes
+
+- 0edeaa37: Allow for custom page extensions for the wildcard blitz route. For example [...blitz].api.ts. For more information vist https://nextjs.org/docs/api-reference/next.config.js/custom-page-extensions
+- aa34661f: Fix invalidateQuery generating wrong param when no param argument is passed
+- 8e0c9d76: Migrate over recipe functionality from legacy framework & expose recipe builder helper functions that find and modify next.config.js, blitz-server & blitz-client.
+- Updated dependencies [9fe0cc54]
+  - @blitzjs/auth@2.0.0-beta.10
+
 ## 2.0.0-beta.4
 
 ### Patch Changes

@@ -151,7 +151,7 @@ const normalizeConfig = (phase: string, config: any) => {
   }
   return config
 }
-const loadConfig = (pagesDir: string) => {
+export const loadConfig = (pagesDir: string) => {
   let userConfigModule
 
   try {

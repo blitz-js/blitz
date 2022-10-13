@@ -2,9 +2,6 @@ import {describe, it, expect, beforeAll, afterAll} from "vitest"
 import {
   killApp,
   findPort,
-  launchApp,
-  nextBuild,
-  nextStart,
   runBlitzCommand,
   blitzLaunchApp,
   blitzBuild,
@@ -12,13 +9,10 @@ import {
 } from "../../utils/next-test-utils"
 import webdriver from "../../utils/next-webdriver"
 
-import {join} from "path"
-
 let app: any
 let appPort: number
-const appDir = join(__dirname, "../")
 
-const runTests = (mode?: string) => {
+const runTests = () => {
   describe("get query data", () => {
     it(
       "should work",
@@ -36,23 +30,65 @@ const runTests = (mode?: string) => {
       },
       5000 * 60 * 2,
     )
-  }),
-    describe("prefetch infinite query", () => {
-      it(
-        "should work",
-        async () => {
-          const browser = await webdriver(appPort, "/page-with-prefetch-inf-query")
+  })
 
-          browser.waitForElementByCss("#data", 0)
-          const newText = await browser.elementByCss("#data").text()
-          expect(newText).not.toMatch("no-data")
-          expect(newText).toMatch("thanks")
+  describe("prefetch infinite query", () => {
+    it(
+      "should work",
+      async () => {
+        const browser = await webdriver(appPort, "/page-with-prefetch-inf-query")
 
-          if (browser) await browser.close()
-        },
-        5000 * 60 * 2,
-      )
-    })
+        browser.waitForElementByCss("#data", 0)
+        const newText = await browser.elementByCss("#data").text()
+        expect(newText).not.toMatch("no-data")
+        expect(newText).toMatch("thanks")
+
+        if (browser) await browser.close()
+      },
+      5000 * 60 * 2,
+    )
+  })
+
+  describe("invalidate query", () => {
+    it(
+      "should work",
+      async () => {
+        const browser = await webdriver(appPort, "/page-with-invalidate")
+        const getData = async () => {
+          const q1 = await browser.elementByCss("#data-first").text()
+          const q2 = await browser.elementByCss("#data-second").text()
+
+          return {q1: parseInt(q1), q2: parseInt(q2)}
+        }
+
+        browser.waitForElementByCss("#data", 0)
+
+        const initialData = await getData()
+        expect(initialData.q1).equal(0)
+        expect(initialData.q2).equal(0)
+
+        browser.elementByCss("#invalidate-both").click() // sometimes first one returns the same value
+        await new Promise((r) => setTimeout(r, 100))
+        browser.elementByCss("#invalidate-both").click()
+
+        browser.waitForElementByCss("#data", 0)
+
+        const bothData = await getData()
+        expect(bothData.q1).greaterThan(initialData.q1)
+        expect(bothData.q2).greaterThan(initialData.q2)
+
+        browser.elementByCss("#invalidate-first").click()
+        browser.waitForElementByCss("#data", 0)
+
+        const afterSecond = await getData()
+        expect(afterSecond.q1).equal(bothData.q1 + 1)
+        expect(afterSecond.q2).equal(bothData.q2)
+
+        if (browser) await browser.close()
+      },
+      5000 * 60 * 2,
+    )
+  })
 }
 
 describe("React Query Utils Tests", () => {

@@ -224,9 +224,14 @@ export function nextBuild(
 
 export function nextExport(nextBin: string, config: ServerConfig) {
   const spawnEnv = getSpawnEnv(config)
+  const args = ["export"]
+
+  if (config.outdir) {
+    args.push("-o", `${config.outdir}`)
+  }
 
   return new Promise<void>((res, rej) => {
-    spawn(nextBin, ["export"], {
+    spawn(nextBin, args, {
       env: spawnEnv,
       stdio: "inherit",
     })
