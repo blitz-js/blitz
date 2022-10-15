@@ -21,10 +21,10 @@ export const authenticateUser = async (email: string, password: string) => {
 export default api(async (req, res, ctx) => {
   const blitzContext = ctx
 
-  // const user = await authenticateUser(req.query.email as string, req.query.password as string)
+  const user = await authenticateUser(req.query.email as string, req.query.password as string)
 
   await blitzContext.session.$create({
-    userId: 1,
+    userId: user.id,
     role: "USER",
   })
 
