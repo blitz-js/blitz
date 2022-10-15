@@ -13,6 +13,6 @@ const PageWithRedirect = () => {
   )
 }
 
-PageWithRedirect.authenticate = {redirectTo: "/"}
+PageWithRedirect.authenticate = {role: ["ADMIN"], redirectTo: "/"}
 
 export default PageWithRedirect

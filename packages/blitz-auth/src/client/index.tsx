@@ -50,7 +50,7 @@ export const parsePublicDataToken = (token: string) => {
   }
 }
 
-const emptyPublicData: EmptyPublicData = {userId: null}
+const emptyPublicData: EmptyPublicData = {userId: null, role: null}
 
 class PublicDataStore {
   private eventKey = `${LOCALSTORAGE_PREFIX}publicDataUpdated`
@@ -164,9 +164,8 @@ export const useSession = (options: UseSessionOptions = {}): ClientSession => {
   return session
 }
 
-export const useAuthorizeIf = (condition?: boolean) => {
+export const useAuthorizeIf = (condition?: boolean, role?: unknown) => {
   const [mounted, setMounted] = useState(false)
-
   useEffect(() => {
     setMounted(true)
   }, [])
@@ -176,6 +175,28 @@ export const useAuthorizeIf = (condition?: boolean) => {
     error.stack = null!
     throw error
   }
+  if (isClient && condition && role && getPublicDataStore().getData().userId && mounted) {
+    const error = new AuthenticationError()
+    error.stack = null!
+    if (!authorizeRole(role, getPublicDataStore().getData().role)) {
+      throw error
+    }
+  }
+}
+
+const authorizeRole = (role?: unknown, currentRole?: unknown) => {
+  if (role && currentRole) {
+    if (Array.isArray(role)) {
+      if (role.includes(currentRole)) {
+        return true
+      }
+    } else {
+      if (currentRole === role) {
+        return true
+      }
+    }
+  }
+  return false
 }
 
 export const useAuthorize = () => {
@@ -217,7 +238,7 @@ export type RedirectAuthenticatedToFn = (
 
 export type BlitzPage<P = {}> = React.ComponentType<P> & {
   getLayout?: (component: JSX.Element) => JSX.Element
-  authenticate?: boolean | {redirectTo?: string | RouteUrlObject}
+  authenticate?: boolean | {redirectTo?: string | RouteUrlObject; role?: string | Array<string>}
   suppressFirstRenderFlicker?: boolean
   redirectAuthenticatedTo?: RedirectAuthenticatedTo | RedirectAuthenticatedToFn
 }
@@ -268,7 +289,10 @@ function withBlitzAuthPlugin<TProps = any>(Page: ComponentType<TProps> | BlitzPa
 
     let {authenticate, redirectAuthenticatedTo} = getAuthValues(Page, props)
 
-    useAuthorizeIf(authenticate === true)
+    useAuthorizeIf(
+      !authenticate ? false : typeof authenticate === "boolean" ? authenticate === true : true,
+      !authenticate ? undefined : typeof authenticate === "object" ? authenticate.role : undefined,
+    )
 
     if (typeof window !== "undefined") {
       const publicData = getPublicDataStore().getData()
@@ -296,6 +320,25 @@ function withBlitzAuthPlugin<TProps = any>(Page: ComponentType<TProps> | BlitzPa
             error.stack = null!
             throw error
           }
+        }
+
+        if (
+          authenticate &&
+          typeof authenticate === "object" &&
+          authenticate.redirectTo &&
+          authenticate.role &&
+          !authorizeRole(authenticate.role, publicData.role)
+        ) {
+          let {redirectTo} = authenticate
+          if (typeof redirectTo !== "string") {
+            redirectTo = formatWithValidation(redirectTo)
+          }
+          const url = new URL(redirectTo, window.location.href)
+          url.searchParams.append("next", window.location.pathname)
+          debug("[BlitzAuthInnerRoot] redirecting to", url.toString())
+          const error = new RedirectError(url.toString())
+          error.stack = null!
+          throw error
         }
       } else {
         debug("[BlitzAuthInnerRoot] logged out")
