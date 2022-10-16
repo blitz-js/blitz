@@ -164,7 +164,7 @@ export const useSession = (options: UseSessionOptions = {}): ClientSession => {
   return session
 }
 
-export const useAuthorizeIf = (condition?: boolean, role?: unknown) => {
+export const useAuthorizeIf = (condition?: boolean, role?: string | Array<string>) => {
   const [mounted, setMounted] = useState(false)
   useEffect(() => {
     setMounted(true)
@@ -175,16 +175,17 @@ export const useAuthorizeIf = (condition?: boolean, role?: unknown) => {
     error.stack = null!
     throw error
   }
+
   if (isClient && condition && role && getPublicDataStore().getData().userId && mounted) {
     const error = new AuthenticationError()
     error.stack = null!
-    if (!authorizeRole(role, getPublicDataStore().getData().role)) {
+    if (!authorizeRole(role, getPublicDataStore().getData().role as string)) {
       throw error
     }
   }
 }
 
-const authorizeRole = (role?: unknown, currentRole?: unknown) => {
+const authorizeRole = (role?: string | Array<string>, currentRole?: string) => {
   if (role && currentRole) {
     if (Array.isArray(role)) {
       if (role.includes(currentRole)) {
@@ -327,7 +328,7 @@ function withBlitzAuthPlugin<TProps = any>(Page: ComponentType<TProps> | BlitzPa
           typeof authenticate === "object" &&
           authenticate.redirectTo &&
           authenticate.role &&
-          !authorizeRole(authenticate.role, publicData.role)
+          !authorizeRole(authenticate.role, publicData.role as string)
         ) {
           let {redirectTo} = authenticate
           if (typeof redirectTo !== "string") {
