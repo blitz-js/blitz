@@ -231,7 +231,12 @@ export class Field {
       args: [
         {
           type: "attributeArgument",
-          value: typeof this.default === "object" ? `${this.default.name}()` : String(this.default),
+          value:
+            typeof this.default === "object"
+              ? `${this.default.name}()`
+              : this.type === FieldType.String
+              ? `"${this.default}"`
+              : this.default,
         },
       ],
     }
