@@ -16,7 +16,6 @@ import { getSession, useSession } from "@blitzjs/auth"
 
 const UserInfo = () => {
   const currentUser = useCurrentUser()
-  const session = useSession()
   const [logoutMutation] = useMutation(logout)
 
   if (currentUser) {
