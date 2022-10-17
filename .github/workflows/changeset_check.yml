@@ -10,7 +10,7 @@ concurrency:
 
 jobs:
   changeset:
-    if: ${{ github.event.label.name != 'no-changeset' }}
+    if: ${{ !contains(github.event.pull_request.labels.*.name, 'no-changeset') && github.event.pull_request.merged == false }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
