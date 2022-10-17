@@ -63,6 +63,7 @@
     "recast": "0.20.5",
     "resolve-cwd": "3.0.0",
     "resolve-from": "5.0.0",
+    "rimraf": "3.0.2",
     "superjson": "1.9.1",
     "supports-color": "8.1.1",
     "tar": "6.1.11",

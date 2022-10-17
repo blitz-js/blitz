@@ -4,11 +4,14 @@ import prompts from "prompts"
 import {bootstrap} from "global-agent"
 import {baseLogger, log} from "../../logging"
 const debug = require("debug")("blitz:cli")
-import {join, resolve} from "path"
+import {join, resolve, dirname} from "path"
 import {Stream} from "stream"
 import {promisify} from "util"
 import {RecipeCLIFlags, RecipeExecutor} from "../../installer"
 import {setupTsnode} from "../utils/setup-ts-node"
+import {isInternalBlitzMonorepoDevelopment} from "../utils/helpers"
+import findUp from "find-up"
+import resolveFrom from "resolve-from"
 
 interface GlobalAgent {
   HTTP_PROXY?: string
@@ -153,13 +156,39 @@ const normalizeRecipePath = (recipeArg: string): RecipeMeta => {
   }
 }
 
+async function findNodeModulesRoot(src: string) {
+  let root: string
+  if (isInternalBlitzMonorepoDevelopment) {
+    root = join(__dirname, "..", "..", "..", "..", "/node_modules")
+  } else {
+    const blitzPkgLocation = dirname(
+      (await findUp("package.json", {
+        cwd: resolveFrom(src, "blitz"),
+      })) ?? "",
+    )
+
+    if (!blitzPkgLocation) {
+      throw new Error("Internal Blitz Error: unable to find 'blitz' package location")
+    }
+
+    if (blitzPkgLocation.includes(".pnpm")) {
+      root = join(blitzPkgLocation, "../../../../")
+    } else {
+      root = join(blitzPkgLocation, "../")
+    }
+  }
+
+  return root
+}
+
 const cloneRepo = async (
   repoFullName: string,
   defaultBranch: string,
   subdirectory?: string,
 ): Promise<string> => {
   debug("[cloneRepo] starting...")
-  const recipeDir = join(process.cwd(), ".blitz", "recipe-install")
+  const dotBlitz = join(await findNodeModulesRoot(process.cwd()), ".blitz")
+  const recipeDir = join(dotBlitz, "recipe-install")
   // clean up from previous run in case of error
   require("rimraf").sync(recipeDir)
   require("fs-extra").mkdirsSync(recipeDir)
@@ -183,6 +212,7 @@ const installRecipeAtPath = async (
   recipePath: string,
   ...runArgs: Parameters<RecipeExecutor<any>["run"]>
 ) => {
+  require("ts-node").register({compilerOptions: {module: "commonjs"}})
   const recipe = require(recipePath).default as RecipeExecutor<any>
 
   await recipe.run(...runArgs)
@@ -205,7 +235,8 @@ const setupProxySupport = async () => {
 }
 
 const install: CliCommand = async () => {
-  setupTsnode()
+  // setupTsnode()
+  require("ts-node").register({compilerOptions: {module: "commonjs"}})
 
   let selectedRecipe: string | null = args._[1] ? `${args._[1]}` : null
   await setupProxySupport()
