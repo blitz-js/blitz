@@ -217,13 +217,9 @@ export function rpcHandler(config: RpcConfig) {
             meta: req.body.meta?.params,
           })
         } else {
-          let meta = req.query.meta
-          if (Array.isArray(meta)) {
-            meta = meta[meta.length - 1]
-          }
           data = deserialize({
             json: parse(req.query.params as string),
-            meta: parse(meta as string),
+            meta: parse(req.query.meta as string),
           })
         }
         log.info(customChalk.dim("Starting with input:"), data ? data : JSON.stringify(data))

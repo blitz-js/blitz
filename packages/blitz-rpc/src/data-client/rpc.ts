@@ -103,12 +103,10 @@ export function __internal_buildRpcClient({
     })
 
     if (httpMethod === "GET") {
-      fullRoutePath +=
-        "?" +
-        new URLSearchParams({
-          params: stringify(serialized.json),
-          meta: stringify(serialized.meta),
-        })
+      const url = new URL(fullRoutePath, window.location.origin)
+      url.searchParams.set("params", stringify(serialized.json))
+      url.searchParams.set("meta", stringify(serialized.meta))
+      fullRoutePath = url.toString()
     }
 
     const promise = window
