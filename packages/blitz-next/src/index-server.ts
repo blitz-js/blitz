@@ -17,7 +17,6 @@ import {
   MiddlewareResponse,
   BlitzLogger,
   initializeLogger,
-  BlitzLogLevel,
 } from "blitz"
 import {handleRequestWithMiddleware, startWatcher, stopWatcher} from "blitz"
 import {
@@ -53,7 +52,7 @@ export type NextApiHandler<TResult> = (
 type SetupBlitzOptions = {
   plugins: BlitzServerPlugin<RequestMiddleware, Ctx>[]
   onError?: (err: Error) => void
-  log: {logger: ReturnType<typeof BlitzLogger>; logLevel?: BlitzLogLevel}
+  logger: ReturnType<typeof BlitzLogger>
 }
 
 export type Redirect =
@@ -131,8 +130,8 @@ const prefetchQueryFactory = (
   }
 }
 
-export const setupBlitzServer = ({plugins, onError, log}: SetupBlitzOptions) => {
-  initializeLogger(log)
+export const setupBlitzServer = ({plugins, onError, logger}: SetupBlitzOptions) => {
+  initializeLogger(logger)
 
   const middlewares = plugins.flatMap((p) => p.requestMiddlewares)
   const contextMiddleware = plugins.flatMap((p) => p.contextMiddleware).filter(Boolean)

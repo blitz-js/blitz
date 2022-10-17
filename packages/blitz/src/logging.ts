@@ -7,7 +7,7 @@ import readline from "readline"
 export type BlitzLoggerSettings = ISettingsParam
 export type BlitzLogLevel = TLogLevelName
 
-declare module globalThis {
+declare namespace globalThis {
   let _blitz_baseLogger: Logger
   let _blitz_logLevel: BlitzLogLevel
 }
@@ -49,15 +49,8 @@ export const BlitzLogger = (settings: BlitzLoggerSettings = {}) => {
   return baseLogger
 }
 
-export const initializeLogger = ({
-  logger,
-  logLevel,
-}: {
-  logger: Logger
-  logLevel?: BlitzLogLevel
-}) => {
+export const initializeLogger = (logger: Logger) => {
   globalThis._blitz_baseLogger = logger
-  globalThis._blitz_logLevel = logLevel || "info"
 }
 
 export const table = Table

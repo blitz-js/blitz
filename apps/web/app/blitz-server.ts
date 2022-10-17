@@ -12,13 +12,10 @@ const {gSSP, gSP, api} = setupBlitzServer({
       isAuthorized: simpleRolesIsAuthorized,
     }),
   ],
-  log: {
-    logger: BlitzLogger({
-      colorizePrettyLogs: true,
-      prefix: ["[blitz]"],
-    }),
-    logLevel: "error",
-  },
+  logger: BlitzLogger({
+    colorizePrettyLogs: true,
+    prefix: ["[blitz]>>>>>"],
+  }),
 })
 
 export {gSSP, gSP, api}

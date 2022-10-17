@@ -3,9 +3,7 @@ import {BlitzLogger} from "blitz"
 
 const {gSSP, gSP, api} = setupBlitzServer({
   plugins: [],
-  log: {
-    logger: BlitzLogger({}),
-  },
+  logger: BlitzLogger({}),
 })
 
 export {gSSP, gSP, api}
