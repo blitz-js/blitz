@@ -129,7 +129,7 @@ jobs:
           cd ./integration-tests
           tree -J -d -L 1 | jq -c  '.[0].contents | map(.name | tostring) | map(select(. != "utils"))'
           folders=$(tree -J -d -L 1 | jq -c  '.[0].contents | map(.name | tostring) | map(select(. != "utils"))')
-          echo "::set-output name=folders::$folders"
+          echo "folders=$folders" >> $GITHUB_OUTPUT
 
   Integration-Tests:
     name: "Integration Test: ${{matrix.folder}} @ ${{ matrix.os }} "

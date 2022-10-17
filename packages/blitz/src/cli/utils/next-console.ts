@@ -9,28 +9,28 @@ import ProgressBar from "progress"
 import {log} from "../../logging"
 
 export function getDbFolder() {
-  if (fs.existsSync(path.join(process.cwd(), "db"))) {
-    return "db"
-  }
   try {
     const packageJsonPath = path.join(process.cwd(), "package.json")
     const packageJson = fs.readFileSync(packageJsonPath, "utf8")
     const packageJsonObj = JSON.parse(packageJson)
     if (!packageJsonObj.prisma || !packageJsonObj.prisma.schema) {
       throw new Error(
-        "db folder does not exist and Prisma schema not found in package.json. Please either create the db folder or add the prisma schema path to the package.json",
+        "db/schema.prisma does not exist and Prisma configuration not found in package.json. Please either create the db folder or add the prisma schema path to the package.json",
       )
     }
     const prismaSchemaPath = path.join(process.cwd(), packageJsonObj.prisma.schema)
     if (!fs.existsSync(prismaSchemaPath)) {
       throw new Error(
-        "prisma.schema file not found. Please either create the db folder or add the prisma schema path to the package.json",
+        `File not found in ${prismaSchemaPath}. Please either create the db/schema.prisma file or add the prisma schema path to the package.json`,
       )
     }
     const folder = packageJsonObj.prisma.schema.split("/")[0] as string
     return folder
   } catch (e) {
-    throw new Error(e)
+    if (fs.existsSync(path.join(process.cwd(), "db/schema.prisma"))) {
+      return "db"
+    }
+    throw e
   }
 }
 
@@ -39,13 +39,8 @@ export function getProjectRootSync() {
 }
 
 export function getConfigSrcPath() {
-  const tsPath = path.resolve(path.join(process.cwd(), "next.config.ts"))
-  if (fs.existsSync(tsPath)) {
-    return tsPath
-  } else {
-    const jsPath = path.resolve(path.join(process.cwd(), "next.config.js"))
-    return jsPath
-  }
+  const jsPath = path.resolve(path.join(process.cwd(), "next.config.js"))
+  return jsPath
 }
 
 const projectRoot = getProjectRootSync()
