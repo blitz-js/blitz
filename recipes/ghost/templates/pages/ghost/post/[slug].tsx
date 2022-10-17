@@ -2,7 +2,7 @@ import Image from "next/image"
 import Link from "next/link"
 import {useMutation, useQuery} from "@blitzjs/rpc"
 import {Routes, BlitzPage} from "@blitzjs/next"
-import { useRouter } from 'next/router'
+import {useRouter} from "next/router"
 import GhostLayout from "app/ghost/layouts/GhostLayout"
 import getPostBySlug from "app/ghost/queries/getPostBySlug"
 

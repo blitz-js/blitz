@@ -3714,6 +3714,25 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "oloost",
+      "name": "oloost",
+      "avatar_url": "https://avatars.githubusercontent.com/u/72395941?v=4",
+      "profile": "https://github.com/oloost",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "janvennemann",
+      "name": "Jan Vennemann",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1406024?v=4",
+      "profile": "https://github.com/janvennemann",
+      "contributions": [
+        "doc",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
