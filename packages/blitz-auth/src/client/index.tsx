@@ -291,7 +291,7 @@ function withBlitzAuthPlugin<TProps = any>(Page: ComponentType<TProps> | BlitzPa
     let {authenticate, redirectAuthenticatedTo} = getAuthValues(Page, props)
 
     useAuthorizeIf(
-      useAuthorizeIf(authenticate === true),
+      authenticate === true,
       !authenticate ? undefined : typeof authenticate === "object" ? authenticate.role : undefined,
     )
 
