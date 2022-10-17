@@ -58,7 +58,8 @@ export function __internal_buildRpcClient({
   routePath,
   httpMethod,
 }: BuildRpcClientParams): RpcClient {
-  let fullRoutePath = normalizeApiRoute("/api/rpc" + routePath)
+  const fullRoutePath = normalizeApiRoute("/api/rpc" + routePath)
+  const routePathURL = new URL(fullRoutePath, window.location.origin)
   const httpClient: RpcClientBase = async (params, opts = {}, signal = undefined) => {
     const debug = (await import("debug")).default("blitz:rpc")
     if (!opts.fromQueryHook && !opts.fromInvoke) {
@@ -103,14 +104,12 @@ export function __internal_buildRpcClient({
     })
 
     if (httpMethod === "GET") {
-      const url = new URL(fullRoutePath, window.location.origin)
-      url.searchParams.set("params", stringify(serialized.json))
-      url.searchParams.set("meta", stringify(serialized.meta))
-      fullRoutePath = url.toString()
+      routePathURL.searchParams.set("params", stringify(serialized.json))
+      routePathURL.searchParams.set("meta", stringify(serialized.meta))
     }
 
     const promise = window
-      .fetch(fullRoutePath, {
+      .fetch(routePathURL, {
         method: httpMethod,
         headers,
         credentials: "include",
