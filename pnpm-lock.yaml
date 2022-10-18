@@ -1155,7 +1155,7 @@ importers:
   recipes/base-web:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: workspace:2.0.0-beta.12
+      blitz: 2.0.0-beta.12
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1166,7 +1166,7 @@ importers:
   recipes/bulma:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: workspace:2.0.0-beta.12
+      blitz: 2.0.0-beta.12
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1178,7 +1178,7 @@ importers:
     specifiers:
       "@types/jscodeshift": 0.11.2
       ast-types: 0.14.2
-      blitz: workspace:2.0.0-beta.12
+      blitz: 2.0.0-beta.12
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1191,7 +1191,7 @@ importers:
     specifiers:
       "@types/jscodeshift": 0.11.2
       ast-types: 0.14.2
-      blitz: workspace:2.0.0-beta.12
+      blitz: 2.0.0-beta.12
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1203,7 +1203,7 @@ importers:
   recipes/emotion:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: workspace:2.0.0-beta.12
+      blitz: 2.0.0-beta.12
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1213,20 +1213,20 @@ importers:
 
   recipes/gh-action-yarn-mariadb:
     specifiers:
-      blitz: workspace:2.0.0-beta.12
+      blitz: 2.0.0-beta.12
     dependencies:
       blitz: link:../../packages/blitz
 
   recipes/gh-action-yarn-postgres:
     specifiers:
-      blitz: workspace:2.0.0-beta.12
+      blitz: 2.0.0-beta.12
     dependencies:
       blitz: link:../../packages/blitz
 
   recipes/ghost:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: workspace:2.0.0-beta.12
+      blitz: 2.0.0-beta.12
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1237,7 +1237,7 @@ importers:
   recipes/graphql-apollo-server:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: workspace:2.0.0-beta.12
+      blitz: 2.0.0-beta.12
       jscodeshift: 0.13.0
       uuid: ^8.3.1
     dependencies:
@@ -1249,14 +1249,14 @@ importers:
 
   recipes/logrocket:
     specifiers:
-      blitz: workspace:2.0.0-beta.12
+      blitz: 2.0.0-beta.12
     dependencies:
       blitz: link:../../packages/blitz
 
   recipes/material-ui:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: workspace:2.0.0-beta.12
+      blitz: 2.0.0-beta.12
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1268,7 +1268,7 @@ importers:
     specifiers:
       "@types/jscodeshift": 0.11.2
       ast-types: 0.14.2
-      blitz: workspace:2.0.0-beta.12
+      blitz: 2.0.0-beta.12
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1279,13 +1279,13 @@ importers:
 
   recipes/passenger:
     specifiers:
-      blitz: workspace:2.0.0-beta.12
+      blitz: 2.0.0-beta.12
     dependencies:
       blitz: link:../../packages/blitz
 
   recipes/quirrel:
     specifiers:
-      blitz: workspace:2.0.0-beta.12
+      blitz: 2.0.0-beta.12
     dependencies:
       blitz: link:../../packages/blitz
 
@@ -1293,7 +1293,7 @@ importers:
     specifiers:
       "@types/jscodeshift": 0.11.2
       ast-types: 0.14.2
-      blitz: workspace:2.0.0-beta.12
+      blitz: 2.0.0-beta.12
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1304,14 +1304,14 @@ importers:
 
   recipes/render:
     specifiers:
-      blitz: workspace:2.0.0-beta.12
+      blitz: 2.0.0-beta.12
     dependencies:
       blitz: link:../../packages/blitz
 
   recipes/secureheaders:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: workspace:2.0.0-beta.12
+      blitz: 2.0.0-beta.12
       jscodeshift: 0.13.0
       uuid: ^8.3.1
     dependencies:
@@ -1324,7 +1324,7 @@ importers:
   recipes/stitches:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: workspace:2.0.0-beta.12
+      blitz: 2.0.0-beta.12
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1336,7 +1336,7 @@ importers:
     specifiers:
       "@types/jscodeshift": 0.11.2
       ast-types: 0.14.2
-      blitz: workspace:2.0.0-beta.12
+      blitz: 2.0.0-beta.12
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1348,7 +1348,7 @@ importers:
   recipes/tailwind:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: workspace:2.0.0-beta.12
+      blitz: 2.0.0-beta.12
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1360,7 +1360,7 @@ importers:
     specifiers:
       "@types/jscodeshift": 0.11.2
       ast-types: 0.14.2
-      blitz: workspace:2.0.0-beta.12
+      blitz: 2.0.0-beta.12
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1372,7 +1372,7 @@ importers:
   recipes/vanilla-extract:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: workspace:2.0.0-beta.12
+      blitz: 2.0.0-beta.12
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz

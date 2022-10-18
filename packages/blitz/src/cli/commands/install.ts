@@ -65,8 +65,9 @@ const requireJSON = (file: string) => {
   return JSON.parse(require("fs-extra").readFileSync(file).toString("utf-8"))
 }
 
-const checkLockFileExists = (filename: string) => {
-  return require("fs-extra").existsSync(resolve(filename))
+const checkLockFileExists = async (filename: string) => {
+  const dotBlitz = join(await findNodeModulesRoot(process.cwd()), ".blitz")
+  return require("fs-extra").existsSync(resolve(join(dotBlitz, "..", "..", filename)))
 }
 
 const GH_ROOT = "https://github.com/"
@@ -212,7 +213,6 @@ const installRecipeAtPath = async (
   recipePath: string,
   ...runArgs: Parameters<RecipeExecutor<any>["run"]>
 ) => {
-  require("ts-node").register({compilerOptions: {module: "commonjs"}})
   const recipe = require(recipePath).default as RecipeExecutor<any>
 
   await recipe.run(...runArgs)
@@ -235,9 +235,7 @@ const setupProxySupport = async () => {
 }
 
 const install: CliCommand = async () => {
-  // setupTsnode()
-  require("ts-node").register({compilerOptions: {module: "commonjs"}})
-
+  setupTsnode()
   let selectedRecipe: string | null = args._[1] ? `${args._[1]}` : null
   await setupProxySupport()
 
@@ -312,10 +310,10 @@ ${chalk.dim("- Available recipes listed at https://github.com/blitz-js/blitz/tre
         let pkgManager = "npm"
         let installArgs = ["install", "--legacy-peer-deps", "--ignore-scripts"]
 
-        if (checkLockFileExists("yarn.lock")) {
+        if (await checkLockFileExists("yarn.lock")) {
           pkgManager = "yarn"
           installArgs = ["install", "--ignore-scripts"]
-        } else if (checkLockFileExists("pnpm-lock.yaml")) {
+        } else if (await checkLockFileExists("pnpm-lock.yaml")) {
           pkgManager = "pnpm"
           installArgs = ["install", "--ignore-scripts"]
         }
