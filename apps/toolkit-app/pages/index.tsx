@@ -7,6 +7,7 @@ import logout from "app/auth/mutations/logout"
 import logo from "public/logo.png"
 import { useMutation } from "@blitzjs/rpc"
 import { Routes, BlitzPage } from "@blitzjs/next"
+import { getSession, useSession } from "@blitzjs/auth"
 
 /*
  * This file is just for a pleasant getting started page for your new app.
@@ -270,7 +271,5 @@ const Home: BlitzPage = () => {
     </Layout>
   )
 }
-
-Home.authenticate = true
 
 export default Home
