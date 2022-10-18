@@ -189,7 +189,7 @@ const cloneRepo = async (
 ): Promise<string> => {
   debug("[cloneRepo] starting...")
   const dotBlitz = join(await findNodeModulesRoot(process.cwd()), ".blitz")
-  const recipeDir = join(dotBlitz, "recipe-install")
+  const recipeDir = join(dotBlitz, "..", "..", "recipe-install")
   // clean up from previous run in case of error
   require("rimraf").sync(recipeDir)
   require("fs-extra").mkdirsSync(recipeDir)
@@ -326,7 +326,7 @@ ${chalk.dim("- Available recipes listed at https://github.com/blitz-js/blitz/tre
 
         const recipePackageMain = requireJSON("./package.json").main
         const recipeEntry = resolve(recipePackageMain)
-        process.chdir(process.cwd())
+        process.chdir(join(process.cwd(), ".."))
 
         await installRecipeAtPath(recipeEntry, cliArgs, cliFlags)
 
