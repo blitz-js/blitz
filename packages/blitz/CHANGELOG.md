@@ -1,5 +1,14 @@
 # blitz
 
+## 2.0.0-beta.12
+
+### Patch Changes
+
+- 3a602b61: Fix `blitz install` not working due to missing `blitz/installer` dependency
+- f39ba1ff: Allow passing custom templates to the `blitz generate` command. Extend the `generate` command with `custom-templates` to provide an easy starting point for users to customize the default templates: `blitz generate custom-templates`.
+- Updated dependencies [f39ba1ff]
+  - @blitzjs/generator@2.0.0-beta.12
+
 ## 2.0.0-beta.11
 
 ### Patch Changes
