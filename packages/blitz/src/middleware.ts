@@ -56,61 +56,6 @@ export async function handleRequestWithMiddleware<
   }
 }
 
-// export type InvokeWithMiddlewareConfig = {
-//   req: IncomingMessage
-//   res: ServerResponse
-//   middleware?: Middleware[]
-//   [prop: string]: any
-// }
-
-// export async function invokeWithMiddleware<
-//   T extends AsyncFunc,
-//   TInput = FirstParam<T>,
-//   TResult = PromiseReturnType<T>
-// >(
-//   resolver: T,
-//   params: TInput,
-//   ctx: InvokeWithMiddlewareConfig
-// ): Promise<TResult> {
-//   if (!ctx.req) {
-//     throw new Error(
-//       'You must provide `req` in third argument of invokeWithMiddleware()'
-//     )
-//   }
-//   if (!ctx.res) {
-//     throw new Error(
-//       'You must provide `res` in third argument of invokeWithMiddleware()'
-//     )
-//   }
-
-//   const rpcResolver = (resolver as unknown) as any // todo: as RpcResolver
-
-//   const resolverName =
-//     rpcResolver._resolverName ?? (rpcResolver as any).default?._resolverName
-
-//   try {
-//     // todo
-//     // const log = baseLogger().getChildLogger({
-//     //   prefix: [resolverName + '()'],
-//     // })
-//     console.log("\n")
-//     console.info(chalk.dim('Starting with input:'), params)
-//     const startTime = Date.now()
-
-//     const result = await interopDefault(rpcResolver)(params, res.blitzCtx)
-
-//     const duration = Date.now() - startTime
-//     console.info(chalk.dim(`Finished in ${prettyMs(duration)}`))
-//     console.log("/n")
-
-//     res.blitzResult = result // todo: remove?
-//   } catch (error) {
-//     throw error
-//   }
-
-//   return (ctx.res as MiddlewareResponse).blitzResult as TResult
-// }
-
 /**
  * If the middleware function doesn't declare receiving the `next` callback
  * assume that it's synchronous and invoke `next` ourselves

@@ -7,7 +7,7 @@ export * from "./types"
 export * from "./utils/run-prisma"
 export * from "./middleware"
 export * from "./paginate"
-export {baseLogger, newLine, log} from "./logging"
+export * from "./logging"
 export {startWatcher, stopWatcher} from "./cli/utils/routes-manifest"
 
 export interface MiddlewareResponse<C extends Ctx = Ctx> extends ServerResponse {
