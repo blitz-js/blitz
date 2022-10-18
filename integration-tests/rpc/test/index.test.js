@@ -100,7 +100,11 @@ function runTests(dev = false) {
         const res = await fetchViaHTTP(appPort, "/api/rpc/getBasicWithGET", null, {
           method: "GET",
         })
+        const json = await res.json()
         expect(res.status).toEqual(400)
+        expect(json.error.message).toBe(
+          "Request query is missing the required `params` and `meta` keys",
+        )
       },
       5000 * 60 * 2,
     )

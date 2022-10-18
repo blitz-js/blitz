@@ -191,7 +191,7 @@ export function rpcHandler(config: RpcConfig) {
     ) {
       if (req.method === "GET") {
         if (Object.keys(req.query).length === 1 && req.query.blitz) {
-          const error = {message: "Request params and meta are missing"}
+          const error = {message: "Request query is missing the required `params` and `meta` keys"}
           log.error(error.message)
           res.status(400).json({
             result: null,
@@ -210,18 +210,10 @@ export function rpcHandler(config: RpcConfig) {
       }
 
       try {
-        let data
-        if (req.method === "POST") {
-          data = deserialize({
-            json: req.body.params,
-            meta: req.body.meta?.params,
-          })
-        } else {
-          data = deserialize({
-            json: parse(req.query.params as string),
-            meta: parse(req.query.meta as string),
-          })
-        }
+        const data = deserialize({
+          json: req.method === "POST" ? req.body.params : parse(req.query.params as string),
+          meta: req.method === "POST" ? req.body.meta?.params : parse(req.query.meta as string),
+        })
         log.info(customChalk.dim("Starting with input:"), data ? data : JSON.stringify(data))
         const startTime = Date.now()
         const result = await resolver(data, (res as any).blitzCtx)
