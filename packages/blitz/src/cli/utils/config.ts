@@ -36,6 +36,8 @@ export type ServerConfig = {
   inspect?: boolean
   // –
   env: ServerEnvironment
+  // -
+  outdir?: string
 }
 
 type NormalizedConfig = ServerConfig & {
