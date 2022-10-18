@@ -1,47 +1,29 @@
-import {ISettingsParam, Logger} from "tslog"
+import {ISettingsParam, Logger, TLogLevelName} from "tslog"
 import c from "chalk"
 import {Table} from "console-table-printer"
 import ora from "ora"
 import readline from "readline"
 
-export type LogLevel = "trace" | "debug" | "info" | "warn" | "error" | "fatal"
+export type BlitzLoggerSettings = ISettingsParam
+export type BlitzLogLevel = TLogLevelName
 
-declare module globalThis {
+declare namespace globalThis {
   let _blitz_baseLogger: Logger
-  let _blitz_logLevel: LogLevel
+  let _blitz_logLevel: BlitzLogLevel
 }
 
-export const newLine = () => {
-  const logLevel: LogLevel = globalThis._blitz_logLevel
-
-  switch (logLevel) {
-    case "trace":
-    case "debug":
-    case "info":
-      console.log(" ")
-      break
-    case "warn":
-    case "error":
-    case "fatal":
-    default:
-      //nothing
-      break
-  }
-}
-
-export const baseLogger = (options?: ISettingsParam): Logger => {
+export const baseLogger = (options: BlitzLoggerSettings = {}): Logger => {
   if (globalThis._blitz_baseLogger) return globalThis._blitz_baseLogger
 
-  let config
-  try {
-    config = {} as any // todo: loadConfigAtRuntime()
-  } catch {
-    config = {}
-  }
+  globalThis._blitz_baseLogger = BlitzLogger(options)
 
-  globalThis._blitz_baseLogger = new Logger({
-    minLevel: config?.log?.level || "info",
-    type: config?.log?.type || "pretty",
+  return globalThis._blitz_baseLogger
+}
+
+export const BlitzLogger = (settings: BlitzLoggerSettings = {}) => {
+  const baseLogger = new Logger({
+    minLevel: "info",
+    type: "pretty",
     dateTimePattern:
       process.env.NODE_ENV === "production"
         ? "year-month-day hour:minute:second.millisecond"
@@ -61,10 +43,14 @@ export const baseLogger = (options?: ISettingsParam): Logger => {
     },
     maskValuesOfKeys: ["password", "passwordConfirmation"],
     exposeErrorCodeFrame: process.env.NODE_ENV !== "production",
-    ...options,
+    ...settings,
   })
 
-  return globalThis._blitz_baseLogger
+  return baseLogger
+}
+
+export const initializeLogger = (logger: Logger) => {
+  globalThis._blitz_baseLogger = logger
 }
 
 export const table = Table
@@ -75,6 +61,24 @@ const blitzBrightBrandColor = "8a3df0"
 
 // Using bright brand color so it's better for dark terminals
 const brandColor = blitzBrightBrandColor
+
+export const newLine = () => {
+  const logLevel: BlitzLogLevel = globalThis._blitz_logLevel
+
+  switch (logLevel) {
+    case "trace":
+    case "debug":
+    case "info":
+      console.log(" ")
+      break
+    case "warn":
+    case "error":
+    case "fatal":
+    default:
+      //nothing
+      break
+  }
+}
 
 const withBrand = (str: string) => {
   return c.hex(brandColor).bold(str)
