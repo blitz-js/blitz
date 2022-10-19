@@ -4,6 +4,7 @@ import os from "os"
 import path from "path"
 import * as REPL from "repl"
 import {REPLCommand, REPLServer} from "repl"
+// eslint-disable-next-line @next/next/no-assign-module-variable
 const debug = require("debug")("blitz:repl")
 import ProgressBar from "progress"
 import {log} from "../../logging"
@@ -58,6 +59,7 @@ export const forceRequire = (modulePath: string) => {
   })
 
   if (isTypeScript) {
+    // eslint-disable-next-line @next/next/no-assign-module-variable
     const module = require(modulePath)
     unregister()
     return module
@@ -115,6 +117,7 @@ export const loadBlitz = async (onlyDb: boolean, module = "") => {
 
       try {
         debug("Loading", modulePath)
+        // eslint-disable-next-line @next/next/no-assign-module-variable
         const module = forceRequire(modulePath)
         const contextObj = module.default || module
         // debug("ContextObj", contextObj)
@@ -172,7 +175,7 @@ const setupSelfRolledHistory = (repl: any, path: string) => {
       const history = fs.readFileSync(path, {encoding: "utf8"})
       const nonEmptyLines = history.split(os.EOL).filter((line) => line.trim())
       repl.history.push(...nonEmptyLines.reverse())
-    } catch (err: any) {
+    } catch (err) {
       if (err.code !== "ENOENT") {
         throw err
       }
