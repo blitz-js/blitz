@@ -211,8 +211,8 @@ export function rpcHandler(config: RpcConfig) {
 
       try {
         const data = deserialize({
-          json: req.method === "POST" ? req.body.params : parse(req.query.params as string),
-          meta: req.method === "POST" ? req.body.meta?.params : parse(req.query.meta as string),
+          json: req.method === "POST" ? req.body.params : parse(`${req.query.params}`),
+          meta: req.method === "POST" ? req.body.meta?.params : parse(`${req.query.meta}`),
         })
         log.info(customChalk.dim("Starting with input:"), data ? data : JSON.stringify(data))
         const startTime = Date.now()

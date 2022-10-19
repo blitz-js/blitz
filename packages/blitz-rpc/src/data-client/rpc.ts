@@ -96,13 +96,6 @@ export function __internal_buildRpcClient({
       serialized = serialize(params)
     }
 
-    const body = JSON.stringify({
-      params: serialized.json,
-      meta: {
-        params: serialized.meta,
-      },
-    })
-
     if (httpMethod === "GET") {
       routePathURL.searchParams.set("params", stringify(serialized.json))
       routePathURL.searchParams.set("meta", stringify(serialized.meta))
@@ -114,7 +107,15 @@ export function __internal_buildRpcClient({
         headers,
         credentials: "include",
         redirect: "follow",
-        body: httpMethod === "POST" ? body : undefined,
+        body:
+          httpMethod === "POST"
+            ? JSON.stringify({
+                params: serialized.json,
+                meta: {
+                  params: serialized.meta,
+                },
+              })
+            : undefined,
         signal,
       })
       .then(async (response) => {
