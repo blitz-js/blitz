@@ -1,5 +1,12 @@
 # @blitzjs/rpc
 
+## 2.0.0-beta.13
+
+### Patch Changes
+
+- 7b63f0f1: Allow the updater function in setQueryData to return undefined to match react-query typings
+  - @blitzjs/auth@2.0.0-beta.13
+
 ## 2.0.0-beta.12
 
 ### Patch Changes

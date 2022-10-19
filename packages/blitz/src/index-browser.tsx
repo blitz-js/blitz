@@ -1,7 +1,22 @@
 import "./global"
 import {ComponentType} from "react"
 import {IncomingMessage, ServerResponse} from "http"
-import {AuthenticationError, AuthorizationError, NotFoundError, RedirectError} from "./errors"
+import {
+  AuthenticationError,
+  AuthorizationError,
+  CSRFTokenMismatchError,
+  NotFoundError,
+  PaginationArgumentError,
+  RedirectError,
+} from "./errors"
+export {
+  AuthenticationError,
+  AuthorizationError,
+  CSRFTokenMismatchError,
+  NotFoundError,
+  PaginationArgumentError,
+  RedirectError,
+}
 
 export type BlitzProviderComponentType = <TProps = any>(
   component: ComponentType<TProps>,
@@ -80,6 +95,5 @@ if (typeof window !== "undefined" && process.env.NODE_ENV === "development") {
 
 export * from "./utils"
 export * from "./types"
-export * from "./errors"
 export * from "./utils/zod"
 export * from "./utils/prisma"
