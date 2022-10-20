@@ -195,7 +195,8 @@ const cloneRepo = async (
   require("fs-extra").mkdirsSync(recipeDir)
   process.chdir(recipeDir)
   debug("Extracting recipe to ", recipeDir)
-
+  //TODO: REMOVE BEFORE COMMIT/MERGE
+  defaultBranch = "fix-install"
   const repoName = repoFullName.split("/")[1]
   // `tar` top-level filter is `${repoName}-${defaultBranch}`, and then we want to get our recipe path
   // within that folder
