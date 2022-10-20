@@ -1,5 +1,14 @@
 # blitz
 
+## 2.0.0-beta.13
+
+### Patch Changes
+
+- a6e81f15: Add BlitzLogger plugin and allow customizing logging
+- 6f434989: Fix "Ambiguous class detected" errors reported by SuperJson by removing duplicated export from errors.ts file
+- Updated dependencies [4e26ae21]
+  - @blitzjs/generator@2.0.0-beta.13
+
 ## 2.0.0-beta.12
 
 ### Patch Changes

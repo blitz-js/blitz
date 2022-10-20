@@ -1,5 +1,11 @@
 # @blitzjs/generator
 
+## 2.0.0-beta.13
+
+### Patch Changes
+
+- 4e26ae21: Upgrade eslint-config-next in new app templates to fix linting issues on blitz build
+
 ## 2.0.0-beta.12
 
 ### Patch Changes
