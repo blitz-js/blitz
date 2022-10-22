@@ -34,11 +34,19 @@ export default RecipeBuilder()
     },
   })
   .addNewFilesStep({
-    stepId: "addExamples",
-    stepName: "Add example files",
+    stepId: "addExamplesMutations",
+    stepName: "Add example Mutation files",
     explanation: "Create one example Queue and CronJob that illustrate Quirrel usage.",
     targetDirectory: "app",
     templatePath: path.join(__dirname, "templates", "app"),
+    templateValues: {},
+  })
+  .addNewFilesStep({
+    stepId: "addExamplesApi",
+    stepName: "Add example API files",
+    explanation: "Create one example Queue and CronJob that illustrate Quirrel usage.",
+    targetDirectory: "pages",
+    templatePath: path.join(__dirname, "templates", "pages"),
     templateValues: {},
   })
   .build()
