@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react"
 import Layout from "app/core/layouts/Layout"
 import { LabeledTextField } from "app/core/components/LabeledTextField"
 import { Form, FORM_ERROR } from "app/core/components/Form"
@@ -9,8 +10,13 @@ import { useMutation } from "@blitzjs/rpc"
 import Link from "next/link"
 
 const ResetPasswordPage: BlitzPage = () => {
+  const [token, setToken] = useState("")
   const router = useRouter()
   const [resetPasswordMutation, { isSuccess }] = useMutation(resetPassword)
+
+  useEffect(() => {
+    setToken(router.query.token as string)
+  }, [router.isReady])
 
   return (
     <div>
@@ -30,11 +36,11 @@ const ResetPasswordPage: BlitzPage = () => {
           initialValues={{
             password: "",
             passwordConfirmation: "",
-            token: router.query.token as string,
+            token,
           }}
           onSubmit={async (values) => {
             try {
-              await resetPasswordMutation(values)
+              await resetPasswordMutation({ ...values, token })
             } catch (error: any) {
               if (error.name === "ResetPasswordError") {
                 return {
