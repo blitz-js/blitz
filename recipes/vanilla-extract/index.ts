@@ -45,7 +45,7 @@ export default RecipeBuilder()
   })
   .addTransformFilesStep({
     stepId: "modifyBlitzConfig",
-    stepName: "Add the '@vanilla-extract/next-plugin' plugin to the blitz config file",
+    stepName: "Add the '@vanilla-extract/next-plugin' plugin to the next config file",
     explanation: `Now we have to update our blitz config to support vanilla-extract`,
     singleFileSearch: paths.nextConfig(),
     async transform(program) {
