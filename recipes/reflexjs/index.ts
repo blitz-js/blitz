@@ -5,25 +5,19 @@ import {join} from "path"
 
 function wrapComponentWithThemeProvider(program: Program) {
   program
-    .find(j.JSXElement)
-    .filter(
-      (path) =>
-        path.parent?.parent?.parent?.value?.id?.name === "App" &&
-        path.parent?.value.type === j.ReturnStatement.toString(),
-    )
+    .find(j.FunctionDeclaration, (node) => node.id.name === "MyApp")
     .forEach((path: NodePath) => {
-      const {node} = path
-      path.replace(
-        j.jsxElement(
-          j.jsxOpeningElement(j.jsxIdentifier("ThemeProvider"), [
-            j.jsxAttribute(
-              j.jsxIdentifier("theme"),
-              j.jsxExpressionContainer(j.identifier("theme")),
-            ),
-          ]),
-          j.jsxClosingElement(j.jsxIdentifier("ThemeProvider")),
-          [j.jsxText("\n"), node, j.jsxText("\n")],
-        ),
+      const statement = path.value.body.body.filter(
+        (b) => b.type === "ReturnStatement",
+      )[0] as j.ReturnStatement
+      const argument = statement?.argument as j.JSXElement
+
+      statement.argument = j.jsxElement(
+        j.jsxOpeningElement(j.jsxIdentifier("ThemeProvider"), [
+          j.jsxAttribute(j.jsxIdentifier("theme"), j.jsxExpressionContainer(j.identifier("theme"))),
+        ]),
+        j.jsxClosingElement(j.jsxIdentifier("ThemeProvider")),
+        [j.jsxText("\n"), argument, j.jsxText("\n")],
       )
     })
 
@@ -107,6 +101,14 @@ export default RecipeBuilder()
       return injectInitializeColorMode(program)
     },
   })
+  .addNewFilesStep({
+    stepId: "create babel file",
+    stepName: "Create babel file",
+    explanation: `Adding default babel file.`,
+    targetDirectory: "./babel.config.js",
+    templatePath: join(__dirname, "templates", "babel.config.js"),
+    templateValues: {},
+  })
   .addTransformFilesStep({
     stepId: "updateBabelConfig",
     stepName: "Add Babel preset",
@@ -116,7 +118,7 @@ export default RecipeBuilder()
 
     transform(program) {
       return addBabelPreset(program, [
-        "blitz/babel",
+        "next/babel",
         {
           "preset-react": {
             runtime: "automatic",

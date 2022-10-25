@@ -1249,9 +1249,14 @@ importers:
 
   recipes/logrocket:
     specifiers:
+      "@types/jscodeshift": 0.11.2
       blitz: 2.0.0-beta.13
+      jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
+      jscodeshift: 0.13.0
+    devDependencies:
+      "@types/jscodeshift": 0.11.2
 
   recipes/material-ui:
     specifiers:

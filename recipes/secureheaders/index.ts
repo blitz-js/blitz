@@ -37,11 +37,11 @@ export default RecipeBuilder()
         addImport(program, secureHeadersImport)
       }
 
-      program.findJSXElements("DocumentHead").forEach((path) => {
+      program.findJSXElements("Head").forEach((path) => {
         path.replace(
           j.jsxElement(
-            j.jsxOpeningElement(j.jsxIdentifier("DocumentHead")),
-            j.jsxClosingElement(j.jsxIdentifier("DocumentHead")),
+            j.jsxOpeningElement(j.jsxIdentifier("Head")),
+            j.jsxClosingElement(j.jsxIdentifier("Head")),
             [
               ...addHttpMetaTag(
                 "Content-Security-Policy",
@@ -137,7 +137,7 @@ const addHttpHeaders = (program: Program, headers: Array<{name: string; value: s
   )
   headersFunction.async = true
   const headersCollection = transformNextConfig(program).configObj.find(
-    (value) =>
+    (value: {type: string; key: {type: string; name: string}}) =>
       value.type === "ObjectProperty" &&
       value.key.type === "Identifier" &&
       value.key.name === "headers",
@@ -152,7 +152,7 @@ const addHttpHeaders = (program: Program, headers: Array<{name: string; value: s
   }
 
   const poweredByProp = transformNextConfig(program).configObj.find(
-    (value) =>
+    (value: {type: string; key: {type: string; name: string}}) =>
       value.type === "ObjectProperty" &&
       value.key.type === "Identifier" &&
       value.key.name === "poweredByHeader",

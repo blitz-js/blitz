@@ -1,16 +1,15 @@
-import {
+import Document, {
   NextScript,
-  Document,
   DocumentContext,
-  DocumentHead,
+  Head,
   DocumentInitialProps,
   Html,
   Main,
 } from "next/document"
 import {Children} from "react"
 import createEmotionServer from "@emotion/server/create-instance"
-import theme from "app/core/styles/theme"
-import createEmotionCache from "app/core/utils/createEmotionCache"
+import theme from "app/styles/theme"
+import createEmotionCache from "app/utils/createEmotionCache"
 
 export default class MyDocument extends Document {
   static async getInitialProps(ctx: DocumentContext): Promise<DocumentInitialProps> {
@@ -73,7 +72,7 @@ export default class MyDocument extends Document {
   render() {
     return (
       <Html lang="en">
-        <DocumentHead>
+        <Head>
           {/* PWA primary color */}
           <meta name="theme-color" content={theme.palette.primary.main} />
           <link
@@ -81,7 +80,7 @@ export default class MyDocument extends Document {
             href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
           />
           <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
-        </DocumentHead>
+        </Head>
         <body>
           <Main />
           <NextScript />
