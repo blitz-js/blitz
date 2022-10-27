@@ -5,9 +5,11 @@ import {Ctx} from "./types"
 export * from "./index-browser"
 export * from "./types"
 export * from "./utils/run-prisma"
+export * from "./utils/enhance-prisma"
 export * from "./middleware"
 export * from "./paginate"
 export * from "./logging"
+
 export {startWatcher, stopWatcher} from "./cli/utils/routes-manifest"
 
 export interface MiddlewareResponse<C extends Ctx = Ctx> extends ServerResponse {
