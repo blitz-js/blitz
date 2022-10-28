@@ -96,4 +96,3 @@ if (typeof window !== "undefined" && process.env.NODE_ENV === "development") {
 export * from "./utils"
 export * from "./types"
 export * from "./utils/zod"
-export * from "./utils/prisma"
