@@ -5,20 +5,17 @@ import j, {JSXIdentifier} from "jscodeshift"
 // Copied from https://github.com/blitz-js/legacy-framework/pull/805, let's add this to the blitz
 function wrapComponentWithChakraProvider(program: Program) {
   program
-    .find(j.JSXElement)
-    .filter(
-      (path) =>
-        path.parent?.parent?.parent?.value?.id?.name === "App" &&
-        path.parent?.value.type === j.ReturnStatement.toString(),
-    )
+    .find(j.FunctionDeclaration, (node) => node.id.name === "MyApp")
     .forEach((path: NodePath) => {
-      const {node} = path
-      path.replace(
-        j.jsxElement(
-          j.jsxOpeningElement(j.jsxIdentifier("NextUIProvider")),
-          j.jsxClosingElement(j.jsxIdentifier("NextUIProvider")),
-          [j.jsxText("\n"), node, j.jsxText("\n")],
-        ),
+      const statement = path.value.body.body.filter(
+        (b) => b.type === "ReturnStatement",
+      )[0] as j.ReturnStatement
+      const argument = statement?.argument as j.JSXElement
+
+      statement.argument = j.jsxElement(
+        j.jsxOpeningElement(j.jsxIdentifier("NextUIProvider")),
+        j.jsxClosingElement(j.jsxIdentifier("NextUIProvider")),
+        [j.jsxText("\n"), argument, j.jsxText("\n")],
       )
     })
   return program

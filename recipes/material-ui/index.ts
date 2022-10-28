@@ -1,4 +1,4 @@
-import {addImport, paths, RecipeBuilder, withComments, withTypeAnnotation} from "blitz/installer"
+import {addImport, paths, RecipeBuilder, withTypeAnnotation} from "blitz/installer"
 import j from "jscodeshift"
 import {join} from "path"
 
@@ -57,26 +57,30 @@ export default RecipeBuilder()
         ),
       )
 
-      // import theme from 'app/core/styles/theme'
+      // import theme from 'app/styles/theme'
       addImport(
         program,
         j.importDeclaration(
           [j.importDefaultSpecifier(j.identifier("theme"))],
-          j.literal("app/core/styles/theme"),
+          j.literal("app/styles/theme"),
         ),
       )
 
-      // import createEmotionCache from 'app/core/utils/createEmotionCache'
+      // import createEmotionCache from 'app/utils/createEmotionCache'
       addImport(
         program,
         j.importDeclaration(
           [j.importDefaultSpecifier(j.identifier("createEmotionCache"))],
-          j.literal("app/core/utils/createEmotionCache"),
+          j.literal("app/utils/createEmotionCache"),
         ),
       )
 
-      program.find(j.ExportDefaultDeclaration).forEach((path) => {
-        path.insertBefore(
+      program.find(j.ImportDeclaration).forEach((i, idx, path) => {
+        if (idx !== path.length - 1) {
+          return
+        }
+
+        path[path.length - 1]?.insertAfter(
           j.interfaceDeclaration(
             j.identifier("MyAppProps"),
             j.objectTypeAnnotation([
@@ -90,26 +94,19 @@ export default RecipeBuilder()
           ),
         )
 
-        path.insertBefore(
-          withComments(
-            j.variableDeclaration("const", [
-              j.variableDeclarator(
-                j.identifier("clientSideEmotionCache"),
-                j.callExpression(j.identifier("createEmotionCache"), []),
-              ),
-            ]),
-            [
-              j.commentLine(
-                " Client-side cache, shared for the whole session of the user in the browser.",
-              ),
-            ],
-          ),
+        path[path.length - 1]?.insertAfter(
+          j.variableDeclaration("const", [
+            j.variableDeclarator(
+              j.identifier("clientSideEmotionCache"),
+              j.callExpression(j.identifier("createEmotionCache"), []),
+            ),
+          ]),
         )
       })
 
       program
         .find(j.FunctionDeclaration)
-        .filter((path) => path.value?.id?.name === "App")
+        .filter((path) => path.value?.id?.name === "MyApp")
         .forEach((path) => {
           let objProps = [
             j.property("init", j.identifier("Component"), j.identifier("Component")),
@@ -136,44 +133,41 @@ export default RecipeBuilder()
         })
 
       program
-        .find(j.JSXElement)
-        .filter(
-          (path) =>
-            path.parent?.parent?.parent?.value?.id?.name === "App" &&
-            path.parent?.value.type === j.ReturnStatement.toString(),
-        )
+        .find(j.FunctionDeclaration, (node) => node.id.name === "MyApp")
         .forEach((path) => {
-          const {node} = path
-          path.replace(
-            j.jsxElement(
-              j.jsxOpeningElement(j.jsxIdentifier("CacheProvider"), [
-                j.jsxAttribute(
-                  j.jsxIdentifier("value"),
-                  j.jsxExpressionContainer(j.identifier("emotionCache")),
-                ),
-              ]),
-              j.jsxClosingElement(j.jsxIdentifier("CacheProvider")),
-              [
-                j.literal("\n"),
-                j.jsxElement(
-                  j.jsxOpeningElement(j.jsxIdentifier("ThemeProvider"), [
-                    j.jsxAttribute(
-                      j.jsxIdentifier("theme"),
-                      j.jsxExpressionContainer(j.identifier("theme")),
-                    ),
-                  ]),
-                  j.jsxClosingElement(j.jsxIdentifier("ThemeProvider")),
-                  [
-                    j.literal("\n"),
-                    j.jsxElement(j.jsxOpeningElement(j.jsxIdentifier("CssBaseline"), [], true)),
-                    j.literal("\n"),
-                    node,
-                    j.literal("\n"),
-                  ],
-                ),
-                j.literal("\n"),
-              ],
-            ),
+          const statement = path.value.body.body.filter(
+            (b) => b.type === "ReturnStatement",
+          )[0] as j.ReturnStatement
+          const argument = statement?.argument as j.JSXElement
+
+          statement.argument = j.jsxElement(
+            j.jsxOpeningElement(j.jsxIdentifier("CacheProvider"), [
+              j.jsxAttribute(
+                j.jsxIdentifier("value"),
+                j.jsxExpressionContainer(j.identifier("emotionCache")),
+              ),
+            ]),
+            j.jsxClosingElement(j.jsxIdentifier("CacheProvider")),
+            [
+              j.literal("\n"),
+              j.jsxElement(
+                j.jsxOpeningElement(j.jsxIdentifier("ThemeProvider"), [
+                  j.jsxAttribute(
+                    j.jsxIdentifier("theme"),
+                    j.jsxExpressionContainer(j.identifier("theme")),
+                  ),
+                ]),
+                j.jsxClosingElement(j.jsxIdentifier("ThemeProvider")),
+                [
+                  j.literal("\n"),
+                  j.jsxElement(j.jsxOpeningElement(j.jsxIdentifier("CssBaseline"), [], true)),
+                  j.literal("\n"),
+                  argument,
+                  j.literal("\n"),
+                ],
+              ),
+              j.literal("\n"),
+            ],
           )
         })
 
