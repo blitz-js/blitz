@@ -15,6 +15,13 @@ const NEXT_MDX_PLUGIN_MODULE = "@next/mdx"
 const NEXT_MDX_PLUGIN_NAME = "withMDX"
 const NEXT_MDX_PLUGIN_OPTIONS = [
   j.property("init", j.identifier("extension"), j.literal(RegExp("mdx?$", ""))),
+  j.property(
+    "init",
+    j.identifier("options"),
+    j.objectExpression([
+      j.property("init", j.identifier("providerImportSource"), j.literal("@mdx-js/react")),
+    ]),
+  ),
 ]
 
 function initializePlugin(program: Program, statement: j.Statement) {
@@ -36,29 +43,32 @@ function initializePlugin(program: Program, statement: j.Statement) {
 // Copied from https://github.com/blitz-js/legacy-framework/pull/805, let's add this to the blitz
 function wrapComponentWithThemeProvider(program: Program) {
   program
-    .find(j.JSXElement)
-    .filter(
-      (path) =>
-        path.parent?.parent?.parent?.value?.id?.name === "App" &&
-        path.parent?.value.type === j.ReturnStatement.toString(),
-    )
+    .find(j.FunctionDeclaration, (node) => node.id.name === "MyApp")
     .forEach((path: NodePath) => {
-      const {node} = path
-      path.replace(
-        j.jsxElement(
-          j.jsxOpeningElement(j.jsxIdentifier("ThemeProvider"), [
-            j.jsxAttribute(
-              j.jsxIdentifier("theme"),
-              j.jsxExpressionContainer(j.identifier("theme")),
-            ),
-            j.jsxAttribute(
-              j.jsxIdentifier("components"),
-              j.jsxExpressionContainer(j.identifier("components")),
-            ),
-          ]),
-          j.jsxClosingElement(j.jsxIdentifier("ThemeProvider")),
-          [j.jsxText("\n"), node, j.jsxText("\n")],
-        ),
+      const statement = path.value.body.body.filter(
+        (b) => b.type === "ReturnStatement",
+      )[0] as j.ReturnStatement
+      const argument = statement?.argument as j.JSXElement
+
+      statement.argument = j.jsxElement(
+        j.jsxOpeningElement(j.jsxIdentifier("ThemeProvider"), [
+          j.jsxAttribute(j.jsxIdentifier("theme"), j.jsxExpressionContainer(j.identifier("theme"))),
+        ]),
+        j.jsxClosingElement(j.jsxIdentifier("ThemeProvider")),
+        [
+          j.jsxText("\n"),
+          j.jsxElement(
+            j.jsxOpeningElement(j.jsxIdentifier("MDXProvider"), [
+              j.jsxAttribute(
+                j.jsxIdentifier("components"),
+                j.jsxExpressionContainer(j.identifier("components")),
+              ),
+            ]),
+            j.jsxClosingElement(j.jsxIdentifier("MDXProvider")),
+            [j.jsxText("\n"), argument, j.jsxText("\n")],
+          ),
+          j.jsxText("\n"),
+        ],
       )
     })
 
@@ -98,6 +108,7 @@ export default RecipeBuilder()
       {name: "@theme-ui/prism", version: "0.x"},
       {name: NEXT_MDX_PLUGIN_MODULE, version: "11.x"},
       {name: "@mdx-js/loader", version: "1.x"},
+      {name: "@mdx-js/react", version: "1.x"},
     ],
   })
   .addTransformFilesStep({
@@ -179,9 +190,15 @@ export default RecipeBuilder()
         j.literal("app/core/theme/components"),
       )
 
+      const mdxReact = j.importDeclaration(
+        [j.importSpecifier(j.identifier("MDXProvider"))],
+        j.literal("@mdx-js/react"),
+      )
+
       addImport(program, providerImport)
       addImport(program, baseThemeImport)
       addImport(program, mdxComponentsImport)
+      addImport(program, mdxReact)
       return wrapComponentWithThemeProvider(program)
     },
   })

@@ -5,32 +5,29 @@ import {join} from "path"
 
 function wrapComponentWithStyledComponentsThemeProvider(program: Program) {
   program
-    .find(j.JSXElement)
-    .filter(
-      (path) =>
-        path.parent?.parent?.parent?.value?.id?.name === "App" &&
-        path.parent?.value.type === j.ReturnStatement.toString(),
-    )
+    .find(j.FunctionDeclaration, (node) => node.id.name === "MyApp")
     .forEach((path: NodePath) => {
-      const {node} = path
-      path.replace(
-        j.jsxFragment(j.jsxOpeningFragment(), j.jsxClosingFragment(), [
-          j.jsxText("\n"),
-          j.jsxElement(j.jsxOpeningElement(j.jsxIdentifier("GlobalStyle"), [], true)),
-          j.jsxText("\n"),
-          j.jsxElement(
-            j.jsxOpeningElement(j.jsxIdentifier("ThemeProvider"), [
-              j.jsxAttribute(
-                j.jsxIdentifier("theme"),
-                j.jsxExpressionContainer(j.identifier("theme")),
-              ),
-            ]),
-            j.jsxClosingElement(j.jsxIdentifier("ThemeProvider")),
-            [j.jsxText("\n"), node, j.jsxText("\n")],
-          ),
-          j.jsxText("\n"),
-        ]),
-      )
+      const statement = path.value.body.body.filter(
+        (b) => b.type === "ReturnStatement",
+      )[0] as j.ReturnStatement
+      const argument = statement?.argument as j.JSXElement
+
+      statement.argument = j.jsxFragment(j.jsxOpeningFragment(), j.jsxClosingFragment(), [
+        j.jsxText("\n"),
+        j.jsxElement(j.jsxOpeningElement(j.jsxIdentifier("GlobalStyle"), [], true)),
+        j.jsxText("\n"),
+        j.jsxElement(
+          j.jsxOpeningElement(j.jsxIdentifier("ThemeProvider"), [
+            j.jsxAttribute(
+              j.jsxIdentifier("theme"),
+              j.jsxExpressionContainer(j.identifier("theme")),
+            ),
+          ]),
+          j.jsxClosingElement(j.jsxIdentifier("ThemeProvider")),
+          [j.jsxText("\n"), argument, j.jsxText("\n")],
+        ),
+        j.jsxText("\n"),
+      ])
     })
   return program
 }
@@ -72,16 +69,18 @@ export default RecipeBuilder()
       )
 
       // Ensure DocumentContext is in the blitz imports.
-      program.find(j.ImportDeclaration, {source: {value: "blitz"}}).forEach((blitzImportPath) => {
-        let specifiers = blitzImportPath.value.specifiers || []
-        if (
-          !specifiers
-            .filter((spec) => j.ImportSpecifier.check(spec))
-            .some((node) => (node as j.ImportSpecifier)?.imported?.name === "DocumentContext")
-        ) {
-          specifiers.splice(0, 0, j.importSpecifier(j.identifier("DocumentContext")))
-        }
-      })
+      program
+        .find(j.ImportDeclaration, {source: {value: "next/document"}})
+        .forEach((blitzImportPath) => {
+          let specifiers = blitzImportPath.value.specifiers || []
+          if (
+            !specifiers
+              .filter((spec) => j.ImportSpecifier.check(spec))
+              .some((node) => (node as j.ImportSpecifier)?.imported?.name === "DocumentContext")
+          ) {
+            specifiers.splice(0, 0, j.importSpecifier(j.identifier("DocumentContext")))
+          }
+        })
       program.find(j.ClassBody).forEach((path) => {
         const {node} = path
 
@@ -233,6 +232,14 @@ export default RecipeBuilder()
 
       return wrapComponentWithStyledComponentsThemeProvider(program)
     },
+  })
+  .addNewFilesStep({
+    stepId: "create babel file",
+    stepName: "Create babel file",
+    explanation: `Adding default babel file.`,
+    targetDirectory: "./babel.config.js",
+    templatePath: join(__dirname, "templates", "babel.config.js"),
+    templateValues: {},
   })
   .addTransformFilesStep({
     stepId: "updateBabelConfig",
