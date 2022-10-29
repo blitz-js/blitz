@@ -6,6 +6,10 @@ export interface RouteUrlObject extends Pick<UrlObject, "pathname" | "query"> {
   pathname: string
 }
 
+export type ResolverConfig = {
+  httpMethod: "GET" | "POST"
+}
+
 export type BlitzCliConfig = {
   customTemplates?: string
 }
