@@ -71,7 +71,7 @@ export const forceRequire = (modulePath: string) => {
   }
 }
 
-export async function getBlitzModulePaths(onlyDb: boolean) {
+export async function getBlitzModulePaths(onlyDb = false) {
   const projectRoot = getProjectRootSync()
   const paths = [getDbFolder()]
   if (!onlyDb) {
