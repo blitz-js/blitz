@@ -15,7 +15,7 @@ import {
   MutationsGenerator,
   ModelGenerator,
   QueryGenerator,
-  addCustomTemplatesBlitzConfig,
+  customTemplatesBlitzConfig,
 } from "@blitzjs/generator"
 import {log} from "../../logging"
 
@@ -65,7 +65,7 @@ const createCustomTemplates = async () => {
   })
   const templatesPathValue: string = templatesPath.value
   const isTypeScript = await getIsTypeScript()
-  addCustomTemplatesBlitzConfig(templatesPathValue, isTypeScript)
+  await customTemplatesBlitzConfig(isTypeScript, templatesPathValue, true) // to run the codemod
   log.success(`🚀 Custom templates path added/updated in app/blitz-server file`)
   const customTemplatesPath = require("path").join(process.cwd(), templatesPathValue)
   const fsExtra = await import("fs-extra")
@@ -275,20 +275,12 @@ const generate: CliCommand = async () => {
     const generators = generatorMap[selectedType as keyof typeof generatorMap]
 
     const isTypeScript = await getIsTypeScript()
-    const blitzServerPath = isTypeScript ? "app/blitz-server.ts" : "app/blitz-server.js"
-    const blitzServer = require("path").join(process.cwd(), blitzServerPath)
-    const {register} = require("esbuild-register/dist/node")
-    const {unregister} = register({
-      target: "es6",
-    })
-    const blitzConfig = require(blitzServer)
-    const {cliConfig} = blitzConfig
-    unregister()
+    const cliConfig = await customTemplatesBlitzConfig(isTypeScript)
 
     for (const GeneratorClass of generators) {
       const generator = new GeneratorClass({
         destinationRoot: require("path").resolve(),
-        templateDir: cliConfig?.customTemplates,
+        templateDir: cliConfig,
         extraArgs: args["_"].slice(3) as string[],
         modelName: singularRootContext,
         modelNames: modelNames(singularRootContext),

@@ -1065,6 +1065,7 @@ importers:
       enquirer: 2.3.6
       eslint: 7.32.0
       fs-extra: 10.0.1
+      globby: 13.1.2
       got: ^11.8.1
       jscodeshift: 0.13.0
       mem-fs: 1.2.0
@@ -1094,6 +1095,7 @@ importers:
       diff: 5.0.0
       enquirer: 2.3.6
       fs-extra: 10.0.1
+      globby: 13.1.2
       got: 11.8.1
       jscodeshift: 0.13.0_slgjdbbopna4ebnpdn2nkn3v2a
       mem-fs: 1.2.0
@@ -2606,7 +2608,7 @@ packages:
     peerDependencies:
       "@babel/core": ^7.0.0-0
     dependencies:
-      "@babel/core": 7.12.10
+      "@babel/core": 7.12.10_supports-color@8.1.1
       "@babel/helper-plugin-utils": 7.17.12
     dev: false
 
