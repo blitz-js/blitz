@@ -10,6 +10,10 @@ export type CodegenField = {
   default?: string
 }
 
+export type ResolverConfig = {
+  httpMethod: "GET" | "POST"
+}
+
 export type BlitzCliConfig = {
   codegen?: {
     fieldTypeMap?: Record<
