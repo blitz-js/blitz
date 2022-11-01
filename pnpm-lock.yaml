@@ -450,7 +450,7 @@ importers:
       "@vitejs/plugin-react": 1.3.0
       delay: 5.0.0
       eslint: 7.32.0
-      eslint-config-next: 13.0.0_hrkuebk64jiu2ut2d2sm4oylnu
+      eslint-config-next: 13.0.1_hrkuebk64jiu2ut2d2sm4oylnu
       eslint-plugin-testing-library: 5.0.1_hrkuebk64jiu2ut2d2sm4oylnu
       jsdom: 19.0.0
       typescript: 4.6.3
@@ -3484,7 +3484,6 @@ packages:
       semver: 5.7.1
     transitivePeerDependencies:
       - supports-color
-    dev: false
 
   /@babel/preset-flow/7.17.12_@babel+core@7.18.2:
     resolution:
@@ -4487,10 +4486,10 @@ packages:
     dependencies:
       glob: 7.1.7
 
-  /@next/eslint-plugin-next/13.0.0:
+  /@next/eslint-plugin-next/13.0.1:
     resolution:
       {
-        integrity: sha512-z+gnX4Zizatqatc6f4CQrcC9oN8Us3Vrq/OLyc98h7K/eWctrnV91zFZodmJHUjx0cITY8uYM7LXD7IdYkg3kg==,
+        integrity: sha512-t3bggJhKE/oB4pvMM7hMNnmIpIqsMGJ+OLklk8llOkSeXtfCV+MBQbhImWxf5QODkxNAmMK3IJGAAecQhBTc/Q==,
       }
     dependencies:
       glob: 7.1.7
@@ -6213,7 +6212,6 @@ packages:
       typescript: 4.6.3
     transitivePeerDependencies:
       - supports-color
-    dev: false
 
   /@typescript-eslint/experimental-utils/5.28.0_hrkuebk64jiu2ut2d2sm4oylnu:
     resolution:
@@ -9971,12 +9969,11 @@ packages:
     transitivePeerDependencies:
       - eslint-import-resolver-webpack
       - supports-color
-    dev: false
 
-  /eslint-config-next/13.0.0_hrkuebk64jiu2ut2d2sm4oylnu:
+  /eslint-config-next/13.0.1_hrkuebk64jiu2ut2d2sm4oylnu:
     resolution:
       {
-        integrity: sha512-y2nqWS2tycWySdVhb+rhp6CuDmDazGySqkzzQZf3UTyfHyC7og1m5m/AtMFwCo5mtvDqvw1BENin52kV9733lg==,
+        integrity: sha512-/N9UpSwkbEMj5pIiB235p7QHaSW08ta/iKVaIHF44wufxr+PuJVLwg5LzlAaQbmCZCBpYvVttl3ZxTusP1g2sg==,
       }
     peerDependencies:
       eslint: ^7.23.0 || ^8.0.0
@@ -9985,7 +9982,7 @@ packages:
       typescript:
         optional: true
     dependencies:
-      "@next/eslint-plugin-next": 13.0.0
+      "@next/eslint-plugin-next": 13.0.1
       "@rushstack/eslint-patch": 1.1.3
       "@typescript-eslint/parser": 5.28.0_hrkuebk64jiu2ut2d2sm4oylnu
       eslint: 7.32.0
@@ -10009,7 +10006,6 @@ packages:
     hasBin: true
     peerDependencies:
       eslint: ">=7.0.0"
-    dev: false
 
   /eslint-config-prettier/8.5.0_eslint@7.32.0:
     resolution:
@@ -12798,7 +12794,7 @@ packages:
       pretty-format: 27.5.1
       slash: 3.0.0
       strip-json-comments: 3.1.1
-      ts-node: 10.7.0_fxg3r7oju3tntkxsvleuiot4fa
+      ts-node: 10.7.0_6sxvnwysvlo53egjnie7htsx5a
     transitivePeerDependencies:
       - bufferutil
       - canvas
@@ -18305,7 +18301,6 @@ packages:
       typescript: 4.7.4
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
-    dev: false
 
   /ts-node/10.7.0_fxg3r7oju3tntkxsvleuiot4fa:
     resolution:
@@ -18339,6 +18334,7 @@ packages:
       typescript: 4.6.3
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
+    dev: false
 
   /ts-node/10.7.0_typescript@4.6.3:
     resolution:
