@@ -131,7 +131,7 @@ const prefetchQueryFactory = (
 }
 
 export const setupBlitzServer = ({plugins, onError, logger}: SetupBlitzOptions) => {
-  initializeLogger(logger ?? BlitzLogger)
+  initializeLogger(logger ?? BlitzLogger())
 
   const middlewares = plugins.flatMap((p) => p.requestMiddlewares)
   const contextMiddleware = plugins.flatMap((p) => p.contextMiddleware).filter(Boolean)
