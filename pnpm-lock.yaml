@@ -2608,7 +2608,7 @@ packages:
     peerDependencies:
       "@babel/core": ^7.0.0-0
     dependencies:
-      "@babel/core": 7.12.10_supports-color@8.1.1
+      "@babel/core": 7.12.10
       "@babel/helper-plugin-utils": 7.17.12
     dev: false
 
@@ -3486,6 +3486,7 @@ packages:
       semver: 5.7.1
     transitivePeerDependencies:
       - supports-color
+    dev: false
 
   /@babel/preset-flow/7.17.12_@babel+core@7.18.2:
     resolution:
@@ -6214,6 +6215,7 @@ packages:
       typescript: 4.6.3
     transitivePeerDependencies:
       - supports-color
+    dev: false
 
   /@typescript-eslint/experimental-utils/5.28.0_hrkuebk64jiu2ut2d2sm4oylnu:
     resolution:
@@ -9971,6 +9973,7 @@ packages:
     transitivePeerDependencies:
       - eslint-import-resolver-webpack
       - supports-color
+    dev: false
 
   /eslint-config-next/13.0.1_hrkuebk64jiu2ut2d2sm4oylnu:
     resolution:
@@ -10008,6 +10011,7 @@ packages:
     hasBin: true
     peerDependencies:
       eslint: ">=7.0.0"
+    dev: false
 
   /eslint-config-prettier/8.5.0_eslint@7.32.0:
     resolution:
@@ -12796,7 +12800,7 @@ packages:
       pretty-format: 27.5.1
       slash: 3.0.0
       strip-json-comments: 3.1.1
-      ts-node: 10.7.0_6sxvnwysvlo53egjnie7htsx5a
+      ts-node: 10.7.0_typescript@4.6.3
     transitivePeerDependencies:
       - bufferutil
       - canvas
@@ -18303,6 +18307,7 @@ packages:
       typescript: 4.7.4
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
+    dev: false
 
   /ts-node/10.7.0_fxg3r7oju3tntkxsvleuiot4fa:
     resolution:
@@ -18369,7 +18374,6 @@ packages:
       typescript: 4.6.3
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
-    dev: false
 
   /ts-node/10.9.1_kakyiqi62sfonxvjmz3ft5vt7y:
     resolution:
