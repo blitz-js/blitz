@@ -4,4 +4,5 @@ declare global {
   var sessionConfig: SessionConfig
   var __BLITZ_SESSION_COOKIE_PREFIX: string | undefined
   var __BLITZ_SUSPENSE_ENABLED: boolean
+  var __BLITZ_AUTH_ENABLED: boolean
 }

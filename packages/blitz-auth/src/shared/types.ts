@@ -21,6 +21,11 @@ export interface AuthenticatedClientSession extends PublicData {
   isLoading: boolean
 }
 
+export interface AuthenticatedSessionContext extends SessionContextBase, PublicData {
+  userId: PublicData["userId"]
+  $publicData: PublicData
+}
+
 export type IsAuthorizedArgs = Session extends {
   isAuthorized: (...args: any) => any
 }
@@ -90,6 +95,9 @@ export interface AuthenticatedSessionContext extends SessionContextBase, PublicD
 declare module "blitz" {
   export interface Ctx {
     session: SessionContext
+  }
+  export interface MiddlewareCtx extends Omit<Ctx, "session"> {
+    session: AuthenticatedSessionContext
   }
 }
 

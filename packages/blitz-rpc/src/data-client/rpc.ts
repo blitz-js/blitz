@@ -2,17 +2,40 @@ import {normalizePathTrailingSlash} from "next/dist/client/normalize-trailing-sl
 import {addBasePath} from "next/dist/client/add-base-path"
 import {deserialize, serialize} from "superjson"
 import {SuperJSONResult} from "superjson/dist/types"
-import {CSRFTokenMismatchError, isServer} from "blitz"
+import {CSRFTokenMismatchError, isServer, readCookie} from "blitz"
 import {getQueryKeyFromUrlAndParams, getQueryClient} from "./react-query-utils"
 import {stringify} from "superjson"
-import {
-  getAntiCSRFToken,
-  getPublicDataStore,
-  HEADER_CSRF,
-  HEADER_CSRF_ERROR,
-  HEADER_PUBLIC_DATA_TOKEN,
-  HEADER_SESSION_CREATED,
-} from "@blitzjs/auth"
+
+/* ---  BLITZ AUTH CONSTANTS --- */
+
+declare global {
+  var __BLITZ_SESSION_COOKIE_PREFIX: string | undefined
+}
+
+const prefix = () => {
+  if (!globalThis.__BLITZ_SESSION_COOKIE_PREFIX && globalThis.__BLITZ_AUTH_ENABLED) {
+    throw new Error("Internal Blitz Error: globalThis.__BLITZ_SESSION_COOKIE_PREFIX is not set")
+  }
+  return globalThis.__BLITZ_SESSION_COOKIE_PREFIX
+}
+const LOCALSTORAGE_CSRF_TOKEN = () => `${prefix()}_sAntiCsrfToken`
+const HEADER_CSRF = "anti-csrf"
+const HEADER_PUBLIC_DATA_TOKEN = "public-data-token"
+const HEADER_CSRF_ERROR = "csrf-error"
+const HEADER_SESSION_CREATED = "session-created"
+const COOKIE_CSRF_TOKEN = () => `${prefix()}_sAntiCsrfToken`
+
+const getAntiCSRFToken = () => {
+  const cookieValue = readCookie(COOKIE_CSRF_TOKEN())
+  if (cookieValue) {
+    localStorage.setItem(LOCALSTORAGE_CSRF_TOKEN(), cookieValue)
+    return cookieValue
+  } else {
+    return localStorage.getItem(LOCALSTORAGE_CSRF_TOKEN())
+  }
+}
+
+/* ---  BLITZ AUTH CONSTANTS --- */
 
 export function normalizeApiRoute(path: string): string {
   return normalizePathTrailingSlash(addBasePath(path))
@@ -122,7 +145,7 @@ export function __internal_buildRpcClient({
         debug("Received request for", routePath)
         if (response.headers) {
           if (response.headers.get(HEADER_PUBLIC_DATA_TOKEN)) {
-            getPublicDataStore().updateState()
+            ;(window as any).__publicDataStore.updateState()
             debug("Public data updated")
           }
           if (response.headers.get(HEADER_SESSION_CREATED)) {
@@ -172,8 +195,11 @@ export function __internal_buildRpcClient({
             }) as any
             // We don't clear the publicDataStore for anonymous users,
             // because there is not sensitive data
-            if (error.name === "AuthenticationError" && getPublicDataStore().getData().userId) {
-              getPublicDataStore().clear()
+            if (
+              error.name === "AuthenticationError" &&
+              (window as any).__publicDataStore.getData().userId
+            ) {
+              ;(window as any).__publicDataStore.clear()
             }
 
             const prismaError = error.message.match(/invalid.*prisma.*invocation/i)

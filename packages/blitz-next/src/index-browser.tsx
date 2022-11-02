@@ -68,6 +68,7 @@ interface RouteUrlObject extends Pick<UrlObject, "pathname" | "query"> {
 
 type RedirectAuthenticatedTo = string | RouteUrlObject | false
 type RedirectAuthenticatedToFnCtx = {
+  //@ts-ignore - TODO: fix this
   session: Ctx["session"]["$publicData"]
 }
 type RedirectAuthenticatedToFn = (args: RedirectAuthenticatedToFnCtx) => RedirectAuthenticatedTo
