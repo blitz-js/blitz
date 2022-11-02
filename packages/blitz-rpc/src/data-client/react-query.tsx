@@ -21,8 +21,8 @@ import {
   getInfiniteQueryKey,
 } from "./react-query-utils"
 import {useRouter} from "next/router"
-import { EmptyPublicData, PublicData } from "../resolver"
-import { useEffect, useState } from "react"
+import {EmptyPublicData, PublicData} from "../resolver"
+import {useEffect, useState} from "react"
 
 export interface UseSessionOptions {
   initialPublicData?: PublicData
@@ -36,14 +36,6 @@ export interface ClientSession extends EmptyPublicData {
 }
 
 export const useSession = (options: UseSessionOptions = {}, enabled = false): ClientSession => {
-  
-  if(enabled === false) {
-    return {
-      ...emptyPublicData,
-      isLoading: false,
-    }
-  }
-
   const suspense = options?.suspense ?? Boolean(globalThis.__BLITZ_SUSPENSE_ENABLED)
 
   let initialState: ClientSession
@@ -66,13 +58,14 @@ export const useSession = (options: UseSessionOptions = {}, enabled = false): Cl
 
   useEffect(() => {
     // Initialize on mount
-    setSession({...(window as any).__publicDataStore.getData(), isLoading: false})
-    const subscription = (window as any).__publicDataStore.observable.subscribe((data:any) =>
-      setSession({...data, isLoading: false}),
-    )
-    globalThis.__BLITZ_AUTH_ENABLED = true
-    return subscription.unsubscribe
-  }, [])
+    if (enabled) {
+      setSession({...(window as any).__publicDataStore.getData(), isLoading: false})
+      const subscription = (window as any).__publicDataStore.observable.subscribe((data: any) =>
+        setSession({...data, isLoading: false}),
+      )
+      return subscription.unsubscribe
+    }
+  }, [enabled])
 
   return session
 }
@@ -312,7 +305,7 @@ export function useInfiniteQuery<
   const session = useSession({suspense}, blitzAuthEnabled)
   if (session.isLoading) {
     enabled = false
-  } 
+  }
 
   const routerIsReady = useRouter().isReady || (isServer && suspenseEnabled)
   const enhancedResolverRpcClient = sanitizeQuery(queryFn)
