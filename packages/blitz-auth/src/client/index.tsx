@@ -21,9 +21,9 @@ import {
   LOCALSTORAGE_CSRF_TOKEN,
   LOCALSTORAGE_PREFIX,
   LOCALSTORAGE_PUBLIC_DATA_TOKEN,
-  AuthenticatedClientSession,
   PublicData,
   EmptyPublicData,
+  AuthenticatedClientSession,
   ClientSession,
 } from "../shared"
 import _debug from "debug"

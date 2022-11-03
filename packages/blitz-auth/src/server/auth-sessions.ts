@@ -14,6 +14,10 @@ import {
   CSRFTokenMismatchError,
 } from "blitz"
 import {
+  PublicData,
+  EmptyPublicData,
+  IsAuthorizedArgs,
+  SessionContext,
   COOKIE_ANONYMOUS_SESSION_TOKEN,
   COOKIE_CSRF_TOKEN,
   COOKIE_PUBLIC_DATA_TOKEN,
@@ -29,10 +33,6 @@ import {
   SESSION_TYPE_OPAQUE_TOKEN_SIMPLE,
   TOKEN_SEPARATOR,
   AuthenticatedSessionContext,
-  PublicData,
-  EmptyPublicData,
-  IsAuthorizedArgs,
-  SessionContext,
 } from "../shared"
 import {generateToken, hash256} from "./auth-utils"
 
