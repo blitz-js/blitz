@@ -1,7 +1,7 @@
-import type {BlitzServerPlugin, RequestMiddleware, Ctx} from "blitz"
+import type {BlitzServerPlugin, RequestMiddleware, Ctx, PublicData} from "blitz"
 import {assert} from "blitz"
 import {IncomingMessage, ServerResponse} from "http"
-import {PublicData, SessionModel, SessionConfigMethods} from "../shared/types"
+import {SessionModel, SessionConfigMethods} from "../shared/types"
 import {getSession} from "./auth-sessions"
 
 interface SessionConfigOptions {

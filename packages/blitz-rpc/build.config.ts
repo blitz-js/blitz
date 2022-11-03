@@ -14,6 +14,7 @@ const config: BuildConfig = {
     "index-server.cjs",
     "index-server.mjs",
     "react",
+    "@blitzjs/auth",
     "blitz",
     "next",
     "zod",

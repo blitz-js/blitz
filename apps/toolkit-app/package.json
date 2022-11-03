@@ -23,6 +23,7 @@
     ]
   },
   "dependencies": {
+    "@blitzjs/auth": "workspace:*",
     "@blitzjs/config": "workspace:*",
     "@blitzjs/next": "workspace:*",
     "@blitzjs/rpc": "workspace:*",

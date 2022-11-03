@@ -10,7 +10,7 @@ import {
   UseMutationOptions,
   UseMutationResult,
 } from "@tanstack/react-query"
-import {isServer, FirstParam, PromiseReturnType, AsyncFunc} from "blitz"
+import {isServer, FirstParam, PromiseReturnType, AsyncFunc, ClientSession} from "blitz"
 import {
   emptyQueryFn,
   getQueryCacheFunctions,
@@ -21,60 +21,12 @@ import {
   getInfiniteQueryKey,
 } from "./react-query-utils"
 import {useRouter} from "next/router"
-import { EmptyPublicData, PublicData } from "../resolver"
-import { useEffect, useState } from "react"
 
-export interface UseSessionOptions {
-  initialPublicData?: PublicData
-  suspense?: boolean | null
-}
-
-const emptyPublicData: EmptyPublicData = {userId: null}
-
-export interface ClientSession extends EmptyPublicData {
-  isLoading: boolean
-}
-
-export const useSession = (options: UseSessionOptions = {}, enabled = false): ClientSession => {
-  
-  if(enabled === false) {
-    return {
-      ...emptyPublicData,
-      isLoading: false,
-    }
+const useSessionWithoutAuth = (options = {}): ClientSession => {
+  return {
+    userId: null,
+    isLoading: false,
   }
-
-  const suspense = options?.suspense ?? Boolean(globalThis.__BLITZ_SUSPENSE_ENABLED)
-
-  let initialState: ClientSession
-  if (options.initialPublicData) {
-    initialState = {...options.initialPublicData, isLoading: false}
-  } else if (suspense) {
-    if (isServer) {
-      const e = new Error()
-      e.name = "Rendering Suspense fallback..."
-      delete e.stack
-      throw e
-    } else {
-      initialState = {...(window as any).__publicDataStore.getData(), isLoading: false}
-    }
-  } else {
-    initialState = {...emptyPublicData, isLoading: true}
-  }
-
-  const [session, setSession] = useState(initialState)
-
-  useEffect(() => {
-    // Initialize on mount
-    setSession({...(window as any).__publicDataStore.getData(), isLoading: false})
-    const subscription = (window as any).__publicDataStore.observable.subscribe((data:any) =>
-      setSession({...data, isLoading: false}),
-    )
-    globalThis.__BLITZ_AUTH_ENABLED = true
-    return subscription.unsubscribe
-  }, [])
-
-  return session
 }
 
 type QueryLazyOptions = {suspense: unknown} | {enabled: unknown}
@@ -127,9 +79,19 @@ export function useQuery<
   const suspenseEnabled = Boolean(globalThis.__BLITZ_SUSPENSE_ENABLED)
   let enabled = isServer && suspenseEnabled ? false : options?.enabled ?? options?.enabled !== null
   const suspense = enabled === false ? false : options?.suspense
-  const blitzAuthEnabled = Boolean(globalThis.__BLITZ_AUTH_ENABLED ?? false)
-  console.log("blitzAuthEnabled", blitzAuthEnabled)
-  const session = useSession({suspense}, blitzAuthEnabled)
+  let useSession = useSessionWithoutAuth
+  if (globalThis.__BLITZ_AUTH_ENABLED) {
+    try {
+      import("@blitzjs/auth").then((mod) => {
+        useSession = mod.useSession
+      }, console.error)
+    } catch (e: any) {
+      if (e.code !== "MODULE_NOT_FOUND") {
+        throw e
+      }
+    }
+  }
+  const session = useSession({suspense})
   if (session.isLoading) {
     enabled = false
   }
@@ -213,8 +175,19 @@ export function usePaginatedQuery<
   const suspenseEnabled = Boolean(globalThis.__BLITZ_SUSPENSE_ENABLED)
   let enabled = isServer && suspenseEnabled ? false : options?.enabled ?? options?.enabled !== null
   const suspense = enabled === false ? false : options?.suspense
-  const blitzAuthEnabled = Boolean(globalThis.__BLITZ_AUTH_ENABLED ?? false)
-  const session = useSession({suspense}, blitzAuthEnabled)
+  let useSession = useSessionWithoutAuth
+  if (globalThis.__BLITZ_AUTH_ENABLED) {
+    try {
+      import("@blitzjs/auth").then((mod) => {
+        useSession = mod.useSession
+      }, console.error)
+    } catch (e: any) {
+      if (e.code !== "MODULE_NOT_FOUND") {
+        throw e
+      }
+    }
+  }
+  const session = useSession({suspense})
   if (session.isLoading) {
     enabled = false
   }
@@ -308,11 +281,22 @@ export function useInfiniteQuery<
   const suspenseEnabled = Boolean(globalThis.__BLITZ_SUSPENSE_ENABLED)
   let enabled = isServer && suspenseEnabled ? false : options?.enabled ?? options?.enabled !== null
   const suspense = enabled === false ? false : options?.suspense
-  const blitzAuthEnabled = Boolean(globalThis.__BLITZ_AUTH_ENABLED ?? false)
-  const session = useSession({suspense}, blitzAuthEnabled)
+  let useSession = useSessionWithoutAuth
+  if (globalThis.__BLITZ_AUTH_ENABLED) {
+    try {
+      import("@blitzjs/auth").then((mod) => {
+        useSession = mod.useSession
+      }, console.error)
+    } catch (e: any) {
+      if (e.code !== "MODULE_NOT_FOUND") {
+        throw e
+      }
+    }
+  }
+  const session = useSession({suspense})
   if (session.isLoading) {
     enabled = false
-  } 
+  }
 
   const routerIsReady = useRouter().isReady || (isServer && suspenseEnabled)
   const enhancedResolverRpcClient = sanitizeQuery(queryFn)

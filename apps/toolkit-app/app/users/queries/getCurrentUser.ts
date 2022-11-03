@@ -1,16 +1,16 @@
-import { resolver } from "@blitzjs/rpc"
+import { Ctx } from "blitz"
 import db from "db"
 
-export default resolver.pipe(
-  // Validate the input data
-  // Ensure user is logged in
-  resolver.authorize(), // just to see the warning to switch to auth plugin
-  // Perform business logic
-  async () => {
-    const project = db.user.findMany()
-    return project
-  }
-)
+export default async function getCurrentUser(_ = null, { session }: Ctx) {
+  if (!session.userId) return null
+
+  const user = await db.user.findFirst({
+    where: { id: session.userId },
+    select: { id: true, name: true, email: true, role: true },
+  })
+
+  return user
+}
 
 export const config = {
   httpMethod: "GET",

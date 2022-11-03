@@ -1,53 +1,15 @@
-import {Await, Ctx, EnsurePromise, log, MiddlewareCtx} from "blitz"
+import {
+  Await,
+  Ctx,
+  EnsurePromise,
+  log,
+  MiddlewareCtx,
+  SessionContext,
+  SessionContextBase,
+} from "blitz"
 import type {input as zInput, output as zOutput, ZodTypeAny} from "zod"
 
 export type ParserType = "sync" | "async"
-
-export interface Session {
-  // isAuthorize can be injected here
-  // PublicData can be injected here
-}
-
-export type PublicData = Session extends {PublicData: unknown}
-  ? Session["PublicData"]
-  : {userId: unknown}
-
-export interface EmptyPublicData extends Partial<Omit<PublicData, "userId">> {
-  userId: PublicData["userId"] | null
-}
-
-export type IsAuthorizedArgs = Session extends {
-  isAuthorized: (...args: any) => any
-}
-  ? "args" extends keyof Parameters<Session["isAuthorized"]>[0]
-    ? Parameters<Session["isAuthorized"]>[0]["args"]
-    : unknown[]
-  : unknown[]
-
-export interface SessionContextBase {
-  $handle: string | null
-  $publicData: unknown
-  $authorize(...args: IsAuthorizedArgs): asserts this is AuthenticatedSessionContext
-  // $isAuthorized cannot have assertion return type because it breaks advanced use cases
-  // with multiple isAuthorized calls
-  $isAuthorized: (...args: IsAuthorizedArgs) => boolean
-  $thisIsAuthorized: (...args: IsAuthorizedArgs) => this is AuthenticatedSessionContext
-  $create: (publicData: PublicData, privateData?: Record<any, any>) => Promise<void>
-  $revoke: () => Promise<void>
-  $revokeAll: () => Promise<void>
-  $getPrivateData: () => Promise<Record<any, any>>
-  $setPrivateData: (data: Record<any, any>) => Promise<void>
-  $setPublicData: (data: Partial<Omit<PublicData, "userId">>) => Promise<void>
-}
-
-export interface SessionContext extends SessionContextBase, EmptyPublicData {
-  $publicData: Partial<PublicData> | EmptyPublicData
-}
-
-export interface AuthenticatedSessionContext extends SessionContextBase, PublicData {
-  userId: PublicData["userId"]
-  $publicData: PublicData
-}
 
 interface ResultWithContext<Result = unknown, Context = unknown> {
   __blitz: true
@@ -58,10 +20,6 @@ function isResultWithContext(x: unknown): x is ResultWithContext {
   return (
     typeof x === "object" && x !== null && "ctx" in x && (x as ResultWithContext).__blitz === true
   )
-}
-
-declare module "blitz" {
-  interface MiddlewareCtx {}
 }
 
 type PipeFn<Prev, Next, PrevCtx, NextCtx = PrevCtx> = (
@@ -337,7 +295,7 @@ const authorize: ResolverAuthorize = (...args) => {
       }
     }
     log.warn(
-      "You are using the `authorize` resolver, but `@blitzjs/auth` plugin is not initialised. Consider switching to enable authentication features.",
+      "You are using the `authorize` resolver, but `@blitzjs/auth` plugin is not initialised. Consider enabling to enable authentication features.",
     )
     return {
       __blitz: true,

@@ -14,6 +14,9 @@ import {
   RedirectError,
   RouteUrlObject,
   Ctx,
+  PublicData,
+  EmptyPublicData,
+  ClientSession,
 } from "blitz"
 import {
   COOKIE_CSRF_TOKEN,
@@ -21,10 +24,7 @@ import {
   LOCALSTORAGE_CSRF_TOKEN,
   LOCALSTORAGE_PREFIX,
   LOCALSTORAGE_PUBLIC_DATA_TOKEN,
-  PublicData,
-  EmptyPublicData,
   AuthenticatedClientSession,
-  ClientSession,
 } from "../shared"
 import _debug from "debug"
 import {formatWithValidation} from "../shared/url-utils"
@@ -154,6 +154,7 @@ export const useSession = (options: UseSessionOptions = {}): ClientSession => {
 
   useEffect(() => {
     // Initialize on mount
+    globalThis.__BLITZ_AUTH_ENABLED = true
     setSession({...getPublicDataStore().getData(), isLoading: false})
     const subscription = getPublicDataStore().observable.subscribe((data) =>
       setSession({...data, isLoading: false}),

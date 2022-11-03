@@ -35,6 +35,7 @@ importers:
 
   apps/toolkit-app:
     specifiers:
+      "@blitzjs/auth": workspace:*
       "@blitzjs/config": workspace:*
       "@blitzjs/next": workspace:*
       "@blitzjs/rpc": workspace:*
@@ -68,6 +69,7 @@ importers:
       typescript: ^4.5.3
       zod: 3.17.3
     dependencies:
+      "@blitzjs/auth": link:../../packages/blitz-auth
       "@blitzjs/config": link:../../packages/config
       "@blitzjs/next": link:../../packages/blitz-next
       "@blitzjs/rpc": link:../../packages/blitz-rpc
@@ -925,6 +927,7 @@ importers:
 
   packages/blitz-rpc:
     specifiers:
+      "@blitzjs/auth": 2.0.0-beta.15
       "@blitzjs/config": workspace:2.0.0-beta.15
       "@swc/core": 1.3.7
       "@tanstack/react-query": 4.0.10
@@ -955,6 +958,7 @@ importers:
       superjson: 1.9.1
       supports-color: 8.1.1
     devDependencies:
+      "@blitzjs/auth": link:../blitz-auth
       "@blitzjs/config": link:../config
       "@types/debug": 4.1.7
       "@types/react": 18.0.17
@@ -12797,7 +12801,7 @@ packages:
       pretty-format: 27.5.1
       slash: 3.0.0
       strip-json-comments: 3.1.1
-      ts-node: 10.7.0_6sxvnwysvlo53egjnie7htsx5a
+      ts-node: 10.7.0_fxg3r7oju3tntkxsvleuiot4fa
     transitivePeerDependencies:
       - bufferutil
       - canvas
@@ -18304,6 +18308,7 @@ packages:
       typescript: 4.7.4
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
+    dev: false
 
   /ts-node/10.7.0_fxg3r7oju3tntkxsvleuiot4fa:
     resolution:
@@ -18337,7 +18342,6 @@ packages:
       typescript: 4.6.3
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
-    dev: false
 
   /ts-node/10.7.0_typescript@4.6.3:
     resolution:
