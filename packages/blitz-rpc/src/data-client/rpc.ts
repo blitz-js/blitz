@@ -80,9 +80,12 @@ export function __internal_buildRpcClient({
           debug("No antiCSRFToken cookie found")
         }
       } catch (e: any) {
-        if (e.code !== "MODULE_NOT_FOUND") {
-          throw e
+        if (e.code === "MODULE_NOT_FOUND") {
+          console.error(
+            "Blitz Auth is enabled but @blitzjs/auth is not installed. Please check if @blitzjs/auth is in your dependencies",
+          )
         }
+        throw e
       }
     }
 

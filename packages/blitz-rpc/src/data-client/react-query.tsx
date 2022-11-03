@@ -88,9 +88,12 @@ export function useQuery<
         useSession = mod.useSession
       }, console.error)
     } catch (e: any) {
-      if (e.code !== "MODULE_NOT_FOUND") {
-        throw e
+      if (e.code === "MODULE_NOT_FOUND") {
+        console.error(
+          "Blitz Auth is enabled but @blitzjs/auth is not installed. Please check if @blitzjs/auth is in your dependencies",
+        )
       }
+      throw e
     }
   }
   const session = useSession({suspense})
@@ -184,9 +187,12 @@ export function usePaginatedQuery<
         useSession = mod.useSession
       }, console.error)
     } catch (e: any) {
-      if (e.code !== "MODULE_NOT_FOUND") {
-        throw e
+      if (e.code === "MODULE_NOT_FOUND") {
+        console.error(
+          "Blitz Auth is enabled but @blitzjs/auth is not installed. Please check if @blitzjs/auth is in your dependencies",
+        )
       }
+      throw e
     }
   }
   const session = useSession({suspense})
@@ -290,9 +296,12 @@ export function useInfiniteQuery<
         useSession = mod.useSession
       }, console.error)
     } catch (e: any) {
-      if (e.code !== "MODULE_NOT_FOUND") {
-        throw e
+      if (e.code === "MODULE_NOT_FOUND") {
+        console.error(
+          "Blitz Auth is enabled but @blitzjs/auth is not installed. Please check if @blitzjs/auth is in your dependencies",
+        )
       }
+      throw e
     }
   }
   const session = useSession({suspense})

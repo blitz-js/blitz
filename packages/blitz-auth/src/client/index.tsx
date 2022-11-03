@@ -154,7 +154,6 @@ export const useSession = (options: UseSessionOptions = {}): ClientSession => {
 
   useEffect(() => {
     // Initialize on mount
-    globalThis.__BLITZ_AUTH_ENABLED = true
     setSession({...getPublicDataStore().getData(), isLoading: false})
     const subscription = getPublicDataStore().observable.subscribe((data) =>
       setSession({...data, isLoading: false}),
@@ -259,10 +258,10 @@ export function getAuthValues<TProps = any>(
 }
 
 function withBlitzAuthPlugin<TProps = any>(Page: ComponentType<TProps> | BlitzPage<TProps>) {
+  globalThis.__BLITZ_AUTH_ENABLED = true
   const AuthRoot = (props: ComponentProps<any>) => {
     useSession({suspense: false})
     const [mounted, setMounted] = useState(false)
-    globalThis.__BLITZ_AUTH_ENABLED = true
     useEffect(() => {
       setMounted(true)
     }, [])
