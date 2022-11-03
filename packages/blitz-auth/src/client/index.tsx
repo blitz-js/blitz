@@ -262,7 +262,7 @@ function withBlitzAuthPlugin<TProps = any>(Page: ComponentType<TProps> | BlitzPa
   const AuthRoot = (props: ComponentProps<any>) => {
     useSession({suspense: false})
     const [mounted, setMounted] = useState(false)
-
+    globalThis.__BLITZ_AUTH_ENABLED = true
     useEffect(() => {
       setMounted(true)
     }, [])
