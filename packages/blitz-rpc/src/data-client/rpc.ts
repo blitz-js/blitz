@@ -2,7 +2,7 @@ import {normalizePathTrailingSlash} from "next/dist/client/normalize-trailing-sl
 import {addBasePath} from "next/dist/client/add-base-path"
 import {deserialize, serialize} from "superjson"
 import {SuperJSONResult} from "superjson/dist/types"
-import {CSRFTokenMismatchError, isServer, readCookie} from "blitz"
+import {CSRFTokenMismatchError, isServer} from "blitz"
 import {getQueryKeyFromUrlAndParams, getQueryClient} from "./react-query-utils"
 import {stringify} from "superjson"
 

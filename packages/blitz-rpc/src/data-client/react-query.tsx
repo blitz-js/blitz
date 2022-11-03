@@ -10,7 +10,8 @@ import {
   UseMutationOptions,
   UseMutationResult,
 } from "@tanstack/react-query"
-import {isServer, FirstParam, PromiseReturnType, AsyncFunc, ClientSession} from "blitz"
+import {isServer, FirstParam, PromiseReturnType, AsyncFunc} from "blitz"
+
 import {
   emptyQueryFn,
   getQueryCacheFunctions,
@@ -21,6 +22,7 @@ import {
   getInfiniteQueryKey,
 } from "./react-query-utils"
 import {useRouter} from "next/router"
+import type {ClientSession} from "@blitzjs/auth"
 
 const useSessionWithoutAuth = (options = {}): ClientSession => {
   return {

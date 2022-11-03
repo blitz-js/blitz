@@ -14,7 +14,7 @@ import {
   truncateString,
 } from "blitz"
 import {IncomingMessage, ServerResponse} from "http"
-import {PublicData, SessionContext} from "blitz"
+import {PublicData, SessionContext} from "../shared"
 
 const isFunction = (functionToCheck: unknown): functionToCheck is Function =>
   typeof functionToCheck === "function"

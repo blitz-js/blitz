@@ -1,12 +1,5 @@
-import {
-  Await,
-  Ctx,
-  EnsurePromise,
-  log,
-  MiddlewareCtx,
-  SessionContext,
-  SessionContextBase,
-} from "blitz"
+import type {SessionContext, SessionContextBase} from "@blitzjs/auth"
+import {Await, Ctx, EnsurePromise, log, MiddlewareCtx} from "blitz"
 import type {input as zInput, output as zOutput, ZodTypeAny} from "zod"
 
 export type ParserType = "sync" | "async"

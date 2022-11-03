@@ -12,11 +12,6 @@ import {
   AuthenticationError,
   AuthorizationError,
   CSRFTokenMismatchError,
-  AuthenticatedSessionContext,
-  EmptyPublicData,
-  IsAuthorizedArgs,
-  PublicData,
-  SessionContext,
 } from "blitz"
 import {
   COOKIE_ANONYMOUS_SESSION_TOKEN,
@@ -33,6 +28,11 @@ import {
   SESSION_TYPE_ANONYMOUS_JWT,
   SESSION_TYPE_OPAQUE_TOKEN_SIMPLE,
   TOKEN_SEPARATOR,
+  AuthenticatedSessionContext,
+  PublicData,
+  EmptyPublicData,
+  IsAuthorizedArgs,
+  SessionContext,
 } from "../shared"
 import {generateToken, hash256} from "./auth-utils"
 
