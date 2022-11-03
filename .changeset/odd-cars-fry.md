@@ -5,4 +5,4 @@
 "@blitzjs/rpc": minor
 ---
 
-Untangle Blitz RPC from Blitz Auth to allow independent use.
+Decoupled Blitz RPC from Blitz Auth to allow independent use.
