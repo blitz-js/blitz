@@ -31,6 +31,7 @@
     "diff": "5.0.0",
     "enquirer": "2.3.6",
     "fs-extra": "10.0.1",
+    "globby": "13.1.2",
     "got": "^11.8.1",
     "jscodeshift": "0.13.0",
     "mem-fs": "1.2.0",
