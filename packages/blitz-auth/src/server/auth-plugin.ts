@@ -77,7 +77,7 @@ const defaultConfig_: SessionConfigOptions = {
   secureCookies: !process.env.DISABLE_SECURE_COOKIES && process.env.NODE_ENV === "production",
 }
 
-interface AuthPluginOptions extends Partial<SessionConfigOptions>, IsAuthorized {
+export interface AuthPluginOptions extends Partial<SessionConfigOptions>, IsAuthorized {
   storage: SessionConfigMethods
 }
 
