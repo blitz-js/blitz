@@ -2,7 +2,7 @@ import {normalizePathTrailingSlash} from "next/dist/client/normalize-trailing-sl
 import {addBasePath} from "next/dist/client/add-base-path"
 import {deserialize, serialize} from "superjson"
 import {SuperJSONResult} from "superjson/dist/types"
-import {CSRFTokenMismatchError, isServer} from "blitz"
+import {CSRFTokenMismatchError, isServer, log} from "blitz"
 import {getQueryKeyFromUrlAndParams, getQueryClient} from "./react-query-utils"
 import {stringify} from "superjson"
 
@@ -157,7 +157,7 @@ export function __internal_buildRpcClient({
             }
           } catch (e: any) {
             if (e.code === "MODULE_NOT_FOUND") {
-              console.error(
+              log.error(
                 "Blitz Auth is enabled but @blitzjs/auth is not installed. Please check if @blitzjs/auth is in your dependencies",
               )
             }

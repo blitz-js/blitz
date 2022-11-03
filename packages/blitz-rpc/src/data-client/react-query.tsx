@@ -10,7 +10,7 @@ import {
   UseMutationOptions,
   UseMutationResult,
 } from "@tanstack/react-query"
-import {isServer, FirstParam, PromiseReturnType, AsyncFunc} from "blitz"
+import {isServer, FirstParam, PromiseReturnType, AsyncFunc, log} from "blitz"
 
 import {
   emptyQueryFn,
@@ -89,7 +89,7 @@ export function useQuery<
       }, console.error)
     } catch (e: any) {
       if (e.code === "MODULE_NOT_FOUND") {
-        console.error(
+        log.error(
           "Blitz Auth is enabled but @blitzjs/auth is not installed. Please check if @blitzjs/auth is in your dependencies",
         )
       }
@@ -188,7 +188,7 @@ export function usePaginatedQuery<
       }, console.error)
     } catch (e: any) {
       if (e.code === "MODULE_NOT_FOUND") {
-        console.error(
+        log.error(
           "Blitz Auth is enabled but @blitzjs/auth is not installed. Please check if @blitzjs/auth is in your dependencies",
         )
       }
@@ -297,7 +297,7 @@ export function useInfiniteQuery<
       }, console.error)
     } catch (e: any) {
       if (e.code === "MODULE_NOT_FOUND") {
-        console.error(
+        log.error(
           "Blitz Auth is enabled but @blitzjs/auth is not installed. Please check if @blitzjs/auth is in your dependencies",
         )
       }
