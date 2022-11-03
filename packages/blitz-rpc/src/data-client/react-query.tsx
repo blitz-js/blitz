@@ -10,7 +10,7 @@ import {
   UseMutationOptions,
   UseMutationResult,
 } from "@tanstack/react-query"
-import {isServer, FirstParam, PromiseReturnType, AsyncFunc} from "blitz"
+import {isServer, FirstParam, PromiseReturnType, AsyncFunc, log} from "blitz"
 
 import {
   emptyQueryFn,
@@ -88,9 +88,12 @@ export function useQuery<
         useSession = mod.useSession
       }, console.error)
     } catch (e: any) {
-      if (e.code !== "MODULE_NOT_FOUND") {
-        throw e
+      if (e.code === "MODULE_NOT_FOUND") {
+        log.error(
+          "Blitz Auth is enabled but @blitzjs/auth is not installed. Please check if @blitzjs/auth is in your dependencies",
+        )
       }
+      throw e
     }
   }
   const session = useSession({suspense})
@@ -184,9 +187,12 @@ export function usePaginatedQuery<
         useSession = mod.useSession
       }, console.error)
     } catch (e: any) {
-      if (e.code !== "MODULE_NOT_FOUND") {
-        throw e
+      if (e.code === "MODULE_NOT_FOUND") {
+        log.error(
+          "Blitz Auth is enabled but @blitzjs/auth is not installed. Please check if @blitzjs/auth is in your dependencies",
+        )
       }
+      throw e
     }
   }
   const session = useSession({suspense})
@@ -290,9 +296,12 @@ export function useInfiniteQuery<
         useSession = mod.useSession
       }, console.error)
     } catch (e: any) {
-      if (e.code !== "MODULE_NOT_FOUND") {
-        throw e
+      if (e.code === "MODULE_NOT_FOUND") {
+        log.error(
+          "Blitz Auth is enabled but @blitzjs/auth is not installed. Please check if @blitzjs/auth is in your dependencies",
+        )
       }
+      throw e
     }
   }
   const session = useSession({suspense})
