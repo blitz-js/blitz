@@ -58,7 +58,7 @@ export const setCSRFCookie = (options: CookieOptions) => {
   setCookie(
     cookie.serialize(`${prefix}_sAntiCsrfToken`, csrfToken, {
       path: "/",
-      secure: secure || isLocalhost(),
+      secure: secure || !isLocalhost(),
       domain: domain || window.location.hostname,
       sameSite: sameSite || "lax",
       expires: expires || new Date(Date.now() + 1000 * 60 * 60 * 24 * 365), // 1 year

@@ -3,7 +3,6 @@ import {NextApiRequest, NextApiResponse} from "next"
 import {deserialize, serialize as superjsonSerialize, parse} from "superjson"
 import {resolve} from "path"
 import chalk from "chalk"
-import {setCSRFCookie} from "./index-browser"
 
 // TODO - optimize end user server bundles by not exporting all client stuff here
 export * from "./index-browser"

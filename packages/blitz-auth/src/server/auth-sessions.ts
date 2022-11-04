@@ -14,8 +14,8 @@ import {
   CSRFTokenMismatchError,
 } from "blitz"
 import {
-  PublicData,
   EmptyPublicData,
+  PublicData,
   IsAuthorizedArgs,
   SessionContext,
   COOKIE_ANONYMOUS_SESSION_TOKEN,
