@@ -50,17 +50,6 @@ export interface SessionConfigMethods {
   deleteSession: (handle: string) => Promise<SessionModel | undefined>
 }
 
-export interface SessionConfig extends SessionConfigMethods {
-  cookiePrefix?: string
-  sessionExpiryMinutes?: number
-  method?: "essential" | "advanced"
-  sameSite?: "none" | "lax" | "strict"
-  secureCookies?: boolean
-  domain?: string
-  publicDataKeysToSyncAcrossSessions?: string[]
-  isAuthorized: (data: {ctx: BlitzCtx; args: any}) => boolean
-}
-
 export interface SessionContextBase {
   $handle: string | null
   $publicData: unknown

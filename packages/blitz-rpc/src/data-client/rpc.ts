@@ -8,6 +8,7 @@ import {stringify} from "superjson"
 import {
   getAntiCSRFToken,
   getPublicDataStore,
+  backupAntiCSRFTokenToLocalStorage,
   HEADER_CSRF,
   HEADER_CSRF_ERROR,
   HEADER_PUBLIC_DATA_TOKEN,
@@ -121,6 +122,7 @@ export function __internal_buildRpcClient({
       .then(async (response) => {
         debug("Received request for", routePath)
         if (response.headers) {
+          backupAntiCSRFTokenToLocalStorage()
           if (response.headers.get(HEADER_PUBLIC_DATA_TOKEN)) {
             getPublicDataStore().updateState()
             debug("Public data updated")
