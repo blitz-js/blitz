@@ -1,5 +1,12 @@
 # blitz
 
+## 2.0.0-beta.15
+
+### Patch Changes
+
+- 1b798d9a: Fix `useSession` hook by exporting `enhancePrisma` from the server entry point instead of server
+  - @blitzjs/generator@2.0.0-beta.15
+
 ## 2.0.0-beta.14
 
 ### Patch Changes

@@ -1,6 +1,6 @@
-import {assert, baseLogger, Ctx, newLine, prettyMs} from "blitz"
+import {assert, baseLogger, Ctx, newLine, prettyMs, ResolverConfig} from "blitz"
 import {NextApiRequest, NextApiResponse} from "next"
-import {deserialize, serialize as superjsonSerialize} from "superjson"
+import {deserialize, serialize as superjsonSerialize, parse} from "superjson"
 import {resolve} from "path"
 import chalk from "chalk"
 
@@ -14,6 +14,10 @@ function isObject(value: unknown): value is Record<string | symbol, unknown> {
   return typeof value === "object" && value !== null
 }
 
+const defaultConfig: ResolverConfig = {
+  httpMethod: "POST",
+}
+
 function getGlobalObject<T extends Record<string, unknown>>(key: string, defaultValue: T): T {
   assert(key.startsWith("__internal_blitz"), "unsupported key")
   if (typeof global === "undefined") {
@@ -25,7 +29,7 @@ function getGlobalObject<T extends Record<string, unknown>>(key: string, default
 }
 
 type Resolver = (...args: unknown[]) => Promise<unknown>
-type ResolverFiles = Record<string, () => Promise<{default?: Resolver}>>
+type ResolverFiles = Record<string, () => Promise<{default?: Resolver; config?: ResolverConfig}>>
 export type ResolverPathOptions = "queries|mutations" | "root" | ((path: string) => string)
 
 // We define `global.__internal_blitzRpcResolverFiles` to ensure we use the same global object.
@@ -43,7 +47,7 @@ export function loadBlitzRpcResolverFilesWithInternalMechanism() {
 
 export function __internal_addBlitzRpcResolver(
   routePath: string,
-  resolver: () => Promise<{default?: Resolver}>,
+  resolver: () => Promise<{default?: Resolver; config?: ResolverConfig}>,
 ) {
   g.blitzRpcResolverFilesLoaded = g.blitzRpcResolverFilesLoaded || {}
   g.blitzRpcResolverFilesLoaded[routePath] = resolver
@@ -169,19 +173,33 @@ export function rpcHandler(config: RpcConfig) {
       throw new Error("No resolver for path: " + routePath)
     }
 
-    const resolver = (await loadableResolver()).default
+    const {default: resolver, config: resolverConfig} = await loadableResolver()
+
     if (!resolver) {
       throw new Error("No default export for resolver path: " + routePath)
     }
+
+    const resolverConfigWithDefaults = {...defaultConfig, ...resolverConfig}
 
     if (req.method === "HEAD") {
       // We used to initiate database connection here
       res.status(200).end()
       return
-    } else if (req.method === "POST") {
-      // Handle RPC call
-
-      if (typeof req.body.params === "undefined") {
+    } else if (
+      req.method === "POST" ||
+      (req.method === "GET" && resolverConfigWithDefaults.httpMethod === "GET")
+    ) {
+      if (req.method === "GET") {
+        if (Object.keys(req.query).length === 1 && req.query.blitz) {
+          const error = {message: "Request query is missing the required `params` and `meta` keys"}
+          log.error(error.message)
+          res.status(400).json({
+            result: null,
+            error,
+          })
+          return
+        }
+      } else if (typeof req.body.params === "undefined") {
         const error = {message: "Request body is missing the `params` key"}
         log.error(error.message)
         res.status(400).json({
@@ -193,10 +211,9 @@ export function rpcHandler(config: RpcConfig) {
 
       try {
         const data = deserialize({
-          json: req.body.params,
-          meta: req.body.meta?.params,
+          json: req.method === "POST" ? req.body.params : parse(`${req.query.params}`),
+          meta: req.method === "POST" ? req.body.meta?.params : parse(`${req.query.meta}`),
         })
-
         log.info(customChalk.dim("Starting with input:"), data ? data : JSON.stringify(data))
         const startTime = Date.now()
         const result = await resolver(data, (res as any).blitzCtx)

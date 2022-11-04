@@ -4,6 +4,7 @@ import {deserialize, serialize} from "superjson"
 import {SuperJSONResult} from "superjson/dist/types"
 import {CSRFTokenMismatchError, isServer} from "blitz"
 import {getQueryKeyFromUrlAndParams, getQueryClient} from "./react-query-utils"
+import {stringify} from "superjson"
 import {
   getAntiCSRFToken,
   getPublicDataStore,
@@ -23,6 +24,7 @@ export interface BuildRpcClientParams {
   resolverName: string
   resolverType: ResolverType
   routePath: string
+  httpMethod: string
 }
 
 export interface RpcOptions {
@@ -54,9 +56,10 @@ export function __internal_buildRpcClient({
   resolverName,
   resolverType,
   routePath,
+  httpMethod,
 }: BuildRpcClientParams): RpcClient {
   const fullRoutePath = normalizeApiRoute("/api/rpc" + routePath)
-
+  const routePathURL = new URL(fullRoutePath, window.location.origin)
   const httpClient: RpcClientBase = async (params, opts = {}, signal = undefined) => {
     const debug = (await import("debug")).default("blitz:rpc")
     if (!opts.fromQueryHook && !opts.fromInvoke) {
@@ -93,18 +96,26 @@ export function __internal_buildRpcClient({
       serialized = serialize(params)
     }
 
+    if (httpMethod === "GET") {
+      routePathURL.searchParams.set("params", stringify(serialized.json))
+      routePathURL.searchParams.set("meta", stringify(serialized.meta))
+    }
+
     const promise = window
-      .fetch(fullRoutePath, {
-        method: "POST",
+      .fetch(routePathURL, {
+        method: httpMethod,
         headers,
         credentials: "include",
         redirect: "follow",
-        body: JSON.stringify({
-          params: serialized.json,
-          meta: {
-            params: serialized.meta,
-          },
-        }),
+        body:
+          httpMethod === "POST"
+            ? JSON.stringify({
+                params: serialized.json,
+                meta: {
+                  params: serialized.meta,
+                },
+              })
+            : undefined,
         signal,
       })
       .then(async (response) => {

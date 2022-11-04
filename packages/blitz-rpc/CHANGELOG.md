@@ -1,5 +1,11 @@
 # @blitzjs/rpc
 
+## 2.0.0-beta.15
+
+### Patch Changes
+
+- @blitzjs/auth@2.0.0-beta.15
+
 ## 2.0.0-beta.14
 
 ### Patch Changes
