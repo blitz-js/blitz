@@ -1,5 +1,5 @@
-import Layout from "app/core/layouts/Layout"
-import { LoginForm } from "app/auth/components/LoginForm"
+import Layout from "src/core/layouts/Layout"
+import { LoginForm } from "src/auth/components/LoginForm"
 import { useRouter } from "next/router"
 import { BlitzPage } from "@blitzjs/next"
 import Link from "next/link"

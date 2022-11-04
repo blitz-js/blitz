@@ -1,8 +1,8 @@
-import Layout from "app/core/layouts/Layout"
-import { LabeledTextField } from "app/core/components/LabeledTextField"
-import { Form, FORM_ERROR } from "app/core/components/Form"
-import { ForgotPassword } from "app/auth/validations"
-import forgotPassword from "app/auth/mutations/forgotPassword"
+import Layout from "src/core/layouts/Layout"
+import { LabeledTextField } from "src/core/components/LabeledTextField"
+import { Form, FORM_ERROR } from "src/core/components/Form"
+import { ForgotPassword } from "src/auth/validations"
+import forgotPassword from "src/auth/mutations/forgotPassword"
 import { useMutation } from "@blitzjs/rpc"
 import { BlitzPage } from "@blitzjs/next"
 
