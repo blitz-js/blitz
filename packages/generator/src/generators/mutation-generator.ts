@@ -25,6 +25,6 @@ export class MutationGenerator extends Generator<MutationGeneratorOptions> {
 
   getTargetDirectory() {
     const context = this.options.context ? `${camelCaseToKebabCase(this.options.context)}` : ""
-    return `app/${context}/mutations`
+    return `src/${context}/mutations`
   }
 }

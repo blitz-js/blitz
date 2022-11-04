@@ -53,6 +53,6 @@ export class FormGenerator extends Generator<FormGeneratorOptions> {
   getTargetDirectory() {
     const context = this.options.context ? `${camelCaseToKebabCase(this.options.context)}/` : ""
     const kebabCaseModelName = camelCaseToKebabCase(this.options.modelNames)
-    return `app/${context}${kebabCaseModelName}/components`
+    return `src/${context}${kebabCaseModelName}/components`
   }
 }
