@@ -25,6 +25,7 @@
     "b64-lite": "1.4.0",
     "bad-behavior": "1.0.1",
     "chalk": "^4.1.0",
+    "cookie": "0.4.1",
     "debug": "4.3.3",
     "superjson": "1.9.1",
     "supports-color": "8.1.1"
