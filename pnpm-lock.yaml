@@ -715,7 +715,7 @@ importers:
       test-listen: 1.1.0
       ts-node: 10.7.0
       tsconfig-paths: 4.0.0
-      tslog: 3.3.1
+      tslog: 3.3.4
       typescript: ^4.5.3
       unbuild: 0.7.6
       watch: 1.0.2
@@ -766,7 +766,7 @@ importers:
       tar: 6.1.11
       ts-node: 10.7.0_typescript@4.6.3
       tsconfig-paths: 4.0.0
-      tslog: 3.3.1
+      tslog: 3.3.4
       watchpack: 2.1.1
     devDependencies:
       "@blitzjs/config": link:../config
@@ -1077,7 +1077,7 @@ importers:
       react: 18.2.0
       recast: 0.20.5
       supports-color: 8.1.1
-      tslog: 3.3.1
+      tslog: 3.3.4
       typescript: ^4.5.3
       unbuild: 0.6.9
       username: 5.1.0
@@ -1106,7 +1106,7 @@ importers:
       prettier: 2.6.2
       recast: 0.20.5
       supports-color: 8.1.1
-      tslog: 3.3.1
+      tslog: 3.3.4
       username: 5.1.0
       vinyl: 2.2.1
     devDependencies:
@@ -2608,7 +2608,7 @@ packages:
     peerDependencies:
       "@babel/core": ^7.0.0-0
     dependencies:
-      "@babel/core": 7.12.10_supports-color@8.1.1
+      "@babel/core": 7.12.10
       "@babel/helper-plugin-utils": 7.17.12
     dev: false
 
@@ -3486,6 +3486,7 @@ packages:
       semver: 5.7.1
     transitivePeerDependencies:
       - supports-color
+    dev: false
 
   /@babel/preset-flow/7.17.12_@babel+core@7.18.2:
     resolution:
@@ -6214,6 +6215,7 @@ packages:
       typescript: 4.6.3
     transitivePeerDependencies:
       - supports-color
+    dev: false
 
   /@typescript-eslint/experimental-utils/5.28.0_hrkuebk64jiu2ut2d2sm4oylnu:
     resolution:
@@ -9971,6 +9973,7 @@ packages:
     transitivePeerDependencies:
       - eslint-import-resolver-webpack
       - supports-color
+    dev: false
 
   /eslint-config-next/13.0.1_hrkuebk64jiu2ut2d2sm4oylnu:
     resolution:
@@ -10008,6 +10011,7 @@ packages:
     hasBin: true
     peerDependencies:
       eslint: ">=7.0.0"
+    dev: false
 
   /eslint-config-prettier/8.5.0_eslint@7.32.0:
     resolution:
@@ -12796,7 +12800,7 @@ packages:
       pretty-format: 27.5.1
       slash: 3.0.0
       strip-json-comments: 3.1.1
-      ts-node: 10.7.0_6sxvnwysvlo53egjnie7htsx5a
+      ts-node: 10.7.0_fxg3r7oju3tntkxsvleuiot4fa
     transitivePeerDependencies:
       - bufferutil
       - canvas
@@ -18303,6 +18307,7 @@ packages:
       typescript: 4.7.4
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
+    dev: false
 
   /ts-node/10.7.0_fxg3r7oju3tntkxsvleuiot4fa:
     resolution:
@@ -18336,7 +18341,6 @@ packages:
       typescript: 4.6.3
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
-    dev: false
 
   /ts-node/10.7.0_typescript@4.6.3:
     resolution:
@@ -18439,10 +18443,10 @@ packages:
         integrity: sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==,
       }
 
-  /tslog/3.3.1:
+  /tslog/3.3.4:
     resolution:
       {
-        integrity: sha512-An3uyXX95uU/X7v5H6G9OKW6ip/gVOpvsERGJ/nR4Or5TP5GwoI9nUjhNWEc8mJOWC7uhPMg2UzkrVDUtadELg==,
+        integrity: sha512-N0HHuHE0e/o75ALfkioFObknHR5dVchUad4F0XyFf3gXJYB++DewEzwGI/uIOM216E5a43ovnRNEeQIq9qgm4Q==,
       }
     engines: {node: ">=10"}
     dependencies:
