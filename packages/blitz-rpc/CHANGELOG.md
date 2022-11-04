@@ -1,5 +1,18 @@
 # @blitzjs/rpc
 
+## 2.0.0-beta.16
+
+### Minor Changes
+
+- 55a43ce1: maybe fix anon session CSRF issue + add ability to customize anon session expiry time
+
+### Patch Changes
+
+- ceb7db27: Add an opt-in GET request support to RPC specification by exporting a `config` object that has the `httpMethod` property.
+  from `query` files.
+- Updated dependencies [55a43ce1]
+  - @blitzjs/auth@2.0.0-beta.16
+
 ## 2.0.0-beta.15
 
 ### Patch Changes
