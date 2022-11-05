@@ -177,19 +177,17 @@ export function __internal_buildRpcClient({
               throw e
             }
           } else if (globalThis.__BLITZ_COOKIE_OPTIONS) {
-            if (response.headers.get("anti-csrf")) {
-              const antiCSRFToken = response.headers.get("anti-csrf")
-              const antiCSRFTokenFromCookie = getAntiCSRFToken(globalThis.__BLITZ_COOKIE_OPTIONS)
-              if (antiCSRFTokenFromCookie !== antiCSRFToken) {
-                if (!antiCSRFToken) {
-                  console.warn(
-                    `This request is missing the anti-csrf header. You can learn about adding this here: https://blitzjs.com/docs/session-management#manual-api-requests`,
-                  )
-                }
-                const err = new CSRFTokenMismatchError()
-                err.stack = null!
-                throw err
+            const antiCSRFToken = response.headers.get("anti-csrf")
+            const antiCSRFTokenFromCookie = getAntiCSRFToken(globalThis.__BLITZ_COOKIE_OPTIONS)
+            if (antiCSRFTokenFromCookie !== antiCSRFToken) {
+              if (!antiCSRFToken) {
+                console.warn(
+                  `This request is missing the anti-csrf header. You can learn about adding this here: https://blitzjs.com/docs/session-management#manual-api-requests`,
+                )
               }
+              const err = new CSRFTokenMismatchError()
+              err.stack = null!
+              throw err
             }
           }
         }
