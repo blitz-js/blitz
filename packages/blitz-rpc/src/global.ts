@@ -7,7 +7,8 @@ declare global {
   var __BLITZ_RPC_CSRF_OPTIONS:
     | undefined
     | {
-        antiCSRFToken?: string
+        prefix?: string
+        csrfToken?: string
         domain?: string
         secure?: boolean
         sameSite?: "lax" | "strict" | "none"
