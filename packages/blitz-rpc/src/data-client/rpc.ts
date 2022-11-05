@@ -88,8 +88,8 @@ export function __internal_buildRpcClient({
         }
         throw e
       }
-    } else if (globalThis.__BLITZ_COOKIE_OPTIONS) {
-      const antiCSRFToken = getAntiCSRFToken(globalThis.__BLITZ_COOKIE_OPTIONS)
+    } else if (globalThis.__BLITZ_RPC_CSRF_OPTIONS) {
+      const antiCSRFToken = getAntiCSRFToken(globalThis.__BLITZ_RPC_CSRF_OPTIONS)
       if (antiCSRFToken) {
         debug("Adding antiCSRFToken cookie header", antiCSRFToken)
         headers["anti-csrf"] = antiCSRFToken
@@ -138,7 +138,7 @@ export function __internal_buildRpcClient({
             try {
               const {
                 HEADER_PUBLIC_DATA_TOKEN,
-                backupAntiCSRFTokenToLocalStorage
+                backupAntiCSRFTokenToLocalStorage,
                 HEADER_SESSION_CREATED,
                 getPublicDataStore,
                 HEADER_CSRF_ERROR,
@@ -178,9 +178,9 @@ export function __internal_buildRpcClient({
               }
               throw e
             }
-          } else if (globalThis.__BLITZ_COOKIE_OPTIONS) {
+          } else if (globalThis.__BLITZ_RPC_CSRF_OPTIONS) {
             const antiCSRFToken = response.headers.get("anti-csrf")
-            const antiCSRFTokenFromCookie = getAntiCSRFToken(globalThis.__BLITZ_COOKIE_OPTIONS)
+            const antiCSRFTokenFromCookie = getAntiCSRFToken(globalThis.__BLITZ_RPC_CSRF_OPTIONS)
             if (antiCSRFTokenFromCookie !== antiCSRFToken) {
               if (!antiCSRFToken) {
                 console.warn(

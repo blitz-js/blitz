@@ -2,7 +2,6 @@ import "./global"
 import {assert, createClientPlugin, readCookie} from "blitz"
 import {DefaultOptions, QueryClient} from "@tanstack/react-query"
 import cookie from "cookie"
-import {IncomingMessage, ServerResponse} from "http"
 
 export * from "./data-client/index"
 
@@ -17,7 +16,7 @@ interface CookieOptions {
 
 interface BlitzRpcOptions {
   reactQueryOptions?: DefaultOptions
-  cookieOptions?: CookieOptions
+  csrf?: boolean | CookieOptions
 }
 
 const setCookie = (cookieStr: string) => {
@@ -52,22 +51,25 @@ export function isLocalhost(): boolean {
   return localhost
 }
 
+const defaultCSRFOptions: CookieOptions = {
+  prefix: "BLITZ_RPC",
+  sameSite: "lax",
+  expires: new Date(Date.now() + 60 * 60 * 24 * 7 * 1000), // 7 days
+}
+
 export const setCSRFCookie = (options: CookieOptions) => {
-  const {prefix = "BlitzRPC", csrfToken, domain, expires, sameSite, secure} = options || {}
+  const {prefix, csrfToken} = options
   assert(csrfToken !== undefined, "Internal error: antiCSRFToken is being set to undefined")
-  setCookie(
-    cookie.serialize(`${prefix}_sAntiCsrfToken`, csrfToken, {
-      path: "/",
-      secure: secure || !isLocalhost(),
-      domain: domain || window.location.hostname,
-      sameSite: sameSite || "lax",
-      expires: expires || new Date(Date.now() + 1000 * 60 * 60 * 24 * 365), // 1 year
-    }),
-  )
+  const csrfOptions = {
+    ...defaultCSRFOptions,
+    ...options,
+  }
+  globalThis.__BLITZ_RPC_CSRF_OPTIONS = csrfOptions
+  setCookie(cookie.serialize(`${prefix}_sAntiCsrfToken`, csrfToken, csrfOptions))
 }
 
 export const getAntiCSRFToken = (options: CookieOptions) => {
-  const {prefix = "BlitzRPC"} = options
+  const {prefix = defaultCSRFOptions.prefix} = options
   const cookieValue = readCookie(`${prefix}_sAntiCsrfToken`)
   if (cookieValue) {
     localStorage.setItem(`${prefix}_sAntiCsrfToken`, cookieValue)
@@ -85,16 +87,13 @@ export const BlitzRpcPlugin = createClientPlugin<BlitzRpcOptions, {queryClient: 
       if (!process.env.CLI_COMMAND_CONSOLE && !process.env.CLI_COMMAND_DB) {
         globalThis.__BLITZ_SUSPENSE_ENABLED = suspenseEnabled
       }
-      // set the cookie on the client
-      globalThis.__BLITZ_COOKIE_OPTIONS = options?.cookieOptions
       if (typeof window !== "undefined") {
-        if (
-          !globalThis.__BLITZ_AUTH_ENABLED &&
-          options &&
-          options.cookieOptions &&
-          options.cookieOptions.csrfToken
-        ) {
-          setCSRFCookie(options.cookieOptions)
+        if (!globalThis.__BLITZ_AUTH_ENABLED) {
+          if (options?.csrf) {
+            const csrfOptions =
+              typeof options.csrf === "boolean" ? defaultCSRFOptions : options.csrf
+            setCSRFCookie(csrfOptions)
+          }
         }
       }
       return new QueryClient({
