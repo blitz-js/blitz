@@ -116,10 +116,17 @@ export const getPublicDataStore = (): PublicDataStore => {
   return (window as any).__publicDataStore
 }
 
-export const getAntiCSRFToken = () => {
+// because safari automatically deletes non-httponly cookies after 7 days
+export const backupAntiCSRFTokenToLocalStorage = () => {
   const cookieValue = readCookie(COOKIE_CSRF_TOKEN())
   if (cookieValue) {
     localStorage.setItem(LOCALSTORAGE_CSRF_TOKEN(), cookieValue)
+  }
+}
+
+export const getAntiCSRFToken = () => {
+  const cookieValue = readCookie(COOKIE_CSRF_TOKEN())
+  if (cookieValue) {
     return cookieValue
   } else {
     return localStorage.getItem(LOCALSTORAGE_CSRF_TOKEN())

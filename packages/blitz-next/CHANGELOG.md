@@ -1,5 +1,17 @@
 # @blitzjs/next
 
+## 2.0.0-beta.16
+
+### Minor Changes
+
+- 11b548ed: Change setupBlitzServer logger config to be optional. Will default to BlitzLogger
+
+### Patch Changes
+
+- Updated dependencies [55a43ce1]
+- Updated dependencies [ceb7db27]
+  - @blitzjs/rpc@2.0.0-beta.16
+
 ## 2.0.0-beta.15
 
 ### Patch Changes

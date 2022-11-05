@@ -7,6 +7,7 @@ import {getSession} from "./auth-sessions"
 interface SessionConfigOptions {
   cookiePrefix?: string
   sessionExpiryMinutes?: number
+  anonSessionExpiryMinutes?: number
   method?: "essential" | "advanced"
   sameSite?: "none" | "lax" | "strict"
   secureCookies?: boolean
@@ -69,13 +70,14 @@ export const PrismaStorage = <Client extends PrismaClientWithSession>(
 
 const defaultConfig_: SessionConfigOptions = {
   sessionExpiryMinutes: 30 * 24 * 60, // Sessions expire after 30 days of being idle
+  anonSessionExpiryMinutes: 5 * 365 * 24 * 60, // Sessions expire after 5 years of being idle
   method: "essential",
   sameSite: "lax",
   publicDataKeysToSyncAcrossSessions: ["role", "roles"],
   secureCookies: !process.env.DISABLE_SECURE_COOKIES && process.env.NODE_ENV === "production",
 }
 
-interface AuthPluginOptions extends Partial<SessionConfigOptions>, IsAuthorized {
+export interface AuthPluginOptions extends Partial<SessionConfigOptions>, IsAuthorized {
   storage: SessionConfigMethods
 }
 

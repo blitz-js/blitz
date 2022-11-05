@@ -138,10 +138,12 @@ export function __internal_buildRpcClient({
             try {
               const {
                 HEADER_PUBLIC_DATA_TOKEN,
+                backupAntiCSRFTokenToLocalStorage
                 HEADER_SESSION_CREATED,
                 getPublicDataStore,
                 HEADER_CSRF_ERROR,
               } = await import("@blitzjs/auth")
+              backupAntiCSRFTokenToLocalStorage()
               if (response.headers.get(HEADER_PUBLIC_DATA_TOKEN)) {
                 getPublicDataStore().updateState()
                 debug("Public data updated")

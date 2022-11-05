@@ -4,15 +4,19 @@ export interface Session {
   // isAuthorize can be injected here
   // PublicData can be injected here
 }
+
 export type PublicData = Session extends {PublicData: unknown}
   ? Session["PublicData"]
   : {userId: unknown}
+
 export interface EmptyPublicData extends Partial<Omit<PublicData, "userId">> {
   userId: PublicData["userId"] | null
 }
+
 export interface ClientSession extends EmptyPublicData {
   isLoading: boolean
 }
+
 export interface AuthenticatedClientSession extends PublicData {
   isLoading: boolean
 }
@@ -34,6 +38,7 @@ export interface SessionModel extends Record<any, any> {
   publicData?: string | null
   privateData?: string | null
 }
+
 export interface SessionConfigMethods {
   getSession: (handle: string) => Promise<SessionModel | null>
   getSessions: (userId: PublicData["userId"]) => Promise<SessionModel[]>
@@ -43,16 +48,6 @@ export interface SessionConfigMethods {
     session: Partial<SessionModel>,
   ) => Promise<SessionModel | undefined>
   deleteSession: (handle: string) => Promise<SessionModel | undefined>
-}
-export interface SessionConfig extends SessionConfigMethods {
-  cookiePrefix?: string
-  sessionExpiryMinutes?: number
-  method?: "essential" | "advanced"
-  sameSite?: "none" | "lax" | "strict"
-  secureCookies?: boolean
-  domain?: string
-  publicDataKeysToSyncAcrossSessions?: string[]
-  isAuthorized: (data: {ctx: BlitzCtx; args: any}) => boolean
 }
 
 export interface SessionContextBase {

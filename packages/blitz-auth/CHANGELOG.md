@@ -1,5 +1,19 @@
 # @blitzjs/auth
 
+## 2.0.0-beta.16
+
+### Minor Changes
+
+- 55a43ce1: maybe fix anon session CSRF issue + add ability to customize anon session expiry time
+
+### Patch Changes
+
+- Updated dependencies [1569bd53]
+- Updated dependencies [ceb7db27]
+- Updated dependencies [8e5903c0]
+- Updated dependencies [45459129]
+  - blitz@2.0.0-beta.16
+
 ## 2.0.0-beta.15
 
 ### Patch Changes
