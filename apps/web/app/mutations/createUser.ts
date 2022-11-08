@@ -6,7 +6,7 @@ export default async function createUser(
   ctx: Ctx,
 ): Promise<User> {
   ctx.session.$authorize()
-  
+
   const user = await db.user.create({data: {name: input.name, email: input.email}})
 
   return user
