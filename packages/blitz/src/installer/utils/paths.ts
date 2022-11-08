@@ -6,13 +6,15 @@ function ext(jsx = false) {
 }
 
 function getBlitzPath(type: string) {
-  const appDir = fs.existsSync(path.resolve(`app/blitz-${type}${ext(false)}`))
-  const srcDir = fs.existsSync(path.resolve(`src/blitz-${type}${ext(false)}`))
+  const appPath = `app/blitz-${type}${ext(false)}`
+  const srcPath = `src/blitz-${type}${ext(false)}`
+  const appDir = fs.existsSync(path.resolve(appPath))
+  const srcDir = fs.existsSync(path.resolve(srcPath))
 
   if (appDir) {
-    return `app/blitz-${type}${ext(false)}`
+    return appPath
   } else if (srcDir) {
-    return `src/blitz-${type}${ext(false)}`
+    return srcPath
   }
 }
 
