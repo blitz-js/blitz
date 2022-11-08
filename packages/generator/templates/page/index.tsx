@@ -13,8 +13,8 @@ if (process.env.parentModel) {
   import {usePaginatedQuery} from '@blitzjs/rpc'
   import { useRouter } from "next/router"
 }
-import Layout from "app/core/layouts/Layout"
-import get__ModelNames__ from "app/__modelNamesPath__/queries/get__ModelNames__"
+import Layout from "src/core/layouts/Layout"
+import get__ModelNames__ from "src/__modelNamesPath__/queries/get__ModelNames__"
 
 const ITEMS_PER_PAGE = 100
 
