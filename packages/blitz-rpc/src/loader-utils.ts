@@ -4,7 +4,7 @@ import {ResolverPathOptions} from "./index-server"
 
 export interface LoaderOptions {
   resolverPath: ResolverPathOptions
-  includeRPCFolders: string[]
+  includeRPCFolders?: string[]
 }
 
 export interface Loader {

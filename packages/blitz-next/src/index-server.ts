@@ -214,7 +214,7 @@ export const setupBlitzServer = ({plugins, onError, logger}: SetupBlitzOptions) 
 export interface BlitzConfig extends NextConfig {
   blitz?: {
     resolverPath?: ResolverPathOptions
-    includeRPCFolders: string[],
+    includeRPCFolders?: string[]
     customServer?: {
       hotReload?: boolean
     }

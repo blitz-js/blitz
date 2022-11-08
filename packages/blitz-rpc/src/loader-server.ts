@@ -17,7 +17,7 @@ export async function loader(this: Loader, input: string): Promise<string> {
   const compiler = this._compiler!
   const id = this.resource
   const root = this._compiler!.context
-  const rpcFolders = this.query.includeRPCFolders
+  const rpcFolders = this.query.includeRPCFolders ? this.query.includeRPCFolders : []
 
   const isSSR = compiler.name === "server"
   if (isSSR) {
@@ -67,16 +67,23 @@ export function collectResolvers(
   rpcFolders: string[],
   pageExtensions: string[],
 ): Promise<string[]> {
-  return recursiveFindResolvers(directory, rpcFolders, buildPageExtensionRegex(pageExtensions))
+  return recursiveFindResolvers(
+    directory,
+    buildPageExtensionRegex(pageExtensions),
+    undefined,
+    [],
+    directory,
+    rpcFolders,
+  )
 }
 
 export async function recursiveFindResolvers(
   dir: string,
-  rpcFolders: string[],
   filter: RegExp,
   ignore?: RegExp,
   arr: string[] = [],
   rootDir: string = dir,
+  rpcFolders: string[] = [],
 ): Promise<string[]> {
   let folders = await promises.readdir(dir)
 
@@ -93,7 +100,7 @@ export async function recursiveFindResolvers(
       const pathStat = await promises.stat(absolutePath)
 
       if (pathStat.isDirectory()) {
-        await recursiveFindResolvers(absolutePath, rpcFolders, filter, ignore, arr, rootDir)
+        await recursiveFindResolvers(absolutePath, filter, ignore, arr, rootDir, rpcFolders)
         return
       }
 
@@ -101,11 +108,13 @@ export async function recursiveFindResolvers(
         return
       }
 
+      if (absolutePath.includes("node_modules")) {
+        return
+      }
+
       if (getIsRpcFile(absolutePath)) {
-        if (!absolutePath.includes("@blitzjs")) {
-          arr.push(absolutePath)
-          return
-        }
+        arr.push(absolutePath)
+        return
       }
     }),
   )
