@@ -38,10 +38,6 @@ export async function loader(this: Loader, input: string): Promise<string> {
 
 module.exports = loader
 
-function slash(str: string) {
-  return str.replace(/\\/g, "/")
-}
-
 export async function transformBlitzRpcServer(
   src: string,
   id: string,
@@ -57,19 +53,20 @@ export async function transformBlitzRpcServer(
   let code = blitzImport + src
   code += "\n\n"
   for (let resolverFilePath of resolvers) {
-    let relativeResolverPath = slash(relative(dirname(id), join(root, resolverFilePath)))
     const routePath = convertPageFilePathToRoutePath(resolverFilePath, options?.resolverPath)
 
-    relativeResolverPath = relativeResolverPath.replace("../../../", "/")
-
-    code += `__internal_addBlitzRpcResolver('${routePath}',() => import('${relativeResolverPath}'));`
+    code += `__internal_addBlitzRpcResolver('${routePath}',() => import('${resolverFilePath}'));`
     code += "\n"
   }
   // console.log("NEW CODE", code)
   return code
 }
 
-export function collectResolvers(directory: string, rpcFolders: string[], pageExtensions: string[]): Promise<string[]> {
+export function collectResolvers(
+  directory: string,
+  rpcFolders: string[],
+  pageExtensions: string[],
+): Promise<string[]> {
   return recursiveFindResolvers(directory, rpcFolders, buildPageExtensionRegex(pageExtensions))
 }
 
@@ -104,11 +101,9 @@ export async function recursiveFindResolvers(
         return
       }
 
-      let relativeFromRoot = absolutePath.replace(rootDir, "")     
-
-      if (getIsRpcFile(relativeFromRoot)) {
-        if (!relativeFromRoot.includes("@blitzjs")) {      
-          arr.push(relativeFromRoot)
+      if (getIsRpcFile(absolutePath)) {
+        if (!absolutePath.includes("@blitzjs")) {
+          arr.push(absolutePath)
           return
         }
       }
