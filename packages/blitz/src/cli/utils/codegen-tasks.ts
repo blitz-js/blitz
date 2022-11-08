@@ -16,14 +16,27 @@ export const codegenTasks = async () => {
     const nextDir = await resolveCwd("next")
     const nextClientIndex = join(nextDir, "../..", "client", "index.js")
     const readFile = await fs.readFile(nextClientIndex)
-    const updatedFile = readFile
-      .toString()
-      .replace(
-        /ReactDOM\.hydrateRoot\(.*?\);/,
-        `ReactDOM.hydrateRoot(domEl, reactEl, {onRecoverableError: (err) => (err.toString().includes("could not finish this Suspense boundary") || err.toString().includes("Minified React error #419")) ? null : console.error(err)});`,
-      )
-    await fs.writeFile(nextClientIndex, updatedFile)
-    log.success("Next.js was successfully patched with a React Suspense fix")
+    const packageJson = await getPackageJson()
+    const nextVersion = packageJson.dependencies.next
+    if (nextVersion && nextVersion.startsWith("12")) {
+      const updatedFile = readFile
+        .toString()
+        .replace(
+          /ReactDOM\.hydrateRoot\(.*?\);/,
+          `ReactDOM.hydrateRoot(domEl, reactEl, {onRecoverableError: (err) => (err.toString().includes("could not finish this Suspense boundary") || err.toString().includes("Minified React error #419")) ? null : console.error(err)});`,
+        )
+      await fs.writeFile(nextClientIndex, updatedFile)
+      log.success("Next.js was successfully patched with a React Suspense fix")
+    } else if (nextVersion && nextVersion.startsWith("13")) {
+      const updatedFile = readFile
+        .toString()
+        .replace(
+          /_client.default\.hydrateRoot\(.*?\);/,
+          `_client.default.hydrateRoot(domEl, reactEl, {onRecoverableError: (err) => (err.toString().includes("could not finish this Suspense boundary") || err.toString().includes("Minified React error #419")) ? null : console.error(err)});`,
+        )
+      await fs.writeFile(nextClientIndex, updatedFile)
+      log.success("Next.js was successfully patched with a React Suspense fix")
+    }
   } catch (err) {
     log.error(JSON.stringify(err, null, 2))
   }
