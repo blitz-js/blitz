@@ -6,9 +6,9 @@ import { useRouter } from "next/router"
 import {useQuery, useMutation} from '@blitzjs/rpc'
 import {useParam} from '@blitzjs/next'
 
-import Layout from "app/core/layouts/Layout"
-import get__ModelName__ from "app/__modelNamesPath__/queries/get__ModelName__"
-import delete__ModelName__ from "app/__modelNamesPath__/mutations/delete__ModelName__"
+import Layout from "src/core/layouts/Layout"
+import get__ModelName__ from "src/__modelNamesPath__/queries/get__ModelName__"
+import delete__ModelName__ from "src/__modelNamesPath__/mutations/delete__ModelName__"
 
 export const __ModelName__ = () => {
   const router = useRouter()

@@ -9,9 +9,9 @@ if (process.env.parentModel) {
   import { useRouter } from "next/router"
   import {useMutation} from '@blitzjs/rpc'
 }
-import Layout from "app/core/layouts/Layout"
-import create__ModelName__ from "app/__modelNamesPath__/mutations/create__ModelName__"
-import {__ModelName__Form, FORM_ERROR} from "app/__modelNamesPath__/components/__ModelName__Form"
+import Layout from "src/core/layouts/Layout"
+import create__ModelName__ from "src/__modelNamesPath__/mutations/create__ModelName__"
+import {__ModelName__Form, FORM_ERROR} from "src/__modelNamesPath__/components/__ModelName__Form"
 
 const New__ModelName__Page = () => {
   const router = useRouter()
