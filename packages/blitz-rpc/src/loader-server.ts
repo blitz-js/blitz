@@ -38,6 +38,10 @@ export async function loader(this: Loader, input: string): Promise<string> {
 
 module.exports = loader
 
+function slash(str: string) {
+  return str.replace(/\\/g, "/")
+}
+
 export async function transformBlitzRpcServer(
   src: string,
   id: string,
@@ -53,7 +57,7 @@ export async function transformBlitzRpcServer(
   let code = blitzImport + src
   code += "\n\n"
   for (let resolverFilePath of resolvers) {
-    const routePath = convertPageFilePathToRoutePath(resolverFilePath, options?.resolverPath)
+    const routePath = convertPageFilePathToRoutePath(slash(resolverFilePath), options?.resolverPath)
 
     code += `__internal_addBlitzRpcResolver('${routePath}',() => import('${resolverFilePath}'));`
     code += "\n"
@@ -100,15 +104,13 @@ export async function recursiveFindResolvers(
       const pathStat = await promises.stat(absolutePath)
 
       if (pathStat.isDirectory()) {
-        await recursiveFindResolvers(absolutePath, filter, ignore, arr, rootDir, rpcFolders)
-        return
+        if (!absolutePath.includes("node_modules")) {
+          await recursiveFindResolvers(absolutePath, filter, ignore, arr, rootDir)
+          return
+        }
       }
 
       if (!filter.test(part)) {
-        return
-      }
-
-      if (absolutePath.includes("node_modules")) {
         return
       }
 
