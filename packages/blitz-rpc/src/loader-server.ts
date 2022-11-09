@@ -59,9 +59,6 @@ export async function transformBlitzRpcServer(
   for (let resolverFilePath of resolvers) {
     const routePath = convertPageFilePathToRoutePath(slash(resolverFilePath), options?.resolverPath)
 
-    console.log("resolverFilePath", resolverFilePath)
-    console.log("slash", slash(resolverFilePath))
-
     code += `__internal_addBlitzRpcResolver('${routePath}',() => import('${slash(
       resolverFilePath,
     )}'));`
