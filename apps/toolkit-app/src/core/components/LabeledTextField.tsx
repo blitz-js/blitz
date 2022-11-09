@@ -34,7 +34,7 @@ export const LabeledTextField = forwardRef<HTMLInputElement, LabeledTextFieldPro
             </div>
           )}
           errors={errors}
-          name="xxx.yyy"
+          name={name}
         />
 
         <style jsx>{`

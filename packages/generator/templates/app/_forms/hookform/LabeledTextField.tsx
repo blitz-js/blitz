@@ -27,11 +27,15 @@ export const LabeledTextField = forwardRef<HTMLInputElement, LabeledTextFieldPro
           <input disabled={isSubmitting} {...register(name)} {...props} />
         </label>
 
-        <ErrorMessage render={({message}) => (
+        <ErrorMessage
+          render={({ message }) => (
             <div role="alert" style={{ color: "red" }}>
               {message}
             </div>
-        )} errors={errors} name="xxx.yyy"/>
+          )}
+          errors={errors}
+          name={name}
+        />
 
         <style jsx>{`
           label {
