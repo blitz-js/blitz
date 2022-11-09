@@ -18430,7 +18430,7 @@ packages:
       typescript: 4.8.4
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
-    dev: true
+    dev: false
 
   /ts-node/10.9.1_typescript@4.8.4:
     resolution:
