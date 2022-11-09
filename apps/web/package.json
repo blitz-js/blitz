@@ -25,6 +25,7 @@
     "@types/passport-twitter": "1.0.37",
     "blitz": "workspace:*",
     "jest": "29.3.0",
+    "jest-environment-jsdom": "29.3.0",
     "next": "12.2.5",
     "passport-mock-strategy": "2.0.0",
     "passport-twitter": "1.0.4",

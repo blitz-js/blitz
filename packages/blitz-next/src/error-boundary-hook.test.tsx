@@ -8,8 +8,6 @@ import userEvent from "@testing-library/user-event"
 import * as React from "react"
 import type {ErrorFallbackProps} from "./error-boundary"
 import {ErrorBoundary, useErrorHandler} from "./error-boundary"
-import {cleanStack} from "./error-boundary.test"
-import {act} from "react-dom/test-utils"
 
 beforeEach(() => {
   global.IS_REACT_ACT_ENVIRONMENT = true

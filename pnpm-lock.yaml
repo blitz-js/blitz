@@ -56,6 +56,7 @@ importers:
       eslint-config-prettier: 8.5.0
       husky: 8.0.2
       jest: 29.3.0
+      jest-environment-jsdom: 29.3.0
       lint-staged: 13.0.3
       next: 12.2.5
       prettier: ^2.7.1
@@ -99,6 +100,7 @@ importers:
       eslint-config-prettier: 8.5.0_eslint@8.27.0
       husky: 8.0.2
       jest: 29.3.0_odkjkoia5xunhxkdrka32ib6vi
+      jest-environment-jsdom: 29.3.0
       lint-staged: 13.0.3
       prettier: 2.7.1
       prettier-plugin-prisma: 4.4.0_prettier@2.7.1
@@ -129,6 +131,7 @@ importers:
       eslint-config-prettier: 8.5.0
       husky: 8.0.2
       jest: 29.3.0
+      jest-environment-jsdom: 29.3.0
       lint-staged: 13.0.3
       next: 12.2.5
       openid-client: 5.2.1
@@ -174,6 +177,7 @@ importers:
       eslint-config-prettier: 8.5.0_eslint@8.27.0
       husky: 8.0.2
       jest: 29.3.0_odkjkoia5xunhxkdrka32ib6vi
+      jest-environment-jsdom: 29.3.0
       lint-staged: 13.0.3
       prettier: 2.7.1
       prettier-plugin-prisma: 4.4.0_prettier@2.7.1
@@ -195,6 +199,7 @@ importers:
       blitz: workspace:*
       eslint: 8.27.0
       jest: 29.3.0
+      jest-environment-jsdom: 29.3.0
       next: 12.2.5
       passport-mock-strategy: 2.0.0
       passport-twitter: 1.0.4
@@ -213,6 +218,7 @@ importers:
       "@types/passport-twitter": 1.0.37
       blitz: link:../../packages/blitz
       jest: 29.3.0_ts-node@10.9.1
+      jest-environment-jsdom: 29.3.0
       next: 12.2.5_biqbaboplfbrettd7655fr4n2y
       passport-mock-strategy: 2.0.0
       passport-twitter: 1.0.4
@@ -4005,6 +4011,7 @@ packages:
       strip-json-comments: 3.1.1
     transitivePeerDependencies:
       - supports-color
+    dev: true
 
   /@hapi/hoek/9.3.0:
     resolution:
@@ -4073,6 +4080,7 @@ packages:
       minimatch: 3.1.2
     transitivePeerDependencies:
       - supports-color
+    dev: true
 
   /@humanwhocodes/module-importer/1.0.1:
     resolution:
@@ -5714,6 +5722,16 @@ packages:
       recast: 0.20.5
     dev: true
 
+  /@types/jsdom/20.0.1:
+    resolution:
+      {
+        integrity: sha512-d0r18sZPmMQr1eG35u12FZfhIXNrnsPU/g5wvRKCUf/tOGilKKwYMYGqh33BNR6ba+2gkHw1EUiHoN3mn7E5IQ==,
+      }
+    dependencies:
+      "@types/node": 18.11.9
+      "@types/tough-cookie": 4.0.2
+      parse5: 7.1.1
+
   /@types/json-buffer/3.0.0:
     resolution:
       {
@@ -6099,6 +6117,12 @@ packages:
       - react-dom
       - react-test-renderer
     dev: true
+
+  /@types/tough-cookie/4.0.2:
+    resolution:
+      {
+        integrity: sha512-Q5vtl1W5ue16D+nIaW8JWebSSraJVlK+EthKn7e7UcD4KWsaSJ8BqGPXNaPghgtcn/fhvrN17Tv8ksUsQpiplw==,
+      }
 
   /@types/use-sync-external-store/0.0.3:
     resolution:
@@ -6761,6 +6785,15 @@ packages:
     dependencies:
       acorn: 7.4.1
       acorn-walk: 7.2.0
+
+  /acorn-globals/7.0.1:
+    resolution:
+      {
+        integrity: sha512-umOSDSDrfHbTNPuNpC2NSnnA3LUrqpevPb4T9jRx4MagXNS0rs+gwiTcAvqCRmsD6utzsrzNt+ebm00SNWiC3Q==,
+      }
+    dependencies:
+      acorn: 8.8.1
+      acorn-walk: 8.2.0
 
   /acorn-jsx/5.3.2_acorn@8.8.1:
     resolution:
@@ -8724,6 +8757,12 @@ packages:
         integrity: sha512-V0pfhfr8suzyPGOx3nmq4aHqabehUZn6Ch9kyFpV79TGDTWFmHqUqXdabR7QHqxzrYolF4+tVmJhUG4OURg5dQ==,
       }
 
+  /decimal.js/10.4.2:
+    resolution:
+      {
+        integrity: sha512-ic1yEvwT6GuvaYwBLLY6/aFFgjZdySKTE8en/fkU3QICTmRtgtSlFn0u0BXN06InZwtfCelR7j8LRiDI/02iGA==,
+      }
+
   /decode-uri-component/0.2.0:
     resolution:
       {
@@ -9227,6 +9266,13 @@ packages:
         integrity: sha512-p92if5Nz619I0w+akJrLZH0MX0Pb5DX39XOwQTtXSdQQOaYH03S1uIQp4mhOZtAXrxq4ViO67YTiLBo2638o9A==,
       }
     dev: true
+
+  /entities/4.4.0:
+    resolution:
+      {
+        integrity: sha512-oYp7156SP8LkeGD0GF85ad1X9Ai79WtRsZ2gxJqtBuzH+98YUV6jkHEKlZkMbcrjJjIVJNIDP/3WL9wQkoPbWA==,
+      }
+    engines: {node: ">=0.12"}
 
   /envinfo/7.8.1:
     resolution:
@@ -10334,7 +10380,7 @@ packages:
     peerDependencies:
       eslint: ">=5"
     dependencies:
-      eslint: 8.27.0_supports-color@8.1.1
+      eslint: 8.27.0
       eslint-visitor-keys: 2.1.0
 
   /eslint-visitor-keys/2.1.0:
@@ -10450,6 +10496,7 @@ packages:
       text-table: 0.2.0
     transitivePeerDependencies:
       - supports-color
+    dev: true
 
   /espree/9.4.1:
     resolution:
@@ -12938,6 +12985,31 @@ packages:
       jest-util: 29.2.1
       pretty-format: 29.2.1
 
+  /jest-environment-jsdom/29.3.0:
+    resolution:
+      {
+        integrity: sha512-xFLbMR4OF4lntNcO9LthJdPRbI9WgfFlG73aQS6wQ54+v4oSAp8T4FKUw0add+Z+Ghu/dirRxuvc4FzzN5kRxw==,
+      }
+    engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
+    peerDependencies:
+      canvas: ^2.5.0
+    peerDependenciesMeta:
+      canvas:
+        optional: true
+    dependencies:
+      "@jest/environment": 29.3.0
+      "@jest/fake-timers": 29.3.0
+      "@jest/types": 29.2.1
+      "@types/jsdom": 20.0.1
+      "@types/node": 18.11.9
+      jest-mock: 29.3.0
+      jest-util: 29.2.1
+      jsdom: 20.0.2
+    transitivePeerDependencies:
+      - bufferutil
+      - supports-color
+      - utf-8-validate
+
   /jest-environment-node/29.3.0:
     resolution:
       {
@@ -13564,6 +13636,49 @@ packages:
       whatwg-mimetype: 3.0.0
       whatwg-url: 10.0.0
       ws: 8.8.0
+      xml-name-validator: 4.0.0
+    transitivePeerDependencies:
+      - bufferutil
+      - supports-color
+      - utf-8-validate
+
+  /jsdom/20.0.2:
+    resolution:
+      {
+        integrity: sha512-AHWa+QO/cgRg4N+DsmHg1Y7xnz+8KU3EflM0LVDTdmrYOc1WWTSkOjtpUveQH+1Bqd5rtcVnb/DuxV/UjDO4rA==,
+      }
+    engines: {node: ">=14"}
+    peerDependencies:
+      canvas: ^2.5.0
+    peerDependenciesMeta:
+      canvas:
+        optional: true
+    dependencies:
+      abab: 2.0.6
+      acorn: 8.8.1
+      acorn-globals: 7.0.1
+      cssom: 0.5.0
+      cssstyle: 2.3.0
+      data-urls: 3.0.2
+      decimal.js: 10.4.2
+      domexception: 4.0.0
+      escodegen: 2.0.0
+      form-data: 4.0.0
+      html-encoding-sniffer: 3.0.0
+      http-proxy-agent: 5.0.0
+      https-proxy-agent: 5.0.1
+      is-potential-custom-element-name: 1.0.1
+      nwsapi: 2.2.2
+      parse5: 7.1.1
+      saxes: 6.0.0
+      symbol-tree: 3.2.4
+      tough-cookie: 4.1.2
+      w3c-xmlserializer: 3.0.0
+      webidl-conversions: 7.0.0
+      whatwg-encoding: 2.0.0
+      whatwg-mimetype: 3.0.0
+      whatwg-url: 11.0.0
+      ws: 8.11.0
       xml-name-validator: 4.0.0
     transitivePeerDependencies:
       - bufferutil
@@ -15101,6 +15216,12 @@ packages:
         integrity: sha512-h2AatdwYH+JHiZpv7pt/gSX1XoRGb7L/qSIeuqA6GwYoF9w1vP1cw42TO0aI2pNyshRK5893hNSl+1//vHK7hQ==,
       }
 
+  /nwsapi/2.2.2:
+    resolution:
+      {
+        integrity: sha512-90yv+6538zuvUMnN+zCr8LuV6bPFdq50304114vJYJ8RDyK8D5O9Phpbd6SZWgI7PwzmmfN1upeOJlvybDSgCw==,
+      }
+
   /oauth/0.9.15:
     resolution:
       {
@@ -15614,6 +15735,14 @@ packages:
       {
         integrity: sha512-Ofn/CTFzRGTTxwpNEs9PP93gXShHcTq255nzRYSKe8AkVpZY7e1fpmTfOyoIvjP5HG7Z2ZM7VS9PPhQGW2pOpw==,
       }
+
+  /parse5/7.1.1:
+    resolution:
+      {
+        integrity: sha512-kwpuwzB+px5WUg9pyK0IcK/shltJN5/OVhQagxhCQNtT9Y9QRZqNY2e1cmbu/paRh5LMnz/oVTVLBpjFmMZhSg==,
+      }
+    dependencies:
+      entities: 4.4.0
 
   /parseley/0.7.0:
     resolution:
@@ -16394,6 +16523,12 @@ packages:
     deprecated: The querystring API is considered Legacy. new code should use the URLSearchParams API instead.
     dev: false
 
+  /querystringify/2.2.0:
+    resolution:
+      {
+        integrity: sha512-FIqgj2EUvTa7R50u0rGsyTftzjYmv/a3hO345bZNrqabNqjtgiDMgmo4mkUjd+nzU5oF3dClKqFIPUKybUyqoQ==,
+      }
+
   /queue-microtask/1.2.3:
     resolution:
       {
@@ -16823,6 +16958,12 @@ packages:
       }
     dev: false
 
+  /requires-port/1.0.0:
+    resolution:
+      {
+        integrity: sha512-KigOCHcocU3XODJxsu8i/j8T9tzT4adHiecwORRQ0ZZFcp7ahwXuRU1m+yuO90C5ZUyGeGfocHDI14M3L3yDAQ==,
+      }
+
   /resolve-alpn/1.2.1:
     resolution:
       {
@@ -17118,6 +17259,15 @@ packages:
         integrity: sha512-5LBh1Tls8c9xgGjw3QrMwETmTMVk0oFgvrFSvWx62llR2hcEInrKNZ2GZCCuuy2lvWrdl5jhbpeqc5hRYKFOcw==,
       }
     engines: {node: ">=10"}
+    dependencies:
+      xmlchars: 2.2.0
+
+  /saxes/6.0.0:
+    resolution:
+      {
+        integrity: sha512-xAg7SOnEhrm5zI3puOOKyy1OMcMlIJZYNJY7xLBwSze0UjhPLnWfj2GF2EpT0jmzaJKIWKHLsaSSajf35bcYnA==,
+      }
+    engines: {node: ">=v12.22.7"}
     dependencies:
       xmlchars: 2.2.0
 
@@ -18298,6 +18448,18 @@ packages:
       punycode: 2.1.1
       universalify: 0.1.2
 
+  /tough-cookie/4.1.2:
+    resolution:
+      {
+        integrity: sha512-G9fqXWoYFZgTc2z8Q5zaHy/vJMjm+WV0AkAeHxVCQiEB1b+dGvWzFW6QV07cY5jQ5gRkeid2qIkzkxUnmoQZUQ==,
+      }
+    engines: {node: ">=6"}
+    dependencies:
+      psl: 1.8.0
+      punycode: 2.1.1
+      universalify: 0.2.0
+      url-parse: 1.5.10
+
   /tr46/3.0.0:
     resolution:
       {
@@ -18996,6 +19158,13 @@ packages:
       }
     engines: {node: ">= 4.0.0"}
 
+  /universalify/0.2.0:
+    resolution:
+      {
+        integrity: sha512-CJ1QgKmNg3CwvAv/kOFmtnEN05f0D/cn9QntgNOQlQF9dgvVTHj3t+8JPdjqawCHk7V/KA+fbUqzZ9XWhcqPUg==,
+      }
+    engines: {node: ">= 4.0.0"}
+
   /universalify/2.0.0:
     resolution:
       {
@@ -19082,6 +19251,15 @@ packages:
     dependencies:
       prepend-http: 2.0.0
     dev: false
+
+  /url-parse/1.5.10:
+    resolution:
+      {
+        integrity: sha512-WypcfiRhfeUP9vvF0j6rw0J3hrWrw6iZv3+22h6iRMJ/8z1Tj6XfLP4DsUix5MhMPnXpiHDoKyoZ/bdCkwBCiQ==,
+      }
+    dependencies:
+      querystringify: 2.2.0
+      requires-port: 1.0.0
 
   /url/0.11.0:
     resolution: {integrity: sha1-ODjpfPxgUh63PFJajlW/3Z4uKPE=}
@@ -19618,6 +19796,21 @@ packages:
         integrity: sha512-ri1Id1WinAX5Jqn9HejiGb8crfRio0Qgu8+MtL36rlTA6RLsMdWt1Az/19A2Qij6uSHUMphEFaTKa4WG+UNHNw==,
       }
     engines: {node: ">=8.3.0"}
+    peerDependencies:
+      bufferutil: ^4.0.1
+      utf-8-validate: ^5.0.2
+    peerDependenciesMeta:
+      bufferutil:
+        optional: true
+      utf-8-validate:
+        optional: true
+
+  /ws/8.11.0:
+    resolution:
+      {
+        integrity: sha512-HPG3wQd9sNQoT9xHyNCXoDUa+Xw/VevmY9FoHyQ+g+rrMn4j6FB4np7Z0OhdTgjx6MgQLK7jwSy1YecU1+4Asg==,
+      }
+    engines: {node: ">=10.0.0"}
     peerDependencies:
       bufferutil: ^4.0.1
       utf-8-validate: ^5.0.2
