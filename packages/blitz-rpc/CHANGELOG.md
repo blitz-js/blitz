@@ -1,5 +1,14 @@
 # @blitzjs/rpc
 
+## 2.0.0-beta.17
+
+### Patch Changes
+
+- 8b4bf999: Update dependencies
+- Updated dependencies [8b4bf999]
+- Updated dependencies [97469a12]
+  - @blitzjs/auth@2.0.0-beta.17
+
 ## 2.0.0-beta.16
 
 ### Minor Changes

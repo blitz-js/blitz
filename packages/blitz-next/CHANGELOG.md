@@ -1,5 +1,14 @@
 # @blitzjs/next
 
+## 2.0.0-beta.17
+
+### Patch Changes
+
+- 8b4bf999: Update dependencies
+- 97469a12: Added option `role` to `authenticate` property of `BlitzPage` to authenticate page with respect to the role of the user. `String` value or `Array` of strings can be passed to authorize users.
+- Updated dependencies [8b4bf999]
+  - @blitzjs/rpc@2.0.0-beta.17
+
 ## 2.0.0-beta.16
 
 ### Minor Changes

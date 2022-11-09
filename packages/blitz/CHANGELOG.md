@@ -1,5 +1,16 @@
 # blitz
 
+## 2.0.0-beta.17
+
+### Patch Changes
+
+- 5ea068b2: Check if blitz-server & blitz-client is located in either the app or src directory and return the correct path for blitz recipes.
+- 8b4bf999: Update dependencies
+- 88caa18e: Patch next13 for suspense error
+- Updated dependencies [2a81af7b]
+- Updated dependencies [8b4bf999]
+  - @blitzjs/generator@2.0.0-beta.17
+
 ## 2.0.0-beta.16
 
 ### Patch Changes
