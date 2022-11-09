@@ -690,7 +690,10 @@ async function createNewSession(
     const anonymousSessionToken = createAnonymousSessionToken(payload)
     const publicDataToken = createPublicDataToken(args.publicData)
 
-    const expiresAt = addYears(new Date(), 30)
+    const expiresAt = addMinutes(
+      new Date(),
+      global.sessionConfig.anonSessionExpiryMinutes as number,
+    )
     setAnonymousSessionCookie(req, res, anonymousSessionToken, expiresAt)
     setCSRFCookie(req, res, antiCSRFToken, expiresAt)
     setPublicDataCookie(req, res, publicDataToken, expiresAt)

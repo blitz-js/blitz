@@ -25,6 +25,6 @@ export class QueryGenerator extends Generator<QueryGeneratorOptions> {
 
   getTargetDirectory() {
     const context = this.options.context ? `${camelCaseToKebabCase(this.options.context)}` : ""
-    return `app/${context}/queries`
+    return `src/${context}/queries`
   }
 }

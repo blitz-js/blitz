@@ -30,7 +30,7 @@ export class PageGenerator extends Generator<PageGeneratorOptions> {
     const parent = this.options.parentModels
       ? `${this.options.parentModels}/__parentModelParam__/`
       : ""
-    return `pages/${parent}${kebabCaseModelName}`
+    return `src/pages/${parent}${kebabCaseModelName}`
   }
 
   async postWrite() {
