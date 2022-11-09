@@ -67,7 +67,7 @@
     "superjson": "1.9.1",
     "supports-color": "8.1.1",
     "tar": "6.1.11",
-    "ts-node": "10.7.0",
+    "ts-node": "10.9.1",
     "tsconfig-paths": "4.0.0",
     "tslog": "3.3.4",
     "watchpack": "2.1.1"
@@ -87,17 +87,17 @@
     "@types/npm-which": "3.0.1",
     "@types/progress": "2.0.5",
     "@types/prompts": "2.0.14",
-    "@types/react": "18.0.17",
+    "@types/react": "18.0.25",
     "@types/react-dom": "17.0.14",
     "@types/test-listen": "1.1.0",
     "@types/watchpack": "1.1.1",
     "express": "4.17.3",
     "react": "18.2.0",
     "test-listen": "1.1.0",
-    "typescript": "^4.5.3",
+    "typescript": "^4.8.4",
     "unbuild": "0.7.6",
     "watch": "1.0.2",
-    "zod": "3.17.3"
+    "zod": "3.19.1"
   },
   "publishConfig": {
     "access": "public"

@@ -302,6 +302,7 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
       case "hookform":
         pkg.dependencies["react-hook-form"] = "7.x"
         pkg.dependencies["@hookform/resolvers"] = "2.x"
+        pkg.dependencies["@hookform/error-message"] = "2.x"
         break
       case "formik":
         pkg.dependencies["formik"] = "2.x"
