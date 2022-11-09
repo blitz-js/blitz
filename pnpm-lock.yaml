@@ -39,6 +39,7 @@ importers:
       "@blitzjs/config": workspace:*
       "@blitzjs/next": workspace:*
       "@blitzjs/rpc": workspace:*
+      "@hookform/error-message": 2.0.0
       "@hookform/resolvers": 2.9.10
       "@next/bundle-analyzer": 12.0.8
       "@prisma/client": 4.6.0
@@ -73,6 +74,7 @@ importers:
       "@blitzjs/config": link:../../packages/config
       "@blitzjs/next": link:../../packages/blitz-next
       "@blitzjs/rpc": link:../../packages/blitz-rpc
+      "@hookform/error-message": 2.0.0_uitc6c22ofsl6jhrdjqyu3was4
       "@hookform/resolvers": 2.9.10_react-hook-form@7.39.1
       "@prisma/client": 4.6.0_prisma@4.6.0
       blitz: link:../../packages/blitz
@@ -1574,7 +1576,7 @@ packages:
       "@babel/core": ^7.0.0
     dependencies:
       "@babel/compat-data": 7.17.10
-      "@babel/core": 7.18.2
+      "@babel/core": 7.18.2_supports-color@8.1.1
       "@babel/helper-validator-option": 7.16.7
       browserslist: 4.20.3
       semver: 6.3.0
@@ -2477,7 +2479,7 @@ packages:
     peerDependencies:
       "@babel/core": ^7.0.0-0
     dependencies:
-      "@babel/core": 7.18.2
+      "@babel/core": 7.18.2_supports-color@8.1.1
       "@babel/helper-plugin-utils": 7.17.12
 
   /@babel/plugin-syntax-numeric-separator/7.10.4_@babel+core@7.12.10:
@@ -2565,7 +2567,7 @@ packages:
     peerDependencies:
       "@babel/core": ^7.0.0-0
     dependencies:
-      "@babel/core": 7.18.2
+      "@babel/core": 7.18.2_supports-color@8.1.1
       "@babel/helper-plugin-utils": 7.17.12
 
   /@babel/plugin-syntax-top-level-await/7.14.5_@babel+core@7.12.10:
@@ -2614,7 +2616,7 @@ packages:
     peerDependencies:
       "@babel/core": ^7.0.0-0
     dependencies:
-      "@babel/core": 7.18.2
+      "@babel/core": 7.18.2_supports-color@8.1.1
       "@babel/helper-plugin-utils": 7.17.12
 
   /@babel/plugin-transform-arrow-functions/7.17.12_@babel+core@7.12.10:
@@ -4003,7 +4005,6 @@ packages:
       strip-json-comments: 3.1.1
     transitivePeerDependencies:
       - supports-color
-    dev: true
 
   /@hapi/hoek/9.3.0:
     resolution:
@@ -4072,7 +4073,6 @@ packages:
       minimatch: 3.1.2
     transitivePeerDependencies:
       - supports-color
-    dev: true
 
   /@humanwhocodes/module-importer/1.0.1:
     resolution:
@@ -6293,6 +6293,7 @@ packages:
       typescript: 4.8.4
     transitivePeerDependencies:
       - supports-color
+    dev: true
 
   /@typescript-eslint/parser/5.28.0_typescript@4.8.4:
     resolution:
@@ -6314,7 +6315,6 @@ packages:
       typescript: 4.8.4
     transitivePeerDependencies:
       - supports-color
-    dev: false
 
   /@typescript-eslint/parser/5.9.1_nw6v2wse7au2evadw7vu3hneg4:
     resolution:
@@ -10041,6 +10041,7 @@ packages:
       tsconfig-paths: 3.14.1
     transitivePeerDependencies:
       - supports-color
+    dev: true
 
   /eslint-import-resolver-typescript/2.7.1_fkfqfehjtk7sk2efaqbgxsuasa:
     resolution:
@@ -10060,7 +10061,6 @@ packages:
       tsconfig-paths: 3.14.1
     transitivePeerDependencies:
       - supports-color
-    dev: false
 
   /eslint-module-utils/2.7.3_pbmiczca3qpqvnkfcriol7sq7u:
     resolution:
@@ -10083,10 +10083,10 @@ packages:
       eslint-import-resolver-webpack:
         optional: true
     dependencies:
-      "@typescript-eslint/parser": 5.28.0_rmayb2veg2btbq6mbmnyivgasy
+      "@typescript-eslint/parser": 5.28.0_typescript@4.8.4
       debug: 3.2.7
       eslint-import-resolver-node: 0.3.6
-      eslint-import-resolver-typescript: 2.7.1_dcpv4nbdr5ks2h5677xdltrk6e
+      eslint-import-resolver-typescript: 2.7.1_fkfqfehjtk7sk2efaqbgxsuasa
       find-up: 2.1.0
     transitivePeerDependencies:
       - supports-color
@@ -10123,6 +10123,7 @@ packages:
       - eslint-import-resolver-typescript
       - eslint-import-resolver-webpack
       - supports-color
+    dev: true
 
   /eslint-plugin-import/2.26.0_xtdmsd4adcznatktegie3poqce:
     resolution:
@@ -10155,7 +10156,6 @@ packages:
       - eslint-import-resolver-typescript
       - eslint-import-resolver-webpack
       - supports-color
-    dev: false
 
   /eslint-plugin-jsx-a11y/6.5.1:
     resolution:
@@ -10334,7 +10334,7 @@ packages:
     peerDependencies:
       eslint: ">=5"
     dependencies:
-      eslint: 8.27.0
+      eslint: 8.27.0_supports-color@8.1.1
       eslint-visitor-keys: 2.1.0
 
   /eslint-visitor-keys/2.1.0:
@@ -10450,7 +10450,6 @@ packages:
       text-table: 0.2.0
     transitivePeerDependencies:
       - supports-color
-    dev: true
 
   /espree/9.4.1:
     resolution:
@@ -18424,7 +18423,7 @@ packages:
       typescript: 4.8.4
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
-    dev: false
+    dev: true
 
   /ts-node/10.9.1_typescript@4.8.4:
     resolution:

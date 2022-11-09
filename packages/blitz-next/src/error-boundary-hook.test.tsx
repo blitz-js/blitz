@@ -70,7 +70,7 @@ test("handleError forwards along async errors", async () => {
     //
     //   React will try to recreate this component tree from scratch using the error boundary you provided, ErrorBoundary."
     // `)
-    expect(consoleError).toHaveBeenCalledTimes(4)
+    expect(consoleError).toHaveBeenCalledTimes(3)
     consoleError.mockClear()
 
     // can recover
@@ -116,7 +116,7 @@ test("can pass an error to useErrorHandler", async () => {
   //
   //   React will try to recreate this component tree from scratch using the error boundary you provided, ErrorBoundary."
   // `)
-  expect(consoleError).toHaveBeenCalledTimes(4)
+  expect(consoleError).toHaveBeenCalledTimes(3)
   consoleError.mockClear()
 
   // can recover
