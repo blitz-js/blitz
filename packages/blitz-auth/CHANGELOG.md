@@ -1,5 +1,53 @@
 # @blitzjs/auth
 
+## 2.0.0-beta.17
+
+### Patch Changes
+
+- 8b4bf999: Update dependencies
+- 97469a12: Added option `role` to `authenticate` property of `BlitzPage` to authenticate page with respect to the role of the user. `String` value or `Array` of strings can be passed to authorize users.
+- Updated dependencies [5ea068b2]
+- Updated dependencies [8b4bf999]
+- Updated dependencies [88caa18e]
+  - blitz@2.0.0-beta.17
+
+## 2.0.0-beta.16
+
+### Minor Changes
+
+- 55a43ce1: maybe fix anon session CSRF issue + add ability to customize anon session expiry time
+
+### Patch Changes
+
+- Updated dependencies [1569bd53]
+- Updated dependencies [ceb7db27]
+- Updated dependencies [8e5903c0]
+- Updated dependencies [45459129]
+  - blitz@2.0.0-beta.16
+
+## 2.0.0-beta.15
+
+### Patch Changes
+
+- Updated dependencies [1b798d9a]
+  - blitz@2.0.0-beta.15
+
+## 2.0.0-beta.14
+
+### Patch Changes
+
+- Updated dependencies [78fd5c48]
+- Updated dependencies [0a8b0cb3]
+  - blitz@2.0.0-beta.14
+
+## 2.0.0-beta.13
+
+### Patch Changes
+
+- Updated dependencies [a6e81f15]
+- Updated dependencies [6f434989]
+  - blitz@2.0.0-beta.13
+
 ## 2.0.0-beta.12
 
 ### Patch Changes

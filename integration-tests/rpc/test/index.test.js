@@ -9,13 +9,10 @@ import {
   nextBuild,
   nextStart,
   nextExport,
-  getPageFileFromBuildManifest,
-  getPageFileFromPagesManifest,
 } from "../../utils/next-test-utils"
 
 // jest.setTimeout(1000 * 60 * 2)
 const appDir = join(__dirname, "../")
-const nextConfig = join(appDir, "next.config.js")
 let appPort
 let mode
 let app
@@ -34,17 +31,6 @@ function runTests(dev = false) {
     )
 
     it(
-      "returns 404 for GET",
-      async () => {
-        const res = await fetchViaHTTP(appPort, "/api/rpc/getBasic", null, {
-          method: "GET",
-        })
-        expect(res.status).toEqual(404)
-      },
-      5000 * 60 * 2,
-    )
-
-    it(
       "requires params",
       async () => {
         const res = await fetchViaHTTP(appPort, "/api/rpc/getBasic", null, {
@@ -54,6 +40,71 @@ function runTests(dev = false) {
         const json = await res.json()
         expect(res.status).toEqual(400)
         expect(json.error.message).toBe("Request body is missing the `params` key")
+      },
+      5000 * 60 * 2,
+    )
+
+    it(
+      "GET - returns 200 only when enabled",
+      async () => {
+        const res = await fetchViaHTTP(
+          appPort,
+          "/api/rpc/getBasicWithGET?params=%7B%7D&meta=%7B%7D",
+          null,
+          {
+            method: "GET",
+          },
+        )
+        expect(res.status).toEqual(200)
+      },
+      5000 * 60 * 2,
+    )
+
+    it(
+      "GET - returns 404 otherwise",
+      async () => {
+        const res = await fetchViaHTTP(
+          appPort,
+          "/api/rpc/getBasic?params=%7B%7D&meta=%7B%7D",
+          null,
+          {
+            method: "GET",
+          },
+        )
+        expect(res.status).toEqual(404)
+      },
+      5000 * 60 * 2,
+    )
+
+    it(
+      "query works - GET",
+      async () => {
+        const res = await fetchViaHTTP(
+          appPort,
+          "/api/rpc/getBasicWithGET?params=%7B%7D&meta=%7B%7D",
+          null,
+          {
+            method: "GET",
+          },
+        )
+        const json = await res.json()
+        expect(json).toEqual({result: "basic-result", error: null, meta: {}})
+        expect(res.status).toEqual(200)
+      },
+      5000 * 60 * 2,
+    )
+
+    it(
+      "requires params - GET",
+      async () => {
+        const res = await fetchViaHTTP(appPort, "/api/rpc/getBasicWithGET", null, {
+          method: "GET",
+        })
+        const json = await res.json()
+        expect(res.status).toEqual(400)
+        expect(json.error.message).toBe(
+          "Request query is missing the required `params` and `meta` keys",
+        )
       },
       5000 * 60 * 2,
     )

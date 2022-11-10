@@ -7,7 +7,7 @@ import type {
   NextApiRequest,
   NextApiResponse,
 } from "next"
-import type {
+import {
   AddParameters,
   AsyncFunc,
   BlitzServerPlugin,
@@ -15,6 +15,8 @@ import type {
   FirstParam,
   RequestMiddleware,
   MiddlewareResponse,
+  BlitzLogger,
+  initializeLogger,
 } from "blitz"
 import {handleRequestWithMiddleware, startWatcher, stopWatcher} from "blitz"
 import {
@@ -50,6 +52,7 @@ export type NextApiHandler<TResult> = (
 type SetupBlitzOptions = {
   plugins: BlitzServerPlugin<RequestMiddleware, Ctx>[]
   onError?: (err: Error) => void
+  logger?: ReturnType<typeof BlitzLogger>
 }
 
 export type Redirect =
@@ -72,7 +75,7 @@ export type BlitzGSPResult<P> =
   | {notFound: true; revalidate?: number | boolean}
 
 export type BlitzGSSPHandler<
-  TProps,
+  TProps extends {[key: string]: any} = {[key: string]: any},
   Query extends ParsedUrlQuery = ParsedUrlQuery,
   PD extends PreviewData = PreviewData,
 > = ({
@@ -85,7 +88,7 @@ export type BlitzGSSPHandler<
 >
 
 export type BlitzGSPHandler<
-  TProps,
+  TProps extends {[key: string]: any} = {[key: string]: any},
   Query extends ParsedUrlQuery = ParsedUrlQuery,
   PD extends PreviewData = PreviewData,
 > = ({
@@ -127,12 +130,18 @@ const prefetchQueryFactory = (
   }
 }
 
-export const setupBlitzServer = ({plugins, onError}: SetupBlitzOptions) => {
+export const setupBlitzServer = ({plugins, onError, logger}: SetupBlitzOptions) => {
+  initializeLogger(logger ?? BlitzLogger())
+
   const middlewares = plugins.flatMap((p) => p.requestMiddlewares)
   const contextMiddleware = plugins.flatMap((p) => p.contextMiddleware).filter(Boolean)
 
   const gSSP =
-    <TProps, Query extends ParsedUrlQuery = ParsedUrlQuery, PD extends PreviewData = PreviewData>(
+    <
+      TProps extends {[key: string]: any} = {[key: string]: any},
+      Query extends ParsedUrlQuery = ParsedUrlQuery,
+      PD extends PreviewData = PreviewData,
+    >(
       handler: BlitzGSSPHandler<TProps, Query, PD>,
     ): GetServerSideProps<TProps, Query, PD> =>
     async ({req, res, ...rest}) => {
@@ -163,7 +172,11 @@ export const setupBlitzServer = ({plugins, onError}: SetupBlitzOptions) => {
     }
 
   const gSP =
-    <TProps, Query extends ParsedUrlQuery = ParsedUrlQuery, PD extends PreviewData = PreviewData>(
+    <
+      TProps extends {[key: string]: any} = {[key: string]: any},
+      Query extends ParsedUrlQuery = ParsedUrlQuery,
+      PD extends PreviewData = PreviewData,
+    >(
       handler: BlitzGSPHandler<TProps, Query, PD>,
     ): GetStaticProps<TProps, Query, PD> =>
     async (context) => {
