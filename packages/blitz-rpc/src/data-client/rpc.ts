@@ -70,7 +70,7 @@ export function __internal_buildRpcClient({
       "Content-Type": "application/json",
     }
     console.log("Blitz Auth Enabled:", globalThis.__BLITZ_AUTH_ENABLED) // For Testing
-    if (globalThis.__BLITZ_AUTH_ENABLED) {
+    if (Boolean(globalThis.__BLITZ_AUTH_ENABLED)) {
       try {
         const {getAntiCSRFToken, HEADER_CSRF} = await import("@blitzjs/auth")
         const antiCSRFToken = getAntiCSRFToken()
@@ -134,7 +134,7 @@ export function __internal_buildRpcClient({
       .then(async (response) => {
         debug("Received request for", routePath)
         if (response.headers) {
-          if (globalThis.__BLITZ_AUTH_ENABLED) {
+          if (Boolean(globalThis.__BLITZ_AUTH_ENABLED)) {
             try {
               const {
                 HEADER_PUBLIC_DATA_TOKEN,

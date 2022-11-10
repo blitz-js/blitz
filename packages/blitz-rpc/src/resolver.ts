@@ -277,7 +277,7 @@ interface ResolverAuthorize {
 
 const authorize: ResolverAuthorize = (...args) => {
   return function _innerAuthorize(input, ctx) {
-    if (globalThis.__BLITZ_AUTH_ENABLED) {
+    if (Boolean(globalThis.__BLITZ_AUTH_ENABLED)) {
       const session: SessionContext = (ctx as any).session
       session.$authorize(...args)
       return {
@@ -288,7 +288,7 @@ const authorize: ResolverAuthorize = (...args) => {
       }
     }
     log.warn(
-      "You are using the `authorize` resolver, but `@blitzjs/auth` plugin is not initialised. Consider enabling to enable authentication features.",
+      "You are using the resolver `authorize` function, but `@blitzjs/auth` plugin is not initialised. Consider enabling to use authentication features.",
     )
     return {
       __blitz: true,

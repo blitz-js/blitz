@@ -88,7 +88,7 @@ export const BlitzRpcPlugin = createClientPlugin<BlitzRpcOptions, {queryClient: 
         globalThis.__BLITZ_SUSPENSE_ENABLED = suspenseEnabled
       }
       if (typeof window !== "undefined") {
-        if (!globalThis.__BLITZ_AUTH_ENABLED) {
+        if (!Boolean(globalThis.__BLITZ_AUTH_ENABLED)) {
           if (options?.csrf) {
             const csrfOptions =
               typeof options.csrf === "boolean" ? defaultCSRFOptions : options.csrf

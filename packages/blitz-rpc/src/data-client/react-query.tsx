@@ -82,7 +82,7 @@ export function useQuery<
   let enabled = isServer && suspenseEnabled ? false : options?.enabled ?? options?.enabled !== null
   const suspense = enabled === false ? false : options?.suspense
   let useSession = useSessionWithoutAuth
-  if (globalThis.__BLITZ_AUTH_ENABLED) {
+  if (Boolean(globalThis.__BLITZ_AUTH_ENABLED)) {
     try {
       import("@blitzjs/auth").then((mod) => {
         useSession = mod.useSession
@@ -181,7 +181,7 @@ export function usePaginatedQuery<
   let enabled = isServer && suspenseEnabled ? false : options?.enabled ?? options?.enabled !== null
   const suspense = enabled === false ? false : options?.suspense
   let useSession = useSessionWithoutAuth
-  if (globalThis.__BLITZ_AUTH_ENABLED) {
+  if (Boolean(globalThis.__BLITZ_AUTH_ENABLED)) {
     try {
       import("@blitzjs/auth").then((mod) => {
         useSession = mod.useSession
@@ -290,7 +290,7 @@ export function useInfiniteQuery<
   let enabled = isServer && suspenseEnabled ? false : options?.enabled ?? options?.enabled !== null
   const suspense = enabled === false ? false : options?.suspense
   let useSession = useSessionWithoutAuth
-  if (globalThis.__BLITZ_AUTH_ENABLED) {
+  if (Boolean(globalThis.__BLITZ_AUTH_ENABLED)) {
     try {
       import("@blitzjs/auth").then((mod) => {
         useSession = mod.useSession
