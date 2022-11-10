@@ -1,4 +1,4 @@
-import greetingsQueue from "app/api/greetingsQueue"
+import greetingsQueue from "pages/api/greetingsQueue"
 
 export default async function enqueueGreeting() {
   await greetingsQueue.enqueue({

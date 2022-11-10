@@ -1,4 +1,4 @@
-import {dirname, join, posix, relative} from "path"
+import {dirname, join, relative} from "path"
 import {promises} from "fs"
 import {
   assertPosixPath,
@@ -52,18 +52,15 @@ export async function transformBlitzRpcServer(
   assertPosixPath(root)
 
   const blitzImport = 'import { __internal_addBlitzRpcResolver } from "@blitzjs/rpc";'
-
   // No break line between `blitzImport` and `src` in order to preserve the source map's line mapping
   let code = blitzImport + src
   code += "\n\n"
-
   for (let resolverFilePath of resolvers) {
     const relativeResolverPath = slash(relative(dirname(id), join(root, resolverFilePath)))
     const routePath = convertPageFilePathToRoutePath(resolverFilePath, options?.resolverPath)
-    code += `__internal_addBlitzRpcResolver('${routePath}', () => import('${relativeResolverPath}'));`
+    code += `__internal_addBlitzRpcResolver('${routePath}',() => import('${relativeResolverPath}'));`
     code += "\n"
   }
-
   // console.log("NEW CODE", code)
   return code
 }

@@ -4,11 +4,14 @@ import prompts from "prompts"
 import {bootstrap} from "global-agent"
 import {baseLogger, log} from "../../logging"
 const debug = require("debug")("blitz:cli")
-import {join, resolve} from "path"
+import {join, resolve, dirname} from "path"
 import {Stream} from "stream"
 import {promisify} from "util"
 import {RecipeCLIFlags, RecipeExecutor} from "../../installer"
 import {setupTsnode} from "../utils/setup-ts-node"
+import {isInternalBlitzMonorepoDevelopment} from "../utils/helpers"
+import findUp from "find-up"
+import resolveFrom from "resolve-from"
 
 interface GlobalAgent {
   HTTP_PROXY?: string
@@ -62,8 +65,9 @@ const requireJSON = (file: string) => {
   return JSON.parse(require("fs-extra").readFileSync(file).toString("utf-8"))
 }
 
-const checkLockFileExists = (filename: string) => {
-  return require("fs-extra").existsSync(resolve(filename))
+const checkLockFileExists = async (filename: string) => {
+  const dotBlitz = join(await findNodeModulesRoot(process.cwd()), ".blitz")
+  return require("fs-extra").existsSync(resolve(join(dotBlitz, "..", "..", filename)))
 }
 
 const GH_ROOT = "https://github.com/"
@@ -153,13 +157,39 @@ const normalizeRecipePath = (recipeArg: string): RecipeMeta => {
   }
 }
 
+async function findNodeModulesRoot(src: string) {
+  let root: string
+  if (isInternalBlitzMonorepoDevelopment) {
+    root = join(__dirname, "..", "..", "..", "..", "/node_modules")
+  } else {
+    const blitzPkgLocation = dirname(
+      (await findUp("package.json", {
+        cwd: resolveFrom(src, "blitz"),
+      })) ?? "",
+    )
+
+    if (!blitzPkgLocation) {
+      throw new Error("Internal Blitz Error: unable to find 'blitz' package location")
+    }
+
+    if (blitzPkgLocation.includes(".pnpm")) {
+      root = join(blitzPkgLocation, "../../../../")
+    } else {
+      root = join(blitzPkgLocation, "../")
+    }
+  }
+
+  return root
+}
+
 const cloneRepo = async (
   repoFullName: string,
   defaultBranch: string,
   subdirectory?: string,
 ): Promise<string> => {
   debug("[cloneRepo] starting...")
-  const recipeDir = join(process.cwd(), ".blitz", "recipe-install")
+  const dotBlitz = join(await findNodeModulesRoot(process.cwd()), ".blitz")
+  const recipeDir = join(dotBlitz, "..", "..", "recipe-install")
   // clean up from previous run in case of error
   require("rimraf").sync(recipeDir)
   require("fs-extra").mkdirsSync(recipeDir)
@@ -206,7 +236,6 @@ const setupProxySupport = async () => {
 
 const install: CliCommand = async () => {
   setupTsnode()
-
   let selectedRecipe: string | null = args._[1] ? `${args._[1]}` : null
   await setupProxySupport()
 
@@ -281,10 +310,10 @@ ${chalk.dim("- Available recipes listed at https://github.com/blitz-js/blitz/tre
         let pkgManager = "npm"
         let installArgs = ["install", "--legacy-peer-deps", "--ignore-scripts"]
 
-        if (checkLockFileExists("yarn.lock")) {
+        if (await checkLockFileExists("yarn.lock")) {
           pkgManager = "yarn"
           installArgs = ["install", "--ignore-scripts"]
-        } else if (checkLockFileExists("pnpm-lock.yaml")) {
+        } else if (await checkLockFileExists("pnpm-lock.yaml")) {
           pkgManager = "pnpm"
           installArgs = ["install", "--ignore-scripts"]
         }
@@ -297,7 +326,7 @@ ${chalk.dim("- Available recipes listed at https://github.com/blitz-js/blitz/tre
 
         const recipePackageMain = requireJSON("./package.json").main
         const recipeEntry = resolve(recipePackageMain)
-        process.chdir(process.cwd())
+        process.chdir(join(process.cwd(), ".."))
 
         await installRecipeAtPath(recipeEntry, cliArgs, cliFlags)
 

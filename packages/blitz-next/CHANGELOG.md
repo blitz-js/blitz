@@ -1,5 +1,46 @@
 # @blitzjs/next
 
+## 2.0.0-beta.17
+
+### Patch Changes
+
+- 8b4bf999: Update dependencies
+- 97469a12: Added option `role` to `authenticate` property of `BlitzPage` to authenticate page with respect to the role of the user. `String` value or `Array` of strings can be passed to authorize users.
+- Updated dependencies [8b4bf999]
+  - @blitzjs/rpc@2.0.0-beta.17
+
+## 2.0.0-beta.16
+
+### Minor Changes
+
+- 11b548ed: Change setupBlitzServer logger config to be optional. Will default to BlitzLogger
+
+### Patch Changes
+
+- Updated dependencies [55a43ce1]
+- Updated dependencies [ceb7db27]
+  - @blitzjs/rpc@2.0.0-beta.16
+
+## 2.0.0-beta.15
+
+### Patch Changes
+
+- @blitzjs/rpc@2.0.0-beta.15
+
+## 2.0.0-beta.14
+
+### Patch Changes
+
+- @blitzjs/rpc@2.0.0-beta.14
+
+## 2.0.0-beta.13
+
+### Patch Changes
+
+- a6e81f15: Add BlitzLogger plugin and allow customizing logging
+- Updated dependencies [7b63f0f1]
+  - @blitzjs/rpc@2.0.0-beta.13
+
 ## 2.0.0-beta.12
 
 ### Patch Changes

@@ -1,9 +1,9 @@
-import { useCurrentUser } from "app/users/hooks/useCurrentUser"
+import { useCurrentUser } from "src/users/hooks/useCurrentUser"
 import { render } from "test/utils"
 
-import Home from "../pages/index"
+import Home from "../src/pages/index"
 
-jest.mock("app/users/hooks/useCurrentUser")
+jest.mock("src/users/hooks/useCurrentUser")
 const mockUseCurrentUser = useCurrentUser as jest.MockedFunction<typeof useCurrentUser>
 
 test.skip("renders blitz documentation link", () => {

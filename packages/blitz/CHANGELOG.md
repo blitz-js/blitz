@@ -1,5 +1,55 @@
 # blitz
 
+## 2.0.0-beta.17
+
+### Patch Changes
+
+- 5ea068b2: Check if blitz-server & blitz-client is located in either the app or src directory and return the correct path for blitz recipes.
+- 8b4bf999: Update dependencies
+- 88caa18e: Patch next13 for suspense error
+- Updated dependencies [2a81af7b]
+- Updated dependencies [8b4bf999]
+  - @blitzjs/generator@2.0.0-beta.17
+
+## 2.0.0-beta.16
+
+### Patch Changes
+
+- 1569bd53: Upgrade `tslog` to the latest version
+- ceb7db27: Add an opt-in GET request support to RPC specification by exporting a `config` object that has the `httpMethod` property.
+  from `query` files.
+- 8e5903c0: Fix `cannot find module db error` in JavaScript template. Replace requiring the config using `esbuild` with parsing using `jscodeshift` to get the `cliConfig` values. Added logic to find the `blitz-server` file in `src` directory
+- 45459129: Include resolvers in `src` directory in blitz console
+- Updated dependencies [1569bd53]
+- Updated dependencies [8e5903c0]
+  - @blitzjs/generator@2.0.0-beta.16
+
+## 2.0.0-beta.15
+
+### Patch Changes
+
+- 1b798d9a: Fix `useSession` hook by exporting `enhancePrisma` from the server entry point instead of server
+  - @blitzjs/generator@2.0.0-beta.15
+
+## 2.0.0-beta.14
+
+### Patch Changes
+
+- 78fd5c48: Fix Blitz Install issue that gets stuck on "Generating file diff"
+- 0a8b0cb3: Fix Custom Server TS error - add `es6` target config to esbuild
+- Updated dependencies [54761393]
+- Updated dependencies [60de0574]
+  - @blitzjs/generator@2.0.0-beta.14
+
+## 2.0.0-beta.13
+
+### Patch Changes
+
+- a6e81f15: Add BlitzLogger plugin and allow customizing logging
+- 6f434989: Fix "Ambiguous class detected" errors reported by SuperJson by removing duplicated export from errors.ts file
+- Updated dependencies [4e26ae21]
+  - @blitzjs/generator@2.0.0-beta.13
+
 ## 2.0.0-beta.12
 
 ### Patch Changes

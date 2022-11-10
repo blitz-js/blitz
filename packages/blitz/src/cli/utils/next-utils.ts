@@ -55,6 +55,7 @@ const getEsbuildOptions = (): esbuild.BuildOptions => {
     entryPoints: [getCustomServerPath()],
     outfile: getCustomServerBuildPath(),
     format: "cjs",
+    target: "es6",
     bundle: true,
     platform: "node",
     external: [

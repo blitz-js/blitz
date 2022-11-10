@@ -3723,6 +3723,25 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "janvennemann",
+      "name": "Jan Vennemann",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1406024?v=4",
+      "profile": "https://github.com/janvennemann",
+      "contributions": [
+        "doc",
+        "code"
+      ]
+    },
+    {
+      "login": "joneskj55",
+      "name": "Kevin Jones",
+      "avatar_url": "https://avatars.githubusercontent.com/u/20748598?v=4",
+      "profile": "https://kevinjones.engineer",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,

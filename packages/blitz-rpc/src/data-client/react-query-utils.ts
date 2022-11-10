@@ -183,7 +183,7 @@ export const invalidateQuery: InvalidateQuery = (resolver = undefined, ...params
 export function setQueryData<TInput, TResult, T extends AsyncFunc>(
   resolver: T | Resolver<TInput, TResult> | RpcClient<TInput, TResult>,
   params: TInput,
-  newData: TResult | ((oldData: TResult | undefined) => TResult),
+  newData: TResult | ((oldData: TResult | undefined) => TResult | undefined),
   opts: MutateOptions = {refetch: true},
 ): Promise<void | ReturnType<ReturnType<typeof getQueryClient>["invalidateQueries"]>> {
   if (typeof resolver === "undefined") {
