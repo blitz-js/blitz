@@ -6,10 +6,10 @@ import { useRouter } from "next/router"
 import {useQuery, useMutation} from '@blitzjs/rpc'
 import {useParam} from '@blitzjs/next'
 
-import Layout from "app/core/layouts/Layout"
-import get__ModelName__ from "app/__modelNamesPath__/queries/get__ModelName__"
-import update__ModelName__ from "app/__modelNamesPath__/mutations/update__ModelName__"
-import {__ModelName__Form, FORM_ERROR} from "app/__modelNamesPath__/components/__ModelName__Form"
+import Layout from "src/core/layouts/Layout"
+import get__ModelName__ from "src/__modelNamesPath__/queries/get__ModelName__"
+import update__ModelName__ from "src/__modelNamesPath__/mutations/update__ModelName__"
+import {__ModelName__Form, FORM_ERROR} from "src/__modelNamesPath__/components/__ModelName__Form"
 
 export const Edit__ModelName__ = () => {
   const router = useRouter()

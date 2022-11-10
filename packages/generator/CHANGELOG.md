@@ -1,5 +1,19 @@
 # @blitzjs/generator
 
+## 2.0.0-beta.17
+
+### Patch Changes
+
+- 2a81af7b: Update generator templates to use the src directory instead of app
+- 8b4bf999: Update dependencies
+
+## 2.0.0-beta.16
+
+### Patch Changes
+
+- 1569bd53: Upgrade `tslog` to the latest version
+- 8e5903c0: Fix `cannot find module db error` in JavaScript template. Replace requiring the config using `esbuild` with parsing using `jscodeshift` to get the `cliConfig` values. Added logic to find the `blitz-server` file in `src` directory
+
 ## 2.0.0-beta.15
 
 ## 2.0.0-beta.14

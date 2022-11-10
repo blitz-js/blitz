@@ -78,11 +78,11 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
       this.destinationPath("package.json"),
     )
 
-    const rpcEndpointPath = `pages/api/rpc/blitzrpcroute.${this.options.useTs ? "ts" : "js"}`
+    const rpcEndpointPath = `src/pages/api/rpc/blitzrpcroute.${this.options.useTs ? "ts" : "js"}`
     if (this.fs.exists(rpcEndpointPath)) {
       this.fs.move(
         this.destinationPath(rpcEndpointPath),
-        this.destinationPath(`pages/api/rpc/[[...blitz]].${this.options.useTs ? "ts" : "js"}`),
+        this.destinationPath(`src/pages/api/rpc/[[...blitz]].${this.options.useTs ? "ts" : "js"}`),
       )
     }
 
@@ -302,6 +302,7 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
       case "hookform":
         pkg.dependencies["react-hook-form"] = "7.x"
         pkg.dependencies["@hookform/resolvers"] = "2.x"
+        pkg.dependencies["@hookform/error-message"] = "2.x"
         break
       case "formik":
         pkg.dependencies["formik"] = "2.x"
@@ -309,11 +310,11 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
     }
     this.fs.move(
       this.destinationPath(`_forms/${type}/Form.${ext}`),
-      this.destinationPath(`app/core/components/Form.${ext}`),
+      this.destinationPath(`src/core/components/Form.${ext}`),
     )
     this.fs.move(
       this.destinationPath(`_forms/${type}/LabeledTextField.${ext}`),
-      this.destinationPath(`app/core/components/LabeledTextField.${ext}`),
+      this.destinationPath(`src/core/components/LabeledTextField.${ext}`),
     )
 
     this.fs.writeJSON(this.destinationPath("package.json"), pkg)

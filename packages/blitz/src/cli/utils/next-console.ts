@@ -71,32 +71,30 @@ export const forceRequire = (modulePath: string) => {
   }
 }
 
-export async function getBlitzModulePaths() {
+export async function getBlitzModulePaths(onlyDb = false) {
   const projectRoot = getProjectRootSync()
-  const {globby} = await import("globby")
-  const paths = await globby(
-    [
-      "app/**/{queries,mutations}/**/*.{js,ts,tsx}",
-      "utils/*.{js,ts,tsx}",
-      "jobs/**/*.{js,ts,tsx}",
-      "integrations/**/*.{js,ts,tsx}",
-      "!**/*.test.*",
-      "!**/*.spec.*",
-    ],
-    {cwd: projectRoot, gitignore: true},
-  )
-  paths.push(getDbFolder())
-  debug("Paths", paths)
-
+  const paths = [getDbFolder()]
+  if (!onlyDb) {
+    const {globby} = await import("globby")
+    paths.push(
+      ...(await globby(
+        [
+          "{app,src}/**/{queries,mutations}/**/*.{js,ts,tsx}",
+          "utils/*.{js,ts,tsx}",
+          "jobs/**/*.{js,ts,tsx}",
+          "integrations/**/*.{js,ts,tsx}",
+          "!**/*.test.*",
+          "!**/*.spec.*",
+        ],
+        {cwd: projectRoot, gitignore: true},
+      )),
+    )
+  }
   return [...paths.map((p: string) => path.join(projectRoot, p))]
 }
 
 export const loadBlitz = async (onlyDb: boolean, module = "") => {
-  let paths = await getBlitzModulePaths()
-
-  if (onlyDb) {
-    paths = paths.filter((p) => p.includes(getDbFolder()))
-  }
+  let paths = await getBlitzModulePaths(onlyDb)
 
   if (module) {
     paths = paths.filter((p) => module.includes(p) || p.includes(module))
