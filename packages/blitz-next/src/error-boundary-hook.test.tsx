@@ -8,8 +8,6 @@ import userEvent from "@testing-library/user-event"
 import * as React from "react"
 import type {ErrorFallbackProps} from "./error-boundary"
 import {ErrorBoundary, useErrorHandler} from "./error-boundary"
-import {cleanStack} from "./error-boundary.test"
-import {act} from "react-dom/test-utils"
 
 beforeEach(() => {
   global.IS_REACT_ACT_ENVIRONMENT = true
@@ -70,7 +68,7 @@ test("handleError forwards along async errors", async () => {
     //
     //   React will try to recreate this component tree from scratch using the error boundary you provided, ErrorBoundary."
     // `)
-    expect(consoleError).toHaveBeenCalledTimes(4)
+    expect(consoleError).toHaveBeenCalledTimes(3)
     consoleError.mockClear()
 
     // can recover
@@ -116,7 +114,7 @@ test("can pass an error to useErrorHandler", async () => {
   //
   //   React will try to recreate this component tree from scratch using the error boundary you provided, ErrorBoundary."
   // `)
-  expect(consoleError).toHaveBeenCalledTimes(4)
+  expect(consoleError).toHaveBeenCalledTimes(3)
   consoleError.mockClear()
 
   // can recover
