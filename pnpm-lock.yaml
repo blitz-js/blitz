@@ -467,7 +467,6 @@ importers:
 
   integration-tests/react-query-utils:
     specifiers:
-      "@blitzjs/auth": workspace:*
       "@blitzjs/config": workspace:*
       "@blitzjs/next": workspace:*
       "@blitzjs/rpc": workspace:*
@@ -490,7 +489,6 @@ importers:
       react-dom: 18.2.0
       typescript: ^4.8.4
     dependencies:
-      "@blitzjs/auth": link:../../packages/blitz-auth
       "@blitzjs/next": link:../../packages/blitz-next
       "@blitzjs/rpc": link:../../packages/blitz-rpc
       "@prisma/client": 4.6.0_prisma@4.6.0
@@ -516,7 +514,6 @@ importers:
 
   integration-tests/rpc:
     specifiers:
-      "@blitzjs/auth": workspace:*
       "@blitzjs/config": workspace:*
       "@blitzjs/next": workspace:*
       "@blitzjs/rpc": workspace:*
@@ -533,7 +530,6 @@ importers:
       react-dom: 18.2.0
       typescript: ^4.8.4
     dependencies:
-      "@blitzjs/auth": link:../../packages/blitz-auth
       "@blitzjs/config": link:../../packages/config
       "@blitzjs/next": link:../../packages/blitz-next
       "@blitzjs/rpc": link:../../packages/blitz-rpc
