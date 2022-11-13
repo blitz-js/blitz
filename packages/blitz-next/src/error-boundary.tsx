@@ -174,7 +174,7 @@ class ErrorBoundary extends React.Component<
   }
 }
 
-function withErrorBoundary<P>(
+function withErrorBoundary<P extends JSX.IntrinsicAttributes>(
   Component: React.ComponentType<P>,
   errorBoundaryProps: ErrorBoundaryProps,
 ): React.ComponentType<P> {

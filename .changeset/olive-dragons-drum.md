@@ -2,4 +2,4 @@
 "@blitzjs/rpc": patch
 ---
 
-Add feature for resolvers to exist outside of Blitz root
+Add ability to put your query and mutation resolvers in a separate monorepo folder, allowing you to use them in multiple apps.

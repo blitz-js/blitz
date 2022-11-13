@@ -177,20 +177,6 @@ function runTests(dev = false) {
       },
       5000 * 60 * 2,
     )
-
-    it(
-      "monorepo query works",
-      async () => {
-        const data = await fetchViaHTTP(appPort, "/api/rpc/getNoSuspenseBasic", null, {
-          method: "POST",
-          headers: {"Content-Type": "application/json; charset=utf-8"},
-          body: JSON.stringify({params: {}}),
-        }).then((res) => res.ok && res.json())
-
-        expect(data).toEqual({result: "basic-result", error: null, meta: {}})
-      },
-      5000 * 60 * 2,
-    )
   })
 
   if (!dev) {
