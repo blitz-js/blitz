@@ -3483,7 +3483,6 @@ packages:
       semver: 5.7.1
     transitivePeerDependencies:
       - supports-color
-    dev: false
 
   /@babel/preset-flow/7.18.6_@babel+core@7.20.2:
     resolution:
@@ -6291,7 +6290,6 @@ packages:
       typescript: 4.8.4
     transitivePeerDependencies:
       - supports-color
-    dev: false
 
   /@typescript-eslint/experimental-utils/5.42.1_rmayb2veg2btbq6mbmnyivgasy:
     resolution:
@@ -6354,6 +6352,29 @@ packages:
       - supports-color
     dev: false
 
+  /@typescript-eslint/parser/5.43.0_rmayb2veg2btbq6mbmnyivgasy:
+    resolution:
+      {
+        integrity: sha512-2iHUK2Lh7PwNUlhFxxLI2haSDNyXvebBO9izhjhMoDC+S3XI9qt2DGFUsiJ89m2k7gGYch2aEpYqV5F/+nwZug==,
+      }
+    engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
+    peerDependencies:
+      eslint: ^6.0.0 || ^7.0.0 || ^8.0.0
+      typescript: "*"
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+    dependencies:
+      "@typescript-eslint/scope-manager": 5.43.0
+      "@typescript-eslint/types": 5.43.0
+      "@typescript-eslint/typescript-estree": 5.43.0_typescript@4.8.4
+      debug: 4.3.4
+      eslint: 8.27.0
+      typescript: 4.8.4
+    transitivePeerDependencies:
+      - supports-color
+    dev: true
+
   /@typescript-eslint/parser/5.9.1_nw6v2wse7au2evadw7vu3hneg4:
     resolution:
       {
@@ -6408,6 +6429,17 @@ packages:
     dependencies:
       "@typescript-eslint/types": 5.42.1
       "@typescript-eslint/visitor-keys": 5.42.1
+
+  /@typescript-eslint/scope-manager/5.43.0:
+    resolution:
+      {
+        integrity: sha512-XNWnGaqAtTJsUiZaoiGIrdJYHsUOd3BZ3Qj5zKp9w6km6HsrjPk/TGZv0qMTWyWj0+1QOqpHQ2gZOLXaGA9Ekw==,
+      }
+    engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
+    dependencies:
+      "@typescript-eslint/types": 5.43.0
+      "@typescript-eslint/visitor-keys": 5.43.0
+    dev: true
 
   /@typescript-eslint/scope-manager/5.9.1:
     resolution:
@@ -6494,6 +6526,14 @@ packages:
       }
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
 
+  /@typescript-eslint/types/5.43.0:
+    resolution:
+      {
+        integrity: sha512-jpsbcD0x6AUvV7tyOlyvon0aUsQpF8W+7TpJntfCUWU1qaIKu2K34pMwQKSzQH8ORgUrGYY6pVIh1Pi8TNeteg==,
+      }
+    engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
+    dev: true
+
   /@typescript-eslint/types/5.9.1:
     resolution:
       {
@@ -6547,6 +6587,30 @@ packages:
       typescript: 4.8.4
     transitivePeerDependencies:
       - supports-color
+
+  /@typescript-eslint/typescript-estree/5.43.0_typescript@4.8.4:
+    resolution:
+      {
+        integrity: sha512-BZ1WVe+QQ+igWal2tDbNg1j2HWUkAa+CVqdU79L4HP9izQY6CNhXfkNwd1SS4+sSZAP/EthI1uiCSY/+H0pROg==,
+      }
+    engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
+    peerDependencies:
+      typescript: "*"
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+    dependencies:
+      "@typescript-eslint/types": 5.43.0
+      "@typescript-eslint/visitor-keys": 5.43.0
+      debug: 4.3.4
+      globby: 11.1.0
+      is-glob: 4.0.3
+      semver: 7.3.7
+      tsutils: 3.21.0_typescript@4.8.4
+      typescript: 4.8.4
+    transitivePeerDependencies:
+      - supports-color
+    dev: true
 
   /@typescript-eslint/typescript-estree/5.9.1_rlpflyxsp53dgdidn3vadezrry:
     resolution:
@@ -6673,6 +6737,17 @@ packages:
     dependencies:
       "@typescript-eslint/types": 5.42.1
       eslint-visitor-keys: 3.3.0
+
+  /@typescript-eslint/visitor-keys/5.43.0:
+    resolution:
+      {
+        integrity: sha512-icl1jNH/d18OVHLfcwdL3bWUKsBeIiKYTGxMJCoGe7xFht+E4QgzOqoWYrU8XSLJWhVw8nTacbm03v23J/hFTg==,
+      }
+    engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
+    dependencies:
+      "@typescript-eslint/types": 5.43.0
+      eslint-visitor-keys: 3.3.0
+    dev: true
 
   /@typescript-eslint/visitor-keys/5.9.1:
     resolution:
@@ -9962,7 +10037,6 @@ packages:
     transitivePeerDependencies:
       - eslint-import-resolver-webpack
       - supports-color
-    dev: false
 
   /eslint-config-next/13.0.3_rmayb2veg2btbq6mbmnyivgasy:
     resolution:
@@ -10000,7 +10074,6 @@ packages:
     hasBin: true
     peerDependencies:
       eslint: ">=7.0.0"
-    dev: false
 
   /eslint-config-prettier/8.5.0_eslint@8.27.0:
     resolution:
