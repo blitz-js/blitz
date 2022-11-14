@@ -35,9 +35,9 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           server-token: ${{ env.TURBO_TOKEN }}
       - name: Build
-        run: pnpm build -- --api="http://127.0.0.1:9080"
+        run: pnpm build
       - name: Lint
-        run: pnpm lint -- --api="http://127.0.0.1:9080"
+        run: pnpm lint
 
   build:
     runs-on: ubuntu-latest
@@ -60,9 +60,9 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           server-token: ${{ env.TURBO_TOKEN }}
       - name: Build
-        run: pnpm build -- --api="http://127.0.0.1:9080"
+        run: pnpm build
       - name: Build Apps
-        run: pnpm build:apps -- --api="http://127.0.0.1:9080"
+        run: pnpm build:apps
 
   Unit-Tests:
     name: "Unit Test: ${{ matrix.os }} (node@16)"
@@ -104,7 +104,7 @@ jobs:
           server-token: ${{ env.TURBO_TOKEN }}
 
       - name: Build
-        run: pnpm build -- --api="http://127.0.0.1:9080"
+        run: pnpm build
         shell: bash
 
       - name: Test Packages
@@ -176,7 +176,7 @@ jobs:
           server-token: ${{ env.TURBO_TOKEN }}
 
       - name: Build
-        run: pnpm build -- --api="http://127.0.0.1:9080"
+        run: pnpm build
         shell: bash
 
       - name: Test Packages
