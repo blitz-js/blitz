@@ -153,10 +153,6 @@ function getSpawnEnv(config: ServerConfig) {
 
 async function createCommandAndPort(config: ServerConfig, command: string) {
   let spawnCommand: string[] = [command]
-  let availablePort: number
-
-  availablePort = await detect({port: config.port ? config.port : 3000})
-  spawnCommand = spawnCommand.concat(["-p", `${availablePort}`])
 
   if (config.hostname) {
     spawnCommand = spawnCommand.concat(["-H", `${config.hostname}`])
@@ -164,7 +160,7 @@ async function createCommandAndPort(config: ServerConfig, command: string) {
 
   const spawnEnv = getSpawnEnv(config)
 
-  return {spawnCommand, spawnEnv, availablePort}
+  return {spawnCommand, spawnEnv}
 }
 
 export async function nextStartDev(
@@ -174,9 +170,7 @@ export async function nextStartDev(
   _buildFolder: string,
   config: ServerConfig,
 ) {
-  const {spawnCommand, spawnEnv, availablePort} = await createCommandAndPort(config, "dev")
-
-  process.env.BLITZ_DEV_SERVER_ORIGIN = `http://localhost:${availablePort}`
+  const {spawnCommand, spawnEnv} = await createCommandAndPort(config, "dev")
 
   debug("cwd ", cwd)
   debug("spawn ", nextBin, spawnCommand)
