@@ -56,7 +56,10 @@ export async function paginate<QueryResult>({
     items,
     nextPage,
     hasMore,
-    pagination: {pageCount: pageCount, pageSize: take, totalCount: count, from, to},
+    pageCount: pageCount,
+    pageSize: take,
+    from,
+    to,
     count,
   }
 }
