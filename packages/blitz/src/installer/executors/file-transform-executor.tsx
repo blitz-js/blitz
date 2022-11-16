@@ -17,10 +17,11 @@ import {useEnterToContinue} from "../utils/use-enter-to-continue"
 import {useUserInput} from "../utils/use-user-input"
 import {IExecutor, executorArgument, ExecutorConfig, getExecutorArgument} from "./executor"
 import {filePrompt} from "./file-prompt"
+import glob from "glob"
 
 export interface Config extends ExecutorConfig {
   selectTargetFiles?(cliArgs: RecipeCLIArgs): any[]
-  multi: boolean
+  multi?: boolean
   singleFileSearch?: executorArgument<string>
   transform?: Transformer
   transformPlain?: StringTransformer
@@ -49,13 +50,15 @@ export const Propose: IExecutor["Propose"] = ({cliArgs, cliFlags, onProposalAcce
   React.useEffect(() => {
     async function generateDiffs() {
       let filesToTransform: string[] = []
+      const singleFileSearch = (step as Config).singleFileSearch
 
-      if ((step as Config).multi) {
+      if ((step as Config).multi && typeof singleFileSearch === "string") {
+        filesToTransform = glob.sync(singleFileSearch)
       } else {
         filesToTransform = [
           await filePrompt({
             context: cliArgs,
-            globFilter: getExecutorArgument((step as Config).singleFileSearch, cliArgs),
+            globFilter: getExecutorArgument(singleFileSearch, cliArgs),
             getChoices: (step as Config).selectTargetFiles,
           }),
         ]

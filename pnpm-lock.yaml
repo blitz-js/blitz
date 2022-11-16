@@ -699,6 +699,7 @@ importers:
       express: 4.17.3
       find-up: 4.1.0
       fs-extra: 10.0.1
+      glob: 8.0.3
       global-agent: 3.0.0
       globby: 13.1.2
       got: ^11.8.1
@@ -752,6 +753,7 @@ importers:
       esbuild-register: 3.3.3_esbuild@0.14.34
       find-up: 4.1.0
       fs-extra: 10.0.1
+      glob: 8.0.3
       global-agent: 3.0.0
       globby: 13.1.2
       got: 11.8.1
@@ -6404,6 +6406,7 @@ packages:
       typescript: 4.8.4
     transitivePeerDependencies:
       - supports-color
+    dev: false
 
   /@typescript-eslint/scope-manager/5.28.0:
     resolution:
@@ -11660,6 +11663,20 @@ packages:
       minimatch: 3.1.2
       once: 1.4.0
       path-is-absolute: 1.0.1
+
+  /glob/8.0.3:
+    resolution:
+      {
+        integrity: sha512-ull455NHSHI/Y1FqGaaYFaLGkNMMJbavMrEGFXG/PGrg6y7sutWHUHrz6gy6WEBH6akM1M414dWKCNs+IhKdiQ==,
+      }
+    engines: {node: ">=12"}
+    dependencies:
+      fs.realpath: 1.0.0
+      inflight: 1.0.6
+      inherits: 2.0.4
+      minimatch: 5.1.0
+      once: 1.4.0
+    dev: false
 
   /glob2base/0.0.12:
     resolution: {integrity: sha1-nUGbPijxLoOjYhZKJ3BVkiycDVY=}

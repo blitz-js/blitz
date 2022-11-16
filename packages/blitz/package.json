@@ -45,6 +45,7 @@
     "esbuild-register": "3.3.3",
     "find-up": "4.1.0",
     "fs-extra": "10.0.1",
+    "glob": "8.0.3",
     "global-agent": "3.0.0",
     "globby": "13.1.2",
     "got": "^11.8.1",
