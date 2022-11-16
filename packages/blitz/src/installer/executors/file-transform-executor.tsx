@@ -20,6 +20,7 @@ import {filePrompt} from "./file-prompt"
 
 export interface Config extends ExecutorConfig {
   selectTargetFiles?(cliArgs: RecipeCLIArgs): any[]
+  multi: boolean
   singleFileSearch?: executorArgument<string>
   transform?: Transformer
   transformPlain?: StringTransformer
@@ -35,42 +36,56 @@ export function isFileTransformExecutor(executor: ExecutorConfig): executor is C
 export const type = "file-transform"
 export const Propose: IExecutor["Propose"] = ({cliArgs, cliFlags, onProposalAccepted, step}) => {
   const userInput = useUserInput(cliFlags)
-  const [diff, setDiff] = React.useState<string | null>(null)
+  const [diffs, setDiffs] = React.useState<string[] | null>(null)
   const [error, setError] = React.useState<Error | null>(null)
-  const [filePath, setFilePath] = React.useState("")
+  const [filePaths, setFilePaths] = React.useState<string[]>([])
   const [proposalAccepted, setProposalAccepted] = React.useState(false)
 
   const acceptProposal = React.useCallback(() => {
     setProposalAccepted(true)
-    onProposalAccepted(filePath)
-  }, [onProposalAccepted, filePath])
+    onProposalAccepted(filePaths)
+  }, [onProposalAccepted, filePaths])
 
   React.useEffect(() => {
-    async function generateDiff() {
-      const fileToTransform: string = await filePrompt({
-        context: cliArgs,
-        globFilter: getExecutorArgument((step as Config).singleFileSearch, cliArgs),
-        getChoices: (step as Config).selectTargetFiles,
-      })
+    async function generateDiffs() {
+      let filesToTransform: string[] = []
 
-      setFilePath(fileToTransform)
-      const originalFile = fs.readFileSync(fileToTransform).toString("utf-8")
+      if ((step as Config).multi) {
+      } else {
+        filesToTransform = [
+          await filePrompt({
+            context: cliArgs,
+            globFilter: getExecutorArgument((step as Config).singleFileSearch, cliArgs),
+            getChoices: (step as Config).selectTargetFiles,
+          }),
+        ]
+      }
 
-      const newFile = await ((step as Config).transformPlain
-        ? stringProcessFile(originalFile, (step as Config).transformPlain!)
-        : processFile(originalFile, (step as Config).transform!))
+      setFilePaths(filesToTransform)
 
-      return createPatch(fileToTransform, originalFile, newFile)
+      const patches = await Promise.all(
+        filesToTransform.map(async (fileToTransform) => {
+          const originalFile = fs.readFileSync(fileToTransform).toString("utf-8")
+
+          const newFile = await ((step as Config).transformPlain
+            ? stringProcessFile(originalFile, (step as Config).transformPlain!)
+            : processFile(originalFile, (step as Config).transform!))
+
+          return createPatch(fileToTransform, originalFile, newFile)
+        }),
+      )
+
+      return patches
     }
 
-    generateDiff().then(setDiff, setError)
+    generateDiffs().then(setDiffs, setError)
   }, [cliArgs, step])
 
   // Let the renderer deal with errors from file transformers, otherwise the
   // process would just hang.
   if (error) throw error
 
-  if (!diff) {
+  if (!diffs) {
     return (
       <Box>
         <Text>
@@ -82,8 +97,8 @@ export const Propose: IExecutor["Propose"] = ({cliArgs, cliFlags, onProposalAcce
   }
 
   const childProps: ProposeChildProps = {
-    diff,
-    filePath,
+    diffs,
+    filePaths,
     proposalAccepted,
     acceptProposal,
   }
@@ -93,8 +108,8 @@ export const Propose: IExecutor["Propose"] = ({cliArgs, cliFlags, onProposalAcce
 }
 
 interface ProposeChildProps {
-  diff: string
-  filePath: string
+  diffs: string[]
+  filePaths: string[]
   proposalAccepted: boolean
   acceptProposal: () => void
 }
@@ -123,56 +138,62 @@ const Diff = ({diff}: {diff: string}) => (
 )
 
 const ProposeWithInput = ({
-  diff,
-  filePath,
+  diffs,
+  filePaths,
   proposalAccepted,
   acceptProposal,
 }: ProposeChildProps) => {
-  useEnterToContinue(acceptProposal, filePath !== "" && !proposalAccepted)
+  useEnterToContinue(acceptProposal, !!filePaths?.length && !proposalAccepted)
 
   return (
     <Box flexDirection="column">
-      <Diff diff={diff} />
+      {diffs.map((diff, i) => {
+        return <Diff diff={diff} key={i} />
+      })}
       <EnterToContinue message="The above changes will be made. Press ENTER to continue" />
     </Box>
   )
 }
 
 const ProposeWithoutInput = ({
-  diff,
-  filePath,
+  diffs,
+  filePaths,
   proposalAccepted,
   acceptProposal,
 }: ProposeChildProps) => {
   React.useEffect(() => {
-    if (filePath !== "" && !proposalAccepted) {
+    if (filePaths?.length && !proposalAccepted) {
       acceptProposal()
     }
-  }, [acceptProposal, filePath, proposalAccepted])
+  }, [acceptProposal, filePaths, proposalAccepted])
 
   return (
     <Box flexDirection="column">
-      <Diff diff={diff} />
+      {diffs.map((diff, i) => {
+        return <Diff diff={diff} key={i} />
+      })}
     </Box>
   )
 }
 
-export const Commit: IExecutor["Commit"] = ({onChangeCommitted, proposalData: filePath, step}) => {
+export const Commit: IExecutor["Commit"] = ({onChangeCommitted, proposalData: filePaths, step}) => {
   React.useEffect(() => {
     void (async function () {
-      const results = await transform(
-        async (original) =>
-          await ((step as Config).transformPlain
-            ? stringProcessFile(original, (step as Config).transformPlain!)
-            : processFile(original, (step as Config).transform!)),
-        [filePath],
-      )
-      if (results.some((r) => r.status === TransformStatus.Failure)) {
-        console.error(results)
+      for (let filePath of filePaths) {
+        const results = await transform(
+          async (original) =>
+            await ((step as Config).transformPlain
+              ? stringProcessFile(original, (step as Config).transformPlain!)
+              : processFile(original, (step as Config).transform!)),
+          [filePath],
+        )
+        if (results.some((r) => r.status === TransformStatus.Failure)) {
+          console.error(results)
+        }
       }
-      onChangeCommitted(`Modified file: ${filePath}`)
+      onChangeCommitted(`Modified file${filePaths.length > 1 ? "s" : ""}: ${filePaths.join(", ")}`)
     })()
-  }, [filePath, onChangeCommitted, step])
+  }, [filePaths, onChangeCommitted, step])
 
   return (
     <Box>
