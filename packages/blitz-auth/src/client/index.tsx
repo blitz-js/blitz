@@ -399,7 +399,7 @@ export const AuthClientPlugin = createClientPlugin((options: AuthPluginClientOpt
   return {
     withProvider: withBlitzAuthPlugin,
     events: {
-      preRequestHook: (options: RequestInit) => {
+      preRequest: (options: RequestInit) => {
         const headers: Record<string, any> = {
           "Content-Type": "application/json",
         }
@@ -415,7 +415,7 @@ export const AuthClientPlugin = createClientPlugin((options: AuthPluginClientOpt
         console.log("options", options)
         return options
       },
-      postResponseHook: (response: Response) => {
+      rpcResponse: (response: Response) => {
         if (response.headers) {
           backupAntiCSRFTokenToLocalStorage()
           if (response.headers.get(HEADER_PUBLIC_DATA_TOKEN)) {
@@ -434,7 +434,7 @@ export const AuthClientPlugin = createClientPlugin((options: AuthPluginClientOpt
           }
         }
       },
-      rpcResponseHook: (error: Error) => {
+      handleError: (error: Error) => {
         // We don't clear the publicDataStore for anonymous users,
         // because there is not sensitive data
         if (error.name === "AuthenticationError" && getPublicDataStore().getData().userId) {
