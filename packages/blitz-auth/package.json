@@ -4,7 +4,7 @@
   "scripts": {
     "build": "unbuild",
     "predev": "wait-on -d 250 ../blitz/dist/index-server.d.ts",
-    "dev": "pnpm run predev && watch unbuild src --wait=0.2",
+    "dev": "rm -rf dist && pnpm run predev && watch unbuild src --wait=0.2",
     "lint": "eslint . --fix",
     "test": "vitest run",
     "test-watch": "vitest",
