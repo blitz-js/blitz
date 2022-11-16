@@ -38,7 +38,15 @@ export const BlitzRpcPlugin = createClientPlugin<BlitzRpcOptions, {queryClient: 
     const queryClient = initializeQueryClient()
     globalThis.queryClient = queryClient
     return {
-      events: {},
+      events: {
+        preRequest: (options: RequestInit) => {
+          const headers: Record<string, any> = {
+            "Content-Type": "application/json",
+          }
+          options.headers = {...options.headers, ...headers}
+          return options
+        },
+      },
       middleware: {},
       exports: () => ({
         queryClient,
