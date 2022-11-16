@@ -149,29 +149,29 @@ const setupBlitzClient = <TPlugins extends readonly ClientPlugin<object>[]>({
       fns.reduce((v, f) => f(v), x)
   const events = plugins.reduce(
     (acc: EventHooks, plugin) => ({
-      preRequestHook: plugin.events.preRequestHook
-        ? pipe(acc.preRequestHook, plugin.events.preRequestHook)
-        : acc.preRequestHook,
-      postResponseHook: plugin.events.postResponseHook
-        ? pipe(acc.postResponseHook, plugin.events.postResponseHook)
-        : acc.postResponseHook,
-      rpcResponseHook: plugin.events.rpcResponseHook
-        ? pipe(acc.rpcResponseHook, plugin.events.rpcResponseHook)
-        : acc.rpcResponseHook,
+      preRequest: plugin.events.preRequest
+        ? pipe(acc.preRequest, plugin.events.preRequest)
+        : acc.preRequest,
+      rpcResponse: plugin.events.rpcResponse
+        ? pipe(acc.rpcResponse, plugin.events.rpcResponse)
+        : acc.rpcResponse,
+      handleError: plugin.events.handleError
+        ? pipe(acc.handleError, plugin.events.handleError)
+        : acc.handleError,
     }),
     {
-      preRequestHook: (options: RequestInit) => options,
-      postResponseHook: (response: Response) => response,
-      rpcResponseHook: (error: Error) => error,
+      preRequest: (options: RequestInit) => options,
+      rpcResponse: (response: Response) => response,
+      handleError: (error: Error) => error,
     },
   )
   // console.log("events", events)
-  globalThis.preRequestHook = events.preRequestHook as (options: RequestInit) => RequestInit
-  globalThis.postResponseHook = events.postResponseHook as (response: Response) => Response
-  globalThis.rpcResponseHook = events.rpcResponseHook as (error: Error) => Error
-  // console.log("preRequestHook", globalThis.preRequestHook.toString())
-  // console.log("postResponseHook", globalThis.postResponseHook.toString())
-  // console.log("rpcResponseHook", globalThis.rpcResponseHook.toString())
+  globalThis.preRequest = events.preRequest as (options: RequestInit) => RequestInit
+  globalThis.rpcResponse = events.rpcResponse as (response: Response) => Response
+  globalThis.handleError = events.handleError as (error: Error) => Error
+  // console.log("preRequest", globalThis.preRequest.toString())
+  // console.log("rpcResponse", globalThis.rpcResponse.toString())
+  // console.log("handleError", globalThis.handleError.toString())
   const withBlitz = buildWithBlitz(plugins)
 
   // todo: finish this

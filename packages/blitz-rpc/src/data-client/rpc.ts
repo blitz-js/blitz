@@ -99,19 +99,19 @@ export function __internal_buildRpcClient({
       routePathURL.searchParams.set("meta", stringify(serialized.meta))
     }
     const {
-      preRequestHook = (options: RequestInit) => options,
-      postResponseHook = (response: Response) => response,
-      rpcResponseHook = (error: Error) => error,
+      preRequest = (options: RequestInit) => options,
+      rpcResponse = (response: Response) => response,
+      handleError = (error: Error) => error,
     } = globalThis
 
-    console.log("preRequestHook", preRequestHook.toString())
-    console.log("postResponseHook", postResponseHook.toString())
-    console.log("rpcResponseHook", rpcResponseHook.toString())
+    console.log("preRequest", preRequest.toString())
+    console.log("rpcResponse", rpcResponse.toString())
+    console.log("handleError", handleError.toString())
 
     const promise = window
       .fetch(
         routePathURL,
-        preRequestHook({
+        preRequest({
           method: httpMethod,
           credentials: "include",
           redirect: "follow",
@@ -130,7 +130,7 @@ export function __internal_buildRpcClient({
       .then(async (response) => {
         debug("Received request for", routePath)
         document.addEventListener("blitz-auth:session-created", resetQueryClient)
-        postResponseHook(response)
+        rpcResponse(response)
         document.removeEventListener("blitz-auth:session-created", resetQueryClient)
         if (!response.ok) {
           const error = new Error(response.statusText)
@@ -152,7 +152,7 @@ export function __internal_buildRpcClient({
               json: payload.error,
               meta: payload.meta?.error,
             }) as any
-            rpcResponseHook(error)
+            handleError(error)
             const prismaError = error.message.match(/invalid.*prisma.*invocation/i)
             if (prismaError && !("code" in error)) {
               error = new Error(prismaError[0])
