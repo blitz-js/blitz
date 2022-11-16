@@ -16,6 +16,7 @@
     "schema": "db/schema.prisma"
   },
   "dependencies": {
+    "@blitzjs/auth": "workspace:*",
     "@blitzjs/next": "workspace:*",
     "@blitzjs/rpc": "workspace:*",
     "@prisma/client": "4.6.0",

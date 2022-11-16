@@ -9,6 +9,7 @@ import {
   PaginationArgumentError,
   RedirectError,
 } from "./errors"
+import {EventHooks} from "./types"
 export {
   AuthenticationError,
   AuthorizationError,
@@ -24,13 +25,8 @@ export type BlitzProviderComponentType = <TProps = any>(
   (props: TProps): JSX.Element
   displayName: string
 }
-
 export interface ClientPlugin<Exports extends object> {
-  events: {
-    onSessionCreate?: () => void
-    onSessionDestroy?: () => void
-    onBeforeRender?: (props: React.ComponentProps<any>) => void
-  }
+  events: EventHooks
   middleware: {
     beforeHttpRequest?: (
       req: IncomingMessage,

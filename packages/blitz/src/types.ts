@@ -8,6 +8,15 @@ export interface RouteUrlObject extends Pick<UrlObject, "pathname" | "query"> {
   pathname: string
 }
 
+export type EventHooks = {
+  onSessionCreate?: (() => void) | undefined
+  onSessionDestroy?: (() => void) | undefined
+  preRequestHook?: ((options: RequestInit) => RequestInit) | undefined
+  postResponseHook?: ((request: Response) => void) | undefined
+  rpcResponseHook?: ((error: Error) => void) | undefined
+  onBeforeRender?: ((props: any) => void) | undefined
+}
+
 export type ResolverConfig = {
   httpMethod: "GET" | "POST"
 }

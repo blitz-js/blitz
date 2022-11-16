@@ -222,6 +222,7 @@ export const setupBlitzServer = ({plugins, onError, logger}: SetupBlitzOptions) 
 export interface BlitzConfig extends NextConfig {
   blitz?: {
     resolverPath?: ResolverPathOptions
+    includeRPCFolders?: string[]
     customServer?: {
       hotReload?: boolean
     }
@@ -252,6 +253,7 @@ export function withBlitz(nextConfig: BlitzConfig = {}) {
         webpackConfig: config,
         webpackRuleOptions: {
           resolverPath: nextConfig.blitz?.resolverPath,
+          includeRPCFolders: nextConfig.blitz?.includeRPCFolders,
         },
       })
       if (typeof nextConfig.webpack === "function") {

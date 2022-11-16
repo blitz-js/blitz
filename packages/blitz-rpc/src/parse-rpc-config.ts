@@ -3,12 +3,10 @@ import {ResolverConfig} from "blitz"
 
 type _ResolverType = "GET" | "POST"
 
-const defaultResolverConfig: ResolverConfig = {
-  httpMethod: "POST",
-}
-
 export function getResolverConfig(content: string): ResolverConfig {
-  const resolverConfig = defaultResolverConfig
+  const resolverConfig: ResolverConfig = {
+    httpMethod: "POST",
+  }
   const resolver = parseSync(content, {
     syntax: "typescript",
     target: "es2020",

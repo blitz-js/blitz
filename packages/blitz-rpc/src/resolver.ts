@@ -3,7 +3,6 @@ import {Await, Ctx, EnsurePromise, log, MiddlewareCtx} from "blitz"
 import type {input as zInput, output as zOutput, ZodTypeAny} from "zod"
 
 export type ParserType = "sync" | "async"
-
 interface ResultWithContext<Result = unknown, Context = unknown> {
   __blitz: true
   value: Result

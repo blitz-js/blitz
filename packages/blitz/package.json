@@ -3,7 +3,7 @@
   "version": "2.0.0-beta.17",
   "scripts": {
     "build": "unbuild",
-    "dev": "pnpm run predev && watch unbuild src --wait=0.2",
+    "dev": "rm -rf dist && pnpm run predev && watch unbuild src --wait=0.2",
     "lint": "eslint . --fix",
     "test": "vitest run",
     "test-watch": "vitest",

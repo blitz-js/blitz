@@ -84,7 +84,6 @@ export interface AuthPluginOptions extends Partial<SessionConfigOptions>, IsAuth
 export function AuthServerPlugin(options: AuthPluginOptions): BlitzServerPlugin<any, any> {
   // pass types
   globalThis.__BLITZ_SESSION_COOKIE_PREFIX = options.cookiePrefix || "blitz"
-  globalThis.__BLITZ_AUTH_ENABLED = true
 
   function authPluginSessionMiddleware() {
     assert(

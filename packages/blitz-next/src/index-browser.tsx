@@ -1,5 +1,11 @@
 import "./global"
-import type {ClientPlugin, BlitzProviderComponentType, UnionToIntersection, Simplify} from "blitz"
+import type {
+  ClientPlugin,
+  BlitzProviderComponentType,
+  UnionToIntersection,
+  Simplify,
+  EventHooks,
+} from "blitz"
 import Head from "next/head"
 import React, {ReactNode} from "react"
 import {QueryClient, QueryClientProvider, Hydrate, HydrateOptions} from "@tanstack/react-query"
@@ -136,9 +142,36 @@ const setupBlitzClient = <TPlugins extends readonly ClientPlugin<object>[]>({
   //   const { middleware } = plugin(clientCtx)
   //   allMiddleware.push(middleware)
   // }
-
   const exports = plugins.reduce((acc, plugin) => ({...plugin.exports(), ...acc}), {})
-
+  const pipe =
+    (...fns: any[]) =>
+    (x: any) =>
+      fns.reduce((v, f) => f(v), x)
+  const events = plugins.reduce(
+    (acc: EventHooks, plugin) => ({
+      preRequestHook: plugin.events.preRequestHook
+        ? pipe(acc.preRequestHook, plugin.events.preRequestHook)
+        : acc.preRequestHook,
+      postResponseHook: plugin.events.postResponseHook
+        ? pipe(acc.postResponseHook, plugin.events.postResponseHook)
+        : acc.postResponseHook,
+      rpcResponseHook: plugin.events.rpcResponseHook
+        ? pipe(acc.rpcResponseHook, plugin.events.rpcResponseHook)
+        : acc.rpcResponseHook,
+    }),
+    {
+      preRequestHook: (options: RequestInit) => options,
+      postResponseHook: (response: Response) => response,
+      rpcResponseHook: (error: Error) => error,
+    },
+  )
+  // console.log("events", events)
+  globalThis.preRequestHook = events.preRequestHook as (options: RequestInit) => RequestInit
+  globalThis.postResponseHook = events.postResponseHook as (response: Response) => Response
+  globalThis.rpcResponseHook = events.rpcResponseHook as (error: Error) => Error
+  // console.log("preRequestHook", globalThis.preRequestHook.toString())
+  // console.log("postResponseHook", globalThis.postResponseHook.toString())
+  // console.log("rpcResponseHook", globalThis.rpcResponseHook.toString())
   const withBlitz = buildWithBlitz(plugins)
 
   // todo: finish this

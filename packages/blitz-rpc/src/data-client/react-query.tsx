@@ -11,7 +11,6 @@ import {
   UseMutationResult,
 } from "@tanstack/react-query"
 import {isServer, FirstParam, PromiseReturnType, AsyncFunc} from "blitz"
-
 import {
   emptyQueryFn,
   getQueryCacheFunctions,
@@ -22,14 +21,6 @@ import {
   getInfiniteQueryKey,
 } from "./react-query-utils"
 import {useRouter} from "next/router"
-import type {ClientSession} from "@blitzjs/auth"
-
-const useSessionWithoutAuth = (options = {}): ClientSession => {
-  return {
-    userId: null,
-    isLoading: false,
-  }
-}
 
 type QueryLazyOptions = {suspense: unknown} | {enabled: unknown}
 type QueryNonLazyOptions =
@@ -81,26 +72,6 @@ export function useQuery<
   const suspenseEnabled = Boolean(globalThis.__BLITZ_SUSPENSE_ENABLED)
   let enabled = isServer && suspenseEnabled ? false : options?.enabled ?? options?.enabled !== null
   const suspense = enabled === false ? false : options?.suspense
-  let useSession = useSessionWithoutAuth
-  if (Boolean(globalThis.__BLITZ_AUTH_ENABLED)) {
-    try {
-      import("@blitzjs/auth").then((mod) => {
-        useSession = mod.useSession
-      }, console.error)
-    } catch (e: any) {
-      if (e.code === "MODULE_NOT_FOUND") {
-        console.error(
-          "Blitz Auth is enabled but @blitzjs/auth is not installed. Please check if @blitzjs/auth is in your dependencies",
-        )
-      }
-      throw e
-    }
-  }
-  const session = useSession({suspense})
-  if (session.isLoading) {
-    enabled = false
-  }
-
   const routerIsReady = useRouter().isReady || (isServer && suspenseEnabled)
   const enhancedResolverRpcClient = sanitizeQuery(queryFn)
   const queryKey = getQueryKey(queryFn, params)
@@ -180,26 +151,6 @@ export function usePaginatedQuery<
   const suspenseEnabled = Boolean(globalThis.__BLITZ_SUSPENSE_ENABLED)
   let enabled = isServer && suspenseEnabled ? false : options?.enabled ?? options?.enabled !== null
   const suspense = enabled === false ? false : options?.suspense
-  let useSession = useSessionWithoutAuth
-  if (Boolean(globalThis.__BLITZ_AUTH_ENABLED)) {
-    try {
-      import("@blitzjs/auth").then((mod) => {
-        useSession = mod.useSession
-      }, console.error)
-    } catch (e: any) {
-      if (e.code === "MODULE_NOT_FOUND") {
-        console.error(
-          "Blitz Auth is enabled but @blitzjs/auth is not installed. Please check if @blitzjs/auth is in your dependencies",
-        )
-      }
-      throw e
-    }
-  }
-  const session = useSession({suspense})
-  if (session.isLoading) {
-    enabled = false
-  }
-
   const routerIsReady = useRouter().isReady || (isServer && suspenseEnabled)
   const enhancedResolverRpcClient = sanitizeQuery(queryFn)
   const queryKey = getQueryKey(queryFn, params)
@@ -289,26 +240,6 @@ export function useInfiniteQuery<
   const suspenseEnabled = Boolean(globalThis.__BLITZ_SUSPENSE_ENABLED)
   let enabled = isServer && suspenseEnabled ? false : options?.enabled ?? options?.enabled !== null
   const suspense = enabled === false ? false : options?.suspense
-  let useSession = useSessionWithoutAuth
-  if (Boolean(globalThis.__BLITZ_AUTH_ENABLED)) {
-    try {
-      import("@blitzjs/auth").then((mod) => {
-        useSession = mod.useSession
-      }, console.error)
-    } catch (e: any) {
-      if (e.code === "MODULE_NOT_FOUND") {
-        console.error(
-          "Blitz Auth is enabled but @blitzjs/auth is not installed. Please check if @blitzjs/auth is in your dependencies",
-        )
-      }
-      throw e
-    }
-  }
-  const session = useSession({suspense})
-  if (session.isLoading) {
-    enabled = false
-  }
-
   const routerIsReady = useRouter().isReady || (isServer && suspenseEnabled)
   const enhancedResolverRpcClient = sanitizeQuery(queryFn)
   const queryKey = getInfiniteQueryKey(queryFn, getQueryParams)

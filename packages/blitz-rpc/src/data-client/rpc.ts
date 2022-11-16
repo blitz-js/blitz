@@ -2,10 +2,9 @@ import {normalizePathTrailingSlash} from "next/dist/client/normalize-trailing-sl
 import {addBasePath} from "next/dist/client/add-base-path"
 import {deserialize, serialize} from "superjson"
 import {SuperJSONResult} from "superjson/dist/types"
-import {CSRFTokenMismatchError, isServer} from "blitz"
+import {isServer} from "blitz"
 import {getQueryKeyFromUrlAndParams, getQueryClient} from "./react-query-utils"
 import {stringify} from "superjson"
-import {getAntiCSRFToken} from "../index-browser"
 
 export function normalizeApiRoute(path: string): string {
   return normalizePathTrailingSlash(addBasePath(path))
@@ -45,6 +44,24 @@ export interface RpcClient<Input = unknown, Result = unknown>
 //   (params: Input, ctx?: Ctx): Promise<Result>
 // }
 
+function resetQueryClient() {
+  console.log("Blitz RPC Session created")
+  setTimeout(async () => {
+    // Do these in the next tick to prevent various bugs like https://github.com/blitz-js/blitz/issues/2207
+    const debug = (await import("debug")).default("blitz:rpc")
+    debug("Invalidating react-query cache...")
+    await getQueryClient().cancelQueries()
+    await getQueryClient().resetQueries()
+    getQueryClient().getMutationCache().clear()
+    // We have a 100ms delay here to prevent unnecessary stale queries from running
+    // This prevents the case where you logout on a page with
+    // Page.authenticate = {redirectTo: '/login'}
+    // Without this delay, queries that require authentication on the original page
+    // will still run (but fail because you are now logged out)
+    // Ref: https://github.com/blitz-js/blitz/issues/1935
+  }, 100)
+}
+
 export function __internal_buildRpcClient({
   resolverName,
   resolverType,
@@ -66,38 +83,6 @@ export function __internal_buildRpcClient({
     }
     debug("Starting request for", fullRoutePath, "with", params, "and", opts)
 
-    const headers: Record<string, any> = {
-      "Content-Type": "application/json",
-    }
-    console.log("Blitz Auth Enabled:", globalThis.__BLITZ_AUTH_ENABLED) // For Testing
-    if (Boolean(globalThis.__BLITZ_AUTH_ENABLED)) {
-      try {
-        const {getAntiCSRFToken, HEADER_CSRF} = await import("@blitzjs/auth")
-        const antiCSRFToken = getAntiCSRFToken()
-        if (antiCSRFToken) {
-          debug("Adding antiCSRFToken cookie header", antiCSRFToken)
-          headers[HEADER_CSRF] = antiCSRFToken
-        } else {
-          debug("No antiCSRFToken cookie found")
-        }
-      } catch (e: any) {
-        if (e.code === "MODULE_NOT_FOUND") {
-          console.error(
-            "Blitz Auth is enabled but @blitzjs/auth is not installed. Please check if @blitzjs/auth is in your dependencies",
-          )
-        }
-        throw e
-      }
-    } else if (globalThis.__BLITZ_RPC_CSRF_OPTIONS) {
-      const antiCSRFToken = getAntiCSRFToken(globalThis.__BLITZ_RPC_CSRF_OPTIONS)
-      if (antiCSRFToken) {
-        debug("Adding antiCSRFToken cookie header", antiCSRFToken)
-        headers["anti-csrf"] = antiCSRFToken
-      } else {
-        debug("No antiCSRFToken cookie found")
-      }
-    }
-
     let serialized: SuperJSONResult
     if (opts.alreadySerialized) {
       // params is already serialized with superjson when it gets here
@@ -113,87 +98,40 @@ export function __internal_buildRpcClient({
       routePathURL.searchParams.set("params", stringify(serialized.json))
       routePathURL.searchParams.set("meta", stringify(serialized.meta))
     }
+    const {
+      preRequestHook = (options: RequestInit) => options,
+      postResponseHook = (response: Response) => response,
+      rpcResponseHook = (error: Error) => error,
+    } = globalThis
+
+    console.log("preRequestHook", preRequestHook.toString())
+    console.log("postResponseHook", postResponseHook.toString())
+    console.log("rpcResponseHook", rpcResponseHook.toString())
 
     const promise = window
-      .fetch(routePathURL, {
-        method: httpMethod,
-        headers,
-        credentials: "include",
-        redirect: "follow",
-        body:
-          httpMethod === "POST"
-            ? JSON.stringify({
-                params: serialized.json,
-                meta: {
-                  params: serialized.meta,
-                },
-              })
-            : undefined,
-        signal,
-      })
+      .fetch(
+        routePathURL,
+        preRequestHook({
+          method: httpMethod,
+          credentials: "include",
+          redirect: "follow",
+          body:
+            httpMethod === "POST"
+              ? JSON.stringify({
+                  params: serialized.json,
+                  meta: {
+                    params: serialized.meta,
+                  },
+                })
+              : undefined,
+          signal,
+        }),
+      )
       .then(async (response) => {
         debug("Received request for", routePath)
-        if (response.headers) {
-          if (Boolean(globalThis.__BLITZ_AUTH_ENABLED)) {
-            try {
-              const {
-                HEADER_PUBLIC_DATA_TOKEN,
-                backupAntiCSRFTokenToLocalStorage,
-                HEADER_SESSION_CREATED,
-                getPublicDataStore,
-                HEADER_CSRF_ERROR,
-              } = await import("@blitzjs/auth")
-              backupAntiCSRFTokenToLocalStorage()
-              if (response.headers.get(HEADER_PUBLIC_DATA_TOKEN)) {
-                getPublicDataStore().updateState()
-                debug("Public data updated")
-              }
-              if (response.headers.get(HEADER_SESSION_CREATED)) {
-                // This also runs on logout, because on logout a new anon session is created
-                debug("Session created")
-                setTimeout(async () => {
-                  // Do these in the next tick to prevent various bugs like https://github.com/blitz-js/blitz/issues/2207
-                  debug("Invalidating react-query cache...")
-                  await getQueryClient().cancelQueries()
-                  await getQueryClient().resetQueries()
-                  getQueryClient().getMutationCache().clear()
-                  // We have a 100ms delay here to prevent unnecessary stale queries from running
-                  // This prevents the case where you logout on a page with
-                  // Page.authenticate = {redirectTo: '/login'}
-                  // Without this delay, queries that require authentication on the original page
-                  // will still run (but fail because you are now logged out)
-                  // Ref: https://github.com/blitz-js/blitz/issues/1935
-                }, 100)
-              }
-              if (response.headers.get(HEADER_CSRF_ERROR)) {
-                const err = new CSRFTokenMismatchError()
-                err.stack = null!
-                throw err
-              }
-            } catch (e: any) {
-              if (e.code === "MODULE_NOT_FOUND") {
-                console.error(
-                  "Blitz Auth is enabled but @blitzjs/auth is not installed. Please check if @blitzjs/auth is in your dependencies",
-                )
-              }
-              throw e
-            }
-          } else if (globalThis.__BLITZ_RPC_CSRF_OPTIONS) {
-            const antiCSRFToken = response.headers.get("anti-csrf")
-            const antiCSRFTokenFromCookie = getAntiCSRFToken(globalThis.__BLITZ_RPC_CSRF_OPTIONS)
-            if (antiCSRFTokenFromCookie !== antiCSRFToken) {
-              if (!antiCSRFToken) {
-                console.warn(
-                  `This request is missing the anti-csrf header. You can learn about adding this here: https://blitzjs.com/docs/session-management#manual-api-requests`,
-                )
-              }
-              const err = new CSRFTokenMismatchError()
-              err.stack = null!
-              throw err
-            }
-          }
-        }
-
+        document.addEventListener("blitz-auth:session-created", resetQueryClient)
+        postResponseHook(response)
+        document.removeEventListener("blitz-auth:session-created", resetQueryClient)
         if (!response.ok) {
           const error = new Error(response.statusText)
           ;(error as any).statusCode = response.status
@@ -209,21 +147,12 @@ export function __internal_buildRpcClient({
             err.stack = null!
             throw err
           }
-
           if (payload.error) {
             let error = deserialize({
               json: payload.error,
               meta: payload.meta?.error,
             }) as any
-            // We don't clear the publicDataStore for anonymous users,
-            // because there is not sensitive data
-            if (
-              error.name === "AuthenticationError" &&
-              (window as any).__publicDataStore.getData().userId
-            ) {
-              ;(window as any).__publicDataStore.clear()
-            }
-
+            rpcResponseHook(error)
             const prismaError = error.message.match(/invalid.*prisma.*invocation/i)
             if (prismaError && !("code" in error)) {
               error = new Error(prismaError[0])
