@@ -74,6 +74,10 @@ describe("paginate", () => {
           nextPage: null,
           hasMore: false,
           count: 3,
+          from: 2,
+          pageCount: 2,
+          pageSize: 2,
+          to: 3,
         },
       },
       {
@@ -88,6 +92,10 @@ describe("paginate", () => {
           nextPage: {skip: 3, take: 2},
           hasMore: true,
           count: 4,
+          from: 2,
+          pageCount: 2,
+          pageSize: 2,
+          to: 3,
         },
       },
     ]
