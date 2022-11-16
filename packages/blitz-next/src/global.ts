@@ -2,7 +2,7 @@ import {QueryClient} from "@tanstack/react-query"
 
 declare global {
   var queryClient: QueryClient
-  var preRequest: (options: RequestInit) => RequestInit
-  var rpcResponse: (response: Response) => void
-  var handleError: (error: Error) => void
+  var preRequestHook: (options: RequestInit) => RequestInit
+  var postResponseHook: (response: Response) => void
+  var rpcResponseHook: (error: Error) => void
 }

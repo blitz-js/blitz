@@ -11,9 +11,9 @@ export interface RouteUrlObject extends Pick<UrlObject, "pathname" | "query"> {
 export type EventHooks = {
   onSessionCreate?: (() => void) | undefined
   onSessionDestroy?: (() => void) | undefined
-  preRequest?: ((options: RequestInit) => RequestInit) | undefined
-  rpcResponse?: ((request: Response) => void) | undefined
-  handleError?: ((error: Error) => void) | undefined
+  preRequestHook?: ((options: RequestInit) => RequestInit) | undefined
+  postResponseHook?: ((request: Response) => void) | undefined
+  rpcResponseHook?: ((error: Error) => void) | undefined
   onBeforeRender?: ((props: any) => void) | undefined
 }
 
