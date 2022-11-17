@@ -412,7 +412,6 @@ export const AuthClientPlugin = createClientPlugin((options: AuthPluginClientOpt
         }
         // add headers to all fetch requests
         options.headers = {...options.headers, ...headers}
-        console.log("options", options)
         return options
       },
       rpcResponse: (response: Response) => {
@@ -423,7 +422,6 @@ export const AuthClientPlugin = createClientPlugin((options: AuthPluginClientOpt
             debug("Public data updated")
           }
           if (response.headers.get(HEADER_SESSION_CREATED)) {
-            console.log("Session created")
             const event = new Event("blitz-auth:session-created")
             document.dispatchEvent(event)
           }

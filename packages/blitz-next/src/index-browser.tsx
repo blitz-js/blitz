@@ -165,13 +165,11 @@ const setupBlitzClient = <TPlugins extends readonly ClientPlugin<object>[]>({
       handleError: (error: Error) => error,
     },
   )
-  // console.log("events", events)
-  globalThis.preRequest = events.preRequest as (options: RequestInit) => RequestInit
-  globalThis.rpcResponse = events.rpcResponse as (response: Response) => Response
-  globalThis.handleError = events.handleError as (error: Error) => Error
-  // console.log("preRequest", globalThis.preRequest.toString())
-  // console.log("rpcResponse", globalThis.rpcResponse.toString())
-  // console.log("handleError", globalThis.handleError.toString())
+
+  globalThis.__BLITZ_preRequest = events.preRequest as (options: RequestInit) => RequestInit
+  globalThis.__BLITZ_rpcResponse = events.rpcResponse as (response: Response) => Response
+  globalThis.__BLITZ_handleError = events.handleError as (error: Error) => Error
+
   const withBlitz = buildWithBlitz(plugins)
 
   // todo: finish this

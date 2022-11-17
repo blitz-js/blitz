@@ -45,7 +45,6 @@ export interface RpcClient<Input = unknown, Result = unknown>
 // }
 
 function resetQueryClient() {
-  console.log("Blitz RPC Session created")
   setTimeout(async () => {
     // Do these in the next tick to prevent various bugs like https://github.com/blitz-js/blitz/issues/2207
     const debug = (await import("debug")).default("blitz:rpc")
@@ -99,19 +98,14 @@ export function __internal_buildRpcClient({
       routePathURL.searchParams.set("meta", stringify(serialized.meta))
     }
     const {
-      preRequest = (options: RequestInit) => options,
-      rpcResponse = (response: Response) => response,
-      handleError = (error: Error) => error,
+      __BLITZ_preRequest = (options: RequestInit) => options,
+      __BLITZ_rpcResponse = (response: Response) => response,
+      __BLITZ_handleError = (error: Error) => error,
     } = globalThis
-
-    console.log("preRequest", preRequest.toString())
-    console.log("rpcResponse", rpcResponse.toString())
-    console.log("handleError", handleError.toString())
-
     const promise = window
       .fetch(
         routePathURL,
-        preRequest({
+        __BLITZ_preRequest({
           method: httpMethod,
           credentials: "include",
           redirect: "follow",
@@ -130,7 +124,7 @@ export function __internal_buildRpcClient({
       .then(async (response) => {
         debug("Received request for", routePath)
         document.addEventListener("blitz-auth:session-created", resetQueryClient)
-        rpcResponse(response)
+        __BLITZ_rpcResponse(response)
         document.removeEventListener("blitz-auth:session-created", resetQueryClient)
         if (!response.ok) {
           const error = new Error(response.statusText)
@@ -152,7 +146,7 @@ export function __internal_buildRpcClient({
               json: payload.error,
               meta: payload.meta?.error,
             }) as any
-            handleError(error)
+            __BLITZ_handleError(error)
             const prismaError = error.message.match(/invalid.*prisma.*invocation/i)
             if (prismaError && !("code" in error)) {
               error = new Error(prismaError[0])

@@ -4,7 +4,7 @@ declare global {
   var queryClient: QueryClient
   var __BLITZ_SUSPENSE_ENABLED: boolean
   var __BLITZ_AUTH_ENABLED: boolean
-  var preRequest: (options: RequestInit) => RequestInit
-  var rpcResponse: (response: Response) => void
-  var handleError: (error: Error) => void
+  var __BLITZ_preRequest: (options: RequestInit) => RequestInit
+  var __BLITZ_rpcResponse: (response: Response) => void
+  var __BLITZ_handleError: (error: Error) => void
 }
