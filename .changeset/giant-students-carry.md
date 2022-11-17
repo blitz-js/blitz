@@ -1,5 +1,5 @@
 ---
-"@blitzjs/generator": patch
+"@blitzjs/generator": fix
 ---
 
 Update form paths when running blitz generate all
