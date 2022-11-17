@@ -10,7 +10,6 @@ import {
   UseMutationOptions,
   UseMutationResult,
 } from "@tanstack/react-query"
-import {useSession} from "@blitzjs/auth"
 import {isServer, FirstParam, PromiseReturnType, AsyncFunc} from "blitz"
 import {
   emptyQueryFn,
@@ -73,11 +72,6 @@ export function useQuery<
   const suspenseEnabled = Boolean(globalThis.__BLITZ_SUSPENSE_ENABLED)
   let enabled = isServer && suspenseEnabled ? false : options?.enabled ?? options?.enabled !== null
   const suspense = enabled === false ? false : options?.suspense
-  const session = useSession({suspense})
-  if (session.isLoading) {
-    enabled = false
-  }
-
   const routerIsReady = useRouter().isReady || (isServer && suspenseEnabled)
   const enhancedResolverRpcClient = sanitizeQuery(queryFn)
   const queryKey = getQueryKey(queryFn, params)
@@ -157,12 +151,6 @@ export function usePaginatedQuery<
   const suspenseEnabled = Boolean(globalThis.__BLITZ_SUSPENSE_ENABLED)
   let enabled = isServer && suspenseEnabled ? false : options?.enabled ?? options?.enabled !== null
   const suspense = enabled === false ? false : options?.suspense
-
-  const session = useSession({suspense})
-  if (session.isLoading) {
-    enabled = false
-  }
-
   const routerIsReady = useRouter().isReady || (isServer && suspenseEnabled)
   const enhancedResolverRpcClient = sanitizeQuery(queryFn)
   const queryKey = getQueryKey(queryFn, params)
@@ -252,11 +240,6 @@ export function useInfiniteQuery<
   const suspenseEnabled = Boolean(globalThis.__BLITZ_SUSPENSE_ENABLED)
   let enabled = isServer && suspenseEnabled ? false : options?.enabled ?? options?.enabled !== null
   const suspense = enabled === false ? false : options?.suspense
-  const session = useSession({suspense})
-  if (session.isLoading) {
-    enabled = false
-  }
-
   const routerIsReady = useRouter().isReady || (isServer && suspenseEnabled)
   const enhancedResolverRpcClient = sanitizeQuery(queryFn)
   const queryKey = getInfiniteQueryKey(queryFn, getQueryParams)
