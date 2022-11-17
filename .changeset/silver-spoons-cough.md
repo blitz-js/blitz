@@ -1,6 +1,4 @@
 ---
-"toolkit-app-passport": patch
-"toolkit-app": patch
 "blitz": patch
 "@blitzjs/generator": patch
 ---
