@@ -1,5 +1,17 @@
 # @blitzjs/rpc
 
+## 2.0.0-beta.18
+
+### Minor Changes
+
+- 72a4e594: internal: remove unneeed useSession from useQuery hooks
+- c0a3b1ee: Fix mutability bug in RPC configuration
+
+### Patch Changes
+
+- ed2b0e22: Add ability to put your query and mutation resolvers in a separate monorepo folder, allowing you to use them in multiple apps.
+  - @blitzjs/auth@2.0.0-beta.18
+
 ## 2.0.0-beta.17
 
 ### Patch Changes
