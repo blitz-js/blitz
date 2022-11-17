@@ -32,6 +32,25 @@ const runTests = () => {
     )
   })
 
+  describe("get query data from monorepo", () => {
+    it(
+      "should work",
+      async () => {
+        const browser = await webdriver(appPort, "/page-with-monorepo-query")
+
+        browser.waitForElementByCss("#button", 0)
+        await browser.elementByCss("#button").click()
+
+        browser.waitForElementByCss("#new-data", 0)
+        const newText = await browser.elementByCss("#new-data").text()
+        expect(newText).toMatch(/basic-result/)
+
+        if (browser) await browser.close()
+      },
+      5000 * 60 * 2,
+    )
+  })
+
   describe("prefetch infinite query", () => {
     it(
       "should work",

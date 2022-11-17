@@ -17,6 +17,10 @@ const config: BuildConfig = {
     "blitz",
     "next",
     "zod",
+    "next",
+    "next/router",
+    "next/dist/client/normalize-trailing-slash",
+    "next/dist/client/add-base-path",
   ],
   declaration: true,
   rollup: {

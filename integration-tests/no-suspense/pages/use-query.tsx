@@ -1,9 +1,9 @@
-import getBasic from "../app/queries/getBasic"
+import getNoSuspenseBasic from "../app/queries/getNoSuspenseBasic"
 import {useQuery} from "@blitzjs/rpc"
 import React from "react"
 
 function Content() {
-  const [result, {isFetching}] = useQuery(getBasic, undefined)
+  const [result, {isFetching}] = useQuery(getNoSuspenseBasic, undefined)
 
   if (isFetching) {
     return <>Loading...</>
