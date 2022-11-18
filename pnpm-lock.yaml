@@ -50,7 +50,7 @@ importers:
       "@types/preview-email": 2.0.1
       "@types/react": 18.0.25
       "@typescript-eslint/eslint-plugin": 5.42.1
-      blitz: workspace:2.0.0-beta.17
+      blitz: workspace:2.0.0-beta.18
       eslint: 8.27.0
       eslint-config-next: 12.3.1
       eslint-config-prettier: 8.5.0
@@ -125,7 +125,7 @@ importers:
       "@types/preview-email": 2.0.1
       "@types/react": 18.0.25
       "@typescript-eslint/eslint-plugin": 5.42.1
-      blitz: workspace:2.0.0-beta.17
+      blitz: workspace:2.0.0-beta.18
       eslint: 8.27.0
       eslint-config-next: 12.3.1
       eslint-config-prettier: 8.5.0
@@ -245,7 +245,7 @@ importers:
       "@types/node-fetch": 2.6.1
       "@types/react": 18.0.25
       b64-lite: 1.4.0
-      blitz: workspace:2.0.0-beta.17
+      blitz: workspace:2.0.0-beta.18
       eslint: 8.27.0
       fs-extra: 10.0.1
       get-port: 6.1.2
@@ -551,6 +551,43 @@ importers:
       fs-extra: 10.0.1
       typescript: 4.8.4
 
+  integration-tests/rpc-path-root:
+    specifiers:
+      "@blitzjs/auth": workspace:*
+      "@blitzjs/config": workspace:*
+      "@blitzjs/next": workspace:*
+      "@blitzjs/rpc": workspace:*
+      "@types/express": 4.17.13
+      "@types/fs-extra": 9.0.13
+      "@types/node-fetch": 2.6.1
+      "@types/react": 18.0.25
+      b64-lite: 1.4.0
+      blitz: workspace:*
+      eslint: 8.27.0
+      fs-extra: 10.0.1
+      next: 12.2.5
+      react: 18.2.0
+      react-dom: 18.2.0
+      typescript: ^4.8.4
+    dependencies:
+      "@blitzjs/auth": link:../../packages/blitz-auth
+      "@blitzjs/config": link:../../packages/config
+      "@blitzjs/next": link:../../packages/blitz-next
+      "@blitzjs/rpc": link:../../packages/blitz-rpc
+      blitz: link:../../packages/blitz
+      next: 12.2.5_biqbaboplfbrettd7655fr4n2y
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    devDependencies:
+      "@types/express": 4.17.13
+      "@types/fs-extra": 9.0.13
+      "@types/node-fetch": 2.6.1
+      "@types/react": 18.0.25
+      b64-lite: 1.4.0
+      eslint: 8.27.0
+      fs-extra: 10.0.1
+      typescript: 4.8.4
+
   integration-tests/trailing-slash:
     specifiers:
       "@blitzjs/auth": workspace:*
@@ -620,7 +657,7 @@ importers:
       get-port: 6.1.2
       node-fetch: 3.2.3
       pkg-dir: 5.0.0
-      playwright-chromium: 1.14.1
+      playwright-chromium: 1.28.0
       react: 18.2.0
       react-dom: 18.2.0
       resolve-cwd: 3.0.0
@@ -648,7 +685,7 @@ importers:
       get-port: 6.1.2
       node-fetch: 3.2.3
       pkg-dir: 5.0.0
-      playwright-chromium: 1.14.1
+      playwright-chromium: 1.28.0
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       resolve-cwd: 3.0.0
@@ -660,8 +697,8 @@ importers:
 
   packages/blitz:
     specifiers:
-      "@blitzjs/config": workspace:2.0.0-beta.17
-      "@blitzjs/generator": 2.0.0-beta.17
+      "@blitzjs/config": workspace:2.0.0-beta.18
+      "@blitzjs/generator": 2.0.0-beta.18
       "@mrleebo/prisma-ast": 0.2.6
       "@types/cookie": 0.4.1
       "@types/cross-spawn": 6.0.2
@@ -809,7 +846,7 @@ importers:
 
   packages/blitz-auth:
     specifiers:
-      "@blitzjs/config": workspace:2.0.0-beta.17
+      "@blitzjs/config": workspace:2.0.0-beta.18
       "@testing-library/react": 13.4.0
       "@testing-library/react-hooks": 8.0.1
       "@types/b64-lite": 1.3.0
@@ -823,7 +860,7 @@ importers:
       "@types/secure-password": 3.1.1
       b64-lite: 1.4.0
       bad-behavior: 1.0.1
-      blitz: 2.0.0-beta.17
+      blitz: 2.0.0-beta.18
       cookie: 0.4.1
       cookie-session: 2.0.0
       debug: 4.3.3
@@ -876,8 +913,8 @@ importers:
 
   packages/blitz-next:
     specifiers:
-      "@blitzjs/config": workspace:2.0.0-beta.17
-      "@blitzjs/rpc": 2.0.0-beta.17
+      "@blitzjs/config": workspace:2.0.0-beta.18
+      "@blitzjs/rpc": 2.0.0-beta.18
       "@tanstack/react-query": 4.0.10
       "@testing-library/dom": 8.13.0
       "@testing-library/jest-dom": 5.16.3
@@ -889,7 +926,7 @@ importers:
       "@types/react": 18.0.25
       "@types/react-dom": 17.0.14
       "@types/testing-library__react-hooks": 4.0.0
-      blitz: 2.0.0-beta.17
+      blitz: 2.0.0-beta.18
       cross-spawn: 7.0.3
       debug: 4.3.3
       find-up: 4.1.0
@@ -939,8 +976,8 @@ importers:
 
   packages/blitz-rpc:
     specifiers:
-      "@blitzjs/auth": 2.0.0-beta.17
-      "@blitzjs/config": workspace:2.0.0-beta.17
+      "@blitzjs/auth": 2.0.0-beta.18
+      "@blitzjs/config": workspace:2.0.0-beta.18
       "@swc/core": 1.3.7
       "@tanstack/react-query": 4.0.10
       "@types/debug": 4.1.7
@@ -948,7 +985,7 @@ importers:
       "@types/react-dom": 17.0.14
       b64-lite: 1.4.0
       bad-behavior: 1.0.1
-      blitz: 2.0.0-beta.17
+      blitz: 2.0.0-beta.18
       chalk: ^4.1.0
       debug: 4.3.3
       next: 12.2.5
@@ -992,12 +1029,12 @@ importers:
       "@babel/plugin-syntax-typescript": 7.17.12
       "@babel/preset-env": 7.12.10
       "@blitzjs/config": workspace:*
-      "@blitzjs/generator": 2.0.0-beta.17
+      "@blitzjs/generator": 2.0.0-beta.18
       "@types/jscodeshift": 0.11.2
       "@types/node": 18.11.9
       arg: 5.0.1
       ast-types: 0.14.2
-      blitz: 2.0.0-beta.17
+      blitz: 2.0.0-beta.18
       chalk: ^4.1.0
       cross-spawn: 7.0.3
       debug: 4.3.3
@@ -1052,7 +1089,7 @@ importers:
       "@babel/plugin-transform-typescript": 7.12.1
       "@babel/preset-env": 7.12.10
       "@babel/types": 7.12.10
-      "@blitzjs/config": 2.0.0-beta.17
+      "@blitzjs/config": 2.0.0-beta.18
       "@juanm04/cpx": 2.0.1
       "@mrleebo/prisma-ast": 0.4.1
       "@types/babel__core": 7.1.19
@@ -1147,7 +1184,7 @@ importers:
 
   packages/pkg-template:
     specifiers:
-      "@blitzjs/config": 2.0.0-beta.17
+      "@blitzjs/config": 2.0.0-beta.18
       "@types/react": 18.0.25
       "@types/react-dom": 17.0.14
       "@typescript-eslint/eslint-plugin": 5.42.1
@@ -1171,7 +1208,7 @@ importers:
   recipes/base-web:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: 2.0.0-beta.17
+      blitz: 2.0.0-beta.18
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1182,7 +1219,7 @@ importers:
   recipes/bulma:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: 2.0.0-beta.17
+      blitz: 2.0.0-beta.18
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1194,7 +1231,7 @@ importers:
     specifiers:
       "@types/jscodeshift": 0.11.2
       ast-types: 0.14.2
-      blitz: 2.0.0-beta.17
+      blitz: 2.0.0-beta.18
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1207,7 +1244,7 @@ importers:
     specifiers:
       "@types/jscodeshift": 0.11.2
       ast-types: 0.14.2
-      blitz: 2.0.0-beta.17
+      blitz: 2.0.0-beta.18
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1219,7 +1256,7 @@ importers:
   recipes/emotion:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: 2.0.0-beta.17
+      blitz: 2.0.0-beta.18
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1229,20 +1266,20 @@ importers:
 
   recipes/gh-action-yarn-mariadb:
     specifiers:
-      blitz: 2.0.0-beta.17
+      blitz: 2.0.0-beta.18
     dependencies:
       blitz: link:../../packages/blitz
 
   recipes/gh-action-yarn-postgres:
     specifiers:
-      blitz: 2.0.0-beta.17
+      blitz: 2.0.0-beta.18
     dependencies:
       blitz: link:../../packages/blitz
 
   recipes/ghost:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: 2.0.0-beta.17
+      blitz: 2.0.0-beta.18
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1253,7 +1290,7 @@ importers:
   recipes/graphql-apollo-server:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: 2.0.0-beta.17
+      blitz: 2.0.0-beta.18
       jscodeshift: 0.13.0
       uuid: ^8.3.1
     dependencies:
@@ -1266,7 +1303,7 @@ importers:
   recipes/logrocket:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: 2.0.0-beta.17
+      blitz: 2.0.0-beta.18
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1277,7 +1314,7 @@ importers:
   recipes/material-ui:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: 2.0.0-beta.17
+      blitz: 2.0.0-beta.18
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1289,7 +1326,7 @@ importers:
     specifiers:
       "@types/jscodeshift": 0.11.2
       ast-types: 0.14.2
-      blitz: 2.0.0-beta.17
+      blitz: 2.0.0-beta.18
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1300,13 +1337,13 @@ importers:
 
   recipes/passenger:
     specifiers:
-      blitz: 2.0.0-beta.17
+      blitz: 2.0.0-beta.18
     dependencies:
       blitz: link:../../packages/blitz
 
   recipes/quirrel:
     specifiers:
-      blitz: 2.0.0-beta.17
+      blitz: 2.0.0-beta.18
     dependencies:
       blitz: link:../../packages/blitz
 
@@ -1314,7 +1351,7 @@ importers:
     specifiers:
       "@types/jscodeshift": 0.11.2
       ast-types: 0.14.2
-      blitz: 2.0.0-beta.17
+      blitz: 2.0.0-beta.18
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1325,14 +1362,14 @@ importers:
 
   recipes/render:
     specifiers:
-      blitz: 2.0.0-beta.17
+      blitz: 2.0.0-beta.18
     dependencies:
       blitz: link:../../packages/blitz
 
   recipes/secureheaders:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: 2.0.0-beta.17
+      blitz: 2.0.0-beta.18
       jscodeshift: 0.13.0
       uuid: ^8.3.1
     dependencies:
@@ -1345,7 +1382,7 @@ importers:
   recipes/stitches:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: 2.0.0-beta.17
+      blitz: 2.0.0-beta.18
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1357,7 +1394,7 @@ importers:
     specifiers:
       "@types/jscodeshift": 0.11.2
       ast-types: 0.14.2
-      blitz: 2.0.0-beta.17
+      blitz: 2.0.0-beta.18
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1369,7 +1406,7 @@ importers:
   recipes/tailwind:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: 2.0.0-beta.17
+      blitz: 2.0.0-beta.18
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1381,7 +1418,7 @@ importers:
     specifiers:
       "@types/jscodeshift": 0.11.2
       ast-types: 0.14.2
-      blitz: 2.0.0-beta.17
+      blitz: 2.0.0-beta.18
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1393,7 +1430,7 @@ importers:
   recipes/vanilla-extract:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: 2.0.0-beta.17
+      blitz: 2.0.0-beta.18
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -13576,13 +13613,6 @@ packages:
     engines: {node: ">=10"}
     dev: true
 
-  /jpeg-js/0.4.4:
-    resolution:
-      {
-        integrity: sha512-WZzeDOEtTOBK4Mdsar0IqEU5sMr3vSV2RqkAIzUEV2BHnUfKGyswWFPFwK5EeDo93K3FohSHbLAjj0s1Wzd+dg==,
-      }
-    dev: true
-
   /js-sdsl/4.1.5:
     resolution:
       {
@@ -14767,15 +14797,6 @@ packages:
         integrity: sha512-x0Vn8spI+wuJ1O6S7gnbaQg8Pxh4NNHb7KSINmEWKiPE4RKOplvijn+NkmYmmRgP68mc70j2EbeTFRsrswaQeg==,
       }
     engines: {node: ">=4"}
-    hasBin: true
-    dev: true
-
-  /mime/2.6.0:
-    resolution:
-      {
-        integrity: sha512-USPkMeET31rOMiarsBNIHZKLGgvKc/LrjofAnBlOttf5ajRvqiRA8QsenbcooctK6d6Ts6aqZXBA+XbkKthiQg==,
-      }
-    engines: {node: ">=4.0.0"}
     hasBin: true
     dev: true
 
@@ -16200,33 +16221,25 @@ packages:
       pathe: 0.3.2
     dev: true
 
-  /playwright-chromium/1.14.1:
+  /playwright-chromium/1.28.0:
     resolution:
       {
-        integrity: sha512-gAHDcrBKrl1Az6TuzC4T013Nl+qKVZeblc2VkElHqEuNQHPKW7840cQBZavFz38xJshC993iClVc6Y+bLgF8FA==,
+        integrity: sha512-5IUBJShMJMaK6NmRj/7KWdvVqd7J8DqLH0wVdXBs/4MfZUAvByBB35y5v6B33NjlJg3SZGX5alR8TANrcKaJNA==,
       }
-    engines: {node: ">=12"}
+    engines: {node: ">=14"}
     hasBin: true
     requiresBuild: true
     dependencies:
-      commander: 6.2.1
-      debug: 4.3.4
-      extract-zip: 2.0.1
-      https-proxy-agent: 5.0.1
-      jpeg-js: 0.4.4
-      mime: 2.6.0
-      pngjs: 5.0.0
-      progress: 2.0.3
-      proper-lockfile: 4.1.2
-      proxy-from-env: 1.1.0
-      rimraf: 3.0.2
-      stack-utils: 2.0.5
-      ws: 7.5.8
-      yazl: 2.5.1
-    transitivePeerDependencies:
-      - bufferutil
-      - supports-color
-      - utf-8-validate
+      playwright-core: 1.28.0
+    dev: true
+
+  /playwright-core/1.28.0:
+    resolution:
+      {
+        integrity: sha512-nJLknd28kPBiCNTbqpu6Wmkrh63OEqJSFw9xOfL9qxfNwody7h6/L3O2dZoWQ6Oxcm0VOHjWmGiCUGkc0X3VZA==,
+      }
+    engines: {node: ">=14"}
+    hasBin: true
     dev: true
 
   /pluralize/8.0.0:
@@ -16236,14 +16249,6 @@ packages:
       }
     engines: {node: ">=4"}
     dev: false
-
-  /pngjs/5.0.0:
-    resolution:
-      {
-        integrity: sha512-40QW5YalBNfQo5yRYmiw7Yz6TKKVr3h6970B2YE+3fQpsWcrbj1PzJgxeJ19DRQjhMbKPIuMY8rFaXc8moolVw==,
-      }
-    engines: {node: ">=10.13.0"}
-    dev: true
 
   /posix-character-classes/0.1.1:
     resolution:
@@ -16437,6 +16442,7 @@ packages:
         integrity: sha512-7PiHtLll5LdnKIMw100I+8xJXR5gW2QwWYkT6iJva0bXitZKa/XMrSbdmg3r2Xnaidz9Qumd0VPaMrZlF9V9sA==,
       }
     engines: {node: ">=0.4.0"}
+    dev: false
 
   /promise/7.3.1:
     resolution:
@@ -16466,17 +16472,6 @@ packages:
       loose-envify: 1.4.0
       object-assign: 4.1.1
       react-is: 16.13.1
-
-  /proper-lockfile/4.1.2:
-    resolution:
-      {
-        integrity: sha512-TjNPblN4BwAWMXU8s9AEz4JmQxnD1NNL7bNOY/AKUzyamc379FWASUhc/K1pL2noVb+XmZKLL68cjzLsiOAMaA==,
-      }
-    dependencies:
-      graceful-fs: 4.2.10
-      retry: 0.12.0
-      signal-exit: 3.0.7
-    dev: true
 
   /proxy-addr/2.0.7:
     resolution:
@@ -17216,14 +17211,6 @@ packages:
         integrity: sha512-TTlYpa+OL+vMMNG24xSlQGEJ3B/RzEfUlLct7b5G/ytav+wPrplCpVMFuwzXbkecJrb6IYo1iFb0S9v37754mg==,
       }
     engines: {node: ">=0.12"}
-
-  /retry/0.12.0:
-    resolution:
-      {
-        integrity: sha512-9LkiTwjUh6rT555DtE9rTX+BKByPfrMzEAtnlEtdEwr3Nkffwiihqe2bWADg+OQRjt9gl6ICdmB/ZFDCGAtSow==,
-      }
-    engines: {node: ">= 4"}
-    dev: true
 
   /reusify/1.0.4:
     resolution:
@@ -20123,15 +20110,6 @@ packages:
     dependencies:
       buffer-crc32: 0.2.13
       fd-slicer: 1.1.0
-    dev: true
-
-  /yazl/2.5.1:
-    resolution:
-      {
-        integrity: sha512-phENi2PLiHnHb6QBVot+dJnaAZ0xosj7p3fWl+znIjBDlnMI2PsZCJZ306BPTFOaHf5qdDEI8x5qFrSOBN5vrw==,
-      }
-    dependencies:
-      buffer-crc32: 0.2.13
     dev: true
 
   /yn/3.1.1:
