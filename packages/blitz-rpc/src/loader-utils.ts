@@ -1,5 +1,5 @@
 import {assert} from "blitz"
-import {posix, sep, win32} from "path"
+import {posix, sep, win32, join} from "path"
 import {ResolverPathOptions} from "./index-server"
 
 export interface LoaderOptions {
@@ -50,19 +50,30 @@ export function buildPageExtensionRegex(pageExtensions: string[]) {
 
 const fileExtensionRegex = /\.([a-z]+)$/
 
-export function convertPageFilePathToRoutePath(
-  filePath: string,
-  resolverPath?: ResolverPathOptions,
-) {
-  if (typeof resolverPath === "function") {
-    return resolverPath(filePath)
+export function convertPageFilePathToRoutePath({
+  absoluteFilePath,
+  resolverBasePath,
+  appRoot,
+  extraRpcBasePaths = [],
+}: {
+  appRoot: string
+  absoluteFilePath: string
+  resolverBasePath?: ResolverPathOptions
+  extraRpcBasePaths?: string[]
+}) {
+  if (typeof resolverBasePath === "function") {
+    return resolverBasePath(absoluteFilePath).replace(fileExtensionRegex, "")
   }
 
-  if (resolverPath === "root") {
-    return filePath.replace(fileExtensionRegex, "")
+  if (resolverBasePath === "root") {
+    let path = absoluteFilePath.replace(appRoot, "")
+    for (const extraPath of extraRpcBasePaths) {
+      path = path.replace(join(appRoot, extraPath), "")
+    }
+    return path.replace(fileExtensionRegex, "")
   }
 
-  return filePath
+  return absoluteFilePath
     .replace(/^.*?[\\/]queries[\\/]/, "/")
     .replace(/^.*?[\\/]mutations[\\/]/, "/")
     .replace(/\\/g, "/")

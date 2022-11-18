@@ -57,14 +57,18 @@ export async function transformBlitzRpcServer(
   let code = blitzImport + src
   code += "\n\n"
   for (let resolverFilePath of resolvers) {
-    const routePath = convertPageFilePathToRoutePath(slash(resolverFilePath), options?.resolverPath)
+    const routePath = convertPageFilePathToRoutePath({
+      appRoot: slash(root),
+      absoluteFilePath: slash(resolverFilePath),
+      resolverBasePath: options?.resolverPath,
+      extraRpcBasePaths: options?.includeRPCFolders,
+    })
 
     code += `__internal_addBlitzRpcResolver('${routePath}',() => import('${slash(
       resolverFilePath,
     )}'));`
     code += "\n"
   }
-  // console.log("NEW CODE", code)
   return code
 }
 
