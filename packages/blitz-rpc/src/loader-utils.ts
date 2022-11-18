@@ -1,5 +1,5 @@
 import {assert} from "blitz"
-import {posix, sep, win32, join} from "path"
+import {posix, sep, win32, join, normalize} from "path"
 import {ResolverPathOptions} from "./index-server"
 
 export interface LoaderOptions {
@@ -61,14 +61,14 @@ export function convertPageFilePathToRoutePath({
   resolverBasePath?: ResolverPathOptions
   extraRpcBasePaths?: string[]
 }) {
-  let path = absoluteFilePath
+  let path = normalize(absoluteFilePath)
 
   if (typeof resolverBasePath === "function") {
-    path = resolverBasePath(absoluteFilePath)
+    path = resolverBasePath(path)
   } else if (resolverBasePath === "root") {
-    path = path.replace(appRoot, "")
+    path = path.replace(normalize(appRoot), "")
     for (const extraPath of extraRpcBasePaths) {
-      path = path.replace(join(appRoot, extraPath.replace("/", sep)), "")
+      path = path.replace(join(normalize(appRoot), extraPath.replace("/", sep)), "")
     }
   } else {
     path = path.replace(/^.*?[\\/]queries[\\/]/, "/").replace(/^.*?[\\/]mutations[\\/]/, "/")
