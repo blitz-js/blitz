@@ -406,13 +406,7 @@ export const AuthClientPlugin = createClientPlugin((options: AuthPluginClientOpt
         }
       },
       onSessionCreated: async (resetQueryClient) => {
-        console.log("onSessionCreated")
-        // TODO Fix this
-        document.addEventListener(
-          "blitz-auth:session-created",
-          resetQueryClient as EventListenerOrEventListenerObject,
-          {once: true},
-        )
+        document.addEventListener("blitz-auth:session-created", resetQueryClient, {once: true})
       },
     },
     middleware: {

@@ -98,10 +98,10 @@ export function __internal_buildRpcClient({
       routePathURL.searchParams.set("meta", stringify(serialized.meta))
     }
     const {
-      __BLITZ_beforeHttpRequest = (options: RequestInit) => options,
-      __BLITZ_beforeHttpResponse = (response: Response) => response,
-      __BLITZ_onRpcError = Promise.resolve,
-      __BLITZ_onSessionCreated = Promise.resolve,
+      __BLITZ_beforeHttpRequest,
+      __BLITZ_beforeHttpResponse,
+      __BLITZ_onRpcError,
+      __BLITZ_onSessionCreated,
     } = globalThis
 
     const promise = window
@@ -128,8 +128,7 @@ export function __internal_buildRpcClient({
       )
       .then(async (response) => {
         debug("Received request for", routePath)
-        // TODO Fix this
-        await Promise.all<any>(__BLITZ_onSessionCreated(resetQueryClient))
+        await Promise.all(__BLITZ_onSessionCreated(resetQueryClient))
         __BLITZ_beforeHttpResponse(response)
         if (!response.ok) {
           const error = new Error(response.statusText)
@@ -151,8 +150,7 @@ export function __internal_buildRpcClient({
               json: payload.error,
               meta: payload.meta?.error,
             }) as any
-            // TODO Fix this
-            await Promise.all<any>(__BLITZ_onRpcError(error))
+            await Promise.all(__BLITZ_onRpcError(error))
             const prismaError = error.message.match(/invalid.*prisma.*invocation/i)
             if (prismaError && !("code" in error)) {
               error = new Error(prismaError[0])

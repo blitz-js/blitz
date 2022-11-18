@@ -9,7 +9,7 @@ export interface RouteUrlObject extends Pick<UrlObject, "pathname" | "query"> {
 }
 
 export type EventHooks = {
-  onSessionCreated?: (x: unknown) => Promise<any>
+  onSessionCreated?: OnSessionCreated
   onRpcError?: OnRpcError
 }
 
@@ -17,7 +17,13 @@ export type BeforeHttpRequest = (options: RequestInit) => RequestInit
 
 export type BeforeHttpResponse = (response: Response) => Response
 
-export type OnRpcError = (error: Error) => Promise<any>
+export type OnRpcError = (error: Error) => Promise<void>
+
+export type OnRpcErrorHook = (error: Error) => Promise<void>[]
+
+export type OnSessionCreated = (resetQueryClient: () => void) => Promise<void>
+
+export type OnSessionCreatedHook = (resetQueryClient: () => void) => Promise<void>[]
 
 export type MiddlewareHooks = {
   beforeHttpRequest?: BeforeHttpRequest

@@ -7,6 +7,7 @@ import type {
   MiddlewareHooks,
   BeforeHttpRequest,
   BeforeHttpResponse,
+  EventHooks,
 } from "blitz"
 import Head from "next/head"
 import React, {ReactNode} from "react"
@@ -150,8 +151,7 @@ const setupBlitzClient = <TPlugins extends readonly ClientPlugin<object>[]>({
     (x: any) =>
       fns.map((fn) => fn(x))
   const events = plugins.reduce(
-    (acc, plugin) => ({
-      // onRpcError: merge(acc.onRpcError, plugin.events.onRpcError),
+    (acc: any, plugin) => ({
       onRpcError: plugin.events.onRpcError
         ? merge(acc.onRpcError, plugin.events.onRpcError)
         : acc.onRpcError,
@@ -160,8 +160,8 @@ const setupBlitzClient = <TPlugins extends readonly ClientPlugin<object>[]>({
         : acc.onSessionCreated,
     }),
     {
-      onRpcError: (x: any) => [x],
-      onSessionCreated: (x: any) => [x],
+      onRpcError: async (error: Error) => {},
+      onSessionCreated: async (resetQueryClient: () => void) => {},
     },
   )
 

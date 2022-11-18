@@ -280,9 +280,10 @@ const authorize: ResolverAuthorize = (...args) => {
       log.warn(
         "You are using the resolver `authorize` function, but `@blitzjs/auth` plugin is not initialised. Consider enabling to use authentication features.",
       )
+    } else {
+      const session: SessionContext = (ctx as any).session
+      session.$authorize(...args)
     }
-    const session: SessionContext = (ctx as any).session
-    session.$authorize(...args)
     return {
       __blitz: true,
       value: input,
