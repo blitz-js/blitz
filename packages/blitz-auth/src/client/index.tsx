@@ -293,7 +293,6 @@ export function getAuthValues<TProps = any>(
 }
 
 function withBlitzAuthPlugin<TProps = any>(Page: ComponentType<TProps> | BlitzPage<TProps>) {
-  globalThis.__BLITZ_AUTH_ENABLED = true
   const AuthRoot = (props: ComponentProps<any>) => {
     useSession({suspense: false})
     const [mounted, setMounted] = useState(false)
@@ -399,7 +398,25 @@ export const AuthClientPlugin = createClientPlugin((options: AuthPluginClientOpt
   return {
     withProvider: withBlitzAuthPlugin,
     events: {
-      preRequest: (options: RequestInit) => {
+      onRpcError: async (error: Error) => {
+        // We don't clear the publicDataStore for anonymous users,
+        // because there is not sensitive data
+        if (error.name === "AuthenticationError" && getPublicDataStore().getData().userId) {
+          getPublicDataStore().clear()
+        }
+      },
+      onSessionCreated: async (resetQueryClient) => {
+        console.log("onSessionCreated")
+        // TODO Fix this
+        document.addEventListener(
+          "blitz-auth:session-created",
+          resetQueryClient as EventListenerOrEventListenerObject,
+          {once: true},
+        )
+      },
+    },
+    middleware: {
+      beforeHttpRequest(options: RequestInit) {
         const headers: Record<string, any> = {
           "Content-Type": "application/json",
         }
@@ -414,33 +431,26 @@ export const AuthClientPlugin = createClientPlugin((options: AuthPluginClientOpt
         options.headers = {...options.headers, ...headers}
         return options
       },
-      rpcResponse: (response: Response) => {
-        if (response.headers) {
+      beforeHttpResponse(res) {
+        if (res.headers) {
           backupAntiCSRFTokenToLocalStorage()
-          if (response.headers.get(HEADER_PUBLIC_DATA_TOKEN)) {
+          if (res.headers.get(HEADER_PUBLIC_DATA_TOKEN)) {
             getPublicDataStore().updateState()
             debug("Public data updated")
           }
-          if (response.headers.get(HEADER_SESSION_CREATED)) {
+          if (res.headers.get(HEADER_SESSION_CREATED)) {
             const event = new Event("blitz-auth:session-created")
             document.dispatchEvent(event)
           }
-          if (response.headers.get(HEADER_CSRF_ERROR)) {
+          if (res.headers.get(HEADER_CSRF_ERROR)) {
             const err = new CSRFTokenMismatchError()
             err.stack = null!
             throw err
           }
         }
-      },
-      handleError: (error: Error) => {
-        // We don't clear the publicDataStore for anonymous users,
-        // because there is not sensitive data
-        if (error.name === "AuthenticationError" && getPublicDataStore().getData().userId) {
-          getPublicDataStore().clear()
-        }
+        return res
       },
     },
-    middleware: {},
     exports: () => ({
       useSession,
       useAuthorize,

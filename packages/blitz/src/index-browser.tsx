@@ -9,7 +9,7 @@ import {
   PaginationArgumentError,
   RedirectError,
 } from "./errors"
-import {EventHooks} from "./types"
+import {EventHooks, MiddlewareHooks} from "./types"
 export {
   AuthenticationError,
   AuthorizationError,
@@ -27,18 +27,7 @@ export type BlitzProviderComponentType = <TProps = any>(
 }
 export interface ClientPlugin<Exports extends object> {
   events: EventHooks
-  middleware: {
-    beforeHttpRequest?: (
-      req: IncomingMessage,
-      res: ServerResponse,
-      next: (error?: Error) => Promise<void> | void,
-    ) => void
-    beforeHttpResponse?: (
-      req: IncomingMessage,
-      res: ServerResponse,
-      next: (error?: Error) => Promise<void> | void,
-    ) => void
-  }
+  middleware: MiddlewareHooks
   exports: () => Exports
   withProvider?: BlitzProviderComponentType
 }

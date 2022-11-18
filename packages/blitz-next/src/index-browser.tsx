@@ -4,7 +4,9 @@ import type {
   BlitzProviderComponentType,
   UnionToIntersection,
   Simplify,
-  EventHooks,
+  MiddlewareHooks,
+  BeforeHttpRequest,
+  BeforeHttpResponse,
 } from "blitz"
 import Head from "next/head"
 import React, {ReactNode} from "react"
@@ -143,32 +145,56 @@ const setupBlitzClient = <TPlugins extends readonly ClientPlugin<object>[]>({
   //   allMiddleware.push(middleware)
   // }
   const exports = plugins.reduce((acc, plugin) => ({...plugin.exports(), ...acc}), {})
+  const merge =
+    (...fns: any[]) =>
+    (x: any) =>
+      fns.map((fn) => fn(x))
+  const events = plugins.reduce(
+    (acc, plugin) => ({
+      // onRpcError: merge(acc.onRpcError, plugin.events.onRpcError),
+      onRpcError: plugin.events.onRpcError
+        ? merge(acc.onRpcError, plugin.events.onRpcError)
+        : acc.onRpcError,
+      onSessionCreated: plugin.events.onSessionCreated
+        ? merge(acc.onSessionCreated, plugin.events.onSessionCreated)
+        : acc.onSessionCreated,
+    }),
+    {
+      onRpcError: (x: any) => [x],
+      onSessionCreated: (x: any) => [x],
+    },
+  )
+
+  console.log("rpcError", events.onRpcError.toString())
+  console.log("sessionCreated", events.onSessionCreated.toString())
+
   const pipe =
     (...fns: any[]) =>
     (x: any) =>
       fns.reduce((v, f) => f(v), x)
-  const events = plugins.reduce(
-    (acc: EventHooks, plugin) => ({
-      preRequest: plugin.events.preRequest
-        ? pipe(acc.preRequest, plugin.events.preRequest)
-        : acc.preRequest,
-      rpcResponse: plugin.events.rpcResponse
-        ? pipe(acc.rpcResponse, plugin.events.rpcResponse)
-        : acc.rpcResponse,
-      handleError: plugin.events.handleError
-        ? pipe(acc.handleError, plugin.events.handleError)
-        : acc.handleError,
+  const middleware = plugins.reduce(
+    (acc: MiddlewareHooks, plugin) => ({
+      beforeHttpRequest: plugin.middleware.beforeHttpRequest
+        ? pipe(acc.beforeHttpRequest, plugin.middleware.beforeHttpRequest)
+        : acc.beforeHttpRequest,
+      beforeHttpResponse: plugin.middleware.beforeHttpResponse
+        ? pipe(acc.beforeHttpResponse, plugin.middleware.beforeHttpResponse)
+        : acc.beforeHttpResponse,
     }),
     {
-      preRequest: (options: RequestInit) => options,
-      rpcResponse: (response: Response) => response,
-      handleError: (error: Error) => error,
+      beforeHttpRequest(options: RequestInit) {
+        return options
+      },
+      beforeHttpResponse(res: Response) {
+        return res
+      },
     },
   )
 
-  globalThis.__BLITZ_preRequest = events.preRequest as (options: RequestInit) => RequestInit
-  globalThis.__BLITZ_rpcResponse = events.rpcResponse as (response: Response) => Response
-  globalThis.__BLITZ_handleError = events.handleError as (error: Error) => Error
+  globalThis.__BLITZ_beforeHttpRequest = middleware.beforeHttpRequest as BeforeHttpRequest
+  globalThis.__BLITZ_beforeHttpResponse = middleware.beforeHttpResponse as BeforeHttpResponse
+  globalThis.__BLITZ_onRpcError = events.onRpcError
+  globalThis.__BLITZ_onSessionCreated = events.onSessionCreated
 
   const withBlitz = buildWithBlitz(plugins)
 

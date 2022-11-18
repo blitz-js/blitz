@@ -98,15 +98,20 @@ export function __internal_buildRpcClient({
       routePathURL.searchParams.set("meta", stringify(serialized.meta))
     }
     const {
-      __BLITZ_preRequest = (options: RequestInit) => options,
-      __BLITZ_rpcResponse = (response: Response) => response,
-      __BLITZ_handleError = (error: Error) => error,
+      __BLITZ_beforeHttpRequest = (options: RequestInit) => options,
+      __BLITZ_beforeHttpResponse = (response: Response) => response,
+      __BLITZ_onRpcError = Promise.resolve,
+      __BLITZ_onSessionCreated = Promise.resolve,
     } = globalThis
+
     const promise = window
       .fetch(
         routePathURL,
-        __BLITZ_preRequest({
+        __BLITZ_beforeHttpRequest({
           method: httpMethod,
+          headers: {
+            "Content-Type": "application/json",
+          },
           credentials: "include",
           redirect: "follow",
           body:
@@ -123,9 +128,9 @@ export function __internal_buildRpcClient({
       )
       .then(async (response) => {
         debug("Received request for", routePath)
-        document.addEventListener("blitz-auth:session-created", resetQueryClient)
-        __BLITZ_rpcResponse(response)
-        document.removeEventListener("blitz-auth:session-created", resetQueryClient)
+        // TODO Fix this
+        await Promise.all<any>(__BLITZ_onSessionCreated(resetQueryClient))
+        __BLITZ_beforeHttpResponse(response)
         if (!response.ok) {
           const error = new Error(response.statusText)
           ;(error as any).statusCode = response.status
@@ -146,7 +151,8 @@ export function __internal_buildRpcClient({
               json: payload.error,
               meta: payload.meta?.error,
             }) as any
-            __BLITZ_handleError(error)
+            // TODO Fix this
+            await Promise.all<any>(__BLITZ_onRpcError(error))
             const prismaError = error.message.match(/invalid.*prisma.*invocation/i)
             if (prismaError && !("code" in error)) {
               error = new Error(prismaError[0])

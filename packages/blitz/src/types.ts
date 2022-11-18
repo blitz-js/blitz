@@ -9,12 +9,19 @@ export interface RouteUrlObject extends Pick<UrlObject, "pathname" | "query"> {
 }
 
 export type EventHooks = {
-  onSessionCreate?: (() => void) | undefined
-  onSessionDestroy?: (() => void) | undefined
-  preRequest?: ((options: RequestInit) => RequestInit) | undefined
-  rpcResponse?: ((request: Response) => void) | undefined
-  handleError?: ((error: Error) => void) | undefined
-  onBeforeRender?: ((props: any) => void) | undefined
+  onSessionCreated?: (x: unknown) => Promise<any>
+  onRpcError?: OnRpcError
+}
+
+export type BeforeHttpRequest = (options: RequestInit) => RequestInit
+
+export type BeforeHttpResponse = (response: Response) => Response
+
+export type OnRpcError = (error: Error) => Promise<any>
+
+export type MiddlewareHooks = {
+  beforeHttpRequest?: BeforeHttpRequest
+  beforeHttpResponse?: BeforeHttpResponse
 }
 
 export type ResolverConfig = {
