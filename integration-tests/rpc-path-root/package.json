@@ -1,5 +1,5 @@
 {
-  "name": "test-rpc",
+  "name": "test-rpc-path-root",
   "version": "0.0.0",
   "private": true,
   "scripts": {
