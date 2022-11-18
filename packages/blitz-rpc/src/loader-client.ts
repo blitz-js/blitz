@@ -33,10 +33,6 @@ export async function loader(this: Loader, input: string): Promise<string> {
 
 module.exports = loader
 
-function slash(str: string) {
-  return str.replace(/\\/g, "/")
-}
-
 export async function transformBlitzRpcResolverClient(
   _src: string,
   id: string,
@@ -48,8 +44,8 @@ export async function transformBlitzRpcResolverClient(
   const resolverFilePath = "/" + posix.relative(root, id)
   assertPosixPath(resolverFilePath)
   const routePath = convertPageFilePathToRoutePath({
-    appRoot: slash(root),
-    absoluteFilePath: slash(resolverFilePath),
+    appRoot: root,
+    absoluteFilePath: resolverFilePath,
     resolverBasePath: options?.resolverPath,
     extraRpcBasePaths: options?.includeRPCFolders,
   })

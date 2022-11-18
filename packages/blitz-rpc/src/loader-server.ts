@@ -58,8 +58,8 @@ export async function transformBlitzRpcServer(
   code += "\n\n"
   for (let resolverFilePath of resolvers) {
     const routePath = convertPageFilePathToRoutePath({
-      appRoot: slash(root),
-      absoluteFilePath: slash(resolverFilePath),
+      appRoot: root,
+      absoluteFilePath: resolverFilePath,
       resolverBasePath: options?.resolverPath,
       extraRpcBasePaths: options?.includeRPCFolders,
     })

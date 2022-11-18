@@ -61,23 +61,20 @@ export function convertPageFilePathToRoutePath({
   resolverBasePath?: ResolverPathOptions
   extraRpcBasePaths?: string[]
 }) {
-  if (typeof resolverBasePath === "function") {
-    return resolverBasePath(absoluteFilePath).replace(fileExtensionRegex, "")
-  }
+  let path = absoluteFilePath
 
-  if (resolverBasePath === "root") {
-    let path = absoluteFilePath.replace(appRoot, "")
+  if (typeof resolverBasePath === "function") {
+    path = resolverBasePath(absoluteFilePath)
+  } else if (resolverBasePath === "root") {
+    path = path.replace(appRoot, "")
     for (const extraPath of extraRpcBasePaths) {
       path = path.replace(join(appRoot, extraPath), "")
     }
-    return path.replace(fileExtensionRegex, "")
+  } else {
+    path = path.replace(/^.*?[\\/]queries[\\/]/, "/").replace(/^.*?[\\/]mutations[\\/]/, "/")
   }
 
-  return absoluteFilePath
-    .replace(/^.*?[\\/]queries[\\/]/, "/")
-    .replace(/^.*?[\\/]mutations[\\/]/, "/")
-    .replace(/\\/g, "/")
-    .replace(fileExtensionRegex, "")
+  return path.replace(/\\/g, "/").replace(fileExtensionRegex, "")
 }
 
 export function convertFilePathToResolverName(filePathFromAppRoot: string) {
