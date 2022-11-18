@@ -69,6 +69,7 @@ export async function transformBlitzRpcServer(
     )}'));`
     code += "\n"
   }
+  console.log("NEW CODE", code)
   return code
 }
 
