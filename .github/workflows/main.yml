@@ -52,13 +52,12 @@ jobs:
         with:
           node-version: 16
           cache: "pnpm"
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm manypkg check
       - name: Turborepo local server
         uses: felixmosh/turborepo-gh-artifacts@v1
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           server-token: ${{ env.TURBO_TOKEN }}
+      - run: pnpm install --frozen-lockfile
       - name: Build
         run: pnpm build
       - name: Build Apps
@@ -90,18 +89,15 @@ jobs:
           node-version: 16
           cache: "pnpm"
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-        shell: bash
-
-      - run: pnpm manypkg check
-        shell: bash
-
       - name: Turborepo local server
         uses: felixmosh/turborepo-gh-artifacts@v1
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           server-token: ${{ env.TURBO_TOKEN }}
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        shell: bash
 
       - name: Build
         run: pnpm build
@@ -158,22 +154,19 @@ jobs:
           node-version: ${{ matrix.NODE_VERSION }}
           cache: "pnpm"
 
-      - name: Link Blitz CLI
-        run: pnpm link ./packages/blitz
-        shell: bash
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-        shell: bash
-
-      - run: pnpm manypkg check
-        shell: bash
-
       - name: Turborepo local server
         uses: felixmosh/turborepo-gh-artifacts@v1
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           server-token: ${{ env.TURBO_TOKEN }}
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        shell: bash
+
+      - name: Install playwright
+        run: npx playwright install --with-deps
+        shell: bash
 
       - name: Build
         run: pnpm build
