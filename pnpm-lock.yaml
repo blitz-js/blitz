@@ -551,6 +551,43 @@ importers:
       fs-extra: 10.0.1
       typescript: 4.8.4
 
+  integration-tests/rpc-path-root:
+    specifiers:
+      "@blitzjs/auth": workspace:*
+      "@blitzjs/config": workspace:*
+      "@blitzjs/next": workspace:*
+      "@blitzjs/rpc": workspace:*
+      "@types/express": 4.17.13
+      "@types/fs-extra": 9.0.13
+      "@types/node-fetch": 2.6.1
+      "@types/react": 18.0.25
+      b64-lite: 1.4.0
+      blitz: workspace:*
+      eslint: 8.27.0
+      fs-extra: 10.0.1
+      next: 12.2.5
+      react: 18.2.0
+      react-dom: 18.2.0
+      typescript: ^4.8.4
+    dependencies:
+      "@blitzjs/auth": link:../../packages/blitz-auth
+      "@blitzjs/config": link:../../packages/config
+      "@blitzjs/next": link:../../packages/blitz-next
+      "@blitzjs/rpc": link:../../packages/blitz-rpc
+      blitz: link:../../packages/blitz
+      next: 12.2.5_biqbaboplfbrettd7655fr4n2y
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    devDependencies:
+      "@types/express": 4.17.13
+      "@types/fs-extra": 9.0.13
+      "@types/node-fetch": 2.6.1
+      "@types/react": 18.0.25
+      b64-lite: 1.4.0
+      eslint: 8.27.0
+      fs-extra: 10.0.1
+      typescript: 4.8.4
+
   integration-tests/trailing-slash:
     specifiers:
       "@blitzjs/auth": workspace:*
@@ -3487,7 +3524,6 @@ packages:
       semver: 5.7.1
     transitivePeerDependencies:
       - supports-color
-    dev: false
 
   /@babel/preset-flow/7.17.12_@babel+core@7.18.2:
     resolution:
@@ -6278,7 +6314,6 @@ packages:
       typescript: 4.8.4
     transitivePeerDependencies:
       - supports-color
-    dev: false
 
   /@typescript-eslint/experimental-utils/5.28.0_rmayb2veg2btbq6mbmnyivgasy:
     resolution:
@@ -10082,7 +10117,6 @@ packages:
     transitivePeerDependencies:
       - eslint-import-resolver-webpack
       - supports-color
-    dev: false
 
   /eslint-config-next/13.0.3_rmayb2veg2btbq6mbmnyivgasy:
     resolution:
@@ -10120,7 +10154,6 @@ packages:
     hasBin: true
     peerDependencies:
       eslint: ">=7.0.0"
-    dev: false
 
   /eslint-config-prettier/8.5.0_eslint@8.27.0:
     resolution:
@@ -13033,7 +13066,7 @@ packages:
       pretty-format: 29.2.1
       slash: 3.0.0
       strip-json-comments: 3.1.1
-      ts-node: 10.9.1_typescript@4.8.4
+      ts-node: 10.9.1_cbe7ovvae6zqfnmtgctpgpys54
     transitivePeerDependencies:
       - supports-color
 
@@ -18643,7 +18676,6 @@ packages:
       typescript: 4.8.4
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
-    dev: false
 
   /ts-node/10.9.1_ieummqxttktzud32hpyrer46t4:
     resolution:
@@ -18710,6 +18742,7 @@ packages:
       typescript: 4.8.4
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
+    dev: false
 
   /tsconfig-paths/3.14.1:
     resolution:
