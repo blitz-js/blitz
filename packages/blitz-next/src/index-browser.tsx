@@ -160,8 +160,8 @@ const setupBlitzClient = <TPlugins extends readonly ClientPlugin<object>[]>({
         : acc.onSessionCreated,
     }),
     {
-      onRpcError: async (error: Error) => {},
-      onSessionCreated: async (resetQueryClient: () => void) => {},
+      onRpcError: merge(),
+      onSessionCreated: merge(),
     },
   )
 
