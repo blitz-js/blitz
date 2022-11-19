@@ -159,11 +159,9 @@ const setupBlitzClient = <TPlugins extends readonly ClientPlugin<object>[]>({
         : acc.onRpcError,
       onSessionCreated: plugin.events.onSessionCreated
         ? merge<() => void, Promise<void>>([
-            ...(acc.onSessionCreated
-              ? Array.isArray(acc.onSessionCreated)
-                ? acc.onSessionCreated
-                : [acc.onSessionCreated]
-              : []),
+            ...(Array.isArray(acc.onSessionCreated)
+              ? acc.onSessionCreated
+              : [acc.onSessionCreated]),
             plugin.events.onSessionCreated,
           ])
         : acc.onSessionCreated,

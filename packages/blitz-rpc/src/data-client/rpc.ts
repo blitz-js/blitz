@@ -128,7 +128,14 @@ export function __internal_buildRpcClient({
       )
       .then(async (response) => {
         debug("Received request for", routePath)
-        await Promise.all(__BLITZ_onSessionCreated(resetQueryClient))
+        document.addEventListener(
+          "blitz:session-created",
+          async () => {
+            await Promise.all(__BLITZ_onSessionCreated(resetQueryClient))
+            debug("blitz-rpc:session-created")
+          },
+          {once: true},
+        )
         __BLITZ_beforeHttpResponse(response)
         if (!response.ok) {
           const error = new Error(response.statusText)

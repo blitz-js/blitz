@@ -406,7 +406,8 @@ export const AuthClientPlugin = createClientPlugin((options: AuthPluginClientOpt
         }
       },
       onSessionCreated: async (resetQueryClient) => {
-        document.addEventListener("blitz-auth:session-created", resetQueryClient, {once: true})
+        resetQueryClient()
+        debug("Blitz Auth: onSessionCreated")
       },
     },
     middleware: {
@@ -433,7 +434,7 @@ export const AuthClientPlugin = createClientPlugin((options: AuthPluginClientOpt
             debug("Public data updated")
           }
           if (res.headers.get(HEADER_SESSION_CREATED)) {
-            const event = new Event("blitz-auth:session-created")
+            const event = new Event("blitz:session-created")
             document.dispatchEvent(event)
           }
           if (res.headers.get(HEADER_CSRF_ERROR)) {
