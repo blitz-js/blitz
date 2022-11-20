@@ -1,2 +1,2 @@
 #!/usr/bin/env node
-require("blitz/dist/index.cjs")
+require("../dist/index.cjs")
