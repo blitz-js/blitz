@@ -166,9 +166,6 @@ const error = (msg: string) => {
   console.log(`${c.red(msg)}`)
 }
 
-const warn = (msg: string) => {
-  console.log(`${c.hex(brandColor).bold("⚡️ Blitz Warning: ")} ${c.yellow(msg)}`)
-}
 
 /**
  * Colorizes a variable for display.

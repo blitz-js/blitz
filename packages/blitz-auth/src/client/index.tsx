@@ -411,7 +411,7 @@ export const AuthClientPlugin = createClientPlugin((options: AuthPluginClientOpt
       },
     },
     middleware: {
-      beforeHttpRequest(options: RequestInit) {
+      beforeHttpRequest(req) {
         const headers: Record<string, any> = {
           "Content-Type": "application/json",
         }

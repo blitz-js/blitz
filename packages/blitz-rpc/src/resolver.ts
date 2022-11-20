@@ -276,14 +276,9 @@ interface ResolverAuthorize {
 
 const authorize: ResolverAuthorize = (...args) => {
   return function _innerAuthorize(input, ctx) {
-    if (!(ctx as any).$session) {
-      log.warn(
-        "You are using the resolver `authorize` function, but `@blitzjs/auth` plugin is not initialised. Consider enabling to use authentication features.",
-      )
-    } else {
-      const session: SessionContext = (ctx as any).session
-      session.$authorize(...args)
-    }
+    const session: SessionContext = (ctx as any).session
+    if (!session) throw new Error("You are using the resolver.authorize() function, but `@blitzjs/auth` plugin is not initialized. Ensure it is installed and the auth plugin is added to setupBlitzServer()")
+    session.$authorize(...args)
     return {
       __blitz: true,
       value: input,

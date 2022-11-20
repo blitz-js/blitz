@@ -13,7 +13,7 @@ export type EventHooks = {
   onRpcError?: OnRpcError
 }
 
-export type BeforeHttpRequest = (options: RequestInit) => RequestInit
+export type BeforeHttpRequest = (request: RequestInit) => RequestInit
 
 export type BeforeHttpResponse = (response: Response) => Response
 
