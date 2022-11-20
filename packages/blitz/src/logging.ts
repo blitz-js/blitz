@@ -166,7 +166,6 @@ const error = (msg: string) => {
   console.log(`${c.red(msg)}`)
 }
 
-
 /**
  * Colorizes a variable for display.
  *
@@ -193,7 +192,6 @@ export const log = {
   success,
   greenText,
   error,
-  warn,
   variable,
   debug,
   Table,

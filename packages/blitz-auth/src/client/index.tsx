@@ -405,10 +405,6 @@ export const AuthClientPlugin = createClientPlugin((options: AuthPluginClientOpt
           getPublicDataStore().clear()
         }
       },
-      onSessionCreated: async (resetQueryClient) => {
-        resetQueryClient()
-        debug("Blitz Auth: onSessionCreated")
-      },
     },
     middleware: {
       beforeHttpRequest(req) {
@@ -422,9 +418,8 @@ export const AuthClientPlugin = createClientPlugin((options: AuthPluginClientOpt
         } else {
           debug("No antiCSRFToken cookie found")
         }
-        // add headers to all fetch requests
-        options.headers = {...options.headers, ...headers}
-        return options
+        req.headers = {...req.headers, ...headers}
+        return req
       },
       beforeHttpResponse(res) {
         if (res.headers) {

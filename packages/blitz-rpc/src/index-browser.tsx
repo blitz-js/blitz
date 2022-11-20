@@ -38,7 +38,12 @@ export const BlitzRpcPlugin = createClientPlugin<BlitzRpcOptions, {queryClient: 
     const queryClient = initializeQueryClient()
     globalThis.queryClient = queryClient
     return {
-      events: {},
+      events: {
+        onSessionCreated: async (resetQueryClient) => {
+          resetQueryClient()
+          console.log("Blitz RPC: Session Created")
+        },
+      },
       middleware: {},
       exports: () => ({
         queryClient,
