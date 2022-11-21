@@ -48,11 +48,18 @@ export async function paginate<QueryResult>({
 
   const hasMore = skip + take < count
   const nextPage = hasMore ? {take, skip: skip + take} : null
+  const pageCount = Math.floor((count + take - 1) / take)
+  const from = skip + 1
+  const to = skip + take
 
   return {
     items,
     nextPage,
     hasMore,
+    pageCount: pageCount,
+    pageSize: take,
+    from,
+    to,
     count,
   }
 }
