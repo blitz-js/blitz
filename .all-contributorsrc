@@ -3755,6 +3755,16 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "selcukfatihsevinc",
+      "name": "Selçuk Fatih Sevinç",
+      "avatar_url": "https://avatars.githubusercontent.com/u/384836?v=4",
+      "profile": "https://github.com/selcukfatihsevinc",
+      "contributions": [
+        "doc",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
