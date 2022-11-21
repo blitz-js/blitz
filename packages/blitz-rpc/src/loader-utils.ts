@@ -1,5 +1,5 @@
 import {assert} from "blitz"
-import {posix, sep, win32} from "path"
+import {posix, sep, win32, join, normalize} from "path"
 import {ResolverPathOptions} from "./index-server"
 
 export interface LoaderOptions {
@@ -50,23 +50,31 @@ export function buildPageExtensionRegex(pageExtensions: string[]) {
 
 const fileExtensionRegex = /\.([a-z]+)$/
 
-export function convertPageFilePathToRoutePath(
-  filePath: string,
-  resolverPath?: ResolverPathOptions,
-) {
-  if (typeof resolverPath === "function") {
-    return resolverPath(filePath)
+export function convertPageFilePathToRoutePath({
+  absoluteFilePath,
+  resolverBasePath,
+  appRoot,
+  extraRpcBasePaths = [],
+}: {
+  appRoot: string
+  absoluteFilePath: string
+  resolverBasePath?: ResolverPathOptions
+  extraRpcBasePaths?: string[]
+}) {
+  let path = normalize(absoluteFilePath)
+
+  if (typeof resolverBasePath === "function") {
+    path = resolverBasePath(path)
+  } else if (resolverBasePath === "root") {
+    path = path.replace(normalize(appRoot), "")
+    for (const extraPath of extraRpcBasePaths) {
+      path = path.replace(join(normalize(appRoot), extraPath.replace("/", sep)), "")
+    }
+  } else {
+    path = path.replace(/^.*?[\\/]queries[\\/]/, "/").replace(/^.*?[\\/]mutations[\\/]/, "/")
   }
 
-  if (resolverPath === "root") {
-    return filePath.replace(fileExtensionRegex, "")
-  }
-
-  return filePath
-    .replace(/^.*?[\\/]queries[\\/]/, "/")
-    .replace(/^.*?[\\/]mutations[\\/]/, "/")
-    .replace(/\\/g, "/")
-    .replace(fileExtensionRegex, "")
+  return path.replace(/\\/g, "/").replace(fileExtensionRegex, "")
 }
 
 export function convertFilePathToResolverName(filePathFromAppRoot: string) {
