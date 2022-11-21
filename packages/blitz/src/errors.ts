@@ -20,10 +20,13 @@ export class AuthenticationError extends Error {
   }
 }
 if (process.env.JEST_WORKER_ID === undefined) {
-  SuperJson.registerClass(AuthenticationError, {
-    identifier: "BlitzAuthenticationError",
-    allowProps: errorProps,
-  })
+  if (!(globalThis as any).ran) {
+    SuperJson.registerClass(AuthenticationError, {
+      identifier: "BlitzAuthenticationError",
+      allowProps: errorProps,
+    })
+    ;(globalThis as any).ran = true
+  }
 }
 
 export class CSRFTokenMismatchError extends Error {
@@ -34,10 +37,13 @@ export class CSRFTokenMismatchError extends Error {
   }
 }
 if (process.env.JEST_WORKER_ID === undefined) {
-  SuperJson.registerClass(CSRFTokenMismatchError, {
-    identifier: "BlitzCSRFTokenMismatchError",
-    allowProps: errorProps,
-  })
+  if (!(globalThis as any).ran) {
+    SuperJson.registerClass(CSRFTokenMismatchError, {
+      identifier: "BlitzCSRFTokenMismatchError",
+      allowProps: errorProps,
+    })
+    ;(globalThis as any).ran = true
+  }
 }
 
 export class AuthorizationError extends Error {
@@ -51,10 +57,13 @@ export class AuthorizationError extends Error {
   }
 }
 if (process.env.JEST_WORKER_ID === undefined) {
-  SuperJson.registerClass(AuthorizationError, {
-    identifier: "BlitzAuthorizationError",
-    allowProps: errorProps,
-  })
+  if (!(globalThis as any).ran) {
+    SuperJson.registerClass(AuthorizationError, {
+      identifier: "BlitzAuthorizationError",
+      allowProps: errorProps,
+    })
+    ;(globalThis as any).ran = true
+  }
 }
 
 export class NotFoundError extends Error {
@@ -68,10 +77,13 @@ export class NotFoundError extends Error {
   }
 }
 if (process.env.JEST_WORKER_ID === undefined) {
-  SuperJson.registerClass(NotFoundError, {
-    identifier: "BlitzNotFoundError",
-    allowProps: errorProps,
-  })
+  if (!(globalThis as any).ran) {
+    SuperJson.registerClass(NotFoundError, {
+      identifier: "BlitzNotFoundError",
+      allowProps: errorProps,
+    })
+    ;(globalThis as any).ran = true
+  }
 }
 
 export class RedirectError extends Error {
@@ -87,10 +99,13 @@ export class RedirectError extends Error {
   }
 }
 if (process.env.JEST_WORKER_ID === undefined) {
-  SuperJson.registerClass(RedirectError, {
-    identifier: "BlitzRedirectError",
-    allowProps: errorProps,
-  })
+  if (!(globalThis as any).ran) {
+    SuperJson.registerClass(RedirectError, {
+      identifier: "BlitzRedirectError",
+      allowProps: errorProps,
+    })
+    ;(globalThis as any).ran = true
+  }
 }
 
 export class PaginationArgumentError extends Error {
@@ -101,8 +116,11 @@ export class PaginationArgumentError extends Error {
   }
 }
 if (process.env.JEST_WORKER_ID === undefined) {
-  SuperJson.registerClass(PaginationArgumentError, {
-    identifier: "BlitzPaginationArgumentError",
-    allowProps: errorProps,
-  })
+  if (!(globalThis as any).ran) {
+    SuperJson.registerClass(PaginationArgumentError, {
+      identifier: "BlitzPaginationArgumentError",
+      allowProps: errorProps,
+    })
+    ;(globalThis as any).ran = true
+  }
 }
