@@ -1,6 +1,12 @@
 import _SuperJson from "superjson"
 import type {UrlObject} from "url"
 
+declare module globalThis {
+  let _superjson_class_registered: {
+    [key: string]: boolean
+  }
+}
+
 const SuperJson: typeof _SuperJson =
   "default" in _SuperJson ? (_SuperJson as any).default : _SuperJson
 
@@ -20,12 +26,15 @@ export class AuthenticationError extends Error {
   }
 }
 if (process.env.JEST_WORKER_ID === undefined) {
-  if (!(globalThis as any).ran) {
+  globalThis._superjson_class_registered = {
+    ...globalThis._superjson_class_registered,
+  }
+  if (!globalThis._superjson_class_registered.AuthenticationError) {
     SuperJson.registerClass(AuthenticationError, {
       identifier: "BlitzAuthenticationError",
       allowProps: errorProps,
     })
-    ;(globalThis as any).ran = true
+    globalThis._superjson_class_registered.AuthenticationError = true
   }
 }
 
@@ -37,12 +46,15 @@ export class CSRFTokenMismatchError extends Error {
   }
 }
 if (process.env.JEST_WORKER_ID === undefined) {
-  if (!(globalThis as any).ran) {
+  globalThis._superjson_class_registered = {
+    ...globalThis._superjson_class_registered,
+  }
+  if (!globalThis._superjson_class_registered.CSRFTokenMismatchError) {
     SuperJson.registerClass(CSRFTokenMismatchError, {
       identifier: "BlitzCSRFTokenMismatchError",
       allowProps: errorProps,
     })
-    ;(globalThis as any).ran = true
+    globalThis._superjson_class_registered.CSRFTokenMismatchError = true
   }
 }
 
@@ -57,12 +69,15 @@ export class AuthorizationError extends Error {
   }
 }
 if (process.env.JEST_WORKER_ID === undefined) {
-  if (!(globalThis as any).ran) {
+  globalThis._superjson_class_registered = {
+    ...globalThis._superjson_class_registered,
+  }
+  if (!globalThis._superjson_class_registered.AuthorizationError) {
     SuperJson.registerClass(AuthorizationError, {
       identifier: "BlitzAuthorizationError",
       allowProps: errorProps,
     })
-    ;(globalThis as any).ran = true
+    globalThis._superjson_class_registered.AuthorizationError = true
   }
 }
 
@@ -77,12 +92,15 @@ export class NotFoundError extends Error {
   }
 }
 if (process.env.JEST_WORKER_ID === undefined) {
-  if (!(globalThis as any).ran) {
+  globalThis._superjson_class_registered = {
+    ...globalThis._superjson_class_registered,
+  }
+  if (!globalThis._superjson_class_registered.NotFoundError) {
     SuperJson.registerClass(NotFoundError, {
       identifier: "BlitzNotFoundError",
       allowProps: errorProps,
     })
-    ;(globalThis as any).ran = true
+    globalThis._superjson_class_registered.NotFoundError = true
   }
 }
 
@@ -99,12 +117,15 @@ export class RedirectError extends Error {
   }
 }
 if (process.env.JEST_WORKER_ID === undefined) {
-  if (!(globalThis as any).ran) {
+  globalThis._superjson_class_registered = {
+    ...globalThis._superjson_class_registered,
+  }
+  if (!globalThis._superjson_class_registered.RedirectError) {
     SuperJson.registerClass(RedirectError, {
       identifier: "BlitzRedirectError",
       allowProps: errorProps,
     })
-    ;(globalThis as any).ran = true
+    globalThis._superjson_class_registered.RedirectError = true
   }
 }
 
@@ -116,11 +137,14 @@ export class PaginationArgumentError extends Error {
   }
 }
 if (process.env.JEST_WORKER_ID === undefined) {
-  if (!(globalThis as any).ran) {
+  globalThis._superjson_class_registered = {
+    ...globalThis._superjson_class_registered,
+  }
+  if (!globalThis._superjson_class_registered.PaginationArgumentError) {
     SuperJson.registerClass(PaginationArgumentError, {
       identifier: "BlitzPaginationArgumentError",
       allowProps: errorProps,
     })
-    ;(globalThis as any).ran = true
+    globalThis._superjson_class_registered.PaginationArgumentError = true
   }
 }

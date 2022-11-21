@@ -4,4 +4,4 @@
 "@blitzjs/rpc": patch
 ---
 
-Fix ambigious class error & bump superjson version
+Fix ambigious class warning log & upgrade superjson from 1.9.1 to 1.11.0
