@@ -2,9 +2,7 @@ import _SuperJson from "superjson"
 import type {UrlObject} from "url"
 
 declare module globalThis {
-  let _superjson_class_registered: {
-    [key: string]: boolean
-  }
+  let _BLITZ_ERROR_CLASS_REGISTERED: boolean
 }
 
 const SuperJson: typeof _SuperJson =
@@ -25,36 +23,12 @@ export class AuthenticationError extends Error {
     return true
   }
 }
-if (process.env.JEST_WORKER_ID === undefined) {
-  globalThis._superjson_class_registered = {
-    ...globalThis._superjson_class_registered,
-  }
-  if (!globalThis._superjson_class_registered.AuthenticationError) {
-    SuperJson.registerClass(AuthenticationError, {
-      identifier: "BlitzAuthenticationError",
-      allowProps: errorProps,
-    })
-    globalThis._superjson_class_registered.AuthenticationError = true
-  }
-}
 
 export class CSRFTokenMismatchError extends Error {
   name = "CSRFTokenMismatchError"
   statusCode = 401
   get _clearStack() {
     return true
-  }
-}
-if (process.env.JEST_WORKER_ID === undefined) {
-  globalThis._superjson_class_registered = {
-    ...globalThis._superjson_class_registered,
-  }
-  if (!globalThis._superjson_class_registered.CSRFTokenMismatchError) {
-    SuperJson.registerClass(CSRFTokenMismatchError, {
-      identifier: "BlitzCSRFTokenMismatchError",
-      allowProps: errorProps,
-    })
-    globalThis._superjson_class_registered.CSRFTokenMismatchError = true
   }
 }
 
@@ -68,18 +42,6 @@ export class AuthorizationError extends Error {
     return true
   }
 }
-if (process.env.JEST_WORKER_ID === undefined) {
-  globalThis._superjson_class_registered = {
-    ...globalThis._superjson_class_registered,
-  }
-  if (!globalThis._superjson_class_registered.AuthorizationError) {
-    SuperJson.registerClass(AuthorizationError, {
-      identifier: "BlitzAuthorizationError",
-      allowProps: errorProps,
-    })
-    globalThis._superjson_class_registered.AuthorizationError = true
-  }
-}
 
 export class NotFoundError extends Error {
   name = "NotFoundError"
@@ -89,18 +51,6 @@ export class NotFoundError extends Error {
   }
   get _clearStack() {
     return true
-  }
-}
-if (process.env.JEST_WORKER_ID === undefined) {
-  globalThis._superjson_class_registered = {
-    ...globalThis._superjson_class_registered,
-  }
-  if (!globalThis._superjson_class_registered.NotFoundError) {
-    SuperJson.registerClass(NotFoundError, {
-      identifier: "BlitzNotFoundError",
-      allowProps: errorProps,
-    })
-    globalThis._superjson_class_registered.NotFoundError = true
   }
 }
 
@@ -116,18 +66,6 @@ export class RedirectError extends Error {
     return true
   }
 }
-if (process.env.JEST_WORKER_ID === undefined) {
-  globalThis._superjson_class_registered = {
-    ...globalThis._superjson_class_registered,
-  }
-  if (!globalThis._superjson_class_registered.RedirectError) {
-    SuperJson.registerClass(RedirectError, {
-      identifier: "BlitzRedirectError",
-      allowProps: errorProps,
-    })
-    globalThis._superjson_class_registered.RedirectError = true
-  }
-}
 
 export class PaginationArgumentError extends Error {
   name = "PaginationArgumentError"
@@ -136,15 +74,37 @@ export class PaginationArgumentError extends Error {
     super(message)
   }
 }
-if (process.env.JEST_WORKER_ID === undefined) {
-  globalThis._superjson_class_registered = {
-    ...globalThis._superjson_class_registered,
-  }
-  if (!globalThis._superjson_class_registered.PaginationArgumentError) {
-    SuperJson.registerClass(PaginationArgumentError, {
-      identifier: "BlitzPaginationArgumentError",
-      allowProps: errorProps,
-    })
-    globalThis._superjson_class_registered.PaginationArgumentError = true
-  }
+
+if (process.env.JEST_WORKER_ID === undefined && !globalThis._BLITZ_ERROR_CLASS_REGISTERED) {
+  SuperJson.registerClass(AuthenticationError, {
+    identifier: "BlitzAuthenticationError",
+    allowProps: errorProps,
+  })
+
+  SuperJson.registerClass(CSRFTokenMismatchError, {
+    identifier: "BlitzCSRFTokenMismatchError",
+    allowProps: errorProps,
+  })
+
+  SuperJson.registerClass(AuthorizationError, {
+    identifier: "BlitzAuthorizationError",
+    allowProps: errorProps,
+  })
+
+  SuperJson.registerClass(NotFoundError, {
+    identifier: "BlitzNotFoundError",
+    allowProps: errorProps,
+  })
+
+  SuperJson.registerClass(RedirectError, {
+    identifier: "BlitzRedirectError",
+    allowProps: errorProps,
+  })
+
+  SuperJson.registerClass(PaginationArgumentError, {
+    identifier: "BlitzPaginationArgumentError",
+    allowProps: errorProps,
+  })
+
+  globalThis._BLITZ_ERROR_CLASS_REGISTERED = true
 }
