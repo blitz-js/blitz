@@ -44,23 +44,6 @@ export interface RpcClient<Input = unknown, Result = unknown>
 //   (params: Input, ctx?: Ctx): Promise<Result>
 // }
 
-function resetQueryClient() {
-  setTimeout(async () => {
-    // Do these in the next tick to prevent various bugs like https://github.com/blitz-js/blitz/issues/2207
-    const debug = (await import("debug")).default("blitz:rpc")
-    debug("Invalidating react-query cache...")
-    await getQueryClient().cancelQueries()
-    await getQueryClient().resetQueries()
-    getQueryClient().getMutationCache().clear()
-    // We have a 100ms delay here to prevent unnecessary stale queries from running
-    // This prevents the case where you logout on a page with
-    // Page.authenticate = {redirectTo: '/login'}
-    // Without this delay, queries that require authentication on the original page
-    // will still run (but fail because you are now logged out)
-    // Ref: https://github.com/blitz-js/blitz/issues/1935
-  }, 100)
-}
-
 export function __internal_buildRpcClient({
   resolverName,
   resolverType,
@@ -97,17 +80,11 @@ export function __internal_buildRpcClient({
       routePathURL.searchParams.set("params", stringify(serialized.json))
       routePathURL.searchParams.set("meta", stringify(serialized.meta))
     }
-    const {
-      __BLITZ_beforeHttpRequest,
-      __BLITZ_beforeHttpResponse,
-      __BLITZ_onRpcError,
-      __BLITZ_onSessionCreated,
-    } = globalThis
 
     const promise = window
       .fetch(
         routePathURL,
-        __BLITZ_beforeHttpRequest({
+        globalThis.__BLITZ_beforeHttpRequest({
           method: httpMethod,
           headers: {
             "Content-Type": "application/json",
@@ -128,15 +105,7 @@ export function __internal_buildRpcClient({
       )
       .then(async (response) => {
         debug("Received request for", routePath)
-        document.addEventListener(
-          "blitz:session-created",
-          async () => {
-            await Promise.all(__BLITZ_onSessionCreated(resetQueryClient))
-            debug("blitz-rpc:session-created")
-          },
-          {once: true},
-        )
-        __BLITZ_beforeHttpResponse(response)
+        response = globalThis.__BLITZ_beforeHttpResponse(response)
         if (!response.ok) {
           const error = new Error(response.statusText)
           ;(error as any).statusCode = response.status
@@ -157,13 +126,12 @@ export function __internal_buildRpcClient({
               json: payload.error,
               meta: payload.meta?.error,
             }) as any
-            await Promise.all(__BLITZ_onRpcError(error))
+            await Promise.all(globalThis.__BLITZ_onRpcError(error))
             const prismaError = error.message.match(/invalid.*prisma.*invocation/i)
             if (prismaError && !("code" in error)) {
               error = new Error(prismaError[0])
               error.statusCode = 500
             }
-
             error.stack = null
             throw error
           } else {
@@ -171,7 +139,6 @@ export function __internal_buildRpcClient({
               json: payload.result,
               meta: payload.meta?.result,
             })
-
             if (!opts.fromQueryHook) {
               const queryKey = getQueryKeyFromUrlAndParams(routePath, params)
               getQueryClient().setQueryData(queryKey, data)

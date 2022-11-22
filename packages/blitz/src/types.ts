@@ -21,9 +21,9 @@ export type OnRpcError = (error: Error) => Promise<void>
 
 export type OnRpcErrorHook = (error: Error) => Promise<void>[]
 
-export type OnSessionCreated = (resetQueryClient: () => void) => Promise<void>
+export type OnSessionCreated = () => Promise<void>
 
-export type OnSessionCreatedHook = (resetQueryClient: () => void) => Promise<void>[]
+export type OnSessionCreatedHook = () => Promise<void>[]
 
 export type MiddlewareHooks = {
   beforeHttpRequest?: BeforeHttpRequest

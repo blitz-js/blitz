@@ -45,6 +45,9 @@ const buildWithBlitz = <TPlugins extends readonly ClientPlugin<object>[]>(plugin
         setTimeout(() => {
           document.documentElement.classList.add("blitz-first-render-complete")
         })
+        document.addEventListener("blitz:session-created", async () => {
+          await Promise.all(globalThis.__BLITZ_onSessionCreated())
+        })
       }, [])
 
       return (
@@ -158,7 +161,7 @@ const setupBlitzClient = <TPlugins extends readonly ClientPlugin<object>[]>({
           ])
         : acc.onRpcError,
       onSessionCreated: plugin.events.onSessionCreated
-        ? merge<() => void, Promise<void>>([
+        ? merge<void, Promise<void>>([
             ...(Array.isArray(acc.onSessionCreated)
               ? acc.onSessionCreated
               : [acc.onSessionCreated]),
@@ -168,7 +171,7 @@ const setupBlitzClient = <TPlugins extends readonly ClientPlugin<object>[]>({
     }),
     {
       onRpcError: merge<Error, Promise<void>>([]),
-      onSessionCreated: merge<() => void, Promise<void>>([]),
+      onSessionCreated: merge<void, Promise<void>>([]),
     },
   )
 
