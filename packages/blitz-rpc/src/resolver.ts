@@ -1,5 +1,5 @@
 import type {SessionContext, SessionContextBase} from "@blitzjs/auth"
-import {Await, Ctx, EnsurePromise, log, MiddlewareCtx} from "blitz"
+import {Await, Ctx, EnsurePromise, MiddlewareCtx} from "blitz"
 import type {input as zInput, output as zOutput, ZodTypeAny} from "zod"
 
 export type ParserType = "sync" | "async"
@@ -277,7 +277,10 @@ interface ResolverAuthorize {
 const authorize: ResolverAuthorize = (...args) => {
   return function _innerAuthorize(input, ctx) {
     const session: SessionContext = (ctx as any).session
-    if (!session) throw new Error("You are using the resolver.authorize() function, but `@blitzjs/auth` plugin is not initialized. Ensure it is installed and the auth plugin is added to setupBlitzServer()")
+    if (!session)
+      throw new Error(
+        "You are using the resolver.authorize() function, but `@blitzjs/auth` plugin is not initialized. Ensure it is installed and the auth plugin is added to setupBlitzServer()",
+      )
     session.$authorize(...args)
     return {
       __blitz: true,
