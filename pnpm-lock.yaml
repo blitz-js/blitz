@@ -756,7 +756,7 @@ importers:
       resolve-cwd: 3.0.0
       resolve-from: 5.0.0
       rimraf: 3.0.2
-      superjson: 1.9.1
+      superjson: 1.11.0
       supports-color: 8.1.1
       tar: 6.1.11
       test-listen: 1.1.0
@@ -808,7 +808,7 @@ importers:
       resolve-cwd: 3.0.0
       resolve-from: 5.0.0
       rimraf: 3.0.2
-      superjson: 1.9.1
+      superjson: 1.11.0
       supports-color: 8.1.1
       tar: 6.1.11
       ts-node: 10.9.1_typescript@4.8.4
@@ -934,7 +934,7 @@ importers:
       react: 18.2.0
       react-dom: 18.2.0
       resolve-from: 5.0.0
-      superjson: 1.9.1
+      superjson: 1.11.0
       supports-color: 8.1.1
       ts-jest: 27.1.4
       typescript: ^4.8.4
@@ -947,7 +947,7 @@ importers:
       debug: 4.3.3_supports-color@8.1.1
       fs-extra: 10.0.1
       hoist-non-react-statics: 3.3.2
-      superjson: 1.9.1
+      superjson: 1.11.0
       supports-color: 8.1.1
     devDependencies:
       "@blitzjs/config": link:../config
@@ -989,7 +989,7 @@ importers:
       next: 12.2.5
       react: 18.2.0
       react-dom: 18.2.0
-      superjson: 1.9.1
+      superjson: 1.11.0
       supports-color: 8.1.1
       typescript: ^4.8.4
       unbuild: 0.7.6
@@ -1003,7 +1003,7 @@ importers:
       bad-behavior: 1.0.1
       chalk: 4.1.2
       debug: 4.3.3_supports-color@8.1.1
-      superjson: 1.9.1
+      superjson: 1.11.0
       supports-color: 8.1.1
     devDependencies:
       "@blitzjs/config": link:../config
@@ -3524,6 +3524,7 @@ packages:
       semver: 5.7.1
     transitivePeerDependencies:
       - supports-color
+    dev: false
 
   /@babel/preset-flow/7.17.12_@babel+core@7.18.2:
     resolution:
@@ -6329,6 +6330,7 @@ packages:
       typescript: 4.8.4
     transitivePeerDependencies:
       - supports-color
+    dev: false
 
   /@typescript-eslint/experimental-utils/5.28.0_rmayb2veg2btbq6mbmnyivgasy:
     resolution:
@@ -10151,6 +10153,7 @@ packages:
     transitivePeerDependencies:
       - eslint-import-resolver-webpack
       - supports-color
+    dev: false
 
   /eslint-config-next/13.0.4_rmayb2veg2btbq6mbmnyivgasy:
     resolution:
@@ -10188,6 +10191,7 @@ packages:
     hasBin: true
     peerDependencies:
       eslint: ">=7.0.0"
+    dev: false
 
   /eslint-config-prettier/8.5.0_eslint@8.27.0:
     resolution:
@@ -13152,7 +13156,7 @@ packages:
       pretty-format: 29.2.1
       slash: 3.0.0
       strip-json-comments: 3.1.1
-      ts-node: 10.9.1_cbe7ovvae6zqfnmtgctpgpys54
+      ts-node: 10.9.1_typescript@4.8.4
     transitivePeerDependencies:
       - supports-color
 
@@ -18386,10 +18390,10 @@ packages:
       minimist: 1.2.6
     dev: true
 
-  /superjson/1.9.1:
+  /superjson/1.11.0:
     resolution:
       {
-        integrity: sha512-oT3HA2nPKlU1+5taFgz/HDy+GEaY+CWEbLzaRJVD4gZ7zMVVC4GDNFdgvAZt6/VuIk6D2R7RtPAiCHwmdzlMmg==,
+        integrity: sha512-6PfAg1FKhqkwWvPb2uXhH4MkMttdc17eJ91+Aoz4s1XUEDZFmLfFx/xVA3wgkPxAGy5dpozgGdK6V/n20Wj9yg==,
       }
     engines: {node: ">=10"}
     dependencies:
@@ -18802,6 +18806,7 @@ packages:
       typescript: 4.8.4
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
+    dev: false
 
   /ts-node/10.9.1_ieummqxttktzud32hpyrer46t4:
     resolution:
@@ -18868,7 +18873,6 @@ packages:
       typescript: 4.8.4
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
-    dev: false
 
   /tsconfig-paths/3.14.1:
     resolution:
