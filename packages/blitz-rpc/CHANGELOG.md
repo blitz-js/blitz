@@ -1,5 +1,18 @@
 # @blitzjs/rpc
 
+## 2.0.0-beta.19
+
+### Minor Changes
+
+- c1e00406: transpile packages to es2015 to support older browsers
+- b493c93f: fix resolverPath:root and make it work with monorepo resolvers
+
+### Patch Changes
+
+- b33db082: Fix ambigious class warning log & upgrade superjson from 1.9.1 to 1.11.0
+- Updated dependencies [c1e00406]
+  - @blitzjs/auth@2.0.0-beta.19
+
 ## 2.0.0-beta.18
 
 ### Minor Changes

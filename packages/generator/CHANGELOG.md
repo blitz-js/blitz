@@ -1,5 +1,11 @@
 # @blitzjs/generator
 
+## 2.0.0-beta.19
+
+### Patch Changes
+
+- b80c3d92: Fix form paths when running blitz generate all
+
 ## 2.0.0-beta.18
 
 ## 2.0.0-beta.17
