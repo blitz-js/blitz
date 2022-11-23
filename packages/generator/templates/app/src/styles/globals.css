@@ -1,3 +1,8 @@
+:root {
+  --border-radius: 0.75rem;
+  --screen-width: 100vmin;
+}
+
 html,
 body {
   padding: 0;

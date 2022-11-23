@@ -1,3 +1,4 @@
+
 .container {
   display: flex;
   flex-direction: column;
@@ -5,33 +6,75 @@
 }
 
 .main {
-  padding: 4rem 0;
   flex: 1;
+  padding: 4rem;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
 }
 
-.layout {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-gap: 4rem;
-  padding: 0 0.5rem;
-}
-
-.instructions {
+.wrapper {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  gap: 2rem;
+  width: var(--screen-width);
+}
+
+.scribbleContainer {
+  position: relative;
+}
+
+.scribbleContainer svg {
+  transform: scale(0.2) rotate(166deg) rotateY(180deg);
+  position: absolute;
+  top: -192px;
+  left: -90px;
+}
+
+.scribbleContainer span {
+  position: absolute;
+  left: -62px;
+  top: -114px;
+  width: 300px;
+  transform: rotate(349deg);
+  font-weight: 300;
+}
+
+.frost {
   background: rgba(255, 255, 255, 0.2);
   border-radius: 16px;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
   border: 1px solid rgba(255, 255, 255, 0.31);
+}
+
+.layout {
+  width: var(--screen-width);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 4rem;
+}
+
+.header {
+  composes: frost;
+  width: 100vw;
+  display: flex;
+  justify-content: space-between;
   padding: 1rem;
-  border-radius: 0.75rem;
+}
+
+
+.instructions {
+  composes: frost;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: var(--border-radius);
+  padding: 1rem;
+  width: 100%;
 }
 
 .globe {
@@ -50,9 +93,13 @@
 .footer {
   display: flex;
   padding: 2rem 0;
-  border-top: 1px solid #eaeaea;
   justify-content: center;
   align-items: center;
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border-top: 1px solid rgba(255, 255, 255, 0.31);
 }
 
 .footer span {
@@ -160,10 +207,11 @@
 
 .buttonContainer {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 1rem;
-  justify-content: center;
-  width: 100%;
+  justify-content: flex-end;
+  align-items: center;
+  flex: 1;
 }
 
 .button {
@@ -173,6 +221,8 @@
   text-shadow: rgba(0, 0, 0, 0.25) 0px 3px 8px;
   padding: 0 24px;
   height: 48px;
+  width: 200px;
+  max-width: 300px;
   position: relative;
   display: inline-flex;
   justify-content: center;
@@ -202,10 +252,12 @@
   flex-direction: column;
   flex-wrap: wrap;
   gap: 1rem;
+  /* width: 100%; */
 }
 
 
 .card {
+  composes: frost;
   padding: 1rem 0rem;
   text-align: center;
   color: inherit;
@@ -214,11 +266,7 @@
   border-bottom-left-radius: 0px;
   transition: color 0.15s ease, border-color 0.15s ease;
   max-width: 300px;
-  background: rgba(255, 255, 255, 0.2);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
-  border: 1px solid rgba(255, 255, 255, 0.31);
+  min-width: 300px;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -243,12 +291,12 @@
 }
 
 .logo {
-  margin-bottom: 1rem;
+  flex: 1;
 }
 
 .logo svg {
   height: 100%;
-  width: 100%;
+  width: 200px;
   fill: #7450ec;
 }
 
