@@ -1,5 +1,19 @@
 # @blitzjs/next
 
+## 2.0.0-beta.19
+
+### Minor Changes
+
+- c1e00406: transpile packages to es2015 to support older browsers
+
+### Patch Changes
+
+- b33db082: Fix ambigious class warning log & upgrade superjson from 1.9.1 to 1.11.0
+- Updated dependencies [c1e00406]
+- Updated dependencies [b33db082]
+- Updated dependencies [b493c93f]
+  - @blitzjs/rpc@2.0.0-beta.19
+
 ## 2.0.0-beta.18
 
 ### Patch Changes

@@ -1,5 +1,21 @@
 # @blitzjs/auth
 
+## 2.0.0-beta.19
+
+### Minor Changes
+
+- c1e00406: transpile packages to es2015 to support older browsers
+
+### Patch Changes
+
+- Updated dependencies [c1e00406]
+- Updated dependencies [696f48c4]
+- Updated dependencies [942536d9]
+- Updated dependencies [a6f32d1d]
+- Updated dependencies [c126b819]
+- Updated dependencies [b33db082]
+  - blitz@2.0.0-beta.19
+
 ## 2.0.0-beta.18
 
 ### Patch Changes
