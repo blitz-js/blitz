@@ -479,7 +479,7 @@ export abstract class Generator<
           })
           const importExists = program
             .find(j.ImportDeclaration)
-            .filter((path) => path.node.source.value === "app/core/components/LabelSelectField")
+            .filter((path) => path.node.source.value === "src/core/components/LabelSelectField")
             .size()
           if (!importExists) {
             program
@@ -488,7 +488,7 @@ export abstract class Generator<
               .insertAfter(
                 j.importDeclaration(
                   [j.importSpecifier(j.identifier("LabeledSelectField"))],
-                  j.literal("app/core/components/LabelSelectField"),
+                  j.literal("src/core/components/LabelSelectField"),
                 ),
               )
           }
@@ -508,7 +508,7 @@ export abstract class Generator<
                   ),
                 ],
                 j.literal(
-                  `app/${templateValues.parentModelId.replace("Id", "s")}/queries/${
+                  `src/${templateValues.parentModelId.replace("Id", "s")}/queries/${
                     "get" + capitalize(templateValues.parentModelId).replace("Id", "s")
                   }`,
                 ),
@@ -544,11 +544,14 @@ export abstract class Generator<
                 ),
               )
           }
-          const projectFormSuspense = program.find(j.FunctionDeclaration).filter((path) => {
-            return path.node.id?.name === "ProjectFormSuspense"
+          const modalFormSuspense = program.find(j.FunctionDeclaration).filter((path) => {
+            if (path.node.id?.name) {
+              return path.node.id.name.includes("FormSuspense")
+            }
+            return false
           })
-          if (projectFormSuspense.size()) {
-            projectFormSuspense
+          if (modalFormSuspense.size()) {
+            modalFormSuspense
               .find(j.ReturnStatement)
               .at(-1)
               .insertBefore(
@@ -578,7 +581,7 @@ export abstract class Generator<
                   ),
                 ]),
               )
-            projectFormSuspense
+            modalFormSuspense
               .find(j.JSXElement)
               .filter((path) => {
                 return (
