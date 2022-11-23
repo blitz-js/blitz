@@ -147,46 +147,47 @@ const setupBlitzClient = <TPlugins extends readonly ClientPlugin<object>[]>({
   //   const { middleware } = plugin(clientCtx)
   //   allMiddleware.push(middleware)
   // }
-  const exports = plugins.reduce((acc, plugin) => ({...plugin.exports(), ...acc}), {})
-  const events = plugins.reduce(
-    (acc, plugin) => ({
-      onRpcError: plugin.events.onRpcError
-        ? merge<Error, Promise<void>>([
-            ...(acc.onRpcError
-              ? Array.isArray(acc.onRpcError)
-                ? acc.onRpcError
-                : [acc.onRpcError]
-              : []),
-            plugin.events.onRpcError,
-          ])
-        : acc.onRpcError,
-      onSessionCreated: plugin.events.onSessionCreated
-        ? merge<void, Promise<void>>([
-            ...(Array.isArray(acc.onSessionCreated)
-              ? acc.onSessionCreated
-              : [acc.onSessionCreated]),
-            plugin.events.onSessionCreated,
-          ])
-        : acc.onSessionCreated,
-    }),
-    {
-      onRpcError: merge<Error, Promise<void>>([]),
-      onSessionCreated: merge<void, Promise<void>>([]),
-    },
-  )
 
-  const middleware = plugins.reduce(
+  const {middleware, events, exports} = plugins.reduce(
     (acc, plugin) => ({
-      beforeHttpRequest: plugin.middleware.beforeHttpRequest
-        ? pipe<RequestInit>(acc.beforeHttpRequest, plugin.middleware.beforeHttpRequest)
-        : acc.beforeHttpRequest,
-      beforeHttpResponse: plugin.middleware.beforeHttpResponse
-        ? pipe<Response>(acc.beforeHttpResponse, plugin.middleware.beforeHttpResponse)
-        : acc.beforeHttpResponse,
+      middleware: {
+        beforeHttpRequest: plugin.middleware.beforeHttpRequest
+          ? pipe<RequestInit>(acc.middleware.beforeHttpRequest, plugin.middleware.beforeHttpRequest)
+          : acc.middleware.beforeHttpRequest,
+        beforeHttpResponse: plugin.middleware.beforeHttpResponse
+          ? pipe<Response>(acc.middleware.beforeHttpResponse, plugin.middleware.beforeHttpResponse)
+          : acc.middleware.beforeHttpResponse,
+      },
+      events: {
+        onRpcError: plugin.events.onRpcError
+          ? merge<Error, Promise<void>>([
+              ...(Array.isArray(acc.events.onRpcError)
+                ? acc.events.onRpcError
+                : [acc.events.onRpcError]),
+              plugin.events.onRpcError,
+            ])
+          : acc.events.onRpcError,
+        onSessionCreated: plugin.events.onSessionCreated
+          ? merge<void, Promise<void>>([
+              ...(Array.isArray(acc.events.onSessionCreated)
+                ? acc.events.onSessionCreated
+                : [acc.events.onSessionCreated]),
+              plugin.events.onSessionCreated,
+            ])
+          : acc.events.onSessionCreated,
+      },
+      exports: {...plugin.exports(), ...acc.exports},
     }),
     {
-      beforeHttpRequest: pipe<RequestInit>(),
-      beforeHttpResponse: pipe<Response>(),
+      middleware: {
+        beforeHttpRequest: pipe<RequestInit>(),
+        beforeHttpResponse: pipe<Response>(),
+      },
+      events: {
+        onRpcError: merge<Error, Promise<void>>([]),
+        onSessionCreated: merge<void, Promise<void>>([]),
+      },
+      exports: {},
     },
   )
 
