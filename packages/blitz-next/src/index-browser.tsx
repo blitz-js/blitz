@@ -178,16 +178,10 @@ const setupBlitzClient = <TPlugins extends readonly ClientPlugin<object>[]>({
   const middleware = plugins.reduce(
     (acc, plugin) => ({
       beforeHttpRequest: plugin.middleware.beforeHttpRequest
-        ? pipe<RequestInit>(
-            acc.beforeHttpRequest as BeforeHttpRequest,
-            plugin.middleware.beforeHttpRequest,
-          )
+        ? pipe<RequestInit>(acc.beforeHttpRequest, plugin.middleware.beforeHttpRequest)
         : acc.beforeHttpRequest,
       beforeHttpResponse: plugin.middleware.beforeHttpResponse
-        ? pipe<Response>(
-            acc.beforeHttpResponse as BeforeHttpResponse,
-            plugin.middleware.beforeHttpResponse,
-          )
+        ? pipe<Response>(acc.beforeHttpResponse, plugin.middleware.beforeHttpResponse)
         : acc.beforeHttpResponse,
     }),
     {
