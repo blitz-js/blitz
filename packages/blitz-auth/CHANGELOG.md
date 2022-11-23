@@ -1,5 +1,38 @@
 # @blitzjs/auth
 
+## 2.0.0-beta.19
+
+### Minor Changes
+
+- c1e00406: transpile packages to es2015 to support older browsers
+
+### Patch Changes
+
+- Updated dependencies [c1e00406]
+- Updated dependencies [696f48c4]
+- Updated dependencies [942536d9]
+- Updated dependencies [a6f32d1d]
+- Updated dependencies [c126b819]
+- Updated dependencies [b33db082]
+  - blitz@2.0.0-beta.19
+
+## 2.0.0-beta.18
+
+### Patch Changes
+
+- blitz@2.0.0-beta.18
+
+## 2.0.0-beta.17
+
+### Patch Changes
+
+- 8b4bf999: Update dependencies
+- 97469a12: Added option `role` to `authenticate` property of `BlitzPage` to authenticate page with respect to the role of the user. `String` value or `Array` of strings can be passed to authorize users.
+- Updated dependencies [5ea068b2]
+- Updated dependencies [8b4bf999]
+- Updated dependencies [88caa18e]
+  - blitz@2.0.0-beta.17
+
 ## 2.0.0-beta.16
 
 ### Minor Changes

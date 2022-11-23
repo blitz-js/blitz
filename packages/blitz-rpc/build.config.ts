@@ -17,10 +17,17 @@ const config: BuildConfig = {
     "blitz",
     "next",
     "zod",
+    "next",
+    "next/router",
+    "next/dist/client/normalize-trailing-slash",
+    "next/dist/client/add-base-path",
   ],
   declaration: true,
   rollup: {
     emitCJS: true,
+    esbuild: {
+      target: ["es2015"],
+    },
   },
 }
 export default config

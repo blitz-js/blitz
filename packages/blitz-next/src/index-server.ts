@@ -75,7 +75,7 @@ export type BlitzGSPResult<P> =
   | {notFound: true; revalidate?: number | boolean}
 
 export type BlitzGSSPHandler<
-  TProps,
+  TProps extends {[key: string]: any} = {[key: string]: any},
   Query extends ParsedUrlQuery = ParsedUrlQuery,
   PD extends PreviewData = PreviewData,
 > = ({
@@ -88,7 +88,7 @@ export type BlitzGSSPHandler<
 >
 
 export type BlitzGSPHandler<
-  TProps,
+  TProps extends {[key: string]: any} = {[key: string]: any},
   Query extends ParsedUrlQuery = ParsedUrlQuery,
   PD extends PreviewData = PreviewData,
 > = ({
@@ -137,7 +137,11 @@ export const setupBlitzServer = ({plugins, onError, logger}: SetupBlitzOptions) 
   const contextMiddleware = plugins.flatMap((p) => p.contextMiddleware).filter(Boolean)
 
   const gSSP =
-    <TProps, Query extends ParsedUrlQuery = ParsedUrlQuery, PD extends PreviewData = PreviewData>(
+    <
+      TProps extends {[key: string]: any} = {[key: string]: any},
+      Query extends ParsedUrlQuery = ParsedUrlQuery,
+      PD extends PreviewData = PreviewData,
+    >(
       handler: BlitzGSSPHandler<TProps, Query, PD>,
     ): GetServerSideProps<TProps, Query, PD> =>
     async ({req, res, ...rest}) => {
@@ -168,7 +172,11 @@ export const setupBlitzServer = ({plugins, onError, logger}: SetupBlitzOptions) 
     }
 
   const gSP =
-    <TProps, Query extends ParsedUrlQuery = ParsedUrlQuery, PD extends PreviewData = PreviewData>(
+    <
+      TProps extends {[key: string]: any} = {[key: string]: any},
+      Query extends ParsedUrlQuery = ParsedUrlQuery,
+      PD extends PreviewData = PreviewData,
+    >(
       handler: BlitzGSPHandler<TProps, Query, PD>,
     ): GetStaticProps<TProps, Query, PD> =>
     async (context) => {
@@ -214,6 +222,7 @@ export const setupBlitzServer = ({plugins, onError, logger}: SetupBlitzOptions) 
 export interface BlitzConfig extends NextConfig {
   blitz?: {
     resolverPath?: ResolverPathOptions
+    includeRPCFolders?: string[]
     customServer?: {
       hotReload?: boolean
     }
@@ -244,6 +253,7 @@ export function withBlitz(nextConfig: BlitzConfig = {}) {
         webpackConfig: config,
         webpackRuleOptions: {
           resolverPath: nextConfig.blitz?.resolverPath,
+          includeRPCFolders: nextConfig.blitz?.includeRPCFolders,
         },
       })
       if (typeof nextConfig.webpack === "function") {

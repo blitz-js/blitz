@@ -1,5 +1,20 @@
 # @blitzjs/generator
 
+## 2.0.0-beta.19
+
+### Patch Changes
+
+- b80c3d92: Fix form paths when running blitz generate all
+
+## 2.0.0-beta.18
+
+## 2.0.0-beta.17
+
+### Patch Changes
+
+- 2a81af7b: Update generator templates to use the src directory instead of app
+- 8b4bf999: Update dependencies
+
 ## 2.0.0-beta.16
 
 ### Patch Changes

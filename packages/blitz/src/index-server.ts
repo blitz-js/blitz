@@ -41,7 +41,7 @@ export type BlitzServerPlugin<
 
 export function createServerPlugin<
   TPluginOptions,
-  TCtx,
+  TCtx extends Ctx,
   TPluginExports extends object,
   TMiddleware,
 >(

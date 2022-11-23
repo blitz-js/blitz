@@ -1,5 +1,37 @@
 # @blitzjs/next
 
+## 2.0.0-beta.19
+
+### Minor Changes
+
+- c1e00406: transpile packages to es2015 to support older browsers
+
+### Patch Changes
+
+- b33db082: Fix ambigious class warning log & upgrade superjson from 1.9.1 to 1.11.0
+- Updated dependencies [c1e00406]
+- Updated dependencies [b33db082]
+- Updated dependencies [b493c93f]
+  - @blitzjs/rpc@2.0.0-beta.19
+
+## 2.0.0-beta.18
+
+### Patch Changes
+
+- Updated dependencies [72a4e594]
+- Updated dependencies [ed2b0e22]
+- Updated dependencies [c0a3b1ee]
+  - @blitzjs/rpc@2.0.0-beta.18
+
+## 2.0.0-beta.17
+
+### Patch Changes
+
+- 8b4bf999: Update dependencies
+- 97469a12: Added option `role` to `authenticate` property of `BlitzPage` to authenticate page with respect to the role of the user. `String` value or `Array` of strings can be passed to authorize users.
+- Updated dependencies [8b4bf999]
+  - @blitzjs/rpc@2.0.0-beta.17
+
 ## 2.0.0-beta.16
 
 ### Minor Changes

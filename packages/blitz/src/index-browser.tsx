@@ -95,4 +95,5 @@ if (typeof window !== "undefined" && process.env.NODE_ENV === "development") {
 
 export * from "./utils"
 export * from "./types"
+export * from "./utils/enhance-prisma"
 export * from "./utils/zod"

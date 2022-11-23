@@ -61,6 +61,7 @@ const loaderServerResolvers = resolve(dir, "./loader-server-resolvers.cjs")
 
 interface WebpackRuleOptions {
   resolverPath: ResolverPathOptions | undefined
+  includeRPCFolders: string[] | undefined
 }
 
 interface WebpackRule {

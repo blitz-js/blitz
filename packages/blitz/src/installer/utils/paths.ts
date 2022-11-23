@@ -5,6 +5,19 @@ function ext(jsx = false) {
   return fs.existsSync(path.resolve("tsconfig.json")) ? (jsx ? ".tsx" : ".ts") : ".js"
 }
 
+function getBlitzPath(type: string) {
+  const appPath = `app/blitz-${type}${ext(false)}`
+  const srcPath = `src/blitz-${type}${ext(false)}`
+  const appDir = fs.existsSync(path.resolve(appPath))
+  const srcDir = fs.existsSync(path.resolve(srcPath))
+
+  if (appDir) {
+    return appPath
+  } else if (srcDir) {
+    return srcPath
+  }
+}
+
 export const paths = {
   document() {
     return `pages/_document${ext(true)}`
@@ -13,10 +26,10 @@ export const paths = {
     return `pages/_app${ext(true)}`
   },
   blitzServer() {
-    return `app/blitz-server${ext(false)}`
+    return getBlitzPath("server")
   },
   blitzClient() {
-    return `app/blitz-client${ext(false)}`
+    return getBlitzPath("client")
   },
   entry() {
     return `pages/index${ext(true)}`

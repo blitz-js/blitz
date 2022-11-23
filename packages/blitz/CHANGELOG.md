@@ -1,5 +1,41 @@
 # blitz
 
+## 2.0.0-beta.19
+
+### Major Changes
+
+- 942536d9: update paginate.ts, return more params for more complex pagination control
+
+### Minor Changes
+
+- c1e00406: transpile packages to es2015 to support older browsers
+- 696f48c4: some providers need extra attributes, update for wrapAppWithProvider
+
+### Patch Changes
+
+- a6f32d1d: Export enhancePrisma for client again (Fixes #3964)
+- c126b819: using "blitz install" inside recipe with addRunCommandStep causes hangs up
+- b33db082: Fix ambigious class warning log & upgrade superjson from 1.9.1 to 1.11.0
+- Updated dependencies [b80c3d92]
+  - @blitzjs/generator@2.0.0-beta.19
+
+## 2.0.0-beta.18
+
+### Patch Changes
+
+- @blitzjs/generator@2.0.0-beta.18
+
+## 2.0.0-beta.17
+
+### Patch Changes
+
+- 5ea068b2: Check if blitz-server & blitz-client is located in either the app or src directory and return the correct path for blitz recipes.
+- 8b4bf999: Update dependencies
+- 88caa18e: Patch next13 for suspense error
+- Updated dependencies [2a81af7b]
+- Updated dependencies [8b4bf999]
+  - @blitzjs/generator@2.0.0-beta.17
+
 ## 2.0.0-beta.16
 
 ### Patch Changes
