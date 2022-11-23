@@ -6,8 +6,8 @@
     "build": "blitz build",
     "start": "blitz start",
     "lint": "eslint --ignore-path .gitignore --ext .js .",
-    "test": "jest --passWithNoTests",
-    "test:watch": "jest --watch",
+    "test": "vitest run --passWithNoTests",
+    "test:watch": "vitest",
     "prepare": "husky install"
   },
   "prettier": {
