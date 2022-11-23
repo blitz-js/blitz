@@ -43,7 +43,6 @@ export const BlitzRpcPlugin = createClientPlugin<BlitzRpcOptions, {queryClient: 
         await queryClient.cancelQueries()
         await queryClient.resetQueries()
         queryClient.getMutationCache().clear()
-        console.log("New Session Created")
         // We have a 100ms delay here to prevent unnecessary stale queries from running
         // This prevents the case where you logout on a page with
         // Page.authenticate = {redirectTo: '/login'}

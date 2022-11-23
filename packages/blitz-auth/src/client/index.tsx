@@ -35,7 +35,6 @@ import _debug from "debug"
 import {formatWithValidation} from "../shared/url-utils"
 import {ComponentType} from "react"
 import {ComponentProps} from "react"
-import {IncomingMessage} from "http"
 
 const BadBehavior: typeof _BadBehavior =
   "default" in _BadBehavior ? (_BadBehavior as any).default : _BadBehavior
@@ -398,7 +397,7 @@ export const AuthClientPlugin = createClientPlugin((options: AuthPluginClientOpt
   return {
     withProvider: withBlitzAuthPlugin,
     events: {
-      onRpcError: async (error: Error) => {
+      onRpcError: async (error) => {
         // We don't clear the publicDataStore for anonymous users,
         // because there is not sensitive data
         if (error.name === "AuthenticationError" && getPublicDataStore().getData().userId) {
