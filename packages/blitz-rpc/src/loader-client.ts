@@ -7,7 +7,7 @@ import {
   LoaderOptions,
   toPosixPath,
 } from "./loader-utils"
-import {posix} from "path"
+import {posix, sep, join, normalize} from "path"
 import {log, ResolverConfig} from "blitz"
 import {getResolverConfig} from "./parse-rpc-config"
 
@@ -41,7 +41,8 @@ export async function transformBlitzRpcResolverClient(
 ) {
   assertPosixPath(id)
   assertPosixPath(root)
-  const resolverFilePath = "/" + posix.relative(root, id)
+  let resolverFilePath = "/" + posix.relative(root, id)
+  resolverFilePath = normalize(join(normalize(root), resolverFilePath.replace("/", sep)))
   assertPosixPath(resolverFilePath)
   const routePath = convertPageFilePathToRoutePath({
     appRoot: root,

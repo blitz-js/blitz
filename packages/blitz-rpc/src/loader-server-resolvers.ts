@@ -8,7 +8,7 @@ import {
   toPosixPath,
 } from "./loader-utils"
 import {normalizeApiRoute} from "./data-client"
-import {posix} from "path"
+import {posix, sep, join, normalize} from "path"
 
 // Subset of `import type { LoaderDefinitionFunction } from 'webpack'`
 
@@ -41,7 +41,8 @@ export async function transformBlitzRpcResolverServer(
   assertPosixPath(id)
   assertPosixPath(root)
 
-  const resolverFilePath = "/" + posix.relative(root, id)
+  let resolverFilePath = "/" + posix.relative(root, id)
+  resolverFilePath = normalize(join(normalize(root), resolverFilePath.replace("/", sep)))
   assertPosixPath(resolverFilePath)
   const routePath = convertPageFilePathToRoutePath({
     appRoot: root,
