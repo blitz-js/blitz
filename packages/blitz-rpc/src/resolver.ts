@@ -1,5 +1,5 @@
 import type {SessionContext, SessionContextBase} from "@blitzjs/auth"
-import {Await, Ctx, EnsurePromise, MiddlewareCtx} from "blitz"
+import {Await, Ctx, EnsurePromise, AuthenticatedMiddlewareCtx} from "blitz"
 import type {input as zInput, output as zOutput, ZodTypeAny} from "zod"
 
 export type ParserType = "sync" | "async"
@@ -271,7 +271,7 @@ interface ResolverAuthorize {
   <T, C = Ctx>(...args: Parameters<SessionContextBase["$authorize"]>): (
     input: T,
     ctx: C,
-  ) => ResultWithContext<T, MiddlewareCtx>
+  ) => ResultWithContext<T, AuthenticatedMiddlewareCtx>
 }
 
 const authorize: ResolverAuthorize = (...args) => {

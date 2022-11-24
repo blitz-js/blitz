@@ -81,7 +81,7 @@ declare module "blitz" {
   export interface Ctx {
     session: SessionContext
   }
-  export interface MiddlewareCtx extends Omit<Ctx, "session"> {
+  export interface AuthenticatedMiddlewareCtx extends Omit<Ctx, "session"> {
     session: AuthenticatedSessionContext
   }
 }
