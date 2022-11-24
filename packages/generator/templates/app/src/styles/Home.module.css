@@ -213,6 +213,7 @@
   justify-content: flex-end;
   align-items: center;
   flex: 1;
+  padding-right: 1rem;
 }
 
 .button {
@@ -293,7 +294,7 @@
 
 .logo {
   flex: 1;
-  padding: 1rem 3rem;
+  padding: 1rem 2rem;
 }
 
 .logo svg {
