@@ -28,16 +28,16 @@
 .scribbleContainer svg {
   transform: scale(0.2) rotate(166deg) rotateY(180deg);
   position: absolute;
-  top: -183px;
-  left: -111px;
+  top: -192px;
+  left: -120px;
 }
 
 .scribbleContainer span {
   position: absolute;
-  left: -108px;
-  top: -94px;
+  left: -127px;
+  top: -97px;
   width: 300px;
-  transform: rotate(351deg);
+  transform: rotate(353deg);
   font-weight: 300;
 }
 
@@ -115,8 +115,9 @@
 .code span {
   background: rgba(124, 58, 237, 50%);
   border-radius: 50rem;
-  font-size: 14px;
-  padding: 5px;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 17px;
   width: 20px;
   height: 20px;
   display: flex;
@@ -128,7 +129,7 @@
 .code pre {
   background: rgba(124, 58, 237, 12%);
   border-radius: 4px;
-  padding: 0.3em 0.60em;
+  padding: 0.7em 1.4em;
   text-align: center;
 }
 
