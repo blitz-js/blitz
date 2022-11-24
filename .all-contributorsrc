@@ -3766,6 +3766,15 @@
         "doc",
         "code"
       ]
+    },
+    {
+      "login": "usamaster",
+      "name": "usamaster",
+      "avatar_url": "https://avatars.githubusercontent.com/u/5255330?v=4",
+      "profile": "https://github.com/usamaster",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
