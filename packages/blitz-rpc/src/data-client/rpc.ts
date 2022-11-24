@@ -81,10 +81,12 @@ export function __internal_buildRpcClient({
       routePathURL.searchParams.set("meta", stringify(serialized.meta))
     }
 
+    const {beforeHttpRequest, beforeHttpResponse} = globalThis.__BLITZ_MIDDLEWARE_HOOKS
+
     const promise = window
       .fetch(
         routePathURL,
-        globalThis.__BLITZ_beforeHttpRequest({
+        beforeHttpRequest({
           method: httpMethod,
           headers: {
             "Content-Type": "application/json",
@@ -105,7 +107,7 @@ export function __internal_buildRpcClient({
       )
       .then(async (response) => {
         debug("Received request for", routePath)
-        response = globalThis.__BLITZ_beforeHttpResponse(response)
+        response = beforeHttpResponse(response)
         if (!response.ok) {
           const error = new Error(response.statusText)
           ;(error as any).statusCode = response.status
@@ -126,7 +128,10 @@ export function __internal_buildRpcClient({
               json: payload.error,
               meta: payload.meta?.error,
             }) as any
-            await Promise.all(globalThis.__BLITZ_onRpcError(error))
+            const rpcEvent = new CustomEvent("blitz:rpc-error", {
+              detail: error,
+            })
+            document.dispatchEvent(rpcEvent)
             const prismaError = error.message.match(/invalid.*prisma.*invocation/i)
             if (prismaError && !("code" in error)) {
               error = new Error(prismaError[0])

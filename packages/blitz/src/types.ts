@@ -21,12 +21,6 @@ export type OnRpcError = (error: Error) => Promise<void>
 
 export type OnSessionCreated = () => Promise<void>
 
-export type EventHook<T extends (...args: any) => Promise<any>> = T extends (
-  ...args: infer A
-) => Promise<infer R>
-  ? (...args: A) => Promise<R>[]
-  : never
-
 export type MiddlewareHooks = {
   beforeHttpRequest?: BeforeHttpRequest
   beforeHttpResponse?: BeforeHttpResponse
