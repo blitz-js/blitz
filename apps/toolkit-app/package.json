@@ -8,7 +8,7 @@
     "lint": "next lint",
     "prisma:start": "prisma generate && prisma migrate deploy",
     "prisma:studio": "prisma studio",
-    "test:local": "vitest run --passWithNoTests",
+    "test:local": "prisma generate && vitest run --passWithNoTests",
     "test:watch": "vitest"
   },
   "prisma": {

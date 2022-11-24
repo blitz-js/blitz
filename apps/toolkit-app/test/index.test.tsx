@@ -2,7 +2,7 @@
  * @vitest-environment jsdom
  */
 
-import { expect, vi } from "vitest"
+import { expect, vi, test } from "vitest"
 import { render } from "test/utils"
 
 import Home from "../src/pages/index"
