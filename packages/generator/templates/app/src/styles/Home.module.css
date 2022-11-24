@@ -28,16 +28,16 @@
 .scribbleContainer svg {
   transform: scale(0.2) rotate(166deg) rotateY(180deg);
   position: absolute;
-  top: -192px;
-  left: -90px;
+  top: -183px;
+  left: -111px;
 }
 
 .scribbleContainer span {
   position: absolute;
-  left: -62px;
-  top: -114px;
+  left: -108px;
+  top: -94px;
   width: 300px;
-  transform: rotate(349deg);
+  transform: rotate(351deg);
   font-weight: 300;
 }
 
@@ -292,6 +292,7 @@
 
 .logo {
   flex: 1;
+  padding: 1rem 3rem;
 }
 
 .logo svg {
