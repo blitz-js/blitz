@@ -1,10 +1,9 @@
 import {normalizePathTrailingSlash} from "next/dist/client/normalize-trailing-slash"
 import {addBasePath} from "next/dist/client/add-base-path"
-import {deserialize, serialize} from "superjson"
+import {deserialize, serialize, stringify} from "superjson"
 import {SuperJSONResult} from "superjson/dist/types"
 import {isServer} from "blitz"
 import {getQueryKeyFromUrlAndParams, getQueryClient} from "./react-query-utils"
-import {stringify} from "superjson"
 
 export function normalizeApiRoute(path: string): string {
   return normalizePathTrailingSlash(addBasePath(path))
@@ -76,7 +75,7 @@ export function __internal_buildRpcClient({
       serialized = serialize(params)
     }
 
-    if (httpMethod === "GET") {
+    if (httpMethod === "GET" && serialized.json) {
       routePathURL.searchParams.set("params", stringify(serialized.json))
       routePathURL.searchParams.set("meta", stringify(serialized.meta))
     }
