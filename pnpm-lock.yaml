@@ -1474,6 +1474,7 @@ packages:
         integrity: sha512-TDCmlK5eOvH+eH7cdAFlNXeVJqWIQ7gW9tY1GJIpUtFb6CmjVyq2VM3u71bOyR8CRihcCgMUYoDNyLXao3+70Q==,
       }
     engines: {node: ">=6.9.0"}
+    requiresBuild: true
     dependencies:
       "@babel/highlight": 7.18.6
     dev: true
@@ -18038,7 +18039,7 @@ packages:
         integrity: sha512-W8LucSynKUIDu9ylraa7ueVZ7hc0uAgJBxVsQSKOXOyle8a93qXhcz+XAXZ8bIq2d6i4Ehddn6Evt+0/UwKk6Q==,
       }
     dependencies:
-      is-core-module: 2.8.1
+      is-core-module: 2.11.0
       path-parse: 1.0.7
 
   /responselike/1.0.2:
