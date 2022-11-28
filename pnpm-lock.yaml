@@ -12525,7 +12525,6 @@ packages:
       }
     dependencies:
       has: 1.0.3
-    dev: true
 
   /is-core-module/2.8.1:
     resolution:
@@ -13157,7 +13156,7 @@ packages:
       pretty-format: 29.2.1
       slash: 3.0.0
       strip-json-comments: 3.1.1
-      ts-node: 10.9.1_cbe7ovvae6zqfnmtgctpgpys54
+      ts-node: 10.9.1_typescript@4.8.4
     transitivePeerDependencies:
       - supports-color
 
@@ -17261,7 +17260,7 @@ packages:
         integrity: sha512-W8LucSynKUIDu9ylraa7ueVZ7hc0uAgJBxVsQSKOXOyle8a93qXhcz+XAXZ8bIq2d6i4Ehddn6Evt+0/UwKk6Q==,
       }
     dependencies:
-      is-core-module: 2.8.1
+      is-core-module: 2.11.0
       path-parse: 1.0.7
 
   /responselike/1.0.2:
@@ -18807,6 +18806,7 @@ packages:
       typescript: 4.8.4
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
+    dev: false
 
   /ts-node/10.9.1_ieummqxttktzud32hpyrer46t4:
     resolution:
@@ -18873,7 +18873,6 @@ packages:
       typescript: 4.8.4
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
-    dev: false
 
   /tsconfig-paths/3.14.1:
     resolution:
