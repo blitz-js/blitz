@@ -1,7 +1,7 @@
 /**
  * @vitest-environment jsdom
  */
-import {assert, expect, test, beforeEach, describe, spyOn, it} from "vitest"
+import {expect, beforeEach, describe, it, vi} from "vitest"
 
 import {getQueryClient, invalidateQuery, setQueryData} from "../../src/data-client"
 
@@ -18,7 +18,7 @@ const isEmpty = async (arg: string): Promise<boolean> => {
 }
 
 describe("getQueryCacheFunctions", () => {
-  const spyRefetchQueries = spyOn(getQueryClient(), "invalidateQueries")
+  const spyRefetchQueries = vi.spyOn(getQueryClient(), "invalidateQueries")
 
   beforeEach(() => {
     spyRefetchQueries.mockReset()
@@ -51,7 +51,7 @@ describe("getQueryCacheFunctions", () => {
 })
 
 describe("invalidateQuery", () => {
-  const spyRefetchQueries = spyOn(getQueryClient(), "invalidateQueries")
+  const spyRefetchQueries = vi.spyOn(getQueryClient(), "invalidateQueries")
 
   beforeEach(() => {
     spyRefetchQueries.mockReset()
@@ -67,8 +67,8 @@ describe("invalidateQuery", () => {
 })
 
 describe("setQueryData", () => {
-  const spyRefetchQueries = spyOn(getQueryClient(), "invalidateQueries")
-  const spySetQueryData = spyOn(getQueryClient(), "setQueryData")
+  const spyRefetchQueries = vi.spyOn(getQueryClient(), "invalidateQueries")
+  const spySetQueryData = vi.spyOn(getQueryClient(), "setQueryData")
 
   beforeEach(() => {
     spyRefetchQueries.mockReset()
