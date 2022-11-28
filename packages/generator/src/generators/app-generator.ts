@@ -46,11 +46,12 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
         "next-env.d.ts",
         "jest.config.ts",
         "package.ts.json",
+        "vitest-config.ts",
         "pre-push-ts",
         "types.ts",
       ]
     }
-    return ["jsconfig.json", "package.js.json", "pre-push-js"]
+    return ["jsconfig.json", "package.js.json", "vitest.config.js", "pre-push-js"]
   }
 
   async getTemplateValues() {
