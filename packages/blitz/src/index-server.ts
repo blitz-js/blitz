@@ -9,7 +9,6 @@ export * from "./utils/enhance-prisma"
 export * from "./middleware"
 export * from "./paginate"
 export * from "./logging"
-export {reduceBlitzPlugins, merge, pipe} from "./plugin"
 
 export {startWatcher, stopWatcher} from "./cli/utils/routes-manifest"
 
