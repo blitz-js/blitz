@@ -9,7 +9,6 @@ import {
   RedirectError,
 } from "./errors"
 import type {EventHooks, MiddlewareHooks} from "./types"
-import {isClient, merge, pipe} from "./utils"
 export {
   AuthenticationError,
   AuthorizationError,
@@ -30,73 +29,6 @@ export interface ClientPlugin<Exports extends object> {
   middleware: MiddlewareHooks
   exports: () => Exports
   withProvider?: BlitzProviderComponentType
-}
-
-export function reduceBlitzPlugins<TPlugins extends readonly ClientPlugin<object>[]>({
-  plugins,
-}: {
-  plugins: TPlugins
-}) {
-  const {middleware, events, exports} = plugins.reduce(
-    (acc, plugin) => ({
-      middleware: {
-        beforeHttpRequest: plugin.middleware.beforeHttpRequest
-          ? pipe<RequestInit>(acc.middleware.beforeHttpRequest, plugin.middleware.beforeHttpRequest)
-          : acc.middleware.beforeHttpRequest,
-        beforeHttpResponse: plugin.middleware.beforeHttpResponse
-          ? pipe<Response>(acc.middleware.beforeHttpResponse, plugin.middleware.beforeHttpResponse)
-          : acc.middleware.beforeHttpResponse,
-      },
-      events: {
-        onRpcError: plugin.events.onRpcError
-          ? merge<Error, Promise<void>>([
-              ...(Array.isArray(acc.events.onRpcError)
-                ? acc.events.onRpcError
-                : [acc.events.onRpcError]),
-              plugin.events.onRpcError,
-            ])
-          : acc.events.onRpcError,
-        onSessionCreated: plugin.events.onSessionCreated
-          ? merge<void, Promise<void>>([
-              ...(Array.isArray(acc.events.onSessionCreated)
-                ? acc.events.onSessionCreated
-                : [acc.events.onSessionCreated]),
-              plugin.events.onSessionCreated,
-            ])
-          : acc.events.onSessionCreated,
-      },
-      exports: {...plugin.exports(), ...acc.exports},
-    }),
-    {
-      middleware: {
-        beforeHttpRequest: pipe<RequestInit>(),
-        beforeHttpResponse: pipe<Response>(),
-      },
-      events: {
-        onRpcError: merge<Error, Promise<void>>([]),
-        onSessionCreated: merge<void, Promise<void>>([]),
-      },
-      exports: {},
-    },
-  )
-
-  globalThis.__BLITZ_MIDDLEWARE_HOOKS = middleware
-
-  if (isClient) {
-    document.addEventListener("blitz:session-created", async () => {
-      await Promise.all(events.onSessionCreated())
-    })
-    document.addEventListener("blitz:rpc-error", async (e) => {
-      const customEvent = e as CustomEvent<Error>
-      await Promise.all(events.onRpcError(customEvent.detail))
-    })
-  }
-
-  return {
-    exports,
-    middleware,
-    events,
-  }
 }
 
 export function createClientPlugin<TPluginOptions, TPluginExports extends object>(
@@ -149,3 +81,4 @@ export * from "./utils"
 export * from "./types"
 export * from "./utils/enhance-prisma"
 export * from "./utils/zod"
+export {reduceBlitzPlugins, merge, pipe} from "./plugin"
