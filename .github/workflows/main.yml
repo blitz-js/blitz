@@ -138,9 +138,9 @@ jobs:
         run: pnpm install --frozen-lockfile
         shell: bash
 
-      # - name: Install playwright
-      #   run: npx playwright install-deps chromium
-      #   shell: bash
+      - name: Install playwright
+        run: PLAYWRIGHT_BROWSERS_PATH=$HOME/pw-browsers npx playwright install
+        shell: bash
 
       - name: Build
         run: pnpm build
