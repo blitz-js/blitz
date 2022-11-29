@@ -24,6 +24,9 @@ export type BlitzProviderComponentType = <TProps = any>(
   (props: TProps): JSX.Element
   displayName: string
 }
+
+export type BlitzPluginWithProvider = (x: React.ComponentType<any>) => React.ComponentType<any>
+
 export interface ClientPlugin<Exports extends object> {
   events: EventHooks
   middleware: MiddlewareHooks

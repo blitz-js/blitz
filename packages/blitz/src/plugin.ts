@@ -1,4 +1,9 @@
-import {ClientPlugin} from "./index-browser"
+import type {
+  BlitzProviderComponentType,
+  ClientPlugin,
+  Simplify,
+  UnionToIntersection,
+} from "./index-browser"
 import {isClient} from "./utils"
 
 export function merge<T, U>([...fns]: Array<(args: T) => U>) {
@@ -9,12 +14,25 @@ export function pipe<T>(...fns: Array<(x: T) => T>) {
   return (x: T) => fns.reduce((v, f) => f(v), x)
 }
 
+const compose =
+  (...rest: BlitzProviderComponentType[]) =>
+  (x: React.ComponentType<any>) =>
+    rest.reduceRight((y, f) => f(y), x)
+
+export type PluginsExports<TPlugins extends readonly ClientPlugin<object>[]> = Simplify<
+  UnionToIntersection<
+    {
+      [I in keyof TPlugins & number]: ReturnType<TPlugins[I]["exports"]>
+    }[number]
+  >
+>
+
 export function reduceBlitzPlugins<TPlugins extends readonly ClientPlugin<object>[]>({
   plugins,
 }: {
   plugins: TPlugins
 }) {
-  const {middleware, events, exports} = plugins.reduce(
+  const {middleware, events, exports, providers} = plugins.reduce(
     (acc, plugin) => ({
       middleware: {
         beforeHttpRequest: plugin.middleware.beforeHttpRequest
@@ -43,6 +61,7 @@ export function reduceBlitzPlugins<TPlugins extends readonly ClientPlugin<object
           : acc.events.onSessionCreated,
       },
       exports: {...plugin.exports(), ...acc.exports},
+      providers: plugin.withProvider ? acc.providers.concat(plugin.withProvider) : acc.providers,
     }),
     {
       middleware: {
@@ -53,7 +72,8 @@ export function reduceBlitzPlugins<TPlugins extends readonly ClientPlugin<object
         onRpcError: merge<Error, Promise<void>>([]),
         onSessionCreated: merge<void, Promise<void>>([]),
       },
-      exports: {},
+      exports: {} as PluginsExports<TPlugins>,
+      providers: [] as BlitzProviderComponentType[],
     },
   )
 
@@ -69,9 +89,12 @@ export function reduceBlitzPlugins<TPlugins extends readonly ClientPlugin<object
     })
   }
 
+  const withPlugins = compose(...providers)
+
   return {
     exports,
     middleware,
     events,
+    withPlugins,
   }
 }
