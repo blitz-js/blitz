@@ -2,18 +2,7 @@
  * @vitest-environment jsdom
  */
 
-import {
-  expect,
-  describe,
-  it,
-  test,
-  afterEach,
-  beforeEach,
-  spyOn,
-  MockWithArgs,
-  vi,
-  MockedFunction,
-} from "vitest"
+import {expect, test, afterEach, beforeEach, vi, MockedFunction} from "vitest"
 import {render, screen, cleanup} from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import React, {forwardRef} from "react"
@@ -22,7 +11,7 @@ import {ErrorBoundary, withErrorBoundary} from "./error-boundary"
 
 beforeEach(() => {
   ;(global as any).IS_REACT_ACT_ENVIRONMENT = true
-  spyOn(console, "error").mockImplementation(() => {})
+  vi.spyOn(console, "error").mockImplementation(() => {})
 })
 afterEach(() => {
   vi.resetAllMocks()
@@ -60,7 +49,7 @@ export const cleanStack = (stack: any): any => {
 }
 
 test("standard use-case", () => {
-  const consoleError = console.error as MockWithArgs<(args: unknown[]) => void>
+  const consoleError = console.error as MockedFunction<(args: unknown[]) => void>
 
   function App() {
     const [username, setUsername] = React.useState("")
@@ -131,7 +120,7 @@ test("standard use-case", () => {
 })
 
 test("fallbackRender prop", () => {
-  const consoleError = console.error as MockWithArgs<(args: unknown[]) => void>
+  const consoleError = console.error as MockedFunction<(args: unknown[]) => void>
 
   const workingMessage = "Phew, we are safe!"
 
@@ -169,7 +158,7 @@ test("fallbackRender prop", () => {
 })
 
 test("simple fallback is supported", () => {
-  const consoleError = console.error as MockWithArgs<(args: unknown[]) => void>
+  const consoleError = console.error as MockedFunction<(args: unknown[]) => void>
 
   const {unmount} = render(
     <ErrorBoundary fallback={<div>Oh no</div>}>
@@ -229,7 +218,7 @@ test("withErrorBoundary HOC", () => {
 })
 
 test("supported but undocumented reset method", () => {
-  const consoleError = console.error as MockWithArgs<(args: unknown[]) => void>
+  const consoleError = console.error as MockedFunction<(args: unknown[]) => void>
 
   const children = "Boundry children"
   function App() {
@@ -266,7 +255,7 @@ test("supported but undocumented reset method", () => {
 })
 
 test("requires either a fallback, fallbackRender, or FallbackComponent", () => {
-  const consoleError = console.error as MockWithArgs<(args: unknown[]) => void>
+  const consoleError = console.error as MockedFunction<(args: unknown[]) => void>
 
   let unmount: undefined | (() => void)
   expect(() => {
@@ -286,7 +275,7 @@ test("requires either a fallback, fallbackRender, or FallbackComponent", () => {
 
 // eslint-disable-next-line max-statements
 test("supports automatic reset of error boundary when resetKeys change", () => {
-  const consoleError = console.error as MockWithArgs<(args: unknown[]) => void>
+  const consoleError = console.error as MockedFunction<(args: unknown[]) => void>
 
   const handleReset = vi.fn()
   const TRY_AGAIN_ARG1 = "TRY_AGAIN_ARG1"
@@ -392,7 +381,7 @@ test("supports automatic reset of error boundary when resetKeys change", () => {
 })
 
 test("supports reset via resetKeys right after error is triggered on component mount", async () => {
-  const consoleError = console.error as MockWithArgs<(args: unknown[]) => void>
+  const consoleError = console.error as MockedFunction<(args: unknown[]) => void>
   const handleResetKeysChange = vi.fn()
   function App() {
     const [explode, setExplode] = React.useState(true)
@@ -430,7 +419,7 @@ test("supports reset via resetKeys right after error is triggered on component m
 })
 
 test("should support not only function as FallbackComponent", () => {
-  const consoleError = console.error as MockWithArgs<(args: unknown[]) => void>
+  const consoleError = console.error as MockedFunction<(args: unknown[]) => void>
 
   const FancyFallback = forwardRef(({error}: ErrorFallbackProps) => (
     <div>
@@ -456,7 +445,7 @@ test("should support not only function as FallbackComponent", () => {
 })
 
 test("should throw error if FallbackComponent is not valid", () => {
-  const consoleError = console.error as MockWithArgs<(args: unknown[]) => void>
+  const consoleError = console.error as MockedFunction<(args: unknown[]) => void>
 
   let unmount: undefined | (() => void)
   expect(() => {
