@@ -139,7 +139,7 @@ jobs:
         shell: bash
 
       - name: Install playwright
-        run: npx playwright install --with-deps
+        run: npx playwright install-deps chromium
         shell: bash
 
       - name: Build
