@@ -1,20 +1,32 @@
-const low = require("lowdb")
-const FileSync = require("lowdb/adapters/FileSync")
+import {Low} from "lowdb"
+import {JSONFile} from "lowdb/lib/adapters/JSONFile"
+import {dirname, join} from "node:path"
+import {fileURLToPath} from "node:url"
 
 declare global {
   namespace NodeJS {
     interface Global {
-      db: any
+      db: Low<any>
     }
   }
 }
 
-let db = global.db || low(new FileSync("db.json"))
+// File path
+const __dirname = dirname(fileURLToPath(import.meta.url))
+const file = join(__dirname, "db.json")
+
+const adapter = new JSONFile(file)
+const db = new Low(adapter)
+
 global.db = db
 
-db.defaults({
-  users: [{id: 1}],
+db.data = {
+  users: [
+    {
+      id: 1,
+    },
+  ],
   sessions: [],
-}).write()
+}
 
 export default db

@@ -313,6 +313,7 @@ importers:
       husky: 8.0.2
       jsdom: 20.0.3
       lint-staged: 13.0.3
+      lowdb: ^4.0.1
       next: 12.2.5
       playwright: 1.28.0
       prettier: ^2.7.1
@@ -338,6 +339,7 @@ importers:
       "@prisma/client": 4.6.0_prisma@4.6.0
       blitz: link:../../packages/blitz
       delay: 5.0.0
+      lowdb: 4.0.1
       next: 12.2.5_biqbaboplfbrettd7655fr4n2y
       prisma: 4.6.0
       react: 18.2.0
@@ -15283,6 +15285,16 @@ packages:
       steno: 2.1.0
     dev: false
 
+  /lowdb/4.0.1:
+    resolution:
+      {
+        integrity: sha512-tbOSxMEjBzKH3d8Ma3uJH6EfA/mITpyjN+8dikG292prSZCIV0SeacieMpQuK43ewANNSHOFofgND834aFsMkA==,
+      }
+    engines: {node: ">=14.16"}
+    dependencies:
+      steno: 3.0.0
+    dev: false
+
   /lowercase-keys/1.0.1:
     resolution:
       {
@@ -18993,6 +19005,14 @@ packages:
         integrity: sha512-mauOsiaqTNGFkWqIfwcm3y/fq+qKKaIWf1vf3ocOuTdco9XoHCO2AGF1gFYXuZFSWuP38Q8LBHBGJv2KnJSXyA==,
       }
     engines: {node: ^14.13.1 || >=16.0.0}
+    dev: false
+
+  /steno/3.0.0:
+    resolution:
+      {
+        integrity: sha512-uZtn7Ht9yXLiYgOsmo8btj4+f7VxyYheMt8g6F1ANjyqByQXEE2Gygjgenp3otHH1TlHsS4JAaRGv5wJ1wvMNw==,
+      }
+    engines: {node: ">=14.16"}
     dev: false
 
   /stream-transform/2.1.3:
