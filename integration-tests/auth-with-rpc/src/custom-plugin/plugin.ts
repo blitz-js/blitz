@@ -7,16 +7,16 @@ type CustomPluginOptions = {
 export const BlitzCustomPlugin = createClientPlugin<CustomPluginOptions, {}>(
   (options?: CustomPluginOptions) => {
     // ... your plugin code
-    console.log("Custom plugin loaded")
+    console.info("Custom plugin loaded")
     return {
       events: {
         onSessionCreated: async () => {
           // ... Called when a new session is created - Usually when the user logs in or logs out
-          console.log("onSessionCreated in custom plugin")
+          console.info("onSessionCreated in custom plugin")
         },
         onRpcError: async () => {
           // ... Called when an RPC call fails
-          console.log("onRpcError in custom plugin")
+          console.info("onRpcError in custom plugin")
         },
       },
       middleware: {

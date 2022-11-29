@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeAll, afterAll, vi } from "vitest"
+import {describe, it, expect, beforeAll, afterAll, vi} from "vitest"
 import {
   killApp,
   findPort,
@@ -12,6 +12,8 @@ import webdriver from "../../utils/next-webdriver"
 
 let app: any
 let appPort: number
+
+vi.spyOn(console, "info")
 
 const runTests = () => {
   describe("Auth", () => {
@@ -30,6 +32,7 @@ const runTests = () => {
         await browser.waitForElementByCss("#error")
         let text = await browser.elementByCss("#error").text()
         // expect(text).toMatch(/AuthenticationError/) - TODO FIX THIS
+        expect(console.info).toHaveBeenCalledWith("onRpcError in custom plugin")
         if (browser) await browser.close()
       })
 
@@ -38,6 +41,7 @@ const runTests = () => {
         await browser.waitForElementByCss("#error")
         let text = await browser.elementByCss("#error").text()
         // expect(text).toMatch(/AuthenticationError/) - TODO FIX THIS
+        expect(console.info).toHaveBeenCalledWith("onRpcError in custom plugin")
         if (browser) await browser.close()
       })
 
@@ -46,6 +50,7 @@ const runTests = () => {
         await browser.waitForElementByCss("#error")
         let text = await browser.elementByCss("#error").text()
         // expect(text).toMatch(/AuthenticationError/) - TODO FIX THIS
+        expect(console.info).toHaveBeenCalledWith("onRpcError in custom plugin")
         if (browser) await browser.close()
       })
 
@@ -63,14 +68,17 @@ const runTests = () => {
         const browser = await webdriver(appPort, "/login")
         await browser.waitForElementByCss("#content")
         let text = await browser.elementByCss("#content").text()
+        expect(console.info).toHaveBeenCalledWith("onSessionCreated in custom plugin")
         expect(text).toMatch(/logged-out/)
         await browser.elementByCss("#login").click()
         await waitFor(200)
         text = await browser.elementByCss("#content").text()
+        expect(console.info).toHaveBeenCalledWith("onSessionCreated in custom plugin")
         expect(text).toMatch(/logged-in/)
         await browser.elementByCss("#logout").click()
         await waitFor(250)
         text = await browser.elementByCss("#content").text()
+        expect(console.info).toHaveBeenCalledWith("onSessionCreated in custom plugin")
         expect(text).toMatch(/logged-out/)
 
         if (browser) await browser.close()
@@ -242,7 +250,7 @@ describe("Auth Tests", () => {
       try {
         await runBlitzCommand(["prisma", "migrate", "reset", "--force"])
         appPort = await findPort()
-        app = await blitzLaunchApp(appPort, { cwd: process.cwd() })
+        app = await blitzLaunchApp(appPort, {cwd: process.cwd()})
       } catch (error) {
         console.log(error)
       }
@@ -258,7 +266,7 @@ describe("Auth Tests", () => {
         await runBlitzCommand(["prisma", "migrate", "deploy"])
         await blitzBuild()
         appPort = await findPort()
-        app = await blitzStart(appPort, { cwd: process.cwd() })
+        app = await blitzStart(appPort, {cwd: process.cwd()})
       } catch (err) {
         console.log(err)
       }
