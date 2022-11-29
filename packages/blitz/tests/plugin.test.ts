@@ -25,7 +25,9 @@ describe("pipe", () => {
 
 describe("reduceBlitzPlugins", () => {
   it("should reduce plugins", async () => {
-    const plugin1: ClientPlugin<object> = {
+    const plugin1: ClientPlugin<{
+      foo: number
+    }> = {
       middleware: {
         beforeHttpRequest: (x) => {
           x.headers = {
@@ -35,7 +37,7 @@ describe("reduceBlitzPlugins", () => {
           return x
         },
         beforeHttpResponse: (x) => {
-          //@ts-ignore
+          //@ts-expect-error - need this as this is not actually a Response
           expect(x.headers["x-plugin2"]).toEqual("plugin2")
           return x
         },
@@ -55,7 +57,9 @@ describe("reduceBlitzPlugins", () => {
         foo: 2,
       }),
     }
-    const plugin2: ClientPlugin<object> = {
+    const plugin2: ClientPlugin<{
+      bar: number
+    }> = {
       middleware: {
         beforeHttpRequest: (x) => {
           x.headers = {
@@ -65,7 +69,7 @@ describe("reduceBlitzPlugins", () => {
           return x
         },
         beforeHttpResponse: (x) => {
-          //@ts-ignore
+          //@ts-expect-error - need this as this is not actually a Response
           expect(x.headers["x-plugin1"]).toEqual("plugin1")
           return x
         },
@@ -91,9 +95,7 @@ describe("reduceBlitzPlugins", () => {
     expect(events.onRpcError).toBeDefined()
     expect(events.onSessionCreated).toBeDefined()
     expect(exports).toBeDefined()
-    //@ts-ignore
     expect(exports.foo).toEqual(2)
-    //@ts-ignore
     expect(exports.bar).toEqual(3)
     const request = {
       headers: {
