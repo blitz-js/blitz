@@ -2,7 +2,7 @@
  * @vitest-environment jsdom
  */
 
-import {afterEach, beforeEach, spyOn, test, expect, MockedFunction, vi} from "vitest"
+import {afterEach, beforeEach, test, expect, MockedFunction, vi} from "vitest"
 import {render, screen, cleanup, waitFor} from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import * as React from "react"
@@ -11,7 +11,7 @@ import {ErrorBoundary, useErrorHandler} from "./error-boundary"
 
 beforeEach(() => {
   global.IS_REACT_ACT_ENVIRONMENT = true
-  spyOn(console, "error").mockImplementation(() => {})
+  vi.spyOn(console, "error").mockImplementation(() => {})
 })
 afterEach(() => {
   vi.resetAllMocks()

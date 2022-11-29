@@ -36,7 +36,7 @@ Runs your tests using Jest.
 yarn test
 ```
 
-Blitz comes with a test setup using [Jest](https://jestjs.io/) and [react-testing-library](https://testing-library.com/).
+Blitz comes with a test setup using [Vitest](https://vitest.dev/) and [react-testing-library](https://testing-library.com/).
 
 ## Commands
 

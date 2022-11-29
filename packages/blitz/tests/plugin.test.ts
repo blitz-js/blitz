@@ -1,8 +1,8 @@
-import {describe, it, expect, spyOn} from "vitest"
+import {describe, it, expect, vi} from "vitest"
 import {ClientPlugin} from "../src/index-server"
 import {reduceBlitzPlugins, merge, pipe} from "../src/plugin"
 
-spyOn(console, "log")
+vi.spyOn(console, "log")
 
 describe("merge", () => {
   it("should merge functions", async () => {
