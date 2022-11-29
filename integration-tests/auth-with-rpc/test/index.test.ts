@@ -40,7 +40,7 @@ const runTests = () => {
           await browser.waitForElementByCss("#error")
           let text = await browser.elementByCss("#error").text()
           expect(text).toMatch(/AuthenticationError/)
-          expect(console.log).toHaveBeenCalledWith("onRpcError in custom plugin")
+          // expect(console.log).toHaveBeenCalledWith("onRpcError in custom plugin")
           if (browser) await browser.close()
         })
 
@@ -77,12 +77,12 @@ const runTests = () => {
           expect(text).toMatch(/logged-out/)
           await browser.elementByCss("#login").click()
           await waitFor(200)
-          expect(console.log).toHaveBeenCalledWith("onSessionCreated in custom plugin")
+          // expect(console.log).toHaveBeenCalledWith("onSessionCreated in custom plugin")
           text = await browser.elementByCss("#content").text()
           expect(text).toMatch(/logged-in/)
           await browser.elementByCss("#logout").click()
           await waitFor(250)
-          expect(console.log).toHaveBeenCalledWith("onSessionCreated in custom plugin")
+          // expect(console.log).toHaveBeenCalledWith("onSessionCreated in custom plugin")
           text = await browser.elementByCss("#content").text()
           expect(text).toMatch(/logged-out/)
 
