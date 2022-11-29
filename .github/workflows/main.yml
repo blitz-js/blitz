@@ -138,9 +138,9 @@ jobs:
         run: pnpm install --frozen-lockfile
         shell: bash
 
-#       - name: Install playwright
-#         run: npx playwright install --with-deps
-#         shell: bash
+      - name: Install playwright
+        run: npx playwright install --with-deps
+        shell: bash
 
       - name: Build
         run: pnpm build
