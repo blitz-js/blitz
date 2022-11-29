@@ -26,7 +26,6 @@
     "@prisma/client": "4.6.0",
     "blitz": "workspace:2.0.0-beta.19",
     "delay": "5.0.0",
-    "lowdb": "^4.0.1",
     "next": "12.2.5",
     "prisma": "4.6.0",
     "react": "18.2.0",
