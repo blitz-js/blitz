@@ -1,5 +1,4 @@
-import {Low} from "lowdb"
-import {JSONFile} from "lowdb/lib/adapters/JSONFile"
+import {Low, JSONFile} from "lowdb"
 import {dirname, join} from "node:path"
 import {fileURLToPath} from "node:url"
 
