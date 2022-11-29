@@ -139,7 +139,9 @@ jobs:
         shell: bash
 
       - name: Install playwright
-        run: PLAYWRIGHT_BROWSERS_PATH=$HOME/pw-browsers npx playwright install
+        run: |
+          npm i -g playwright
+          PLAYWRIGHT_BROWSERS_PATH=$HOME/pw-browsers npx playwright install
         shell: bash
 
       - name: Build
