@@ -90,17 +90,14 @@ const runTests = () => {
         const browser = await webdriver(appPort, "/login")
         await browser.waitForElementByCss("#content")
         let text = await browser.elementByCss("#content").text()
-        // expect(console.info).toHaveBeenCalledWith("onSessionCreated in custom plugin")
         expect(text).toMatch(/logged-out/)
         await browser.elementByCss("#login").click()
         await waitFor(200)
         text = await browser.elementByCss("#content").text()
-        // expect(console.info).toHaveBeenCalledWith("onSessionCreated in custom plugin")
         expect(text).toMatch(/logged-in/)
         await browser.elementByCss("#logout").click()
         await waitFor(250)
         text = await browser.elementByCss("#content").text()
-        // expect(console.info).toHaveBeenCalledWith("onSessionCreated in custom plugin")
         expect(text).toMatch(/logged-out/)
 
         if (browser) await browser.close()
@@ -173,32 +170,27 @@ const runTests = () => {
       })
     })
 
-    // TODO Fix this test
-    // describe("setting public data for a user", () => {
-    //   it("should update all sessions of the user", async () => {
-    //     // Ensure logged out
-    //     const browser = await webdriver(appPort, "/login")
-    //     await waitFor(200)
-    //     let text = await browser.elementByCss("#content").text()
-    //     if (text.match(/logged-in/)) {
-    //       await browser.elementByCss("#logout").click()
-    //       await waitFor(200)
-    //     }
+    describe("setting public data for a user", () => {
+      it("should update all sessions of the user", async () => {
+        // Ensure logged out
+        const browser = await webdriver(appPort, "/login")
+        await waitFor(200)
+        let text = await browser.elementByCss("#content").text()
+        if (text.match(/logged-in/)) {
+          await browser.elementByCss("#logout").click()
+          await waitFor(200)
+        }
 
-    //     await browser.eval(`window.location = "/set-public-data"`)
-    //     await browser.waitForElementByCss("#change-role")
-    //     await browser.elementByCss("#change-role").click()
-    //     await waitFor(500)
-    //     await browser.waitForElementByCss(".role")
-    //     const roleElementsAfter = await browser.elementsByCss(".role")
-    //     expect(roleElementsAfter.length).toBe(2)
-    //     for (const role of roleElementsAfter) {
-    //       const text = await role.text()
-    //       expect(text).toMatch(/role: new role/)
-    //     }
-    //     if (browser) await browser.close()
-    //   })
-    // })
+        await browser.eval(`window.location = "/set-public-data"`)
+        await browser.waitForElementByCss("#change-role")
+        await browser.elementByCss("#change-role").click()
+        await waitFor(500)
+        await browser.waitForElementByCss(".role")
+        text = await browser.elementByCss(".role").text()
+        expect(text).toMatch(/role: new role/)
+        if (browser) await browser.close()
+      })
+    })
 
     describe("Page.redirectAuthenticatedTo", () => {
       it("should work when redirecting to page with useQuery", async () => {

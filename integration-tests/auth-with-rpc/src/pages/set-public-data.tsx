@@ -7,12 +7,10 @@ function Content() {
   const [publicData] = useQuery(getPublicDataForUser, {userId: 1})
   return (
     <div id="session">
-      {publicData.map((pD) => (
-        <>
-          <div className="userId">userId: {pD.userId}</div>
-          <div className="role">role: {pD.role}</div>
-        </>
-      ))}
+      <>
+        <div className="userId">userId: {publicData.userId}</div>
+        <div className="role">role: {publicData.role}</div>
+      </>
     </div>
   )
 }
