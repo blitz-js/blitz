@@ -1,4 +1,4 @@
-import {describe, it, expect, beforeAll, afterAll, vi} from "vitest"
+import {describe, it, expect, beforeAll, afterAll} from "vitest"
 import {
   killApp,
   findPort,
@@ -13,13 +13,23 @@ import webdriver from "../../utils/next-webdriver"
 let app: any
 let appPort: number
 
-vi.spyOn(console, "info")
-
 const runTests = () => {
   describe("Auth", () => {
-    it("should load custom plugin", async () => {
-      await waitFor(1000)
-      // expect(console.info).toHaveBeenCalledWith("Custom plugin loaded")
+    describe("custom plugin", () => {
+      it("custom plugin - events", async () => {
+        const browser = await webdriver(appPort, "/custom-plugin")
+        let text = await browser.elementByCss("#page").text()
+        expect(text).toBe("This is the custom plugin page")
+        await waitFor(1000)
+        text = await browser.elementByCss("#page").text()
+        expect(text).toBe("Custom plugin Session Created")
+        await waitFor(1000)
+        text = await browser.elementByCss("#page").text()
+        expect(text).toBe("Custom plugin RPC Error")
+        if (browser) {
+          await browser.close()
+        }
+      })
     })
     describe("unauthenticated", () => {
       it("should render result for open query", async () => {
@@ -35,7 +45,7 @@ const runTests = () => {
         const browser = await webdriver(appPort, "/authenticated-query")
         await browser.waitForElementByCss("#error")
         let text = await browser.elementByCss("#error").text()
-        // expect(text).toMatch(/AuthenticationError/) - TODO FIX THIS
+        expect(text).toMatch(/AuthenticationError/)
         if (browser) await browser.close()
       })
 
@@ -43,7 +53,7 @@ const runTests = () => {
         const browser = await webdriver(appPort, "/page-dot-authenticate")
         await browser.waitForElementByCss("#error")
         let text = await browser.elementByCss("#error").text()
-        // expect(text).toMatch(/AuthenticationError/) - TODO FIX THIS
+        expect(text).toMatch(/AuthenticationError/)
         if (browser) await browser.close()
       })
 
@@ -51,7 +61,7 @@ const runTests = () => {
         const browser = await webdriver(appPort, "/layout-authenticate")
         await browser.waitForElementByCss("#error")
         let text = await browser.elementByCss("#error").text()
-        // expect(text).toMatch(/AuthenticationError/) - TODO FIX THIS
+        expect(text).toMatch(/AuthenticationError/)
         if (browser) await browser.close()
       })
 
@@ -100,7 +110,7 @@ const runTests = () => {
         await waitFor(200)
         await browser.waitForElementByCss("#error")
         text = await browser.elementByCss("#error").text()
-        // expect(text).toMatch(/AuthenticationError/) - TODO FIX THIS
+        expect(text).toMatch(/AuthenticationError/)
         if (browser) await browser.close()
       })
 
@@ -170,10 +180,9 @@ const runTests = () => {
         await browser.waitForElementByCss(".role")
         // @ts-ignore
         const roleElementsAfter = await browser.elementsByCss(".role")
-        expect(roleElementsAfter.length).toBe(2)
+        expect(roleElementsAfter.length).toBe(3)
         for (const role of roleElementsAfter) {
-          // @ts-ignore
-          const text = await role.getText()
+          const text = await role.text()
           expect(text).toMatch(/role: new role/)
         }
         if (browser) await browser.close()

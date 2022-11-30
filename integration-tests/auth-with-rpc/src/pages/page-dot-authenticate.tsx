@@ -23,9 +23,6 @@ function Content() {
 }
 
 const Authenticate: BlitzPage = () => {
-  if (typeof window !== "undefined") {
-    throw new Error("This code should never run")
-  }
   return (
     <div id="page">
       <Suspense fallback={"Loading..."}>

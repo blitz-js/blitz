@@ -12,11 +12,17 @@ export const BlitzCustomPlugin = createClientPlugin<CustomPluginOptions, {}>(
       events: {
         onSessionCreated: async () => {
           // ... Called when a new session is created - Usually when the user logs in or logs out
-          console.info("onSessionCreated in custom plugin")
+          // if the document url is /custom-plugin then write message to the document
+          if (document.location.pathname === "/custom-plugin") {
+            //find the content in div id page and write message
+            document.getElementById("page")!.innerText = "Custom plugin Session Created"
+          }
         },
         onRpcError: async () => {
           // ... Called when an RPC call fails
-          console.info("onRpcError in custom plugin")
+          if (document.location.pathname === "/custom-plugin") {
+            document.getElementById("page")!.innerText = "Custom plugin RPC Error"
+          }
         },
       },
       middleware: {
