@@ -19,7 +19,6 @@ const runTests = () => {
       it("custom plugin - events", async () => {
         const browser = await webdriver(appPort, "/custom-plugin")
         let text = await browser.elementByCss("#page").text()
-        expect(text).toBe("This is the custom plugin page")
         await waitFor(250)
         text = await browser.elementByCss("#page").text()
         expect(text).toBe("Custom plugin Session Created")
@@ -34,9 +33,7 @@ const runTests = () => {
         const browser = await webdriver(appPort, "/custom-plugin")
         await waitFor(100)
         let text = await browser.elementByCss("#before-req").text()
-        expect(text).toMatch(
-          /{"method":"POST","headers":{"Content-Type":"application\/json","anti-csrf":"08iqhZ5RBzCbT_GVUQjjftIFAIMRgc8E","customHeader":"customHeaderValue"},"credentials":"include","redirect":"follow","body":"{\"params\":null,\"meta\":{\"params\":{\"values\":[\"undefined\"]}}}","signal":{}}/,
-        )
+        expect(text).toBe("customHeaderValue")
         await waitFor(1000)
         text = await browser.elementByCss("#before-res").text()
         expect(text).toBe("55")
