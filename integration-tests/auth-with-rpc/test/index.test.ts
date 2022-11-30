@@ -30,6 +30,20 @@ const runTests = () => {
           await browser.close()
         }
       })
+      it("custom plugin - middleware", async () => {
+        const browser = await webdriver(appPort, "/custom-plugin")
+        await waitFor(100)
+        let text = await browser.elementByCss("#before-req").text()
+        expect(text).toMatch(
+          /{"method":"POST","headers":{"Content-Type":"application\/json","anti-csrf":"08iqhZ5RBzCbT_GVUQjjftIFAIMRgc8E","customHeader":"customHeaderValue"},"credentials":"include","redirect":"follow","body":"{\"params\":null,\"meta\":{\"params\":{\"values\":[\"undefined\"]}}}","signal":{}}/,
+        )
+        await waitFor(1000)
+        text = await browser.elementByCss("#before-res").text()
+        expect(text).toBe("55")
+        if (browser) {
+          await browser.close()
+        }
+      })
     })
     describe("unauthenticated", () => {
       it("should render result for open query", async () => {

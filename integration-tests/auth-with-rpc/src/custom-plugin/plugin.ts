@@ -28,11 +28,17 @@ export const BlitzCustomPlugin = createClientPlugin<CustomPluginOptions, {}>(
       middleware: {
         beforeHttpRequest: (req) => {
           // ... make changes to the request options before RPC call
-          req.headers = {...req.headers, ...{customHeader: "customHeaderValue"}}
+          if (document.location.pathname === "/custom-plugin") {
+            req.headers = {...req.headers, ...{customHeader: "customHeaderValue"}}
+            document.getElementById("before-req")!.innerText = JSON.stringify(req)
+          }
           return req
         },
         beforeHttpResponse: (res) => {
           // ... make changes to the response before returning to the caller
+          if (document.location.pathname === "/custom-plugin") {
+            document.getElementById("before-res")!.innerText = res.headers.get("content-length")!
+          }
           return res
         },
       },
