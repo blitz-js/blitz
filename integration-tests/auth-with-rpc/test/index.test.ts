@@ -20,10 +20,10 @@ const runTests = () => {
         const browser = await webdriver(appPort, "/custom-plugin")
         let text = await browser.elementByCss("#page").text()
         expect(text).toBe("This is the custom plugin page")
-        await waitFor(1000)
+        await waitFor(250)
         text = await browser.elementByCss("#page").text()
         expect(text).toBe("Custom plugin Session Created")
-        await waitFor(1000)
+        await waitFor(1500)
         text = await browser.elementByCss("#page").text()
         expect(text).toBe("Custom plugin RPC Error")
         if (browser) {
@@ -178,13 +178,16 @@ const runTests = () => {
         await browser.elementByCss("#change-role").click()
         await waitFor(500)
         await browser.waitForElementByCss(".role")
-        // @ts-ignore
         const roleElementsAfter = await browser.elementsByCss(".role")
-        expect(roleElementsAfter.length).toBe(3)
-        for (const role of roleElementsAfter) {
+        expect(roleElementsAfter.length).toBe(2)
+        // for (const role of roleElementsAfter) {
+        //   const text = await role.text()
+        //   expect(text).toMatch(/role: new role/)
+        // }
+        roleElementsAfter.forEach(async (role) => {
           const text = await role.text()
           expect(text).toMatch(/role: new role/)
-        }
+        })
         if (browser) await browser.close()
       })
     })

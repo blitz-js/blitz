@@ -7,14 +7,14 @@ const CustomPlugin: BlitzPage = () => {
     setTimeout(() => {
       const event = new Event("blitz:session-created")
       document.dispatchEvent(event)
-    }, 1000)
+    }, 100)
     setTimeout(() => {
       const error = new Error("RPC failed")
       const rpcEvent = new CustomEvent("blitz:rpc-error", {
         detail: error,
       })
       document.dispatchEvent(rpcEvent)
-    }, 1000)
+    }, 2000)
   })
 
   return <div id="page">This is the custom plugin page</div>
