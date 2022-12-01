@@ -41,8 +41,7 @@ export async function transformBlitzRpcResolverServer(
   assertPosixPath(id)
   assertPosixPath(root)
 
-  let resolverFilePath = "/" + posix.relative(root, id)
-  resolverFilePath = normalize(join(normalize(root), resolverFilePath.replace("/", sep)))
+  const resolverFilePath = normalize(join(normalize(root), "/" + posix.relative(root, id).replace("/", sep))).replace(/\\/g, "/")
   assertPosixPath(resolverFilePath)
   const routePath = convertPageFilePathToRoutePath({
     appRoot: root,
