@@ -136,8 +136,6 @@ Your financial contributions help ensure Blitz continues to be developed and mai
   <tr>
     <td align="center"><a href="https://twitter.com/flybayer"><img src="https://avatars3.githubusercontent.com/u/8813276?v=4" width="100px;" alt=""/><br /><sub><b>Brandon Bayer</b></sub></a><br />Creator</td>
     <td align="center"><a href="http://twitter.com/dillonraphael"><img src="https://avatars.githubusercontent.com/u/3496193?v=4" width="100px;" alt=""/><br /><sub><b>Dillon Raphael</b></sub></a><br />Lead Maintainer</td>
-    <td align="center"><a href="http://aleksandra.codes"><img src="https://avatars.githubusercontent.com/u/9019397?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Aleksandra Sikora</b></sub></a><br />Core Maintainer</td>
-
 
   </tr>
 </table>
