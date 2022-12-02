@@ -1,6 +1,8 @@
 import {addImport, paths, Program, RecipeBuilder} from "blitz/installer"
 import type {NodePath} from "ast-types/lib/node-path"
 import j, {JSXIdentifier} from "jscodeshift"
+import fs from "fs"
+import path from "path"
 
 // Copied from https://github.com/blitz-js/legacy-framework/pull/805, let's add this to the blitz
 function wrapComponentWithChakraProvider(program: Program) {
@@ -75,6 +77,8 @@ function removeDefaultStyleElement(program: Program) {
   return program
 }
 
+const appDirectory = fs.existsSync(path.resolve("src/core")) ? "src" : "app"
+
 export default RecipeBuilder()
   .setName("Next UI")
   .setDescription(`This will install all necessary dependencies and configure Next UI for use.`)
@@ -111,7 +115,7 @@ export default RecipeBuilder()
     stepId: "updateLabeledTextField",
     stepName: "Update the `LabeledTextField` with Next UI's `Input` component",
     explanation: `The LabeledTextField component uses Next UI's input component`,
-    singleFileSearch: "app/core/components/LabeledTextField.tsx",
+    singleFileSearch: `${appDirectory}/core/components/LabeledTextField.tsx`,
     transform(program) {
       // Add ComponentPropsWithoutRef import
       program.find(j.ImportDeclaration, {source: {value: "react"}}).forEach((path) => {
