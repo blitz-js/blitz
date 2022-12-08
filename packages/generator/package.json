@@ -45,8 +45,7 @@
     "supports-color": "8.1.1",
     "tslog": "3.3.4",
     "username": "5.1.0",
-    "vinyl": "2.2.1",
-    "zod": "3.17.3"
+    "vinyl": "2.2.1"
   },
   "devDependencies": {
     "@blitzjs/config": "2.0.0-beta.19",
@@ -70,7 +69,8 @@
     "react": "18.2.0",
     "typescript": "^4.8.4",
     "unbuild": "0.6.9",
-    "watch": "1.0.2"
+    "watch": "1.0.2",
+    "zod": "3.17.3"
   },
   "publishConfig": {
     "access": "public"
