@@ -546,7 +546,7 @@ export abstract class Generator<
           }
           const modalFormSuspense = program.find(j.FunctionDeclaration).filter((path) => {
             if (path.node.id?.name) {
-              return path.node.id.name.includes("FormSuspense")
+              return path.node.id.name.includes("Form")
             }
             return false
           })
@@ -590,12 +590,24 @@ export abstract class Generator<
                 )
               })
               .forEach((path) => {
-                console.log(path.node)
-                path.node.openingElement.attributes?.forEach((attribute) => {
-                  if (attribute.type === "JSXAttribute" && attribute.name.name === "type") {
-                    attribute.name.name = "options"
-                  }
-                })
+                let value = ""
+                path.node.openingElement.attributes = path.node.openingElement.attributes?.filter(
+                  (attribute) => {
+                    if (attribute.type === "JSXAttribute" && attribute.name.name === "type") {
+                      if (attribute.value?.type === "StringLiteral") {
+                        value = attribute.value.value
+                      }
+                      return false
+                    }
+                    return true
+                  },
+                )
+                path.node.openingElement.attributes?.push(
+                  j.jsxAttribute(
+                    j.jsxIdentifier("options"),
+                    j.jsxExpressionContainer(j.identifier(value)),
+                  ),
+                )
               })
             this.fs.write(templatedPathSuffix, program.toSource())
           }

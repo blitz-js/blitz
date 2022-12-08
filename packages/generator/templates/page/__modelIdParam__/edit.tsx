@@ -36,7 +36,7 @@ export const Edit__ModelName__ = () => {
       <div>
         <h1>Edit __ModelName__ {__modelName__.id}</h1>
         <pre>{JSON.stringify(__modelName__, null, 2)}</pre>
-
+        <Suspense fallback={<div>Loading...</div>}>
         <__ModelName__Form
           submitText="Update __ModelName__"
           // TODO use a zod schema for form validation
@@ -64,6 +64,7 @@ export const Edit__ModelName__ = () => {
             }
           }}
         />
+        </Suspense>
       </div>
     </>
   )

@@ -28,12 +28,11 @@ export async function createFieldTemplateValues(
   {
     let values: {[x: string]: any} = {
       attributeName: singleCamel(valueName),
-      fieldName: '"' + singleCamel(valueName) + '"',
-      FieldName: '"' + singlePascal(valueName) + '"',
-      field_name: '"' + addSpaceBeforeCapitals(`${valueName}`).toLocaleLowerCase() + '"', // field name
-      Field_name:
-        '"' + singlePascal(addSpaceBeforeCapitals(`${valueName}`).toLocaleLowerCase()) + '"', // Field name
-      Field_Name: '"' + singlePascal(addSpaceBeforeCapitals(`${valueName}`)) + '"', // Field Name
+      fieldName: singleCamel(valueName),
+      FieldName: singlePascal(valueName),
+      field_name: addSpaceBeforeCapitals(`${valueName}`).toLocaleLowerCase(), // field name
+      Field_name: singlePascal(addSpaceBeforeCapitals(`${valueName}`).toLocaleLowerCase()), // Field name
+      Field_Name: singlePascal(addSpaceBeforeCapitals(`${valueName}`)), // Field Name
     }
     const codegen = await getCodegen()
     // iterate over resources defined for this field type
@@ -41,12 +40,12 @@ export async function createFieldTemplateValues(
       codegen.fieldTypeMap?.[typeName as keyof typeof codegen.fieldTypeMap] || defaultFieldConfig
     values = {...values, ...fieldConfig}
     if (parent) {
-      values.inputType = "{" + singleCamel(valueName).replace("Id", "s") + "}"
+      values.inputType = singleCamel(valueName).replace("Id", "s")
       values.component = "LabeledSelectField"
-      values.fieldName = '"id"'
+      values.fieldName = "id"
       return values
     }
-    values.inputType = '"' + fieldConfig.inputType + '"'
+    values.inputType = fieldConfig.inputType
     return values
   }
 }
