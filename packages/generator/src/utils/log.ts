@@ -32,16 +32,9 @@ export const newLine = () => {
 export const baseLogger = (options?: ISettingsParam): Logger => {
   if (globalThis._blitz_baseLogger) return globalThis._blitz_baseLogger
 
-  let config
-  try {
-    config = {} as any // todo: loadConfigAtRuntime()
-  } catch {
-    config = {}
-  }
-
   globalThis._blitz_baseLogger = new Logger({
-    minLevel: config?.log?.level || "info",
-    type: config?.log?.type || "pretty",
+    minLevel: "info",
+    type: "pretty",
     dateTimePattern:
       process.env.NODE_ENV === "production"
         ? "year-month-day hour:minute:second.millisecond"
