@@ -5,6 +5,36 @@ describe("Form Generator", () => {
   process.env.BLITZ_APP_DIR = process.cwd()
   const generator = new FieldValuesBuilder()
 
+  it("Should work with two word field names", async () => {
+    expect(
+      await generator.getFieldTemplateValues(["orgName:string", "orgId:integer"]),
+    ).toStrictEqual([
+      {
+        component: "LabeledTextField",
+        FieldName: "OrgName",
+        Field_Name: "Org Name",
+        Field_name: "Org name",
+        attributeName: "orgName",
+        fieldName: "orgName",
+        field_name: "org name",
+        zodType: "string",
+        prismaType: "String",
+        inputType: "text",
+      },
+      {
+        component: "LabeledTextField",
+        FieldName: "OrgId",
+        Field_Name: "Org Id",
+        Field_name: "Org id",
+        attributeName: "orgId",
+        fieldName: "orgId",
+        field_name: "org id",
+        zodType: "string",
+        prismaType: "String",
+        inputType: "text",
+      },
+    ])
+  })
   it("Should work with simple types", async () => {
     expect(
       await generator.getFieldTemplateValues(["field1:string", "field2:string"]),

@@ -11,15 +11,11 @@ function getDbFolder() {
       const packageJson = fs.readFileSync(packageJsonPath, "utf8")
       const packageJsonObj = JSON.parse(packageJson)
       if (!packageJsonObj.prisma || !packageJsonObj.prisma.schema) {
-        throw new Error(
-          "db folder does not exist and Prisma schema not found in package.json. Please either create the db folder or add the prisma schema path to the package.json",
-        )
+        return "db"
       }
       const prismaSchemaPath = path.join(process.cwd(), packageJsonObj.prisma.schema)
       if (!fs.existsSync(prismaSchemaPath)) {
-        throw new Error(
-          "prisma.schema file not found. Please either create the db/schema.prisma file or add the prisma schema path to the package.json",
-        )
+        return "db"
       }
       const folder = packageJsonObj.prisma.schema.split("/")[0] as string
       return folder
