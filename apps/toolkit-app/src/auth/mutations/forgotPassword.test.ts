@@ -14,7 +14,7 @@ vi.mock("@blitzjs/auth", async () => {
   const auth = await vi.importActual<Record<string, unknown>>("@blitzjs/auth")!
   return {
     ...auth,
-    generateToken: () => generatedToken
+    generateToken: () => generatedToken,
   }
 })
 

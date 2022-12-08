@@ -7,7 +7,6 @@ import logout from "src/auth/mutations/logout"
 import logo from "public/logo.png"
 import { useMutation } from "@blitzjs/rpc"
 import { Routes, BlitzPage } from "@blitzjs/next"
-import { getSession, useSession } from "@blitzjs/auth"
 
 /*
  * This file is just for a pleasant getting started page for your new app.
