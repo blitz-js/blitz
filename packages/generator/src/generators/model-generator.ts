@@ -22,6 +22,7 @@ export class ModelGenerator extends Generator<ModelGeneratorOptions> {
   // default subdirectory is /app/[name], we need to back out of there to generate the model
   static subdirectory = "../.."
   unsafe_disableConflictChecker = true
+  prisma = true
 
   getTargetDirectory() {
     return ""
@@ -39,62 +40,68 @@ export class ModelGenerator extends Generator<ModelGeneratorOptions> {
 
   // eslint-disable-next-line require-await
   async write() {
-    const {schema, schemaPath} = getPrismaSchema(this.fs)
-    const {modelName, extraArgs, dryRun} = this.options
-    let updatedOrCreated = "created"
+    const obj = getPrismaSchema(this.fs)
+    if (typeof obj !== "boolean") {
+      const {schema, schemaPath} = obj
+      const {modelName, extraArgs, dryRun} = this.options
+      let updatedOrCreated = "created"
 
-    let fieldPromises = (
-      extraArgs.length === 1 && extraArgs[0]?.includes(" ") ? extraArgs[0]?.split(" ") : extraArgs
-    ).map((input) => Field.parse(input, schema))
-    let fields = (await Promise.all(fieldPromises)).flatMap((fieldArray) => fieldArray)
-    const modelDefinition = new Model(modelName, fields)
+      let fieldPromises = (
+        extraArgs.length === 1 && extraArgs[0]?.includes(" ") ? extraArgs[0]?.split(" ") : extraArgs
+      ).map((input) => Field.parse(input, schema))
+      let fields = (await Promise.all(fieldPromises)).flatMap((fieldArray) => fieldArray)
+      const modelDefinition = new Model(modelName, fields)
 
-    let model: ast.Model | undefined
-    if (!dryRun) {
-      model = schema.list.find(function (component): component is ast.Model {
-        return component.type === "model" && component.name === modelDefinition.name
-      })
-      try {
-        if (model) {
-          for (const field of fields) field.appendTo(model)
-          this.fs.write(schemaPath, ast.printSchema(schema))
-          updatedOrCreated = "updated"
-        } else {
-          model = modelDefinition.appendTo(schema)
-          this.fs.write(schemaPath, ast.printSchema(schema))
+      let model: ast.Model | undefined
+      if (!dryRun) {
+        model = schema.list.find(function (component): component is ast.Model {
+          return component.type === "model" && component.name === modelDefinition.name
+        })
+        try {
+          if (model) {
+            for (const field of fields) field.appendTo(model)
+            this.fs.write(schemaPath, ast.printSchema(schema))
+            updatedOrCreated = "updated"
+          } else {
+            model = modelDefinition.appendTo(schema)
+            this.fs.write(schemaPath, ast.printSchema(schema))
+          }
+        } catch (err) {
+          console.error(`Failed to apply changes to model '${modelDefinition.name}'`)
+          throw err
         }
-      } catch (err) {
-        console.error(`Failed to apply changes to model '${modelDefinition.name}'`)
-        throw err
       }
-    }
 
-    if (model) {
-      console.log("\n")
-      console.log(
-        `Model '${modelDefinition.name}'${
-          dryRun ? "" : ` ${updatedOrCreated} in schema.prisma`
-        }:\n`,
-      )
-      ast
-        .printSchema({type: "schema", list: [model]})
-        .split("\n")
-        .map(log.progress)
-      console.log("\n")
+      if (model) {
+        console.log("\n")
+        console.log(
+          `Model '${modelDefinition.name}'${
+            dryRun ? "" : ` ${updatedOrCreated} in schema.prisma`
+          }:\n`,
+        )
+        ast
+          .printSchema({type: "schema", list: [model]})
+          .split("\n")
+          .map(log.progress)
+        console.log("\n")
+      }
+    } else {
+      this.prisma = false
     }
   }
 
   async postWrite() {
-    const prismaBin = which(process.cwd()).sync("prisma")
-    //@ts-ignore
-    spawn.sync(prismaBin, ["format"], {stdio: "inherit"})
-    const shouldMigrate = await this.prismaMigratePrompt()
-    if (shouldMigrate) {
-      await new Promise<void>((res, rej) => {
-        // const prismaBin = which(process.cwd()).sync("prisma")
-        const child = spawn(prismaBin, ["migrate", "dev"], {stdio: "inherit"})
-        child.on("exit", (code) => (code === 0 ? res() : rej()))
-      })
+    if (this.prisma) {
+      const prismaBin = which(process.cwd()).sync("prisma")
+      //@ts-ignore
+      spawn.sync(prismaBin, ["format"], {stdio: "inherit"})
+      const shouldMigrate = await this.prismaMigratePrompt()
+      if (shouldMigrate) {
+        await new Promise<void>((res, rej) => {
+          const child = spawn(prismaBin, ["migrate", "dev"], {stdio: "inherit"})
+          child.on("exit", (code) => (code === 0 ? res() : rej()))
+        })
+      }
     }
   }
 }

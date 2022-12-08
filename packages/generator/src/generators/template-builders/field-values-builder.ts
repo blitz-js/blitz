@@ -18,8 +18,9 @@ export class FieldValuesBuilder extends Builder<ResourceGeneratorOptions, Common
 
   // eslint-disable-next-line require-await
   public async getTemplateValues(options: ResourceGeneratorOptions): Promise<CommonTemplateValues> {
+    const prismaFolder = getPrismaSchema(this.getEditor())
     let values: CommonTemplateValues = {
-      prismaFolder: getPrismaSchema(this.getEditor()).dbFolder,
+      prismaFolder: typeof prismaFolder !== "boolean" ? prismaFolder.dbFolder : "db",
       parentModelId: this.getId(options.parentModel),
       parentModelIdZodType: undefined,
       parentModelParam: this.getParam(this.getId(options.parentModel)),
@@ -64,42 +65,45 @@ export class FieldValuesBuilder extends Builder<ResourceGeneratorOptions, Common
 
       // Get the parent model it type if options.parentModel exists
       if (options.parentModel !== undefined && options.parentModel.length > 0) {
-        const {schema} = getPrismaSchema(this.getEditor())
-        // O(N) - N is total ast Blocks
-        const model = schema.list.find(function (component): component is ast.Model {
-          return component.type === "model" && component.name === options.rawParentModelName
-        })
-
-        if (model !== undefined) {
-          // O(N) - N is number of properties in parent model
-          const idField = model.properties.find(function (property): property is ast.Field {
-            return (
-              property.type === "field" &&
-              property.attributes?.findIndex((attr) => attr.name === "id") !== -1
-            )
+        const obj = getPrismaSchema(this.getEditor())
+        if (typeof obj !== "boolean") {
+          const schema = obj.schema
+          // O(N) - N is total ast Blocks
+          const model = schema.list.find(function (component): component is ast.Model {
+            return component.type === "model" && component.name === options.rawParentModelName
           })
 
-          // TODO: Do we want a map between prisma types and "user types", we can then use that map instead of these conditionals
-          // We have a map from "user types" (which are what users type into the blitz generate command)
-          // to primsa type and other types, but we dont have a reverse map 1:1. This is because we lose
-          // some information for certain maps. E.g.: fieldname:uuid will be converted into a Prisma field with
-          // the String type, and the uuid portion is added to a decorator at the end of the field.
-          // This means it is more complicated to extract the original "user specified type" than creating a reverse map
-          if (idField?.fieldType === "Int") {
-            // TODO: Check if ints have decorators that make them a different type, like Bigint, etc.
-            // And see if that has to map to a different user specified type
-            values.parentModelIdZodType = await getResourceValueFromCodegen("int", "zodType")
-          } else if (idField?.fieldType === "String") {
-            if (
-              idField.attributes?.find(
-                (attr) =>
-                  attr.name === "default" &&
-                  attr.args?.findIndex((arg) => arg.value === "uuid") !== -1,
+          if (model !== undefined) {
+            // O(N) - N is number of properties in parent model
+            const idField = model.properties.find(function (property): property is ast.Field {
+              return (
+                property.type === "field" &&
+                property.attributes?.findIndex((attr) => attr.name === "id") !== -1
               )
-            ) {
-              values.parentModelIdZodType = await getResourceValueFromCodegen("uuid", "zodType")
-            } else {
-              values.parentModelIdZodType = await getResourceValueFromCodegen("string", "zodType")
+            })
+
+            // TODO: Do we want a map between prisma types and "user types", we can then use that map instead of these conditionals
+            // We have a map from "user types" (which are what users type into the blitz generate command)
+            // to primsa type and other types, but we dont have a reverse map 1:1. This is because we lose
+            // some information for certain maps. E.g.: fieldname:uuid will be converted into a Prisma field with
+            // the String type, and the uuid portion is added to a decorator at the end of the field.
+            // This means it is more complicated to extract the original "user specified type" than creating a reverse map
+            if (idField?.fieldType === "Int") {
+              // TODO: Check if ints have decorators that make them a different type, like Bigint, etc.
+              // And see if that has to map to a different user specified type
+              values.parentModelIdZodType = await getResourceValueFromCodegen("int", "zodType")
+            } else if (idField?.fieldType === "String") {
+              if (
+                idField.attributes?.find(
+                  (attr) =>
+                    attr.name === "default" &&
+                    attr.args?.findIndex((arg) => arg.value === "uuid") !== -1,
+                )
+              ) {
+                values.parentModelIdZodType = await getResourceValueFromCodegen("uuid", "zodType")
+              } else {
+                values.parentModelIdZodType = await getResourceValueFromCodegen("string", "zodType")
+              }
             }
           }
         } else {
