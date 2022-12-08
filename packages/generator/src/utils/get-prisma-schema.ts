@@ -36,7 +36,6 @@ export const getPrismaSchema = (
   const dbFolder = getDbFolder()
   const schemaPath = path.join(process.cwd(), dbFolder, "schema.prisma")
   if (!fs.existsSync(schemaPath)) {
-    log.error(`Could not find schema.prisma file at ${schemaPath}`)
     return {schema: {type: "schema", list: []}, schemaPath, dbFolder}
   }
   let schema: ast.Schema
