@@ -59,7 +59,9 @@ export function createSetupServer<TMiddleware extends RequestMiddleware, TExport
 }
 
 export const BlitzServerMiddleware = <
-  TMiddleware extends RequestMiddleware<any, any> = RequestMiddleware,
+  TRequest extends IncomingMessage = IncomingMessage,
+  TResponse extends ServerResponse = ServerResponse,
+  TMiddleware extends RequestMiddleware<TRequest, TResponse> = RequestMiddleware<TRequest, TResponse>,
 >(
   middleware: TMiddleware,
 ): BlitzServerPlugin => ({
