@@ -4,6 +4,7 @@ import {getTemplateRoot} from "../utils/get-template-root"
 import {camelCaseToKebabCase} from "../utils/inflector"
 import {spawn} from "cross-spawn"
 import which from "npm-which"
+import * as fs from "fs-extra"
 
 export interface PageGeneratorOptions extends ResourceGeneratorOptions {}
 
@@ -31,6 +32,28 @@ export class PageGenerator extends Generator<PageGeneratorOptions> {
       ? `${this.options.parentModels}/__parentModelParam__/`
       : ""
     return `src/pages/${parent}${kebabCaseModelName}`
+  }
+
+  async preFileWrite(): Promise<any> {
+    const templateValues = await this.getTemplateValues()
+    const targetDirectory = this.getTargetDirectory().replace(
+      "__parentModelParam__",
+      templateValues.parentModelParam,
+    )
+    if (templateValues.parentModel) {
+      const modelPages = fs.existsSync(
+        `src/pages/${camelCaseToKebabCase(templateValues.modelNames)}`,
+      )
+      if (modelPages) {
+        if (!fs.existsSync(targetDirectory)) {
+          fs.moveSync(
+            `src/pages/${camelCaseToKebabCase(templateValues.modelNames)}`,
+            targetDirectory,
+          )
+        }
+      }
+    }
+    return templateValues
   }
 
   async postWrite() {
