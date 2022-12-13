@@ -563,9 +563,12 @@ importers:
       "@types/react": 18.0.25
       b64-lite: 1.4.0
       blitz: workspace:*
+      canvas: workspace:*
+      dam: workspace:*
       eslint: 8.27.0
       fs-extra: 10.0.1
       next: 12.2.5
+      next-transpile-modules: 9.0.0
       react: 18.2.0
       react-dom: 18.2.0
       typescript: ^4.8.4
@@ -575,7 +578,10 @@ importers:
       "@blitzjs/next": link:../../packages/blitz-next
       "@blitzjs/rpc": link:../../packages/blitz-rpc
       blitz: link:../../packages/blitz
+      canvas: link:../../modules/canvas
+      dam: link:../../modules/dam
       next: 12.2.5_biqbaboplfbrettd7655fr4n2y
+      next-transpile-modules: 9.0.0
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
     devDependencies:
@@ -693,6 +699,36 @@ importers:
       rimraf: 3.0.2
       selenium-webdriver: 4.1.1
       tree-kill: 1.2.2
+      typescript: 4.8.4
+
+  modules/canvas:
+    specifiers:
+      "@blitzjs/auth": workspace:*
+      "@blitzjs/rpc": workspace:*
+      react: 18.2.0
+      react-dom: 18.2.0
+      typescript: ^4.5.3
+    dependencies:
+      "@blitzjs/auth": link:../../packages/blitz-auth
+      "@blitzjs/rpc": link:../../packages/blitz-rpc
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    devDependencies:
+      typescript: 4.8.4
+
+  modules/dam:
+    specifiers:
+      "@blitzjs/auth": workspace:*
+      "@blitzjs/rpc": workspace:*
+      react: 18.2.0
+      react-dom: 18.2.0
+      typescript: ^4.5.3
+    dependencies:
+      "@blitzjs/auth": link:../../packages/blitz-auth
+      "@blitzjs/rpc": link:../../packages/blitz-rpc
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    devDependencies:
       typescript: 4.8.4
 
   packages/blitz:
@@ -9394,7 +9430,6 @@ packages:
     dependencies:
       graceful-fs: 4.2.10
       tapable: 2.2.1
-    dev: true
 
   /enquirer/2.3.6:
     resolution:
@@ -10356,7 +10391,7 @@ packages:
       eslint-import-resolver-node: 0.3.6
       eslint-module-utils: 2.7.3_pbmiczca3qpqvnkfcriol7sq7u
       has: 1.0.3
-      is-core-module: 2.8.1
+      is-core-module: 2.11.0
       is-glob: 4.0.3
       minimatch: 3.1.2
       object.values: 1.1.5
@@ -10390,7 +10425,7 @@ packages:
       eslint-import-resolver-node: 0.3.6
       eslint-module-utils: 2.7.3_clahhyedowhj7lywpxe6ohktxi
       has: 1.0.3
-      is-core-module: 2.8.1
+      is-core-module: 2.11.0
       is-glob: 4.0.3
       minimatch: 3.1.2
       object.values: 1.1.5
@@ -10423,7 +10458,7 @@ packages:
       eslint-import-resolver-node: 0.3.6
       eslint-module-utils: 2.7.3_pbmiczca3qpqvnkfcriol7sq7u
       has: 1.0.3
-      is-core-module: 2.8.1
+      is-core-module: 2.11.0
       is-glob: 4.0.3
       minimatch: 3.1.2
       object.values: 1.1.5
@@ -12517,15 +12552,6 @@ packages:
     resolution:
       {
         integrity: sha512-RRjxlvLDkD1YJwDbroBHMb+cukurkDWNyHx7D3oNB5x9rb5ogcksMC5wHCadcXoo67gVr/+3GFySh3134zi6rw==,
-      }
-    dependencies:
-      has: 1.0.3
-    dev: true
-
-  /is-core-module/2.8.1:
-    resolution:
-      {
-        integrity: sha512-SdNCUs284hr40hFTFP6l0IfZ/RSrMXF3qgoRHd3/79unUTvrFO/JoXwkGm+5J/Oe3E/b5GsnG330uUNgRpu1PA==,
       }
     dependencies:
       has: 1.0.3
@@ -15205,6 +15231,16 @@ packages:
       }
     dev: false
 
+  /next-transpile-modules/9.0.0:
+    resolution:
+      {
+        integrity: sha512-VCNFOazIAnXn1hvgYYSTYMnoWgKgwlYh4lm1pKbSfiB3kj5ZYLcKVhfh3jkPOg1cnd9DP+pte9yCUocdPEUBTQ==,
+      }
+    dependencies:
+      enhanced-resolve: 5.11.0
+      escalade: 3.1.1
+    dev: false
+
   /next/12.2.5:
     resolution:
       {
@@ -17246,7 +17282,7 @@ packages:
       }
     hasBin: true
     dependencies:
-      is-core-module: 2.8.1
+      is-core-module: 2.11.0
       path-parse: 1.0.7
       supports-preserve-symlinks-flag: 1.0.0
 
@@ -17256,7 +17292,7 @@ packages:
         integrity: sha512-W8LucSynKUIDu9ylraa7ueVZ7hc0uAgJBxVsQSKOXOyle8a93qXhcz+XAXZ8bIq2d6i4Ehddn6Evt+0/UwKk6Q==,
       }
     dependencies:
-      is-core-module: 2.8.1
+      is-core-module: 2.11.0
       path-parse: 1.0.7
 
   /responselike/1.0.2:
@@ -18453,7 +18489,6 @@ packages:
         integrity: sha512-GNzQvQTOIP6RyTfE2Qxb8ZVlNmw0n88vp1szwWRimP02mnTsx3Wtn5qRdqY9w2XduFNUgvOwhNnQsjwCp+kqaQ==,
       }
     engines: {node: ">=6"}
-    dev: true
 
   /tar/6.1.11:
     resolution:
