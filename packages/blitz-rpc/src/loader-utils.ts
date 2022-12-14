@@ -67,15 +67,18 @@ export function convertPageFilePathToRoutePath({
     path = resolverBasePath(path)
   } else if (resolverBasePath === "root") {
     path = path.replace(normalize(appRoot), "")
-    for (const extraPath of extraRpcBasePaths) {
-      path = path
-        .replace(join(normalize(appRoot), extraPath.replace("/", sep)), "")
-        .replace(/\\/g, "/")
 
-      const baseRPCFolder = sep + extraPath.replace(/^(?:\.\.\/)+/, "").replace(/\\/g, "/")
+    for (const extraPath of extraRpcBasePaths) {
+      path = path.replace(join(normalize(appRoot), extraPath.replace("/", sep)), "")
+
+      let baseRPCFolder = sep + extraPath.replace(/^(?:\.\.\/)+/, "")
+
+      if (process.platform === "win32") {
+        baseRPCFolder = baseRPCFolder.replace("/", "\\")
+      }
 
       if (normalize(absoluteFilePath).includes(baseRPCFolder)) {
-        path = join(baseRPCFolder, path).replace(/\\/g, "/")
+        path = join(baseRPCFolder, path)
       }
     }
   } else {
