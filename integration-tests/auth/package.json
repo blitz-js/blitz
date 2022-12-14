@@ -17,9 +17,9 @@
     "prisma:studio": "prisma studio"
   },
   "dependencies": {
-    "@blitzjs/auth": "workspace:*",
-    "@blitzjs/config": "workspace:*",
-    "@blitzjs/next": "workspace:*",
+    "@blitzjs/auth": "workspace:2.0.0-beta.19",
+    "@blitzjs/config": "workspace:2.0.0-beta.19",
+    "@blitzjs/next": "workspace:2.0.0-beta.19",
     "@prisma/client": "4.6.0",
     "blitz": "workspace:2.0.0-beta.19",
     "lowdb": "3.0.0",
