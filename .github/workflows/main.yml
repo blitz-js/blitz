@@ -8,10 +8,6 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-env:
-  TURBO_TOKEN: 05de0230f01174d1f8cb4845a01dc6c895ce28f04ebef2318ab11615791b871c35eabbf8
-  TURBO_TEAM: foo
-
 jobs:
   lint:
     name: Lint
@@ -29,11 +25,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install  --frozen-lockfile
       - run: pnpm manypkg check
-      - name: Turborepo local server
-        uses: felixmosh/turborepo-gh-artifacts@v1
-        with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          server-token: ${{ env.TURBO_TOKEN }}
       - name: Build
         run: pnpm build
       - name: Lint
@@ -52,11 +43,6 @@ jobs:
         with:
           node-version: 16
           cache: "pnpm"
-      - name: Turborepo local server
-        uses: felixmosh/turborepo-gh-artifacts@v1
-        with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          server-token: ${{ env.TURBO_TOKEN }}
       - run: pnpm install --frozen-lockfile
       - name: Build
         run: pnpm build
@@ -88,12 +74,6 @@ jobs:
         with:
           node-version: 16
           cache: "pnpm"
-
-      - name: Turborepo local server
-        uses: felixmosh/turborepo-gh-artifacts@v1
-        with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          server-token: ${{ env.TURBO_TOKEN }}
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -154,18 +134,14 @@ jobs:
           node-version: ${{ matrix.NODE_VERSION }}
           cache: "pnpm"
 
-      - name: Turborepo local server
-        uses: felixmosh/turborepo-gh-artifacts@v1
-        with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          server-token: ${{ env.TURBO_TOKEN }}
-
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
         shell: bash
 
       - name: Install playwright
-        run: npx playwright install --with-deps
+        run: |
+          npm i -g playwright
+          PLAYWRIGHT_BROWSERS_PATH=$HOME/pw-browsers npx playwright install
         shell: bash
 
       - name: Build
