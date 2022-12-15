@@ -2,8 +2,28 @@ import {UrlObject} from "url"
 // Context for plugins to declaration merge stuff into
 export interface Ctx {}
 
+export interface AuthenticatedMiddlewareCtx {}
+
 export interface RouteUrlObject extends Pick<UrlObject, "pathname" | "query"> {
   pathname: string
+}
+
+export type EventHooks = {
+  onSessionCreated?: OnSessionCreated
+  onRpcError?: OnRpcError
+}
+
+export type BeforeHttpRequest = (request: RequestInit) => RequestInit
+
+export type BeforeHttpResponse = (response: Response) => Response
+
+export type OnRpcError = (error: Error) => Promise<void>
+
+export type OnSessionCreated = () => Promise<void>
+
+export type MiddlewareHooks = {
+  beforeHttpRequest?: BeforeHttpRequest
+  beforeHttpResponse?: BeforeHttpResponse
 }
 
 export type ResolverConfig = {
