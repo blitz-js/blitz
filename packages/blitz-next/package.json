@@ -33,6 +33,11 @@
     "superjson": "1.11.0",
     "supports-color": "8.1.1"
   },
+  "peerDependencies": {
+    "blitz": "*",
+    "next": "*",
+    "react": "*"
+  },
   "devDependencies": {
     "@blitzjs/config": "workspace:2.0.0-beta.19",
     "@testing-library/dom": "8.13.0",
