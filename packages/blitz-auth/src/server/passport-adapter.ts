@@ -118,8 +118,11 @@ export function passportAuth(config: BlitzPassportConfig): ApiHandler {
 
     const {name, strategy, authenticateOptions} = blitzStrategy
 
-    assert(typeof strategy.name  !== "undefined", `A passport strategy name was not found for: ${req.query.auth[0]}`)
-    
+    assert(
+      typeof strategy.name !== "undefined",
+      `A passport strategy name was not found for: ${req.query.auth[0]}`,
+    )
+
     const strategyName = name || strategy.name
     passport.use(strategyName, strategy)
 

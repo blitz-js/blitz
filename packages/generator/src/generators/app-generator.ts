@@ -41,9 +41,9 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
 
   filesToIgnore() {
     if (!this.options.useTs) {
-      return ["tsconfig.json", "next-env.d.ts", "jest.config.ts", "package.ts.json", "types.ts"]
+      return ["tsconfig.json", "next-env.d.ts", "vitest-config.ts", "package.ts.json", "types.ts"]
     }
-    return ["jsconfig.json", "package.js.json"]
+    return ["jsconfig.json", "package.js.json", "vitest.config.js"]
   }
 
   async getTemplateValues() {

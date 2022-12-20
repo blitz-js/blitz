@@ -18,12 +18,23 @@ function getBlitzPath(type: string) {
   }
 }
 
+function findPageDir() {
+  const srcPagePath = `src/pages`
+  const srcPage = fs.existsSync(path.resolve(srcPagePath))
+
+  if (srcPage) {
+    return srcPagePath
+  } else {
+    return `pages`
+  }
+}
+
 export const paths = {
   document() {
-    return `pages/_document${ext(true)}`
+    return `${findPageDir()}/_document${ext(true)}`
   },
   app() {
-    return `pages/_app${ext(true)}`
+    return `${findPageDir()}/_app${ext(true)}`
   },
   blitzServer() {
     return getBlitzPath("server")
@@ -32,7 +43,7 @@ export const paths = {
     return getBlitzPath("client")
   },
   entry() {
-    return `pages/index${ext(true)}`
+    return `${findPageDir()}/index${ext(true)}`
   },
   nextConfig() {
     return `next.config.js`
