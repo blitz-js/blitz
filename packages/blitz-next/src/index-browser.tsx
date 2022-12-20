@@ -1,10 +1,10 @@
 import "./global"
-import type {ClientPlugin, BlitzProviderComponentType, UnionToIntersection, Simplify} from "blitz"
+import type {ClientPlugin, BlitzPluginWithProvider} from "blitz"
+import {reduceBlitzPlugins, Ctx} from "blitz"
 import Head from "next/head"
 import React, {ReactNode} from "react"
 import {QueryClient, QueryClientProvider, Hydrate, HydrateOptions} from "@tanstack/react-query"
 import {withSuperJSONPage} from "./superjson"
-import {Ctx} from "blitz"
 import {UrlObject} from "url"
 import {AppPropsType} from "next/dist/shared/lib/utils"
 import {Router, useRouter} from "next/router"
@@ -16,18 +16,7 @@ export * from "./use-params"
 export * from "./router-context"
 export {Routes} from ".blitz"
 
-const compose =
-  (...rest: BlitzProviderComponentType[]) =>
-  (x: React.ComponentType<any>) =>
-    rest.reduceRight((y, f) => f(y), x)
-
-const buildWithBlitz = <TPlugins extends readonly ClientPlugin<object>[]>(plugins: TPlugins) => {
-  const providers = plugins.reduce((acc, plugin) => {
-    return plugin.withProvider ? acc.concat(plugin.withProvider) : acc
-  }, [] as BlitzProviderComponentType[])
-
-  const withPlugins = compose(...providers)
-
+const buildWithBlitz = (withPlugins: BlitzPluginWithProvider) => {
   return function withBlitzAppRoot(UserAppRoot: React.ComponentType<AppProps>) {
     const BlitzOuterRoot = (props: AppProps) => {
       const component = React.useMemo(() => withPlugins(props.Component), [props.Component])
@@ -111,14 +100,6 @@ export const BlitzProvider = ({
   return <RouterContext.Provider value={router}>{children}</RouterContext.Provider>
 }
 
-export type PluginsExports<TPlugins extends readonly ClientPlugin<object>[]> = Simplify<
-  UnionToIntersection<
-    {
-      [I in keyof TPlugins & number]: ReturnType<TPlugins[I]["exports"]>
-    }[number]
-  >
->
-
 const setupBlitzClient = <TPlugins extends readonly ClientPlugin<object>[]>({
   plugins,
 }: {
@@ -137,9 +118,9 @@ const setupBlitzClient = <TPlugins extends readonly ClientPlugin<object>[]>({
   //   allMiddleware.push(middleware)
   // }
 
-  const exports = plugins.reduce((acc, plugin) => ({...plugin.exports(), ...acc}), {})
+  const {exports, withPlugins} = reduceBlitzPlugins({plugins})
 
-  const withBlitz = buildWithBlitz(plugins)
+  const withBlitz = buildWithBlitz(withPlugins)
 
   // todo: finish this
   // Used to build BlitzPage type
@@ -147,7 +128,7 @@ const setupBlitzClient = <TPlugins extends readonly ClientPlugin<object>[]>({
 
   return {
     withBlitz,
-    ...(exports as PluginsExports<TPlugins>),
+    ...exports,
   }
 }
 

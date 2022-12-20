@@ -85,6 +85,7 @@ export const emptyQueryFn: RpcClient<unknown, unknown> = (() => {
 
 const isNotInUserTestEnvironment = () => {
   if (process.env.JEST_WORKER_ID === undefined) return true
+  if (process.env.VITEST_WORKER_ID === undefined) return true
   if (process.env.BLITZ_TEST_ENVIRONMENT !== undefined) return true
   return false
 }
