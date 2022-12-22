@@ -40,7 +40,7 @@ export class FieldValuesBuilder extends Builder<ResourceGeneratorOptions, Common
     if (options.extraArgs) {
       // specialArgs - these are arguments like 'id' or 'belongsTo', which are not meant to
       // be processed as fields but have their own special logic
-      let specialArgs: {[key in string]: string} = {}
+      const specialArgs: {[key in string]: string} = {}
 
       const processSpecialArgs: Promise<void>[] = options.extraArgs.map(async (arg) => {
         const [valueName, typeName] = arg.split(":")
