@@ -1,6 +1,11 @@
 import {getTemplateRoot} from "../utils/get-template-root"
 import {camelCaseToKebabCase} from "../utils/inflector"
-import {createFieldTemplateValues, FieldValuesBuilder, ResourceGeneratorOptions} from ".."
+import {
+  CommonTemplateValues,
+  createFieldTemplateValues,
+  FieldValuesBuilder,
+  ResourceGeneratorOptions,
+} from ".."
 import {customTsParser, Generator, SourceRootType} from "../generator"
 import j from "jscodeshift"
 import {
@@ -23,7 +28,7 @@ export class FormGenerator extends Generator<FormGeneratorOptions> {
 
   templateValuesBuilder = new FieldValuesBuilder()
 
-  async preFileWrite(): Promise<any> {
+  async preFileWrite(): Promise<CommonTemplateValues> {
     let templateValues = await this.getTemplateValues()
     if (templateValues.parentModel) {
       const newFieldTemplateValues = await createFieldTemplateValues(
@@ -40,7 +45,7 @@ export class FormGenerator extends Generator<FormGeneratorOptions> {
     return templateValues
   }
 
-  async postFileWrite(filePath: string, templateValues: any): Promise<void> {
+  async postFileWrite(filePath: string, templateValues: CommonTemplateValues): Promise<void> {
     if (templateValues.parentModel && filePath.match(/components/g)) {
       let program = j(this.fs.read(filePath), {
         parser: customTsParser,

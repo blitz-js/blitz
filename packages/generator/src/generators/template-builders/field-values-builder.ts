@@ -3,7 +3,7 @@ import {create as createStore} from "mem-fs"
 import {create as createEditor, Editor} from "mem-fs-editor"
 import {getResourceValueFromCodegen} from "../../utils/get-codegen"
 import {getPrismaSchema} from "../../utils/get-prisma-schema"
-import {ModelName, modelName, ModelNames, modelNames} from "../../utils/modal-names"
+import {ModelName, modelName, ModelNames, modelNames} from "../../utils/model-names"
 import {Builder, CommonTemplateValues, ResourceGeneratorOptions} from "./builder"
 
 export class FieldValuesBuilder extends Builder<ResourceGeneratorOptions, CommonTemplateValues> {

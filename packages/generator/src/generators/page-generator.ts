@@ -1,4 +1,4 @@
-import {FieldValuesBuilder, ResourceGeneratorOptions} from ".."
+import {CommonTemplateValues, FieldValuesBuilder, ResourceGeneratorOptions} from ".."
 import {Generator, SourceRootType} from "../generator"
 import {getTemplateRoot} from "../utils/get-template-root"
 import {camelCaseToKebabCase} from "../utils/inflector"
@@ -34,7 +34,7 @@ export class PageGenerator extends Generator<PageGeneratorOptions> {
     return `src/pages/${parent}${kebabCaseModelName}`
   }
 
-  async preFileWrite(): Promise<any> {
+  async preFileWrite(): Promise<CommonTemplateValues> {
     const templateValues = await this.getTemplateValues()
     const targetDirectory = this.getTargetDirectory().replace(
       "__parentModelParam__",

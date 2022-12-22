@@ -6,7 +6,7 @@ import Enquirer from "enquirer"
 import {EventEmitter} from "events"
 import * as fs from "fs-extra"
 import j from "jscodeshift"
-import {createFieldTemplateValues, IBuilder} from "./generators/template-builders/builder"
+import {CommonTemplateValues, IBuilder} from "./generators/template-builders/builder"
 import {NullBuilder} from "./generators/template-builders/null-builder"
 import {create as createStore, Store} from "mem-fs"
 import {create as createEditor, Editor} from "mem-fs-editor"
@@ -18,7 +18,6 @@ import {pipe} from "./utils/pipe"
 import {readdirRecursive} from "./utils/readdir-recursive"
 import prettier from "prettier"
 import {log} from "./utils/log"
-import {capitalize, singleCamel} from "./utils/inflector"
 const debug = require("debug")("blitz:generator")
 
 export function getProjectRootSync() {
@@ -309,14 +308,12 @@ export abstract class Generator<
 
   replaceTemplateValues(input: string, templateValues: any) {
     let result = input
-    // console.log("templateValues", templateValues)
     for (let templateKey in templateValues) {
       const token = `__${templateKey}__`
       if (result.includes(token)) {
-        result = result.replace(new RegExp(token, "g"), templateValues[templateKey])
+        result = result.replace(new RegExp(token, "g"), templateValues[templateKey] as string)
       }
     }
-    // console.log(templateValues.fieldTemplateValues)
     for (let templateKey in templateValues.fieldTemplateValues) {
       const token = `__${templateKey}__`
       if (result.includes(token)) {
@@ -387,12 +384,12 @@ export abstract class Generator<
     return templatedFile
   }
 
-  async preFileWrite(filePath: string): Promise<any> {
+  async preFileWrite(filePath: string): Promise<CommonTemplateValues> {
     // allow subclasses to do something before writing a file
     return this.getTemplateValues()
   }
 
-  async postFileWrite(filePath: string, templateValues: any): Promise<void> {
+  async postFileWrite(filePath: string, templateValues: CommonTemplateValues): Promise<void> {
     // allow subclasses to do something after writing a file
   }
 

@@ -1,4 +1,4 @@
-import {FieldValuesBuilder, ResourceGeneratorOptions} from ".."
+import {CommonTemplateValues, FieldValuesBuilder, ResourceGeneratorOptions} from ".."
 import {customTsParser, Generator, SourceRootType} from "../generator"
 import {getTemplateRoot} from "../utils/get-template-root"
 import {camelCaseToKebabCase} from "../utils/inflector"
@@ -17,7 +17,7 @@ export class QueriesGenerator extends Generator<QueriesGeneratorOptions> {
 
   templateValuesBuilder = new FieldValuesBuilder(this.fs)
 
-  async preFileWrite(filePath: string): Promise<void> {
+  async preFileWrite(filePath: string): Promise<CommonTemplateValues> {
     let templateValues = await this.getTemplateValues()
     if (this.fs.exists(filePath)) {
       let program = j(this.fs.read(filePath) as any, {

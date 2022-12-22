@@ -1,7 +1,12 @@
 import {getTemplateRoot} from "../utils/get-template-root"
 import {camelCaseToKebabCase} from "../utils/inflector"
 import j from "jscodeshift"
-import {createFieldTemplateValues, FieldValuesBuilder, ResourceGeneratorOptions} from ".."
+import {
+  CommonTemplateValues,
+  createFieldTemplateValues,
+  FieldValuesBuilder,
+  ResourceGeneratorOptions,
+} from ".."
 import {customTsParser, Generator, SourceRootType} from "../generator"
 import {replaceImportDbWithPrismaFolder} from "../../src/utils/codemod-utils"
 
@@ -17,7 +22,7 @@ export class MutationsGenerator extends Generator<MutationsGeneratorOptions> {
 
   templateValuesBuilder = new FieldValuesBuilder(this.fs)
 
-  async preFileWrite(filePath: string): Promise<void> {
+  async preFileWrite(filePath: string): Promise<CommonTemplateValues> {
     let templateValues = await this.getTemplateValues()
     if (templateValues.parentModel && filePath.match(/.*mutations.*create.*/g)) {
       const newFieldTemplateValues = await createFieldTemplateValues(
