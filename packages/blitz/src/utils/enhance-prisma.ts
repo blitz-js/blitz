@@ -40,7 +40,9 @@ export const enhancePrisma = <TPrismaClientCtor extends Constructor>(
             const process = spawn(prismaBin, ["migrate", "reset", "--force", "--skip-generate"], {
               stdio: "ignore",
             })
-            process.on("exit", (code) => (code === 0 ? res(0) : rej(new Error(`db.$reset() failed with code ${code}`))))
+            process.on("exit", (code) =>
+              code === 0 ? res(0) : rej(new Error(`db.$reset() failed with code ${code}`)),
+            )
           })
           globalThis._blitz_prismaClient.$disconnect()
         }
