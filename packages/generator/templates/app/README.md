@@ -120,7 +120,7 @@ __name__
 ├── .eslintrc.js
 ├── babel.config.js
 ├── blitz.config.ts
-├── jest.config.ts
+├── vitest.config.ts
 ├── package.json
 ├── README.md
 ├── tsconfig.json
@@ -147,7 +147,7 @@ These files are:
 
 - `blitz.config.ts` is for advanced custom configuration of Blitz. [Here you can learn how to use it](https://blitzjs.com/docs/blitz-config).
 
-- `jest.config.js` contains config for Jest tests. You can [customize it if needed](https://jestjs.io/docs/en/configuration).
+- `vitest.config.ts` contains config for Vitest tests. You can [customize it if needed](https://vitejs.dev/config/).
 
 You can read more about it in the [File Structure](https://blitzjs.com/docs/file-structure) section of the documentation.
 
