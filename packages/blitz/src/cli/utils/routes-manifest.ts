@@ -368,8 +368,31 @@ export function setupManifest(routes: Record<string, RouteManifestEntry>): {
   const routesWithoutDuplicates = dedupeBy(Object.entries(routes), ([_path, {name}]) => name)
 
   const implementationLines = routesWithoutDuplicates.map(
-    ([path, {name}]) => `${name}: (query) => ({ pathname: "${path}", query })`,
+    ([path, {name}]) => `${name}: (query) => ({ 
+      pathname: "${path}", 
+      query,
+      href: query
+      ? replaceSlugsWithValues(
+          "${path}",
+          Object.keys(query),
+          Object.values(query)
+        )
+      : "${path}",
+    })`,
   )
+
+  const implementationHelpers = [
+    `function replaceSlugsWithValues(str, slugs, values) {
+      let result = str;
+      slugs.forEach((slug, i) => {
+          const value = values[i];
+          if (value) {
+              result = result.replace('[' + slug + ']', String(value));
+          }
+      });
+      return result;
+    }`,
+  ]
 
   const declarationLines = routesWithoutDuplicates.map(
     ([_path, {name, parameters, multipleParameters}]) => {
@@ -392,7 +415,11 @@ export function setupManifest(routes: Record<string, RouteManifestEntry>): {
 
   return {
     implementation:
-      "exports.Routes = {\n" + implementationLines.map((line) => "  " + line).join(",\n") + "\n}",
+      "exports.Routes = {\n" +
+      implementationLines.map((line) => "  " + line).join(",\n") +
+      "\n}" +
+      "\n" +
+      implementationHelpers.join("\n"),
     declaration: `
 import type { ParsedUrlQueryInput } from "querystring"
 import type { RouteUrlObject } from "blitz"
