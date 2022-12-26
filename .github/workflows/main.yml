@@ -149,5 +149,5 @@ jobs:
         shell: bash
 
       - name: Test Packages
-        run: PLAYWRIGHT_BROWSERS_PATH=$HOME/pw-browsers pnpm test -- --filter=./integration-tests/${{matrix.folder}}
+        run: pnpm test -- --filter=./integration-tests/${{matrix.folder}}
         shell: bash
