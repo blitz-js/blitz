@@ -1,5 +1,46 @@
 # @blitzjs/rpc
 
+## 2.0.0-beta.20
+
+### Minor Changes
+
+- 6ece0961: Decoupled Blitz RPC from Blitz Auth to allow independent use.
+- 03bad317: fix Cannot read properties of null (reading 'isReady') for pnpm/yarn v3
+
+### Patch Changes
+
+- 8c247e26: Switch from jest to vitest in new app templates
+- 650a157e: fix: allow `GET` requests without `params` and `meta` keys
+- Updated dependencies [74a14b70]
+- Updated dependencies [6ece0961]
+- Updated dependencies [a0596279]
+  - blitz@2.0.0-beta.20
+
+## 2.0.0-beta.19
+
+### Minor Changes
+
+- c1e00406: transpile packages to es2015 to support older browsers
+- b493c93f: fix resolverPath:root and make it work with monorepo resolvers
+
+### Patch Changes
+
+- b33db082: Fix ambigious class warning log & upgrade superjson from 1.9.1 to 1.11.0
+- Updated dependencies [c1e00406]
+  - @blitzjs/auth@2.0.0-beta.19
+
+## 2.0.0-beta.18
+
+### Minor Changes
+
+- 72a4e594: internal: remove unneeed useSession from useQuery hooks
+- c0a3b1ee: Fix mutability bug in RPC configuration
+
+### Patch Changes
+
+- ed2b0e22: Add ability to put your query and mutation resolvers in a separate monorepo folder, allowing you to use them in multiple apps.
+  - @blitzjs/auth@2.0.0-beta.18
+
 ## 2.0.0-beta.17
 
 ### Patch Changes

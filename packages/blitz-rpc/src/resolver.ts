@@ -1,9 +1,8 @@
-import {AuthenticatedSessionContext, SessionContext, SessionContextBase} from "@blitzjs/auth"
-import {Await, Ctx, EnsurePromise} from "blitz"
+import type {SessionContext, SessionContextBase} from "@blitzjs/auth"
+import {Await, Ctx, EnsurePromise, AuthenticatedMiddlewareCtx} from "blitz"
 import type {input as zInput, output as zOutput, ZodTypeAny} from "zod"
 
 export type ParserType = "sync" | "async"
-
 interface ResultWithContext<Result = unknown, Context = unknown> {
   __blitz: true
   value: Result
@@ -13,10 +12,6 @@ function isResultWithContext(x: unknown): x is ResultWithContext {
   return (
     typeof x === "object" && x !== null && "ctx" in x && (x as ResultWithContext).__blitz === true
   )
-}
-
-export interface AuthenticatedMiddlewareCtx extends Omit<Ctx, "session"> {
-  session: AuthenticatedSessionContext
 }
 
 type PipeFn<Prev, Next, PrevCtx, NextCtx = PrevCtx> = (
@@ -282,6 +277,10 @@ interface ResolverAuthorize {
 const authorize: ResolverAuthorize = (...args) => {
   return function _innerAuthorize(input, ctx) {
     const session: SessionContext = (ctx as any).session
+    if (!session)
+      throw new Error(
+        "You are using the resolver.authorize() function, but `@blitzjs/auth` plugin is not initialized. Ensure it is installed and the auth plugin is added to setupBlitzServer()",
+      )
     session.$authorize(...args)
     return {
       __blitz: true,

@@ -4,6 +4,27 @@ export interface Ctx {}
 
 export interface RouteUrlObject extends Pick<UrlObject, "pathname" | "query" | "href"> {
   pathname: string
+  href: string
+}
+
+export interface AuthenticatedMiddlewareCtx {}
+
+export type EventHooks = {
+  onSessionCreated?: OnSessionCreated
+  onRpcError?: OnRpcError
+}
+
+export type BeforeHttpRequest = (request: RequestInit) => RequestInit
+
+export type BeforeHttpResponse = (response: Response) => Response
+
+export type OnRpcError = (error: Error) => Promise<void>
+
+export type OnSessionCreated = () => Promise<void>
+
+export type MiddlewareHooks = {
+  beforeHttpRequest?: BeforeHttpRequest
+  beforeHttpResponse?: BeforeHttpResponse
 }
 
 export type ResolverConfig = {

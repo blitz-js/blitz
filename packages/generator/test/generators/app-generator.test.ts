@@ -1,11 +1,9 @@
-import {beforeEach, describe, spyOn, vi, it, expect, test} from "vitest"
-import spawn from "cross-spawn"
-import {AppGenerator} from "../../src/generators/app-generator"
+import {beforeEach, describe, vi, it, expect, test} from "vitest"
 
 // Spies process to avoid trying to chdir to a non existing folder
-spyOn(process, "chdir").mockImplementation(() => true)
-spyOn(global.console, "log").mockImplementation((...args: any[]) => args)
-spyOn(global.console, "warn").mockImplementation((...args: any[]) => args)
+vi.spyOn(process, "chdir").mockImplementation(() => true)
+vi.spyOn(global.console, "log").mockImplementation((...args: any[]) => args)
+vi.spyOn(global.console, "warn").mockImplementation((...args: any[]) => args)
 
 // Mocks spawn
 vi.mock("cross-spawn", () => {

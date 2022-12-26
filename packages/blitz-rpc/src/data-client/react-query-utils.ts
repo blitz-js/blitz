@@ -85,6 +85,7 @@ export const emptyQueryFn: RpcClient<unknown, unknown> = (() => {
 
 const isNotInUserTestEnvironment = () => {
   if (process.env.JEST_WORKER_ID === undefined) return true
+  if (process.env.VITEST_WORKER_ID === undefined) return true
   if (process.env.BLITZ_TEST_ENVIRONMENT !== undefined) return true
   return false
 }
@@ -163,23 +164,20 @@ export function getInfiniteQueryKey<TInput, TResult, T extends AsyncFunc>(
   return [...queryKey, "infinite"]
 }
 
-type InvalidateQueryTypeWithParams = <TInput, TResult, T extends AsyncFunc>(
-  resolver: T | Resolver<TInput, TResult> | RpcClient<TInput, TResult>,
-  ...params: [TInput]
-) => Promise<void>
-type InvalidateQueryTypeAllQueries = <TInput, TResult, T extends AsyncFunc>(
-  resolver: T | Resolver<TInput, TResult> | RpcClient<TInput, TResult>,
-) => Promise<void>
-type InvalidateQueryType = InvalidateQueryTypeWithParams & InvalidateQueryTypeAllQueries
+interface InvalidateQuery {
+  <TInput, TResult, T extends AsyncFunc>(
+    resolver: T | Resolver<TInput, TResult> | RpcClient<TInput, TResult>,
+    ...params: [TInput]
+  ): Promise<void>
+  <TInput, TResult, T extends AsyncFunc>(
+    resolver: T | Resolver<TInput, TResult> | RpcClient<TInput, TResult>,
+  ): Promise<void>
+  (): Promise<void>
+}
 
-export const invalidateQuery: InvalidateQueryType = (resolver, ...params: []) => {
-  if (typeof resolver === "undefined") {
-    throw new Error(
-      "invalidateQuery is missing the first argument - it must be a resolver function",
-    )
-  }
-
-  const fullQueryKey = getQueryKey(resolver, ...params)
+export const invalidateQuery: InvalidateQuery = (resolver = undefined, ...params: []) => {
+  const fullQueryKey =
+    typeof resolver === "undefined" ? undefined : getQueryKey(resolver, ...params)
   return getQueryClient().invalidateQueries(fullQueryKey)
 }
 
