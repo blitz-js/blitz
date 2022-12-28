@@ -3794,6 +3794,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "iagormoraes",
+      "name": "Iagor Moraes",
+      "avatar_url": "https://avatars.githubusercontent.com/u/13892132?v=4",
+      "profile": "https://www.linkedin.com/in/iagor-moraes/",
+      "contributions": [
+        "doc",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
