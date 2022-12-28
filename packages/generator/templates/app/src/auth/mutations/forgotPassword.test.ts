@@ -1,3 +1,4 @@
+import { vi, describe, it, beforeEach } from "vitest"
 import db from "db"
 import { hash256 } from "@blitzjs/auth"
 import forgotPassword from "./forgotPassword"
@@ -9,11 +10,15 @@ beforeEach(async () => {
 })
 
 const generatedToken = "plain-token"
-jest.mock("@blitzjs/auth", () => ({
-  ...jest.requireActual<Record<string, unknown>>("@blitzjs/auth")!,
-  generateToken: () => generatedToken,
-}))
-jest.mock("preview-email", () => jest.fn())
+vi.mock("@blitzjs/auth", async () => {
+  const auth = await vi.importActual<Record<string, unknown>>("@blitzjs/auth")!
+  return {
+    ...auth,
+    generateToken: () => generatedToken
+  }
+})
+
+vi.mock("preview-email", () => ({ default: vi.fn() }))
 
 describe("forgotPassword mutation", () => {
   it("does not throw error if user doesn't exist", async () => {

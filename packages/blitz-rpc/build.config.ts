@@ -13,18 +13,15 @@ const config: BuildConfig = {
     "index-browser.mjs",
     "index-server.cjs",
     "index-server.mjs",
-    "react",
-    "blitz",
-    "next",
+    "@blitzjs/auth",
     "zod",
-    "next",
-    "next/router",
-    "next/dist/client/normalize-trailing-slash",
-    "next/dist/client/add-base-path",
   ],
   declaration: true,
   rollup: {
     emitCJS: true,
+    esbuild: {
+      target: ["es2015"],
+    },
   },
 }
 export default config

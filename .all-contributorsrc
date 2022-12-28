@@ -2913,7 +2913,8 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/120626?v=4",
       "profile": "https://github.com/medihack",
       "contributions": [
-        "doc"
+        "doc",
+        "code"
       ]
     },
     {
@@ -3754,6 +3755,44 @@
         "doc",
         "code",
         "test"
+      ]
+    },
+    {
+      "login": "selcukfatihsevinc",
+      "name": "Selçuk Fatih Sevinç",
+      "avatar_url": "https://avatars.githubusercontent.com/u/384836?v=4",
+      "profile": "https://github.com/selcukfatihsevinc",
+      "contributions": [
+        "doc",
+        "code"
+      ]
+    },
+    {
+      "login": "usamaster",
+      "name": "usamaster",
+      "avatar_url": "https://avatars.githubusercontent.com/u/5255330?v=4",
+      "profile": "https://github.com/usamaster",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "a11rew",
+      "name": "Andrew Glago",
+      "avatar_url": "https://avatars.githubusercontent.com/u/87580113?v=4",
+      "profile": "a11rew.dev",
+      "contributions": [
+        "doc",
+        "code"
+      ]
+    },
+    {
+      "login": "tordans",
+      "name": "Tobias",
+      "avatar_url": "https://avatars.githubusercontent.com/u/111561?v=4",
+      "profile": "http://tobiasjordans.de",
+      "contributions": [
+        "code"
       ]
     }
   ],
