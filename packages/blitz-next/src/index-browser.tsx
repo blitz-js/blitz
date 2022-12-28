@@ -51,7 +51,7 @@ export type BlitzProviderProps = {
   hydrateOptions?: HydrateOptions
 }
 
-interface RouteUrlObject extends Pick<UrlObject, "pathname" | "query"> {
+interface RouteUrlObject extends Pick<UrlObject, "pathname" | "query" | "href"> {
   pathname: string
 }
 
