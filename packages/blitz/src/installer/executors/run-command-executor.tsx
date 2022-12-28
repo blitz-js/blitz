@@ -79,8 +79,8 @@ export async function executeCommand(input: CliCommand): Promise<void> {
     const cp = spawn(`${command[0]}`, command.slice(1), {
       stdio: ["inherit", "pipe", "pipe"],
     })
-    cp.on("exit", resolve);
-    cp.stdout.on('data', () => {});
+    cp.on("exit", resolve)
+    cp.stdout.on("data", () => {})
   })
 }
 

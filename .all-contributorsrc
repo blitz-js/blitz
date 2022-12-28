@@ -3775,6 +3775,16 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "a11rew",
+      "name": "Andrew Glago",
+      "avatar_url": "https://avatars.githubusercontent.com/u/87580113?v=4",
+      "profile": "a11rew.dev",
+      "contributions": [
+        "doc",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
