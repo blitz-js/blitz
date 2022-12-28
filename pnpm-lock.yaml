@@ -547,7 +547,7 @@ importers:
       "@vitejs/plugin-react": 1.3.0
       delay: 5.0.0
       eslint: 8.27.0
-      eslint-config-next: 13.0.7_rmayb2veg2btbq6mbmnyivgasy
+      eslint-config-next: 13.1.1_rmayb2veg2btbq6mbmnyivgasy
       eslint-plugin-testing-library: 5.0.1_rmayb2veg2btbq6mbmnyivgasy
       jsdom: 19.0.0
       typescript: 4.8.4
@@ -5088,10 +5088,10 @@ packages:
     dependencies:
       glob: 7.1.7
 
-  /@next/eslint-plugin-next/13.0.7:
+  /@next/eslint-plugin-next/13.1.1:
     resolution:
       {
-        integrity: sha512-Q/Z0V3D3UpKhhzFU6/s17wD4rqJ+ZDGded8UpqNyzX1nUdD+/PnsZexPhSIZ2Yf/c8QESeirmJVRb3eAfCQkRQ==,
+        integrity: sha512-SBrOFS8PC3nQ5aeZmawJkjKkWjwK9RoxvBSv/86nZp0ubdoVQoko8r8htALd9ufp16NhacCdqhu9bzZLDWtALQ==,
       }
     dependencies:
       glob: 7.1.7
@@ -10949,10 +10949,10 @@ packages:
       - supports-color
     dev: false
 
-  /eslint-config-next/13.0.7_rmayb2veg2btbq6mbmnyivgasy:
+  /eslint-config-next/13.1.1_rmayb2veg2btbq6mbmnyivgasy:
     resolution:
       {
-        integrity: sha512-X7DB7iDJ9iHi5DAZbnFdWm4M0dwarj5h5y6Vpm9INCYzFgAwSWslq3v0qjYEjtUO5IQ8n1WK6IU5FkOQ2HBhOA==,
+        integrity: sha512-/5S2XGWlGaiqrRhzpn51ux5JUSLwx8PVK2keLi5xk7QmhfYB8PqE6R6SlVw6hgnf/VexvUXSrlNJ/su00NhtHQ==,
       }
     peerDependencies:
       eslint: ^7.23.0 || ^8.0.0
@@ -10961,7 +10961,7 @@ packages:
       typescript:
         optional: true
     dependencies:
-      "@next/eslint-plugin-next": 13.0.7
+      "@next/eslint-plugin-next": 13.1.1
       "@rushstack/eslint-patch": 1.1.3
       "@typescript-eslint/parser": 5.43.0_rmayb2veg2btbq6mbmnyivgasy
       eslint: 8.27.0
@@ -13973,7 +13973,7 @@ packages:
       pretty-format: 29.2.1
       slash: 3.0.0
       strip-json-comments: 3.1.1
-      ts-node: 10.9.1_cbe7ovvae6zqfnmtgctpgpys54
+      ts-node: 10.9.1_typescript@4.8.4
     transitivePeerDependencies:
       - supports-color
 
@@ -19740,6 +19740,7 @@ packages:
       typescript: 4.8.4
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
+    dev: false
 
   /ts-node/10.9.1_ieummqxttktzud32hpyrer46t4:
     resolution:
@@ -19806,7 +19807,6 @@ packages:
       typescript: 4.8.4
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
-    dev: false
 
   /tsconfig-paths/3.14.1:
     resolution:
