@@ -122,7 +122,7 @@ __name__
 ├── .eslintrc.js
 ├── babel.config.js
 ├── blitz.config.ts
-- `vitest.config.ts` contains config for Vitest tests. You can [customize it if needed](https://vitejs.dev/config/).
+├── vitest.config.ts
 ├── package.json
 ├── README.md
 ├── tsconfig.json
