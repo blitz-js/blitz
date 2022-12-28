@@ -51,7 +51,7 @@ Here is the starting structure of your app.
 
 ```
 __name__
-├── app/
+├── src/
 │   ├── pages/
 │   │   ├── _app.tsx
 │   │   ├── _document.tsx
@@ -76,7 +76,7 @@ __name__
 
 These files are:
 
-- The `app/` folder is a container for most of your project. This is where you’ll put any pages or API routes.
+- The `src/` folder is a container for most of your project. This is where you’ll put any pages or API routes.
 
 - `public/` is a folder where you will put any static assets. If you have images, files, or videos which you want to use in your app, this is where to put them.
 

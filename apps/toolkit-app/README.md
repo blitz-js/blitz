@@ -67,7 +67,7 @@ Here is the starting structure of your app.
 
 ```
 __name__
-├── app/
+├── src/
 │   ├── api/
 │   ├── auth/
 │   │   ├── components/
@@ -131,7 +131,7 @@ __name__
 
 These files are:
 
-- The `app/` folder is a container for most of your project. This is where you’ll put any pages or API routes.
+- The `src/` folder is a container for most of your project. This is where you’ll put any pages or API routes.
 
 - `db/` is where your database configuration goes. If you’re writing models or checking migrations, this is where to go.
 
