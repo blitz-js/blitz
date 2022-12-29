@@ -1,6 +1,6 @@
 {
   "name": "@blitzjs/auth",
-  "version": "2.0.0-beta.20",
+  "version": "2.0.0-beta.21",
   "scripts": {
     "build": "unbuild",
     "predev": "wait-on -d 250 ../blitz/dist/index-server.d.ts",
@@ -39,10 +39,10 @@
     "url": "0.11.0"
   },
   "peerDependencies": {
-    "blitz": "2.0.0-beta.20"
+    "blitz": "2.0.0-beta.21"
   },
   "devDependencies": {
-    "@blitzjs/config": "workspace:2.0.0-beta.20",
+    "@blitzjs/config": "workspace:2.0.0-beta.21",
     "@testing-library/react": "13.4.0",
     "@testing-library/react-hooks": "8.0.1",
     "@types/cookie": "0.4.1",
@@ -50,7 +50,7 @@
     "@types/jsonwebtoken": "8.5.8",
     "@types/react": "18.0.25",
     "@types/react-dom": "17.0.14",
-    "blitz": "2.0.0-beta.20",
+    "blitz": "2.0.0-beta.21",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "typescript": "^4.8.4",
