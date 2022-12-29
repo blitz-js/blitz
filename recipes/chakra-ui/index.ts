@@ -1,7 +1,5 @@
 import {addImport, paths, Program, RecipeBuilder, wrapAppWithProvider} from "blitz/installer"
 import j, {JSXIdentifier} from "jscodeshift"
-import fs from "fs"
-import path from "path"
 
 function updateLabeledTextFieldWithInputComponent(program: Program) {
   program
@@ -106,8 +104,6 @@ function removeDefaultStyleElement(program: Program) {
   return program
 }
 
-const appDirectory = fs.existsSync(path.resolve("src/core")) ? "src" : "app"
-
 export default RecipeBuilder()
   .setName("Chakra UI")
   .setDescription(`This will install all necessary dependencies and configure Chakra UI for use.`)
@@ -143,7 +139,7 @@ export default RecipeBuilder()
     stepId: "updateLabeledTextField",
     stepName: "Update the `LabeledTextField` with Chakra UI's `Input` component",
     explanation: `The LabeledTextField component uses Chakra UI's input component`,
-    singleFileSearch: `${appDirectory}/core/components/LabeledTextField.tsx`,
+    singleFileSearch: `${paths.appSrcDirectory()}/core/components/LabeledTextField.tsx`,
     transform(program) {
       // Add ComponentPropsWithoutRef import
       program.find(j.ImportDeclaration, {source: {value: "react"}}).forEach((path) => {

@@ -18,12 +18,30 @@ function getBlitzPath(type: string) {
   }
 }
 
+function getAppSourceDir(isConfigFile?: boolean) {
+  const srcPath = "src/pages"
+  const srcDir = fs.existsSync(path.resolve(srcPath))
+  const appPath = "app/pages"
+  const appDir = fs.existsSync(path.resolve(appPath))
+
+  if (srcDir) {
+    return "src"
+  } else if (appDir && isConfigFile) {
+    return "{pages,app}"
+  } else if (appDir && !!isConfigFile) {
+    return "app"
+  }
+}
+
 export const paths = {
   document() {
     return `pages/_document${ext(true)}`
   },
   app() {
     return `pages/_app${ext(true)}`
+  },
+  appSrcDirectory({config}: {config?: boolean}) {
+    return getAppSourceDir(config)
   },
   blitzServer() {
     return getBlitzPath("server")

@@ -1,11 +1,8 @@
 // tailwind.config.js
-const fs = require("fs")
-const path = require("path")
-
-const appDirectory = fs.existsSync(path.resolve("src/pages")) ? "src" : "{pages,app}"
+const {paths} = require("blitz/installer")
 
 module.exports = {
-  content: [`${appDirectory}/**/*.{js,ts,jsx,tsx}`],
+  content: [`${paths.appSrcDirectory({config: true})}/**/*.{js,ts,jsx,tsx}`],
   theme: {
     extend: {},
   },

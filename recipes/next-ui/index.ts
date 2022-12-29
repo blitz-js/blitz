@@ -77,8 +77,6 @@ function removeDefaultStyleElement(program: Program) {
   return program
 }
 
-const appDirectory = fs.existsSync(path.resolve("src/core")) ? "src" : "app"
-
 export default RecipeBuilder()
   .setName("Next UI")
   .setDescription(`This will install all necessary dependencies and configure Next UI for use.`)
@@ -115,7 +113,7 @@ export default RecipeBuilder()
     stepId: "updateLabeledTextField",
     stepName: "Update the `LabeledTextField` with Next UI's `Input` component",
     explanation: `The LabeledTextField component uses Next UI's input component`,
-    singleFileSearch: `${appDirectory}/core/components/LabeledTextField.tsx`,
+    singleFileSearch: `${paths.appSrcDirectory()}/core/components/LabeledTextField.tsx`,
     transform(program) {
       // Add ComponentPropsWithoutRef import
       program.find(j.ImportDeclaration, {source: {value: "react"}}).forEach((path) => {
