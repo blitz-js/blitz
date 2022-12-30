@@ -28,6 +28,10 @@ describe("Field", () => {
     expect(field?.default).toMatchObject({name: "uuid"})
   })
 
+  it("disallow brackes `()` as default attribute", () => {
+    expect(() => Field.parse("id:string:default=now()")).toThrow()
+  })
+
   it("handles uuid convenience syntax", () => {
     const [field] = Field.parse("someSpecialToken:uuid")
     expect(field?.type).toBe("String")

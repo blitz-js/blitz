@@ -59,9 +59,21 @@ export class ModelGenerator extends Generator<ModelGeneratorOptions> {
     const {modelName, extraArgs, dryRun} = this.options
     let updatedOrCreated = "created"
 
-    let fields = (
-      extraArgs.length === 1 && extraArgs[0]?.includes(" ") ? extraArgs[0]?.split(" ") : extraArgs
-    ).flatMap((input) => Field.parse(input, schema))
+    const checkInputOrRaise = (input: typeof extraArgs) => {
+      input.forEach((oneInput) => {
+        if (oneInput.includes("(")) {
+          throw new Error("Input cannot include `()`")
+        }
+      })
+    }
+
+    const splitInputCommans = (input: typeof extraArgs) => {
+      const inputs = input.length === 1 && input[0]?.includes(" ") ? input[0]?.split(" ") : input
+      checkInputOrRaise(inputs)
+      return inputs
+    }
+
+    let fields = splitInputCommans(extraArgs).flatMap((input) => Field.parse(input, schema))
 
     const modelDefinition = new Model(modelName, fields)
 
