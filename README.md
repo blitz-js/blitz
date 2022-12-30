@@ -736,7 +736,7 @@ Thanks to these wonderful people ([emoji key](https://allcontributors.org/docs/e
   </tr>
   <tr>
     <td align="center"><a href="a11rew.dev"><img src="https://avatars.githubusercontent.com/u/87580113?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Andrew Glago</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=a11rew" title="Documentation">📖</a> <a href="https://github.com/blitz-js/blitz/commits?author=a11rew" title="Code">💻</a></td>
-    <td align="center"><a href="http://tobiasjordans.de"><img src="https://avatars.githubusercontent.com/u/111561?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Tobias</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=tordans" title="Code">💻</a></td>
+    <td align="center"><a href="http://tobiasjordans.de"><img src="https://avatars.githubusercontent.com/u/111561?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Tobias</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=tordans" title="Code">💻</a> <a href="https://github.com/blitz-js/blitz/commits?author=tordans" title="Documentation">📖</a></td>
     <td align="center"><a href="https://www.linkedin.com/in/iagor-moraes/"><img src="https://avatars.githubusercontent.com/u/13892132?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Iagor Moraes</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=iagormoraes" title="Documentation">📖</a> <a href="https://github.com/blitz-js/blitz/commits?author=iagormoraes" title="Code">💻</a></td>
   </tr>
 </table>
