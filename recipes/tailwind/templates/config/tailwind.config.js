@@ -2,7 +2,7 @@
 const {paths} = require("blitz/installer")
 
 module.exports = {
-  content: [`${paths.appSrcDirectory({config: true})}/**/*.{js,ts,jsx,tsx}`],
+  content: [`${paths.appSrcDirectory({isConfig: true})}/**/*.{js,ts,jsx,tsx}`],
   theme: {
     extend: {},
   },

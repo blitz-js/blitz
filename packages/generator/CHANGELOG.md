@@ -1,5 +1,11 @@
 # @blitzjs/generator
 
+## 2.0.0-beta.20
+
+### Patch Changes
+
+- 8c247e26: Switch from jest to vitest in new app templates
+
 ## 2.0.0-beta.19
 
 ### Patch Changes

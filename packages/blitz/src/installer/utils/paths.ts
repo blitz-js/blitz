@@ -21,27 +21,39 @@ function getBlitzPath(type: string) {
 function getAppSourceDir(isConfigFile?: boolean) {
   const srcPath = "src/pages"
   const srcDir = fs.existsSync(path.resolve(srcPath))
-  const appPath = "app/pages"
-  const appDir = fs.existsSync(path.resolve(appPath))
 
-  if (srcDir) {
+  if (srcDir || (srcDir && isConfigFile)) {
     return "src"
-  } else if (appDir && isConfigFile) {
+  } else if (!srcDir && isConfigFile) {
     return "{pages,app}"
-  } else if (appDir && !!isConfigFile) {
+  } else {
     return "app"
+  }
+}
+
+function findPageDir() {
+  const srcPagePath = `src/pages`
+  const srcPage = getAppSourceDir()
+
+  switch (srcPage) {
+    case "src": {
+      return srcPagePath
+    }
+    default: {
+      return `pages`
+    }
   }
 }
 
 export const paths = {
   document() {
-    return `pages/_document${ext(true)}`
+    return `${findPageDir()}/_document${ext(true)}`
   },
   app() {
-    return `pages/_app${ext(true)}`
+    return `${findPageDir()}/_app${ext(true)}`
   },
-  appSrcDirectory({config}: {config?: boolean}) {
-    return getAppSourceDir(config)
+  appSrcDirectory({isConfig}: {isConfig?: boolean}) {
+    return getAppSourceDir(isConfig)
   },
   blitzServer() {
     return getBlitzPath("server")
@@ -50,7 +62,7 @@ export const paths = {
     return getBlitzPath("client")
   },
   entry() {
-    return `pages/index${ext(true)}`
+    return `${findPageDir()}/index${ext(true)}`
   },
   nextConfig() {
     return `next.config.js`

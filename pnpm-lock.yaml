@@ -51,7 +51,7 @@ importers:
       "@types/react": 18.0.25
       "@typescript-eslint/eslint-plugin": 5.42.1
       "@vitejs/plugin-react": 2.2.0
-      blitz: workspace:2.0.0-beta.19
+      blitz: workspace:2.0.0-beta.20
       eslint: 8.27.0
       eslint-config-next: 12.3.1
       eslint-config-prettier: 8.5.0
@@ -129,7 +129,7 @@ importers:
       "@types/preview-email": 2.0.1
       "@types/react": 18.0.25
       "@typescript-eslint/eslint-plugin": 5.42.1
-      blitz: workspace:2.0.0-beta.19
+      blitz: workspace:2.0.0-beta.20
       eslint: 8.27.0
       eslint-config-next: 12.3.1
       eslint-config-prettier: 8.5.0
@@ -238,9 +238,9 @@ importers:
 
   integration-tests/auth:
     specifiers:
-      "@blitzjs/auth": workspace:*
-      "@blitzjs/config": workspace:*
-      "@blitzjs/next": workspace:*
+      "@blitzjs/auth": workspace:2.0.0-beta.20
+      "@blitzjs/config": workspace:2.0.0-beta.20
+      "@blitzjs/next": workspace:2.0.0-beta.20
       "@next/bundle-analyzer": 12.0.8
       "@prisma/client": 4.6.0
       "@types/express": 4.17.13
@@ -249,7 +249,7 @@ importers:
       "@types/node-fetch": 2.6.1
       "@types/react": 18.0.25
       b64-lite: 1.4.0
-      blitz: workspace:2.0.0-beta.19
+      blitz: workspace:2.0.0-beta.20
       eslint: 8.27.0
       fs-extra: 10.0.1
       get-port: 6.1.2
@@ -287,12 +287,95 @@ importers:
       ts-node: 10.9.1_ieummqxttktzud32hpyrer46t4
       typescript: 4.8.4
 
+  integration-tests/auth-with-rpc:
+    specifiers:
+      "@blitzjs/auth": workspace:2.0.0-beta.20
+      "@blitzjs/config": workspace:2.0.0-beta.20
+      "@blitzjs/next": workspace:2.0.0-beta.20
+      "@blitzjs/rpc": workspace:2.0.0-beta.20
+      "@hookform/error-message": 2.0.0
+      "@hookform/resolvers": 2.9.10
+      "@next/bundle-analyzer": 12.0.8
+      "@prisma/client": 4.6.0
+      "@testing-library/jest-dom": 5.16.5
+      "@testing-library/react": 13.4.0
+      "@testing-library/react-hooks": 8.0.1
+      "@types/node": 18.11.9
+      "@types/preview-email": 2.0.1
+      "@types/react": 18.0.25
+      "@typescript-eslint/eslint-plugin": 5.42.1
+      "@vitejs/plugin-react": 2.2.0
+      blitz: workspace:2.0.0-beta.20
+      delay: 5.0.0
+      eslint: 8.27.0
+      eslint-config-next: 12.3.1
+      eslint-config-prettier: 8.5.0
+      husky: 8.0.2
+      jsdom: 20.0.3
+      lint-staged: 13.0.3
+      next: 12.2.5
+      playwright: 1.28.0
+      prettier: ^2.7.1
+      prettier-plugin-prisma: 4.4.0
+      pretty-quick: 3.1.3
+      preview-email: 3.0.7
+      prisma: 4.6.0
+      react: 18.2.0
+      react-dom: 18.2.0
+      react-hook-form: 7.39.1
+      ts-node: 10.9.1
+      typescript: ^4.8.4
+      vite-tsconfig-paths: 3.6.0
+      vitest: 0.25.3
+      zod: 3.19.1
+    dependencies:
+      "@blitzjs/auth": link:../../packages/blitz-auth
+      "@blitzjs/config": link:../../packages/config
+      "@blitzjs/next": link:../../packages/blitz-next
+      "@blitzjs/rpc": link:../../packages/blitz-rpc
+      "@hookform/error-message": 2.0.0_uitc6c22ofsl6jhrdjqyu3was4
+      "@hookform/resolvers": 2.9.10_react-hook-form@7.39.1
+      "@prisma/client": 4.6.0_prisma@4.6.0
+      blitz: link:../../packages/blitz
+      delay: 5.0.0
+      next: 12.2.5_mqvh5p7ejg4taogoj6tpk3gd5a
+      prisma: 4.6.0
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      react-hook-form: 7.39.1_react@18.2.0
+      ts-node: 10.9.1_cbe7ovvae6zqfnmtgctpgpys54
+      zod: 3.19.1
+    devDependencies:
+      "@next/bundle-analyzer": 12.0.8
+      "@testing-library/jest-dom": 5.16.5
+      "@testing-library/react": 13.4.0_biqbaboplfbrettd7655fr4n2y
+      "@testing-library/react-hooks": 8.0.1_2zx2umvpluuhvlq44va5bta2da
+      "@types/node": 18.11.9
+      "@types/preview-email": 2.0.1
+      "@types/react": 18.0.25
+      "@typescript-eslint/eslint-plugin": 5.42.1_yy4vf4gcvxiubmg7fqa55dqe2i
+      "@vitejs/plugin-react": 2.2.0_vite@3.2.4
+      eslint: 8.27.0
+      eslint-config-next: 12.3.1_rmayb2veg2btbq6mbmnyivgasy
+      eslint-config-prettier: 8.5.0_eslint@8.27.0
+      husky: 8.0.2
+      jsdom: 20.0.3
+      lint-staged: 13.0.3
+      playwright: 1.28.0
+      prettier: 2.7.1
+      prettier-plugin-prisma: 4.4.0_prettier@2.7.1
+      pretty-quick: 3.1.3_prettier@2.7.1
+      preview-email: 3.0.7
+      typescript: 4.8.4
+      vite-tsconfig-paths: 3.6.0_vite@3.2.4
+      vitest: 0.25.3_jsdom@20.0.3
+
   integration-tests/get-initial-props:
     specifiers:
-      "@blitzjs/auth": workspace:*
-      "@blitzjs/config": workspace:*
-      "@blitzjs/next": workspace:*
-      "@blitzjs/rpc": workspace:*
+      "@blitzjs/auth": workspace:2.0.0-beta.20
+      "@blitzjs/config": workspace:2.0.0-beta.20
+      "@blitzjs/next": workspace:2.0.0-beta.20
+      "@blitzjs/rpc": workspace:2.0.0-beta.20
       "@next/bundle-analyzer": 12.0.8
       "@prisma/client": 4.6.0
       "@types/express": 4.17.13
@@ -300,7 +383,7 @@ importers:
       "@types/node-fetch": 2.6.1
       "@types/react": 18.0.25
       b64-lite: 1.4.0
-      blitz: workspace:*
+      blitz: workspace:2.0.0-beta.20
       eslint: 8.27.0
       fs-extra: 10.0.1
       get-port: 6.1.2
@@ -338,15 +421,15 @@ importers:
 
   integration-tests/middleware:
     specifiers:
-      "@blitzjs/config": workspace:*
-      "@blitzjs/next": workspace:*
-      "@blitzjs/rpc": workspace:*
+      "@blitzjs/config": workspace:2.0.0-beta.20
+      "@blitzjs/next": workspace:2.0.0-beta.20
+      "@blitzjs/rpc": workspace:2.0.0-beta.20
       "@next/bundle-analyzer": 12.0.8
       "@types/express": 4.17.13
       "@types/fs-extra": 9.0.13
       "@types/node-fetch": 2.6.1
       "@types/react": 18.0.25
-      blitz: workspace:*
+      blitz: workspace:2.0.0-beta.20
       eslint: 8.27.0
       fs-extra: 10.0.1
       get-port: 6.1.2
@@ -377,10 +460,10 @@ importers:
 
   integration-tests/no-suspense:
     specifiers:
-      "@blitzjs/auth": workspace:*
-      "@blitzjs/config": workspace:*
-      "@blitzjs/next": workspace:*
-      "@blitzjs/rpc": workspace:*
+      "@blitzjs/auth": workspace:2.0.0-beta.20
+      "@blitzjs/config": workspace:2.0.0-beta.20
+      "@blitzjs/next": workspace:2.0.0-beta.20
+      "@blitzjs/rpc": workspace:2.0.0-beta.20
       "@next/bundle-analyzer": 12.0.8
       "@prisma/client": 4.6.0
       "@types/express": 4.17.13
@@ -388,7 +471,7 @@ importers:
       "@types/node-fetch": 2.6.1
       "@types/react": 18.0.25
       b64-lite: 1.4.0
-      blitz: workspace:*
+      blitz: workspace:2.0.0-beta.20
       eslint: 8.27.0
       fs-extra: 10.0.1
       get-port: 6.1.2
@@ -426,16 +509,16 @@ importers:
 
   integration-tests/qm:
     specifiers:
-      "@blitzjs/auth": workspace:*
-      "@blitzjs/config": workspace:*
-      "@blitzjs/next": workspace:*
-      "@blitzjs/rpc": workspace:*
+      "@blitzjs/auth": workspace:2.0.0-beta.20
+      "@blitzjs/config": workspace:2.0.0-beta.20
+      "@blitzjs/next": workspace:2.0.0-beta.20
+      "@blitzjs/rpc": workspace:2.0.0-beta.20
       "@prisma/client": 4.6.0
       "@tanstack/react-query": 4.0.10
       "@testing-library/react": 13.4.0
       "@types/react": 18.0.25
       "@vitejs/plugin-react": 1.3.0
-      blitz: workspace:*
+      blitz: workspace:2.0.0-beta.20
       delay: 5.0.0
       eslint: 8.27.0
       eslint-config-next: latest
@@ -471,10 +554,9 @@ importers:
 
   integration-tests/react-query-utils:
     specifiers:
-      "@blitzjs/auth": workspace:*
-      "@blitzjs/config": workspace:*
-      "@blitzjs/next": workspace:*
-      "@blitzjs/rpc": workspace:*
+      "@blitzjs/config": workspace:2.0.0-beta.20
+      "@blitzjs/next": workspace:2.0.0-beta.20
+      "@blitzjs/rpc": workspace:2.0.0-beta.20
       "@next/bundle-analyzer": 12.0.8
       "@prisma/client": 4.6.0
       "@types/express": 4.17.13
@@ -482,7 +564,7 @@ importers:
       "@types/node-fetch": 2.6.1
       "@types/react": 18.0.25
       b64-lite: 1.4.0
-      blitz: workspace:*
+      blitz: workspace:2.0.0-beta.20
       eslint: 8.27.0
       fs-extra: 10.0.1
       get-port: 6.1.2
@@ -494,7 +576,6 @@ importers:
       react-dom: 18.2.0
       typescript: ^4.8.4
     dependencies:
-      "@blitzjs/auth": link:../../packages/blitz-auth
       "@blitzjs/next": link:../../packages/blitz-next
       "@blitzjs/rpc": link:../../packages/blitz-rpc
       "@prisma/client": 4.6.0_prisma@4.6.0
@@ -520,16 +601,15 @@ importers:
 
   integration-tests/rpc:
     specifiers:
-      "@blitzjs/auth": workspace:*
-      "@blitzjs/config": workspace:*
-      "@blitzjs/next": workspace:*
-      "@blitzjs/rpc": workspace:*
+      "@blitzjs/config": workspace:2.0.0-beta.20
+      "@blitzjs/next": workspace:2.0.0-beta.20
+      "@blitzjs/rpc": workspace:2.0.0-beta.20
       "@types/express": 4.17.13
       "@types/fs-extra": 9.0.13
       "@types/node-fetch": 2.6.1
       "@types/react": 18.0.25
       b64-lite: 1.4.0
-      blitz: workspace:*
+      blitz: workspace:2.0.0-beta.20
       eslint: 8.27.0
       fs-extra: 10.0.1
       next: 12.2.5
@@ -537,7 +617,6 @@ importers:
       react-dom: 18.2.0
       typescript: ^4.8.4
     dependencies:
-      "@blitzjs/auth": link:../../packages/blitz-auth
       "@blitzjs/config": link:../../packages/config
       "@blitzjs/next": link:../../packages/blitz-next
       "@blitzjs/rpc": link:../../packages/blitz-rpc
@@ -557,16 +636,15 @@ importers:
 
   integration-tests/rpc-path-root:
     specifiers:
-      "@blitzjs/auth": workspace:*
-      "@blitzjs/config": workspace:*
-      "@blitzjs/next": workspace:*
-      "@blitzjs/rpc": workspace:*
+      "@blitzjs/config": workspace:2.0.0-beta.20
+      "@blitzjs/next": workspace:2.0.0-beta.20
+      "@blitzjs/rpc": workspace:2.0.0-beta.20
       "@types/express": 4.17.13
       "@types/fs-extra": 9.0.13
       "@types/node-fetch": 2.6.1
       "@types/react": 18.0.25
       b64-lite: 1.4.0
-      blitz: workspace:*
+      blitz: workspace:2.0.0-beta.20
       eslint: 8.27.0
       fs-extra: 10.0.1
       next: 12.2.5
@@ -574,7 +652,6 @@ importers:
       react-dom: 18.2.0
       typescript: ^4.8.4
     dependencies:
-      "@blitzjs/auth": link:../../packages/blitz-auth
       "@blitzjs/config": link:../../packages/config
       "@blitzjs/next": link:../../packages/blitz-next
       "@blitzjs/rpc": link:../../packages/blitz-rpc
@@ -594,10 +671,10 @@ importers:
 
   integration-tests/trailing-slash:
     specifiers:
-      "@blitzjs/auth": workspace:*
-      "@blitzjs/config": workspace:*
-      "@blitzjs/next": workspace:*
-      "@blitzjs/rpc": workspace:*
+      "@blitzjs/auth": workspace:2.0.0-beta.20
+      "@blitzjs/config": workspace:2.0.0-beta.20
+      "@blitzjs/next": workspace:2.0.0-beta.20
+      "@blitzjs/rpc": workspace:2.0.0-beta.20
       "@next/bundle-analyzer": 12.0.8
       "@prisma/client": 4.6.0
       "@types/express": 4.17.13
@@ -605,7 +682,7 @@ importers:
       "@types/node-fetch": 2.6.1
       "@types/react": 18.0.25
       b64-lite: 1.4.0
-      blitz: workspace:*
+      blitz: workspace:2.0.0-beta.20
       eslint: 8.27.0
       fs-extra: 10.0.1
       get-port: 6.1.2
@@ -701,8 +778,8 @@ importers:
 
   packages/blitz:
     specifiers:
-      "@blitzjs/config": workspace:2.0.0-beta.19
-      "@blitzjs/generator": 2.0.0-beta.19
+      "@blitzjs/config": workspace:2.0.0-beta.20
+      "@blitzjs/generator": 2.0.0-beta.20
       "@mrleebo/prisma-ast": 0.2.6
       "@types/cookie": 0.4.1
       "@types/cross-spawn": 6.0.2
@@ -848,7 +925,7 @@ importers:
 
   packages/blitz-auth:
     specifiers:
-      "@blitzjs/config": workspace:2.0.0-beta.19
+      "@blitzjs/config": workspace:2.0.0-beta.20
       "@testing-library/react": 13.4.0
       "@testing-library/react-hooks": 8.0.1
       "@types/b64-lite": 1.3.0
@@ -862,7 +939,7 @@ importers:
       "@types/secure-password": 3.1.1
       b64-lite: 1.4.0
       bad-behavior: 1.0.1
-      blitz: 2.0.0-beta.19
+      blitz: 2.0.0-beta.20
       cookie: 0.4.1
       cookie-session: 2.0.0
       debug: 4.3.3
@@ -886,7 +963,6 @@ importers:
       "@types/secure-password": 3.1.1
       b64-lite: 1.4.0
       bad-behavior: 1.0.1
-      blitz: link:../blitz
       cookie: 0.4.1
       cookie-session: 2.0.0_supports-color@8.1.1
       debug: 4.3.3_supports-color@8.1.1
@@ -907,6 +983,7 @@ importers:
       "@types/jsonwebtoken": 8.5.8
       "@types/react": 18.0.25
       "@types/react-dom": 17.0.14
+      blitz: link:../blitz
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       typescript: 4.8.4
@@ -915,8 +992,8 @@ importers:
 
   packages/blitz-next:
     specifiers:
-      "@blitzjs/config": workspace:2.0.0-beta.19
-      "@blitzjs/rpc": 2.0.0-beta.19
+      "@blitzjs/config": workspace:2.0.0-beta.20
+      "@blitzjs/rpc": 2.0.0-beta.20
       "@tanstack/react-query": 4.0.10
       "@testing-library/dom": 8.13.0
       "@testing-library/jest-dom": 5.16.3
@@ -928,7 +1005,7 @@ importers:
       "@types/react": 18.0.25
       "@types/react-dom": 17.0.14
       "@types/testing-library__react-hooks": 4.0.0
-      blitz: 2.0.0-beta.19
+      blitz: 2.0.0-beta.20
       cross-spawn: 7.0.3
       debug: 4.3.3
       find-up: 4.1.0
@@ -978,8 +1055,8 @@ importers:
 
   packages/blitz-rpc:
     specifiers:
-      "@blitzjs/auth": 2.0.0-beta.19
-      "@blitzjs/config": workspace:2.0.0-beta.19
+      "@blitzjs/auth": 2.0.0-beta.20
+      "@blitzjs/config": workspace:2.0.0-beta.20
       "@swc/core": 1.3.7
       "@tanstack/react-query": 4.0.10
       "@types/debug": 4.1.7
@@ -987,7 +1064,7 @@ importers:
       "@types/react-dom": 17.0.14
       b64-lite: 1.4.0
       bad-behavior: 1.0.1
-      blitz: 2.0.0-beta.19
+      blitz: 2.0.0-beta.20
       chalk: ^4.1.0
       debug: 4.3.3
       next: 12.2.5
@@ -1000,7 +1077,6 @@ importers:
       watch: 1.0.2
       zod: 3.19.1
     dependencies:
-      "@blitzjs/auth": link:../blitz-auth
       "@swc/core": 1.3.7
       "@tanstack/react-query": 4.0.10_biqbaboplfbrettd7655fr4n2y
       b64-lite: 1.4.0
@@ -1010,12 +1086,13 @@ importers:
       superjson: 1.11.0
       supports-color: 8.1.1
     devDependencies:
+      "@blitzjs/auth": link:../blitz-auth
       "@blitzjs/config": link:../config
       "@types/debug": 4.1.7
       "@types/react": 18.0.25
       "@types/react-dom": 17.0.14
       blitz: link:../blitz
-      next: 12.2.5_w53b3ma4oycvgh3v4dwmhz6z6q
+      next: 12.2.5_mqvh5p7ejg4taogoj6tpk3gd5a
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       typescript: 4.8.4
@@ -1031,12 +1108,12 @@ importers:
       "@babel/plugin-syntax-typescript": 7.17.12
       "@babel/preset-env": 7.12.10
       "@blitzjs/config": workspace:*
-      "@blitzjs/generator": 2.0.0-beta.19
+      "@blitzjs/generator": 2.0.0-beta.20
       "@types/jscodeshift": 0.11.2
       "@types/node": 18.11.9
       arg: 5.0.1
       ast-types: 0.14.2
-      blitz: 2.0.0-beta.19
+      blitz: 2.0.0-beta.20
       chalk: ^4.1.0
       cross-spawn: 7.0.3
       debug: 4.3.3
@@ -1091,7 +1168,7 @@ importers:
       "@babel/plugin-transform-typescript": 7.12.1
       "@babel/preset-env": 7.12.10
       "@babel/types": 7.12.10
-      "@blitzjs/config": 2.0.0-beta.19
+      "@blitzjs/config": 2.0.0-beta.20
       "@juanm04/cpx": 2.0.1
       "@mrleebo/prisma-ast": 0.4.1
       "@types/babel__core": 7.1.19
@@ -1186,7 +1263,7 @@ importers:
 
   packages/pkg-template:
     specifiers:
-      "@blitzjs/config": 2.0.0-beta.19
+      "@blitzjs/config": 2.0.0-beta.20
       "@types/react": 18.0.25
       "@types/react-dom": 17.0.14
       "@typescript-eslint/eslint-plugin": 5.42.1
@@ -1210,7 +1287,7 @@ importers:
   recipes/base-web:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: 2.0.0-beta.19
+      blitz: 2.0.0-beta.20
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1221,7 +1298,7 @@ importers:
   recipes/bulma:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: 2.0.0-beta.19
+      blitz: 2.0.0-beta.20
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1233,7 +1310,7 @@ importers:
     specifiers:
       "@types/jscodeshift": 0.11.2
       ast-types: 0.14.2
-      blitz: 2.0.0-beta.19
+      blitz: 2.0.0-beta.20
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1246,7 +1323,7 @@ importers:
     specifiers:
       "@types/jscodeshift": 0.11.2
       ast-types: 0.14.2
-      blitz: 2.0.0-beta.19
+      blitz: 2.0.0-beta.20
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1258,7 +1335,7 @@ importers:
   recipes/emotion:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: 2.0.0-beta.19
+      blitz: 2.0.0-beta.20
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1268,20 +1345,20 @@ importers:
 
   recipes/gh-action-yarn-mariadb:
     specifiers:
-      blitz: 2.0.0-beta.19
+      blitz: 2.0.0-beta.20
     dependencies:
       blitz: link:../../packages/blitz
 
   recipes/gh-action-yarn-postgres:
     specifiers:
-      blitz: 2.0.0-beta.19
+      blitz: 2.0.0-beta.20
     dependencies:
       blitz: link:../../packages/blitz
 
   recipes/ghost:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: 2.0.0-beta.19
+      blitz: 2.0.0-beta.20
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1292,7 +1369,7 @@ importers:
   recipes/graphql-apollo-server:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: 2.0.0-beta.19
+      blitz: 2.0.0-beta.20
       jscodeshift: 0.13.0
       uuid: ^8.3.1
     dependencies:
@@ -1305,7 +1382,7 @@ importers:
   recipes/logrocket:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: 2.0.0-beta.19
+      blitz: 2.0.0-beta.20
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1316,7 +1393,7 @@ importers:
   recipes/material-ui:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: 2.0.0-beta.19
+      blitz: 2.0.0-beta.20
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1328,7 +1405,7 @@ importers:
     specifiers:
       "@types/jscodeshift": 0.11.2
       ast-types: 0.14.2
-      blitz: 2.0.0-beta.19
+      blitz: 2.0.0-beta.20
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1339,13 +1416,13 @@ importers:
 
   recipes/passenger:
     specifiers:
-      blitz: 2.0.0-beta.19
+      blitz: 2.0.0-beta.20
     dependencies:
       blitz: link:../../packages/blitz
 
   recipes/quirrel:
     specifiers:
-      blitz: 2.0.0-beta.19
+      blitz: 2.0.0-beta.20
     dependencies:
       blitz: link:../../packages/blitz
 
@@ -1353,7 +1430,7 @@ importers:
     specifiers:
       "@types/jscodeshift": 0.11.2
       ast-types: 0.14.2
-      blitz: 2.0.0-beta.19
+      blitz: 2.0.0-beta.20
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1364,14 +1441,14 @@ importers:
 
   recipes/render:
     specifiers:
-      blitz: 2.0.0-beta.19
+      blitz: 2.0.0-beta.20
     dependencies:
       blitz: link:../../packages/blitz
 
   recipes/secureheaders:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: 2.0.0-beta.19
+      blitz: 2.0.0-beta.20
       jscodeshift: 0.13.0
       uuid: ^8.3.1
     dependencies:
@@ -1384,7 +1461,7 @@ importers:
   recipes/stitches:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: 2.0.0-beta.19
+      blitz: 2.0.0-beta.20
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1396,7 +1473,7 @@ importers:
     specifiers:
       "@types/jscodeshift": 0.11.2
       ast-types: 0.14.2
-      blitz: 2.0.0-beta.19
+      blitz: 2.0.0-beta.20
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1408,7 +1485,7 @@ importers:
   recipes/tailwind:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: 2.0.0-beta.19
+      blitz: 2.0.0-beta.20
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1420,7 +1497,7 @@ importers:
     specifiers:
       "@types/jscodeshift": 0.11.2
       ast-types: 0.14.2
-      blitz: 2.0.0-beta.19
+      blitz: 2.0.0-beta.20
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1432,7 +1509,7 @@ importers:
   recipes/vanilla-extract:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: 2.0.0-beta.19
+      blitz: 2.0.0-beta.20
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1592,6 +1669,7 @@ packages:
       semver: 6.3.0
     transitivePeerDependencies:
       - supports-color
+    dev: false
 
   /@babel/core/7.20.2:
     resolution:
@@ -1617,7 +1695,6 @@ packages:
       semver: 6.3.0
     transitivePeerDependencies:
       - supports-color
-    dev: true
 
   /@babel/core/7.20.2_supports-color@8.1.1:
     resolution:
@@ -1683,7 +1760,6 @@ packages:
     engines: {node: ">=6.9.0"}
     dependencies:
       "@babel/types": 7.20.2
-    dev: true
 
   /@babel/helper-builder-binary-assignment-operator-visitor/7.16.7:
     resolution:
@@ -1693,7 +1769,7 @@ packages:
     engines: {node: ">=6.9.0"}
     dependencies:
       "@babel/helper-explode-assignable-expression": 7.16.7
-      "@babel/types": 7.18.4
+      "@babel/types": 7.20.2
 
   /@babel/helper-compilation-targets/7.18.2_@babel+core@7.12.10:
     resolution:
@@ -1751,7 +1827,7 @@ packages:
       "@babel/core": ^7.0.0
     dependencies:
       "@babel/compat-data": 7.20.1
-      "@babel/core": 7.20.2_supports-color@8.1.1
+      "@babel/core": 7.20.2
       "@babel/helper-validator-option": 7.18.6
       browserslist: 4.21.4
       semver: 6.3.0
@@ -1972,7 +2048,7 @@ packages:
       }
     engines: {node: ">=6.9.0"}
     dependencies:
-      "@babel/types": 7.18.4
+      "@babel/types": 7.20.2
 
   /@babel/helper-function-name/7.17.9:
     resolution:
@@ -2074,6 +2150,7 @@ packages:
       "@babel/types": 7.18.4
     transitivePeerDependencies:
       - supports-color
+    dev: false
 
   /@babel/helper-module-transforms/7.20.2:
     resolution:
@@ -2092,7 +2169,6 @@ packages:
       "@babel/types": 7.20.2
     transitivePeerDependencies:
       - supports-color
-    dev: true
 
   /@babel/helper-module-transforms/7.20.2_supports-color@8.1.1:
     resolution:
@@ -2156,9 +2232,9 @@ packages:
       }
     engines: {node: ">=6.9.0"}
     dependencies:
-      "@babel/helper-annotate-as-pure": 7.16.7
+      "@babel/helper-annotate-as-pure": 7.18.6
       "@babel/helper-wrap-function": 7.16.8_supports-color@8.1.1
-      "@babel/types": 7.18.4
+      "@babel/types": 7.20.2
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -2295,10 +2371,10 @@ packages:
       }
     engines: {node: ">=6.9.0"}
     dependencies:
-      "@babel/helper-function-name": 7.17.9
-      "@babel/template": 7.16.7
-      "@babel/traverse": 7.18.2_supports-color@8.1.1
-      "@babel/types": 7.18.4
+      "@babel/helper-function-name": 7.19.0
+      "@babel/template": 7.18.10
+      "@babel/traverse": 7.20.1_supports-color@8.1.1
+      "@babel/types": 7.20.2
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -2328,6 +2404,7 @@ packages:
       "@babel/types": 7.18.4
     transitivePeerDependencies:
       - supports-color
+    dev: false
 
   /@babel/helpers/7.20.1:
     resolution:
@@ -2341,7 +2418,6 @@ packages:
       "@babel/types": 7.20.2
     transitivePeerDependencies:
       - supports-color
-    dev: true
 
   /@babel/helpers/7.20.1_supports-color@8.1.1:
     resolution:
@@ -2892,17 +2968,6 @@ packages:
       "@babel/core": 7.12.10
       "@babel/helper-plugin-utils": 7.17.12
 
-  /@babel/plugin-syntax-async-generators/7.8.4_@babel+core@7.18.2:
-    resolution:
-      {
-        integrity: sha512-tycmZxkGfZaxhMRbXlPXuVFpdWlXpir2W4AMhSJgRKzk/eDlIXOhb2LHWoLpDF7TEHylV5zNhykX6KAgHJmTNw==,
-      }
-    peerDependencies:
-      "@babel/core": ^7.0.0-0
-    dependencies:
-      "@babel/core": 7.18.2
-      "@babel/helper-plugin-utils": 7.17.12
-
   /@babel/plugin-syntax-async-generators/7.8.4_@babel+core@7.20.2:
     resolution:
       {
@@ -2914,17 +2979,6 @@ packages:
       "@babel/core": 7.20.2_supports-color@8.1.1
       "@babel/helper-plugin-utils": 7.17.12
 
-  /@babel/plugin-syntax-bigint/7.8.3_@babel+core@7.18.2:
-    resolution:
-      {
-        integrity: sha512-wnTnFlG+YxQm3vDxpGE57Pj0srRU4sHE/mDkt1qv2YJJSeUAec2ma4WLUnUPeKjyrfntVwe/N6dCXpU+zL3Npg==,
-      }
-    peerDependencies:
-      "@babel/core": ^7.0.0-0
-    dependencies:
-      "@babel/core": 7.18.2
-      "@babel/helper-plugin-utils": 7.17.12
-
   /@babel/plugin-syntax-bigint/7.8.3_@babel+core@7.20.2:
     resolution:
       {
@@ -2933,9 +2987,8 @@ packages:
     peerDependencies:
       "@babel/core": ^7.0.0-0
     dependencies:
-      "@babel/core": 7.20.2_supports-color@8.1.1
+      "@babel/core": 7.20.2
       "@babel/helper-plugin-utils": 7.17.12
-    dev: true
 
   /@babel/plugin-syntax-class-properties/7.12.13_@babel+core@7.12.10:
     resolution:
@@ -2946,17 +2999,6 @@ packages:
       "@babel/core": ^7.0.0-0
     dependencies:
       "@babel/core": 7.12.10
-      "@babel/helper-plugin-utils": 7.17.12
-
-  /@babel/plugin-syntax-class-properties/7.12.13_@babel+core@7.18.2:
-    resolution:
-      {
-        integrity: sha512-fm4idjKla0YahUNgFNLCB0qySdsoPiZP3iQE3rky0mBUtMZ23yDJ9SJdg6dXTSDnulOVqiF3Hgr9nbXvXTQZYA==,
-      }
-    peerDependencies:
-      "@babel/core": ^7.0.0-0
-    dependencies:
-      "@babel/core": 7.18.2
       "@babel/helper-plugin-utils": 7.17.12
 
   /@babel/plugin-syntax-class-properties/7.12.13_@babel+core@7.20.2:
@@ -3029,17 +3071,6 @@ packages:
       "@babel/helper-plugin-utils": 7.17.12
     dev: false
 
-  /@babel/plugin-syntax-import-meta/7.10.4_@babel+core@7.18.2:
-    resolution:
-      {
-        integrity: sha512-Yqfm+XDx0+Prh3VSeEQCPU81yC+JWZ2pDPFSS4ZdpfZhp4MkFMaDC1UqseovEKwSUpnIL7+vK+Clp7bfh0iD7g==,
-      }
-    peerDependencies:
-      "@babel/core": ^7.0.0-0
-    dependencies:
-      "@babel/core": 7.18.2
-      "@babel/helper-plugin-utils": 7.17.12
-
   /@babel/plugin-syntax-import-meta/7.10.4_@babel+core@7.20.2:
     resolution:
       {
@@ -3048,9 +3079,8 @@ packages:
     peerDependencies:
       "@babel/core": ^7.0.0-0
     dependencies:
-      "@babel/core": 7.20.2_supports-color@8.1.1
+      "@babel/core": 7.20.2
       "@babel/helper-plugin-utils": 7.17.12
-    dev: true
 
   /@babel/plugin-syntax-json-strings/7.8.3_@babel+core@7.12.10:
     resolution:
@@ -3061,17 +3091,6 @@ packages:
       "@babel/core": ^7.0.0-0
     dependencies:
       "@babel/core": 7.12.10
-      "@babel/helper-plugin-utils": 7.17.12
-
-  /@babel/plugin-syntax-json-strings/7.8.3_@babel+core@7.18.2:
-    resolution:
-      {
-        integrity: sha512-lY6kdGpWHvjoe2vk4WrAapEuBR69EMxZl+RoGRhrFGNYVK8mOPAW8VfbT/ZgrFbXlDNiiaxQnAtgVCZ6jv30EA==,
-      }
-    peerDependencies:
-      "@babel/core": ^7.0.0-0
-    dependencies:
-      "@babel/core": 7.18.2
       "@babel/helper-plugin-utils": 7.17.12
 
   /@babel/plugin-syntax-json-strings/7.8.3_@babel+core@7.20.2:
@@ -3109,6 +3128,19 @@ packages:
     dependencies:
       "@babel/core": 7.18.2
       "@babel/helper-plugin-utils": 7.17.12
+    dev: true
+
+  /@babel/plugin-syntax-jsx/7.17.12_@babel+core@7.20.2:
+    resolution:
+      {
+        integrity: sha512-spyY3E3AURfxh/RHtjx5j6hs8am5NbUBGfcZ2vB3uShSpZdQyXSf5rR5Mk76vbtlAZOelyVQ71Fg0x9SG4fsog==,
+      }
+    engines: {node: ">=6.9.0"}
+    peerDependencies:
+      "@babel/core": ^7.0.0-0
+    dependencies:
+      "@babel/core": 7.20.2
+      "@babel/helper-plugin-utils": 7.17.12
 
   /@babel/plugin-syntax-jsx/7.18.6_@babel+core@7.20.2:
     resolution:
@@ -3132,17 +3164,6 @@ packages:
       "@babel/core": ^7.0.0-0
     dependencies:
       "@babel/core": 7.12.10
-      "@babel/helper-plugin-utils": 7.17.12
-
-  /@babel/plugin-syntax-logical-assignment-operators/7.10.4_@babel+core@7.18.2:
-    resolution:
-      {
-        integrity: sha512-d8waShlpFDinQ5MtvGU9xDAOzKH47+FFoney2baFIoMr952hKOLp1HR7VszoZvOsV/4+RRszNY7D17ba0te0ig==,
-      }
-    peerDependencies:
-      "@babel/core": ^7.0.0-0
-    dependencies:
-      "@babel/core": 7.18.2
       "@babel/helper-plugin-utils": 7.17.12
 
   /@babel/plugin-syntax-logical-assignment-operators/7.10.4_@babel+core@7.20.2:
@@ -3177,6 +3198,7 @@ packages:
     dependencies:
       "@babel/core": 7.18.2_supports-color@8.1.1
       "@babel/helper-plugin-utils": 7.17.12
+    dev: false
 
   /@babel/plugin-syntax-nullish-coalescing-operator/7.8.3_@babel+core@7.20.2:
     resolution:
@@ -3198,17 +3220,6 @@ packages:
       "@babel/core": ^7.0.0-0
     dependencies:
       "@babel/core": 7.12.10
-      "@babel/helper-plugin-utils": 7.17.12
-
-  /@babel/plugin-syntax-numeric-separator/7.10.4_@babel+core@7.18.2:
-    resolution:
-      {
-        integrity: sha512-9H6YdfkcK/uOnY/K7/aA2xpzaAgkQn37yzWUMRK7OaPOqOpGS1+n0H5hxT9AUw9EsSjPW8SVyMJwYRtWs3X3ug==,
-      }
-    peerDependencies:
-      "@babel/core": ^7.0.0-0
-    dependencies:
-      "@babel/core": 7.18.2
       "@babel/helper-plugin-utils": 7.17.12
 
   /@babel/plugin-syntax-numeric-separator/7.10.4_@babel+core@7.20.2:
@@ -3233,17 +3244,6 @@ packages:
       "@babel/core": 7.12.10
       "@babel/helper-plugin-utils": 7.17.12
 
-  /@babel/plugin-syntax-object-rest-spread/7.8.3_@babel+core@7.18.2:
-    resolution:
-      {
-        integrity: sha512-XoqMijGZb9y3y2XskN+P1wUGiVwWZ5JmoDRwx5+3GmEplNyVM2s2Dg8ILFQm8rWM48orGy5YpI5Bl8U1y7ydlA==,
-      }
-    peerDependencies:
-      "@babel/core": ^7.0.0-0
-    dependencies:
-      "@babel/core": 7.18.2
-      "@babel/helper-plugin-utils": 7.17.12
-
   /@babel/plugin-syntax-object-rest-spread/7.8.3_@babel+core@7.20.2:
     resolution:
       {
@@ -3264,17 +3264,6 @@ packages:
       "@babel/core": ^7.0.0-0
     dependencies:
       "@babel/core": 7.12.10
-      "@babel/helper-plugin-utils": 7.17.12
-
-  /@babel/plugin-syntax-optional-catch-binding/7.8.3_@babel+core@7.18.2:
-    resolution:
-      {
-        integrity: sha512-6VPD0Pc1lpTqw0aKoeRTMiB+kWhAoT24PA+ksWSBrFtl5SIRVpZlwN3NNPQjehA2E/91FV3RjLWoVTglWcSV3Q==,
-      }
-    peerDependencies:
-      "@babel/core": ^7.0.0-0
-    dependencies:
-      "@babel/core": 7.18.2
       "@babel/helper-plugin-utils": 7.17.12
 
   /@babel/plugin-syntax-optional-catch-binding/7.8.3_@babel+core@7.20.2:
@@ -3309,6 +3298,7 @@ packages:
     dependencies:
       "@babel/core": 7.18.2_supports-color@8.1.1
       "@babel/helper-plugin-utils": 7.17.12
+    dev: false
 
   /@babel/plugin-syntax-optional-chaining/7.8.3_@babel+core@7.20.2:
     resolution:
@@ -3331,18 +3321,6 @@ packages:
       "@babel/core": ^7.0.0-0
     dependencies:
       "@babel/core": 7.12.10
-      "@babel/helper-plugin-utils": 7.17.12
-
-  /@babel/plugin-syntax-top-level-await/7.14.5_@babel+core@7.18.2:
-    resolution:
-      {
-        integrity: sha512-hx++upLv5U1rgYfwe1xBQUhRmU41NEvpUvrp8jkrSCdvGSnM5/qdRMtylJ6PG5OFkBaHkbTAKTnd3/YyESRHFw==,
-      }
-    engines: {node: ">=6.9.0"}
-    peerDependencies:
-      "@babel/core": ^7.0.0-0
-    dependencies:
-      "@babel/core": 7.18.2
       "@babel/helper-plugin-utils": 7.17.12
 
   /@babel/plugin-syntax-top-level-await/7.14.5_@babel+core@7.20.2:
@@ -3381,6 +3359,7 @@ packages:
     dependencies:
       "@babel/core": 7.18.2_supports-color@8.1.1
       "@babel/helper-plugin-utils": 7.17.12
+    dev: false
 
   /@babel/plugin-syntax-typescript/7.17.12_@babel+core@7.20.2:
     resolution:
@@ -3393,7 +3372,6 @@ packages:
     dependencies:
       "@babel/core": 7.20.2_supports-color@8.1.1
       "@babel/helper-plugin-utils": 7.17.12
-    dev: true
 
   /@babel/plugin-transform-arrow-functions/7.17.12_@babel+core@7.12.10:
     resolution:
@@ -5037,6 +5015,7 @@ packages:
       globals: 11.12.0
     transitivePeerDependencies:
       - supports-color
+    dev: false
 
   /@babel/traverse/7.20.1:
     resolution:
@@ -5057,7 +5036,6 @@ packages:
       globals: 11.12.0
     transitivePeerDependencies:
       - supports-color
-    dev: true
 
   /@babel/traverse/7.20.1_supports-color@8.1.1:
     resolution:
@@ -6005,7 +5983,7 @@ packages:
       }
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     dependencies:
-      "@babel/core": 7.18.2
+      "@babel/core": 7.20.2
       "@jest/types": 29.2.1
       "@jridgewell/trace-mapping": 0.3.17
       babel-plugin-istanbul: 6.1.1
@@ -7194,7 +7172,7 @@ packages:
       }
     dependencies:
       "@types/connect": 3.4.35
-      "@types/node": 17.0.24
+      "@types/node": 18.11.9
 
   /@types/cacheable-request/6.0.2:
     resolution:
@@ -7204,7 +7182,7 @@ packages:
     dependencies:
       "@types/http-cache-semantics": 4.0.1
       "@types/keyv": 3.1.4
-      "@types/node": 18.7.13
+      "@types/node": 18.11.9
       "@types/responselike": 1.0.0
     dev: false
 
@@ -7238,7 +7216,7 @@ packages:
         integrity: sha512-cdeYyv4KWoEgpBISTxWvqYsVy444DOqehiF3fM3ne10AmJ62RSyNkUnxMJXHQWRQQX2eR94m5y1IZyDwBjV9FQ==,
       }
     dependencies:
-      "@types/node": 17.0.24
+      "@types/node": 18.11.9
 
   /@types/cookie-session/2.0.44:
     resolution:
@@ -7263,7 +7241,7 @@ packages:
         integrity: sha512-KuwNhp3eza+Rhu8IFI5HUXRP0LIhqH5cAjubUvGXXthh4YYBuP2ntwEX+Cz8GJoZUHlKo247wPWOfA9LYEq4cw==,
       }
     dependencies:
-      "@types/node": 17.0.24
+      "@types/node": 18.11.9
     dev: true
 
   /@types/debug/4.1.7:
@@ -7330,7 +7308,7 @@ packages:
         integrity: sha512-P1BJAEAW3E2DJUlkgq4tOL3RyMunoWXqbSCygWo5ZIWTjUgN1YnaXWW4VWl/oc8vs/XoYibEGBKP0uZyF4AHig==,
       }
     dependencies:
-      "@types/node": 17.0.24
+      "@types/node": 18.11.9
       "@types/qs": 6.9.7
       "@types/range-parser": 1.2.4
 
@@ -7361,7 +7339,7 @@ packages:
       }
     dependencies:
       "@types/minimatch": 3.0.5
-      "@types/node": 17.0.24
+      "@types/node": 18.11.9
 
   /@types/global-agent/2.1.1:
     resolution:
@@ -7376,7 +7354,7 @@ packages:
         integrity: sha512-anKkLmZZ+xm4p8JWBf4hElkM4XR+EZeA2M9BAkkTldmcyDY4mbdIJnRghDJH3Ov5ooY7/UAoENtmdMSkaAd7Cw==,
       }
     dependencies:
-      "@types/node": 17.0.24
+      "@types/node": 18.11.9
 
   /@types/hasbin/1.2.0:
     resolution:
@@ -7487,7 +7465,7 @@ packages:
         integrity: sha512-zm6xBQpFDIDM6o9r6HSgDeIcLy82TKWctCXEPbJJcXb5AKmi5BNNdLXneixK4lplX3PqIVcwLBCGE/kAGnlD4A==,
       }
     dependencies:
-      "@types/node": 17.0.24
+      "@types/node": 18.11.9
     dev: true
 
   /@types/keygrip/1.0.2:
@@ -7503,7 +7481,7 @@ packages:
         integrity: sha512-BQ5aZNSCpj7D6K2ksrRCTmKRLEpnPvWDiLPfoGyhZ++8YtiK9d/3DBKPJgry359X/P1PfruyYwvnvwFjuEiEIg==,
       }
     dependencies:
-      "@types/node": 18.7.13
+      "@types/node": 18.11.9
     dev: false
 
   /@types/mem-fs-editor/7.0.1:
@@ -7516,7 +7494,7 @@ packages:
       "@types/glob": 7.2.0
       "@types/json-schema": 7.0.11
       "@types/mem-fs": 1.1.2
-      "@types/node": 17.0.24
+      "@types/node": 18.11.9
       "@types/vinyl": 2.0.6
     dev: true
 
@@ -7526,7 +7504,7 @@ packages:
         integrity: sha512-tt+4IoDO8/wmtaP2bHnB91c8AnzYtR9MK6NxfcZY9E3XgtmzOiFMeSXu3EZrBeevd0nJ87iGoUiFDGsb9QUvew==,
       }
     dependencies:
-      "@types/node": 17.0.24
+      "@types/node": 18.11.9
       "@types/vinyl": 2.0.6
     dev: true
 
@@ -7578,6 +7556,7 @@ packages:
       {
         integrity: sha512-aveCYRQbgTH9Pssp1voEP7HiuWlD2jW2BO56w+bVrJn04i61yh6mRfoKO6hEYQD9vF+W8Chkwc6j1M36uPkx4g==,
       }
+    dev: true
 
   /@types/node/18.11.9:
     resolution:
@@ -7590,6 +7569,7 @@ packages:
       {
         integrity: sha512-46yIhxSe5xEaJZXWdIBP7GU4HDTG8/eo0qd9atdiL+lFpA03y8KS+lkTN834TWJj5767GbWv4n/P6efyTFt1Dw==,
       }
+    dev: true
 
   /@types/nodemailer/6.4.4:
     resolution:
@@ -7613,7 +7593,7 @@ packages:
         integrity: sha512-6cCMPsnLzad47O+OuWHnz+r+GRoHb/o1fVZ4AqzS3hzliy7wVgXm6kHBj/VxkKYLvda3zJa/A3QZU0xOoDxOxg==,
       }
     dependencies:
-      "@types/node": 17.0.24
+      "@types/node": 18.11.9
     dev: true
 
   /@types/passport-twitter/1.0.37:
@@ -7679,7 +7659,7 @@ packages:
         integrity: sha512-ZYYVc/kSMkhH9W/4dNK/sLNra3cnkfT2nJyOAIDY+C2u6w72wa0s1aXAezVtbTsnN8HID1uhXCrLwDE2ZXpplg==,
       }
     dependencies:
-      "@types/node": 18.7.13
+      "@types/node": 18.11.9
     dev: true
 
   /@types/prompts/2.0.14:
@@ -7688,7 +7668,7 @@ packages:
         integrity: sha512-HZBd99fKxRWpYCErtm2/yxUZv6/PBI9J7N4TNFffl5JbrYMHBwF25DjQGTW3b3jmXq+9P6/8fCIb2ee57BFfYA==,
       }
     dependencies:
-      "@types/node": 17.0.24
+      "@types/node": 18.11.9
     dev: true
 
   /@types/prop-types/15.7.5:
@@ -7743,7 +7723,7 @@ packages:
         integrity: sha512-yy7HuzQhj0dhGpD8RLXSZWEkLsV9ibvxvi6EiJ3bkqLAO1RGo0WbkWQiwpRlSFymTJRz0d3k5LM3kkx8ArDbLw==,
       }
     dependencies:
-      "@types/node": 17.0.24
+      "@types/node": 18.11.9
     dev: true
 
   /@types/responselike/1.0.0:
@@ -7752,7 +7732,7 @@ packages:
         integrity: sha512-85Y2BjiufFzaMIlvJDvTTB8Fxl2xfLo4HgmHzVBz08w4wDePCTjYw66PdrolO0kzli3yam/YCgRufyo1DdQVTA==,
       }
     dependencies:
-      "@types/node": 18.7.13
+      "@types/node": 18.11.9
     dev: false
 
   /@types/rimraf/3.0.2:
@@ -7762,7 +7742,7 @@ packages:
       }
     dependencies:
       "@types/glob": 7.2.0
-      "@types/node": 17.0.24
+      "@types/node": 18.11.9
     dev: true
 
   /@types/scheduler/0.16.2:
@@ -7777,7 +7757,7 @@ packages:
         integrity: sha512-8S6JYBt22MXJrc/ehq8U0jknbnCzssVFKwOqn2pLnzbZLtiotjxaCd+SRQtOcVqrn1NNiKyw6fZJagW1eBe1bQ==,
       }
     dependencies:
-      "@types/node": 17.0.24
+      "@types/node": 18.11.9
     dev: false
 
   /@types/selenium-webdriver/4.0.18:
@@ -7807,7 +7787,7 @@ packages:
       }
     dependencies:
       "@types/mime": 1.3.2
-      "@types/node": 17.0.24
+      "@types/node": 18.11.9
 
   /@types/stack-utils/2.0.1:
     resolution:
@@ -7821,7 +7801,7 @@ packages:
         integrity: sha512-y6ZfbSzYHniCeY6ZAzsQjSAdJInNVoEz4Uhsb81W+RCoNYA59yoG/+XbqPqCPj2KCU3Wa6RFWSozutkGIHIsNQ==,
       }
     dependencies:
-      "@types/node": 17.0.24
+      "@types/node": 18.11.9
     dev: true
 
   /@types/testing-library__jest-dom/5.14.3:
@@ -7867,7 +7847,7 @@ packages:
       }
     dependencies:
       "@types/expect": 1.20.4
-      "@types/node": 17.0.24
+      "@types/node": 18.11.9
     dev: true
 
   /@types/watchpack/1.1.1:
@@ -7878,7 +7858,7 @@ packages:
     dependencies:
       "@types/chokidar": 2.1.3
       "@types/graceful-fs": 4.1.5
-      "@types/node": 17.0.24
+      "@types/node": 18.11.9
     dev: true
 
   /@types/yargs-parser/21.0.0:
@@ -7911,7 +7891,7 @@ packages:
       }
     requiresBuild: true
     dependencies:
-      "@types/node": 17.0.24
+      "@types/node": 18.11.9
     dev: true
     optional: true
 
@@ -8028,28 +8008,6 @@ packages:
       - typescript
     dev: true
 
-  /@typescript-eslint/parser/5.28.0_rmayb2veg2btbq6mbmnyivgasy:
-    resolution:
-      {
-        integrity: sha512-ekqoNRNK1lAcKhZESN/PdpVsWbP9jtiNqzFWkp/yAUdZvJalw2heCYuqRmM5eUJSIYEkgq5sGOjq+ZqsLMjtRA==,
-      }
-    engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
-    peerDependencies:
-      eslint: ^6.0.0 || ^7.0.0 || ^8.0.0
-      typescript: "*"
-    peerDependenciesMeta:
-      typescript:
-        optional: true
-    dependencies:
-      "@typescript-eslint/scope-manager": 5.28.0
-      "@typescript-eslint/types": 5.28.0
-      "@typescript-eslint/typescript-estree": 5.28.0_typescript@4.8.4
-      debug: 4.3.4
-      eslint: 8.27.0
-      typescript: 4.8.4
-    transitivePeerDependencies:
-      - supports-color
-
   /@typescript-eslint/parser/5.43.0_rmayb2veg2btbq6mbmnyivgasy:
     resolution:
       {
@@ -8071,7 +8029,6 @@ packages:
       typescript: 4.8.4
     transitivePeerDependencies:
       - supports-color
-    dev: true
 
   /@typescript-eslint/parser/5.9.1_nw6v2wse7au2evadw7vu3hneg4:
     resolution:
@@ -8117,6 +8074,7 @@ packages:
       typescript: 4.8.4
     transitivePeerDependencies:
       - supports-color
+    dev: false
 
   /@typescript-eslint/scope-manager/5.28.0:
     resolution:
@@ -8127,6 +8085,7 @@ packages:
     dependencies:
       "@typescript-eslint/types": 5.28.0
       "@typescript-eslint/visitor-keys": 5.28.0
+    dev: true
 
   /@typescript-eslint/scope-manager/5.42.1:
     resolution:
@@ -8147,7 +8106,6 @@ packages:
     dependencies:
       "@typescript-eslint/types": 5.43.0
       "@typescript-eslint/visitor-keys": 5.43.0
-    dev: true
 
   /@typescript-eslint/scope-manager/5.9.1:
     resolution:
@@ -8210,6 +8168,7 @@ packages:
         integrity: sha512-2OOm8ZTOQxqkPbf+DAo8oc16sDlVR5owgJfKheBkxBKg1vAfw2JsSofH9+16VPlN9PWtv8Wzhklkqw3k/zCVxA==,
       }
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
+    dev: true
 
   /@typescript-eslint/types/5.42.1:
     resolution:
@@ -8224,7 +8183,6 @@ packages:
         integrity: sha512-jpsbcD0x6AUvV7tyOlyvon0aUsQpF8W+7TpJntfCUWU1qaIKu2K34pMwQKSzQH8ORgUrGYY6pVIh1Pi8TNeteg==,
       }
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
-    dev: true
 
   /@typescript-eslint/types/5.9.1:
     resolution:
@@ -8255,6 +8213,7 @@ packages:
       typescript: 4.8.4
     transitivePeerDependencies:
       - supports-color
+    dev: true
 
   /@typescript-eslint/typescript-estree/5.42.1_rlpflyxsp53dgdidn3vadezrry:
     resolution:
@@ -8325,7 +8284,6 @@ packages:
       typescript: 4.8.4
     transitivePeerDependencies:
       - supports-color
-    dev: true
 
   /@typescript-eslint/typescript-estree/5.9.1_rlpflyxsp53dgdidn3vadezrry:
     resolution:
@@ -8373,6 +8331,7 @@ packages:
       typescript: 4.8.4
     transitivePeerDependencies:
       - supports-color
+    dev: false
 
   /@typescript-eslint/utils/5.28.0_rmayb2veg2btbq6mbmnyivgasy:
     resolution:
@@ -8449,6 +8408,7 @@ packages:
     dependencies:
       "@typescript-eslint/types": 5.28.0
       eslint-visitor-keys: 3.3.0
+    dev: true
 
   /@typescript-eslint/visitor-keys/5.42.1:
     resolution:
@@ -8469,7 +8429,6 @@ packages:
     dependencies:
       "@typescript-eslint/types": 5.43.0
       eslint-visitor-keys: 3.3.0
-    dev: true
 
   /@typescript-eslint/visitor-keys/5.9.1:
     resolution:
@@ -9080,7 +9039,7 @@ packages:
       - supports-color
     dev: true
 
-  /babel-jest/29.3.0_@babel+core@7.18.2:
+  /babel-jest/29.3.0_@babel+core@7.20.2:
     resolution:
       {
         integrity: sha512-LzQWdGm6hUugVeyGpIKI/T4SVT+PgAA5WFPqBDbneK7C/PqfckNb0tc4KvcKXq/PLA1yY6wTvB8Bc/REQdUxFg==,
@@ -9089,11 +9048,11 @@ packages:
     peerDependencies:
       "@babel/core": ^7.8.0
     dependencies:
-      "@babel/core": 7.18.2
+      "@babel/core": 7.20.2
       "@jest/transform": 29.3.0
       "@types/babel__core": 7.1.19
       babel-plugin-istanbul: 6.1.1
-      babel-preset-jest: 29.2.0_@babel+core@7.18.2
+      babel-preset-jest: 29.2.0_@babel+core@7.20.2
       chalk: 4.1.2
       graceful-fs: 4.2.10
       slash: 3.0.0
@@ -9159,32 +9118,10 @@ packages:
       }
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     dependencies:
-      "@babel/template": 7.16.7
-      "@babel/types": 7.18.4
+      "@babel/template": 7.18.10
+      "@babel/types": 7.20.2
       "@types/babel__core": 7.1.19
       "@types/babel__traverse": 7.17.1
-
-  /babel-preset-current-node-syntax/1.0.1_@babel+core@7.18.2:
-    resolution:
-      {
-        integrity: sha512-M7LQ0bxarkxQoN+vz5aJPsLBn77n8QgTFmo8WK0/44auK2xlCXrYcUxHFxgU7qW5Yzw/CjmLRK2uJzaCd7LvqQ==,
-      }
-    peerDependencies:
-      "@babel/core": ^7.0.0
-    dependencies:
-      "@babel/core": 7.18.2
-      "@babel/plugin-syntax-async-generators": 7.8.4_@babel+core@7.18.2
-      "@babel/plugin-syntax-bigint": 7.8.3_@babel+core@7.18.2
-      "@babel/plugin-syntax-class-properties": 7.12.13_@babel+core@7.18.2
-      "@babel/plugin-syntax-import-meta": 7.10.4_@babel+core@7.18.2
-      "@babel/plugin-syntax-json-strings": 7.8.3_@babel+core@7.18.2
-      "@babel/plugin-syntax-logical-assignment-operators": 7.10.4_@babel+core@7.18.2
-      "@babel/plugin-syntax-nullish-coalescing-operator": 7.8.3_@babel+core@7.18.2
-      "@babel/plugin-syntax-numeric-separator": 7.10.4_@babel+core@7.18.2
-      "@babel/plugin-syntax-object-rest-spread": 7.8.3_@babel+core@7.18.2
-      "@babel/plugin-syntax-optional-catch-binding": 7.8.3_@babel+core@7.18.2
-      "@babel/plugin-syntax-optional-chaining": 7.8.3_@babel+core@7.18.2
-      "@babel/plugin-syntax-top-level-await": 7.14.5_@babel+core@7.18.2
 
   /babel-preset-current-node-syntax/1.0.1_@babel+core@7.20.2:
     resolution:
@@ -9207,7 +9144,6 @@ packages:
       "@babel/plugin-syntax-optional-catch-binding": 7.8.3_@babel+core@7.20.2
       "@babel/plugin-syntax-optional-chaining": 7.8.3_@babel+core@7.20.2
       "@babel/plugin-syntax-top-level-await": 7.14.5_@babel+core@7.20.2
-    dev: true
 
   /babel-preset-jest/27.5.1_@babel+core@7.20.2:
     resolution:
@@ -9223,7 +9159,7 @@ packages:
       babel-preset-current-node-syntax: 1.0.1_@babel+core@7.20.2
     dev: true
 
-  /babel-preset-jest/29.2.0_@babel+core@7.18.2:
+  /babel-preset-jest/29.2.0_@babel+core@7.20.2:
     resolution:
       {
         integrity: sha512-z9JmMJppMxNv8N7fNRHvhMg9cvIkMxQBXgFkane3yKVEvEOP+kB50lk8DFRvF9PGqbyXxlmebKWhuDORO8RgdA==,
@@ -9232,9 +9168,9 @@ packages:
     peerDependencies:
       "@babel/core": ^7.0.0
     dependencies:
-      "@babel/core": 7.18.2
+      "@babel/core": 7.20.2
       babel-plugin-jest-hoist: 29.2.0
-      babel-preset-current-node-syntax: 1.0.1_@babel+core@7.18.2
+      babel-preset-current-node-syntax: 1.0.1_@babel+core@7.20.2
 
   /babel-walk/3.0.0-canary-5:
     resolution:
@@ -10328,7 +10264,7 @@ packages:
         integrity: sha512-rEF75n3QtInrYICvJjrAgV03HwKiYvtKHdPtaba1KucG+cNZ4NJnH9isqt979e67KZlhpbCOTwnsvnIr+CVeOg==,
       }
     dependencies:
-      browserslist: 4.20.3
+      browserslist: 4.21.4
       semver: 7.0.0
 
   /core-js-pure/3.23.0:
@@ -10858,7 +10794,6 @@ packages:
         integrity: sha512-ReEBKkIfe4ya47wlPYf/gu5ib6yUG0/Aez0JQZQz94kiWtRQvZIQbTiehsnwHvLSWJnQdhVeqYue7Id1dKr0qw==,
       }
     engines: {node: ">=10"}
-    dev: true
 
   /delayed-stream/1.0.0:
     resolution:
@@ -12203,11 +12138,11 @@ packages:
     dependencies:
       "@next/eslint-plugin-next": 12.3.1
       "@rushstack/eslint-patch": 1.1.3
-      "@typescript-eslint/parser": 5.28.0_rmayb2veg2btbq6mbmnyivgasy
+      "@typescript-eslint/parser": 5.43.0_rmayb2veg2btbq6mbmnyivgasy
       eslint: 8.27.0
       eslint-import-resolver-node: 0.3.6
       eslint-import-resolver-typescript: 2.7.1_dcpv4nbdr5ks2h5677xdltrk6e
-      eslint-plugin-import: 2.26.0_taybwpfxmgds2suit433x5jrpu
+      eslint-plugin-import: 2.26.0_wbsj7pk5g7hogwvhsif6xntns4
       eslint-plugin-jsx-a11y: 6.5.1_eslint@8.27.0
       eslint-plugin-react: 7.31.8_eslint@8.27.0
       eslint-plugin-react-hooks: 4.5.0_eslint@8.27.0
@@ -12278,7 +12213,7 @@ packages:
     dependencies:
       debug: 4.3.4
       eslint: 8.27.0
-      eslint-plugin-import: 2.26.0_taybwpfxmgds2suit433x5jrpu
+      eslint-plugin-import: 2.26.0_wbsj7pk5g7hogwvhsif6xntns4
       glob: 7.2.0
       is-glob: 4.0.3
       resolve: 1.22.0
@@ -12309,6 +12244,34 @@ packages:
       - supports-color
     dev: true
 
+  /eslint-module-utils/2.7.3_fmuy6wfytpxcy4lufnxcokvnry:
+    resolution:
+      {
+        integrity: sha512-088JEC7O3lDZM9xGe0RerkOMd0EjFl+Yvd1jPWIkMT5u3H9+HC34mWWPnqPrN13gieT9pBOO+Qt07Nb/6TresQ==,
+      }
+    engines: {node: ">=4"}
+    peerDependencies:
+      "@typescript-eslint/parser": "*"
+      eslint-import-resolver-node: "*"
+      eslint-import-resolver-typescript: "*"
+      eslint-import-resolver-webpack: "*"
+    peerDependenciesMeta:
+      "@typescript-eslint/parser":
+        optional: true
+      eslint-import-resolver-node:
+        optional: true
+      eslint-import-resolver-typescript:
+        optional: true
+      eslint-import-resolver-webpack:
+        optional: true
+    dependencies:
+      "@typescript-eslint/parser": 5.43.0_rmayb2veg2btbq6mbmnyivgasy
+      debug: 3.2.7
+      eslint-import-resolver-node: 0.3.6
+      find-up: 2.1.0
+    transitivePeerDependencies:
+      - supports-color
+
   /eslint-module-utils/2.7.3_ulu2225r2ychl26a37c6o2rfje:
     resolution:
       {
@@ -12336,34 +12299,6 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
-
-  /eslint-module-utils/2.7.3_w2gi6vxsccmbmf2uuwklzdca3q:
-    resolution:
-      {
-        integrity: sha512-088JEC7O3lDZM9xGe0RerkOMd0EjFl+Yvd1jPWIkMT5u3H9+HC34mWWPnqPrN13gieT9pBOO+Qt07Nb/6TresQ==,
-      }
-    engines: {node: ">=4"}
-    peerDependencies:
-      "@typescript-eslint/parser": "*"
-      eslint-import-resolver-node: "*"
-      eslint-import-resolver-typescript: "*"
-      eslint-import-resolver-webpack: "*"
-    peerDependenciesMeta:
-      "@typescript-eslint/parser":
-        optional: true
-      eslint-import-resolver-node:
-        optional: true
-      eslint-import-resolver-typescript:
-        optional: true
-      eslint-import-resolver-webpack:
-        optional: true
-    dependencies:
-      "@typescript-eslint/parser": 5.9.1_rmayb2veg2btbq6mbmnyivgasy
-      debug: 3.2.7
-      eslint-import-resolver-node: 0.3.6
-      find-up: 2.1.0
-    transitivePeerDependencies:
-      - supports-color
 
   /eslint-plugin-import/2.26.0_eslint@8.27.0:
     resolution:
@@ -12398,7 +12333,7 @@ packages:
       - supports-color
     dev: true
 
-  /eslint-plugin-import/2.26.0_taybwpfxmgds2suit433x5jrpu:
+  /eslint-plugin-import/2.26.0_wbsj7pk5g7hogwvhsif6xntns4:
     resolution:
       {
         integrity: sha512-hYfi3FXaM8WPLf4S1cikh/r4IxnO6zrhZbEGz2b660EJRbuxgpDS5gkCuYgGWg2xxh2rBuIr4Pvhve/7c31koA==,
@@ -12411,14 +12346,14 @@ packages:
       "@typescript-eslint/parser":
         optional: true
     dependencies:
-      "@typescript-eslint/parser": 5.9.1_rmayb2veg2btbq6mbmnyivgasy
+      "@typescript-eslint/parser": 5.43.0_rmayb2veg2btbq6mbmnyivgasy
       array-includes: 3.1.5
       array.prototype.flat: 1.3.0
       debug: 2.6.9
       doctrine: 2.1.0
       eslint: 8.27.0
       eslint-import-resolver-node: 0.3.6
-      eslint-module-utils: 2.7.3_w2gi6vxsccmbmf2uuwklzdca3q
+      eslint-module-utils: 2.7.3_fmuy6wfytpxcy4lufnxcokvnry
       has: 1.0.3
       is-core-module: 2.11.0
       is-glob: 4.0.3
@@ -14957,8 +14892,8 @@ packages:
       }
     engines: {node: ">=8"}
     dependencies:
-      "@babel/core": 7.18.2
-      "@babel/parser": 7.18.4
+      "@babel/core": 7.20.2
+      "@babel/parser": 7.20.3
       "@istanbuljs/schema": 0.1.3
       istanbul-lib-coverage: 3.2.0
       semver: 6.3.0
@@ -14972,8 +14907,8 @@ packages:
       }
     engines: {node: ">=8"}
     dependencies:
-      "@babel/core": 7.18.2_supports-color@8.1.1
-      "@babel/parser": 7.18.4
+      "@babel/core": 7.20.2_supports-color@8.1.1
+      "@babel/parser": 7.20.3
       "@istanbuljs/schema": 0.1.3
       istanbul-lib-coverage: 3.2.0
       semver: 6.3.0
@@ -15245,11 +15180,11 @@ packages:
       ts-node:
         optional: true
     dependencies:
-      "@babel/core": 7.18.2
+      "@babel/core": 7.20.2
       "@jest/test-sequencer": 29.3.0
       "@jest/types": 29.2.1
       "@types/node": 18.11.9
-      babel-jest: 29.3.0_@babel+core@7.18.2
+      babel-jest: 29.3.0_@babel+core@7.20.2
       chalk: 4.1.2
       ci-info: 3.5.0
       deepmerge: 4.2.2
@@ -15896,10 +15831,10 @@ packages:
       }
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     dependencies:
-      "@babel/core": 7.18.2
+      "@babel/core": 7.20.2
       "@babel/generator": 7.18.2
-      "@babel/plugin-syntax-jsx": 7.17.12_@babel+core@7.18.2
-      "@babel/plugin-syntax-typescript": 7.17.12_@babel+core@7.18.2
+      "@babel/plugin-syntax-jsx": 7.17.12_@babel+core@7.20.2
+      "@babel/plugin-syntax-typescript": 7.17.12_@babel+core@7.20.2
       "@babel/traverse": 7.18.2
       "@babel/types": 7.18.4
       "@jest/expect-utils": 29.2.2
@@ -15907,7 +15842,7 @@ packages:
       "@jest/types": 29.2.1
       "@types/babel__traverse": 7.17.1
       "@types/prettier": 2.6.3
-      babel-preset-current-node-syntax: 1.0.1_@babel+core@7.18.2
+      babel-preset-current-node-syntax: 1.0.1_@babel+core@7.20.2
       chalk: 4.1.2
       expect: 29.3.0
       graceful-fs: 4.2.10
@@ -17712,7 +17647,7 @@ packages:
     dependencies:
       "@next/env": 12.2.5
       "@swc/helpers": 0.4.3
-      caniuse-lite: 1.0.30001339
+      caniuse-lite: 1.0.30001434
       postcss: 8.4.14
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
@@ -17759,7 +17694,7 @@ packages:
     dependencies:
       "@next/env": 12.2.5
       "@swc/helpers": 0.4.3
-      caniuse-lite: 1.0.30001339
+      caniuse-lite: 1.0.30001434
       postcss: 8.4.14
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
@@ -17782,6 +17717,7 @@ packages:
     transitivePeerDependencies:
       - "@babel/core"
       - babel-plugin-macros
+    dev: false
 
   /nice-try/1.0.5:
     resolution:
@@ -18812,6 +18748,18 @@ packages:
       }
     engines: {node: ">=14"}
     hasBin: true
+    dev: true
+
+  /playwright/1.28.0:
+    resolution:
+      {
+        integrity: sha512-kyOXGc5y1mgi+hgEcCIyE1P1+JumLrxS09nFHo5sdJNzrucxPRAGwM4A2X3u3SDOfdgJqx61yIoR6Av+5plJPg==,
+      }
+    engines: {node: ">=14"}
+    hasBin: true
+    requiresBuild: true
+    dependencies:
+      playwright-core: 1.28.0
     dev: true
 
   /pluralize/8.0.0:
@@ -19884,7 +19832,7 @@ packages:
       rollup: ^2.55
       typescript: ^4.1
     dependencies:
-      magic-string: 0.26.2
+      magic-string: 0.26.7
       rollup: 2.77.2
       typescript: 4.8.4
     optionalDependencies:
@@ -20905,7 +20853,7 @@ packages:
       babel-plugin-macros:
         optional: true
     dependencies:
-      "@babel/core": 7.20.2_supports-color@8.1.1
+      "@babel/core": 7.20.2
       react: 18.2.0
 
   /styled-jsx/5.0.4_react@18.2.0:
@@ -20945,6 +20893,7 @@ packages:
     dependencies:
       "@babel/core": 7.18.2
       react: 18.2.0
+    dev: false
 
   /subarg/1.0.0:
     resolution:
@@ -21450,7 +21399,7 @@ packages:
       "@tsconfig/node14": 1.0.2
       "@tsconfig/node16": 1.0.3
       "@types/node": 18.11.9
-      acorn: 8.7.1
+      acorn: 8.8.1
       acorn-walk: 8.2.0
       arg: 4.1.3
       create-require: 1.1.1
@@ -22086,7 +22035,7 @@ packages:
         integrity: sha512-sY6u8RedwfLfBis0copfU/fzROieyAndqPs8Kn2PfyzTjtA88vCk81J1b5z+8/VJc+cwfGy23/AqOCpvAbkNVw==,
       }
     dependencies:
-      "@babel/core": 7.18.2
+      "@babel/core": 7.20.2
       "@babel/standalone": 7.18.9
       "@babel/types": 7.18.4
       scule: 0.2.1
@@ -22100,7 +22049,7 @@ packages:
         integrity: sha512-sY6u8RedwfLfBis0copfU/fzROieyAndqPs8Kn2PfyzTjtA88vCk81J1b5z+8/VJc+cwfGy23/AqOCpvAbkNVw==,
       }
     dependencies:
-      "@babel/core": 7.18.2_supports-color@8.1.1
+      "@babel/core": 7.20.2_supports-color@8.1.1
       "@babel/standalone": 7.18.9
       "@babel/types": 7.18.4
       scule: 0.2.1

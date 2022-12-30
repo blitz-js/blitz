@@ -1,5 +1,18 @@
 # blitz
 
+## 2.0.0-beta.20
+
+### Minor Changes
+
+- 74a14b70: When db.\$reset() rejects, reject with an Error object
+- 6ece0961: Decoupled Blitz RPC from Blitz Auth to allow independent use.
+
+### Patch Changes
+
+- a0596279: Fix blitz install for recipes that use the path helper to check if ./src/pages directory is available, otherwise use ./pages
+- Updated dependencies [8c247e26]
+  - @blitzjs/generator@2.0.0-beta.20
+
 ## 2.0.0-beta.19
 
 ### Major Changes

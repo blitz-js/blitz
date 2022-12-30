@@ -9,7 +9,7 @@ import {runPrisma} from "../../utils/run-prisma"
 import resolveFrom from "resolve-from"
 export const codegenTasks = async () => {
   try {
-    /* 
+    /*
       Updates the user's nextjs file and adds onRecoverableError to the hydrateRoot 3rd parameter object.
       We can remove this when https://github.com/vercel/next.js/pull/38207 is merged into next.js
     */
@@ -18,7 +18,7 @@ export const codegenTasks = async () => {
     const readFile = await fs.readFile(nextClientIndex)
     const packageJson = await getPackageJson()
     const nextVersion = packageJson.dependencies.next
-    if (nextVersion && nextVersion.startsWith("12")) {
+    if (nextVersion && /^([~^])?12/.test(nextVersion)) {
       const updatedFile = readFile
         .toString()
         .replace(
@@ -27,11 +27,11 @@ export const codegenTasks = async () => {
         )
       await fs.writeFile(nextClientIndex, updatedFile)
       log.success("Next.js was successfully patched with a React Suspense fix")
-    } else if (nextVersion && nextVersion.startsWith("13")) {
+    } else if (nextVersion && /^([~^])?13/.test(nextVersion)) {
       const updatedFile = readFile
         .toString()
         .replace(
-          /_client.default\.hydrateRoot\(.*?\);/,
+          /_client\.default\.hydrateRoot\(.*?\{?[\s\S]*?}?\);/,
           `_client.default.hydrateRoot(domEl, reactEl, {onRecoverableError: (err) => (err.toString().includes("could not finish this Suspense boundary") || err.toString().includes("Minified React error #419")) ? null : console.error(err)});`,
         )
       await fs.writeFile(nextClientIndex, updatedFile)
