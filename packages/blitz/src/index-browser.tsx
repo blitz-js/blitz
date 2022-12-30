@@ -1,6 +1,5 @@
 import "./global"
 import {ComponentType} from "react"
-import {IncomingMessage, ServerResponse} from "http"
 import {
   AuthenticationError,
   AuthorizationError,
@@ -9,6 +8,7 @@ import {
   PaginationArgumentError,
   RedirectError,
 } from "./errors"
+import type {EventHooks, MiddlewareHooks} from "./types"
 export {
   AuthenticationError,
   AuthorizationError,
@@ -25,24 +25,11 @@ export type BlitzProviderComponentType = <TProps = any>(
   displayName: string
 }
 
+export type BlitzPluginWithProvider = (x: React.ComponentType<any>) => React.ComponentType<any>
+
 export interface ClientPlugin<Exports extends object> {
-  events: {
-    onSessionCreate?: () => void
-    onSessionDestroy?: () => void
-    onBeforeRender?: (props: React.ComponentProps<any>) => void
-  }
-  middleware: {
-    beforeHttpRequest?: (
-      req: IncomingMessage,
-      res: ServerResponse,
-      next: (error?: Error) => Promise<void> | void,
-    ) => void
-    beforeHttpResponse?: (
-      req: IncomingMessage,
-      res: ServerResponse,
-      next: (error?: Error) => Promise<void> | void,
-    ) => void
-  }
+  events: EventHooks
+  middleware: MiddlewareHooks
   exports: () => Exports
   withProvider?: BlitzProviderComponentType
 }
@@ -97,3 +84,4 @@ export * from "./utils"
 export * from "./types"
 export * from "./utils/enhance-prisma"
 export * from "./utils/zod"
+export {reduceBlitzPlugins} from "./plugin"

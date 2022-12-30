@@ -1,5 +1,21 @@
 # @blitzjs/rpc
 
+## 2.0.0-beta.20
+
+### Minor Changes
+
+- 6ece0961: Decoupled Blitz RPC from Blitz Auth to allow independent use.
+- 03bad317: fix Cannot read properties of null (reading 'isReady') for pnpm/yarn v3
+
+### Patch Changes
+
+- 8c247e26: Switch from jest to vitest in new app templates
+- 650a157e: fix: allow `GET` requests without `params` and `meta` keys
+- Updated dependencies [74a14b70]
+- Updated dependencies [6ece0961]
+- Updated dependencies [a0596279]
+  - blitz@2.0.0-beta.20
+
 ## 2.0.0-beta.19
 
 ### Minor Changes

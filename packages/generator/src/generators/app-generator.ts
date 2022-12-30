@@ -41,17 +41,9 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
 
   filesToIgnore() {
     if (!this.options.useTs) {
-      return [
-        "tsconfig.json",
-        "next-env.d.ts",
-        "jest.config.ts",
-        "package.ts.json",
-        "vitest-config.ts",
-        "pre-push-ts",
-        "types.ts",
-      ]
+      return ["tsconfig.json", "next-env.d.ts", "vitest-config.ts", "package.ts.json", "types.ts"]
     }
-    return ["jsconfig.json", "package.js.json", "vitest.config.js", "pre-push-js"]
+    return ["jsconfig.json", "package.js.json", "vitest.config.js"]
   }
 
   async getTemplateValues() {
@@ -70,10 +62,6 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
   async preCommit() {
     this.fs.move(this.destinationPath("gitignore"), this.destinationPath(".gitignore"))
     this.fs.move(this.destinationPath("npmrc"), this.destinationPath(".npmrc"))
-    this.fs.move(
-      this.destinationPath(this.options.useTs ? ".husky/pre-push-ts" : ".husky/pre-push-js"),
-      this.destinationPath(".husky/pre-push"),
-    )
     this.fs.move(
       this.destinationPath(this.options.useTs ? "package.ts.json" : "package.js.json"),
       this.destinationPath("package.json"),
