@@ -32,6 +32,10 @@ describe("Field", () => {
     expect(() => Field.parse("id:string:default=now()")).toThrow()
   })
 
+  it("disallow not allowed characters like `!`", () => {
+    expect(() => Field.parse("id:string!")).toThrow()
+  })
+
   it("handles uuid convenience syntax", () => {
     const [field] = Field.parse("someSpecialToken:uuid")
     expect(field?.type).toBe("String")
