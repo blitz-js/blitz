@@ -4,4 +4,4 @@
 "@blitzjs/recipe-tailwind": patch
 ---
 
-This change is to reflect the directory change from app/pages to src/pages. It checks for which directories exists first so it is compatible with either versions.
+This change reflects the directory change from app/pages to src/pages for the receipts chakra-ui, next-ui, tailwind. It checks for which directories exists and is compatible with either versions.
