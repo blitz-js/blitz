@@ -10,7 +10,7 @@ import type {ServerConfig} from "./config"
 const debug = require("debug")("blitz:utils")
 
 export function getProjectRootSync() {
-  return path.dirname(process.cwd())
+  return process.cwd()
 }
 
 export function getCustomServerPath() {
@@ -55,6 +55,7 @@ const getEsbuildOptions = (): esbuild.BuildOptions => {
     entryPoints: [getCustomServerPath()],
     outfile: getCustomServerBuildPath(),
     format: "cjs",
+    target: "es6",
     bundle: true,
     platform: "node",
     external: [
@@ -224,9 +225,14 @@ export function nextBuild(
 
 export function nextExport(nextBin: string, config: ServerConfig) {
   const spawnEnv = getSpawnEnv(config)
+  const args = ["export"]
+
+  if (config.outdir) {
+    args.push("-o", `${config.outdir}`)
+  }
 
   return new Promise<void>((res, rej) => {
-    spawn(nextBin, ["export"], {
+    spawn(nextBin, args, {
       env: spawnEnv,
       stdio: "inherit",
     })

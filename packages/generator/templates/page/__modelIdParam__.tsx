@@ -1,14 +1,14 @@
 import {Suspense} from "react"
-
+import {Routes} from '@blitzjs/next'
 import Head from "next/head"
 import Link from 'next/link'
 import { useRouter } from "next/router"
 import {useQuery, useMutation} from '@blitzjs/rpc'
 import {useParam} from '@blitzjs/next'
 
-import Layout from "app/core/layouts/Layout"
-import get__ModelName__ from "app/__modelNamesPath__/queries/get__ModelName__"
-import delete__ModelName__ from "app/__modelNamesPath__/mutations/delete__ModelName__"
+import Layout from "src/core/layouts/Layout"
+import get__ModelName__ from "src/__modelNamesPath__/queries/get__ModelName__"
+import delete__ModelName__ from "src/__modelNamesPath__/mutations/delete__ModelName__"
 
 export const __ModelName__ = () => {
   const router = useRouter()
@@ -30,11 +30,11 @@ export const __ModelName__ = () => {
         <pre>{JSON.stringify(__modelName__, null, 2)}</pre>
 
         <if condition="parentModel">
-          <Link href={{pathname: '/__parentModel__/[__parentModelId__]/__modelName__s/[__modelId__]/edit', query: {__parentModelId__: __parentModelId__!, __modelId__: __modelName__.id}}}>
+          <Link href={Routes.Edit__ModelName__Page({ __parentModelId__: __parentModelId__!, __modelId__: __modelName__.id })}>
             <a>Edit</a>
           </Link>
           <else>
-            <Link href={{pathname: '/__modelName__s/[__modelId__]/edit', query: {__modelId__: __modelName__.id}}}>
+            <Link href={Routes.Edit__ModelName__Page({ __modelId__: __modelName__.id })}>
               <a>Edit</a>
             </Link>
           </else>
@@ -46,9 +46,9 @@ export const __ModelName__ = () => {
             if (window.confirm("This will be deleted")) {
               await delete__ModelName__Mutation({id: __modelName__.id})
               if (process.env.parentModel) {
-                router.push({pathname: '/__parentModel__/[__parentModelId__]/__modelName__s', query: {__parentModelId__: __parentModelId__!}})
+                await router.push(Routes.__ModelNames__Page({ __parentModelId__: __parentModelId__! }))
               } else {
-                router.push({pathname: '/__modelName__s'})
+                await router.push(Routes.__ModelNames__Page())
               }
             }
           }}
@@ -70,11 +70,11 @@ const Show__ModelName__Page = () => {
     <div>
       <p>
         <if condition="parentModel">
-          <Link href={{pathname: '/__parentModel__/[__parentModelId__]/__modelName__s', query: {__parentModelId__: __parentModelId__!}}}>
+          <Link href={Routes.__ModelNames__Page({ __parentModelId__: __parentModelId__! })}>
             <a>__ModelNames__</a>
           </Link>
           <else>
-            <Link href={{pathname: '/__modelName__s'}}>
+            <Link href={Routes.__ModelNames__Page()}>
               <a>__ModelNames__</a>
             </Link>
           </else>

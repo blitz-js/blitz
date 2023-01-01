@@ -1,5 +1,384 @@
 # @blitzjs/codemod
 
+## 2.0.0-beta.20
+
+### Patch Changes
+
+- Updated dependencies [74a14b70]
+- Updated dependencies [8c247e26]
+- Updated dependencies [6ece0961]
+- Updated dependencies [a0596279]
+  - blitz@2.0.0-beta.20
+  - @blitzjs/generator@2.0.0-beta.20
+
+## 2.0.0-beta.19
+
+### Patch Changes
+
+- Updated dependencies [c1e00406]
+- Updated dependencies [696f48c4]
+- Updated dependencies [b80c3d92]
+- Updated dependencies [942536d9]
+- Updated dependencies [a6f32d1d]
+- Updated dependencies [c126b819]
+- Updated dependencies [b33db082]
+  - blitz@2.0.0-beta.19
+  - @blitzjs/generator@2.0.0-beta.19
+
+## 2.0.0-beta.18
+
+### Patch Changes
+
+- @blitzjs/generator@2.0.0-beta.18
+- blitz@2.0.0-beta.18
+
+## 2.0.0-beta.17
+
+### Patch Changes
+
+- Updated dependencies [2a81af7b]
+- Updated dependencies [5ea068b2]
+- Updated dependencies [8b4bf999]
+- Updated dependencies [88caa18e]
+  - @blitzjs/generator@2.0.0-beta.17
+  - blitz@2.0.0-beta.17
+
+## 2.0.0-beta.16
+
+### Patch Changes
+
+- Updated dependencies [1569bd53]
+- Updated dependencies [ceb7db27]
+- Updated dependencies [8e5903c0]
+- Updated dependencies [45459129]
+  - blitz@2.0.0-beta.16
+  - @blitzjs/generator@2.0.0-beta.16
+
+## 2.0.0-beta.15
+
+### Patch Changes
+
+- Updated dependencies [1b798d9a]
+  - blitz@2.0.0-beta.15
+  - @blitzjs/generator@2.0.0-beta.15
+
+## 2.0.0-beta.14
+
+### Patch Changes
+
+- Updated dependencies [54761393]
+- Updated dependencies [78fd5c48]
+- Updated dependencies [60de0574]
+- Updated dependencies [0a8b0cb3]
+  - @blitzjs/generator@2.0.0-beta.14
+  - blitz@2.0.0-beta.14
+
+## 2.0.0-beta.13
+
+### Patch Changes
+
+- Updated dependencies [a6e81f15]
+- Updated dependencies [6f434989]
+- Updated dependencies [4e26ae21]
+  - blitz@2.0.0-beta.13
+  - @blitzjs/generator@2.0.0-beta.13
+
+## 2.0.0-beta.12
+
+### Patch Changes
+
+- Updated dependencies [3a602b61]
+- Updated dependencies [f39ba1ff]
+  - blitz@2.0.0-beta.12
+  - @blitzjs/generator@2.0.0-beta.12
+
+## 2.0.0-beta.11
+
+### Patch Changes
+
+- 1476a577: Fix release
+- Updated dependencies [1476a577]
+  - blitz@2.0.0-beta.11
+  - @blitzjs/generator@2.0.0-beta.11
+
+## 2.0.0-beta.10
+
+### Patch Changes
+
+- b3b4c215: Unwrap `invokeWithMiddleware` so the query or mutation is called directly when running the codemod
+- eb970f7b: Fix detecting `blitz.config.(ts|js)` config file when running the codemod.
+- Updated dependencies [04730205]
+- Updated dependencies [9db6c885]
+- Updated dependencies [824a9b5e]
+- Updated dependencies [d6717b9d]
+- Updated dependencies [d98e4bac]
+- Updated dependencies [bf4aaf1d]
+- Updated dependencies [9fe0cc54]
+- Updated dependencies [b43c1a81]
+- Updated dependencies [af58e2b2]
+- Updated dependencies [2ade7268]
+- Updated dependencies [0edeaa37]
+- Updated dependencies [430f6ec7]
+- Updated dependencies [83281a84]
+- Updated dependencies [15d22af2]
+- Updated dependencies [bd09db75]
+- Updated dependencies [aa34661f]
+- Updated dependencies [8e0c9d76]
+- Updated dependencies [e2c18895]
+  - @blitzjs/generator@2.0.0-beta.10
+  - blitz@2.0.0-beta.5
+
+## 2.0.0-beta.4
+
+### Patch Changes
+
+- d3403cf8: Show file path on error when running the upgrade legacy codemod.
+- 74a4ce8e: Add `AuthenticatedSessionContext` to the `upgrade-legacy` codemod import map
+- 43e65cfe: Remove TypeScript type annotations from `next.config.js` (a JavaScript file) in the `upgrade-legacy` codemod.
+- da914c92: Convert import statements to require when creating the next.config.js file in the codemod
+- Updated dependencies [7498aef4]
+- Updated dependencies [c213d521]
+- Updated dependencies [0b94a450]
+- Updated dependencies [22344d05]
+- Updated dependencies [8fa9a56f]
+- Updated dependencies [c53978d5]
+- Updated dependencies [a84b8de4]
+- Updated dependencies [161270e3]
+  - @blitzjs/generator@2.0.0-beta.4
+  - blitz@2.0.0-beta.4
+
+## 2.0.0-beta.3
+
+### Patch Changes
+
+- 2313fa61: Fix upgrade-legacy codemod replacing identifiers with an invalid value. Previously new values were hardcoded to `NextApiRequest`. Now we're using correct values provided as `replaceIdentifiers` function argument.
+- 1bf185d6: Add a new codemod step to update the .eslintrc.js file
+- Updated dependencies [638f2319]
+- Updated dependencies [b72d1215]
+  - blitz@2.0.0-beta.3
+  - @blitzjs/generator@2.0.0-beta.3
+
+## 2.0.0-beta.2
+
+### Patch Changes
+
+- db7233db: Bump react, react-dom, @types/react and next versions
+
+  This fixes a console warning: `Warning: Received`true`for a non-boolean attribute`global`.` when using `styled-jsx`. Versions bump also fixes React Hydration error that happens on and off when using `redirectAuthenticatedTo`.
+
+- a3b5fdd0: Change ES6 import for `withBlitz` during the codemod to the require syntax.
+- ebfb562b: Add `Script` as a default import from next.js during the codemod.
+- Updated dependencies [db7233db]
+- Updated dependencies [eb971568]
+- Updated dependencies [0936cb38]
+- Updated dependencies [8ada2c26]
+- Updated dependencies [3f9fe8f0]
+  - blitz@2.0.0-beta.2
+  - @blitzjs/generator@2.0.0-beta.2
+
+## 2.0.0-beta.1
+
+### Patch Changes
+
+- 0f4926fd: Set current Blitz tag to latest
+- Updated dependencies [0f4926fd]
+  - @blitzjs/generator@2.0.0-beta.1
+  - blitz@2.0.0-beta.1
+
+## 2.0.0-beta.72
+
+### Patch Changes
+
+- 2cc888ef: Beta release
+- Updated dependencies [2cc888ef]
+  - blitz@2.0.0-beta.72
+  - @blitzjs/generator@2.0.0-beta.72
+
+## 2.0.0-alpha.71
+
+### Patch Changes
+
+- Updated dependencies [176c7b8b]
+  - @blitzjs/generator@2.0.0-alpha.71
+  - blitz@2.0.0-alpha.71
+
+## 2.0.0-alpha.70
+
+### Patch Changes
+
+- f88702c1: Remove trailing comma when removing BlitzConfig from next.config.js & Fix codemod so if route (eg. `app/auth/pages`) convert to (eg. `pages/`) instead of (eg. `pages/auth`)
+- Updated dependencies [4656e6ec]
+- Updated dependencies [1e0ec7a9]
+  - @blitzjs/generator@2.0.0-alpha.70
+  - blitz@2.0.0-alpha.70
+
+## 2.0.0-alpha.69
+
+### Patch Changes
+
+- 86af6dec: Wrap middlewares with BlitzServerMiddleware function with codemod
+- 72a332e0: Wrap `blitz.config.ts` with the `withBlitz` function during the codemod step instead of creating a blank `next.config.js` file.
+- 2d1482fc: Allow codemod to finish if `cookiePrefix` is undefined. Then show error at the end of running the codemod.
+- Updated dependencies [fd31e56b]
+- Updated dependencies [6baab190]
+- Updated dependencies [37623a4f]
+  - blitz@2.0.0-alpha.69
+  - @blitzjs/generator@2.0.0-alpha.69
+
+## 2.0.0-alpha.68
+
+### Patch Changes
+
+- 06427f67: Throw error if cookiePrefix is undefined when running codemod
+- f120f672: Add DocumentProps & DocumentContext to the codemod import map
+- 8dfaad08: Set correct packages versions in package.json with upgrade-legacy codemod
+- cb55ed26: Fix codemod to accept a self closing `DocumentHead` in the `_document` page
+- Updated dependencies [271c58ac]
+- Updated dependencies [630c7181]
+- Updated dependencies [f0ca738d]
+- Updated dependencies [41608c4c]
+- Updated dependencies [70b334a2]
+- Updated dependencies [dd299ae8]
+- Updated dependencies [078fe474]
+  - blitz@2.0.0-alpha.68
+  - @blitzjs/generator@2.0.0-alpha.68
+
+## 2.0.0-alpha.67
+
+### Patch Changes
+
+- Updated dependencies [ebd74b4e]
+  - @blitzjs/generator@2.0.0-alpha.67
+  - blitz@2.0.0-alpha.67
+
+## 2.0.0-alpha.66
+
+### Patch Changes
+
+- Updated dependencies [91aa5356]
+- Updated dependencies [928e840b]
+- Updated dependencies [240f3f34]
+- Updated dependencies [55b1cb20]
+- Updated dependencies [4d7d126d]
+- Updated dependencies [890b0c0c]
+- Updated dependencies [807a2b56]
+- Updated dependencies [a3e6c49c]
+- Updated dependencies [065db256]
+- Updated dependencies [f202aac1]
+  - @blitzjs/generator@2.0.0-alpha.66
+  - blitz@2.0.0-alpha.66
+
+## 2.0.0-alpha.65
+
+### Patch Changes
+
+- Updated dependencies [dd5f5174]
+  - blitz@2.0.0-alpha.65
+  - @blitzjs/generator@2.0.0-alpha.65
+
+## 2.0.0-alpha.64
+
+### Patch Changes
+
+- Updated dependencies [54db8a46]
+- Updated dependencies [62bf12b5]
+  - blitz@2.0.0-alpha.64
+  - @blitzjs/generator@2.0.0-alpha.64
+
+## 2.0.0-alpha.63
+
+### Patch Changes
+
+- @blitzjs/generator@2.0.0-alpha.63
+- blitz@2.0.0-alpha.63
+
+## 2.0.0-alpha.62
+
+### Patch Changes
+
+- Updated dependencies [365e6709]
+  - blitz@2.0.0-alpha.62
+  - @blitzjs/generator@2.0.0-alpha.62
+
+## 2.0.0-alpha.61
+
+### Patch Changes
+
+- Updated dependencies [240f378b]
+  - blitz@2.0.0-alpha.61
+  - @blitzjs/generator@2.0.0-alpha.61
+
+## 2.0.0-alpha.60
+
+### Patch Changes
+
+- Updated dependencies [1d863f35]
+  - blitz@2.0.0-alpha.60
+  - @blitzjs/generator@2.0.0-alpha.60
+
+## 2.0.0-alpha.59
+
+### Patch Changes
+
+- @blitzjs/generator@2.0.0-alpha.59
+- blitz@2.0.0-alpha.59
+
+## 2.0.0-alpha.58
+
+### Patch Changes
+
+- dcdcd040: These are various changes to will make the codemod more dynamic and work with a larger variety of codebases. These fixes are implemented to make the codemod work with flightdeck.
+- 7e538ba4: Import ErrorComponent as DefaultErrorComponent
+- 8e00605a: Updates the error messages based on if it's a babel parse error or an unexpected error
+- Updated dependencies [83b35590]
+- Updated dependencies [e339e2fd]
+  - blitz@2.0.0-alpha.58
+  - @blitzjs/generator@2.0.0-alpha.58
+
+## 2.0.0-alpha.57
+
+### Patch Changes
+
+- Updated dependencies [3511d5b6]
+  - blitz@2.0.0-alpha.57
+  - @blitzjs/generator@2.0.0-alpha.57
+
+## 2.0.0-alpha.56
+
+### Patch Changes
+
+- Updated dependencies [abb1ad5d]
+- Updated dependencies [abe2afcc]
+- Updated dependencies [0ac6e171]
+- Updated dependencies [8bcb471a]
+  - blitz@2.0.0-alpha.56
+  - @blitzjs/generator@2.0.0-alpha.56
+
+## 2.0.0-alpha.55
+
+### Patch Changes
+
+- Updated dependencies [8f166a5d]
+- Updated dependencies [54a66a95]
+- Updated dependencies [ab4d9de7]
+  - blitz@2.0.0-alpha.55
+  - @blitzjs/generator@2.0.0-alpha.55
+
+## 2.0.0-alpha.54
+
+### Patch Changes
+
+- Updated dependencies [f397cc20]
+- Updated dependencies [cacb65d6]
+- Updated dependencies [348fd6f5]
+- Updated dependencies [20fc9f80]
+- Updated dependencies [a961aff8]
+- Updated dependencies [80e1ead7]
+- Updated dependencies [a3bbe6ce]
+- Updated dependencies [ffa7b5cc]
+  - blitz@2.0.0-alpha.54
+  - @blitzjs/generator@2.0.0-alpha.54
+
 ## 2.0.0-alpha.53
 
 ### Patch Changes

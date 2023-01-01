@@ -385,7 +385,7 @@ const parseAnonymousSessionToken = (token: string) => {
   }
 }
 
-const setCookie = (res: ServerResponse, cookieStr: string) => {
+export const setCookie = (res: ServerResponse, cookieStr: string) => {
   const getCookieName = (c: string) => c.split("=", 2)[0]
   const appendCookie = () => append(res, "Set-Cookie", cookieStr)
 
@@ -407,7 +407,7 @@ const setCookie = (res: ServerResponse, cookieStr: string) => {
     for (let i = 0; i < cookiesHeader.length; i++) {
       if (cookieName === getCookieName(cookiesHeader[i] || "")) {
         cookiesHeader[i] = cookieStr
-        res.setHeader("Set-Cookie", cookieStr)
+        res.setHeader("Set-Cookie", cookiesHeader)
         return
       }
     }
@@ -690,7 +690,10 @@ async function createNewSession(
     const anonymousSessionToken = createAnonymousSessionToken(payload)
     const publicDataToken = createPublicDataToken(args.publicData)
 
-    const expiresAt = addYears(new Date(), 30)
+    const expiresAt = addMinutes(
+      new Date(),
+      global.sessionConfig.anonSessionExpiryMinutes as number,
+    )
     setAnonymousSessionCookie(req, res, anonymousSessionToken, expiresAt)
     setCSRFCookie(req, res, antiCSRFToken, expiresAt)
     setPublicDataCookie(req, res, publicDataToken, expiresAt)
@@ -801,30 +804,16 @@ async function refreshSession(
     const expiresAt = addYears(new Date(), 30)
     setAnonymousSessionCookie(req, res, anonymousSessionToken, expiresAt)
     setPublicDataCookie(req, res, publicDataToken, expiresAt)
-    setCSRFCookie(req, res, sessionKernel.antiCSRFToken, expiresAt)
   } else if (global.sessionConfig.method === "essential" && "sessionToken" in sessionKernel) {
     const expiresAt = addMinutes(new Date(), global.sessionConfig.sessionExpiryMinutes as number)
-    const publicDataToken = createPublicDataToken(sessionKernel.publicData)
-
-    let sessionToken: string
-    // Only generate new session token if public data actually changed
-    // Otherwise if new session token is generated just for refresh, then
-    // we have race condition bugs
-    if (publicDataChanged) {
-      sessionToken = createSessionToken(sessionKernel.handle, sessionKernel.publicData)
-    } else {
-      sessionToken = sessionKernel.sessionToken
-    }
-
-    setSessionCookie(req, res, sessionToken, expiresAt)
-    setPublicDataCookie(req, res, publicDataToken, expiresAt)
-    setCSRFCookie(req, res, sessionKernel.antiCSRFToken, expiresAt)
 
     debug("Updating session in db with", {expiresAt})
     if (publicDataChanged) {
+      debug("Public data has changed")
+      const publicDataToken = createPublicDataToken(sessionKernel.publicData)
+      setPublicDataCookie(req, res, publicDataToken, expiresAt)
       await global.sessionConfig.updateSession(sessionKernel.handle, {
         expiresAt,
-        hashedSessionToken: hash256(sessionToken),
         publicData: JSON.stringify(sessionKernel.publicData),
       })
     } else {

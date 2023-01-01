@@ -1,12 +1,12 @@
-import {NON_STANDARD_NODE_ENV} from "./utils/constants"
 import arg from "arg"
-import {loadEnvConfig} from "../env-utils"
-import {getCommandBin} from "./utils/config"
 import spawn from "cross-spawn"
-import {readdirSync} from "fs-extra"
-import resolveFrom from "resolve-from"
-import pkgDir from "pkg-dir"
-import {join} from "path"
+
+import {loadEnvConfig} from "../utils/env"
+import {NON_STANDARD_NODE_ENV} from "./utils/constants"
+import {getCommandBin} from "./utils/config"
+import {readVersions} from "./utils/read-versions"
+
+import {getPkgManager} from "./utils/helpers"
 
 const commonArgs = {
   // Flags
@@ -30,18 +30,26 @@ const commands = {
   dev: () => import("./commands/next/dev").then((i) => i.dev),
   build: () => import("./commands/next/build").then((i) => i.build),
   start: () => import("./commands/next/start").then((i) => i.start),
+  export: () => import("./commands/next/export").then((i) => i.nextExport),
   new: () => import("./commands/new").then((i) => i.newApp),
   generate: () => import("./commands/generate").then((i) => i.generate),
   codegen: () => import("./commands/codegen").then((i) => i.codegen),
   db: () => import("./commands/db").then((i) => i.db),
+  install: () => import("./commands/install").then((i) => i.install),
+  console: () => import("./commands/console").then((i) => i.consoleREPL),
+  routes: () => import("./commands/routes").then((i) => i.routes),
 }
 
 const aliases: Record<string, keyof typeof commands> = {
   d: "dev",
   b: "build",
   s: "start",
+  e: "export",
   n: "new",
   g: "generate",
+  i: "install",
+  c: "console",
+  r: "routes",
 }
 
 type Command = keyof typeof commands
@@ -57,15 +65,13 @@ if (aliases[args._[0] as Alias]) {
 
 const forwardedArgs = blitzCommand ? args._.slice(1) : args._
 
-const globalBlitzPath = resolveFrom(__dirname, "blitz")
-const localBlitzPath = resolveFrom.silent(process.cwd(), "blitz")
-
 async function runCommandFromBin() {
   if (!args._[0]) {
     console.log("No command specified")
     process.exit(1)
   }
   let commandBin: string | null = null
+
   try {
     commandBin = await getCommandBin(args._[0])
   } catch (e: any) {
@@ -76,25 +82,24 @@ async function runCommandFromBin() {
     process.exit(1)
   }
 
-  const result = spawn.sync(commandBin, process.argv.slice(3), {stdio: "inherit"})
+  const result = spawn.sync(commandBin, args._.slice(1), {stdio: "inherit"})
   process.exit(result.status || 0)
 }
 
 async function printEnvInfo() {
   const osName = await import("os-name")
   const envinfo = await import("envinfo")
-  const pkgManager = readdirSync(process.cwd()).includes("pnpm-lock.yaml")
-    ? "pnpm"
-    : readdirSync(process.cwd()).includes("yarn-lock.yaml")
-    ? "yarn"
-    : "npm"
 
+  const pkgManager = getPkgManager()
   const env = await envinfo.default.run(
     {
       System: ["OS", "CPU", "Memory", "Shell"],
       Binaries: ["Node", "Yarn", "npm", "pnpm"],
       npmPackages: [
         "blitz",
+        "@blitzjs/rpc",
+        "@blitzjs/auth",
+        "@blitzjs/next",
         "typescript",
         "react",
         "react-dom",
@@ -106,18 +111,13 @@ async function printEnvInfo() {
     {showNotFound: true},
   )
 
-  const globalBlitzPkgJsonPath = pkgDir.sync(globalBlitzPath)
-  const localBlitzPkgJsonPath = pkgDir.sync(localBlitzPath)
-
-  if (globalBlitzPkgJsonPath && globalBlitzPkgJsonPath !== localBlitzPkgJsonPath) {
-    // This branch won't run if user does `npx blitz` or `yarn blitz`
-    const globalVersion = require(join(globalBlitzPkgJsonPath, "package.json")).version
+  const {globalVersion, localVersions} = readVersions()
+  if (globalVersion) {
     console.log(`Blitz version: ${globalVersion} (global)`)
   }
 
-  if (localBlitzPkgJsonPath) {
-    const localVersion = require(join(localBlitzPkgJsonPath, "package.json")).version
-    console.log(`Blitz version: ${localVersion} (local)`)
+  if (localVersions.blitz) {
+    console.log(`Blitz version: ${localVersions.blitz} (local)`)
   }
 
   console.log(
@@ -129,15 +129,13 @@ async function printEnvInfo() {
 }
 
 async function main() {
-  loadEnvConfig(process.cwd(), undefined, {error: console.error, info: console.info})
+  if (args["--env"]) {
+    process.env.APP_ENV = args["--env"]
+  }
 
   // Version is inlined into the file using taskr build pipeline
   if (args["_"].length === 0 && args["--version"]) {
     await printEnvInfo()
-  }
-
-  if (args["--env"]) {
-    process.env.APP_ENV = args["--env"]
   }
 
   if (args["--help"]) {
@@ -154,7 +152,7 @@ async function main() {
   }
 
   process.env.NODE_ENV = process.env.NODE_ENV || defaultEnv
-
+  loadEnvConfig(process.cwd(), undefined, {error: console.error, info: console.info})
   // Make sure commands gracefully respect termination signals (e.g. from Docker)
   process.on("SIGTERM", () => process.exit(0))
   process.on("SIGINT", () => process.exit(0))
@@ -174,19 +172,18 @@ async function main() {
         console.log(err)
       })
   } else {
-    if (args["--help"] && args._.length === 0) {
-      // TODO: add back the generate command description once it's working
-      // generate, g     Generate new files for your Blitz project 🤠
-
+    if (args["--help"] && forwardedArgs.length === 1 && forwardedArgs[0] === "--help") {
       console.log(`
       Usage
         $ blitz <command>
   
       Available commands
-        dev, d          Start a development server 🪄
+        dev, d          Start a development server 🦄 
         build, b        Create a production build 🏗️
         start, s        Start the production server 🐎
+        export, e       Export application to static HTML 📁
         new, n          Create a new Blitz project ✨
+        generate, g     Generate new files for your Blitz project 🤠
         codegen         Run the blitz codegen 🤖
         db              Run database commands 🗄️
         

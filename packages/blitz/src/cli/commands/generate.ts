@@ -1,22 +1,23 @@
-import {
-  capitalize,
-  FormGenerator,
-  ModelGenerator,
-  MutationGenerator,
-  MutationsGenerator,
-  PageGenerator,
-  pluralCamel,
-  pluralPascal,
-  QueriesGenerator,
-  QueryGenerator,
-  singleCamel,
-  singlePascal,
-  uncapitalize,
-} from "@blitzjs/generator"
 import arg from "arg"
 import {CliCommand} from "../index"
 import prompts from "prompts"
-import chalk from "chalk"
+import {
+  capitalize,
+  pluralCamel,
+  pluralPascal,
+  singleCamel,
+  singlePascal,
+  uncapitalize,
+  PageGenerator,
+  FormGenerator,
+  QueriesGenerator,
+  MutationGenerator,
+  MutationsGenerator,
+  ModelGenerator,
+  QueryGenerator,
+  customTemplatesBlitzConfig,
+} from "@blitzjs/generator"
+import {log} from "../../logging"
 
 const getIsTypeScript = async () =>
   require("fs").existsSync(require("path").join(process.cwd(), "tsconfig.json"))
@@ -31,6 +32,7 @@ enum ResourceType {
   Mutations = "mutations",
   Mutation = "mutation",
   Resource = "resource",
+  CustomTemplates = "custom-templates",
 }
 
 function modelName(input: string = "") {
@@ -44,6 +46,39 @@ function ModelName(input: string = "") {
 }
 function ModelNames(input: string = "") {
   return pluralPascal(input)
+}
+
+const createCustomTemplates = async () => {
+  const continuePrompt = await prompts({
+    type: "confirm",
+    name: "value",
+    message: `This will copy the default templates to your app/templates folder. Do you want to continue?`,
+  })
+  if (!continuePrompt.value) {
+    process.exit(0)
+  }
+  const templatesPath = await prompts({
+    type: "text",
+    name: "value",
+    message: `Enter the path to save the custom templates folder`,
+    initial: "app/templates",
+  })
+  const templatesPathValue: string = templatesPath.value
+  const isTypeScript = await getIsTypeScript()
+  await customTemplatesBlitzConfig(isTypeScript, templatesPathValue, true) // to run the codemod
+  log.success(`🚀 Custom templates path added/updated in app/blitz-server file`)
+  const customTemplatesPath = require("path").join(process.cwd(), templatesPathValue)
+  const fsExtra = await import("fs-extra")
+  const blitzGeneratorPath = require.resolve("@blitzjs/generator")
+  const templateFolder = ["form", "page", "query", "mutation", "queries", "mutations"]
+  for (const template of templateFolder) {
+    await fsExtra.copy(
+      require("path").join(blitzGeneratorPath, "..", "templates", template),
+      require("path").join(customTemplatesPath, template),
+    )
+  }
+  log.success(`🚀 Custom templates created in ${templatesPathValue} directory`)
+  process.exit(0)
 }
 
 const generatorMap = {
@@ -62,6 +97,7 @@ const generatorMap = {
   [ResourceType.Mutations]: [MutationsGenerator],
   [ResourceType.Mutation]: [MutationGenerator],
   [ResourceType.Resource]: [QueriesGenerator, MutationsGenerator, ModelGenerator],
+  [ResourceType.CustomTemplates]: [],
 }
 
 const args = arg(
@@ -69,7 +105,6 @@ const args = arg(
     // Types
     "--help": Boolean,
     "--type": String,
-    "--name": String,
     "--context": String,
     "--parent": String,
     "--dry-run": Boolean,
@@ -77,10 +112,10 @@ const args = arg(
 
     // Aliases
     "-e": "--env",
-    "-n": "--name",
     "-t": "--type",
     "-c": "--context",
-    "-p": "--dry-run",
+    "-p": "--parent",
+    "-d": "--dry-run",
   },
   {
     permissive: true,
@@ -172,23 +207,8 @@ const determineName = async () => {
 }
 
 const determineContext = async () => {
-  if (args["--context"] && !selectedModelName) {
-    if (args["--name"] && args["--name"].includes("/")) {
-      throw new Error("Your model should not contain a context when supplying a context explicitly")
-    }
-
-    const res = await prompts({
-      type: "text",
-      name: "model",
-      message: `The name of your model, like "user". Can be singular or plural - same result`,
-    })
-
-    if (res.model.includes("/")) {
-      throw new Error("Your model should not contain a context when supplying a context explicitly")
-    }
-    const {model, context} = getModelNameAndContext(res.model, args["--context"])
-    selectedModelName = model
-    selectedContext = context
+  if (args["--context"] && selectedModelName && !selectedContext) {
+    selectedContext = args["--context"]
   }
 }
 
@@ -196,33 +216,40 @@ const getHelp = async () => {
   if (args["--help"]) {
     console.log(`
       # The 'crud' type will generate all queries & mutations for a model
-      
-        > blitz generate --type crud --name productVariant
+
+        > blitz generate crud productVariant
 
       # The 'all' generator will scaffold out everything possible for a model
-      
-        > blitz generate --type all --name products
 
-      # The '--context' flag will allow you to generate files in a nested folder
-      
-        > blitz generate --type pages --name projects --context admin
+        > blitz generate all products
+
+      # The '--context' flag will allow you to generate files such as components, queries & mutations in a nested folder
+
+        > blitz generate pages projects --context=admin
 
       # Context can also be supplied in the model name directly
-      
-        > blitz generate --type pages --name admin/projects
 
-      # To generate nested routes for dependent models (e.g. Projects that contain Tasks), specify a parent model. 
-      For example, this command generates pages under app/tasks/pages/projects/[projectId]/tasks/
+        > blitz generate pages admin/projects
+
+      # To generate nested routes for dependent models (e.g. Projects that contain Tasks), specify a parent model.
+      For example, this command generates pages under pages/projects/[projectId]/tasks/
+
+        > blitz generate all tasks --parent=projects
+
+      # To customize the templates used by the blitz generate command,
         
-        > blitz generate --type all --name tasks --parent=projects
+        > blitz generate custom-templates
+
+        This command will copy the default templates to your app and update the app/blitz-server file to enable
+        the custom templating feature of the blitz CLI
 
       # Database models can also be generated directly from the CLI.
-        Model fields can be specified with any generator that generates a database model ("all", "model", "resource"). 
+        Model fields can be specified with any generator that generates a database model ("all", "model", "resource").
         Both of the commands below will generate the proper database model for a Task.
-      
-        > blitz generate --type model --name task name:string completed:boolean:default=false belongsTo:project?
 
-        > blitz generate --type all --name tasks name:string completed:boolean:default=false belongsTo:project?
+        > blitz generate model task name:string completed:boolean:default=false belongsTo:project?
+
+        > blitz generate all tasks name:string completed:boolean:default=false belongsTo:project?
 
     `)
 
@@ -230,26 +257,30 @@ const getHelp = async () => {
   }
 }
 
-const generate: CliCommand = async (argv) => {
+const generate: CliCommand = async () => {
   await getHelp()
   await determineType()
-  await determineContext()
+  if (selectedType === "custom-templates") {
+    await createCustomTemplates()
+  }
   if (!selectedModelName) {
     await determineName()
   }
+  await determineContext()
 
   try {
     const singularRootContext = modelName(selectedModelName)
     validateModelName(singularRootContext)
 
-    // const {loadConfigProduction} = await import("next/dist/server/config-shared")
-    // const blitzConfig = loadConfigProduction(process.cwd())
     const generators = generatorMap[selectedType as keyof typeof generatorMap]
+
+    const isTypeScript = await getIsTypeScript()
+    const cliConfig = await customTemplatesBlitzConfig(isTypeScript)
 
     for (const GeneratorClass of generators) {
       const generator = new GeneratorClass({
         destinationRoot: require("path").resolve(),
-        // templateDir: blitzConfig.codegen?.templateDir,
+        templateDir: cliConfig,
         extraArgs: args["_"].slice(3) as string[],
         modelName: singularRootContext,
         modelNames: modelNames(singularRootContext),

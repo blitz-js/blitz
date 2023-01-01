@@ -1,5 +1,291 @@
 # @blitzjs/next
 
+## 2.0.0-beta.20
+
+### Minor Changes
+
+- 6ece0961: Decoupled Blitz RPC from Blitz Auth to allow independent use.
+- 03bad317: fix Cannot read properties of null (reading 'isReady') for pnpm/yarn v3
+
+### Patch Changes
+
+- Updated dependencies [74a14b70]
+- Updated dependencies [8c247e26]
+- Updated dependencies [6ece0961]
+- Updated dependencies [03bad317]
+- Updated dependencies [650a157e]
+- Updated dependencies [a0596279]
+  - blitz@2.0.0-beta.20
+  - @blitzjs/rpc@2.0.0-beta.20
+
+## 2.0.0-beta.19
+
+### Minor Changes
+
+- c1e00406: transpile packages to es2015 to support older browsers
+
+### Patch Changes
+
+- b33db082: Fix ambigious class warning log & upgrade superjson from 1.9.1 to 1.11.0
+- Updated dependencies [c1e00406]
+- Updated dependencies [b33db082]
+- Updated dependencies [b493c93f]
+  - @blitzjs/rpc@2.0.0-beta.19
+
+## 2.0.0-beta.18
+
+### Patch Changes
+
+- Updated dependencies [72a4e594]
+- Updated dependencies [ed2b0e22]
+- Updated dependencies [c0a3b1ee]
+  - @blitzjs/rpc@2.0.0-beta.18
+
+## 2.0.0-beta.17
+
+### Patch Changes
+
+- 8b4bf999: Update dependencies
+- 97469a12: Added option `role` to `authenticate` property of `BlitzPage` to authenticate page with respect to the role of the user. `String` value or `Array` of strings can be passed to authorize users.
+- Updated dependencies [8b4bf999]
+  - @blitzjs/rpc@2.0.0-beta.17
+
+## 2.0.0-beta.16
+
+### Minor Changes
+
+- 11b548ed: Change setupBlitzServer logger config to be optional. Will default to BlitzLogger
+
+### Patch Changes
+
+- Updated dependencies [55a43ce1]
+- Updated dependencies [ceb7db27]
+  - @blitzjs/rpc@2.0.0-beta.16
+
+## 2.0.0-beta.15
+
+### Patch Changes
+
+- @blitzjs/rpc@2.0.0-beta.15
+
+## 2.0.0-beta.14
+
+### Patch Changes
+
+- @blitzjs/rpc@2.0.0-beta.14
+
+## 2.0.0-beta.13
+
+### Patch Changes
+
+- a6e81f15: Add BlitzLogger plugin and allow customizing logging
+- Updated dependencies [7b63f0f1]
+  - @blitzjs/rpc@2.0.0-beta.13
+
+## 2.0.0-beta.12
+
+### Patch Changes
+
+- @blitzjs/rpc@2.0.0-beta.12
+
+## 2.0.0-beta.11
+
+### Patch Changes
+
+- 1476a577: Fix release
+- Updated dependencies [1476a577]
+  - @blitzjs/rpc@2.0.0-beta.11
+
+## 2.0.0-beta.10
+
+### Patch Changes
+
+- 1742eb45: Fix prefetching infinite Blitz queries.
+- 9fe0cc54: Fix auth related React hydration errors by not redirecting until after component mount.
+- e2c18895: Add client testing utilities and a sample test to a new blitz app template
+- 25f4526f: Treat API Route handler as a middleware. This allows outer middlewares to completely wrap queries and mutations.
+- Updated dependencies [0edeaa37]
+- Updated dependencies [aa34661f]
+- Updated dependencies [8e0c9d76]
+  - @blitzjs/rpc@2.0.0-beta.10
+
+## 2.0.0-beta.4
+
+### Patch Changes
+
+- 69fb2803: Allow setting static page properties (e.g. `getInitialProps`) on the App component
+- 0b94a450: Upgrade superjson to the latest version
+- Updated dependencies [c213d521]
+- Updated dependencies [0b94a450]
+- Updated dependencies [f6dac093]
+  - @blitzjs/rpc@2.0.0-beta.4
+
+## 2.0.0-beta.3
+
+### Patch Changes
+
+- @blitzjs/rpc@2.0.0-beta.3
+
+## 2.0.0-beta.2
+
+### Patch Changes
+
+- db7233db: Bump react, react-dom, @types/react and next versions
+
+  This fixes a console warning: `Warning: Received`true`for a non-boolean attribute`global`.` when using `styled-jsx`. Versions bump also fixes React Hydration error that happens on and off when using `redirectAuthenticatedTo`.
+
+- Updated dependencies [db7233db]
+  - @blitzjs/rpc@2.0.0-beta.2
+
+## 2.0.0-beta.1
+
+### Patch Changes
+
+- 0f4926fd: Set current Blitz tag to latest
+- Updated dependencies [0f4926fd]
+  - @blitzjs/rpc@2.0.0-beta.1
+
+## 2.0.0-beta.72
+
+### Patch Changes
+
+- 2cc888ef: Beta release
+- Updated dependencies [2cc888ef]
+  - @blitzjs/rpc@2.0.0-beta.72
+
+## 2.0.0-alpha.71
+
+### Patch Changes
+
+- @blitzjs/rpc@2.0.0-alpha.71
+
+## 2.0.0-alpha.70
+
+### Patch Changes
+
+- @blitzjs/rpc@2.0.0-alpha.70
+
+## 2.0.0-alpha.69
+
+### Patch Changes
+
+- a3c92cb8: Allow using `RouteUrlObject` as `redirect.destination` in `getStaticProps` and `getServerSideProps`
+- Updated dependencies [49028024]
+  - @blitzjs/rpc@2.0.0-alpha.69
+
+## 2.0.0-alpha.68
+
+### Patch Changes
+
+- Updated dependencies [630c7181]
+  - @blitzjs/rpc@2.0.0-alpha.68
+
+## 2.0.0-alpha.67
+
+### Patch Changes
+
+- @blitzjs/rpc@2.0.0-alpha.67
+
+## 2.0.0-alpha.66
+
+### Patch Changes
+
+- ccb1af8d: Avoid `invalid config detected` warnings by deleting `"blitz"` key from next config object
+- 807a2b56: Fixes peer dependency warnings
+- a3e6c49c: Fixes the supports-color warning for pnpm
+- Updated dependencies [807a2b56]
+- Updated dependencies [a3e6c49c]
+- Updated dependencies [9620ef6b]
+  - @blitzjs/rpc@2.0.0-alpha.66
+
+## 2.0.0-alpha.65
+
+### Patch Changes
+
+- @blitzjs/rpc@2.0.0-alpha.65
+
+## 2.0.0-alpha.64
+
+### Patch Changes
+
+- @blitzjs/rpc@2.0.0-alpha.64
+
+## 2.0.0-alpha.63
+
+### Patch Changes
+
+- f52ca398: Upgrade react-query to v4
+- Updated dependencies [f52ca398]
+  - @blitzjs/rpc@2.0.0-alpha.63
+
+## 2.0.0-alpha.62
+
+### Patch Changes
+
+- 31d7a6f4: Set prefix in moduleNameWrapper's options in Blitz's jest configuration
+  - @blitzjs/rpc@2.0.0-alpha.62
+
+## 2.0.0-alpha.61
+
+### Patch Changes
+
+- @blitzjs/rpc@2.0.0-alpha.61
+
+## 2.0.0-alpha.60
+
+### Patch Changes
+
+- @blitzjs/rpc@2.0.0-alpha.60
+
+## 2.0.0-alpha.59
+
+### Patch Changes
+
+- 3b213a35: Export router-context from browser entrypoint
+- Updated dependencies [3b213a35]
+  - @blitzjs/rpc@2.0.0-alpha.59
+
+## 2.0.0-alpha.58
+
+### Patch Changes
+
+- 6ab9db78: Infer result type in the `api` handler and allow customizing it
+- Updated dependencies [c721c104]
+  - @blitzjs/rpc@2.0.0-alpha.58
+
+## 2.0.0-alpha.57
+
+### Patch Changes
+
+- 0f18c68d: Avoid reassigning queryClient in prefetch methods
+- Updated dependencies [716e188d]
+  - @blitzjs/rpc@2.0.0-alpha.57
+
+## 2.0.0-alpha.56
+
+### Patch Changes
+
+- d9fc5d8e: Allow prefetching multiple queries in gSSP and gSP
+  - @blitzjs/rpc@2.0.0-alpha.56
+
+## 2.0.0-alpha.55
+
+### Patch Changes
+
+- 8d9ea00e: Fix prefetching multiple queries causes only the last one to be passed to page
+- Updated dependencies [df7cee84]
+  - @blitzjs/rpc@2.0.0-alpha.55
+
+## 2.0.0-alpha.54
+
+### Patch Changes
+
+- 348fd6f5: Fix redirectAuthenticatedTo errors
+- 20fc9f80: Fix SSP / SP not prefetching queries correctly
+- 80e1ead7: Add jest.config.js to newly generated typescript apps
+- Updated dependencies [20fc9f80]
+  - @blitzjs/rpc@2.0.0-alpha.54
+
 ## 2.0.0-alpha.53
 
 ### Patch Changes

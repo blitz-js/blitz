@@ -1,4 +1,4 @@
-import {QueryClient, QueryKey} from "react-query"
+import {QueryClient} from "@tanstack/react-query"
 import {serialize} from "superjson"
 import {isClient, isServer, AsyncFunc} from "blitz"
 import {ResolverType, RpcClient} from "./rpc"
@@ -85,6 +85,7 @@ export const emptyQueryFn: RpcClient<unknown, unknown> = (() => {
 
 const isNotInUserTestEnvironment = () => {
   if (process.env.JEST_WORKER_ID === undefined) return true
+  if (process.env.VITEST_WORKER_ID === undefined) return true
   if (process.env.BLITZ_TEST_ENVIRONMENT !== undefined) return true
   return false
 }
@@ -94,7 +95,7 @@ export const validateQueryFn = <TInput, TResult>(
 ) => {
   if (isClient && !isRpcClient(queryFn) && isNotInUserTestEnvironment()) {
     throw new Error(
-      `Either the file path to your resolver is incorrect (must be in a "queries" or "mutations" folder that isn't nested inside "pages" or "api") or you are trying to use Blitz's useQuery to fetch from third-party APIs (to do that, import useQuery directly from "react-query")`,
+      `Either the file path to your resolver is incorrect (must be in a "queries" or "mutations" folder that isn't nested inside "pages" or "api") or you are trying to use Blitz's useQuery to fetch from third-party APIs (to do that, import useQuery directly from "@tanstack/react-query").`,
     )
   }
 }
@@ -124,24 +125,29 @@ const sanitize =
 export const sanitizeQuery = sanitize("query")
 export const sanitizeMutation = sanitize("mutation")
 
-export const getQueryKeyFromUrlAndParams = (url: string, params: unknown) => {
-  const queryKey = [url]
+type BlitzQueryKey = [string] | [string, any]
+export const getQueryKeyFromUrlAndParams = (
+  url: string,
+  ...params: [unknown] | []
+): BlitzQueryKey => {
+  const queryKey: BlitzQueryKey = [url]
+  if (params.length === 1) {
+    const param = params[0]
+    queryKey.push(serialize(typeof param === "function" ? param() : param) as any)
+  }
 
-  const args = typeof params === "function" ? (params as Function)() : params
-  queryKey.push(serialize(args) as any)
-
-  return queryKey as [string, any]
+  return queryKey
 }
 
 export function getQueryKey<TInput, TResult, T extends AsyncFunc>(
   resolver: T | Resolver<TInput, TResult> | RpcClient<TInput, TResult>,
-  params?: TInput,
+  ...params: [TInput] | []
 ) {
   if (typeof resolver === "undefined") {
     throw new Error("getQueryKey is missing the first argument - it must be a resolver function")
   }
 
-  return getQueryKeyFromUrlAndParams(sanitizeQuery(resolver)._routePath, params)
+  return getQueryKeyFromUrlAndParams(sanitizeQuery(resolver)._routePath, ...params)
 }
 
 export function getInfiniteQueryKey<TInput, TResult, T extends AsyncFunc>(
@@ -158,31 +164,27 @@ export function getInfiniteQueryKey<TInput, TResult, T extends AsyncFunc>(
   return [...queryKey, "infinite"]
 }
 
-export function invalidateQuery<TInput, TResult, T extends AsyncFunc>(
-  resolver: T | Resolver<TInput, TResult> | RpcClient<TInput, TResult>,
-  params?: TInput,
-) {
-  if (typeof resolver === "undefined") {
-    throw new Error(
-      "invalidateQuery is missing the first argument - it must be a resolver function",
-    )
-  }
+interface InvalidateQuery {
+  <TInput, TResult, T extends AsyncFunc>(
+    resolver: T | Resolver<TInput, TResult> | RpcClient<TInput, TResult>,
+    ...params: [TInput]
+  ): Promise<void>
+  <TInput, TResult, T extends AsyncFunc>(
+    resolver: T | Resolver<TInput, TResult> | RpcClient<TInput, TResult>,
+  ): Promise<void>
+  (): Promise<void>
+}
 
-  const fullQueryKey = getQueryKey(resolver, params)
-  let queryKey: QueryKey
-  if (params) {
-    queryKey = fullQueryKey
-  } else {
-    // Params not provided, only use first query key item (url)
-    queryKey = fullQueryKey[0]
-  }
-  return getQueryClient().invalidateQueries(queryKey)
+export const invalidateQuery: InvalidateQuery = (resolver = undefined, ...params: []) => {
+  const fullQueryKey =
+    typeof resolver === "undefined" ? undefined : getQueryKey(resolver, ...params)
+  return getQueryClient().invalidateQueries(fullQueryKey)
 }
 
 export function setQueryData<TInput, TResult, T extends AsyncFunc>(
   resolver: T | Resolver<TInput, TResult> | RpcClient<TInput, TResult>,
   params: TInput,
-  newData: TResult | ((oldData: TResult | undefined) => TResult),
+  newData: TResult | ((oldData: TResult | undefined) => TResult | undefined),
   opts: MutateOptions = {refetch: true},
 ): Promise<void | ReturnType<ReturnType<typeof getQueryClient>["invalidateQueries"]>> {
   if (typeof resolver === "undefined") {
@@ -205,4 +207,16 @@ export function setQueryData<TInput, TResult, T extends AsyncFunc>(
       res(result)
     }
   })
+}
+
+export function getQueryData<TInput, TResult, T extends AsyncFunc>(
+  resolver: T | Resolver<TInput, TResult> | RpcClient<TInput, TResult>,
+  params: TInput,
+): TResult | undefined {
+  if (typeof resolver === "undefined") {
+    throw new Error("getQueryData is missing the first argument - it must be a resolver function")
+  }
+  const queryKey = getQueryKey(resolver, params)
+
+  return getQueryClient().getQueryData(queryKey)
 }

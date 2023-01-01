@@ -9,8 +9,7 @@ import {
   useMutation as useReactQueryMutation,
   UseMutationOptions,
   UseMutationResult,
-} from "react-query"
-import {useSession} from "@blitzjs/auth"
+} from "@tanstack/react-query"
 import {isServer, FirstParam, PromiseReturnType, AsyncFunc} from "blitz"
 import {
   emptyQueryFn,
@@ -73,11 +72,6 @@ export function useQuery<
   const suspenseEnabled = Boolean(globalThis.__BLITZ_SUSPENSE_ENABLED)
   let enabled = isServer && suspenseEnabled ? false : options?.enabled ?? options?.enabled !== null
   const suspense = enabled === false ? false : options?.suspense
-  const session = useSession({suspense})
-  if (session.isLoading) {
-    enabled = false
-  }
-
   const routerIsReady = useRouter().isReady || (isServer && suspenseEnabled)
   const enhancedResolverRpcClient = sanitizeQuery(queryFn)
   const queryKey = getQueryKey(queryFn, params)
@@ -85,14 +79,14 @@ export function useQuery<
   const {data, ...queryRest} = useReactQuery({
     queryKey: routerIsReady ? queryKey : ["_routerNotReady_"],
     queryFn: routerIsReady
-      ? () => enhancedResolverRpcClient(params, {fromQueryHook: true})
+      ? ({signal}) => enhancedResolverRpcClient(params, {fromQueryHook: true}, signal)
       : (emptyQueryFn as any),
     ...options,
     enabled,
   })
 
   if (
-    queryRest.isIdle &&
+    queryRest.fetchStatus === "idle" &&
     isServer &&
     suspenseEnabled !== false &&
     !data &&
@@ -157,12 +151,6 @@ export function usePaginatedQuery<
   const suspenseEnabled = Boolean(globalThis.__BLITZ_SUSPENSE_ENABLED)
   let enabled = isServer && suspenseEnabled ? false : options?.enabled ?? options?.enabled !== null
   const suspense = enabled === false ? false : options?.suspense
-
-  const session = useSession({suspense})
-  if (session.isLoading) {
-    enabled = false
-  }
-
   const routerIsReady = useRouter().isReady || (isServer && suspenseEnabled)
   const enhancedResolverRpcClient = sanitizeQuery(queryFn)
   const queryKey = getQueryKey(queryFn, params)
@@ -170,7 +158,7 @@ export function usePaginatedQuery<
   const {data, ...queryRest} = useReactQuery({
     queryKey: routerIsReady ? queryKey : ["_routerNotReady_"],
     queryFn: routerIsReady
-      ? () => enhancedResolverRpcClient(params, {fromQueryHook: true})
+      ? ({signal}) => enhancedResolverRpcClient(params, {fromQueryHook: true}, signal)
       : (emptyQueryFn as any),
     ...options,
     keepPreviousData: true,
@@ -178,7 +166,7 @@ export function usePaginatedQuery<
   })
 
   if (
-    queryRest.isIdle &&
+    queryRest.fetchStatus === "idle" &&
     isServer &&
     suspenseEnabled !== false &&
     !data &&
@@ -252,11 +240,6 @@ export function useInfiniteQuery<
   const suspenseEnabled = Boolean(globalThis.__BLITZ_SUSPENSE_ENABLED)
   let enabled = isServer && suspenseEnabled ? false : options?.enabled ?? options?.enabled !== null
   const suspense = enabled === false ? false : options?.suspense
-  const session = useSession({suspense})
-  if (session.isLoading) {
-    enabled = false
-  }
-
   const routerIsReady = useRouter().isReady || (isServer && suspenseEnabled)
   const enhancedResolverRpcClient = sanitizeQuery(queryFn)
   const queryKey = getInfiniteQueryKey(queryFn, getQueryParams)
@@ -267,17 +250,15 @@ export function useInfiniteQuery<
     // Without this cache for usePaginatedQuery and this will conflict and break.
     queryKey: routerIsReady ? queryKey : ["_routerNotReady_"],
     queryFn: routerIsReady
-      ? ({pageParam}) =>
-          enhancedResolverRpcClient(getQueryParams(pageParam), {
-            fromQueryHook: true,
-          })
+      ? ({pageParam, signal}) =>
+          enhancedResolverRpcClient(getQueryParams(pageParam), {fromQueryHook: true}, signal)
       : (emptyQueryFn as any),
     ...options,
     enabled,
   })
 
   if (
-    queryRest.isIdle &&
+    queryRest.fetchStatus === "idle" &&
     isServer &&
     suspenseEnabled !== false &&
     !data &&

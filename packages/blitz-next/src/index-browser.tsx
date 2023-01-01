@@ -1,37 +1,23 @@
 import "./global"
-import type {
-  ClientPlugin,
-  BlitzProvider as BlitzProviderType,
-  UnionToIntersection,
-  Simplify,
-} from "blitz"
+import type {ClientPlugin, BlitzPluginWithProvider} from "blitz"
+import {reduceBlitzPlugins, Ctx} from "blitz"
 import Head from "next/head"
-import React from "react"
-import {QueryClient, QueryClientProvider} from "react-query"
-import {Hydrate, HydrateOptions} from "react-query/hydration"
+import React, {ReactNode} from "react"
+import {QueryClient, QueryClientProvider, Hydrate, HydrateOptions} from "@tanstack/react-query"
 import {withSuperJSONPage} from "./superjson"
-import {Ctx} from "blitz"
 import {UrlObject} from "url"
 import {AppPropsType} from "next/dist/shared/lib/utils"
-import {Router} from "next/router"
+import {Router, useRouter} from "next/router"
+import {RouterContext} from "./router-context"
 
 export * from "./error-boundary"
 export * from "./error-component"
 export * from "./use-params"
+export * from "./router-context"
 export {Routes} from ".blitz"
 
-const compose =
-  (...rest: BlitzProviderType[]) =>
-  (x: React.ComponentType<any>) =>
-    rest.reduceRight((y, f) => f(y), x)
-
-const buildWithBlitz = <TPlugins extends readonly ClientPlugin<object>[]>(plugins: TPlugins) => {
-  const providers = plugins.reduce((acc, plugin) => {
-    return plugin.withProvider ? acc.concat(plugin.withProvider) : acc
-  }, [] as BlitzProviderType[])
-  const withPlugins = compose(...providers)
-
-  return function withBlitzAppRoot(UserAppRoot: React.ComponentType<any>) {
+const buildWithBlitz = (withPlugins: BlitzPluginWithProvider) => {
+  return function withBlitzAppRoot(UserAppRoot: React.ComponentType<AppProps>) {
     const BlitzOuterRoot = (props: AppProps) => {
       const component = React.useMemo(() => withPlugins(props.Component), [props.Component])
 
@@ -45,13 +31,14 @@ const buildWithBlitz = <TPlugins extends readonly ClientPlugin<object>[]>(plugin
       return (
         <BlitzProvider dehydratedState={props.pageProps?.dehydratedState}>
           <>
-            {/* @ts-ignore todo */}
             {props.Component.suppressFirstRenderFlicker && <NoPageFlicker />}
             <UserAppRoot {...props} Component={component} />
           </>
         </BlitzProvider>
       )
     }
+
+    Object.assign(BlitzOuterRoot, UserAppRoot)
     return withSuperJSONPage(BlitzOuterRoot)
   }
 }
@@ -64,9 +51,10 @@ export type BlitzProviderProps = {
   hydrateOptions?: HydrateOptions
 }
 
-interface RouteUrlObject extends Pick<UrlObject, "pathname" | "query"> {
+interface RouteUrlObject extends Pick<UrlObject, "pathname" | "query" | "href"> {
   pathname: string
 }
+
 type RedirectAuthenticatedTo = string | RouteUrlObject | false
 type RedirectAuthenticatedToFnCtx = {
   session: Ctx["session"]["$publicData"]
@@ -74,11 +62,11 @@ type RedirectAuthenticatedToFnCtx = {
 type RedirectAuthenticatedToFn = (args: RedirectAuthenticatedToFnCtx) => RedirectAuthenticatedTo
 export type BlitzPage<P = {}> = React.ComponentType<P> & {
   getLayout?: (component: JSX.Element) => JSX.Element
-  authenticate?: boolean | {redirectTo?: string | RouteUrlObject}
+  authenticate?: boolean | {redirectTo?: string | RouteUrlObject; role?: string | Array<string>}
   suppressFirstRenderFlicker?: boolean
   redirectAuthenticatedTo?: RedirectAuthenticatedTo | RedirectAuthenticatedToFn
 }
-export type BlitzLayout<P = {}> = React.ComponentType<P> & {
+export type BlitzLayout<P = {}> = React.ComponentType<P & {children: ReactNode}> & {
   authenticate?: boolean | {redirectTo?: string | RouteUrlObject}
   redirectAuthenticatedTo?: RedirectAuthenticatedTo | RedirectAuthenticatedToFn
 }
@@ -92,29 +80,25 @@ export const BlitzProvider = ({
   hydrateOptions,
   children,
 }: BlitzProviderProps) => {
+  const router = useRouter()
+
   if (client) {
     return (
-      <QueryClientProvider
-        client={client || globalThis.queryClient}
-        contextSharing={contextSharing}
-      >
-        <Hydrate state={dehydratedState} options={hydrateOptions}>
-          {children}
-        </Hydrate>
-      </QueryClientProvider>
+      <RouterContext.Provider value={router}>
+        <QueryClientProvider
+          client={client || globalThis.queryClient}
+          contextSharing={contextSharing}
+        >
+          <Hydrate state={dehydratedState} options={hydrateOptions}>
+            {children}
+          </Hydrate>
+        </QueryClientProvider>
+      </RouterContext.Provider>
     )
   }
 
-  return children
+  return <RouterContext.Provider value={router}>{children}</RouterContext.Provider>
 }
-
-export type PluginsExports<TPlugins extends readonly ClientPlugin<object>[]> = Simplify<
-  UnionToIntersection<
-    {
-      [I in keyof TPlugins & number]: ReturnType<TPlugins[I]["exports"]>
-    }[number]
-  >
->
 
 const setupBlitzClient = <TPlugins extends readonly ClientPlugin<object>[]>({
   plugins,
@@ -134,18 +118,17 @@ const setupBlitzClient = <TPlugins extends readonly ClientPlugin<object>[]>({
   //   allMiddleware.push(middleware)
   // }
 
-  const exports = plugins.reduce((acc, plugin) => ({...plugin.exports(), ...acc}), {})
+  const {exports, withPlugins} = reduceBlitzPlugins({plugins})
 
-  const withBlitz = buildWithBlitz(plugins)
+  const withBlitz = buildWithBlitz(withPlugins)
 
   // todo: finish this
   // Used to build BlitzPage type
-  const types = {} as {plugins: typeof plugins}
+  // const types = {} as {plugins: typeof plugins}
 
   return {
-    types,
     withBlitz,
-    ...(exports as PluginsExports<TPlugins>),
+    ...exports,
   }
 }
 

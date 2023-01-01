@@ -14,6 +14,7 @@ import {
   RedirectError,
   RouteUrlObject,
   Ctx,
+  CSRFTokenMismatchError,
 } from "blitz"
 import {
   COOKIE_CSRF_TOKEN,
@@ -25,6 +26,10 @@ import {
   EmptyPublicData,
   AuthenticatedClientSession,
   ClientSession,
+  HEADER_CSRF,
+  HEADER_PUBLIC_DATA_TOKEN,
+  HEADER_SESSION_CREATED,
+  HEADER_CSRF_ERROR,
 } from "../shared"
 import _debug from "debug"
 import {formatWithValidation} from "../shared/url-utils"
@@ -50,7 +55,7 @@ export const parsePublicDataToken = (token: string) => {
   }
 }
 
-const emptyPublicData: EmptyPublicData = {userId: null}
+const emptyPublicData: EmptyPublicData = {userId: null, role: null}
 
 class PublicDataStore {
   private eventKey = `${LOCALSTORAGE_PREFIX}publicDataUpdated`
@@ -116,10 +121,17 @@ export const getPublicDataStore = (): PublicDataStore => {
   return (window as any).__publicDataStore
 }
 
-export const getAntiCSRFToken = () => {
+// because safari automatically deletes non-httponly cookies after 7 days
+export const backupAntiCSRFTokenToLocalStorage = () => {
   const cookieValue = readCookie(COOKIE_CSRF_TOKEN())
   if (cookieValue) {
     localStorage.setItem(LOCALSTORAGE_CSRF_TOKEN(), cookieValue)
+  }
+}
+
+export const getAntiCSRFToken = () => {
+  const cookieValue = readCookie(COOKIE_CSRF_TOKEN())
+  if (cookieValue) {
     return cookieValue
   } else {
     return localStorage.getItem(LOCALSTORAGE_CSRF_TOKEN())
@@ -164,12 +176,40 @@ export const useSession = (options: UseSessionOptions = {}): ClientSession => {
   return session
 }
 
-export const useAuthorizeIf = (condition?: boolean) => {
-  if (isClient && condition && !getPublicDataStore().getData().userId) {
+export const useAuthorizeIf = (condition?: boolean, role?: string | Array<string>) => {
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (isClient && condition && !getPublicDataStore().getData().userId && mounted) {
     const error = new AuthenticationError()
     error.stack = null!
     throw error
   }
+
+  if (isClient && condition && role && getPublicDataStore().getData().userId && mounted) {
+    const error = new AuthenticationError()
+    error.stack = null!
+    if (!authorizeRole(role, getPublicDataStore().getData().role as string)) {
+      throw error
+    }
+  }
+}
+
+const authorizeRole = (role?: string | Array<string>, currentRole?: string) => {
+  if (role && currentRole) {
+    if (Array.isArray(role)) {
+      if (role.includes(currentRole)) {
+        return true
+      }
+    } else {
+      if (currentRole === role) {
+        return true
+      }
+    }
+  }
+  return false
 }
 
 export const useAuthorize = () => {
@@ -184,7 +224,13 @@ export const useAuthenticatedSession = (
 }
 
 export const useRedirectAuthenticated = (to: UrlObject | string) => {
-  if (isClient && getPublicDataStore().getData().userId) {
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (isClient && getPublicDataStore().getData().userId && mounted) {
     const error = new RedirectError(to)
     error.stack = null!
     throw error
@@ -205,7 +251,7 @@ export type RedirectAuthenticatedToFn = (
 
 export type BlitzPage<P = {}> = React.ComponentType<P> & {
   getLayout?: (component: JSX.Element) => JSX.Element
-  authenticate?: boolean | {redirectTo?: string | RouteUrlObject}
+  authenticate?: boolean | {redirectTo?: string | RouteUrlObject; role?: string | Array<string>}
   suppressFirstRenderFlicker?: boolean
   redirectAuthenticatedTo?: RedirectAuthenticatedTo | RedirectAuthenticatedToFn
 }
@@ -216,8 +262,8 @@ export function getAuthValues<TProps = any>(
 ) {
   if (!Page) return {}
 
-  let authenticate = "authenticate" in Page && Page.authenticate
-  let redirectAuthenticatedTo = "redirectAuthenticatedTo" in Page && Page.redirectAuthenticatedTo
+  let authenticate = (Page as BlitzPage)?.authenticate
+  let redirectAuthenticatedTo = (Page as BlitzPage)?.redirectAuthenticatedTo
 
   if (authenticate === undefined && redirectAuthenticatedTo === undefined) {
     const layout = "getLayout" in Page && Page.getLayout?.(<Page {...props} />)
@@ -248,10 +294,18 @@ export function getAuthValues<TProps = any>(
 function withBlitzAuthPlugin<TProps = any>(Page: ComponentType<TProps> | BlitzPage<TProps>) {
   const AuthRoot = (props: ComponentProps<any>) => {
     useSession({suspense: false})
+    const [mounted, setMounted] = useState(false)
+
+    useEffect(() => {
+      setMounted(true)
+    }, [])
 
     let {authenticate, redirectAuthenticatedTo} = getAuthValues(Page, props)
 
-    useAuthorizeIf(authenticate === true)
+    useAuthorizeIf(
+      authenticate === true,
+      !authenticate ? undefined : typeof authenticate === "object" ? authenticate.role : undefined,
+    )
 
     if (typeof window !== "undefined") {
       const publicData = getPublicDataStore().getData()
@@ -273,8 +327,29 @@ function withBlitzAuthPlugin<TProps = any>(Page: ComponentType<TProps> | BlitzPa
               ? redirectAuthenticatedTo
               : formatWithValidation(redirectAuthenticatedTo)
 
-          debug("[BlitzAuthInnerRoot] redirecting to", redirectUrl)
-          const error = new RedirectError(redirectUrl)
+          if (mounted) {
+            debug("[BlitzAuthInnerRoot] redirecting to", redirectUrl)
+            const error = new RedirectError(redirectUrl)
+            error.stack = null!
+            throw error
+          }
+        }
+
+        if (
+          authenticate &&
+          typeof authenticate === "object" &&
+          authenticate.redirectTo &&
+          authenticate.role &&
+          !authorizeRole(authenticate.role, publicData.role as string)
+        ) {
+          let {redirectTo} = authenticate
+          if (typeof redirectTo !== "string") {
+            redirectTo = formatWithValidation(redirectTo)
+          }
+          const url = new URL(redirectTo, window.location.href)
+          url.searchParams.append("next", window.location.pathname)
+          debug("[BlitzAuthInnerRoot] redirecting to", url.toString())
+          const error = new RedirectError(url.toString())
           error.stack = null!
           throw error
         }
@@ -288,10 +363,13 @@ function withBlitzAuthPlugin<TProps = any>(Page: ComponentType<TProps> | BlitzPa
 
           const url = new URL(redirectTo, window.location.href)
           url.searchParams.append("next", window.location.pathname)
-          debug("[BlitzAuthInnerRoot] redirecting to", url.toString())
-          const error = new RedirectError(url.toString())
-          error.stack = null!
-          throw error
+
+          if (mounted) {
+            debug("[BlitzAuthInnerRoot] redirecting to", url.toString())
+            const error = new RedirectError(url.toString())
+            error.stack = null!
+            throw error
+          }
         }
       }
     }
@@ -318,8 +396,50 @@ export const AuthClientPlugin = createClientPlugin((options: AuthPluginClientOpt
   globalThis.__BLITZ_SESSION_COOKIE_PREFIX = options.cookiePrefix || "blitz"
   return {
     withProvider: withBlitzAuthPlugin,
-    events: {},
-    middleware: {},
+    events: {
+      onRpcError: async (error) => {
+        // We don't clear the publicDataStore for anonymous users,
+        // because there is not sensitive data
+        if (error.name === "AuthenticationError" && getPublicDataStore().getData().userId) {
+          getPublicDataStore().clear()
+        }
+      },
+    },
+    middleware: {
+      beforeHttpRequest(req) {
+        const headers: Record<string, any> = {
+          "Content-Type": "application/json",
+        }
+        const antiCSRFToken = getAntiCSRFToken()
+        if (antiCSRFToken) {
+          debug("Adding antiCSRFToken cookie header", antiCSRFToken)
+          headers[HEADER_CSRF] = antiCSRFToken
+        } else {
+          debug("No antiCSRFToken cookie found")
+        }
+        req.headers = {...req.headers, ...headers}
+        return req
+      },
+      beforeHttpResponse(res) {
+        if (res.headers) {
+          backupAntiCSRFTokenToLocalStorage()
+          if (res.headers.get(HEADER_PUBLIC_DATA_TOKEN)) {
+            getPublicDataStore().updateState()
+            debug("Public data updated")
+          }
+          if (res.headers.get(HEADER_SESSION_CREATED)) {
+            const event = new Event("blitz:session-created")
+            document.dispatchEvent(event)
+          }
+          if (res.headers.get(HEADER_CSRF_ERROR)) {
+            const err = new CSRFTokenMismatchError()
+            err.stack = null!
+            throw err
+          }
+        }
+        return res
+      },
+    },
     exports: () => ({
       useSession,
       useAuthorize,

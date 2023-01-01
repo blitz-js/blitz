@@ -6,6 +6,7 @@ import {outputFile, readdir} from "fs-extra"
 import findUp from "find-up"
 import resolveFrom from "resolve-from"
 import Watchpack from "watchpack"
+import {isInternalBlitzMonorepoDevelopment} from "./helpers"
 export const CONFIG_FILE = ".blitz.config.compiled.js"
 export const NEXT_CONFIG_FILE = "next.config.js"
 export const PHASE_PRODUCTION_SERVER = "phase-production-server"
@@ -150,11 +151,11 @@ const normalizeConfig = (phase: string, config: any) => {
   }
   return config
 }
-const loadConfig = (pagesDir: string) => {
+export const loadConfig = (pagesDir: string) => {
   let userConfigModule
+
   try {
     const path = join(pagesDir, NEXT_CONFIG_FILE)
-
     // eslint-disable-next-line no-eval -- block webpack from following this module path
     userConfigModule = eval("require")(path)
   } catch {
@@ -162,6 +163,7 @@ const loadConfig = (pagesDir: string) => {
     // In case user does not have custom config
     userConfigModule = {}
   }
+
   let userConfig = normalizeConfig(
     PHASE_PRODUCTION_SERVER,
     userConfigModule.default || userConfigModule,
@@ -228,23 +230,39 @@ export function buildPageExtensionRegex(pageExtensions: string[]) {
 type PagesMapping = {
   [page: string]: string
 }
-export function convertPageFilePathToRoutePath(filePath: string, pageExtensions: string[]) {
-  return filePath
-    .replace(/^.*?[\\/]pages[\\/]/, "/")
-    .replace(/^.*?[\\/]api[\\/]/, "/api/")
-    .replace(/^.*?[\\/]queries[\\/]/, "/api/rpc/")
-    .replace(/^.*?[\\/]mutations[\\/]/, "/api/rpc/")
-    .replace(new RegExp(`\\.+(${pageExtensions.join("|")})$`), "")
+function stripExtension(filePath: string, pageExtensions: string[]) {
+  return filePath.replace(new RegExp(`\\.+(${pageExtensions.join("|")})$`), "")
 }
-export function createPagesMapping(pagePaths: string[], pageExtensions: string[]) {
+export function convertPageFilePathToRoutePath(filePath: string, pageExtensions: string[]) {
+  return stripExtension(
+    filePath
+      .replace(/^.*?[\\/]pages[\\/]/, "/")
+      .replace(/^.*?[\\/]api[\\/]/, "/api/")
+      .replace(/^.*?[\\/]queries[\\/]/, "/api/rpc/")
+      .replace(/^.*?[\\/]mutations[\\/]/, "/api/rpc/"),
+    pageExtensions,
+  )
+}
+export function createPagesMapping(pagePaths: string[], config: any) {
+  const {pageExtensions, blitz} = config
+  const resolverType = blitz?.resolverPath || "queries|mutations"
+
   const previousPages: PagesMapping = {}
-  const pages = pagePaths.reduce((result: PagesMapping, pagePath): PagesMapping => {
+  const pages = pagePaths.reduce<PagesMapping>((result, pagePath) => {
     let page = `${convertPageFilePathToRoutePath(pagePath, pageExtensions).replace(
       /\\/g,
       "/",
     )}`.replace(/\/index$/, "")
-    let pageKey = page === "" ? "/" : page
+    const isResolver = pagePath.includes("/queries/") || pagePath.includes("/mutations/")
+    if (isResolver) {
+      if (typeof resolverType === "function") {
+        page = `/api/rpc${resolverType(pagePath)}`
+      } else if (resolverType === "root") {
+        page = `/api/rpc${stripExtension(pagePath, pageExtensions)}`
+      }
+    }
 
+    let pageKey = page === "" ? "/" : page
     if (pageKey in result) {
       console.warn(
         `Duplicate page detected. ${previousPages[pageKey]} and ${pagePath} both resolve to ${pageKey}.`,
@@ -255,6 +273,7 @@ export function createPagesMapping(pagePaths: string[], pageExtensions: string[]
     result[pageKey] = join(PAGES_DIR_ALIAS, pagePath).replace(/\\/g, "/")
     return result
   }, {})
+
   pages["/_app"] = pages["/_app"] || "next/dist/pages/_app"
   pages["/_error"] = pages["/_error"] || "next/dist/pages/_error"
   pages["/_document"] = pages["/_document"] || "next/dist/pages/_document"
@@ -277,7 +296,7 @@ function getVerb(type: string) {
 const apiPathRegex = /([\\/]api[\\/])/
 export async function collectAllRoutes(directory: string, config: any) {
   const routeFiles = await collectPages(directory, config.pageExtensions!)
-  const rawRouteMappings = createPagesMapping(routeFiles, config.pageExtensions!)
+  const rawRouteMappings = createPagesMapping(routeFiles, config)
   const routes = []
   for (const [route, filePath] of Object.entries(rawRouteMappings)) {
     if (["/_app", "/_document", "/_error"].includes(route)) continue
@@ -349,8 +368,31 @@ export function setupManifest(routes: Record<string, RouteManifestEntry>): {
   const routesWithoutDuplicates = dedupeBy(Object.entries(routes), ([_path, {name}]) => name)
 
   const implementationLines = routesWithoutDuplicates.map(
-    ([path, {name}]) => `${name}: (query) => ({ pathname: "${path}", query })`,
+    ([path, {name}]) => `${name}: (query) => ({ 
+      pathname: "${path}", 
+      query,
+      href: query
+      ? replaceSlugsWithValues(
+          "${path}",
+          Object.keys(query),
+          Object.values(query)
+        )
+      : "${path}",
+    })`,
   )
+
+  const implementationHelpers = [
+    `function replaceSlugsWithValues(str, slugs, values) {
+      let result = str;
+      slugs.forEach((slug, i) => {
+          const value = values[i];
+          if (value) {
+              result = result.replace('[' + slug + ']', String(value));
+          }
+      });
+      return result;
+    }`,
+  ]
 
   const declarationLines = routesWithoutDuplicates.map(
     ([_path, {name, parameters, multipleParameters}]) => {
@@ -373,7 +415,11 @@ export function setupManifest(routes: Record<string, RouteManifestEntry>): {
 
   return {
     implementation:
-      "exports.Routes = {\n" + implementationLines.map((line) => "  " + line).join(",\n") + "\n}",
+      "exports.Routes = {\n" +
+      implementationLines.map((line) => "  " + line).join(",\n") +
+      "\n}" +
+      "\n" +
+      implementationHelpers.join("\n"),
     declaration: `
 import type { ParsedUrlQueryInput } from "querystring"
 import type { RouteUrlObject } from "blitz"
@@ -468,7 +514,6 @@ export function parseDefaultExportName(contents: string): string | null {
 export async function generateManifest() {
   const config = await loadConfig(process.cwd())
   const allRoutes = await collectAllRoutes(process.cwd(), config)
-
   const routes: Record<string, RouteManifestEntry> = {}
 
   for (let {filePath, route, type} of allRoutes) {
@@ -509,10 +554,6 @@ export async function generateManifest() {
     encoding: "utf-8",
   })
 }
-
-export const isInternalBlitzMonorepoDevelopment = __dirname.match(
-  /[\\/]packages[\\/]blitz[\\/]dist[\\/]chunks$/,
-)
 
 async function findNodeModulesRoot(src: string) {
   let root: string
@@ -576,7 +617,7 @@ export async function stopWatcher(): Promise<void> {
   if (!webpackWatcher) {
     return
   }
-  console.log("stopWatcher")
+
   webpackWatcher.close()
   webpackWatcher = null
 }

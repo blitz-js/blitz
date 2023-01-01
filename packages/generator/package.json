@@ -1,6 +1,6 @@
 {
   "name": "@blitzjs/generator",
-  "version": "2.0.0-alpha.53",
+  "version": "2.0.0-beta.20",
   "scripts": {
     "dev": "watch unbuild src --wait=0.2",
     "build": "unbuild && pnpm build:templates",
@@ -24,13 +24,14 @@
     "@babel/plugin-transform-typescript": "7.12.1",
     "@babel/preset-env": "7.12.10",
     "@babel/types": "7.12.10",
-    "@mrleebo/prisma-ast": "0.2.6",
+    "@mrleebo/prisma-ast": "0.4.1",
     "chalk": "^4.1.0",
     "console-table-printer": "2.10.0",
     "cross-spawn": "7.0.3",
     "diff": "5.0.0",
     "enquirer": "2.3.6",
     "fs-extra": "10.0.1",
+    "globby": "13.1.2",
     "got": "^11.8.1",
     "jscodeshift": "0.13.0",
     "mem-fs": "1.2.0",
@@ -38,14 +39,15 @@
     "npm-which": "3.0.1",
     "ora": "5.3.0",
     "pluralize": "8.0.0",
-    "prettier": "^2.5.1",
+    "prettier": "^2.7.1",
     "recast": "0.20.5",
-    "tslog": "3.3.1",
+    "supports-color": "8.1.1",
+    "tslog": "3.3.4",
     "username": "5.1.0",
     "vinyl": "2.2.1"
   },
   "devDependencies": {
-    "@blitzjs/config": "2.0.0-alpha.53",
+    "@blitzjs/config": "2.0.0-beta.20",
     "@juanm04/cpx": "2.0.1",
     "@types/babel__core": "7.1.19",
     "@types/diff": "5.0.2",
@@ -55,23 +57,20 @@
     "@types/mem-fs-editor": "7.0.1",
     "@types/pluralize": "0.0.29",
     "@types/prettier": "2.4.4",
-    "@types/react": "18.0.1",
+    "@types/react": "18.0.25",
     "@types/react-dom": "17.0.14",
     "@types/vinyl": "2.0.6",
-    "@typescript-eslint/eslint-plugin": "5.9.1",
+    "@typescript-eslint/eslint-plugin": "5.42.1",
     "@typescript-eslint/parser": "5.9.1",
     "babylon": "6.18.0",
     "debug": "4.3.3",
-    "eslint": "7.32.0",
-    "react": "18.0.0",
-    "typescript": "^4.5.3",
+    "eslint": "8.27.0",
+    "react": "18.2.0",
+    "typescript": "^4.8.4",
     "unbuild": "0.6.9",
     "watch": "1.0.2"
   },
   "publishConfig": {
     "access": "public"
-  },
-  "peerDependencies": {
-    "react": "*"
   }
 }

@@ -2,6 +2,7 @@ import * as ast from "@mrleebo/prisma-ast"
 import {spawn} from "cross-spawn"
 import which from "npm-which"
 import path from "path"
+import {log} from "../utils/log"
 import {Generator, GeneratorOptions, SourceRootType} from "../generator"
 import {Field} from "../prisma/field"
 import {Model} from "../prisma/model"
@@ -40,7 +41,10 @@ export class ModelGenerator extends Generator<ModelGeneratorOptions> {
 
   // eslint-disable-next-line require-await
   async write() {
-    const schemaPath = path.resolve("db/schema.prisma")
+    const pkgJson = this.fs.readJSON("package.json", {}) as {[key: string]: any}
+    const rawSchemaPath = pkgJson?.prisma?.schema || "db/schema.prisma"
+
+    const schemaPath = path.resolve(rawSchemaPath)
     if (!this.fs.exists(schemaPath)) {
       throw new Error("Prisma schema file was not found")
     }
@@ -49,7 +53,7 @@ export class ModelGenerator extends Generator<ModelGeneratorOptions> {
     try {
       schema = ast.getSchema(this.fs.read(schemaPath))
     } catch (err) {
-      console.error("Failed to parse db/schema.prisma file")
+      console.error(`Failed to parse ${rawSchemaPath} file`)
       throw err
     }
     const {modelName, extraArgs, dryRun} = this.options
@@ -88,8 +92,10 @@ export class ModelGenerator extends Generator<ModelGeneratorOptions> {
           dryRun ? "" : ` ${updatedOrCreated} in schema.prisma`
         }:\n`,
       )
-      ast.printSchema({type: "schema", list: [model]}).split("\n")
-      // .map(log.progress) // todo
+      ast
+        .printSchema({type: "schema", list: [model]})
+        .split("\n")
+        .map(log.progress)
       console.log("\n")
     }
   }

@@ -1,7 +1,8 @@
-import {assert, Ctx, prettyMs} from "blitz"
+import {assert, baseLogger, Ctx, newLine, prettyMs, ResolverConfig} from "blitz"
 import {NextApiRequest, NextApiResponse} from "next"
-import {deserialize, serialize as superjsonSerialize} from "superjson"
+import {deserialize, serialize as superjsonSerialize, parse} from "superjson"
 import {resolve} from "path"
+import chalk from "chalk"
 
 // TODO - optimize end user server bundles by not exporting all client stuff here
 export * from "./index-browser"
@@ -11,6 +12,10 @@ export * from "./resolver"
 // Mechanism used by Vite/Next/Nuxt plugins for automatically loading query and mutation resolvers
 function isObject(value: unknown): value is Record<string | symbol, unknown> {
   return typeof value === "object" && value !== null
+}
+
+const defaultConfig: ResolverConfig = {
+  httpMethod: "POST",
 }
 
 function getGlobalObject<T extends Record<string, unknown>>(key: string, defaultValue: T): T {
@@ -24,7 +29,7 @@ function getGlobalObject<T extends Record<string, unknown>>(key: string, default
 }
 
 type Resolver = (...args: unknown[]) => Promise<unknown>
-type ResolverFiles = Record<string, () => Promise<{default?: Resolver}>>
+type ResolverFiles = Record<string, () => Promise<{default?: Resolver; config?: ResolverConfig}>>
 export type ResolverPathOptions = "queries|mutations" | "root" | ((path: string) => string)
 
 // We define `global.__internal_blitzRpcResolverFiles` to ensure we use the same global object.
@@ -42,7 +47,7 @@ export function loadBlitzRpcResolverFilesWithInternalMechanism() {
 
 export function __internal_addBlitzRpcResolver(
   routePath: string,
-  resolver: () => Promise<{default?: Resolver}>,
+  resolver: () => Promise<{default?: Resolver; config?: ResolverConfig}>,
 ) {
   g.blitzRpcResolverFilesLoaded = g.blitzRpcResolverFilesLoaded || {}
   g.blitzRpcResolverFilesLoaded[routePath] = resolver
@@ -50,11 +55,13 @@ export function __internal_addBlitzRpcResolver(
 }
 
 const dir = __dirname + (() => "")() // trick to avoid `@vercel/ncc` to glob import
-const loaderServer = resolve(dir, "./loader-server.cjs")
 const loaderClient = resolve(dir, "./loader-client.cjs")
+const loaderServer = resolve(dir, "./loader-server.cjs")
+const loaderServerResolvers = resolve(dir, "./loader-server-resolvers.cjs")
 
 interface WebpackRuleOptions {
   resolverPath: ResolverPathOptions | undefined
+  includeRPCFolders: string[] | undefined
 }
 
 interface WebpackRule {
@@ -67,6 +74,11 @@ interface WebpackRule {
 
 export interface InstallWebpackConfigOptions {
   webpackConfig: {
+    resolve: {
+      alias: {
+        [key: string]: boolean
+      }
+    }
     module: {
       rules: WebpackRule[]
     }
@@ -78,8 +90,10 @@ export function installWebpackConfig({
   webpackConfig,
   webpackRuleOptions,
 }: InstallWebpackConfigOptions) {
+  webpackConfig.resolve.alias["npm-which"] = false
+  webpackConfig.resolve.alias["cross-spawn"] = false
   webpackConfig.module.rules.push({
-    test: /\/\[\[\.\.\.blitz]]\.[jt]s$/,
+    test: /[\\/]\[\[\.\.\.blitz]]?.+\.[jt]sx?$/,
     use: [
       {
         loader: loaderServer,
@@ -92,6 +106,10 @@ export function installWebpackConfig({
     use: [
       {
         loader: loaderClient,
+        options: webpackRuleOptions,
+      },
+      {
+        loader: loaderServerResolvers,
         options: webpackRuleOptions,
       },
     ],
@@ -141,47 +159,66 @@ export function rpcHandler(config: RpcConfig) {
       "It seems your Blitz RPC endpoint file is not named [[...blitz]].(jt)s. Please ensure it is",
     )
 
-    const relativeRoutePath = req.query.blitz.join("/")
+    const relativeRoutePath = (req.query.blitz as string[])?.join("/")
     const routePath = "/" + relativeRoutePath
 
-    const loadableResolver = resolverMap[routePath]
+    const log = baseLogger().getChildLogger({
+      prefix: [routePath.replace(/(\/api\/rpc)?\//, "") + "()"],
+    })
+    const customChalk = new chalk.Instance({
+      level: log.settings.type === "json" ? 0 : chalk.level,
+    })
+
+    const loadableResolver = resolverMap?.[routePath]
     if (!loadableResolver) {
       throw new Error("No resolver for path: " + routePath)
     }
 
-    const resolver = (await loadableResolver()).default
+    const {default: resolver, config: resolverConfig} = await loadableResolver()
+
     if (!resolver) {
       throw new Error("No default export for resolver path: " + routePath)
     }
+
+    const resolverConfigWithDefaults = {...defaultConfig, ...resolverConfig}
 
     if (req.method === "HEAD") {
       // We used to initiate database connection here
       res.status(200).end()
       return
-    } else if (req.method === "POST") {
-      // Handle RPC call
-
-      if (typeof req.body.params === "undefined") {
+    } else if (
+      req.method === "POST" ||
+      (req.method === "GET" && resolverConfigWithDefaults.httpMethod === "GET")
+    ) {
+      if (req.method === "POST" && typeof req.body.params === "undefined") {
         const error = {message: "Request body is missing the `params` key"}
-        console.error(error.message)
+        log.error(error.message)
         res.status(400).json({
           result: null,
           error,
         })
         return
       }
-
       try {
         const data = deserialize({
-          json: req.body.params,
-          meta: req.body.meta?.params,
+          json:
+            req.method === "POST"
+              ? req.body.params
+              : req.query.params
+              ? parse(`${req.query.params}`)
+              : undefined,
+          meta:
+            req.method === "POST"
+              ? req.body.meta?.params
+              : req.query.meta
+              ? parse(`${req.query.meta}`)
+              : undefined,
         })
-
-        console.info("Starting with input:", data ? data : JSON.stringify(data))
+        log.info(customChalk.dim("Starting with input:"), data ? data : JSON.stringify(data))
         const startTime = Date.now()
         const result = await resolver(data, (res as any).blitzCtx)
         const resolverDuration = Date.now() - startTime
-        console.debug("Result:", result ? result : JSON.stringify(result))
+        log.debug(customChalk.dim("Result:"), result ? result : JSON.stringify(result))
 
         const serializerStartTime = Date.now()
         const serializedResult = superjsonSerialize(result)
@@ -195,16 +232,22 @@ export function rpcHandler(config: RpcConfig) {
             result: serializedResult.meta,
           },
         })
-        console.debug(`Next.js serialization:${prettyMs(Date.now() - nextSerializerStartTime)}`)
+        log.debug(
+          customChalk.dim(
+            `Next.js serialization:${prettyMs(Date.now() - nextSerializerStartTime)}`,
+          ),
+        )
         const serializerDuration = Date.now() - serializerStartTime
         const duration = Date.now() - startTime
 
-        console.info(
-          `Finished: resolver:${prettyMs(resolverDuration)} serializer:${prettyMs(
-            serializerDuration,
-          )} total:${prettyMs(duration)}`,
+        log.info(
+          customChalk.dim(
+            `Finished: resolver:${prettyMs(resolverDuration)} serializer:${prettyMs(
+              serializerDuration,
+            )} total:${prettyMs(duration)}`,
+          ),
         )
-        console.log("\n")
+        newLine()
 
         return
       } catch (error: any) {
@@ -214,8 +257,8 @@ export function rpcHandler(config: RpcConfig) {
 
         config.onError?.(error)
 
-        console.error(error)
-        console.log("\n")
+        log.error(error)
+        newLine()
 
         if (!error.statusCode) {
           error.statusCode = 500
@@ -234,7 +277,7 @@ export function rpcHandler(config: RpcConfig) {
       }
     } else {
       // Everything else is error
-      console.warn(`${req.method} method not supported`)
+      log.warn(`${req.method} method not supported`)
       res.status(404).end()
       return
     }

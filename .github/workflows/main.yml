@@ -1,5 +1,3 @@
-# https://github.com/vercel/next.js/commits/canary/.github/workflows/build_test_deploy.yml
-
 name: CI
 
 on:
@@ -11,28 +9,145 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
+        with:
+          version: 7.11.0
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+          cache: "pnpm"
+      - name: Install dependencies
+        run: pnpm install  --frozen-lockfile
+      - run: pnpm manypkg check
+      - name: Build
+        run: pnpm build
+      - name: Lint
+        run: pnpm lint
+
   build:
+    runs-on: ubuntu-latest
+    name: Build
+    steps:
+      - uses: actions/checkout@v2
+      - uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
+        with:
+          version: 7.11.0
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+          cache: "pnpm"
+      - run: pnpm install --frozen-lockfile
+      - name: Build
+        run: pnpm build
+      - name: Build Apps
+        run: pnpm build:apps
+
+  Unit-Tests:
+    name: "Unit Test: ${{ matrix.os }} (node@16)"
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os:
           - ubuntu-latest
-        node_version:
-          - 16
-    name: Node ${{ matrix.node_version }} - ${{ matrix.os }}
+          - windows-latest
+      fail-fast: false
+    env:
+      NODE_VERSION: 16
     steps:
-      - uses: actions/checkout@v2
-      - uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup PNPM
+        uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
         with:
-          version: 6.32.6
-      - name: Setup node
+          version: 7.11.0
+
+      - name: Setup node@16
         uses: actions/setup-node@v2
         with:
-          node-version: ${{ matrix.node_version }}
+          node-version: 16
           cache: "pnpm"
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm manypkg check
-      - run: pnpm build
-      - run: pnpm lint
-      - run: pnpm build:apps
-      - run: pnpm test
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        shell: bash
+
+      - name: Build
+        run: pnpm build
+        shell: bash
+
+      - name: Test Packages
+        run: pnpm test -- --filter=./packages/*
+        shell: bash
+
+      - name: Test Apps
+        run: pnpm test -- --filter=./apps/*
+        shell: bash
+
+  find-integration-tests:
+    name: "Find Integration Tests"
+    runs-on: ubuntu-latest
+    outputs:
+      folders: ${{ steps.set-matrix.outputs.folders }}
+    steps:
+      - uses: actions/checkout@v2
+      - id: set-matrix
+        name: "Find all folders"
+        shell: bash
+        run: |
+          cd ./integration-tests
+          tree -J -d -L 1 | jq -c  '.[0].contents | map(.name | tostring) | map(select(. != "utils"))'
+          folders=$(tree -J -d -L 1 | jq -c  '.[0].contents | map(.name | tostring) | map(select(. != "utils"))')
+          echo "folders=$folders" >> $GITHUB_OUTPUT
+
+  Integration-Tests:
+    name: "Integration Test: ${{matrix.folder}} @ ${{ matrix.os }} "
+    needs: [find-integration-tests]
+    strategy:
+      matrix:
+        folder: ${{fromJSON(needs.find-integration-tests.outputs.folders)}}
+        os:
+          - ubuntu-latest
+          - windows-latest
+      fail-fast: false
+    runs-on: ${{ matrix.os }}
+    steps:
+      - run: echo ${{matrix.folder}}
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup PNPM
+        uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
+        with:
+          version: 7.11.0
+
+      - name: Setup node@${{ matrix.NODE_VERSION }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.NODE_VERSION }}
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        shell: bash
+
+      - name: Install playwright
+        run: |
+          npm i -g playwright
+          PLAYWRIGHT_BROWSERS_PATH=$HOME/pw-browsers npx playwright install --with-deps
+        shell: bash
+
+      - name: Build
+        run: pnpm build
+        shell: bash
+
+      - name: Test Packages
+        run: pnpm test -- --filter=./integration-tests/${{matrix.folder}}
+        shell: bash

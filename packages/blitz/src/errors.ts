@@ -1,6 +1,10 @@
 import _SuperJson from "superjson"
 import type {UrlObject} from "url"
 
+declare module globalThis {
+  let _BLITZ_ERROR_CLASS_REGISTERED: boolean
+}
+
 const SuperJson: typeof _SuperJson =
   "default" in _SuperJson ? (_SuperJson as any).default : _SuperJson
 
@@ -19,12 +23,6 @@ export class AuthenticationError extends Error {
     return true
   }
 }
-if (process.env.JEST_WORKER_ID === undefined) {
-  SuperJson.registerClass(AuthenticationError, {
-    identifier: "BlitzAuthenticationError",
-    allowProps: errorProps,
-  })
-}
 
 export class CSRFTokenMismatchError extends Error {
   name = "CSRFTokenMismatchError"
@@ -32,12 +30,6 @@ export class CSRFTokenMismatchError extends Error {
   get _clearStack() {
     return true
   }
-}
-if (process.env.JEST_WORKER_ID === undefined) {
-  SuperJson.registerClass(CSRFTokenMismatchError, {
-    identifier: "BlitzCSRFTokenMismatchError",
-    allowProps: errorProps,
-  })
 }
 
 export class AuthorizationError extends Error {
@@ -50,12 +42,6 @@ export class AuthorizationError extends Error {
     return true
   }
 }
-if (process.env.JEST_WORKER_ID === undefined) {
-  SuperJson.registerClass(AuthorizationError, {
-    identifier: "BlitzAuthorizationError",
-    allowProps: errorProps,
-  })
-}
 
 export class NotFoundError extends Error {
   name = "NotFoundError"
@@ -66,12 +52,6 @@ export class NotFoundError extends Error {
   get _clearStack() {
     return true
   }
-}
-if (process.env.JEST_WORKER_ID === undefined) {
-  SuperJson.registerClass(NotFoundError, {
-    identifier: "BlitzNotFoundError",
-    allowProps: errorProps,
-  })
 }
 
 export class RedirectError extends Error {
@@ -86,12 +66,6 @@ export class RedirectError extends Error {
     return true
   }
 }
-if (process.env.JEST_WORKER_ID === undefined) {
-  SuperJson.registerClass(RedirectError, {
-    identifier: "BlitzRedirectError",
-    allowProps: errorProps,
-  })
-}
 
 export class PaginationArgumentError extends Error {
   name = "PaginationArgumentError"
@@ -100,9 +74,37 @@ export class PaginationArgumentError extends Error {
     super(message)
   }
 }
-if (process.env.JEST_WORKER_ID === undefined) {
+
+if (process.env.JEST_WORKER_ID === undefined && !globalThis._BLITZ_ERROR_CLASS_REGISTERED) {
+  SuperJson.registerClass(AuthenticationError, {
+    identifier: "BlitzAuthenticationError",
+    allowProps: errorProps,
+  })
+
+  SuperJson.registerClass(CSRFTokenMismatchError, {
+    identifier: "BlitzCSRFTokenMismatchError",
+    allowProps: errorProps,
+  })
+
+  SuperJson.registerClass(AuthorizationError, {
+    identifier: "BlitzAuthorizationError",
+    allowProps: errorProps,
+  })
+
+  SuperJson.registerClass(NotFoundError, {
+    identifier: "BlitzNotFoundError",
+    allowProps: errorProps,
+  })
+
+  SuperJson.registerClass(RedirectError, {
+    identifier: "BlitzRedirectError",
+    allowProps: errorProps,
+  })
+
   SuperJson.registerClass(PaginationArgumentError, {
     identifier: "BlitzPaginationArgumentError",
     allowProps: errorProps,
   })
+
+  globalThis._BLITZ_ERROR_CLASS_REGISTERED = true
 }

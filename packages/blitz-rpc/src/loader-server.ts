@@ -1,4 +1,4 @@
-import {dirname, join, posix} from "path"
+import {dirname, join, relative} from "path"
 import {promises} from "fs"
 import {
   assertPosixPath,
@@ -17,12 +17,13 @@ export async function loader(this: Loader, input: string): Promise<string> {
   const compiler = this._compiler!
   const id = this.resource
   const root = this._compiler!.context
+  const rpcFolders = this.query.includeRPCFolders ? this.query.includeRPCFolders : []
 
   const isSSR = compiler.name === "server"
   if (isSSR) {
     this.cacheable(false)
 
-    const resolvers = await collectResolvers(root, ["ts", "js"])
+    const resolvers = await collectResolvers(root, rpcFolders, ["ts", "js"])
     return await transformBlitzRpcServer(
       input,
       toPosixPath(id),
@@ -37,6 +38,10 @@ export async function loader(this: Loader, input: string): Promise<string> {
 
 module.exports = loader
 
+function slash(str: string) {
+  return str.replace(/\\/g, "/")
+}
+
 export async function transformBlitzRpcServer(
   src: string,
   id: string,
@@ -48,24 +53,39 @@ export async function transformBlitzRpcServer(
   assertPosixPath(root)
 
   const blitzImport = 'import { __internal_addBlitzRpcResolver } from "@blitzjs/rpc";'
-
   // No break line between `blitzImport` and `src` in order to preserve the source map's line mapping
   let code = blitzImport + src
   code += "\n\n"
-
   for (let resolverFilePath of resolvers) {
-    const relativeResolverPath = posix.relative(dirname(id), join(root, resolverFilePath))
-    const routePath = convertPageFilePathToRoutePath(resolverFilePath, options?.resolverPath)
-    code += `__internal_addBlitzRpcResolver('${routePath}', () => import('${relativeResolverPath}'));`
+    const routePath = convertPageFilePathToRoutePath({
+      appRoot: root,
+      absoluteFilePath: resolverFilePath,
+      resolverBasePath: options?.resolverPath,
+      extraRpcBasePaths: options?.includeRPCFolders,
+    })
+
+    code += `__internal_addBlitzRpcResolver('${routePath}',() => import('${slash(
+      resolverFilePath,
+    )}'));`
     code += "\n"
   }
-
   // console.log("NEW CODE", code)
   return code
 }
 
-export function collectResolvers(directory: string, pageExtensions: string[]): Promise<string[]> {
-  return recursiveFindResolvers(directory, buildPageExtensionRegex(pageExtensions))
+export function collectResolvers(
+  directory: string,
+  rpcFolders: string[],
+  pageExtensions: string[],
+): Promise<string[]> {
+  return recursiveFindResolvers(
+    directory,
+    buildPageExtensionRegex(pageExtensions),
+    undefined,
+    [],
+    directory,
+    rpcFolders,
+  )
 }
 
 export async function recursiveFindResolvers(
@@ -74,11 +94,13 @@ export async function recursiveFindResolvers(
   ignore?: RegExp,
   arr: string[] = [],
   rootDir: string = dir,
+  rpcFolders: string[] = [],
 ): Promise<string[]> {
   let folders = await promises.readdir(dir)
 
   if (dir === rootDir) {
     folders = folders.filter((folder) => topLevelFoldersThatMayContainResolvers.includes(folder))
+    folders.push(...rpcFolders)
   }
 
   await Promise.all(
@@ -89,17 +111,18 @@ export async function recursiveFindResolvers(
       const pathStat = await promises.stat(absolutePath)
 
       if (pathStat.isDirectory()) {
-        await recursiveFindResolvers(absolutePath, filter, ignore, arr, rootDir)
-        return
+        if (!absolutePath.includes("node_modules")) {
+          await recursiveFindResolvers(absolutePath, filter, ignore, arr, rootDir)
+          return
+        }
       }
 
       if (!filter.test(part)) {
         return
       }
 
-      const relativeFromRoot = absolutePath.replace(rootDir, "")
-      if (getIsRpcFile(relativeFromRoot)) {
-        arr.push(relativeFromRoot)
+      if (getIsRpcFile(absolutePath)) {
+        arr.push(absolutePath)
         return
       }
     }),

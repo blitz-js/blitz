@@ -1,5 +1,358 @@
 # blitz
 
+## 2.0.0-beta.20
+
+### Minor Changes
+
+- 74a14b70: When db.\$reset() rejects, reject with an Error object
+- 6ece0961: Decoupled Blitz RPC from Blitz Auth to allow independent use.
+
+### Patch Changes
+
+- a0596279: Fix blitz install for recipes that use the path helper to check if ./src/pages directory is available, otherwise use ./pages
+- Updated dependencies [8c247e26]
+  - @blitzjs/generator@2.0.0-beta.20
+
+## 2.0.0-beta.19
+
+### Major Changes
+
+- 942536d9: update paginate.ts, return more params for more complex pagination control
+
+### Minor Changes
+
+- c1e00406: transpile packages to es2015 to support older browsers
+- 696f48c4: some providers need extra attributes, update for wrapAppWithProvider
+
+### Patch Changes
+
+- a6f32d1d: Export enhancePrisma for client again (Fixes #3964)
+- c126b819: using "blitz install" inside recipe with addRunCommandStep causes hangs up
+- b33db082: Fix ambigious class warning log & upgrade superjson from 1.9.1 to 1.11.0
+- Updated dependencies [b80c3d92]
+  - @blitzjs/generator@2.0.0-beta.19
+
+## 2.0.0-beta.18
+
+### Patch Changes
+
+- @blitzjs/generator@2.0.0-beta.18
+
+## 2.0.0-beta.17
+
+### Patch Changes
+
+- 5ea068b2: Check if blitz-server & blitz-client is located in either the app or src directory and return the correct path for blitz recipes.
+- 8b4bf999: Update dependencies
+- 88caa18e: Patch next13 for suspense error
+- Updated dependencies [2a81af7b]
+- Updated dependencies [8b4bf999]
+  - @blitzjs/generator@2.0.0-beta.17
+
+## 2.0.0-beta.16
+
+### Patch Changes
+
+- 1569bd53: Upgrade `tslog` to the latest version
+- ceb7db27: Add an opt-in GET request support to RPC specification by exporting a `config` object that has the `httpMethod` property.
+  from `query` files.
+- 8e5903c0: Fix `cannot find module db error` in JavaScript template. Replace requiring the config using `esbuild` with parsing using `jscodeshift` to get the `cliConfig` values. Added logic to find the `blitz-server` file in `src` directory
+- 45459129: Include resolvers in `src` directory in blitz console
+- Updated dependencies [1569bd53]
+- Updated dependencies [8e5903c0]
+  - @blitzjs/generator@2.0.0-beta.16
+
+## 2.0.0-beta.15
+
+### Patch Changes
+
+- 1b798d9a: Fix `useSession` hook by exporting `enhancePrisma` from the server entry point instead of server
+  - @blitzjs/generator@2.0.0-beta.15
+
+## 2.0.0-beta.14
+
+### Patch Changes
+
+- 78fd5c48: Fix Blitz Install issue that gets stuck on "Generating file diff"
+- 0a8b0cb3: Fix Custom Server TS error - add `es6` target config to esbuild
+- Updated dependencies [54761393]
+- Updated dependencies [60de0574]
+  - @blitzjs/generator@2.0.0-beta.14
+
+## 2.0.0-beta.13
+
+### Patch Changes
+
+- a6e81f15: Add BlitzLogger plugin and allow customizing logging
+- 6f434989: Fix "Ambiguous class detected" errors reported by SuperJson by removing duplicated export from errors.ts file
+- Updated dependencies [4e26ae21]
+  - @blitzjs/generator@2.0.0-beta.13
+
+## 2.0.0-beta.12
+
+### Patch Changes
+
+- 3a602b61: Fix `blitz install` not working due to missing `blitz/installer` dependency
+- f39ba1ff: Allow passing custom templates to the `blitz generate` command. Extend the `generate` command with `custom-templates` to provide an easy starting point for users to customize the default templates: `blitz generate custom-templates`.
+- Updated dependencies [f39ba1ff]
+  - @blitzjs/generator@2.0.0-beta.12
+
+## 2.0.0-beta.11
+
+### Patch Changes
+
+- 1476a577: Fix release
+- Updated dependencies [1476a577]
+  - @blitzjs/generator@2.0.0-beta.11
+
+## 2.0.0-beta.5
+
+### Patch Changes
+
+- 9db6c885: Fix `blitz --help` CLI command not being found
+- d98e4bac: Add `blitz routes` CLI command back to toolkit
+- 9fe0cc54: Fix auth related React hydration errors by not redirecting until after component mount.
+- af58e2b2: Add a global Blitz version check when generating a new Blitz project to ensure users use the latest Blitz.
+- 2ade7268: Add `blitz export` CLI command to toolkit
+- 0edeaa37: Allow for custom page extensions for the wildcard blitz route. For example [...blitz].api.ts. For more information vist https://nextjs.org/docs/api-reference/next.config.js/custom-page-extensions
+- 430f6ec7: Only generate the prisma client if it's not found in node_modules when running a blitz cli command.
+- 15d22af2: Add `blitz console` CLI command back to toolkit
+- aa34661f: Fix invalidateQuery generating wrong param when no param argument is passed
+- 8e0c9d76: Migrate over recipe functionality from legacy framework & expose recipe builder helper functions that find and modify next.config.js, blitz-server & blitz-client.
+- e2c18895: Add client testing utilities and a sample test to a new blitz app template
+- Updated dependencies [04730205]
+- Updated dependencies [824a9b5e]
+- Updated dependencies [d6717b9d]
+- Updated dependencies [bf4aaf1d]
+- Updated dependencies [b43c1a81]
+- Updated dependencies [83281a84]
+- Updated dependencies [bd09db75]
+- Updated dependencies [e2c18895]
+  - @blitzjs/generator@2.0.0-beta.10
+
+## 2.0.0-beta.4
+
+### Patch Changes
+
+- c213d521: Fix issue with the route name that's generated for nested routes in @blitzjs/rpc. This was causing issues for windows users.
+- 0b94a450: Upgrade superjson to the latest version
+- 161270e3: Only run the prisma generate command when the schema file changes.
+- Updated dependencies [7498aef4]
+- Updated dependencies [22344d05]
+- Updated dependencies [8fa9a56f]
+- Updated dependencies [c53978d5]
+- Updated dependencies [a84b8de4]
+  - @blitzjs/generator@2.0.0-beta.4
+
+## 2.0.0-beta.3
+
+### Patch Changes
+
+- 638f2319: Prevent `Minified react error #419` in production
+- Updated dependencies [b72d1215]
+  - @blitzjs/generator@2.0.0-beta.3
+
+## 2.0.0-beta.2
+
+### Patch Changes
+
+- db7233db: Bump react, react-dom, @types/react and next versions
+
+  This fixes a console warning: `Warning: Received`true`for a non-boolean attribute`global`.` when using `styled-jsx`. Versions bump also fixes React Hydration error that happens on and off when using `redirectAuthenticatedTo`.
+
+- 0936cb38: Patch Next.js Suspense issue in all node environments. Previously we only patched it in the `development` environment, but now we make sure it gets patched in the `production` env (with the `blitz build` command) as well.
+- 3f9fe8f0: Exit CLI process after `blitz new` command is finished
+- Updated dependencies [db7233db]
+- Updated dependencies [eb971568]
+- Updated dependencies [8ada2c26]
+  - @blitzjs/generator@2.0.0-beta.2
+
+## 2.0.0-beta.1
+
+### Patch Changes
+
+- Updated dependencies [0f4926fd]
+  - @blitzjs/generator@2.0.0-beta.1
+
+## 2.0.0-beta.72
+
+### Patch Changes
+
+- 2cc888ef: Beta release
+- Updated dependencies [2cc888ef]
+  - @blitzjs/generator@2.0.0-beta.72
+
+## 2.0.0-alpha.71
+
+### Patch Changes
+
+- Updated dependencies [176c7b8b]
+  - @blitzjs/generator@2.0.0-alpha.71
+
+## 2.0.0-alpha.70
+
+### Patch Changes
+
+- Updated dependencies [4656e6ec]
+- Updated dependencies [1e0ec7a9]
+  - @blitzjs/generator@2.0.0-alpha.70
+
+## 2.0.0-alpha.69
+
+### Patch Changes
+
+- fd31e56b: Add back blitz generate command
+- Updated dependencies [fd31e56b]
+- Updated dependencies [6baab190]
+- Updated dependencies [37623a4f]
+  - @blitzjs/generator@2.0.0-alpha.69
+
+## 2.0.0-alpha.68
+
+### Patch Changes
+
+- 271c58ac: Comment out generate command import until we add the full support back
+- 630c7181: Use internal branded blitz logger for @blitzjs/rpc
+- f0ca738d: Run codegen tasks on blitz dev command
+- 41608c4c: Run codegen tasks after creating a new app if user chose yarn as a package manager
+- Updated dependencies [70b334a2]
+- Updated dependencies [dd299ae8]
+- Updated dependencies [078fe474]
+  - @blitzjs/generator@2.0.0-alpha.68
+
+## 2.0.0-alpha.67
+
+### Patch Changes
+
+- Updated dependencies [ebd74b4e]
+  - @blitzjs/generator@2.0.0-alpha.67
+
+## 2.0.0-alpha.66
+
+### Patch Changes
+
+- 928e840b: Fixes loading production env variables by default for blitz build command
+- 240f3f34: Add BlitzServerMiddleware utility function to wrap middleware in blitz server file
+- 55b1cb20: Runs the codegen on the blitz build command
+- 4d7d126d: Run `prisma generate` as a `blitz codegen` step if "prisma" is found in project's dependencies
+- 890b0c0c: Improve `blitz new` messaging and fix minor issues
+- 807a2b56: Fixes peer dependency warnings
+- a3e6c49c: Fixes the supports-color warning for pnpm
+- Updated dependencies [91aa5356]
+- Updated dependencies [890b0c0c]
+- Updated dependencies [807a2b56]
+- Updated dependencies [a3e6c49c]
+- Updated dependencies [065db256]
+- Updated dependencies [f202aac1]
+  - @blitzjs/generator@2.0.0-alpha.66
+
+## 2.0.0-alpha.65
+
+### Patch Changes
+
+- dd5f5174: Fix `enhancePrisma is undefined` errors by moving the utility function to a browser entrypoint
+  - @blitzjs/generator@2.0.0-alpha.65
+
+## 2.0.0-alpha.64
+
+### Patch Changes
+
+- 54db8a46: Add missing value to "skip" option when choosing a package manager during new app scaffolding
+- 62bf12b5: Fix blitz codegen to work with monorepos
+  - @blitzjs/generator@2.0.0-alpha.64
+
+## 2.0.0-alpha.63
+
+### Patch Changes
+
+- @blitzjs/generator@2.0.0-alpha.63
+
+## 2.0.0-alpha.62
+
+### Patch Changes
+
+- 365e6709: Fixes the db seed command so that the database can disconnect after running the seed file.
+  - @blitzjs/generator@2.0.0-alpha.62
+
+## 2.0.0-alpha.61
+
+### Patch Changes
+
+- 240f378b: Passes the correct arguments (without flags) to any bin command ran with the blitz cli
+  - @blitzjs/generator@2.0.0-alpha.61
+
+## 2.0.0-alpha.60
+
+### Patch Changes
+
+- 1d863f35: Fix APP_ENV not being set before loading env config
+  - @blitzjs/generator@2.0.0-alpha.60
+
+## 2.0.0-alpha.59
+
+### Patch Changes
+
+- @blitzjs/generator@2.0.0-alpha.59
+
+## 2.0.0-alpha.58
+
+### Minor Changes
+
+- 83b35590: Truncate errors from `api/auth/<strategy>/callback` request to 100 characters before passing them to the `?authError=` query parameter
+
+### Patch Changes
+
+- Updated dependencies [e339e2fd]
+  - @blitzjs/generator@2.0.0-alpha.58
+
+## 2.0.0-alpha.57
+
+### Patch Changes
+
+- 3511d5b6: Temporarily skip version check
+  - @blitzjs/generator@2.0.0-alpha.57
+
+## 2.0.0-alpha.56
+
+### Patch Changes
+
+- abb1ad5d: Improve codemod utilities
+- abe2afcc: Fix a long-standing issue with occasional blitz auth flakiness
+
+  This bug would sometimes cause users to be logged out or to experience an CSRFTokenMismatchError. This bug, when encountered, usually by lots of setPublicData or session.create calls, would not set the cookie headers correctly resulting in cookies being set to a previous state or in a possibly undefined state.
+
+  There are no security concerns as far as I can tell.
+
+- 0ac6e171: fixes blitz not loading custom server
+- 8bcb471a: Fix auth issue where session token and publicData cookie were updated unnecessarily, leading to potential user logout
+
+  - Previously, we were updating the session token each time public data changed. This is not needed, and it would cause race condition bugs where a user could be unexpectedly logged out because a request already in flight would not match the new session token.
+  - Previously, we were updating the publicData cookie even when it hadn't changed. This may reduce unnecessary re-renders on the client.
+  - @blitzjs/generator@2.0.0-alpha.56
+
+## 2.0.0-alpha.55
+
+### Patch Changes
+
+- 8f166a5d: Check for new versions when running CLI
+- 54a66a95: Show all blitz packages when running `blitz version` command
+- Updated dependencies [ab4d9de7]
+  - @blitzjs/generator@2.0.0-alpha.55
+
+## 2.0.0-alpha.54
+
+### Patch Changes
+
+- f397cc20: Fixes issue when generating a new blitz app with the form flag that ends up installing the wrong form library
+- cacb65d6: Fixes wrong import of the db module in `blitz db seed` command function
+- 348fd6f5: Fix redirectAuthenticatedTo errors
+- 20fc9f80: Fix SSP / SP not prefetching queries correctly
+- a3bbe6ce: Fix routes manifest showing duplicates for non queries|resolvers reso…
+- ffa7b5cc: During `blitz new` if project name argument is set to "." change it to current folder name
+- Updated dependencies [a961aff8]
+- Updated dependencies [80e1ead7]
+  - @blitzjs/generator@2.0.0-alpha.54
+
 ## 2.0.0-alpha.53
 
 ### Patch Changes

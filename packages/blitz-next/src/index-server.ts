@@ -1,5 +1,5 @@
-import type {NextConfig} from "next"
-import {
+import type {
+  NextConfig,
   GetServerSideProps,
   GetServerSidePropsResult,
   GetStaticProps,
@@ -7,7 +7,7 @@ import {
   NextApiRequest,
   NextApiResponse,
 } from "next"
-import type {
+import {
   AddParameters,
   AsyncFunc,
   BlitzServerPlugin,
@@ -15,6 +15,8 @@ import type {
   FirstParam,
   RequestMiddleware,
   MiddlewareResponse,
+  BlitzLogger,
+  initializeLogger,
 } from "blitz"
 import {handleRequestWithMiddleware, startWatcher, stopWatcher} from "blitz"
 import {
@@ -25,11 +27,13 @@ import {
   InstallWebpackConfigOptions,
   ResolverPathOptions,
 } from "@blitzjs/rpc"
-import {DefaultOptions, QueryClient} from "react-query"
+import {DefaultOptions, QueryClient} from "@tanstack/react-query"
 import {IncomingMessage, ServerResponse} from "http"
 import {withSuperJsonProps} from "./superjson"
 import {ParsedUrlQuery} from "querystring"
 import {PreviewData} from "next/types"
+import {resolveHref} from "next/dist/shared/lib/router/router"
+import {RouteUrlObject, isRouteUrlObject} from "blitz"
 
 export * from "./index-browser"
 
@@ -40,18 +44,38 @@ export interface BlitzNextApiResponse
   extends MiddlewareResponse,
     Omit<NextApiResponse, keyof MiddlewareResponse> {}
 
-export type NextApiHandler = (
+export type NextApiHandler<TResult> = (
   req: NextApiRequest,
   res: BlitzNextApiResponse,
-) => void | Promise<void>
+) => TResult | void | Promise<TResult | void>
 
 type SetupBlitzOptions = {
   plugins: BlitzServerPlugin<RequestMiddleware, Ctx>[]
   onError?: (err: Error) => void
+  logger?: ReturnType<typeof BlitzLogger>
 }
 
+export type Redirect =
+  | {
+      statusCode: 301 | 302 | 303 | 307 | 308
+      destination: string | RouteUrlObject
+      basePath?: false
+    }
+  | {
+      permanent: boolean
+      destination: string | RouteUrlObject
+      basePath?: false
+    }
+
+export type BlitzGSSPResult<P> = {props: P | Promise<P>} | {redirect: Redirect} | {notFound: true}
+
+export type BlitzGSPResult<P> =
+  | {props: P; revalidate?: number | boolean}
+  | {redirect: Redirect; revalidate?: number | boolean}
+  | {notFound: true; revalidate?: number | boolean}
+
 export type BlitzGSSPHandler<
-  TProps,
+  TProps extends {[key: string]: any} = {[key: string]: any},
   Query extends ParsedUrlQuery = ParsedUrlQuery,
   PD extends PreviewData = PreviewData,
 > = ({
@@ -59,33 +83,65 @@ export type BlitzGSSPHandler<
   req,
   res,
   ...args
-}: Parameters<GetServerSideProps<TProps, Query, PD>>[0] & {ctx: Ctx}) => ReturnType<
-  GetServerSideProps<TProps, Query, PD>
+}: Parameters<GetServerSideProps<TProps, Query, PD>>[0] & {ctx: Ctx}) => Promise<
+  BlitzGSSPResult<TProps>
 >
 
 export type BlitzGSPHandler<
-  TProps,
+  TProps extends {[key: string]: any} = {[key: string]: any},
   Query extends ParsedUrlQuery = ParsedUrlQuery,
   PD extends PreviewData = PreviewData,
 > = ({
   ctx,
   ...args
-}: Parameters<GetStaticProps<TProps, Query, PD>>[0] & {ctx: Ctx}) => ReturnType<
-  GetStaticProps<TProps, Query, PD>
->
+}: Parameters<GetStaticProps<TProps, Query, PD>>[0] & {ctx: Ctx}) =>
+  | Promise<BlitzGSPResult<TProps>>
+  | BlitzGSPResult<TProps>
 
-export type BlitzAPIHandler = (
-  req: Parameters<NextApiHandler>[0],
-  res: Parameters<NextApiHandler>[1],
+export type BlitzAPIHandler<TResult> = (
+  req: NextApiRequest,
+  res: BlitzNextApiResponse,
   ctx: Ctx,
-) => ReturnType<NextApiHandler>
+) => TResult | void | Promise<TResult | void>
 
-export const setupBlitzServer = ({plugins, onError}: SetupBlitzOptions) => {
+const prefetchQueryFactory = (
+  ctx: BlitzCtx,
+): {
+  getClient: () => QueryClient | null
+  prefetchQuery: AddParameters<PrefetchQueryFn, [boolean?]>
+} => {
+  let queryClient: null | QueryClient = null
+
+  return {
+    getClient: () => queryClient,
+    prefetchQuery: async (fn, input, defaultOptions = {}, infinite = false) => {
+      if (!queryClient) {
+        queryClient = new QueryClient({defaultOptions})
+      }
+
+      if (infinite) {
+        await queryClient.prefetchInfiniteQuery(getInfiniteQueryKey(fn, input), () =>
+          fn(input, ctx),
+        )
+      } else {
+        await queryClient.prefetchQuery(getQueryKey(fn, input), () => fn(input, ctx))
+      }
+    },
+  }
+}
+
+export const setupBlitzServer = ({plugins, onError, logger}: SetupBlitzOptions) => {
+  initializeLogger(logger ?? BlitzLogger())
+
   const middlewares = plugins.flatMap((p) => p.requestMiddlewares)
   const contextMiddleware = plugins.flatMap((p) => p.contextMiddleware).filter(Boolean)
 
   const gSSP =
-    <TProps, Query extends ParsedUrlQuery = ParsedUrlQuery, PD extends PreviewData = PreviewData>(
+    <
+      TProps extends {[key: string]: any} = {[key: string]: any},
+      Query extends ParsedUrlQuery = ParsedUrlQuery,
+      PD extends PreviewData = PreviewData,
+    >(
       handler: BlitzGSSPHandler<TProps, Query, PD>,
     ): GetServerSideProps<TProps, Query, PD> =>
     async ({req, res, ...rest}) => {
@@ -94,26 +150,21 @@ export const setupBlitzServer = ({plugins, onError}: SetupBlitzOptions) => {
         (y, f) => (f ? f(y) : y),
         (res as MiddlewareResponse).blitzCtx,
       )
-      let queryClient: null | QueryClient = null
 
-      const prefetchQuery: AddParameters<PrefetchQueryFn, [boolean?]> = async (
-        fn,
-        input,
-        defaultOptions = {},
-        infinite = false,
-      ) => {
-        queryClient = new QueryClient({defaultOptions})
-
-        const queryKey = infinite ? getQueryKey(fn, input) : getInfiniteQueryKey(fn, input)
-        await queryClient.prefetchQuery(queryKey, () => fn(input, ctx))
-      }
+      const {getClient, prefetchQuery} = prefetchQueryFactory(ctx)
 
       ctx.prefetchQuery = prefetchQuery
-      ctx.prefetchInfiniteQuery = (...args) => prefetchQuery(...args, true)
+      ctx.prefetchInfiniteQuery = (fn, input, defaultOptions = {}) =>
+        prefetchQuery(fn, input, defaultOptions, true)
 
       try {
         const result = await handler({req, res, ctx, ...rest})
-        return withSuperJsonProps(withDehydratedState(result, queryClient))
+        return withSuperJsonProps(
+          withDehydratedState(
+            normalizeRedirectValues<GetServerSidePropsResult<TProps>>(result),
+            getClient(),
+          ),
+        )
       } catch (err: any) {
         onError?.(err)
         throw err
@@ -121,31 +172,28 @@ export const setupBlitzServer = ({plugins, onError}: SetupBlitzOptions) => {
     }
 
   const gSP =
-    <TProps, Query extends ParsedUrlQuery = ParsedUrlQuery, PD extends PreviewData = PreviewData>(
+    <
+      TProps extends {[key: string]: any} = {[key: string]: any},
+      Query extends ParsedUrlQuery = ParsedUrlQuery,
+      PD extends PreviewData = PreviewData,
+    >(
       handler: BlitzGSPHandler<TProps, Query, PD>,
     ): GetStaticProps<TProps, Query, PD> =>
     async (context) => {
       const ctx = contextMiddleware.reduceRight((y, f) => (f ? f(y) : y), {} as Ctx)
-      let queryClient: null | QueryClient = null
-
-      const prefetchQuery: AddParameters<PrefetchQueryFn, [boolean?]> = async (
-        fn,
-        input,
-        defaultOptions = {},
-        infinite = false,
-      ) => {
-        queryClient = new QueryClient({defaultOptions})
-
-        const queryKey = infinite ? getQueryKey(fn, input) : getInfiniteQueryKey(fn, input)
-        await queryClient.prefetchQuery(queryKey, () => fn(input, ctx))
-      }
+      const {getClient, prefetchQuery} = prefetchQueryFactory(ctx)
 
       ctx.prefetchQuery = prefetchQuery
       ctx.prefetchInfiniteQuery = (...args) => prefetchQuery(...args, true)
 
       try {
         const result = await handler({...context, ctx: ctx})
-        return withSuperJsonProps(withDehydratedState(result, queryClient))
+        return withSuperJsonProps(
+          withDehydratedState(
+            normalizeRedirectValues<GetStaticPropsResult<TProps>>(result),
+            getClient(),
+          ),
+        )
       } catch (err: any) {
         onError?.(err)
         throw err
@@ -153,11 +201,15 @@ export const setupBlitzServer = ({plugins, onError}: SetupBlitzOptions) => {
     }
 
   const api =
-    (handler: BlitzAPIHandler): NextApiHandler =>
+    <TResult = Promise<void> | void>(
+      handler: BlitzAPIHandler<TResult>,
+    ): NextApiHandler<TResult | void> =>
     async (req, res) => {
       try {
-        await handleRequestWithMiddleware(req, res, middlewares)
-        return handler(req, res, res.blitzCtx)
+        return await handleRequestWithMiddleware(req, res, [
+          ...middlewares,
+          (req, res) => handler(req, res, res.blitzCtx),
+        ])
       } catch (error: any) {
         onError?.(error)
         return res.status(400).send(error)
@@ -170,6 +222,7 @@ export const setupBlitzServer = ({plugins, onError}: SetupBlitzOptions) => {
 export interface BlitzConfig extends NextConfig {
   blitz?: {
     resolverPath?: ResolverPathOptions
+    includeRPCFolders?: string[]
     customServer?: {
       hotReload?: boolean
     }
@@ -200,6 +253,7 @@ export function withBlitz(nextConfig: BlitzConfig = {}) {
         webpackConfig: config,
         webpackRuleOptions: {
           resolverPath: nextConfig.blitz?.resolverPath,
+          includeRPCFolders: nextConfig.blitz?.includeRPCFolders,
         },
       })
       if (typeof nextConfig.webpack === "function") {
@@ -209,7 +263,8 @@ export function withBlitz(nextConfig: BlitzConfig = {}) {
     },
   })
 
-  return config
+  const {blitz, ...rest} = config
+  return rest
 }
 
 export type PrefetchQueryFn = <T extends AsyncFunc, TInput = FirstParam<T>>(
@@ -218,14 +273,36 @@ export type PrefetchQueryFn = <T extends AsyncFunc, TInput = FirstParam<T>>(
   options?: DefaultOptions,
 ) => Promise<void>
 
+type BlitzResult = Partial<BlitzGSPResult<any> & BlitzGSSPResult<any>>
 type Result = Partial<GetServerSidePropsResult<any> & GetStaticPropsResult<any>>
 
 function withDehydratedState<T extends Result>(result: T, queryClient: QueryClient | null) {
   if (!queryClient) {
     return result
   }
-  const dehydratedProps = dehydrate(queryClient)
-  return {...result, props: {...("props" in result ? result.props : undefined), dehydratedProps}}
+  const dehydratedState = dehydrate(queryClient)
+  return {...result, props: {...("props" in result ? result.props : undefined), dehydratedState}}
+}
+
+// Converts Blitz's GetServerSidePropsResult and GetStaticPropsResult to a NextJS compatible format
+// Blitz accepts string | RouteUrlObject as redirect.destination — this function converts it to a string
+const normalizeRedirectValues = <NormalizedResult extends Result>(
+  result: BlitzResult,
+): NormalizedResult => {
+  if ("redirect" in result) {
+    const dest = result.redirect?.destination
+    if (dest && isRouteUrlObject(dest)) {
+      // Todo: find a better way to resolve href without `as any` assertion.
+      const resolvedDest = resolveHref({asPath: "/", pathname: "/"} as any, dest, true)
+
+      return {
+        ...result,
+        redirect: {...result.redirect, destination: resolvedDest[1] || resolvedDest[0]},
+      } as NormalizedResult
+    }
+  }
+
+  return result as NormalizedResult
 }
 
 declare module "blitz" {
