@@ -1,5 +1,4 @@
 ---
-"toolkit-app": patch
 "@blitzjs/rpc": patch
 "blitz": patch
 ---
