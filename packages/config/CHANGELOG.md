@@ -1,7 +1,5 @@
 # @blitzjs/config
 
-## 2.0.0-beta.21
-
 ## 2.0.0-beta.20
 
 ## 2.0.0-beta.19
