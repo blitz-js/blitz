@@ -5,6 +5,7 @@
 ### Patch Changes
 
 - Updated dependencies [77b7da0f3]
+- Updated dependencies [d692b4c1d]
 - Updated dependencies [10f98c681]
 - Updated dependencies [d5b8faa86]
   - @blitzjs/generator@2.0.0-beta.21

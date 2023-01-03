@@ -5,6 +5,7 @@
 ### Patch Changes
 
 - 10f98c681: Add an href property to the generated route manifest that will return a string of the pathname and included query params.
+- Updated dependencies [d692b4c1d]
 - Updated dependencies [0025856b9]
 - Updated dependencies [10f98c681]
 - Updated dependencies [d5b8faa86]
