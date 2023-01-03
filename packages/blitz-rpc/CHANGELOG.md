@@ -1,16 +1,5 @@
 # @blitzjs/rpc
 
-## 2.0.0-beta.21
-
-### Patch Changes
-
-- d692b4c1d: Fix suspense error codegen patch for nextjs versions 13-13.0.6
-- 0025856b9: Support full api of tanstack invalidateQueries
-- Updated dependencies [d692b4c1d]
-- Updated dependencies [10f98c681]
-- Updated dependencies [d5b8faa86]
-  - blitz@2.0.0-beta.21
-
 ## 2.0.0-beta.20
 
 ### Minor Changes
