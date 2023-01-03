@@ -1,5 +1,11 @@
 # @blitzjs/generator
 
+## 2.0.0-beta.21
+
+### Patch Changes
+
+- 77b7da0f3: Remove husky prepush hook & update precommit hook to only run prettier
+
 ## 2.0.0-beta.20
 
 ### Patch Changes
