@@ -1,6 +1,6 @@
 {
   "name": "@blitzjs/codemod",
-  "version": "2.0.0-beta.20",
+  "version": "2.0.0-beta.21",
   "scripts": {
     "build": "unbuild",
     "dev": "watch unbuild src --wait=0.2",
@@ -25,9 +25,9 @@
     "@babel/plugin-proposal-class-properties": "7.17.12",
     "@babel/plugin-syntax-jsx": "7.17.12",
     "@babel/plugin-syntax-typescript": "7.17.12",
-    "@blitzjs/generator": "2.0.0-beta.20",
+    "@blitzjs/generator": "2.0.0-beta.21",
     "arg": "5.0.1",
-    "blitz": "2.0.0-beta.20",
+    "blitz": "2.0.0-beta.21",
     "chalk": "^4.1.0",
     "cross-spawn": "7.0.3",
     "debug": "4.3.3",
