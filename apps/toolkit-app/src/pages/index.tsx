@@ -38,12 +38,12 @@ const UserInfo = () => {
   } else {
     return (
       <>
-        <Link href={Routes.SignupPage()} passHref legacyBehavior>
+        <Link href={Routes.SignupPage()} passHref>
           <a className="button small">
             <strong>Sign Up</strong>
           </a>
         </Link>
-        <Link href={Routes.LoginPage()} passHref legacyBehavior>
+        <Link href={Routes.LoginPage()} passHref>
           <a className="button small">
             <strong>Login</strong>
           </a>
@@ -59,7 +59,7 @@ const Home: BlitzPage = () => {
       <div className="container">
         <main>
           <div className="logo">
-            <Image src={`${logo.src}`} alt="blitzjs" width={256} height={118} />
+            <Image src={`${logo.src}`} alt="blitzjs" width="256px" height="118px" layout="fixed" />
           </div>
           <p>
             <strong>Congrats!</strong> Your app is ready, including user sign-up and log-in.
@@ -90,7 +90,10 @@ const Home: BlitzPage = () => {
               <code>blitz dev</code>
             </pre>
             <p>
-              and go to <Link href="/projects">/projects</Link>
+              and go to{" "}
+              <Link href="/projects">
+                <a>/projects</a>
+              </Link>
             </p>
           </div>
           <div className="buttons" style={{ marginTop: "5rem" }}>
