@@ -837,6 +837,7 @@ importers:
       resolve-cwd: 3.0.0
       resolve-from: 5.0.0
       rimraf: 3.0.2
+      semver: 7.3.8
       superjson: 1.11.0
       supports-color: 8.1.1
       tar: 6.1.11
@@ -889,6 +890,7 @@ importers:
       resolve-cwd: 3.0.0
       resolve-from: 5.0.0
       rimraf: 3.0.2
+      semver: 7.3.8
       superjson: 1.11.0
       supports-color: 8.1.1
       tar: 6.1.11
@@ -12602,7 +12604,7 @@ packages:
       es6-error: 4.1.1
       matcher: 3.0.0
       roarr: 2.15.4
-      semver: 7.3.7
+      semver: 7.3.8
       serialize-error: 7.0.1
     dev: false
 
@@ -18480,6 +18482,17 @@ packages:
     hasBin: true
     dependencies:
       lru-cache: 6.0.0
+
+  /semver/7.3.8:
+    resolution:
+      {
+        integrity: sha512-NB1ctGL5rlHrPJtFDVIVzTyQylMLu9N9VICA6HSFJo8MCGVTMW6gfpicwKmmK/dAjTOrqu5l63JJOpDSrAis3A==,
+      }
+    engines: {node: ">=10"}
+    hasBin: true
+    dependencies:
+      lru-cache: 6.0.0
+    dev: false
 
   /send/0.17.2:
     resolution:
