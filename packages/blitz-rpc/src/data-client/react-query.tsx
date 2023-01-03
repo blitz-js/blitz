@@ -100,6 +100,8 @@ export function useQuery<
     const e = new NextError()
     e.name = "Rendering Suspense fallback..."
     e.digest = "DYNAMIC_SERVER_USAGE"
+    // Backwards compatibility for nextjs 13.0.7
+    e.message = "DYNAMIC_SERVER_USAGE"
     delete e.stack
     throw e
   }
@@ -181,6 +183,8 @@ export function usePaginatedQuery<
     const e = new NextError()
     e.name = "Rendering Suspense fallback..."
     e.digest = "DYNAMIC_SERVER_USAGE"
+    // Backwards compatibility for nextjs 13.0.7
+    e.message = "DYNAMIC_SERVER_USAGE"
     delete e.stack
     throw e
   }
@@ -274,6 +278,8 @@ export function useInfiniteQuery<
     const e = new NextError()
     e.name = "Rendering Suspense fallback..."
     e.digest = "DYNAMIC_SERVER_USAGE"
+    // Backwards compatibility for nextjs 13.0.7
+    e.message = "DYNAMIC_SERVER_USAGE"
     delete e.stack
     throw e
   }
