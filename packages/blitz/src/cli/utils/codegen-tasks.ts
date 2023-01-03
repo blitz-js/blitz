@@ -29,7 +29,7 @@ export const codegenTasks = async () => {
         )
       await fs.writeFile(nextClientIndex, updatedFile)
       log.success("Next.js was successfully patched with a React Suspense fix")
-    } else if (nextVersion && semver.satisfies(nextVersion, "13 - 13.0.8")) {
+    } else if (nextVersion && semver.satisfies(nextVersion, "13 - 13.0.6")) {
       const updatedFile = readFile
         .toString()
         .replace(
