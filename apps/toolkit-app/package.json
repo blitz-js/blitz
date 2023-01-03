@@ -31,7 +31,7 @@
     "@hookform/error-message": "2.0.0",
     "@hookform/resolvers": "2.9.10",
     "@prisma/client": "4.6.0",
-    "blitz": "workspace:2.0.0-beta.20",
+    "blitz": "workspace:2.0.0-beta.21",
     "next": "12.2.5",
     "prisma": "4.6.0",
     "react": "18.2.0",
