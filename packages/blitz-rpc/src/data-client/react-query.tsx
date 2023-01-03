@@ -29,6 +29,10 @@ type QueryNonLazyOptions =
   | {suspense: true; enabled: true}
   | {suspense?: never; enabled?: never}
 
+class NextError extends Error {
+  digest?: string
+}
+
 // -------------------------
 // useQuery
 // -------------------------
@@ -93,8 +97,9 @@ export function useQuery<
     (!options || !("suspense" in options) || options.suspense) &&
     (!options || !("enabled" in options) || options.enabled)
   ) {
-    const e = new Error()
+    const e = new NextError()
     e.name = "Rendering Suspense fallback..."
+    e.digest = "DYNAMIC_SERVER_USAGE"
     delete e.stack
     throw e
   }
@@ -173,8 +178,9 @@ export function usePaginatedQuery<
     (!options || !("suspense" in options) || options.suspense) &&
     (!options || !("enabled" in options) || options.enabled)
   ) {
-    const e = new Error()
+    const e = new NextError()
     e.name = "Rendering Suspense fallback..."
+    e.digest = "DYNAMIC_SERVER_USAGE"
     delete e.stack
     throw e
   }
@@ -265,8 +271,9 @@ export function useInfiniteQuery<
     (!options || !("suspense" in options) || options.suspense) &&
     (!options || !("enabled" in options) || options.enabled)
   ) {
-    const e = new Error()
+    const e = new NextError()
     e.name = "Rendering Suspense fallback..."
+    e.digest = "DYNAMIC_SERVER_USAGE"
     delete e.stack
     throw e
   }

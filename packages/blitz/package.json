@@ -64,6 +64,7 @@
     "resolve-cwd": "3.0.0",
     "resolve-from": "5.0.0",
     "rimraf": "3.0.2",
+    "semver": "7.3.8",
     "superjson": "1.11.0",
     "supports-color": "8.1.1",
     "tar": "6.1.11",
