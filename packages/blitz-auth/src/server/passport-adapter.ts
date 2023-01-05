@@ -118,8 +118,11 @@ export function passportAuth(config: BlitzPassportConfig): ApiHandler {
 
     const {name, strategy, authenticateOptions} = blitzStrategy
 
-    assert(typeof strategy.name  !== "undefined", `A passport strategy name was not found for: ${req.query.auth[0]}`)
-    
+    assert(
+      typeof strategy.name !== "undefined",
+      `A passport strategy name was not found for: ${req.query.auth[0]}`,
+    )
+
     const strategyName = name || strategy.name
     passport.use(strategyName, strategy)
 
@@ -169,8 +172,13 @@ export function passportAuth(config: BlitzPassportConfig): ApiHandler {
               if (error) {
                 console.error(`Login via ${strategyName} was unsuccessful.`)
                 console.error(error)
+
+                const authErrorQueryStringKey = redirectUrl.includes("?")
+                  ? "&authError="
+                  : "?authError="
                 redirectUrl +=
-                  "?authError=" + encodeURIComponent(truncateString(error.toString(), 100))
+                  authErrorQueryStringKey +
+                  encodeURIComponent(truncateString(error.toString(), 100))
                 res.setHeader("Location", redirectUrl)
                 res.statusCode = 302
                 res.end()

@@ -1,5 +1,35 @@
 # @blitzjs/next
 
+## 2.0.0-beta.21
+
+### Patch Changes
+
+- 10f98c681: Add an href property to the generated route manifest that will return a string of the pathname and included query params.
+- Updated dependencies [d692b4c1d]
+- Updated dependencies [0025856b9]
+- Updated dependencies [10f98c681]
+- Updated dependencies [d5b8faa86]
+  - @blitzjs/rpc@2.0.0-beta.21
+  - blitz@2.0.0-beta.21
+
+## 2.0.0-beta.20
+
+### Minor Changes
+
+- 6ece0961: Decoupled Blitz RPC from Blitz Auth to allow independent use.
+- 03bad317: fix Cannot read properties of null (reading 'isReady') for pnpm/yarn v3
+
+### Patch Changes
+
+- Updated dependencies [74a14b70]
+- Updated dependencies [8c247e26]
+- Updated dependencies [6ece0961]
+- Updated dependencies [03bad317]
+- Updated dependencies [650a157e]
+- Updated dependencies [a0596279]
+  - blitz@2.0.0-beta.20
+  - @blitzjs/rpc@2.0.0-beta.20
+
 ## 2.0.0-beta.19
 
 ### Minor Changes

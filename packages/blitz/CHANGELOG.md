@@ -1,5 +1,28 @@
 # blitz
 
+## 2.0.0-beta.21
+
+### Patch Changes
+
+- d692b4c1d: Fix suspense error codegen patch for nextjs versions 13-13.0.6
+- 10f98c681: Add an href property to the generated route manifest that will return a string of the pathname and included query params.
+- d5b8faa86: add regex to support inline and non-inline codebase and proper next.js package version check
+- Updated dependencies [77b7da0f3]
+  - @blitzjs/generator@2.0.0-beta.21
+
+## 2.0.0-beta.20
+
+### Minor Changes
+
+- 74a14b70: When db.\$reset() rejects, reject with an Error object
+- 6ece0961: Decoupled Blitz RPC from Blitz Auth to allow independent use.
+
+### Patch Changes
+
+- a0596279: Fix blitz install for recipes that use the path helper to check if ./src/pages directory is available, otherwise use ./pages
+- Updated dependencies [8c247e26]
+  - @blitzjs/generator@2.0.0-beta.20
+
 ## 2.0.0-beta.19
 
 ### Major Changes

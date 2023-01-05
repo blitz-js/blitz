@@ -190,17 +190,7 @@ export function rpcHandler(config: RpcConfig) {
       req.method === "POST" ||
       (req.method === "GET" && resolverConfigWithDefaults.httpMethod === "GET")
     ) {
-      if (req.method === "GET") {
-        if (Object.keys(req.query).length === 1 && req.query.blitz) {
-          const error = {message: "Request query is missing the required `params` and `meta` keys"}
-          log.error(error.message)
-          res.status(400).json({
-            result: null,
-            error,
-          })
-          return
-        }
-      } else if (typeof req.body.params === "undefined") {
+      if (req.method === "POST" && typeof req.body.params === "undefined") {
         const error = {message: "Request body is missing the `params` key"}
         log.error(error.message)
         res.status(400).json({
@@ -209,11 +199,20 @@ export function rpcHandler(config: RpcConfig) {
         })
         return
       }
-
       try {
         const data = deserialize({
-          json: req.method === "POST" ? req.body.params : parse(`${req.query.params}`),
-          meta: req.method === "POST" ? req.body.meta?.params : parse(`${req.query.meta}`),
+          json:
+            req.method === "POST"
+              ? req.body.params
+              : req.query.params
+              ? parse(`${req.query.params}`)
+              : undefined,
+          meta:
+            req.method === "POST"
+              ? req.body.meta?.params
+              : req.query.meta
+              ? parse(`${req.query.meta}`)
+              : undefined,
         })
         log.info(customChalk.dim("Starting with input:"), data ? data : JSON.stringify(data))
         const startTime = Date.now()

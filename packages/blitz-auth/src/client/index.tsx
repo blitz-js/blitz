@@ -14,6 +14,7 @@ import {
   RedirectError,
   RouteUrlObject,
   Ctx,
+  CSRFTokenMismatchError,
 } from "blitz"
 import {
   COOKIE_CSRF_TOKEN,
@@ -25,6 +26,10 @@ import {
   EmptyPublicData,
   AuthenticatedClientSession,
   ClientSession,
+  HEADER_CSRF,
+  HEADER_PUBLIC_DATA_TOKEN,
+  HEADER_SESSION_CREATED,
+  HEADER_CSRF_ERROR,
 } from "../shared"
 import _debug from "debug"
 import {formatWithValidation} from "../shared/url-utils"
@@ -85,7 +90,11 @@ class PublicDataStore {
 
   clear() {
     deleteCookie(COOKIE_PUBLIC_DATA_TOKEN())
-    localStorage.removeItem(LOCALSTORAGE_PUBLIC_DATA_TOKEN())
+    try {
+      localStorage.removeItem(LOCALSTORAGE_PUBLIC_DATA_TOKEN())
+    } catch (err) {
+      console.error("LocalStorage is not available", err)
+    }
     this.updateState(emptyPublicData)
   }
 
@@ -100,12 +109,17 @@ class PublicDataStore {
   }
 
   private getToken() {
-    const cookieValue = readCookie(COOKIE_PUBLIC_DATA_TOKEN())
-    if (cookieValue) {
-      localStorage.setItem(LOCALSTORAGE_PUBLIC_DATA_TOKEN(), cookieValue)
-      return cookieValue
-    } else {
-      return localStorage.getItem(LOCALSTORAGE_PUBLIC_DATA_TOKEN())
+    try {
+      const cookieValue = readCookie(COOKIE_PUBLIC_DATA_TOKEN())
+      if (cookieValue) {
+        localStorage.setItem(LOCALSTORAGE_PUBLIC_DATA_TOKEN(), cookieValue)
+        return cookieValue
+      } else {
+        return localStorage.getItem(LOCALSTORAGE_PUBLIC_DATA_TOKEN())
+      }
+    } catch (err) {
+      console.error("LocalStorage is not available", err)
+      return undefined
     }
   }
 }
@@ -391,8 +405,50 @@ export const AuthClientPlugin = createClientPlugin((options: AuthPluginClientOpt
   globalThis.__BLITZ_SESSION_COOKIE_PREFIX = options.cookiePrefix || "blitz"
   return {
     withProvider: withBlitzAuthPlugin,
-    events: {},
-    middleware: {},
+    events: {
+      onRpcError: async (error) => {
+        // We don't clear the publicDataStore for anonymous users,
+        // because there is not sensitive data
+        if (error.name === "AuthenticationError" && getPublicDataStore().getData().userId) {
+          getPublicDataStore().clear()
+        }
+      },
+    },
+    middleware: {
+      beforeHttpRequest(req) {
+        const headers: Record<string, any> = {
+          "Content-Type": "application/json",
+        }
+        const antiCSRFToken = getAntiCSRFToken()
+        if (antiCSRFToken) {
+          debug("Adding antiCSRFToken cookie header", antiCSRFToken)
+          headers[HEADER_CSRF] = antiCSRFToken
+        } else {
+          debug("No antiCSRFToken cookie found")
+        }
+        req.headers = {...req.headers, ...headers}
+        return req
+      },
+      beforeHttpResponse(res) {
+        if (res.headers) {
+          backupAntiCSRFTokenToLocalStorage()
+          if (res.headers.get(HEADER_PUBLIC_DATA_TOKEN)) {
+            getPublicDataStore().updateState()
+            debug("Public data updated")
+          }
+          if (res.headers.get(HEADER_SESSION_CREATED)) {
+            const event = new Event("blitz:session-created")
+            document.dispatchEvent(event)
+          }
+          if (res.headers.get(HEADER_CSRF_ERROR)) {
+            const err = new CSRFTokenMismatchError()
+            err.stack = null!
+            throw err
+          }
+        }
+        return res
+      },
+    },
     exports: () => ({
       useSession,
       useAuthorize,

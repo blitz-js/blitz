@@ -3766,6 +3766,55 @@
         "doc",
         "code"
       ]
+    },
+    {
+      "login": "usamaster",
+      "name": "usamaster",
+      "avatar_url": "https://avatars.githubusercontent.com/u/5255330?v=4",
+      "profile": "https://github.com/usamaster",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "a11rew",
+      "name": "Andrew Glago",
+      "avatar_url": "https://avatars.githubusercontent.com/u/87580113?v=4",
+      "profile": "a11rew.dev",
+      "contributions": [
+        "doc",
+        "code"
+      ]
+    },
+    {
+      "login": "tordans",
+      "name": "Tobias",
+      "avatar_url": "https://avatars.githubusercontent.com/u/111561?v=4",
+      "profile": "http://tobiasjordans.de",
+      "contributions": [
+        "code",
+        "doc"
+      ]
+    },
+    {
+      "login": "iagormoraes",
+      "name": "Iagor Moraes",
+      "avatar_url": "https://avatars.githubusercontent.com/u/13892132?v=4",
+      "profile": "https://www.linkedin.com/in/iagor-moraes/",
+      "contributions": [
+        "doc",
+        "code"
+      ]
+    },
+    {
+      "login": "Trancever",
+      "name": "Dawid Urbaniak",
+      "avatar_url": "https://avatars.githubusercontent.com/u/18584155?v=4",
+      "profile": "https://twitter.com/trensik",
+      "contributions": [
+        "doc",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
