@@ -54,14 +54,6 @@
   max-width: var(--screen-width);
 }
 
-
-.instructions {
-  display: inline-flex;
-  flex-direction: column;
-  padding: 1rem;
-  width: 100%;
-}
-
 .globe {
   position: fixed;
   width: 350vmin;
@@ -84,41 +76,6 @@
 
 .footer span {
   margin-right: 0.2rem;
-}
-
-.code {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.code span {
-  background: rgba(124, 58, 237, 50%);
-  border-radius: 50rem;
-  font-size: 14px;
-  font-weight: 500;
-  padding: 17px;
-  width: 20px;
-  height: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: rgb(57, 33, 97);
-}
-
-.code pre {
-  background: rgba(124, 58, 237, 12%);
-  border-radius: 4px;
-  padding: 0.7em 1.4em;
-  text-align: center;
-}
-
-.code code {
-  font-size: 0.86em;
-  font-weight: bold;
-  color: rgb(124, 58, 237);
-  font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono,
-    Bitstream Vera Sans Mono, Courier New, monospace;
 }
 
 .toastContainer {
@@ -195,48 +152,6 @@
   flex: 1;
 }
 
-.button {
-  background: linear-gradient(to top, rgb(124, 58, 237), rgb(117, 81, 236));
-  border: 1px solid rgb(231, 216, 246);
-  color: white;
-  text-shadow: rgba(0, 0, 0, 0.25) 0px 3px 8px;
-  padding: 0 24px;
-  height: 48px;
-  width: 200px;
-  max-width: 300px;
-  position: relative;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  flex-shrink: 0;
-  user-select: none;
-  white-space: nowrap;
-  border-radius: 0.75rem;
-  border-bottom-left-radius: 0px;
-  font-size: 15px;
-  transition: all 0.3s ease 0s;
-  cursor: pointer;
-}
-
-.button:hover {
-  color: white;
-  text-shadow: rgb(0 0 0 / 56%) 0px 3px 12px;
-  box-shadow: rgb(80 63 205 / 50%) 0px 1px 40px;
-}
-
-.loginButton {
-  composes: button;
-  background: rgb(248 250 252);
-  border: 1px solid rgb(231, 216, 246);
-  color: rgb(30 41 59);
-  text-shadow: none;
-}
-
-.loginButton:hover {
-  color: rgb(30 41 59);
-  text-shadow: none;
-}
-
 .card:hover .arrowIcon {
   color: #7450ec;
 }
@@ -246,8 +161,8 @@
   flex-direction: column;
   flex-wrap: wrap;
   gap: 1rem;
+  width: 100%;
 }
-
 
 .card {
   composes: frost;
@@ -258,7 +173,7 @@
   border-radius: 10px;
   border-bottom-left-radius: 0px;
   transition: color 0.15s ease, border-color 0.15s ease;
-  max-width: 200px;
+  max-width: 100%;
   min-width: 200px;
   display: flex;
   flex-direction: row;
