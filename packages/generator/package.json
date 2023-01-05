@@ -1,6 +1,6 @@
 {
   "name": "@blitzjs/generator",
-  "version": "2.0.0-beta.20",
+  "version": "2.0.0-beta.21",
   "scripts": {
     "dev": "watch unbuild src --wait=0.2",
     "build": "unbuild && pnpm build:templates",
@@ -47,7 +47,7 @@
     "vinyl": "2.2.1"
   },
   "devDependencies": {
-    "@blitzjs/config": "2.0.0-beta.20",
+    "@blitzjs/config": "2.0.0-beta.21",
     "@juanm04/cpx": "2.0.1",
     "@types/babel__core": "7.1.19",
     "@types/diff": "5.0.2",
