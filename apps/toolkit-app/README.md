@@ -67,7 +67,7 @@ Here is the starting structure of your app.
 
 ```
 __name__
-├── app/
+├── src/
 │   ├── api/
 │   ├── auth/
 │   │   ├── components/
@@ -122,7 +122,7 @@ __name__
 ├── .eslintrc.js
 ├── babel.config.js
 ├── blitz.config.ts
-├── jest.config.ts
+├── vitest.config.ts
 ├── package.json
 ├── README.md
 ├── tsconfig.json
@@ -131,7 +131,7 @@ __name__
 
 These files are:
 
-- The `app/` folder is a container for most of your project. This is where you’ll put any pages or API routes.
+- The `src/` folder is a container for most of your project. This is where you’ll put any pages or API routes.
 
 - `db/` is where your database configuration goes. If you’re writing models or checking migrations, this is where to go.
 
@@ -149,7 +149,7 @@ These files are:
 
 - `blitz.config.ts` is for advanced custom configuration of Blitz. [Here you can learn how to use it](https://blitzjs.com/docs/blitz-config).
 
-- `jest.config.js` contains config for Jest tests. You can [customize it if needed](https://jestjs.io/docs/en/configuration).
+- `vitest.config.ts` contains config for Vitest tests. You can [customize it if needed](https://vitejs.dev/config/).
 
 You can read more about it in the [File Structure](https://blitzjs.com/docs/file-structure) section of the documentation.
 
