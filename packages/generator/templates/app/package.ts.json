@@ -31,7 +31,7 @@
     "prisma": "4.6.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "zod": "3.19.1"
+    "zod": "3.20.2"
   },
   "devDependencies": {
     "@next/bundle-analyzer": "12.0.8",
