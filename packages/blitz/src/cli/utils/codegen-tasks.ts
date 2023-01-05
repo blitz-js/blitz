@@ -5,6 +5,7 @@ import {join} from "path"
 import fs from "fs-extra"
 import {getPackageJson} from "./get-package-json"
 import {runPrisma} from "../../utils/run-prisma"
+import semver from "semver"
 
 import resolveFrom from "resolve-from"
 export const codegenTasks = async () => {
@@ -18,21 +19,22 @@ export const codegenTasks = async () => {
     const readFile = await fs.readFile(nextClientIndex)
     const packageJson = await getPackageJson()
     const nextVersion = packageJson.dependencies.next
+
     if (nextVersion && /^([~^])?12/.test(nextVersion)) {
       const updatedFile = readFile
         .toString()
         .replace(
           /ReactDOM\.hydrateRoot\(.*?\);/,
-          `ReactDOM.hydrateRoot(domEl, reactEl, {onRecoverableError: (err) => (err.toString().includes("could not finish this Suspense boundary") || err.toString().includes("Minified React error #419")) ? null : console.error(err)});`,
+          `ReactDOM.hydrateRoot(domEl, reactEl, {onRecoverableError: (err) => (err.toString().includes("DYNAMIC_SERVER_USAGE") || err.toString().includes("could not finish this Suspense boundary") || err.toString().includes("Minified React error #419")) ? null : console.error(err)});`,
         )
       await fs.writeFile(nextClientIndex, updatedFile)
       log.success("Next.js was successfully patched with a React Suspense fix")
-    } else if (nextVersion && /^([~^])?13/.test(nextVersion)) {
+    } else if (nextVersion && semver.satisfies(nextVersion, "13 - 13.0.6")) {
       const updatedFile = readFile
         .toString()
         .replace(
-          /_client\.default\.hydrateRoot\(.*?\{?[\s\S]*?}?\);/,
-          `_client.default.hydrateRoot(domEl, reactEl, {onRecoverableError: (err) => (err.toString().includes("could not finish this Suspense boundary") || err.toString().includes("Minified React error #419")) ? null : console.error(err)});`,
+          /_client.default\.hydrateRoot\(.*?\);/,
+          `_client.default.hydrateRoot(domEl, reactEl, {onRecoverableError: (err) => (err.toString().includes("DYNAMIC_SERVER_USAGE") || err.toString().includes("could not finish this Suspense boundary") || err.toString().includes("Minified React error #419")) ? null : console.error(err)});`,
         )
       await fs.writeFile(nextClientIndex, updatedFile)
       log.success("Next.js was successfully patched with a React Suspense fix")
