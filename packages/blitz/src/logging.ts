@@ -41,7 +41,7 @@ export const BlitzLogger = (settings: BlitzLoggerSettings = {}) => {
       bigint: "blue",
       boolean: "blue",
     },
-    maskValuesOfKeys: ["password", "passwordConfirmation"],
+    maskValuesOfKeys: ["password", "passwordConfirmation", "currentPassword"],
     exposeErrorCodeFrame: process.env.NODE_ENV !== "production",
     ...settings,
   })
