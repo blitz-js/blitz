@@ -32,6 +32,14 @@ export class CSRFTokenMismatchError extends Error {
   }
 }
 
+export class OAuthError extends Error {
+  name = "CSRFTokenMismatchError"
+  statusCode = 401
+  get _clearStack() {
+    return true
+  }
+}
+
 export class AuthorizationError extends Error {
   name = "AuthorizationError"
   statusCode = 403

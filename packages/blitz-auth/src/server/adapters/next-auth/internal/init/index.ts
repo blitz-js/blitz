@@ -23,7 +23,7 @@ import {AuthOptions, RequestInternal} from "next-auth"
 import {parseProviders, parseUrl} from "./utils/parse"
 import * as cookie from "./utils/cookie"
 import * as jwt from "next-auth/jwt"
-import {defaultCallbacks, createCSRFToken, createCallbackUrl} from "./utils"
+import {defaultCallbacks, createCallbackUrl} from "./utils"
 import {createHash} from "crypto"
 import type {NextAuth_InternalOptions} from "../types"
 
@@ -51,10 +51,6 @@ interface InitParams {
   action: NextAuth_InternalOptions["action"]
   /** Callback URL value extracted from the incoming request. */
   callbackUrl?: string
-  /** CSRF token value extracted from the incoming request. From body if POST, from query if GET */
-  csrfToken?: string
-  /** Is the incoming request a POST request? */
-  isPost: boolean
   cookies: RequestInternal["cookies"]
 }
 
@@ -66,8 +62,6 @@ export async function init({
   url: reqUrl,
   cookies: reqCookies,
   callbackUrl: reqCallbackUrl,
-  csrfToken: reqCsrfToken,
-  isPost,
 }: InitParams): Promise<{
   options: NextAuth_InternalOptions
   cookies: cookie.Cookie[]
@@ -149,28 +143,6 @@ export async function init({
   // Init cookies
 
   const cookies: cookie.Cookie[] = []
-
-  const {
-    csrfToken,
-    cookie: csrfCookie,
-    csrfTokenVerified,
-  } = createCSRFToken({
-    options,
-    cookieValue: reqCookies?.[options.cookies.csrfToken.name],
-    isPost,
-    bodyValue: reqCsrfToken,
-  })
-
-  options.csrfToken = csrfToken
-  options.csrfTokenVerified = csrfTokenVerified
-
-  if (csrfCookie) {
-    cookies.push({
-      name: options.cookies.csrfToken.name,
-      value: csrfCookie,
-      options: options.cookies.csrfToken.options,
-    })
-  }
 
   const {callbackUrl, callbackUrlCookie} = await createCallbackUrl({
     options,

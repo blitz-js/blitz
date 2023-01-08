@@ -69,8 +69,6 @@ export interface NextAuth_InternalOptions<
   url: URL
   action: NextAuth_AuthAction
   provider: NextAuth_InternalProvider<TProviderType>
-  csrfToken?: string
-  csrfTokenVerified?: boolean
   secret: string
   theme: NextAuth_Theme
   debug: boolean

@@ -1,19 +1,23 @@
+import {assert, Ctx} from "blitz"
 import oAuthCallback from "./internal/oauth/callback"
 import getAuthorizationUrl from "./internal/oauth/authorization-url"
 import {init} from "./internal/init"
-import {assert} from "blitz"
 import {setHeaders, toInternalRequest, toResponse} from "./internal/utils"
-import {NextAuth_AuthAction, NextAuth_InternalOptions} from "./internal/types"
 import {Cookie} from "./internal/init/utils/cookie"
+import type {NextAuth_AuthAction, NextAuth_InternalOptions} from "./internal/types"
+import type {
+  ApiHandlerIncomingMessage,
+  BlitzNextAuthApiHandler,
+  BlitzNextAuthOptions,
+} from "./types"
 import type {ResponseInternal} from "next-auth/core"
-import {ApiHandlerIncomingMessage, BlitzNextAuthApiHandler, BlitzNextAuthOptions} from "./types"
 
 export function NextAuthAdapter(config: BlitzNextAuthOptions): BlitzNextAuthApiHandler {
-  return async function authHandler(req, res) {
+  return async function authHandler(req, res, ctx) {
     assert(req.query.auth, "req.query.auth is not defined. Page must be named [...auth].ts/js.")
     assert(
       Array.isArray(req.query.auth),
-      "req.query.auth must be an array. Page must be named [...blitz].ts/js.",
+      "req.query.auth must be an array. Page must be named [...auth].ts/js.",
     )
     if (!req.query.auth?.length) {
       return res.status(404).end()
@@ -23,28 +27,31 @@ export function NextAuthAdapter(config: BlitzNextAuthOptions): BlitzNextAuthApiH
       return res.status(404).end()
     }
     const internalRequest = await toInternalRequest(req)
-    const {providerId, method} = internalRequest
+    const {providerId} = internalRequest
     const {options, cookies} = await init({
       url: new URL(internalRequest.url!, "http://localhost:3000"),
       authOptions: config,
       action,
       providerId,
       callbackUrl: req.body?.callbackUrl ?? (req.query?.callbackUrl as string),
-      csrfToken: req.body?.csrfToken,
       cookies: internalRequest.cookies,
-      isPost: method === "POST",
     })
 
     console.log("🚀 ~ file: [...auth].ts:122 ~ authHandler ~ options", options)
     console.log("🚀 ~ file: [...auth].ts:122 ~ authHandler ~ cookies", cookies)
-
     const oAuthHandler = (await AuthHandler(
       req,
+      ctx,
+      config,
       internalRequest,
       action,
       options,
       cookies,
-    )) as ResponseInternal
+    )) as ResponseInternal | {error: string}
+
+    if (typeof oAuthHandler === "object" && "error" in oAuthHandler) {
+      return res.status(500).send(oAuthHandler.error)
+    }
 
     const response = toResponse(oAuthHandler)
 
@@ -69,6 +76,8 @@ export function NextAuthAdapter(config: BlitzNextAuthOptions): BlitzNextAuthApiH
 
 async function AuthHandler(
   req: ApiHandlerIncomingMessage,
+  ctx: Ctx,
+  config: BlitzNextAuthOptions,
   internalRequest: any,
   action: NextAuth_AuthAction,
   options: NextAuth_InternalOptions,
@@ -100,10 +109,19 @@ async function AuthHandler(
         account,
         OAuthProfile,
       )
+      if (!profile || !account || !OAuthProfile)
+        return {
+          error: "OAuth callback error - missing profile, account or OAuthProfile",
+        }
+      await config.callback(profile, account, OAuthProfile, ctx)
       if (oauthCookies) cookies.push(...oauthCookies)
       return {
         redirect: "/",
         cookies: oauthCookies,
+      }
+    } else {
+      return {
+        error: "OAuth callback error - no provider",
       }
     }
   }
