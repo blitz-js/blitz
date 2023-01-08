@@ -2,10 +2,14 @@ import type {Ctx} from "blitz"
 import type {IncomingMessage, ServerResponse} from "http"
 import type {Profile, User} from "next-auth"
 import type {Provider} from "next-auth/providers"
+import {SessionContext} from "../../../index-server"
 
 export type BlitzNextAuthOptions = {
+  successRedirectUrl: string
+  failureRedirectUrl: string
   providers: Provider[]
-  callback: (user: User, account: any, profile: Profile, ctx: Ctx) => Promise<void>
+  secureProxy?: boolean
+  callback: (user: User, account: any, profile: Profile, session: SessionContext) => Promise<void>
 }
 
 export type ApiHandlerIncomingMessage = IncomingMessage & {
