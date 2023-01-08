@@ -59,6 +59,7 @@ importers:
       jsdom: 20.0.3
       lint-staged: 13.0.3
       next: 12.2.5
+      next-auth: 4.18.7
       prettier: ^2.7.1
       prettier-plugin-prisma: 4.4.0
       pretty-quick: 3.1.3
@@ -82,6 +83,7 @@ importers:
       "@prisma/client": 4.6.0_prisma@4.6.0
       blitz: link:../../packages/blitz
       next: 12.2.5_biqbaboplfbrettd7655fr4n2y
+      next-auth: 4.18.7_3xcjr4wz26biff45sz3jtokgje
       prisma: 4.6.0
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
@@ -935,6 +937,7 @@ importers:
       "@types/cookie-session": 2.0.44
       "@types/debug": 4.1.7
       "@types/jsonwebtoken": 8.5.8
+      "@types/oauth": 0.9.1
       "@types/passport": 1.0.7
       "@types/react": 18.0.25
       "@types/react-dom": 17.0.14
@@ -948,6 +951,9 @@ importers:
       http: 0.0.1-security
       jsonwebtoken: 8.5.1
       nanoid: 3.2.0
+      next-auth: 4.18.7
+      oauth: 0.10.0
+      openid-client: 5.2.1
       passport: 0.5.2
       path: 0.12.7
       react: 18.2.0
@@ -961,6 +967,7 @@ importers:
     dependencies:
       "@types/b64-lite": 1.3.0
       "@types/cookie-session": 2.0.44
+      "@types/oauth": 0.9.1
       "@types/passport": 1.0.7
       "@types/secure-password": 3.1.1
       b64-lite: 1.4.0
@@ -971,6 +978,8 @@ importers:
       http: 0.0.1-security
       jsonwebtoken: 8.5.1
       nanoid: 3.2.0
+      oauth: 0.10.0
+      openid-client: 5.2.1
       passport: 0.5.2
       path: 0.12.7
       secure-password: 4.0.0
@@ -986,6 +995,7 @@ importers:
       "@types/react": 18.0.25
       "@types/react-dom": 17.0.14
       blitz: link:../blitz
+      next-auth: 4.18.7_biqbaboplfbrettd7655fr4n2y
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       typescript: 4.8.4
@@ -1773,7 +1783,7 @@ packages:
       "@babel/core": ^7.0.0
     dependencies:
       "@babel/compat-data": 7.17.10
-      "@babel/core": 7.18.2
+      "@babel/core": 7.18.2_supports-color@8.1.1
       "@babel/helper-validator-option": 7.16.7
       browserslist: 4.20.3
       semver: 6.3.0
@@ -5278,6 +5288,12 @@ packages:
       "@nodelib/fs.scandir": 2.1.5
       fastq: 1.13.0
 
+  /@panva/hkdf/1.0.2:
+    resolution:
+      {
+        integrity: sha512-MSAs9t3Go7GUkMhpKC44T58DJ5KGk2vBo+h1cqQeqlMfdGkxaVB78ZWpv9gYi/g2fa4sopag9gJsNvS8XGgWJA==,
+      }
+
   /@pkgr/utils/2.3.1:
     resolution:
       {
@@ -6434,6 +6450,15 @@ packages:
     dependencies:
       "@types/node": 18.11.9
     dev: true
+
+  /@types/oauth/0.9.1:
+    resolution:
+      {
+        integrity: sha512-a1iY62/a3yhZ7qH7cNUsxoI3U/0Fe9+RnuFrpTKr+0WVOzbKlSLojShCKe20aOD1Sppv+i8Zlq0pLDuTJnwS4A==,
+      }
+    dependencies:
+      "@types/node": 18.11.9
+    dev: false
 
   /@types/passport-twitter/1.0.37:
     resolution:
@@ -9040,6 +9065,13 @@ packages:
       }
     engines: {node: ">= 0.6"}
     dev: true
+
+  /cookie/0.5.0:
+    resolution:
+      {
+        integrity: sha512-YZ3GUyn/o8gfKJlnlX7g7xq4gyO6OSuhGPKaaGssGB2qgDUS0gPgtTvoyZLTt9Ab6dC4hfc9dV5arkvc/OCmrw==,
+      }
+    engines: {node: ">= 0.6"}
 
   /cookies/0.8.0:
     resolution:
@@ -14463,7 +14495,6 @@ packages:
       {
         integrity: sha512-wLe+lJHeG8Xt6uEubS4x0LVjS/3kXXu9dGoj9BNnlhYq7Kts0Pbb2pvv5KiI0yaKH/eaiR0LUOBhOVo9ktd05A==,
       }
-    dev: false
 
   /joycon/3.1.1:
     resolution:
@@ -16026,6 +16057,63 @@ packages:
       }
     dev: false
 
+  /next-auth/4.18.7_3xcjr4wz26biff45sz3jtokgje:
+    resolution:
+      {
+        integrity: sha512-kR3s1JVPMaDuSAlFxcGyv7Ec3fdE6za71r1F77IOII5zJmW2wfkIA2xj223fM0D20ip2pzFpHfk/qN4L6l5XMA==,
+      }
+    engines: {node: ^12.19.0 || ^14.15.0 || ^16.13.0 || ^18.12.0}
+    peerDependencies:
+      next: ^12.2.5 || ^13
+      nodemailer: ^6.6.5
+      react: ^17.0.2 || ^18
+      react-dom: ^17.0.2 || ^18
+    peerDependenciesMeta:
+      nodemailer:
+        optional: true
+    dependencies:
+      "@babel/runtime": 7.18.3
+      "@panva/hkdf": 1.0.2
+      cookie: 0.5.0
+      jose: 4.11.0
+      next: 12.2.5_biqbaboplfbrettd7655fr4n2y
+      oauth: 0.9.15
+      openid-client: 5.2.1
+      preact: 10.11.3
+      preact-render-to-string: 5.2.6_preact@10.11.3
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      uuid: 8.3.2
+    dev: false
+
+  /next-auth/4.18.7_biqbaboplfbrettd7655fr4n2y:
+    resolution:
+      {
+        integrity: sha512-kR3s1JVPMaDuSAlFxcGyv7Ec3fdE6za71r1F77IOII5zJmW2wfkIA2xj223fM0D20ip2pzFpHfk/qN4L6l5XMA==,
+      }
+    engines: {node: ^12.19.0 || ^14.15.0 || ^16.13.0 || ^18.12.0}
+    peerDependencies:
+      next: ^12.2.5 || ^13
+      nodemailer: ^6.6.5
+      react: ^17.0.2 || ^18
+      react-dom: ^17.0.2 || ^18
+    peerDependenciesMeta:
+      nodemailer:
+        optional: true
+    dependencies:
+      "@babel/runtime": 7.18.3
+      "@panva/hkdf": 1.0.2
+      cookie: 0.5.0
+      jose: 4.11.0
+      oauth: 0.9.15
+      openid-client: 5.2.1
+      preact: 10.11.3
+      preact-render-to-string: 5.2.6_preact@10.11.3
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      uuid: 8.3.2
+    dev: true
+
   /next/12.2.5:
     resolution:
       {
@@ -16293,12 +16381,18 @@ packages:
         integrity: sha512-90yv+6538zuvUMnN+zCr8LuV6bPFdq50304114vJYJ8RDyK8D5O9Phpbd6SZWgI7PwzmmfN1upeOJlvybDSgCw==,
       }
 
+  /oauth/0.10.0:
+    resolution:
+      {
+        integrity: sha512-1orQ9MT1vHFGQxhuy7E/0gECD3fd2fCC+PIX+/jgmU/gI3EpRocXtmtvxCO5x3WZ443FLTLFWNDjl5MPJf9u+Q==,
+      }
+    dev: false
+
   /oauth/0.9.15:
     resolution:
       {
         integrity: sha512-a5ERWK1kh38ExDEfoO6qUHJb32rd7aYmPHuyCu3Fta/cnICvYmgd2uhuKXvPD+PXB+gCEYYEaQdIRAjCOwAKNA==,
       }
-    dev: false
 
   /object-assign/4.1.1:
     resolution:
@@ -16325,7 +16419,6 @@ packages:
         integrity: sha512-gScRMn0bS5fH+IuwyIFgnh9zBdo4DV+6GhygmWM9HyNJSgS0hScp1f5vjtm7oIIOiT9trXrShAkLFSc2IqKNgw==,
       }
     engines: {node: ">= 6"}
-    dev: false
 
   /object-inspect/1.12.2:
     resolution:
@@ -16420,7 +16513,6 @@ packages:
         integrity: sha512-EvoOtz6FIEBzE+9q253HsLCVRiK/0doEJ2HCvvqMQb3dHZrP3WlJKYtJ55CRTw4jmYomzH4wkPuCj/I3ZvpKxQ==,
       }
     engines: {node: ^10.13.0 || >=12.0.0}
-    dev: false
 
   /on-finished/2.3.0:
     resolution:
@@ -16518,7 +16610,6 @@ packages:
       lru-cache: 6.0.0
       object-hash: 2.2.0
       oidc-token-hash: 5.0.1
-    dev: false
 
   /optionator/0.8.3:
     resolution:
@@ -17203,6 +17294,23 @@ packages:
       picocolors: 1.0.0
       source-map-js: 1.0.2
 
+  /preact-render-to-string/5.2.6_preact@10.11.3:
+    resolution:
+      {
+        integrity: sha512-JyhErpYOvBV1hEPwIxc/fHWXPfnEGdRKxc8gFdAZ7XV4tlzyzG847XAyEZqoDnynP88akM4eaHcSOzNcLWFguw==,
+      }
+    peerDependencies:
+      preact: ">=10"
+    dependencies:
+      preact: 10.11.3
+      pretty-format: 3.8.0
+
+  /preact/10.11.3:
+    resolution:
+      {
+        integrity: sha512-eY93IVpod/zG3uMF22Unl8h9KkrcKIRs2EGar8hwLZZDU1lkjph303V9HZBwufh2s736U6VXuhD109LYqPoffg==,
+      }
+
   /preferred-pm/3.0.3:
     resolution:
       {
@@ -17305,6 +17413,12 @@ packages:
       "@jest/schemas": 29.0.0
       ansi-styles: 5.2.0
       react-is: 18.2.0
+
+  /pretty-format/3.8.0:
+    resolution:
+      {
+        integrity: sha512-WuxUnVtlWL1OfZFQFuqvnvs6MiAGk9UNsBostyBOB0Is9wb5uRESevA6rnl/rkksXaGX3GzZhPup5d6Vp1nFew==,
+      }
 
   /pretty-quick/3.1.3_prettier@2.7.1:
     resolution:

@@ -1,8 +1,7 @@
 /* @eslint-disable no-redeclare */
 import cookieSession from "cookie-session"
 import passport from "passport"
-import type {AuthenticateOptions, Strategy} from "passport"
-import {isLocalhost} from "./index"
+import {isLocalhost} from "../../index"
 import {
   assert,
   connectMiddleware,
@@ -13,60 +12,22 @@ import {
   secureProxyMiddleware,
   truncateString,
 } from "blitz"
-import {IncomingMessage, ServerResponse} from "http"
-import {PublicData, SessionContext} from "../shared"
+import {SessionContext} from "../../../shared"
+import {
+  BlitzPassportConfig,
+  ApiHandler,
+  BlitzPassportConfigObject,
+  ApiHandlerIncomingMessage,
+  VerifyCallbackResult,
+} from "./types"
 
-const isFunction = (functionToCheck: unknown): functionToCheck is Function =>
+export const isFunction = (functionToCheck: unknown): functionToCheck is Function =>
   typeof functionToCheck === "function"
 
-const isVerifyCallbackResult = (value: unknown): value is VerifyCallbackResult =>
+export const isVerifyCallbackResult = (value: unknown): value is VerifyCallbackResult =>
   typeof value === "object" && value !== null && "publicData" in value
 
-const INTERNAL_REDIRECT_URL_KEY = "_redirectUrl"
-
-export interface BlitzPassportConfigCallbackParams {
-  ctx: Ctx
-  req: IncomingMessage
-  res: ServerResponse
-}
-
-export type BlitzPassportConfigCallback = ({
-  ctx,
-  req,
-  res,
-}: BlitzPassportConfigCallbackParams) => BlitzPassportConfigObject
-
-export type BlitzPassportConfig = BlitzPassportConfigObject | BlitzPassportConfigCallback
-
-export type BlitzPassportStrategy = {
-  name?: string
-  authenticateOptions?: AuthenticateOptions
-  strategy: Strategy
-}
-
-export type BlitzPassportConfigObject = {
-  successRedirectUrl?: string
-  errorRedirectUrl?: string
-  strategies: BlitzPassportStrategy[]
-  secureProxy?: boolean
-}
-
-export type VerifyCallbackResult = {
-  publicData: PublicData
-  privateData?: Record<string, unknown>
-  redirectUrl?: string
-}
-
-export type ApiHandlerIncomingMessage = IncomingMessage & {
-  query: {
-    [key: string]: string | string[] | undefined
-  }
-}
-
-export type ApiHandler = (
-  req: ApiHandlerIncomingMessage,
-  res: MiddlewareResponse & {status: (statusCode: number) => any},
-) => void | Promise<void>
+export const INTERNAL_REDIRECT_URL_KEY = "_redirectUrl"
 
 export function passportAuth(config: BlitzPassportConfig): ApiHandler {
   return async function authHandler(req, res) {
