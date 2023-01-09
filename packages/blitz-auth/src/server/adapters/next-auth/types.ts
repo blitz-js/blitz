@@ -1,4 +1,4 @@
-import type {Ctx} from "blitz"
+import type {Ctx, MiddlewareResponse} from "blitz"
 import type {IncomingMessage, ServerResponse} from "http"
 import type {Profile, User} from "next-auth"
 import type {Provider} from "next-auth/providers"
@@ -24,6 +24,6 @@ export type ApiHandlerIncomingMessage = IncomingMessage & {
 
 export type BlitzNextAuthApiHandler = (
   req: ApiHandlerIncomingMessage,
-  res: ServerResponse & {status: (statusCode: number) => any} & {send: (body: string) => any},
+  res: MiddlewareResponse & {status: (statusCode: number) => any},
   ctx: Ctx,
 ) => void | Promise<void>

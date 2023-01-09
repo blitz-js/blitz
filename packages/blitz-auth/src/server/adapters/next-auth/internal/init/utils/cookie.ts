@@ -1,5 +1,5 @@
 /*
-From https://github.com/nextauthjs/next-auth/tree/main/packages/next-auth/src/core/init.ts
+From https://github.com/nextauthjs/next-auth/tree/main/packages/next-auth/src/core/lib/cookie.ts
 
 ISC License
 

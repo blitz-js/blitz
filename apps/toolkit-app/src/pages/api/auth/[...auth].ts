@@ -6,15 +6,15 @@ import { Role } from "types"
 
 const config: BlitzNextAuthOptions = {
   successRedirectUrl: "/",
-  failureRedirectUrl: "/",
+  failureRedirectUrl: "/error",
   providers: [
     GithubProvider({
-      clientId: "dcd02983e7e911bd169f",
-      clientSecret: "86d8f87ec03c980e313e5fa3e23ec3e9878d74b1",
+      clientId: process.env.GITHUB_CLIENT_ID as string,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
     }),
   ],
   callback: async (user, account, profile, session) => {
-    console.log("USER SIDE PROFILE_DATA", { user, account, profile, session })
+    console.log("USER SIDE PROFILE_DATA", { user, account, profile })
     let newUser: User
     try {
       newUser = await db.user.findFirstOrThrow({ where: { name: { equals: user.name } } })
@@ -30,7 +30,7 @@ const config: BlitzNextAuthOptions = {
     const publicData = {
       userId: newUser.id,
       role: newUser.role as Role,
-      source: "mock_client1",
+      source: "github",
     }
     await session.$create(publicData)
   },

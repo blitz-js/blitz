@@ -28,6 +28,7 @@ import {createPKCE} from "./pkce-handler"
 import type {AuthorizationParameters} from "openid-client"
 import type {RequestInternal} from "next-auth"
 import type {NextAuth_InternalOptions} from "../types"
+import {log} from "blitz"
 
 /**
  *
@@ -65,7 +66,7 @@ export default async function getAuthorizationUrl({
       ...tokens.params,
     })}`
 
-    console.log("GET_AUTHORIZATION_URL", {url, provider})
+    log.debug("GET_AUTHORIZATION_URL", {url, provider})
     return {redirect: url}
   }
 
@@ -95,6 +96,6 @@ export default async function getAuthorizationUrl({
 
   const url = client.authorizationUrl(authorizationParams)
 
-  console.log("GET_AUTHORIZATION_URL", {url, cookies, provider})
+  log.debug("GET_AUTHORIZATION_URL", {url, cookies, provider})
   return {redirect: url, cookies}
 }

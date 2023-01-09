@@ -25,7 +25,7 @@ import {oAuth1Client} from "./client-legacy"
 import {useState} from "./state-handler"
 import {usePKCECodeVerifier} from "./pkce-handler"
 import {useNonce} from "./nonce-handler"
-import {AuthenticationError} from "blitz"
+import {log, OAuthError} from "blitz"
 
 import type {CallbackParamsType, OpenIDCallbackChecks} from "openid-client"
 import type {Profile, RequestInternal} from "next-auth"
@@ -50,7 +50,7 @@ export default async function oAuthCallback(params: {
       error_description: query?.error_description,
       providerId: provider.id,
     })
-    console.log("OAUTH_CALLBACK_HANDLER_ERROR", {body})
+    log.debug("OAUTH_CALLBACK_HANDLER_ERROR", {body})
     throw error
   }
 
@@ -127,8 +127,9 @@ export default async function oAuthCallback(params: {
     } else {
       tokens = await client.oauthCallback(provider.callbackUrl, params, checks)
     }
-    console.log("PROVIDER", provider)
-    console.log("OAUTH_CALLBACK_TOKENS", tokens)
+
+    log.debug("PROVIDER", provider)
+    log.debug("OAUTH_CALLBACK_TOKENS", tokens)
 
     // REVIEW: How can scope be returned as an array?
     if (Array.isArray(tokens.scope)) {
@@ -157,7 +158,7 @@ export default async function oAuthCallback(params: {
     })
     return {...profileResult, cookies: resCookies}
   } catch (error) {
-    throw new AuthenticationError((error as Error).message)
+    throw new OAuthError((error as Error).message)
   }
 }
 
@@ -170,7 +171,7 @@ export interface GetProfileParams {
 /** Returns profile, raw profile and auth provider details */
 async function getProfile({profile: OAuthProfile, tokens, provider}: GetProfileParams) {
   try {
-    console.log("PROFILE_DATA", {OAuthProfile})
+    log.debug("PROFILE_DATA", {OAuthProfile})
     const profile = await provider.profile(OAuthProfile, tokens)
     profile.email = profile.email?.toLowerCase()
     if (!profile.id)

@@ -1,5 +1,4 @@
 /*
-From https://github.com/nextauthjs/next-auth/tree/main/packages/next-auth/src/core/init.ts
 
 ISC License
 
@@ -18,6 +17,7 @@ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 */
+import {OAuthError} from "blitz"
 import {parse as parseCookie, serialize} from "cookie"
 import {ServerResponse} from "http"
 import type {ResponseInternal} from "next-auth/core"
@@ -42,11 +42,11 @@ export async function toInternalRequest(req: ApiHandlerIncomingMessage) {
 
   const action = actions.find((a) => pathname?.includes(a)) as "signin" | "callback" | undefined
   if (!action) {
-    throw new Error("Cannot detect action.")
+    throw new OAuthError("Cannot detect action.")
   }
 
   if (req.method !== "GET" && req.method !== "POST") {
-    throw new Error("Only GET and POST requests are supported.")
+    throw new OAuthError("Only GET and POST requests are supported.")
   }
 
   const providerIdOrAction = pathname?.split("/").pop()

@@ -44,8 +44,6 @@ export async function createState(
     token: {state},
   })
 
-  console.log("CREATE_STATE", {state, maxAge})
-
   const expires = new Date()
   expires.setTime(expires.getTime() + maxAge * 1000)
   return {

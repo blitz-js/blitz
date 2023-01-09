@@ -1,6 +1,4 @@
 /*
-From https://github.com/nextauthjs/next-auth/tree/main/packages/next-auth/src/core/init.ts
-
 ISC License
 
 Copyright (c) 2022-2023, Balázs Orbán
@@ -21,6 +19,8 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 import {CallbacksOptions} from "next-auth"
 import type {NextAuth_InternalOptions} from "../../types"
 
+// From https://github.com/nextauthjs/next-auth/tree/main/packages/next-auth/src/core/lib/default-callbacks.ts
+
 export const defaultCallbacks: CallbacksOptions = {
   signIn() {
     return true
@@ -37,6 +37,8 @@ export const defaultCallbacks: CallbacksOptions = {
     return token
   },
 }
+
+// From https://github.com/nextauthjs/next-auth/tree/main/packages/next-auth/src/core/lib/callback-url.ts
 
 interface CreateCallbackUrlParams {
   options: NextAuth_InternalOptions

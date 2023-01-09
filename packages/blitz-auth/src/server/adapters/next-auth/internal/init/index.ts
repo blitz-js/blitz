@@ -69,14 +69,11 @@ export async function init({
   if (providerId?.includes("?")) {
     providerId = providerId.split("?")[0]
   }
-  // TODO: move this to web.ts
+
   const parsed = parseUrl(
     reqUrl.origin + reqUrl.pathname.replace(`/${action}`, "").replace(`/${providerId}`, ""),
   )
   const url = new URL(parsed.toString())
-  console.log("🚀 ~ file: index.ts ~ line 85 ~ init ~ providerId", providerId)
-  console.log("🚀 ~ file: index.ts ~ line 85 ~ init ~ url", url)
-
   const secret = createSecret({authOptions, url})
 
   const {providers, provider} = parseProviders({

@@ -19,6 +19,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 */
 
+import {log} from "blitz"
 import * as jwt from "next-auth/jwt"
 import {generators} from "openid-client"
 import type {NextAuth_InternalOptions} from "../types"
@@ -53,7 +54,7 @@ export async function createNonce(options: NextAuth_InternalOptions<"oauth">): P
     token: {nonce},
   })
 
-  console.log("CREATE_ENCRYPTED_NONCE", {
+  log.debug("CREATE_ENCRYPTED_NONCE", {
     nonce,
     maxAge: NONCE_MAX_AGE,
   })

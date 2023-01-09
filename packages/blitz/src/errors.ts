@@ -33,10 +33,15 @@ export class CSRFTokenMismatchError extends Error {
 }
 
 export class OAuthError extends Error {
-  name = "CSRFTokenMismatchError"
-  statusCode = 401
+  name = "OAuthError"
+  statusCode = 500
+  redirect?: string
   get _clearStack() {
     return true
+  }
+  constructor(message: string, redirect?: string) {
+    super(message)
+    this.redirect = redirect
   }
 }
 
@@ -111,6 +116,11 @@ if (process.env.JEST_WORKER_ID === undefined && !globalThis._BLITZ_ERROR_CLASS_R
 
   SuperJson.registerClass(PaginationArgumentError, {
     identifier: "BlitzPaginationArgumentError",
+    allowProps: errorProps,
+  })
+
+  SuperJson.registerClass(OAuthError, {
+    identifier: "OAuthError",
     allowProps: errorProps,
   })
 

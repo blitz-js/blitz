@@ -19,6 +19,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 */
 
+import {log} from "blitz"
 import * as jwt from "next-auth/jwt"
 import {generators} from "openid-client"
 import type {NextAuth_InternalOptions} from "../types"
@@ -58,7 +59,7 @@ export async function createPKCE(options: NextAuth_InternalOptions<"oauth">): Pr
     token: {code_verifier},
   })
 
-  console.log("CREATE_PKCE_CHALLENGE_VERIFIER", {
+  log.debug("CREATE_PKCE_CHALLENGE_VERIFIER", {
     code_challenge,
     code_challenge_method: PKCE_CODE_CHALLENGE_METHOD,
     code_verifier,

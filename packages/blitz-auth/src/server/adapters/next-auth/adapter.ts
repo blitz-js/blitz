@@ -3,9 +3,12 @@ import {
   connectMiddleware,
   Ctx,
   handleRequestWithMiddleware,
+  log,
   MiddlewareResponse,
+  OAuthError,
   RequestMiddleware,
   secureProxyMiddleware,
+  truncateString,
 } from "blitz"
 import oAuthCallback from "./internal/oauth/callback"
 import getAuthorizationUrl from "./internal/oauth/authorization-url"
@@ -56,7 +59,10 @@ export function NextAuthAdapter(config: BlitzNextAuthOptions): BlitzNextAuthApiH
     const internalRequest = await toInternalRequest(req)
     const {providerId} = internalRequest
     const {options, cookies} = await init({
-      url: new URL(internalRequest.url!, "http://localhost:3000"),
+      url: new URL(
+        internalRequest.url!,
+        process.env.APP_ORIGIN || process.env.BLITZ_DEV_SERVER_ORIGIN,
+      ),
       authOptions: config,
       action,
       providerId,
@@ -64,41 +70,46 @@ export function NextAuthAdapter(config: BlitzNextAuthOptions): BlitzNextAuthApiH
       cookies: internalRequest.cookies,
     })
 
-    console.log("🚀 ~ file: [...auth].ts:122 ~ authHandler ~ options", options)
-    console.log("🚀 ~ file: [...auth].ts:122 ~ authHandler ~ cookies", cookies)
+    log.debug("NEXT_AUTH_INTERNAL_OPTIONS", options)
 
-    const oAuthHandler = await AuthHandler(
-      req,
-      middleware,
-      config,
-      internalRequest,
-      action,
-      options,
-      cookies,
-    )
-
-    await handleRequestWithMiddleware<ApiHandlerIncomingMessage, MiddlewareResponse<Ctx>>(
-      req,
-      res as any,
-      oAuthHandler?.middleware as any,
-    )
+    await AuthHandler(middleware, config, internalRequest, action, options, cookies)
+      .then(async ({middleware}) => {
+        await handleRequestWithMiddleware<ApiHandlerIncomingMessage, MiddlewareResponse<Ctx>>(
+          req,
+          res,
+          middleware,
+        )
+      })
+      .catch((error) => {
+        const authErrorQueryStringKey = config.failureRedirectUrl.includes("?")
+          ? "&authError="
+          : "?authError="
+        const redirectUrl =
+          authErrorQueryStringKey +
+          encodeURIComponent(truncateString((error as Error).toString(), 100))
+        res.status(302).setHeader("Location", config.failureRedirectUrl + redirectUrl)
+        res.end()
+        return null
+      })
   }
 }
 
 async function AuthHandler(
-  req: ApiHandlerIncomingMessage,
   middleware: RequestMiddleware<ApiHandlerIncomingMessage, MiddlewareResponse<Ctx>>[],
   config: BlitzNextAuthOptions,
-  internalRequest: any,
+  internalRequest: Awaited<ReturnType<typeof toInternalRequest>>,
   action: NextAuth_AuthAction,
   options: NextAuth_InternalOptions,
   cookies: Cookie[],
 ) {
+  if (!options.provider) {
+    throw new OAuthError("MISSING_PROVIDER_ERROR")
+  }
   if (action === "signin") {
-    if (options.provider) {
-      const _signin = await getAuthorizationUrl({options, query: req.query})
-      if (_signin.cookies) cookies.push(..._signin.cookies)
-      middleware.push(async (req, res, next) => {
+    middleware.push(async (req, res, next) => {
+      try {
+        const _signin = await getAuthorizationUrl({options, query: req.query})
+        if (_signin.cookies) cookies.push(..._signin.cookies)
         const session = res.blitzCtx.session as SessionContext
         assert(session, "Missing Blitz sessionMiddleware!")
         await session.$setPublicData({
@@ -109,20 +120,25 @@ async function AuthHandler(
         res.setHeader("Location", _signin.redirect)
         res.statusCode = 302
         res.end()
-      })
-      return {middleware, redirect: _signin.redirect}
-    }
+      } catch (e) {
+        log.error("OAUTH_SIGNIN_Error in NextAuthAdapter " + (e as Error).toString())
+        const authErrorQueryStringKey = config.failureRedirectUrl.includes("?")
+          ? "&authError="
+          : "?authError="
+        const redirectUrl =
+          authErrorQueryStringKey + encodeURIComponent(truncateString((e as Error).toString(), 100))
+        res.setHeader("Location", config.failureRedirectUrl + redirectUrl)
+        res.statusCode = 302
+        res.end()
+      }
+    })
+    return {middleware}
   } else if (action === "callback") {
-    if (options.provider) {
-      middleware.push(
-        // eslint-disable-next-line no-shadow
-        connectMiddleware(async (req, res, next) => {
-          const {
-            profile,
-            account,
-            OAuthProfile,
-            cookies: oauthCookies,
-          } = await oAuthCallback({
+    middleware.push(
+      // eslint-disable-next-line no-shadow
+      connectMiddleware(async (req, res, next) => {
+        try {
+          const {profile, account, OAuthProfile} = await oAuthCallback({
             query: internalRequest.query,
             body: internalRequest.body,
             method: "POST",
@@ -131,12 +147,6 @@ async function AuthHandler(
           })
           const session = res.blitzCtx.session as SessionContext
           assert(session, "Missing Blitz sessionMiddleware!")
-          console.log(
-            "🚀 ~ file: [...auth].ts:122 ~ authHandler ~ callback",
-            profile,
-            account,
-            OAuthProfile,
-          )
           await config.callback(profile as User, account, OAuthProfile as Profile, session)
           const response = toResponse({
             redirect: config.successRedirectUrl,
@@ -147,18 +157,24 @@ async function AuthHandler(
           res.setHeader("Location", config.successRedirectUrl)
           res.statusCode = 302
           res.end()
-        }),
-      )
-      return {
-        middleware,
-        redirect: config.successRedirectUrl,
-      }
-    } else {
-      // failure Case to be handled
-      return {
-        middleware,
-        redirect: config.failureRedirectUrl,
-      }
+        } catch (e) {
+          log.error("OAUTH_CALLBACK_Error in NextAuthAdapter " + (e as Error).toString())
+          const authErrorQueryStringKey = config.failureRedirectUrl.includes("?")
+            ? "&authError="
+            : "?authError="
+          const redirectUrl =
+            authErrorQueryStringKey +
+            encodeURIComponent(truncateString((e as Error).toString(), 100))
+          res.setHeader("Location", config.failureRedirectUrl + redirectUrl)
+          res.statusCode = 302
+          res.end()
+        }
+      }),
+    )
+    return {
+      middleware,
     }
+  } else {
+    throw new OAuthError("Invalid action")
   }
 }

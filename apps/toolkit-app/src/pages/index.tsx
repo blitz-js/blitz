@@ -48,6 +48,11 @@ const UserInfo = () => {
             <strong>Login</strong>
           </a>
         </Link>
+        <Link href="/api/auth/signin/github" passHref>
+          <a className="button small">
+            <strong>Sign in with GitHub</strong>
+          </a>
+        </Link>
       </>
     )
   }
