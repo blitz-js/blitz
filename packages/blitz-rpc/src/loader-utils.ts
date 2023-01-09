@@ -68,7 +68,7 @@ export function convertPageFilePathToRoutePath({
   } else if (resolverBasePath === "root") {
     path = path.replace(normalize(appRoot), "")
     for (const extraPath of extraRpcBasePaths) {
-      path = path.replace(join(normalize(appRoot), extraPath.replace("/", sep)), "")
+      path = path.replace(join(normalize(appRoot), extraPath.replace("/", sep), ".."), "")
     }
   } else {
     path = path.replace(/^.*?[\\/]queries[\\/]/, "/").replace(/^.*?[\\/]mutations[\\/]/, "/")
