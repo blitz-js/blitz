@@ -143,7 +143,7 @@ jobs:
       - name: Install playwright
         run: |
             cd integration-tests/${{matrix.folder}}
-            PLAYWRIGHT_BROWSERS_PATH=/usr/lib/playwright pnpm add playwright-chromium@1.11.1 playwright-webkit@1.11.1 playwright-firefox@1.11.1
+            PLAYWRIGHT_BROWSERS_PATH=$HOME/pw-browsers pnpm add playwright-chromium@1.11.1 playwright-webkit@1.11.1 playwright-firefox@1.11.1
             cd ..
             cd ..
         shell: bash
@@ -153,5 +153,5 @@ jobs:
         shell: bash
 
       - name: Test Packages
-        run: PLAYWRIGHT_BROWSERS_PATH=/usr/lib/playwright pnpm test -- --filter=./integration-tests/${{matrix.folder}}
+        run: PLAYWRIGHT_BROWSERS_PATH=$HOME/pw-browsers pnpm test -- --filter=./integration-tests/${{matrix.folder}}
         shell: bash
