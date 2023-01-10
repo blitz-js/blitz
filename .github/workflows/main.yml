@@ -142,15 +142,15 @@ jobs:
         run: pnpm install --frozen-lockfile
         shell: bash
 
-      - name: Install playwright
-        run: |
-            PLAYWRIGHT_BROWSERS_PATH=/usr/lib/playwright pnpm add playwright-chromium@1.11.1 playwright-webkit@1.11.1 playwright-firefox@1.11.1
-        shell: bash
+#       - name: Install playwright
+#         run: |
+#             PLAYWRIGHT_BROWSERS_PATH=/usr/lib/playwright pnpm add playwright-chromium@1.11.1 playwright-webkit@1.11.1 playwright-firefox@1.11.1
+#         shell: bash
 
       - name: Build
         run: pnpm build
         shell: bash
 
       - name: Test Packages
-        run: pnpm test -- --filter=./integration-tests/${{matrix.folder}}
+        run: PLAYWRIGHT_BROWSERS_PATH=/usr/lib/playwright pnpm test -- --filter=./integration-tests/${{matrix.folder}}
         shell: bash
