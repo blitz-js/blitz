@@ -16,10 +16,10 @@
     "schema": "db/schema.prisma"
   },
   "dependencies": {
-    "@blitzjs/next": "workspace:2.0.0-beta.20",
-    "@blitzjs/rpc": "workspace:2.0.0-beta.20",
+    "@blitzjs/next": "workspace:2.0.0-beta.21",
+    "@blitzjs/rpc": "workspace:2.0.0-beta.21",
     "@prisma/client": "4.6.0",
-    "blitz": "workspace:2.0.0-beta.20",
+    "blitz": "workspace:2.0.0-beta.21",
     "lowdb": "3.0.0",
     "next": "12.2.5",
     "prisma": "4.6.0",
@@ -27,7 +27,7 @@
     "react-dom": "18.2.0"
   },
   "devDependencies": {
-    "@blitzjs/config": "workspace:2.0.0-beta.20",
+    "@blitzjs/config": "workspace:2.0.0-beta.21",
     "@next/bundle-analyzer": "12.0.8",
     "@types/express": "4.17.13",
     "@types/fs-extra": "9.0.13",

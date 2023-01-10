@@ -43,7 +43,7 @@ const createCustomTemplates = async () => {
   const continuePrompt = await prompts({
     type: "confirm",
     name: "value",
-    message: `This will copy the default templates to your app/templates folder. Do you want to continue?`,
+    message: `This will copy the default templates to your src/templates folder. Do you want to continue?`,
   })
   if (!continuePrompt.value) {
     process.exit(0)
@@ -52,12 +52,11 @@ const createCustomTemplates = async () => {
     type: "text",
     name: "value",
     message: `Enter the path to save the custom templates folder`,
-    initial: "app/templates",
+    initial: "src/templates",
   })
   const templatesPathValue: string = templatesPath.value
   const isTypeScript = await getIsTypeScript()
   await customTemplatesBlitzConfig(isTypeScript, templatesPathValue, true) // to run the codemod
-  log.success(`🚀 Custom templates path added/updated in app/blitz-server file`)
   const customTemplatesPath = require("path").join(process.cwd(), templatesPathValue)
   const fsExtra = await import("fs-extra")
   const blitzGeneratorPath = require.resolve("@blitzjs/generator")

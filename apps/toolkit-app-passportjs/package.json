@@ -30,7 +30,7 @@
     "@hookform/error-message": "2.0.0",
     "@hookform/resolvers": "2.9.10",
     "@prisma/client": "4.6.0",
-    "blitz": "workspace:2.0.0-beta.20",
+    "blitz": "workspace:2.0.0-beta.21",
     "next": "12.2.5",
     "openid-client": "5.2.1",
     "prisma": "4.6.0",
