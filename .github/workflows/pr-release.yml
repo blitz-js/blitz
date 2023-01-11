@@ -26,21 +26,22 @@ jobs:
       - name: Build
         run: pnpm build
       - name: Version
-        run: pnpm changeset version --snapshot ${{ github.event.pull_request.number }}
+        run: |
+          pnpm changeset pre exit 
+          pnpm changeset version --snapshot next-${{ github.event.pull_request.number }}
       - name: Publish
         run: pnpm changeset publish --tag next@${{ github.event.pull_request.number }}
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Comment on PR
-        uses: peter-evans/create-or-update-comment@v1
+        uses: peter-evans/create-or-update-comment@v2
         with:
           issue-number: ${{ github.event.pull_request.number }}
           body: |
-            The new version of this PR is available as next in npm: `0.0.0-${{ github.event.pull_request.number }}`
+            The new version of this PR is available as next in npm:
             ```
             npm install <package>@next${{ github.event.pull_request.number }}
             ```
-          reactions: rocket
       
       
 
