@@ -220,7 +220,7 @@ describe("Form Generator", () => {
         attributeName: "field8",
         fieldName: "field8",
         field_name: "field8",
-        zodType: "string",
+        zodType: "string().datetime()",
         prismaType: "DateTime",
         inputType: "text",
       },
