@@ -19,5 +19,5 @@ const {gSSP, gSP, api} = setupBlitzServer({
 export {gSSP, gSP, api}
 
 export const cliConfig: BlitzCliConfig = {
-  customTemplates: "app/templates",
+  customTemplates: "src/templates",
 }

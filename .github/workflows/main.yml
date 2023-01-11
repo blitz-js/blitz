@@ -136,12 +136,13 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+        env: 
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
         shell: bash
 
       - name: Install playwright
         run: |
-          npm i -g playwright
-          PLAYWRIGHT_BROWSERS_PATH=$HOME/pw-browsers npx playwright install --with-deps
+            pnpx playwright@1.28.0 install --with-deps
         shell: bash
 
       - name: Build
