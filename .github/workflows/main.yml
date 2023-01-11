@@ -8,10 +8,6 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-env:
-  PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
-  PLAYWRIGHT_BROWSERS_PATH: /usr/lib/playwright
-
 jobs:
   lint:
     name: Lint
@@ -140,17 +136,19 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+        env: 
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
         shell: bash
 
-#       - name: Install playwright
-#         run: |
-#             PLAYWRIGHT_BROWSERS_PATH=/usr/lib/playwright pnpm add playwright-chromium@1.11.1 playwright-webkit@1.11.1 playwright-firefox@1.11.1
-#         shell: bash
+      - name: Install playwright
+        run: |
+            pnpx playwright@1.28.0 install --with-deps
+        shell: bash
 
       - name: Build
         run: pnpm build
         shell: bash
 
       - name: Test Packages
-        run: PLAYWRIGHT_BROWSERS_PATH=/usr/lib/playwright pnpm test -- --filter=./integration-tests/${{matrix.folder}}
+        run: pnpm test -- --filter=./integration-tests/${{matrix.folder}}
         shell: bash
