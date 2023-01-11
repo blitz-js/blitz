@@ -3944,7 +3944,6 @@ packages:
       semver: 5.7.1
     transitivePeerDependencies:
       - supports-color
-    dev: false
 
   /@babel/preset-flow/7.17.12_@babel+core@7.18.2:
     resolution:
@@ -6826,7 +6825,6 @@ packages:
       typescript: 4.8.4
     transitivePeerDependencies:
       - supports-color
-    dev: false
 
   /@typescript-eslint/experimental-utils/5.28.0_rmayb2veg2btbq6mbmnyivgasy:
     resolution:
@@ -10949,7 +10947,6 @@ packages:
     transitivePeerDependencies:
       - eslint-import-resolver-webpack
       - supports-color
-    dev: false
 
   /eslint-config-next/13.1.1_rmayb2veg2btbq6mbmnyivgasy:
     resolution:
@@ -10987,7 +10984,6 @@ packages:
     hasBin: true
     peerDependencies:
       eslint: ">=7.0.0"
-    dev: false
 
   /eslint-config-prettier/8.5.0_eslint@8.27.0:
     resolution:
@@ -20720,7 +20716,6 @@ packages:
       - sugarss
       - supports-color
       - terser
-    dev: false
 
   /vitest/0.25.3_jsdom@20.0.3:
     resolution:
