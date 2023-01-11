@@ -1,6 +1,4 @@
 ---
-"toolkit-app": patch
-"test-full-auth-with-rpc": patch
 "blitz": patch
 ---
 
