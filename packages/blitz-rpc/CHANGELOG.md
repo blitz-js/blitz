@@ -1,5 +1,17 @@
 # @blitzjs/rpc
 
+## 2.0.0-beta.22
+
+### Minor Changes
+
+- 270361886: change rpc route basepath to be one folder higher when using includeRPC in monorepos
+
+### Patch Changes
+
+- Updated dependencies [989691ec8]
+- Updated dependencies [8aa22a0b2]
+  - blitz@2.0.0-beta.22
+
 ## 2.0.0-beta.21
 
 ### Patch Changes
