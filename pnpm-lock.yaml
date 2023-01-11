@@ -1214,7 +1214,7 @@ importers:
       username: 5.1.0
       vinyl: 2.2.1
       watch: 1.0.2
-      zod: 3.19.1
+      zod: 3.20.2
     dependencies:
       "@babel/core": 7.12.10_supports-color@8.1.1
       "@babel/plugin-transform-typescript": 7.12.1_ps3yxa7qdojvlda5ukda3zlwie
@@ -1265,7 +1265,7 @@ importers:
       typescript: 4.8.4
       unbuild: 0.6.9_supports-color@8.1.1
       watch: 1.0.2
-      zod: 3.19.1
+      zod: 3.20.2
 
   packages/pkg-template:
     specifiers:
@@ -21322,13 +21322,6 @@ packages:
     dependencies:
       "@types/yoga-layout": 1.9.2
     dev: false
-
-  /zod/3.19.1:
-    resolution:
-      {
-        integrity: sha512-LYjZsEDhCdYET9ikFu6dVPGp2YH9DegXjdJToSzD9rO6fy4qiRYFoyEYwps88OseJlPyl2NOe2iJuhEhL7IpEA==,
-      }
-    dev: true
 
   /zod/3.20.2:
     resolution:
