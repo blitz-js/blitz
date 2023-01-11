@@ -49,11 +49,16 @@ function runTests(dev = false) {
     it(
       "monorepo query works",
       async () => {
-        const data = await fetchViaHTTP(appPort, "/api/rpc/queries/getNoSuspenseBasic", null, {
-          method: "POST",
-          headers: {"Content-Type": "application/json; charset=utf-8"},
-          body: JSON.stringify({params: {}}),
-        }).then((res) => res.ok && res.json())
+        const data = await fetchViaHTTP(
+          appPort,
+          "/api/rpc/no-suspense/app/queries/getNoSuspenseBasic",
+          null,
+          {
+            method: "POST",
+            headers: {"Content-Type": "application/json; charset=utf-8"},
+            body: JSON.stringify({params: {}}),
+          },
+        ).then((res) => res.ok && res.json())
 
         expect(data).toEqual({result: "basic-result", error: null, meta: {}})
       },
