@@ -7,7 +7,7 @@ describe("checkInputsOrRaise()", () => {
       expect(() => checkInputsOrRaise("Foo:foo=bar[]?:-_ ")).not.toThrow()
     })
     it("raisees when input has unwanted characters", () => {
-      expect(() => checkInputsOrRaise("()!")).toThrowError("Input")
+      expect(() => checkInputsOrRaise("()!")).toThrowError("Input contains invalid character:")
     })
   })
 
@@ -16,7 +16,9 @@ describe("checkInputsOrRaise()", () => {
       expect(() => checkInputsOrRaise(["ok:ok=ok", "also ok:ok"])).not.toThrow()
     })
     it("raisees when one input has unwanted characters", () => {
-      expect(() => checkInputsOrRaise(["ok:ok=ok", "not ok!"])).toThrowError("Input")
+      expect(() => checkInputsOrRaise(["ok:ok=ok", "not ok!"])).toThrowError(
+        "Input contains invalid character:",
+      )
     })
   })
 })
