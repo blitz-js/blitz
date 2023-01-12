@@ -1,15 +1,13 @@
 name: PR-Release
 
-on:
-  issue_comment:
-    types: [created, deleted]
+on: issue_comment
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  changeset:
+  pr-publish:
     if: ${{ github.event.issue.pull_request && github.event.pull_request.merged == false && contains(github.event.comment.body,'/publish') && github.event.comment.author_association == 'MEMBER' }}
     runs-on: ubuntu-latest
     steps:
