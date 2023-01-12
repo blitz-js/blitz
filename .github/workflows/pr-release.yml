@@ -10,7 +10,7 @@ concurrency:
 
 jobs:
   changeset:
-    if: ${{ contains(github.event.pull_request.labels.*.name, 'release/next') && github.event.pull_request.merged == false && contains(github.event.comment.body,'/publish') && github.event.comment.author_association == 'MEMBER' }}
+    if: ${{ github.event.pull_request.merged == false && contains(github.event.comment.body,'/publish') && github.event.comment.author_association == 'MEMBER' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
@@ -30,7 +30,7 @@ jobs:
           pnpm changeset pre exit 
           pnpm changeset version --snapshot next-${{ github.event.pull_request.number }}
       - name: Publish
-        run: pnpm changeset publish --tag next@${{ github.event.pull_request.number }}
+        run: pnpm changeset publish --tag next-${{ github.event.pull_request.number }}
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Comment on PR
@@ -40,5 +40,5 @@ jobs:
           body: |
             The new version of this PR is available as next in npm:
             ```
-            npm install <package>@next${{ github.event.pull_request.number }}
+            npm install <package>@next-${{ github.event.pull_request.number }}
             ```
