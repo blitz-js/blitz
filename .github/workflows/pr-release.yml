@@ -1,44 +1,58 @@
-name: PR-Release
-
-on:
-  pull_request:
-    types: [issue_comment]
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+on: issue_comment
 
 jobs:
-  changeset:
-    if: ${{ github.event.pull_request.merged == false && contains(github.event.comment.body,'/publish') && github.event.comment.author_association == 'MEMBER' }}
+  pr_commented:
+    # This job only runs for pull request comments
+    name: PR comment
+    if: ${{ github.event.issue.pull_request }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: Setup node
-        uses: actions/setup-node@v2
-        with:
-          node-version: 16
-          cache: "pnpm"
-      - run: pnpm install --frozen-lockfile
-      - name: Build
-        run: pnpm build
-      - name: Version
-        run: |
-          pnpm changeset pre exit 
-          pnpm changeset version --snapshot next-${{ github.event.pull_request.number }}
-      - name: Publish
-        run: pnpm changeset publish --tag next-${{ github.event.pull_request.number }}
+      - run: |
+          echo A comment on PR $NUMBER
         env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-      - name: Comment on PR
-        uses: peter-evans/create-or-update-comment@v2
-        with:
-          issue-number: ${{ github.event.pull_request.number }}
-          body: |
-            The new version of this PR is available as next in npm:
-            ```
-            npm install <package>@next-${{ github.event.pull_request.number }}
-            ```
+          NUMBER: ${{ github.event.issue.number }}
+
+# name: PR-Release
+
+# on:
+#   pull_request:
+#     types: [issue_comment]
+
+# concurrency:
+#   group: ${{ github.workflow }}-${{ github.ref }}
+#   cancel-in-progress: true
+
+# jobs:
+#   changeset:
+#     if: ${{ github.event.pull_request.merged == false && contains(github.event.comment.body,'/publish') && github.event.comment.author_association == 'MEMBER' }}
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout Repo
+#         uses: actions/checkout@v2
+#         with:
+#           fetch-depth: 0
+#       - name: Setup node
+#         uses: actions/setup-node@v2
+#         with:
+#           node-version: 16
+#           cache: "pnpm"
+#       - run: pnpm install --frozen-lockfile
+#       - name: Build
+#         run: pnpm build
+#       - name: Version
+#         run: |
+#           pnpm changeset pre exit 
+#           pnpm changeset version --snapshot next-${{ github.event.pull_request.number }}
+#       - name: Publish
+#         run: pnpm changeset publish --tag next-${{ github.event.pull_request.number }}
+#         env:
+#           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+#       - name: Comment on PR
+#         uses: peter-evans/create-or-update-comment@v2
+#         with:
+#           issue-number: ${{ github.event.pull_request.number }}
+#           body: |
+#             The new version of this PR is available as next in npm:
+#             ```
+#             npm install <package>@next-${{ github.event.pull_request.number }}
+#             ```
