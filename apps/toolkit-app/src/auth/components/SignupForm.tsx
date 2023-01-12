@@ -24,7 +24,7 @@ export const SignupForm = (props: SignupFormProps) => {
             props.onSuccess?.()
           } catch (error: any) {
             if (error.code === "P2002" && error.meta?.target?.includes("email")) {
-              // This error comes from Prisma
+              // Error "P2002" comes from Prisma (https://www.prisma.io/docs/reference/api-reference/error-reference#p2002)
               return { email: "This email is already being used" }
             } else {
               return { [FORM_ERROR]: error.toString() }

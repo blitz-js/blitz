@@ -90,7 +90,11 @@ class PublicDataStore {
 
   clear() {
     deleteCookie(COOKIE_PUBLIC_DATA_TOKEN())
-    localStorage.removeItem(LOCALSTORAGE_PUBLIC_DATA_TOKEN())
+    try {
+      localStorage.removeItem(LOCALSTORAGE_PUBLIC_DATA_TOKEN())
+    } catch (err) {
+      console.error("LocalStorage is not available", err)
+    }
     this.updateState(emptyPublicData)
   }
 
@@ -105,12 +109,17 @@ class PublicDataStore {
   }
 
   private getToken() {
-    const cookieValue = readCookie(COOKIE_PUBLIC_DATA_TOKEN())
-    if (cookieValue) {
-      localStorage.setItem(LOCALSTORAGE_PUBLIC_DATA_TOKEN(), cookieValue)
-      return cookieValue
-    } else {
-      return localStorage.getItem(LOCALSTORAGE_PUBLIC_DATA_TOKEN())
+    try {
+      const cookieValue = readCookie(COOKIE_PUBLIC_DATA_TOKEN())
+      if (cookieValue) {
+        localStorage.setItem(LOCALSTORAGE_PUBLIC_DATA_TOKEN(), cookieValue)
+        return cookieValue
+      } else {
+        return localStorage.getItem(LOCALSTORAGE_PUBLIC_DATA_TOKEN())
+      }
+    } catch (err) {
+      console.error("LocalStorage is not available", err)
+      return undefined
     }
   }
 }
