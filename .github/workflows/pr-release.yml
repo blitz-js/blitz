@@ -1,8 +1,8 @@
 name: PR-Release
 
 on:
-  pull_request:
-    types: [issue_comment]
+  issue_comment:
+    types: [created, deleted]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -10,7 +10,7 @@ concurrency:
 
 jobs:
   changeset:
-    if: ${{ github.event.pull_request.merged == false && contains(github.event.comment.body,'/publish') && github.event.comment.author_association == 'MEMBER' }}
+    if: ${{ github.event.issue.pull_request && github.event.pull_request.merged == false && contains(github.event.comment.body,'/publish') && github.event.comment.author_association == 'MEMBER' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
