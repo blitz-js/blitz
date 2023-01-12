@@ -1,3 +1,5 @@
+name: PR-Release
+
 on: issue_comment
 
 jobs:
