@@ -10,9 +10,9 @@ import {
   secureProxyMiddleware,
   truncateString,
 } from "blitz"
-import oAuthCallback from "./internal/oauth/callback"
-import getAuthorizationUrl from "./internal/oauth/authorization-url"
-import {init} from "./internal/init"
+import oAuthCallback from "./next-auth/packages/next-auth/src/core/lib/oauth/callback"
+import getAuthorizationUrl from "./next-auth/packages/next-auth/src/core/lib/oauth/authorization-url"
+import {init} from "./next-auth/packages/next-auth/src/core/init"
 import {setHeaders, toInternalRequest, toResponse} from "./internal/utils"
 import {Cookie} from "./internal/init/utils/cookie"
 import type {NextAuth_AuthAction, NextAuth_InternalOptions} from "./internal/types"
@@ -57,22 +57,27 @@ export function NextAuthAdapter(config: BlitzNextAuthOptions): BlitzNextAuthApiH
     }
 
     const internalRequest = await toInternalRequest(req)
-    const {providerId} = internalRequest
+    let {providerId} = internalRequest
+    // remove stuff after ? from providerId
+    if (providerId?.includes("?")) {
+      providerId = providerId.split("?")[0]
+    }
     const {options, cookies} = await init({
       url: new URL(
         internalRequest.url!,
         process.env.APP_ORIGIN || process.env.BLITZ_DEV_SERVER_ORIGIN,
       ),
-      authOptions: config,
+      authOptions: config as any,
       action,
       providerId,
       callbackUrl: req.body?.callbackUrl ?? (req.query?.callbackUrl as string),
       cookies: internalRequest.cookies,
+      isPost: req.method === "POST",
     })
 
     log.debug("NEXT_AUTH_INTERNAL_OPTIONS", options)
 
-    await AuthHandler(middleware, config, internalRequest, action, options, cookies)
+    await AuthHandler(middleware, config, internalRequest, action, options as any, cookies)
       .then(async ({middleware}) => {
         await handleRequestWithMiddleware<ApiHandlerIncomingMessage, MiddlewareResponse<Ctx>>(
           req,
@@ -102,13 +107,14 @@ async function AuthHandler(
   options: NextAuth_InternalOptions,
   cookies: Cookie[],
 ) {
+  console.log("options", options)
   if (!options.provider) {
     throw new OAuthError("MISSING_PROVIDER_ERROR")
   }
   if (action === "signin") {
     middleware.push(async (req, res, next) => {
       try {
-        const _signin = await getAuthorizationUrl({options, query: req.query})
+        const _signin = await getAuthorizationUrl({options: options as any, query: req.query})
         if (_signin.cookies) cookies.push(..._signin.cookies)
         const session = res.blitzCtx.session as SessionContext
         assert(session, "Missing Blitz sessionMiddleware!")
@@ -122,6 +128,7 @@ async function AuthHandler(
         res.end()
       } catch (e) {
         log.error("OAUTH_SIGNIN_Error in NextAuthAdapter " + (e as Error).toString())
+        console.log(e)
         const authErrorQueryStringKey = config.failureRedirectUrl.includes("?")
           ? "&authError="
           : "?authError="
@@ -140,9 +147,9 @@ async function AuthHandler(
         try {
           const {profile, account, OAuthProfile} = await oAuthCallback({
             query: internalRequest.query,
-            body: internalRequest.body,
+            body: internalRequest.body || {code: req.query.code, state: req.query.state},
             method: "POST",
-            options,
+            options: options as any,
             cookies: internalRequest.cookies,
           })
           const session = res.blitzCtx.session as SessionContext
@@ -159,6 +166,7 @@ async function AuthHandler(
           res.end()
         } catch (e) {
           log.error("OAUTH_CALLBACK_Error in NextAuthAdapter " + (e as Error).toString())
+          console.log(e)
           const authErrorQueryStringKey = config.failureRedirectUrl.includes("?")
             ? "&authError="
             : "?authError="
