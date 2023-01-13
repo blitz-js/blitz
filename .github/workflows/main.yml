@@ -139,6 +139,10 @@ jobs:
         env: 
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
         shell: bash
+      
+      - name: Update system (Ubuntu)
+        if: matrix.os == 'ubuntu-latest'
+        run: sudo apt update && sudo apt upgrade -y
 
       - name: Install playwright
         run: |
