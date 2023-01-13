@@ -1,5 +1,15 @@
 # @blitzjs/generator
 
+## 2.0.0-beta.22
+
+### Minor Changes
+
+- 7abfb9086: Redesign the index page for newly generated blitz projects
+
+### Patch Changes
+
+- bcef81fad: Fix missing MockRouter prop in test utils
+
 ## 2.0.0-beta.21
 
 ### Patch Changes

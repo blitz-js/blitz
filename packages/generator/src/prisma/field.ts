@@ -87,7 +87,7 @@ export class Field {
     }
     // use original unmodified field name in case the list handling code
     // has modified fieldName
-    if (isRelation(_fieldName as string)) {
+    if (typeof _fieldName === "string" && isRelation(_fieldName)) {
       // this field is an object type, not a scalar type
       const relationType = Relation[_fieldName]
       // translate the type into the name since they should stay in sync
