@@ -12,7 +12,7 @@ defaults:
 jobs:
   snapshot-release:
     name: Create a snapshot release of a pull request
-    if: ${{ github.repository_owner == 'siddhsuresh' && github.event.issue.pull_request && startsWith(github.event.comment.body, '!preview') }}
+    if: ${{ github.repository_owner == 'blitz-js' && github.event.issue.pull_request && startsWith(github.event.comment.body, '!preview') }}
     runs-on: ubuntu-latest
     steps:
       - name: "Check if user has admin access (only admins can publish snapshot releases)."
