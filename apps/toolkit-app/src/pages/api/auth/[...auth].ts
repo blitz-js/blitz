@@ -6,7 +6,7 @@ import { Role } from "types"
 
 const config: BlitzNextAuthOptions = {
   successRedirectUrl: "/",
-  failureRedirectUrl: "/error",
+  errorRedirectUrl: "/error",
   providers: [
     GithubProvider({
       clientId: process.env.GITHUB_CLIENT_ID as string,
@@ -33,6 +33,7 @@ const config: BlitzNextAuthOptions = {
       source: "github",
     }
     await session.$create(publicData)
+    return { redirectUrl: "/github" }
   },
 }
 

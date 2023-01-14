@@ -5,9 +5,14 @@ import {SessionContext} from "../../../index-server"
 
 export type BlitzNextAuthOptions = AuthOptions & {
   successRedirectUrl: string
-  failureRedirectUrl: string
+  errorRedirectUrl: string
   secureProxy?: boolean
-  callback: (user: User, account: any, profile: Profile, session: SessionContext) => Promise<void>
+  callback: (
+    user: User,
+    account: any,
+    profile: Profile,
+    session: SessionContext,
+  ) => Promise<void | {redirectUrl: string}>
 }
 
 export type ApiHandlerIncomingMessage = IncomingMessage & {

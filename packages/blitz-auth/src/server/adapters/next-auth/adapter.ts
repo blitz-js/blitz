@@ -117,13 +117,13 @@ export function NextAuthAdapter(config: BlitzNextAuthOptions): BlitzNextAuthApiH
         )
       })
       .catch((error) => {
-        const authErrorQueryStringKey = config.failureRedirectUrl.includes("?")
+        const authErrorQueryStringKey = config.errorRedirectUrl.includes("?")
           ? "&authError="
           : "?authError="
         const redirectUrl =
           authErrorQueryStringKey +
           encodeURIComponent(truncateString((error as Error).toString(), 100))
-        res.status(302).setHeader("Location", config.failureRedirectUrl + redirectUrl)
+        res.status(302).setHeader("Location", config.errorRedirectUrl + redirectUrl)
         res.end()
         return null
       })
@@ -160,12 +160,12 @@ async function AuthHandler(
       } catch (e) {
         log.error("OAUTH_SIGNIN_Error in NextAuthAdapter " + (e as Error).toString())
         console.log(e)
-        const authErrorQueryStringKey = config.failureRedirectUrl.includes("?")
+        const authErrorQueryStringKey = config.errorRedirectUrl.includes("?")
           ? "&authError="
           : "?authError="
         const redirectUrl =
           authErrorQueryStringKey + encodeURIComponent(truncateString((e as Error).toString(), 100))
-        res.setHeader("Location", config.failureRedirectUrl + redirectUrl)
+        res.setHeader("Location", config.errorRedirectUrl + redirectUrl)
         res.statusCode = 302
         res.end()
       }
@@ -185,26 +185,30 @@ async function AuthHandler(
           })
           const session = res.blitzCtx.session as SessionContext
           assert(session, "Missing Blitz sessionMiddleware!")
-          await config.callback(profile as User, account, OAuthProfile!, session)
+          const callback = await config.callback(profile as User, account, OAuthProfile!, session)
+          let _redirect = config.successRedirectUrl
+          if (callback instanceof Object) {
+            _redirect = callback.redirectUrl
+          }
           const response = toResponse({
-            redirect: config.successRedirectUrl,
+            redirect: _redirect,
             cookies: cookies,
           })
 
           setHeaders(response.headers, res)
-          res.setHeader("Location", config.successRedirectUrl)
+          res.setHeader("Location", _redirect)
           res.statusCode = 302
           res.end()
         } catch (e) {
           log.error("OAUTH_CALLBACK_Error in NextAuthAdapter " + (e as Error).toString())
           console.log(e)
-          const authErrorQueryStringKey = config.failureRedirectUrl.includes("?")
+          const authErrorQueryStringKey = config.errorRedirectUrl.includes("?")
             ? "&authError="
             : "?authError="
           const redirectUrl =
             authErrorQueryStringKey +
             encodeURIComponent(truncateString((e as Error).toString(), 100))
-          res.setHeader("Location", config.failureRedirectUrl + redirectUrl)
+          res.setHeader("Location", config.errorRedirectUrl + redirectUrl)
           res.statusCode = 302
           res.end()
         }
