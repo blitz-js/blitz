@@ -21,13 +21,13 @@ import {
   VerifyCallbackResult,
 } from "./types"
 
-export const isFunction = (functionToCheck: unknown): functionToCheck is Function =>
+const isFunction = (functionToCheck: unknown): functionToCheck is Function =>
   typeof functionToCheck === "function"
 
-export const isVerifyCallbackResult = (value: unknown): value is VerifyCallbackResult =>
+const isVerifyCallbackResult = (value: unknown): value is VerifyCallbackResult =>
   typeof value === "object" && value !== null && "publicData" in value
 
-export const INTERNAL_REDIRECT_URL_KEY = "_redirectUrl"
+const INTERNAL_REDIRECT_URL_KEY = "_redirectUrl"
 
 export function passportAuth(config: BlitzPassportConfig): ApiHandler {
   return async function authHandler(req, res) {
