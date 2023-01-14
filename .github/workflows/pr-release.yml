@@ -1,155 +1,102 @@
-name: CI
+# https://github.com/withastro/astro/blob/main/.github/workflows/snapshot-release.yml
+
+name: Create a Snapshot Release
 
 on:
-  pull_request:
-    types: [opened, synchronize]
+  issue_comment:
+    types: [created]
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
+defaults:
+  run:
+    shell: bash
 jobs:
-  lint:
-    name: Lint
+  snapshot-release:
+    name: Create a snapshot release of a pull request
+    if: ${{ github.repository_owner == 'siddhsuresh' && github.event.issue.pull_request && startsWith(github.event.comment.body, '!preview') }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
+      - name: "Check if user has admin access (only admins can publish snapshot releases)."
+        uses: "lannonbr/repo-permission-check-action@2.0.0"
         with:
-          version: 7.11.0
-      - name: Setup node
-        uses: actions/setup-node@v2
-        with:
-          node-version: 16
-          cache: "pnpm"
-      - name: Install dependencies
-        run: pnpm install  --frozen-lockfile
-      - run: pnpm manypkg check
-      - name: Build
-        run: pnpm build
-      - name: Lint
-        run: pnpm lint
+          permission: "admin"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  build:
-    runs-on: ubuntu-latest
-    name: Build
-    steps:
-      - uses: actions/checkout@v2
-      - uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
+      - name: resolve pr refs
+        id: refs
+        uses: eficode/resolve-pr-refs@main
         with:
-          version: 7.11.0
-      - name: Setup node
-        uses: actions/setup-node@v2
+          token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - uses: actions/checkout@v3
         with:
-          node-version: 16
-          cache: "pnpm"
-      - run: pnpm install --frozen-lockfile
-      - name: Build
-        run: pnpm build
-      - name: Build Apps
-        run: pnpm build:apps
-
-  Unit-Tests:
-    name: "Unit Test: ${{ matrix.os }} (node@16)"
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os:
-          - ubuntu-latest
-          - windows-latest
-      fail-fast: false
-    env:
-      NODE_VERSION: 16
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+          ref: ${{ steps.refs.outputs.head_ref }}
 
       - name: Setup PNPM
-        uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
-        with:
-          version: 7.11.0
+        uses: pnpm/action-setup@v2.2.1
 
-      - name: Setup node@16
-        uses: actions/setup-node@v2
+      - name: Setup Node
+        uses: actions/setup-node@v3
         with:
           node-version: 16
-          cache: "pnpm"
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'pnpm'
+      
+      - name: Short SHA
+        id: vars
+        run: echo "sha_short=$(git rev-parse --short "$GITHUB_SHA")" >> $GITHUB_OUTPUT
+          
+      - name: Extract the snapshot name from comment body
+        id: getSnapshotName
+        uses: actions/github-script@v6
+        with:
+          script:  |
+            const splitComment = context.payload.comment.body.split(' ');
+            if(splitComment.length !== 2) {
+              return "${{ steps.vars.outputs.sha_short }}";
+            }
+            return splitComment[1].trim();
+          result-encoding: string
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-        shell: bash
-
-      - name: Build
-        run: pnpm build
-        shell: bash
-
-      - name: Test Packages
-        run: pnpm test -- --filter=./packages/*
-        shell: bash
-
-      - name: Test Apps
-        run: pnpm test -- --filter=./apps/*
-        shell: bash
-
-  find-integration-tests:
-    name: "Find Integration Tests"
-    runs-on: ubuntu-latest
-    outputs:
-      folders: ${{ steps.set-matrix.outputs.folders }}
-    steps:
-      - uses: actions/checkout@v2
-      - id: set-matrix
-        name: "Find all folders"
-        shell: bash
-        run: |
-          cd ./integration-tests
-          tree -J -d -L 1 | jq -c  '.[0].contents | map(.name | tostring) | map(select(. != "utils"))'
-          folders=$(tree -J -d -L 1 | jq -c  '.[0].contents | map(.name | tostring) | map(select(. != "utils"))')
-          echo "folders=$folders" >> $GITHUB_OUTPUT
-
-  Integration-Tests:
-    name: "Integration Test: ${{matrix.folder}} @ ${{ matrix.os }} "
-    needs: [find-integration-tests]
-    strategy:
-      matrix:
-        folder: ${{fromJSON(needs.find-integration-tests.outputs.folders)}}
-        os:
-          - ubuntu-latest
-          - windows-latest
-      fail-fast: false
-    runs-on: ${{ matrix.os }}
-    steps:
-      - run: echo ${{matrix.folder}}
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Setup PNPM
-        uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
-        with:
-          version: 7.11.0
-
-      - name: Setup node@${{ matrix.NODE_VERSION }}
-        uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.NODE_VERSION }}
-          cache: "pnpm"
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install
         env: 
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
-        shell: bash
 
-      - name: Install playwright
+      - name: Build Packages
+        run: pnpm run build
+
+      - name: Bump Package Versions
+        id: changesets
         run: |
-            pnpx playwright@1.28.0 install --with-deps
-        shell: bash
+          pnpm changeset pre exit
+          pnpm changeset version --snapshot ${{ steps.getSnapshotName.outputs.result }} > changesets.output.txt 2>&1
+          echo ::set-output name=result::`cat changesets.output.txt`
+        env:
+          # Needs access to run the script
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build
-        run: pnpm build
-        shell: bash
+      - name: Publish Release
+        id: publish
+        run: |
+          pnpm run release --tag next--${{ steps.getSnapshotName.outputs.result }} > publish.output.txt 2>&1
+          echo ::set-output name=result::`cat publish.output.txt`
+        env:
+          # Needs access to publish to npm
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Test Packages
-        run: pnpm test -- --filter=./integration-tests/${{matrix.folder}}
-        shell: bash
+      - name: Pull Request Notification
+        uses: actions/github-script@v6
+        env:
+          MESSAGE: ${{ steps.publish.outputs.result }}
+        with:
+          script: |
+            console.log(process.env.MESSAGE);
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '```\n' + process.env.MESSAGE + '\n```',
+            })
   
