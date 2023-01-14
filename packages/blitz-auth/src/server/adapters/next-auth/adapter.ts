@@ -1,3 +1,4 @@
+import cookieSession from "cookie-session"
 import {
   assert,
   connectMiddleware,
@@ -10,21 +11,28 @@ import {
   secureProxyMiddleware,
   truncateString,
 } from "blitz"
+import {isLocalhost, SessionContext} from "../../../index-server"
+
+// next-auth internals
 import oAuthCallback from "./next-auth/packages/next-auth/src/core/lib/oauth/callback"
 import getAuthorizationUrl from "./next-auth/packages/next-auth/src/core/lib/oauth/authorization-url"
 import {init} from "./next-auth/packages/next-auth/src/core/init"
-import {setHeaders, toInternalRequest, toResponse} from "./internal/utils"
-import {Cookie} from "./internal/init/utils/cookie"
-import type {NextAuth_AuthAction, NextAuth_InternalOptions} from "./internal/types"
+import {toInternalRequest, toResponse} from "./next-auth/packages/next-auth/src/utils/web"
+import {getBody, getURL, setHeaders} from "./next-auth/packages/next-auth/src/utils/node"
+import type {RequestInternal} from "./next-auth/packages/next-auth/src/core"
+import type {Cookie} from "./next-auth/packages/core/src/lib/cookie"
+import type {
+  AuthAction,
+  AuthOptions,
+  InternalOptions,
+} from "./next-auth/packages/next-auth/src/core/types"
+
 import type {
   ApiHandlerIncomingMessage,
   BlitzNextAuthApiHandler,
   BlitzNextAuthOptions,
 } from "./types"
-import type {ResponseInternal} from "next-auth/core"
-import cookieSession from "cookie-session"
-import {isLocalhost, SessionContext} from "../../../index-server"
-import {Profile, User} from "next-auth"
+import type {User} from "next-auth"
 
 const INTERNAL_REDIRECT_URL_KEY = "_redirectUrl"
 
@@ -38,7 +46,7 @@ export function NextAuthAdapter(config: BlitzNextAuthOptions): BlitzNextAuthApiH
     if (!req.query.auth?.length) {
       return res.status(404).end()
     }
-    const action = req.query.auth[0] as NextAuth_AuthAction
+    const action = req.query.auth[0] as AuthAction
     if (!action || !["signin", "callback"].includes(action)) {
       return res.status(404).end()
     }
@@ -56,9 +64,32 @@ export function NextAuthAdapter(config: BlitzNextAuthOptions): BlitzNextAuthApiH
       middleware.push(secureProxyMiddleware)
     }
 
-    const internalRequest = await toInternalRequest(req)
+    const headers = new Headers(req.headers as any)
+    const url = getURL(req.url, headers)
+    if (url instanceof Error) {
+      if (process.env.NODE_ENV !== "production") throw url
+      const errorLogger = config.logger?.error ?? console.error
+      errorLogger("INVALID_URL", url)
+      res.status(400)
+      return res.json({
+        message:
+          "There is a problem with the server configuration. Check the server logs for more information.",
+      })
+    }
+    const request = new Request(url, {
+      headers,
+      method: req.method,
+      ...getBody(req),
+    })
+
+    const internalRequest = await toInternalRequest(request)
+    if (internalRequest instanceof Error) {
+      console.error((request as any).code, request)
+      return new Response(`Error: This action with HTTP ${request.method} is not supported.`, {
+        status: 400,
+      })
+    }
     let {providerId} = internalRequest
-    // remove stuff after ? from providerId
     if (providerId?.includes("?")) {
       providerId = providerId.split("?")[0]
     }
@@ -67,7 +98,7 @@ export function NextAuthAdapter(config: BlitzNextAuthOptions): BlitzNextAuthApiH
         internalRequest.url!,
         process.env.APP_ORIGIN || process.env.BLITZ_DEV_SERVER_ORIGIN,
       ),
-      authOptions: config as any,
+      authOptions: config as unknown as AuthOptions,
       action,
       providerId,
       callbackUrl: req.body?.callbackUrl ?? (req.query?.callbackUrl as string),
@@ -77,7 +108,7 @@ export function NextAuthAdapter(config: BlitzNextAuthOptions): BlitzNextAuthApiH
 
     log.debug("NEXT_AUTH_INTERNAL_OPTIONS", options)
 
-    await AuthHandler(middleware, config, internalRequest, action, options as any, cookies)
+    await AuthHandler(middleware, config, internalRequest, action, options, cookies)
       .then(async ({middleware}) => {
         await handleRequestWithMiddleware<ApiHandlerIncomingMessage, MiddlewareResponse<Ctx>>(
           req,
@@ -102,9 +133,9 @@ export function NextAuthAdapter(config: BlitzNextAuthOptions): BlitzNextAuthApiH
 async function AuthHandler(
   middleware: RequestMiddleware<ApiHandlerIncomingMessage, MiddlewareResponse<Ctx>>[],
   config: BlitzNextAuthOptions,
-  internalRequest: Awaited<ReturnType<typeof toInternalRequest>>,
-  action: NextAuth_AuthAction,
-  options: NextAuth_InternalOptions,
+  internalRequest: RequestInternal,
+  action: AuthAction,
+  options: InternalOptions,
   cookies: Cookie[],
 ) {
   console.log("options", options)
@@ -114,14 +145,14 @@ async function AuthHandler(
   if (action === "signin") {
     middleware.push(async (req, res, next) => {
       try {
-        const _signin = await getAuthorizationUrl({options: options as any, query: req.query})
+        const _signin = await getAuthorizationUrl({options: options, query: req.query})
         if (_signin.cookies) cookies.push(..._signin.cookies)
         const session = res.blitzCtx.session as SessionContext
         assert(session, "Missing Blitz sessionMiddleware!")
         await session.$setPublicData({
           [INTERNAL_REDIRECT_URL_KEY]: _signin.redirect,
         } as any)
-        const response = toResponse(_signin as ResponseInternal)
+        const response = toResponse(_signin)
         setHeaders(response.headers, res)
         res.setHeader("Location", _signin.redirect)
         res.statusCode = 302
@@ -154,11 +185,11 @@ async function AuthHandler(
           })
           const session = res.blitzCtx.session as SessionContext
           assert(session, "Missing Blitz sessionMiddleware!")
-          await config.callback(profile as User, account, OAuthProfile as Profile, session)
+          await config.callback(profile as User, account, OAuthProfile!, session)
           const response = toResponse({
             redirect: config.successRedirectUrl,
             cookies: cookies,
-          } as ResponseInternal)
+          })
 
           setHeaders(response.headers, res)
           res.setHeader("Location", config.successRedirectUrl)

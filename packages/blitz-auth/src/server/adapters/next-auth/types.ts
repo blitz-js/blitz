@@ -1,13 +1,11 @@
 import type {Ctx, MiddlewareResponse} from "blitz"
-import type {IncomingMessage, ServerResponse} from "http"
-import type {Profile, User} from "next-auth"
-import type {Provider} from "next-auth/providers"
+import type {IncomingMessage} from "http"
+import type {AuthOptions, Profile, User} from "next-auth"
 import {SessionContext} from "../../../index-server"
 
-export type BlitzNextAuthOptions = {
+export type BlitzNextAuthOptions = AuthOptions & {
   successRedirectUrl: string
   failureRedirectUrl: string
-  providers: Provider[]
   secureProxy?: boolean
   callback: (user: User, account: any, profile: Profile, session: SessionContext) => Promise<void>
 }
@@ -24,6 +22,6 @@ export type ApiHandlerIncomingMessage = IncomingMessage & {
 
 export type BlitzNextAuthApiHandler = (
   req: ApiHandlerIncomingMessage,
-  res: MiddlewareResponse & {status: (statusCode: number) => any},
+  res: MiddlewareResponse & {status: (statusCode: number) => any} & {json: (data: any) => any},
   ctx: Ctx,
 ) => void | Promise<void>
