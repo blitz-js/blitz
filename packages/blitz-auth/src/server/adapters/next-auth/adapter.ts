@@ -14,25 +14,20 @@ import {
 import {isLocalhost, SessionContext} from "../../../index-server"
 
 // next-auth internals
-import oAuthCallback from "./next-auth/packages/next-auth/src/core/lib/oauth/callback"
-import getAuthorizationUrl from "./next-auth/packages/next-auth/src/core/lib/oauth/authorization-url"
-import {init} from "./next-auth/packages/next-auth/src/core/init"
-import {toInternalRequest, toResponse} from "./next-auth/packages/next-auth/src/utils/web"
-import {getBody, getURL, setHeaders} from "./next-auth/packages/next-auth/src/utils/node"
-import type {RequestInternal} from "./next-auth/packages/next-auth/src/core"
-import type {Cookie} from "./next-auth/packages/core/src/lib/cookie"
-import type {
-  AuthAction,
-  AuthOptions,
-  InternalOptions,
-} from "./next-auth/packages/next-auth/src/core/types"
+import oAuthCallback from "./internals/core/lib/oauth/callback"
+import getAuthorizationUrl from "./internals/core/lib/oauth/authorization-url"
+import {init} from "./internals/core/init"
+import {toInternalRequest, toResponse} from "./internals/utils/web"
+import {getBody, getURL, setHeaders} from "./internals/utils/node"
+import type {RequestInternal, AuthOptions, User} from "next-auth"
+import type {Cookie} from "./internals/core/lib/cookie"
+import type {AuthAction, InternalOptions} from "./internals/core/types"
 
 import type {
   ApiHandlerIncomingMessage,
   BlitzNextAuthApiHandler,
   BlitzNextAuthOptions,
 } from "./types"
-import type {User} from "next-auth"
 
 const INTERNAL_REDIRECT_URL_KEY = "_redirectUrl"
 
@@ -95,6 +90,7 @@ export function NextAuthAdapter(config: BlitzNextAuthOptions): BlitzNextAuthApiH
     }
     const {options, cookies} = await init({
       url: new URL(
+        // @ts-ignore
         internalRequest.url!,
         process.env.APP_ORIGIN || process.env.BLITZ_DEV_SERVER_ORIGIN,
       ),
@@ -138,7 +134,6 @@ async function AuthHandler(
   options: InternalOptions,
   cookies: Cookie[],
 ) {
-  console.log("options", options)
   if (!options.provider) {
     throw new OAuthError("MISSING_PROVIDER_ERROR")
   }
