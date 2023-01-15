@@ -7,10 +7,11 @@ export interface Session {
 
 export type PublicData = Session extends {PublicData: unknown}
   ? Session["PublicData"]
-  : {userId: unknown}
+  : {userId: unknown; role?: unknown}
 
 export interface EmptyPublicData extends Partial<Omit<PublicData, "userId">> {
   userId: PublicData["userId"] | null
+  role?: PublicData["role"] | null
 }
 
 export interface ClientSession extends EmptyPublicData {
@@ -50,17 +51,6 @@ export interface SessionConfigMethods {
   deleteSession: (handle: string) => Promise<SessionModel | undefined>
 }
 
-export interface SessionConfig extends SessionConfigMethods {
-  cookiePrefix?: string
-  sessionExpiryMinutes?: number
-  method?: "essential" | "advanced"
-  sameSite?: "none" | "lax" | "strict"
-  secureCookies?: boolean
-  domain?: string
-  publicDataKeysToSyncAcrossSessions?: string[]
-  isAuthorized: (data: {ctx: BlitzCtx; args: any}) => boolean
-}
-
 export interface SessionContextBase {
   $handle: string | null
   $publicData: unknown
@@ -90,6 +80,9 @@ export interface AuthenticatedSessionContext extends SessionContextBase, PublicD
 declare module "blitz" {
   export interface Ctx {
     session: SessionContext
+  }
+  export interface AuthenticatedMiddlewareCtx extends Omit<Ctx, "session"> {
+    session: AuthenticatedSessionContext
   }
 }
 

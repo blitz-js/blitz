@@ -41,7 +41,10 @@ export class ModelGenerator extends Generator<ModelGeneratorOptions> {
 
   // eslint-disable-next-line require-await
   async write() {
-    const schemaPath = path.resolve("db/schema.prisma")
+    const pkgJson = this.fs.readJSON("package.json", {}) as {[key: string]: any}
+    const rawSchemaPath = pkgJson?.prisma?.schema || "db/schema.prisma"
+
+    const schemaPath = path.resolve(rawSchemaPath)
     if (!this.fs.exists(schemaPath)) {
       throw new Error("Prisma schema file was not found")
     }
@@ -50,7 +53,7 @@ export class ModelGenerator extends Generator<ModelGeneratorOptions> {
     try {
       schema = ast.getSchema(this.fs.read(schemaPath))
     } catch (err) {
-      console.error("Failed to parse db/schema.prisma file")
+      console.error(`Failed to parse ${rawSchemaPath} file`)
       throw err
     }
     const {modelName, extraArgs, dryRun} = this.options

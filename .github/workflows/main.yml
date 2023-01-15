@@ -9,8 +9,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  TURBO_TOKEN: 05de0230f01174d1f8cb4845a01dc6c895ce28f04ebef2318ab11615791b871c35eabbf8
-  TURBO_TEAM: foo
+  PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
 
 jobs:
   lint:
@@ -20,7 +19,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
         with:
-          version: 6.32.6
+          version: 7.11.0
       - name: Setup node
         uses: actions/setup-node@v2
         with:
@@ -29,15 +28,10 @@ jobs:
       - name: Install dependencies
         run: pnpm install  --frozen-lockfile
       - run: pnpm manypkg check
-      - name: Turborepo local server
-        uses: felixmosh/turborepo-gh-artifacts@v1
-        with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          server-token: ${{ env.TURBO_TOKEN }}
       - name: Build
-        run: pnpm build -- --api="http://127.0.0.1:9080"
+        run: pnpm build
       - name: Lint
-        run: pnpm lint -- --api="http://127.0.0.1:9080"
+        run: pnpm lint
 
   build:
     runs-on: ubuntu-latest
@@ -46,23 +40,17 @@ jobs:
       - uses: actions/checkout@v2
       - uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
         with:
-          version: 6.32.6
+          version: 7.11.0
       - name: Setup node
         uses: actions/setup-node@v2
         with:
           node-version: 16
           cache: "pnpm"
       - run: pnpm install --frozen-lockfile
-      - run: pnpm manypkg check
-      - name: Turborepo local server
-        uses: felixmosh/turborepo-gh-artifacts@v1
-        with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          server-token: ${{ env.TURBO_TOKEN }}
       - name: Build
-        run: pnpm build -- --api="http://127.0.0.1:9080"
+        run: pnpm build
       - name: Build Apps
-        run: pnpm build:apps -- --api="http://127.0.0.1:9080"
+        run: pnpm build:apps
 
   Unit-Tests:
     name: "Unit Test: ${{ matrix.os }} (node@16)"
@@ -82,7 +70,7 @@ jobs:
       - name: Setup PNPM
         uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
         with:
-          version: 6.32.6
+          version: 7.11.0
 
       - name: Setup node@16
         uses: actions/setup-node@v2
@@ -94,17 +82,8 @@ jobs:
         run: pnpm install --frozen-lockfile
         shell: bash
 
-      - run: pnpm manypkg check
-        shell: bash
-
-      - name: Turborepo local server
-        uses: felixmosh/turborepo-gh-artifacts@v1
-        with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          server-token: ${{ env.TURBO_TOKEN }}
-
       - name: Build
-        run: pnpm build -- --api="http://127.0.0.1:9080"
+        run: pnpm build
         shell: bash
 
       - name: Test Packages
@@ -129,7 +108,7 @@ jobs:
           cd ./integration-tests
           tree -J -d -L 1 | jq -c  '.[0].contents | map(.name | tostring) | map(select(. != "utils"))'
           folders=$(tree -J -d -L 1 | jq -c  '.[0].contents | map(.name | tostring) | map(select(. != "utils"))')
-          echo "::set-output name=folders::$folders"
+          echo "folders=$folders" >> $GITHUB_OUTPUT
 
   Integration-Tests:
     name: "Integration Test: ${{matrix.folder}} @ ${{ matrix.os }} "
@@ -150,7 +129,7 @@ jobs:
       - name: Setup PNPM
         uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
         with:
-          version: 6.32.6
+          version: 7.11.0
 
       - name: Setup node@${{ matrix.NODE_VERSION }}
         uses: actions/setup-node@v2
@@ -158,25 +137,17 @@ jobs:
           node-version: ${{ matrix.NODE_VERSION }}
           cache: "pnpm"
 
-      - name: Link Blitz CLI
-        run: pnpm link ./packages/blitz
-        shell: bash
-
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
         shell: bash
 
-      - run: pnpm manypkg check
+      - name: Install playwright
+        run: |
+          pnpx playwright@1.28.0 install --with-deps
         shell: bash
 
-      - name: Turborepo local server
-        uses: felixmosh/turborepo-gh-artifacts@v1
-        with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          server-token: ${{ env.TURBO_TOKEN }}
-
       - name: Build
-        run: pnpm build -- --api="http://127.0.0.1:9080"
+        run: pnpm build
         shell: bash
 
       - name: Test Packages

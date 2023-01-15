@@ -16,6 +16,112 @@ import {readdirRecursive} from "./utils/readdir-recursive"
 import prettier from "prettier"
 const debug = require("debug")("blitz:generator")
 
+export function getProjectRootSync() {
+  return path.dirname(getConfigSrcPath())
+}
+
+export function getConfigSrcPath() {
+  const jsPath = path.resolve(path.join(process.cwd(), "next.config.js"))
+  return jsPath
+}
+
+export const customTemplatesBlitzConfig = async (
+  isTypeScript: boolean,
+  customTemplatesPath = "",
+  codemod = false,
+) => {
+  const {globby} = await import("globby")
+  const blitzServer = await globby(["{app,src}/**/blitz-server.{ts,js}"], {
+    cwd: getProjectRootSync(),
+  })
+  if (blitzServer.length === 0) {
+    throw new Error("Could not find blitz-server.js or blitz-server.ts in app or src folder")
+  }
+  if (blitzServer.length > 1) {
+    throw new Error("Found more than one blitz-server.js or blitz-server.ts in app or src folder")
+  }
+  const blitzServerPath = require("path").join(process.cwd(), blitzServer.at(0))
+  const userConfigModuleSource = fs.readFileSync(blitzServerPath, {encoding: "utf-8"})
+  const userConfigModule = j(userConfigModuleSource, {parser: customTsParser})
+  const program = userConfigModule.get()
+  const cliConfigDeclaration = userConfigModule
+    .find(j.ExportNamedDeclaration, {
+      declaration: {
+        type: "VariableDeclaration",
+        declarations: [
+          {
+            id: {
+              name: "cliConfig",
+            },
+          },
+        ],
+      },
+    })
+    .paths()
+    .at(0)
+  if (!cliConfigDeclaration) {
+    const config = j.identifier("cliConfig")
+    const configVariable = j.variableDeclaration("const", [
+      j.variableDeclarator(
+        config,
+        j.objectExpression([
+          j.objectProperty(j.identifier("customTemplates"), j.literal(customTemplatesPath)),
+        ]),
+      ),
+    ])
+    if (isTypeScript) {
+      const type = j.tsTypeAnnotation(j.tsTypeReference(j.identifier("BlitzCliConfig")))
+      const declaration: any = configVariable?.declarations
+      declaration[0].id.typeAnnotation = type
+      const typeImport = j.importDeclaration(
+        [j.importSpecifier(j.identifier("BlitzCliConfig"))],
+        j.literal("blitz"),
+      )
+      typeImport.importKind = "type"
+      program.node.program.body.unshift(typeImport)
+    }
+    const exportConfig = j.exportNamedDeclaration(configVariable)
+    program.node.program.body.push(exportConfig)
+  } else {
+    const configType = cliConfigDeclaration.value.declaration?.type
+    if (configType === "VariableDeclaration") {
+      const config = cliConfigDeclaration.value.declaration.declarations[0]
+      if (config?.type === "VariableDeclarator") {
+        const configProperties = config.init
+        if (configProperties?.type === "ObjectExpression") {
+          const customTemplatesProperty = configProperties.properties.find((property) => {
+            if (property.type === "ObjectProperty") {
+              const key = property.key
+              if (key.type === "Identifier") {
+                return key.name === "customTemplates"
+              }
+            }
+          })
+          if (!customTemplatesProperty) {
+            configProperties.properties.push(
+              j.objectProperty(j.identifier("customTemplates"), j.literal(customTemplatesPath)),
+            )
+          } else {
+            if (customTemplatesProperty.type === "ObjectProperty") {
+              const customValue = customTemplatesProperty.value
+              if (customValue.type === "StringLiteral") {
+                if (!codemod) {
+                  return customValue.value
+                }
+                customValue.value = customTemplatesPath
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  if (codemod) {
+    const newSource = userConfigModule.toSource()
+    fs.writeFileSync(blitzServerPath, newSource)
+  }
+}
+
 export const customTsParser = {
   parse(source: string, options?: Overrides) {
     const babelOptions = getBabelOptions(options)

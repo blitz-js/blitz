@@ -7,7 +7,7 @@ import type {
   NextApiRequest,
   NextApiResponse,
 } from "next"
-import type {
+import {
   AddParameters,
   AsyncFunc,
   BlitzServerPlugin,
@@ -15,6 +15,8 @@ import type {
   FirstParam,
   RequestMiddleware,
   MiddlewareResponse,
+  BlitzLogger,
+  initializeLogger,
 } from "blitz"
 import {
   handleRequestWithMiddleware,
@@ -57,6 +59,7 @@ export type NextApiHandler<TResult> = (
 type SetupBlitzOptions = {
   plugins: BlitzServerPlugin<RequestMiddleware, Ctx>[]
   onError?: (err: Error) => void
+  logger?: ReturnType<typeof BlitzLogger>
 }
 
 export type Redirect =
@@ -79,7 +82,7 @@ export type BlitzGSPResult<P> =
   | {notFound: true; revalidate?: number | boolean}
 
 export type BlitzGSSPHandler<
-  TProps extends {[key: string]: any},
+  TProps extends {[key: string]: any} = {[key: string]: any},
   Query extends ParsedUrlQuery = ParsedUrlQuery,
   PD extends PreviewData = PreviewData,
 > = ({
@@ -92,7 +95,7 @@ export type BlitzGSSPHandler<
 >
 
 export type BlitzGSPHandler<
-  TProps extends {[key: string]: any},
+  TProps extends {[key: string]: any} = {[key: string]: any},
   Query extends ParsedUrlQuery = ParsedUrlQuery,
   PD extends PreviewData = PreviewData,
 > = ({
@@ -134,13 +137,15 @@ const prefetchQueryFactory = (
   }
 }
 
-export const setupBlitzServer = ({plugins, onError}: SetupBlitzOptions) => {
+export const setupBlitzServer = ({plugins, onError, logger}: SetupBlitzOptions) => {
+  initializeLogger(logger ?? BlitzLogger())
+
   const middlewares = [...plugins.flatMap((p) => p.requestMiddlewares), revalidateMiddleware]
   const contextMiddleware = plugins.flatMap((p) => p.contextMiddleware).filter(Boolean)
 
   const gSSP =
     <
-      TProps extends {[key: string]: any},
+      TProps extends {[key: string]: any} = {[key: string]: any},
       Query extends ParsedUrlQuery = ParsedUrlQuery,
       PD extends PreviewData = PreviewData,
     >(
@@ -175,7 +180,7 @@ export const setupBlitzServer = ({plugins, onError}: SetupBlitzOptions) => {
 
   const gSP =
     <
-      TProps extends {[key: string]: any},
+      TProps extends {[key: string]: any} = {[key: string]: any},
       Query extends ParsedUrlQuery = ParsedUrlQuery,
       PD extends PreviewData = PreviewData,
     >(
@@ -227,6 +232,7 @@ export const setupBlitzServer = ({plugins, onError}: SetupBlitzOptions) => {
 export interface BlitzConfig extends NextConfig {
   blitz?: {
     resolverPath?: ResolverPathOptions
+    includeRPCFolders?: string[]
     customServer?: {
       hotReload?: boolean
     }
@@ -257,6 +263,7 @@ export function withBlitz(nextConfig: BlitzConfig = {}) {
         webpackConfig: config,
         webpackRuleOptions: {
           resolverPath: nextConfig.blitz?.resolverPath,
+          includeRPCFolders: nextConfig.blitz?.includeRPCFolders,
         },
       })
       if (typeof nextConfig.webpack === "function") {

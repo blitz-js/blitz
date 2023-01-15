@@ -1,4 +1,4 @@
-import {QueryClient, QueryFilters} from "@tanstack/react-query"
+import {QueryClient} from "@tanstack/react-query"
 import {serialize} from "superjson"
 import {isClient, isServer, AsyncFunc} from "blitz"
 import {ResolverType, RpcClient} from "./rpc"
@@ -85,6 +85,7 @@ export const emptyQueryFn: RpcClient<unknown, unknown> = (() => {
 
 const isNotInUserTestEnvironment = () => {
   if (process.env.JEST_WORKER_ID === undefined) return true
+  if (process.env.VITEST_WORKER_ID === undefined) return true
   if (process.env.BLITZ_TEST_ENVIRONMENT !== undefined) return true
   return false
 }
@@ -124,24 +125,29 @@ const sanitize =
 export const sanitizeQuery = sanitize("query")
 export const sanitizeMutation = sanitize("mutation")
 
-export const getQueryKeyFromUrlAndParams = (url: string, params: unknown) => {
-  const queryKey = [url]
+type BlitzQueryKey = [string] | [string, any]
+export const getQueryKeyFromUrlAndParams = (
+  url: string,
+  ...params: [unknown] | []
+): BlitzQueryKey => {
+  const queryKey: BlitzQueryKey = [url]
+  if (params.length === 1) {
+    const param = params[0]
+    queryKey.push(serialize(typeof param === "function" ? param() : param) as any)
+  }
 
-  const args = typeof params === "function" ? (params as Function)() : params
-  queryKey.push(serialize(args) as any)
-
-  return queryKey as [string, any]
+  return queryKey
 }
 
 export function getQueryKey<TInput, TResult, T extends AsyncFunc>(
   resolver: T | Resolver<TInput, TResult> | RpcClient<TInput, TResult>,
-  params?: TInput,
+  ...params: [TInput] | []
 ) {
   if (typeof resolver === "undefined") {
     throw new Error("getQueryKey is missing the first argument - it must be a resolver function")
   }
 
-  return getQueryKeyFromUrlAndParams(sanitizeQuery(resolver)._routePath, params)
+  return getQueryKeyFromUrlAndParams(sanitizeQuery(resolver)._routePath, ...params)
 }
 
 export function getInfiniteQueryKey<TInput, TResult, T extends AsyncFunc>(
@@ -158,24 +164,27 @@ export function getInfiniteQueryKey<TInput, TResult, T extends AsyncFunc>(
   return [...queryKey, "infinite"]
 }
 
-export function invalidateQuery<TInput, TResult, T extends AsyncFunc>(
-  resolver: T | Resolver<TInput, TResult> | RpcClient<TInput, TResult>,
-  params?: TInput,
-) {
-  if (typeof resolver === "undefined") {
-    throw new Error(
-      "invalidateQuery is missing the first argument - it must be a resolver function",
-    )
-  }
+interface InvalidateQuery {
+  <TInput, TResult, T extends AsyncFunc>(
+    resolver: T | Resolver<TInput, TResult> | RpcClient<TInput, TResult>,
+    ...params: [TInput]
+  ): Promise<void>
+  <TInput, TResult, T extends AsyncFunc>(
+    resolver: T | Resolver<TInput, TResult> | RpcClient<TInput, TResult>,
+  ): Promise<void>
+  (): Promise<void>
+}
 
-  const fullQueryKey = getQueryKey(resolver, params)
+export const invalidateQuery: InvalidateQuery = (resolver = undefined, ...params: []) => {
+  const fullQueryKey =
+    typeof resolver === "undefined" ? undefined : getQueryKey(resolver, ...params)
   return getQueryClient().invalidateQueries(fullQueryKey)
 }
 
 export function setQueryData<TInput, TResult, T extends AsyncFunc>(
   resolver: T | Resolver<TInput, TResult> | RpcClient<TInput, TResult>,
   params: TInput,
-  newData: TResult | ((oldData: TResult | undefined) => TResult),
+  newData: TResult | ((oldData: TResult | undefined) => TResult | undefined),
   opts: MutateOptions = {refetch: true},
 ): Promise<void | ReturnType<ReturnType<typeof getQueryClient>["invalidateQueries"]>> {
   if (typeof resolver === "undefined") {

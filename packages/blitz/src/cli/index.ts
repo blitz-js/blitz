@@ -30,20 +30,26 @@ const commands = {
   dev: () => import("./commands/next/dev").then((i) => i.dev),
   build: () => import("./commands/next/build").then((i) => i.build),
   start: () => import("./commands/next/start").then((i) => i.start),
+  export: () => import("./commands/next/export").then((i) => i.nextExport),
   new: () => import("./commands/new").then((i) => i.newApp),
   generate: () => import("./commands/generate").then((i) => i.generate),
   codegen: () => import("./commands/codegen").then((i) => i.codegen),
   db: () => import("./commands/db").then((i) => i.db),
+  install: () => import("./commands/install").then((i) => i.install),
   console: () => import("./commands/console").then((i) => i.consoleREPL),
+  routes: () => import("./commands/routes").then((i) => i.routes),
 }
 
 const aliases: Record<string, keyof typeof commands> = {
   d: "dev",
   b: "build",
   s: "start",
+  e: "export",
   n: "new",
   g: "generate",
+  i: "install",
   c: "console",
+  r: "routes",
 }
 
 type Command = keyof typeof commands
@@ -172,9 +178,10 @@ async function main() {
         $ blitz <command>
   
       Available commands
-        dev, d          Start a development server 🪄
+        dev, d          Start a development server 🦄 
         build, b        Create a production build 🏗️
         start, s        Start the production server 🐎
+        export, e       Export application to static HTML 📁
         new, n          Create a new Blitz project ✨
         generate, g     Generate new files for your Blitz project 🤠
         codegen         Run the blitz codegen 🤖

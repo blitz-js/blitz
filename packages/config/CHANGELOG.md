@@ -1,5 +1,39 @@
 # @blitzjs/config
 
+## 2.0.0-beta.22
+
+## 2.0.0-beta.21
+
+## 2.0.0-beta.20
+
+## 2.0.0-beta.19
+
+## 2.0.0-beta.18
+
+## 2.0.0-beta.17
+
+## 2.0.0-beta.16
+
+## 2.0.0-beta.15
+
+## 2.0.0-beta.14
+
+## 2.0.0-beta.13
+
+### Patch Changes
+
+- 4e26ae21: Upgrade eslint-config-next in new app templates to fix linting issues on blitz build
+
+## 2.0.0-beta.12
+
+## 2.0.0-beta.11
+
+### Patch Changes
+
+- 1476a577: Fix release
+
+## 2.0.0-beta.10
+
 ## 2.0.0-beta.4
 
 ## 2.0.0-beta.3

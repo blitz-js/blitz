@@ -1,5 +1,136 @@
 # @blitzjs/next
 
+## 2.0.0-beta.22
+
+### Patch Changes
+
+- Updated dependencies [270361886]
+- Updated dependencies [989691ec8]
+- Updated dependencies [8aa22a0b2]
+  - @blitzjs/rpc@2.0.0-beta.22
+  - blitz@2.0.0-beta.22
+
+## 2.0.0-beta.21
+
+### Patch Changes
+
+- 10f98c681: Add an href property to the generated route manifest that will return a string of the pathname and included query params.
+- Updated dependencies [d692b4c1d]
+- Updated dependencies [0025856b9]
+- Updated dependencies [10f98c681]
+- Updated dependencies [d5b8faa86]
+  - @blitzjs/rpc@2.0.0-beta.21
+  - blitz@2.0.0-beta.21
+
+## 2.0.0-beta.20
+
+### Minor Changes
+
+- 6ece0961: Decoupled Blitz RPC from Blitz Auth to allow independent use.
+- 03bad317: fix Cannot read properties of null (reading 'isReady') for pnpm/yarn v3
+
+### Patch Changes
+
+- Updated dependencies [74a14b70]
+- Updated dependencies [8c247e26]
+- Updated dependencies [6ece0961]
+- Updated dependencies [03bad317]
+- Updated dependencies [650a157e]
+- Updated dependencies [a0596279]
+  - blitz@2.0.0-beta.20
+  - @blitzjs/rpc@2.0.0-beta.20
+
+## 2.0.0-beta.19
+
+### Minor Changes
+
+- c1e00406: transpile packages to es2015 to support older browsers
+
+### Patch Changes
+
+- b33db082: Fix ambigious class warning log & upgrade superjson from 1.9.1 to 1.11.0
+- Updated dependencies [c1e00406]
+- Updated dependencies [b33db082]
+- Updated dependencies [b493c93f]
+  - @blitzjs/rpc@2.0.0-beta.19
+
+## 2.0.0-beta.18
+
+### Patch Changes
+
+- Updated dependencies [72a4e594]
+- Updated dependencies [ed2b0e22]
+- Updated dependencies [c0a3b1ee]
+  - @blitzjs/rpc@2.0.0-beta.18
+
+## 2.0.0-beta.17
+
+### Patch Changes
+
+- 8b4bf999: Update dependencies
+- 97469a12: Added option `role` to `authenticate` property of `BlitzPage` to authenticate page with respect to the role of the user. `String` value or `Array` of strings can be passed to authorize users.
+- Updated dependencies [8b4bf999]
+  - @blitzjs/rpc@2.0.0-beta.17
+
+## 2.0.0-beta.16
+
+### Minor Changes
+
+- 11b548ed: Change setupBlitzServer logger config to be optional. Will default to BlitzLogger
+
+### Patch Changes
+
+- Updated dependencies [55a43ce1]
+- Updated dependencies [ceb7db27]
+  - @blitzjs/rpc@2.0.0-beta.16
+
+## 2.0.0-beta.15
+
+### Patch Changes
+
+- @blitzjs/rpc@2.0.0-beta.15
+
+## 2.0.0-beta.14
+
+### Patch Changes
+
+- @blitzjs/rpc@2.0.0-beta.14
+
+## 2.0.0-beta.13
+
+### Patch Changes
+
+- a6e81f15: Add BlitzLogger plugin and allow customizing logging
+- Updated dependencies [7b63f0f1]
+  - @blitzjs/rpc@2.0.0-beta.13
+
+## 2.0.0-beta.12
+
+### Patch Changes
+
+- @blitzjs/rpc@2.0.0-beta.12
+
+## 2.0.0-beta.11
+
+### Patch Changes
+
+- 1476a577: Fix release
+- Updated dependencies [1476a577]
+  - @blitzjs/rpc@2.0.0-beta.11
+
+## 2.0.0-beta.10
+
+### Patch Changes
+
+- 1742eb45: Fix prefetching infinite Blitz queries.
+- 9fe0cc54: Fix auth related React hydration errors by not redirecting until after component mount.
+- e2c18895: Add client testing utilities and a sample test to a new blitz app template
+- 25f4526f: Treat API Route handler as a middleware. This allows outer middlewares to completely wrap queries and mutations.
+- Updated dependencies [0edeaa37]
+- Updated dependencies [aa34661f]
+- Updated dependencies [8e0c9d76]
+  - @blitzjs/rpc@2.0.0-beta.10
+
 ## 2.0.0-beta.4
 
 ### Patch Changes

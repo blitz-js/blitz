@@ -10,7 +10,6 @@ import {
   UseMutationOptions,
   UseMutationResult,
 } from "@tanstack/react-query"
-import {useSession} from "@blitzjs/auth"
 import {isServer, FirstParam, PromiseReturnType, AsyncFunc} from "blitz"
 import {
   emptyQueryFn,
@@ -29,6 +28,10 @@ type QueryNonLazyOptions =
   | {suspense?: never; enabled: true}
   | {suspense: true; enabled: true}
   | {suspense?: never; enabled?: never}
+
+class NextError extends Error {
+  digest?: string
+}
 
 // -------------------------
 // useQuery
@@ -73,11 +76,6 @@ export function useQuery<
   const suspenseEnabled = Boolean(globalThis.__BLITZ_SUSPENSE_ENABLED)
   let enabled = isServer && suspenseEnabled ? false : options?.enabled ?? options?.enabled !== null
   const suspense = enabled === false ? false : options?.suspense
-  const session = useSession({suspense})
-  if (session.isLoading) {
-    enabled = false
-  }
-
   const routerIsReady = useRouter().isReady || (isServer && suspenseEnabled)
   const enhancedResolverRpcClient = sanitizeQuery(queryFn)
   const queryKey = getQueryKey(queryFn, params)
@@ -99,8 +97,11 @@ export function useQuery<
     (!options || !("suspense" in options) || options.suspense) &&
     (!options || !("enabled" in options) || options.enabled)
   ) {
-    const e = new Error()
+    const e = new NextError()
     e.name = "Rendering Suspense fallback..."
+    e.digest = "DYNAMIC_SERVER_USAGE"
+    // Backwards compatibility for nextjs 13.0.7
+    e.message = "DYNAMIC_SERVER_USAGE"
     delete e.stack
     throw e
   }
@@ -157,12 +158,6 @@ export function usePaginatedQuery<
   const suspenseEnabled = Boolean(globalThis.__BLITZ_SUSPENSE_ENABLED)
   let enabled = isServer && suspenseEnabled ? false : options?.enabled ?? options?.enabled !== null
   const suspense = enabled === false ? false : options?.suspense
-
-  const session = useSession({suspense})
-  if (session.isLoading) {
-    enabled = false
-  }
-
   const routerIsReady = useRouter().isReady || (isServer && suspenseEnabled)
   const enhancedResolverRpcClient = sanitizeQuery(queryFn)
   const queryKey = getQueryKey(queryFn, params)
@@ -185,8 +180,11 @@ export function usePaginatedQuery<
     (!options || !("suspense" in options) || options.suspense) &&
     (!options || !("enabled" in options) || options.enabled)
   ) {
-    const e = new Error()
+    const e = new NextError()
     e.name = "Rendering Suspense fallback..."
+    e.digest = "DYNAMIC_SERVER_USAGE"
+    // Backwards compatibility for nextjs 13.0.7
+    e.message = "DYNAMIC_SERVER_USAGE"
     delete e.stack
     throw e
   }
@@ -252,11 +250,6 @@ export function useInfiniteQuery<
   const suspenseEnabled = Boolean(globalThis.__BLITZ_SUSPENSE_ENABLED)
   let enabled = isServer && suspenseEnabled ? false : options?.enabled ?? options?.enabled !== null
   const suspense = enabled === false ? false : options?.suspense
-  const session = useSession({suspense})
-  if (session.isLoading) {
-    enabled = false
-  }
-
   const routerIsReady = useRouter().isReady || (isServer && suspenseEnabled)
   const enhancedResolverRpcClient = sanitizeQuery(queryFn)
   const queryKey = getInfiniteQueryKey(queryFn, getQueryParams)
@@ -282,8 +275,11 @@ export function useInfiniteQuery<
     (!options || !("suspense" in options) || options.suspense) &&
     (!options || !("enabled" in options) || options.enabled)
   ) {
-    const e = new Error()
+    const e = new NextError()
     e.name = "Rendering Suspense fallback..."
+    e.digest = "DYNAMIC_SERVER_USAGE"
+    // Backwards compatibility for nextjs 13.0.7
+    e.message = "DYNAMIC_SERVER_USAGE"
     delete e.stack
     throw e
   }

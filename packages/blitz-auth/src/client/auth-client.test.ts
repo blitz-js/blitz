@@ -2,7 +2,7 @@
  * @vitest-environment jsdom
  */
 
-import {vi, expect, describe, it, beforeAll, afterAll, spyOn, SpyInstance} from "vitest"
+import {vi, expect, describe, it, beforeAll, afterAll, SpyInstance} from "vitest"
 import {parsePublicDataToken, getPublicDataStore, useSession} from "./index"
 import {COOKIE_PUBLIC_DATA_TOKEN} from "../shared"
 import {toBase64} from "b64-lite"
@@ -54,7 +54,7 @@ describe("parsePublicDataToken", () => {
 
 describe("publicDataStore", () => {
   it("calls readCookie token on init", () => {
-    const spy = spyOn(stdlib, "readCookie")
+    const spy = vi.spyOn(stdlib, "readCookie")
     getPublicDataStore()
     expect(spy).toHaveBeenCalledWith(COOKIE_PUBLIC_DATA_TOKEN())
     spy.mockRestore()
@@ -64,7 +64,7 @@ describe("publicDataStore", () => {
     let localStorageSpy: SpyInstance
 
     beforeAll(() => {
-      localStorageSpy = spyOn(Storage.prototype, "setItem")
+      localStorageSpy = vi.spyOn(Storage.prototype, "setItem")
     })
 
     it("sets local storage", () => {
@@ -84,7 +84,7 @@ describe("publicDataStore", () => {
 
   describe("clear", () => {
     it("clears the cookie", () => {
-      const spy = spyOn(stdlib, "deleteCookie")
+      const spy = vi.spyOn(stdlib, "deleteCookie")
       getPublicDataStore().clear()
       expect(spy).toHaveBeenCalledWith(COOKIE_PUBLIC_DATA_TOKEN())
     })
@@ -98,7 +98,7 @@ describe("publicDataStore", () => {
         ret = data
       })
       getPublicDataStore().clear()
-      expect(ret).toEqual({userId: null})
+      expect(ret).toEqual({userId: null, role: null})
     })
   })
 
@@ -107,7 +107,7 @@ describe("publicDataStore", () => {
       it("returns empty data if cookie is falsy", () => {
         const ret = getPublicDataStore().getData()
 
-        expect(ret).toEqual({userId: null})
+        expect(ret).toEqual({userId: null, role: null})
       })
     })
   })
@@ -118,6 +118,7 @@ describe("useSession", () => {
     const {result} = renderHook(() => useSession())
 
     expect(result.current).toEqual({
+      role: null,
       isLoading: false,
       userId: null,
     })
