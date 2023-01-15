@@ -27,10 +27,6 @@ jobs:
           cache: "pnpm"
       - name: Install dependencies
         run: pnpm install  --frozen-lockfile
-      - name: Submodules
-        run: |
-          git submodule init
-          git submodule update
       - run: pnpm manypkg check
       - name: Build
         run: pnpm build
@@ -51,10 +47,6 @@ jobs:
           node-version: 16
           cache: "pnpm"
       - run: pnpm install --frozen-lockfile
-      - name: Submodules
-        run: |
-          git submodule init
-          git submodule update
       - name: Build
         run: pnpm build
       - name: Build Apps
@@ -89,11 +81,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
         shell: bash
-        
-      - name: Submodules
-        run: |
-          git submodule init
-          git submodule update
 
       - name: Build
         run: pnpm build
@@ -153,11 +140,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
         shell: bash
-        
-      - name: Submodules
-        run: |
-          git submodule init
-          git submodule update
 
       - name: Install playwright
         run: |
