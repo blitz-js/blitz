@@ -7,6 +7,9 @@ on:
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
+  
+env: 
+  PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
 
 jobs:
   lint:
@@ -149,8 +152,6 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-        env: 
-          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
         shell: bash
         
       - name: Submodules
