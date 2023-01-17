@@ -7,6 +7,7 @@ import {useQuery, useMutation} from '@blitzjs/rpc'
 import {useParam} from '@blitzjs/next'
 
 import Layout from "src/core/layouts/Layout"
+import {__ModelName__Schema} from "src/__modelNamesPath__/validations/schema"
 import get__ModelName__ from "src/__modelNamesPath__/queries/get__ModelName__"
 import update__ModelName__ from "src/__modelNamesPath__/mutations/update__ModelName__"
 import {__ModelName__Form, FORM_ERROR} from "src/__modelNamesPath__/components/__ModelName__Form"
@@ -39,10 +40,7 @@ export const Edit__ModelName__ = () => {
         <Suspense fallback={<div>Loading...</div>}>
         <__ModelName__Form
           submitText="Update __ModelName__"
-          // TODO use a zod schema for form validation
-          //  - Tip: extract mutation's schema into a shared `validations.ts` file and
-          //         then import and use it here
-          // schema={Update__ModelName__}
+          schema={__ModelName__Schema}
           initialValues={__modelName__}
           onSubmit={async (values) => {
             try {
