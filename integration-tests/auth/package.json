@@ -24,7 +24,7 @@
     "blitz": "workspace:2.0.0-beta.22",
     "lowdb": "3.0.0",
     "next": "12.2.5",
-    "prisma": "4.6.0",
+    "prisma": "4.6.1",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },
