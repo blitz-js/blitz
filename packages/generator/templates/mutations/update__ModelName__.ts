@@ -1,6 +1,6 @@
 import { resolver } from "@blitzjs/rpc"
 import db from "__prismaFolder__"
-import { Update__ModelName__Schema } from "../validations/schema"
+import { Update__ModelName__Schema } from "../schema"
 
 export default resolver.pipe(
   resolver.zod(Update__ModelName__Schema),

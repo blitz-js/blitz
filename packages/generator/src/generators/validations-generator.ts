@@ -49,6 +49,6 @@ export class ValidationsGenerator extends Generator<ValidationsGeneratorOptions>
   getTargetDirectory() {
     const context = this.options.context ? `${camelCaseToKebabCase(this.options.context)}/` : ""
     const kebabCaseModelName = camelCaseToKebabCase(this.options.modelNames)
-    return `src/${context}${kebabCaseModelName}/validations`
+    return `src/${context}${kebabCaseModelName}`
   }
 }
