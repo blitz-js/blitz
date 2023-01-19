@@ -23,7 +23,7 @@
     "@blitzjs/rpc": "workspace:2.0.0-beta.22",
     "@hookform/error-message": "2.0.0",
     "@hookform/resolvers": "2.9.10",
-    "@prisma/client": "4.6.0",
+    "@prisma/client": "4.6.1",
     "blitz": "workspace:2.0.0-beta.22",
     "delay": "5.0.0",
     "next": "12.2.5",

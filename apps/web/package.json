@@ -20,7 +20,7 @@
     "@blitzjs/config": "workspace:*",
     "@blitzjs/next": "workspace:*",
     "@blitzjs/rpc": "workspace:*",
-    "@prisma/client": "4.6.0",
+    "@prisma/client": "4.6.1",
     "@types/jest": "29.2.2",
     "@types/passport-twitter": "1.0.37",
     "blitz": "workspace:*",

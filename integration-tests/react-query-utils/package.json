@@ -18,7 +18,7 @@
   "dependencies": {
     "@blitzjs/next": "workspace:2.0.0-beta.22",
     "@blitzjs/rpc": "workspace:2.0.0-beta.22",
-    "@prisma/client": "4.6.0",
+    "@prisma/client": "4.6.1",
     "blitz": "workspace:2.0.0-beta.22",
     "lowdb": "3.0.0",
     "next": "12.2.5",

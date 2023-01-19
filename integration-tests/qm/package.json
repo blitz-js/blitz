@@ -12,7 +12,7 @@
     "@blitzjs/config": "workspace:2.0.0-beta.22",
     "@blitzjs/next": "workspace:2.0.0-beta.22",
     "@blitzjs/rpc": "workspace:2.0.0-beta.22",
-    "@prisma/client": "4.6.0",
+    "@prisma/client": "4.6.1",
     "@tanstack/react-query": "4.0.10",
     "blitz": "workspace:2.0.0-beta.22",
     "next": "12.2.5",
