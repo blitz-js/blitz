@@ -107,9 +107,7 @@ export function AuthServerPlugin(options: AuthPluginOptions): BlitzServerPlugin<
       IncomingMessage,
       ServerResponse & {blitzCtx: Ctx}
     > = async (req, res, next) => {
-      if (!res.blitzCtx?.session) {
-        await getSession(req, res)
-      }
+      await getSession(req, res)
       return next()
     }
 

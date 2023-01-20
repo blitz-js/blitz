@@ -17,8 +17,8 @@ export * from "./router-context"
 export {Routes} from ".blitz"
 
 const buildWithBlitz = (withPlugins: BlitzPluginWithProvider) => {
-  return function withBlitzAppRoot(UserAppRoot: React.ComponentType<AppProps>) {
-    const BlitzOuterRoot = (props: AppProps) => {
+  return function withBlitzAppRoot(UserAppRoot: React.ComponentType<AppProps>, isRSC = false) {
+    const BlitzOuterRoot = (props: AppProps<{dehydratedState: unknown}>) => {
       const component = React.useMemo(() => withPlugins(props.Component), [props.Component])
 
       React.useEffect(() => {
@@ -28,14 +28,28 @@ const buildWithBlitz = (withPlugins: BlitzPluginWithProvider) => {
         })
       }, [])
 
-      return (
-        <BlitzProvider dehydratedState={props.pageProps?.dehydratedState}>
+      if (isRSC) {
+        globalThis.__BLITZ_RSC = true
+        console.log(
+          "🚀 ~ file: Blitz Next index-browser.tsx ~ line 64 ~ BlitzOuterRoot ~ globalThis.__BLITZ_RSC",
+          globalThis.__BLITZ_RSC,
+        )
+        return (
           <>
             {props.Component.suppressFirstRenderFlicker && <NoPageFlicker />}
             <UserAppRoot {...props} Component={component} />
           </>
-        </BlitzProvider>
-      )
+        )
+      } else {
+        return (
+          <BlitzProvider dehydratedState={props.pageProps?.dehydratedState}>
+            <>
+              {props.Component.suppressFirstRenderFlicker && <NoPageFlicker />}
+              <UserAppRoot {...props} Component={component} />
+            </>
+          </BlitzProvider>
+        )
+      }
     }
 
     Object.assign(BlitzOuterRoot, UserAppRoot)
@@ -81,7 +95,7 @@ export const BlitzProvider = ({
   children,
 }: BlitzProviderProps) => {
   const router = useRouter()
-
+  console.log("client: ", client)
   if (client) {
     return (
       <RouterContext.Provider value={router}>

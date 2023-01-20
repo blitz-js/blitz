@@ -1,3 +1,5 @@
+"use client"
+
 import "./global"
 import {ComponentType} from "react"
 import {

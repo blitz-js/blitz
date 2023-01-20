@@ -140,6 +140,13 @@ function ensureMiddlewareResponse(
   }
 }
 
+const serverBlitzCtx = {} as Ctx
+
+export function getSessionContext(): Ctx {
+  console.log("Getting session context", serverBlitzCtx)
+  return serverBlitzCtx
+}
+
 export async function getSession(
   req: IncomingMessage,
   res: ServerResponse,
@@ -150,6 +157,8 @@ export async function getSession(
   debug("cookiePrefix", globalThis.__BLITZ_SESSION_COOKIE_PREFIX)
 
   if (res.blitzCtx.session) {
+    console.log("Returning existing session", res.blitzCtx.session)
+    serverBlitzCtx.session = res.blitzCtx.session
     return res.blitzCtx.session
   }
 
@@ -166,6 +175,8 @@ export async function getSession(
 
   const sessionContext = makeProxyToPublicData(new SessionContextClass(req, res, sessionKernel))
   res.blitzCtx.session = sessionContext
+  console.log("Returning new session", sessionContext)
+  serverBlitzCtx.session = sessionContext
   return sessionContext
 }
 

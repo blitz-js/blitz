@@ -1,11 +1,13 @@
 import "./global"
 import {createClientPlugin} from "blitz"
-import {DefaultOptions, QueryClient} from "@tanstack/react-query"
+import {DefaultOptions, QueryClient, QueryClientProvider} from "@tanstack/react-query"
+import React from "react"
 export * from "./data-client/index"
 
 interface BlitzRpcOptions {
   reactQueryOptions?: DefaultOptions
 }
+
 export const BlitzRpcPlugin = createClientPlugin<BlitzRpcOptions, {queryClient: QueryClient}>(
   (options?: BlitzRpcOptions) => {
     const initializeQueryClient = () => {
@@ -35,6 +37,13 @@ export const BlitzRpcPlugin = createClientPlugin<BlitzRpcOptions, {queryClient: 
       })
     }
     const queryClient = initializeQueryClient()
+    type Props = {
+      children: React.ReactNode
+      client?: QueryClient
+    }
+    const RSC_BlitzProvider = ({client = globalThis.queryClient, children}: Props) => (
+      <QueryClientProvider client={client}>{children}</QueryClientProvider>
+    )
     function resetQueryClient() {
       setTimeout(async () => {
         // Do these in the next tick to prevent various bugs like https://github.com/blitz-js/blitz/issues/2207
@@ -51,7 +60,6 @@ export const BlitzRpcPlugin = createClientPlugin<BlitzRpcOptions, {queryClient: 
         // Ref: https://github.com/blitz-js/blitz/issues/1935
       }, 100)
     }
-    globalThis.queryClient = queryClient
     return {
       events: {
         onSessionCreated: async () => {
@@ -61,6 +69,7 @@ export const BlitzRpcPlugin = createClientPlugin<BlitzRpcOptions, {queryClient: 
       middleware: {},
       exports: () => ({
         queryClient,
+        RSC_BlitzProvider,
       }),
     }
   },
