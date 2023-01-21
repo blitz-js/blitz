@@ -10,7 +10,7 @@ if (process.env.parentModel) {
   import {useMutation} from '@blitzjs/rpc'
 }
 import Layout from "src/core/layouts/Layout"
-import {__ModelName__Schema} from "src/__modelNamesPath__/validations/schema"
+import {__ModelName__Schema} from "src/__modelNamesPath__/schema"
 import create__ModelName__ from "src/__modelNamesPath__/mutations/create__ModelName__"
 import {__ModelName__Form, FORM_ERROR} from "src/__modelNamesPath__/components/__ModelName__Form"
 import { Suspense } from 'react'

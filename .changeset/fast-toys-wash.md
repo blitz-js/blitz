@@ -3,4 +3,4 @@
 "@blitzjs/generator": patch
 ---
 
-Consolidate mutations schema to validations/schema folder.
+Consolidate mutations schema to new schema.{ts|js} file.

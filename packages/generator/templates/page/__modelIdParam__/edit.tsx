@@ -7,7 +7,7 @@ import {useQuery, useMutation} from '@blitzjs/rpc'
 import {useParam} from '@blitzjs/next'
 
 import Layout from "src/core/layouts/Layout"
-import {__ModelName__Schema} from "src/__modelNamesPath__/validations/schema"
+import {__ModelName__Schema} from "src/__modelNamesPath__/schema"
 import get__ModelName__ from "src/__modelNamesPath__/queries/get__ModelName__"
 import update__ModelName__ from "src/__modelNamesPath__/mutations/update__ModelName__"
 import {__ModelName__Form, FORM_ERROR} from "src/__modelNamesPath__/components/__ModelName__Form"
