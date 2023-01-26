@@ -1,4 +1,5 @@
 import * as ast from "@mrleebo/prisma-ast"
+import {checkInputsOrRaise} from "../utils/checkInputOrRaise"
 import {capitalize, singlePascal, uncapitalize} from "../utils/inflector"
 
 export enum FieldType {
@@ -55,6 +56,8 @@ export class Field {
 
   // 'name:type?[]:attribute' => Field
   static parse(input: string, schema?: ast.Schema): Field[] {
+    checkInputsOrRaise(input)
+
     const [_fieldName, _fieldType = "String", _attribute] = input.split(":")
     let attribute = _attribute as string
     let fieldName = uncapitalize(_fieldName as string)
