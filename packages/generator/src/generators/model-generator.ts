@@ -5,6 +5,7 @@ import {log} from "../utils/log"
 import {Generator, GeneratorOptions, SourceRootType} from "../generator"
 import {Field} from "../prisma/field"
 import {Model} from "../prisma/model"
+import {checkInputsOrRaise} from "../utils/checkInputOrRaise"
 import {getTemplateRoot} from "../utils/get-template-root"
 import {getPrismaSchema} from "../utils/get-prisma-schema"
 
