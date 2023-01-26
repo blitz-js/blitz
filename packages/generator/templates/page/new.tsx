@@ -10,6 +10,7 @@ if (process.env.parentModel) {
   import {useMutation} from '@blitzjs/rpc'
 }
 import Layout from "src/core/layouts/Layout"
+import {__ModelName__Schema} from "src/__modelNamesPath__/schemas"
 import create__ModelName__ from "src/__modelNamesPath__/mutations/create__ModelName__"
 import {__ModelName__Form, FORM_ERROR} from "src/__modelNamesPath__/components/__ModelName__Form"
 import { Suspense } from 'react'
@@ -27,10 +28,7 @@ const New__ModelName__Page = () => {
       <Suspense fallback={<div>Loading...</div>}>
       <__ModelName__Form
         submitText="Create __ModelName__"
-        // TODO use a zod schema for form validation
-        //  - Tip: extract mutation's schema into a shared `validations.ts` file and
-        //         then import and use it here
-        // schema={Create__ModelName__}
+        schema={__ModelName__Schema}
         // initialValues={{}}
         onSubmit={async (values) => {
           try {
