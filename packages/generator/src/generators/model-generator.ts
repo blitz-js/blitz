@@ -2,11 +2,12 @@ import * as ast from "@mrleebo/prisma-ast"
 import {spawn} from "cross-spawn"
 import which from "npm-which"
 import path from "path"
-import {log} from "../utils/log"
 import {Generator, GeneratorOptions, SourceRootType} from "../generator"
 import {Field} from "../prisma/field"
 import {Model} from "../prisma/model"
+import {checkInputsOrRaise} from "../utils/checkInputOrRaise"
 import {getTemplateRoot} from "../utils/get-template-root"
+import {log} from "../utils/log"
 
 export interface ModelGeneratorOptions extends GeneratorOptions {
   modelName: string
@@ -59,9 +60,13 @@ export class ModelGenerator extends Generator<ModelGeneratorOptions> {
     const {modelName, extraArgs, dryRun} = this.options
     let updatedOrCreated = "created"
 
-    let fields = (
-      extraArgs.length === 1 && extraArgs[0]?.includes(" ") ? extraArgs[0]?.split(" ") : extraArgs
-    ).flatMap((input) => Field.parse(input, schema))
+    const splitInputCommans = (input: typeof extraArgs) => {
+      const inputs = input.length === 1 && input[0]?.includes(" ") ? input[0]?.split(" ") : input
+      checkInputsOrRaise(inputs)
+      return inputs
+    }
+
+    let fields = splitInputCommans(extraArgs).flatMap((input) => Field.parse(input, schema))
 
     const modelDefinition = new Model(modelName, fields)
 
