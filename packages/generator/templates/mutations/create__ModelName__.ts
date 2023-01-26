@@ -1,6 +1,6 @@
 import { resolver } from "@blitzjs/rpc"
 import db from "__prismaFolder__"
-import { __ModelName__Schema } from "../schema"
+import { __ModelName__Schema } from "../schemas"
 
 export default resolver.pipe(
   resolver.zod(__ModelName__Schema),
