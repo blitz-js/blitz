@@ -38,15 +38,11 @@ const UserInfo = () => {
   } else {
     return (
       <>
-        <Link href={Routes.SignupPage()} passHref>
-          <a className="button small">
-            <strong>Sign Up</strong>
-          </a>
+        <Link href={Routes.SignupPage()}className="button small">
+          <strong>Sign Up</strong>
         </Link>
-        <Link href={Routes.LoginPage()} passHref>
-          <a className="button small">
-            <strong>Login</strong>
-          </a>
+        <Link href={Routes.LoginPage()} className="button small">
+          <strong>Login</strong>
         </Link>
       </>
     )
@@ -90,10 +86,7 @@ const Home: BlitzPage = () => {
               <code>blitz dev</code>
             </pre>
             <p>
-              and go to{" "}
-              <Link href="/projects">
-                <a>/projects</a>
-              </Link>
+              and go to <Link href="/projects">/projects</Link>
             </p>
           </div>
           <div className="buttons" style={{ marginTop: "5rem" }}>

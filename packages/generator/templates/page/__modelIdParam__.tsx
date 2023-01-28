@@ -31,11 +31,11 @@ export const __ModelName__ = () => {
 
         <if condition="parentModel">
           <Link href={Routes.Edit__ModelName__Page({ __parentModelId__: __parentModelId__!, __modelId__: __modelName__.id })}>
-            <a>Edit</a>
+            Edit
           </Link>
           <else>
             <Link href={Routes.Edit__ModelName__Page({ __modelId__: __modelName__.id })}>
-              <a>Edit</a>
+              Edit
             </Link>
           </else>
         </if>
@@ -71,11 +71,11 @@ const Show__ModelName__Page = () => {
       <p>
         <if condition="parentModel">
           <Link href={Routes.__ModelNames__Page({ __parentModelId__: __parentModelId__! })}>
-            <a>__ModelNames__</a>
+            __ModelNames__
           </Link>
           <else>
             <Link href={Routes.__ModelNames__Page()}>
-              <a>__ModelNames__</a>
+              __ModelNames__
             </Link>
           </else>
         </if>
