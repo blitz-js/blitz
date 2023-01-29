@@ -1,0 +1,35 @@
+{
+  "name": "next-blitz-auth",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "blitz:dev": "next dev",
+    "blitz:build": "next build",
+    "blitz:start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@blitzjs/auth": "workspace:*",
+    "@blitzjs/config": "workspace:*",
+    "@blitzjs/next": "workspace:*",
+    "@blitzjs/react-query": "workspace:*",
+    "@blitzjs/rpc": "workspace:*",
+    "@prisma/client": "^4.5.0",
+    "@tanstack/react-query": "4.0.10",
+    "blitz": "workspace:*",
+    "flatted": "3.2.7",
+    "next": "13.1.2",
+    "prisma": "^4.5.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "superjson": "1.11.0"
+  },
+  "devDependencies": {
+    "@types/node": "18.11.7",
+    "@types/react": "18.0.23",
+    "@types/react-dom": "18.0.7",
+    "eslint": "8.26.0",
+    "eslint-config-next": "13.0.0",
+    "typescript": "4.8.4"
+  }
+}

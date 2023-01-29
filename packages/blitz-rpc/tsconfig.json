@@ -3,6 +3,6 @@
   "compilerOptions": {
     "lib": ["DOM", "ES2015"]
   },
-  "include": ["."],
+  "include": [".", "../query/src/client/react-query.tsx"],
   "exclude": ["dist", "build", "node_modules"]
 }

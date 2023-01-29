@@ -21,7 +21,6 @@
   ],
   "dependencies": {
     "@swc/core": "1.3.7",
-    "@tanstack/react-query": "4.0.10",
     "b64-lite": "1.4.0",
     "bad-behavior": "1.0.1",
     "chalk": "^4.1.0",
@@ -31,12 +30,19 @@
   },
   "peerDependencies": {
     "blitz": "2.0.0-beta.22",
+    "@blitzjs/react-query": "2.0.0-beta.22",
     "next": "*",
     "react": "*"
+  },
+  "peerDependenciesMeta": {
+    "@blitzjs/react-query": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@blitzjs/auth": "2.0.0-beta.22",
     "@blitzjs/config": "workspace:2.0.0-beta.22",
+    "@blitzjs/react-query": "workspace:2.0.0-beta.22",
     "@types/debug": "4.1.7",
     "@types/react": "18.0.25",
     "@types/react-dom": "17.0.14",

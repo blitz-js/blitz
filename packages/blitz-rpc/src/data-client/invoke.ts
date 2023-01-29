@@ -1,5 +1,4 @@
-import {FirstParam, PromiseReturnType, isClient} from "blitz"
-import {RpcClient} from "./rpc"
+import {FirstParam, PromiseReturnType, isClient, RpcClient} from "blitz"
 
 export function invoke<T extends (...args: any) => any, TInput = FirstParam<T>>(
   queryFn: T,

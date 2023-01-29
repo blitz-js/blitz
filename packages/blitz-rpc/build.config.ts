@@ -14,6 +14,7 @@ const config: BuildConfig = {
     "index-server.cjs",
     "index-server.mjs",
     "@blitzjs/auth",
+    "@blitzjs/react-query",
     "zod",
   ],
   declaration: true,

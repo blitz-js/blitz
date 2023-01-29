@@ -1,5 +1,5 @@
 import {RedirectError} from "blitz"
-import {Router} from "next/router"
+import type {Router} from "next/router"
 import * as React from "react"
 import {RouterContext} from "./router-context"
 import _debug from "debug"

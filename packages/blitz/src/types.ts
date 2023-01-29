@@ -2,6 +2,29 @@ import {UrlObject} from "url"
 // Context for plugins to declaration merge stuff into
 export interface Ctx {}
 
+export type ResolverType = "query" | "mutation"
+
+export interface EnhancedRpc {
+  _isRpcClient: true
+  _resolverType: ResolverType
+  _resolverName: string
+  _routePath: string
+}
+
+export interface RpcOptions {
+  fromQueryHook?: boolean
+  fromInvoke?: boolean
+  alreadySerialized?: boolean
+}
+
+export interface RpcClientBase<Input = unknown, Result = unknown> {
+  (params: Input, opts?: RpcOptions, signal?: AbortSignal): Promise<Result>
+}
+
+export interface RpcClient<Input = unknown, Result = unknown>
+  extends EnhancedRpc,
+    RpcClientBase<Input, Result> {}
+
 export interface RouteUrlObject extends Pick<UrlObject, "pathname" | "query" | "href"> {
   pathname: string
   href: string

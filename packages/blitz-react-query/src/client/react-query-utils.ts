@@ -1,7 +1,6 @@
 import {QueryClient} from "@tanstack/react-query"
 import {serialize} from "superjson"
-import {isClient, isServer, AsyncFunc} from "blitz"
-import {ResolverType, RpcClient} from "./rpc"
+import {isClient, isServer, AsyncFunc, ResolverType, RpcClient} from "blitz"
 
 export type Resolver<TInput, TResult> = (input: TInput, ctx?: any) => Promise<TResult>
 

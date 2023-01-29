@@ -1,10 +1,8 @@
 {
-  "TODO": "REMOVE PRIVATE FIELD",
-  "name": "template",
-  "private": true,
-  "version": "0.0.0",
+  "name": "@blitzjs/react-query",
+  "version": "2.0.0-beta.22",
   "scripts": {
-    "build": "unbuild",
+    "build": "unbuild && node ./utils/add-directives.js",
     "dev": "watch unbuild src --wait=0.2",
     "lint": "eslint . --fix",
     "test": "vitest run",
@@ -21,8 +19,13 @@
     "dist/**"
   ],
   "dependencies": {
+    "@tanstack/react-query": "4.0.10",
     "@typescript-eslint/eslint-plugin": "5.42.1",
-    "@typescript-eslint/parser": "5.9.1"
+    "@typescript-eslint/parser": "5.9.1",
+    "blitz": "workspace:2.0.0-beta.22",
+    "debug": "4.3.3",
+    "next": "13.1.6",
+    "superjson": "1.11.0"
   },
   "devDependencies": {
     "@blitzjs/config": "2.0.0-beta.22",

@@ -1,14 +1,13 @@
 import "./global"
 import type {ClientPlugin, BlitzPluginWithProvider} from "blitz"
-import {reduceBlitzPlugins, Ctx} from "blitz"
+import {reduceBlitzClientPlugins, Ctx} from "blitz"
 import Head from "next/head"
 import React, {ReactNode} from "react"
-import {QueryClient, QueryClientProvider, Hydrate, HydrateOptions} from "@tanstack/react-query"
+import {QueryClient, QueryClientProvider, Hydrate, HydrateOptions} from "@blitzjs/react-query"
 import {withSuperJSONPage} from "./superjson"
 import {UrlObject} from "url"
 import {AppPropsType} from "next/dist/shared/lib/utils"
-import {Router, useRouter} from "next/router"
-import {RouterContext} from "./router-context"
+import type {Router} from "next/router"
 
 export * from "./error-boundary"
 export * from "./error-component"
@@ -17,8 +16,8 @@ export * from "./router-context"
 export {Routes} from ".blitz"
 
 const buildWithBlitz = (withPlugins: BlitzPluginWithProvider) => {
-  return function withBlitzAppRoot(UserAppRoot: React.ComponentType<AppProps>) {
-    const BlitzOuterRoot = (props: AppProps) => {
+  return function withBlitzAppRoot(UserAppRoot: React.ComponentType<AppProps>, isRSC = false) {
+    const BlitzOuterRoot = (props: AppProps<{dehydratedState: unknown}>) => {
       const component = React.useMemo(() => withPlugins(props.Component), [props.Component])
 
       React.useEffect(() => {
@@ -28,6 +27,10 @@ const buildWithBlitz = (withPlugins: BlitzPluginWithProvider) => {
         })
       }, [])
 
+      if (isRSC) {
+        globalThis.__BLITZ_RSC = true
+        return <UserAppRoot {...props} Component={component} />
+      }
       return (
         <BlitzProvider dehydratedState={props.pageProps?.dehydratedState}>
           <>
@@ -80,24 +83,20 @@ export const BlitzProvider = ({
   hydrateOptions,
   children,
 }: BlitzProviderProps) => {
-  const router = useRouter()
-
   if (client) {
     return (
-      <RouterContext.Provider value={router}>
-        <QueryClientProvider
-          client={client || globalThis.queryClient}
-          contextSharing={contextSharing}
-        >
-          <Hydrate state={dehydratedState} options={hydrateOptions}>
-            {children}
-          </Hydrate>
-        </QueryClientProvider>
-      </RouterContext.Provider>
+      <QueryClientProvider
+        client={client || globalThis.queryClient}
+        contextSharing={contextSharing}
+      >
+        <Hydrate state={dehydratedState} options={hydrateOptions}>
+          {children}
+        </Hydrate>
+      </QueryClientProvider>
     )
   }
 
-  return <RouterContext.Provider value={router}>{children}</RouterContext.Provider>
+  return children
 }
 
 const setupBlitzClient = <TPlugins extends readonly ClientPlugin<object>[]>({
@@ -118,7 +117,7 @@ const setupBlitzClient = <TPlugins extends readonly ClientPlugin<object>[]>({
   //   allMiddleware.push(middleware)
   // }
 
-  const {exports, withPlugins} = reduceBlitzPlugins({plugins})
+  const {exports, withPlugins} = reduceBlitzClientPlugins({plugins})
 
   const withBlitz = buildWithBlitz(withPlugins)
 

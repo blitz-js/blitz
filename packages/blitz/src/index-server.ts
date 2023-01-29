@@ -9,6 +9,7 @@ export * from "./utils/enhance-prisma"
 export * from "./middleware"
 export * from "./paginate"
 export * from "./logging"
+export type {ServerPluginsExports, ClientPluginsExports} from "./plugin"
 
 export {startWatcher, stopWatcher} from "./cli/utils/routes-manifest"
 
@@ -36,7 +37,7 @@ export type BlitzServerPlugin<
 > = {
   requestMiddlewares: RequestMiddlewareType[]
   contextMiddleware?: (ctx: TCtx) => TCtx
-  exports?: TExports
+  exports?: () => TExports
 }
 
 export function createServerPlugin<

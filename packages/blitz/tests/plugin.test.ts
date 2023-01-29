@@ -1,6 +1,6 @@
 import {describe, it, expect, vi} from "vitest"
 import {ClientPlugin} from "../src/index-server"
-import {reduceBlitzPlugins, merge, pipe} from "../src/plugin"
+import {reduceBlitzClientPlugins, merge, pipe} from "../src/plugin"
 
 vi.spyOn(console, "log")
 
@@ -23,7 +23,7 @@ describe("pipe", () => {
   })
 })
 
-describe("reduceBlitzPlugins", () => {
+describe("reduceBlitzClientPlugins", () => {
   it("should reduce plugins", async () => {
     const plugin1: ClientPlugin<{
       foo: number
@@ -89,7 +89,7 @@ describe("reduceBlitzPlugins", () => {
         bar: 3,
       }),
     }
-    const {middleware, events, exports} = reduceBlitzPlugins({plugins: [plugin1, plugin2]})
+    const {middleware, events, exports} = reduceBlitzClientPlugins({plugins: [plugin1, plugin2]})
     expect(middleware.beforeHttpRequest).toBeDefined()
     expect(middleware.beforeHttpResponse).toBeDefined()
     expect(events.onRpcError).toBeDefined()

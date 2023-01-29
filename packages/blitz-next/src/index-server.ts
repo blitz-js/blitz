@@ -19,21 +19,16 @@ import {
   initializeLogger,
 } from "blitz"
 import {handleRequestWithMiddleware, startWatcher, stopWatcher} from "blitz"
-import {
-  dehydrate,
-  getInfiniteQueryKey,
-  getQueryKey,
-  installWebpackConfig,
-  InstallWebpackConfigOptions,
-  ResolverPathOptions,
-} from "@blitzjs/rpc"
-import {DefaultOptions, QueryClient} from "@tanstack/react-query"
+import {installWebpackConfig, InstallWebpackConfigOptions, ResolverPathOptions} from "@blitzjs/rpc"
+import {dehydrate, getInfiniteQueryKey, getQueryKey} from "@blitzjs/react-query"
+import {DefaultOptions, QueryClient} from "@blitzjs/react-query"
 import {IncomingMessage, ServerResponse} from "http"
 import {withSuperJsonProps} from "./superjson"
 import {ParsedUrlQuery} from "querystring"
 import {PreviewData} from "next/types"
 import {resolveHref} from "next/dist/shared/lib/router/router"
 import {RouteUrlObject, isRouteUrlObject} from "blitz"
+import {ServerPluginsExports} from "blitz"
 
 export * from "./index-browser"
 
@@ -49,8 +44,8 @@ export type NextApiHandler<TResult> = (
   res: BlitzNextApiResponse,
 ) => TResult | void | Promise<TResult | void>
 
-type SetupBlitzOptions = {
-  plugins: BlitzServerPlugin<RequestMiddleware, Ctx>[]
+type SetupBlitzOptions<Exports extends object> = {
+  plugins: BlitzServerPlugin<RequestMiddleware, Ctx, () => Exports>[]
   onError?: (err: Error) => void
   logger?: ReturnType<typeof BlitzLogger>
 }
@@ -130,11 +125,19 @@ const prefetchQueryFactory = (
   }
 }
 
-export const setupBlitzServer = ({plugins, onError, logger}: SetupBlitzOptions) => {
+export const setupBlitzServer = <TPlugins extends SetupBlitzOptions<object>>({
+  plugins,
+  onError,
+  logger,
+}: TPlugins) => {
   initializeLogger(logger ?? BlitzLogger())
 
   const middlewares = plugins.flatMap((p) => p.requestMiddlewares)
   const contextMiddleware = plugins.flatMap((p) => p.contextMiddleware).filter(Boolean)
+  const pluginExports = plugins.reduce(
+    (acc, plugin) => ({...plugin.exports!(), ...acc}),
+    {} as ServerPluginsExports<TPlugins["plugins"]>,
+  )
 
   const gSSP =
     <
@@ -216,7 +219,7 @@ export const setupBlitzServer = ({plugins, onError, logger}: SetupBlitzOptions) 
       }
     }
 
-  return {gSSP, gSP, api}
+  return {gSSP, gSP, api, ...pluginExports}
 }
 
 export interface BlitzConfig extends NextConfig {

@@ -1,4 +1,4 @@
-import {useRouter} from "next/router"
+// import {useRouter} from "next/router"
 import {ParsedUrlQuery} from "querystring"
 import React from "react"
 
@@ -36,13 +36,13 @@ export function extractQueryFromAsPath(asPath: string) {
   return decode(asPath.split("?", 2)[1] as string)
 }
 
-export function useRouterQuery() {
-  const router = useRouter()
+// export function useRouterQuery() {
+//   const router = useRouter()
 
-  const query = React.useMemo(() => extractQueryFromAsPath(router.asPath), [router.asPath])
+//   const query = React.useMemo(() => extractQueryFromAsPath(router.asPath), [router.asPath])
 
-  return query
-}
+//   return query
+// }
 
 type ParsedUrlQueryValue = string | string[] | undefined
 function areQueryValuesEqual(value1: ParsedUrlQueryValue, value2: ParsedUrlQueryValue) {
@@ -77,68 +77,68 @@ export function extractRouterParams(routerQuery: ParsedUrlQuery, asPathQuery: Pa
   )
 }
 
-export function useParams(): Dict<string | string[]>
-export function useParams(returnType?: ReturnTypes): Dict<string | string[]>
-export function useParams(returnType: "string"): Dict<string>
-export function useParams(returnType: "number"): Dict<number>
-export function useParams(returnType: "array"): Dict<string[]>
-export function useParams(returnType?: ReturnTypes | undefined) {
-  const router = useRouter()
-  const query = useRouterQuery()
+// export function useParams(): Dict<string | string[]>
+// export function useParams(returnType?: ReturnTypes): Dict<string | string[]>
+// export function useParams(returnType: "string"): Dict<string>
+// export function useParams(returnType: "number"): Dict<number>
+// export function useParams(returnType: "array"): Dict<string[]>
+// export function useParams(returnType?: ReturnTypes | undefined) {
+//   const router = useRouter()
+//   // const query = useRouterQuery()
 
-  const params = React.useMemo(() => {
-    const rawParams = extractRouterParams(router.query, query)
+//   const params = React.useMemo(() => {
+//     const rawParams = extractRouterParams(router.query, query)
 
-    if (returnType === "string") {
-      const parsedParams: Dict<string> = {}
-      for (const key in rawParams) {
-        if (typeof rawParams[key] === "string") {
-          parsedParams[key] = rawParams[key] as string
-        }
-      }
-      return parsedParams
-    }
+//     if (returnType === "string") {
+//       const parsedParams: Dict<string> = {}
+//       for (const key in rawParams) {
+//         if (typeof rawParams[key] === "string") {
+//           parsedParams[key] = rawParams[key] as string
+//         }
+//       }
+//       return parsedParams
+//     }
 
-    if (returnType === "number") {
-      const parsedParams: Dict<number> = {}
-      for (const key in rawParams) {
-        if (rawParams[key]) {
-          const num = Number(rawParams[key])
-          parsedParams[key] = isNaN(num) ? undefined : num
-        }
-      }
-      return parsedParams
-    }
+//     if (returnType === "number") {
+//       const parsedParams: Dict<number> = {}
+//       for (const key in rawParams) {
+//         if (rawParams[key]) {
+//           const num = Number(rawParams[key])
+//           parsedParams[key] = isNaN(num) ? undefined : num
+//         }
+//       }
+//       return parsedParams
+//     }
 
-    if (returnType === "array") {
-      const parsedParams: Dict<string[]> = {}
-      for (const key in rawParams) {
-        const rawValue = rawParams[key]
-        if (Array.isArray(rawParams[key])) {
-          parsedParams[key] = rawValue as string[]
-        } else if (typeof rawValue === "string") {
-          parsedParams[key] = [rawValue]
-        }
-      }
-      return parsedParams
-    }
+//     if (returnType === "array") {
+//       const parsedParams: Dict<string[]> = {}
+//       for (const key in rawParams) {
+//         const rawValue = rawParams[key]
+//         if (Array.isArray(rawParams[key])) {
+//           parsedParams[key] = rawValue as string[]
+//         } else if (typeof rawValue === "string") {
+//           parsedParams[key] = [rawValue]
+//         }
+//       }
+//       return parsedParams
+//     }
 
-    return rawParams
-  }, [router.query, query, returnType])
+//     return rawParams
+//   }, [router.query, query, returnType])
 
-  return params
-}
+//   return params
+// }
 
-export function useParam(key: string): undefined | string | string[]
-export function useParam(key: string, returnType: "string"): string | undefined
-export function useParam(key: string, returnType: "number"): number | undefined
-export function useParam(key: string, returnType: "array"): string[] | undefined
-export function useParam(
-  key: string,
-  returnType?: ReturnTypes,
-): undefined | number | string | string[] {
-  const params = useParams(returnType)
-  const value = params[key]
+// export function useParam(key: string): undefined | string | string[]
+// export function useParam(key: string, returnType: "string"): string | undefined
+// export function useParam(key: string, returnType: "number"): number | undefined
+// export function useParam(key: string, returnType: "array"): string[] | undefined
+// export function useParam(
+//   key: string,
+//   returnType?: ReturnTypes,
+// ): undefined | number | string | string[] {
+//   const params = useParams(returnType)
+//   const value = params[key]
 
-  return value
-}
+//   return value
+// }

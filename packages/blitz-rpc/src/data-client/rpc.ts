@@ -3,13 +3,11 @@ import {addBasePath} from "next/dist/client/add-base-path"
 import {deserialize, serialize, stringify} from "superjson"
 import {SuperJSONResult} from "superjson/dist/types"
 import {isServer} from "blitz"
-import {getQueryKeyFromUrlAndParams, getQueryClient} from "./react-query-utils"
+import {ResolverType, RpcClient, RpcClientBase} from "blitz"
 
 export function normalizeApiRoute(path: string): string {
   return normalizePathTrailingSlash(addBasePath(path))
 }
-
-export type ResolverType = "query" | "mutation"
 
 export interface BuildRpcClientParams {
   resolverName: string
@@ -17,27 +15,6 @@ export interface BuildRpcClientParams {
   routePath: string
   httpMethod: string
 }
-
-export interface RpcOptions {
-  fromQueryHook?: boolean
-  fromInvoke?: boolean
-  alreadySerialized?: boolean
-}
-
-export interface EnhancedRpc {
-  _isRpcClient: true
-  _resolverType: ResolverType
-  _resolverName: string
-  _routePath: string
-}
-
-export interface RpcClientBase<Input = unknown, Result = unknown> {
-  (params: Input, opts?: RpcOptions, signal?: AbortSignal): Promise<Result>
-}
-
-export interface RpcClient<Input = unknown, Result = unknown>
-  extends EnhancedRpc,
-    RpcClientBase<Input, Result> {}
 
 // export interface RpcResolver<Input = unknown, Result = unknown> extends EnhancedRpc {
 //   (params: Input, ctx?: Ctx): Promise<Result>
@@ -144,8 +121,13 @@ export function __internal_buildRpcClient({
               meta: payload.meta?.result,
             })
             if (!opts.fromQueryHook) {
-              const queryKey = getQueryKeyFromUrlAndParams(routePath, params)
-              getQueryClient().setQueryData(queryKey, data)
+              try {
+                const {getQueryKeyFromUrlAndParams, getQueryClient} = await import(
+                  "@blitzjs/react-query"
+                )
+                const queryKey = getQueryKeyFromUrlAndParams(routePath, params)
+                getQueryClient().setQueryData(queryKey, data)
+              } catch (e) {}
             }
             return data
           }
