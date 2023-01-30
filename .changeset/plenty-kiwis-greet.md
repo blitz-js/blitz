@@ -1,7 +1,4 @@
 ---
-"test-middleware": patch
-"test-qm": patch
-"test-rpc": patch
 "blitz": patch
 "@blitzjs/rpc": patch
 ---
