@@ -9,10 +9,6 @@ import {UrlObject} from "url"
 import {AppPropsType} from "next/dist/shared/lib/utils"
 import type {Router} from "next/router"
 
-export * from "./error-boundary"
-export * from "./error-component"
-export * from "./use-params"
-export * from "./router-context"
 export {Routes} from ".blitz"
 
 const buildWithBlitz = (withPlugins: BlitzPluginWithProvider) => {
@@ -166,3 +162,8 @@ export const NoPageFlicker = () => {
     </Head>
   )
 }
+
+export * from "./error-boundary"
+export * from "./error-component"
+export * from "./use-params"
+export * from "./router-context"

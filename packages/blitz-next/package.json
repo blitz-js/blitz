@@ -2,7 +2,7 @@
   "name": "@blitzjs/next",
   "version": "2.0.0-beta.22",
   "scripts": {
-    "build": "unbuild",
+    "build": "unbuild && node ./utils/add-directives.js",
     "dev": "pnpm predev && pnpm watch unbuild src --wait=0.2",
     "predev": "wait-on -d 250 ../blitz/dist/index-server.d.ts && wait-on -d 250 ../blitz-rpc/dist/index-server.d.ts",
     "lint": "eslint . --fix",

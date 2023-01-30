@@ -11,7 +11,7 @@ const filesToModify = [
 
 const addDirectives = (filePath) => {
   const fileContent = fs.readFileSync(filePath, "utf8")
-  const newFileContent = '"use client";\n' + fileContent
+  const newFileContent = "'use client';\n" + fileContent
   fs.writeFileSync(filePath, newFileContent)
 }
 
