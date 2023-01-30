@@ -51,7 +51,7 @@
   width: 100%;
   flex-direction: row;
   align-self: center;
-  max-width: var(--screen-width);
+  max-width: calc(min(var(--screen-width),800px));
 }
 
 .globe {
