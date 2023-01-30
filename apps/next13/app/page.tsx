@@ -4,6 +4,7 @@ import Test from "./react-query"
 import {cookies, headers} from "next/headers"
 import {getServerSession} from "../src/blitz-server"
 import getCurrentUser from "../src/users/queries/getCurrentUser"
+import {SessionContext} from "@blitzjs/auth"
 
 export default async function Home() {
   const session = await getServerSession(cookies(), headers())

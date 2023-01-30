@@ -156,7 +156,7 @@ export async function getSession(
     return res.blitzCtx.session
   }
 
-  let sessionKernel = await getSessionKernel({req, res})
+  let sessionKernel = await getSessionKernel(req, res)
 
   if (sessionKernel) {
     debug("Got existing session", sessionKernel)
@@ -177,7 +177,7 @@ export async function getServerSession(_cookies: any, _headers: Headers): Promis
   const req = new IncomingMessage(new Socket()) as IncomingMessage & {
     cookies: {[key: string]: string}
   }
-  req.headers = Object.fromEntries(_headers as Headers)
+  req.headers = Object.fromEntries(_headers as any)
   req.headers[HEADER_CSRF] = _cookies.get(COOKIE_CSRF_TOKEN()).value
   req.cookies = Object.fromEntries(
     _cookies.getAll().map((c: {name: string; value: string}) => [c.name, c.value]),
@@ -519,45 +519,19 @@ const setPublicDataCookie = (
 // --------------------------------
 // Get Session
 // --------------------------------
-async function getSessionKernel({
-  req,
-  res,
-  cookies,
-}: {
-  req?: IncomingMessage & {cookies: {[key: string]: string}}
-  res?: ServerResponse
-  cookies?: {[key: string]: string}
-}): Promise<SessionKernel | null> {
-  // const anonymousSessionToken = req.cookies[COOKIE_ANONYMOUS_SESSION_TOKEN()]
-  const anonymousSessionToken = req
-    ? req.cookies[COOKIE_ANONYMOUS_SESSION_TOKEN()]
-    : cookies
-    ? cookies[COOKIE_ANONYMOUS_SESSION_TOKEN()]
-    : undefined
-  // const sessionToken = req.cookies[COOKIE_SESSION_TOKEN()] // for essential method
-  const sessionToken = req
-    ? req.cookies[COOKIE_SESSION_TOKEN()]
-    : cookies
-    ? cookies[COOKIE_SESSION_TOKEN()]
-    : undefined
-  // debug("sessionToken", req.cookies)
-  // const idRefreshToken = req.cookies[COOKIE_REFRESH_TOKEN()] // for advanced method
-  const idRefreshToken = req
-    ? req.cookies[COOKIE_REFRESH_TOKEN()]
-    : cookies
-    ? cookies[COOKIE_REFRESH_TOKEN()]
-    : undefined
+async function getSessionKernel(
+  req: IncomingMessage & {cookies: {[key: string]: string}},
+  res: ServerResponse,
+): Promise<SessionKernel | null> {
+  const anonymousSessionToken = req.cookies[COOKIE_ANONYMOUS_SESSION_TOKEN()]
+  const sessionToken = req.cookies[COOKIE_SESSION_TOKEN()] // for essential method
+  const idRefreshToken = req.cookies[COOKIE_REFRESH_TOKEN()] // for advanced method
   const enableCsrfProtection =
-    req &&
     req.method !== "GET" &&
     req.method !== "OPTIONS" &&
     req.method !== "HEAD" &&
     !process.env.DANGEROUSLY_DISABLE_CSRF_PROTECTION
-  const antiCSRFToken = req
-    ? (req.headers[HEADER_CSRF] as string | undefined)
-    : cookies
-    ? cookies[HEADER_CSRF]
-    : undefined
+  const antiCSRFToken = req.headers[HEADER_CSRF] as string | undefined
 
   if (sessionToken) {
     debug("[getSessionKernel] Request has sessionToken")
@@ -569,7 +543,9 @@ async function getSessionKernel({
     }
 
     if (version !== SESSION_TOKEN_VERSION_0) {
-      debug(new AuthenticationError("Session token version is not " + SESSION_TOKEN_VERSION_0))
+      console.log(
+        new AuthenticationError("Session token version is not " + SESSION_TOKEN_VERSION_0),
+      )
       return null
     }
     debug("(global as any) session config", global.sessionConfig)
@@ -598,7 +574,7 @@ async function getSessionKernel({
         )
       }
 
-      res && setHeader(res, HEADER_CSRF_ERROR, "true")
+      setHeader(res, HEADER_CSRF_ERROR, "true")
       throw new CSRFTokenMismatchError()
     }
 
@@ -610,7 +586,7 @@ async function getSessionKernel({
      *  But only renew with non-GET requests because a GET request could be from a
      *  browser level navigation
      */
-    if (req && req.method !== "GET") {
+    if (req.method !== "GET") {
       // The publicData in the DB could have been updated since this client last made
       // a request. If so, then we generate a new access token
       const hasPublicDataChanged =
@@ -632,19 +608,18 @@ async function getSessionKernel({
       }
 
       if (hasPublicDataChanged || hasQuarterExpiryTimePassed) {
-        res &&
-          (await refreshSession(
-            req,
-            res,
-            {
-              handle,
-              publicData: JSON.parse(persistedSession.publicData || ""),
-              jwtPayload: null,
-              antiCSRFToken: persistedSession.antiCSRFToken,
-              sessionToken,
-            },
-            {publicDataChanged: hasPublicDataChanged},
-          ))
+        await refreshSession(
+          req,
+          res,
+          {
+            handle,
+            publicData: JSON.parse(persistedSession.publicData || ""),
+            jwtPayload: null,
+            antiCSRFToken: persistedSession.antiCSRFToken,
+            sessionToken,
+          },
+          {publicDataChanged: hasPublicDataChanged},
+        )
       }
     }
 
@@ -675,7 +650,7 @@ async function getSessionKernel({
         )
       }
 
-      res && setHeader(res, HEADER_CSRF_ERROR, "true")
+      setHeader(res, HEADER_CSRF_ERROR, "true")
       throw new CSRFTokenMismatchError()
     }
 

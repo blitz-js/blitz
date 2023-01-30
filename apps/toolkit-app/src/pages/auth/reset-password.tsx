@@ -6,7 +6,7 @@ import { ResetPassword } from "src/auth/validations"
 import resetPassword from "src/auth/mutations/resetPassword"
 import { BlitzPage, Routes } from "@blitzjs/next"
 import { useRouter } from "next/router"
-import { useMutation } from "@blitzjs/rpc"
+import { useMutation } from "@blitzjs/react-query"
 import Link from "next/link"
 
 const ResetPasswordPage: BlitzPage = () => {
