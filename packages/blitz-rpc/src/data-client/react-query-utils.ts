@@ -1,6 +1,6 @@
 import {QueryClient} from "@tanstack/react-query"
 import {serialize} from "superjson"
-import {isClient, isServer, AsyncFunc} from "blitz"
+import {isClient, isServer, AsyncFunc, isNotInUserTestEnvironment} from "blitz"
 import {ResolverType, RpcClient} from "./rpc"
 
 export type Resolver<TInput, TResult> = (input: TInput, ctx?: any) => Promise<TResult>
@@ -82,13 +82,6 @@ export const emptyQueryFn: RpcClient<unknown, unknown> = (() => {
   fn._isRpcClient = true
   return fn
 })()
-
-const isNotInUserTestEnvironment = () => {
-  if (process.env.JEST_WORKER_ID === undefined) return true
-  if (process.env.VITEST_WORKER_ID === undefined) return true
-  if (process.env.BLITZ_TEST_ENVIRONMENT !== undefined) return true
-  return false
-}
 
 export const validateQueryFn = <TInput, TResult>(
   queryFn: Resolver<TInput, TResult> | RpcClient<TInput, TResult>,
