@@ -37,11 +37,11 @@ const UserInfo = () => {
   } else {
     return (
       <>
-        <Link href={Routes.SignupPage()} className={styles.button}>
-          <strong>Sign Up</strong>
+        <Link href={Routes.SignupPage()}>
+          <strong className={styles.button}>Sign Up</strong>
         </Link>
-        <Link href={Routes.LoginPage()} className={styles.loginButton}>
-          <strong>Login</strong>
+        <Link href={Routes.LoginPage()}>
+          <strong className={styles.loginButton}>Login</strong>
         </Link>
       </>
     )
