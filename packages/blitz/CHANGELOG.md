@@ -1,5 +1,18 @@
 # blitz
 
+## 2.0.0-beta.22
+
+### Minor Changes
+
+- 8aa22a0b2: add `currentPassword` to the default fields that are masked in the logger
+
+### Patch Changes
+
+- 989691ec8: Use `src` instead of `app` folder for `blitz generate custom-template`
+- Updated dependencies [bcef81fad]
+- Updated dependencies [7abfb9086]
+  - @blitzjs/generator@2.0.0-beta.22
+
 ## 2.0.0-beta.21
 
 ### Patch Changes

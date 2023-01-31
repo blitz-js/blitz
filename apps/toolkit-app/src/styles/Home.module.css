@@ -18,7 +18,6 @@
   gap: 2rem;
 }
 
-
 .frost {
   background: rgba(255, 255, 255, 0.2);
   border-radius: 16px;
@@ -27,7 +26,6 @@
   -webkit-backdrop-filter: blur(5px);
   border: 1px solid rgba(255, 255, 255, 0.31);
 }
-
 
 .header {
   display: flex;
@@ -40,7 +38,6 @@
 .header h1 {
   max-width: 620px;
   align-self: center;
-
 }
 
 .body {
@@ -51,9 +48,8 @@
   width: 100%;
   flex-direction: row;
   align-self: center;
-  max-width: calc(min(var(--screen-width),800px));
+  max-width: calc(min(var(--screen-width), 700px));
 }
-
 
 .instructions {
   display: inline-flex;
@@ -71,7 +67,12 @@
   transform: translate(-50%, calc(-50% + 40px));
   z-index: -1;
   border-radius: 100%;
-  background-image: radial-gradient(95.63% 95.63% at 95.92% 0%, rgba(255, 255, 255, 0.62) 0%, #8155ff38 60.42%, #002fff5c 169%);
+  background-image: radial-gradient(
+    95.63% 95.63% at 95.92% 0%,
+    rgba(255, 255, 255, 0.62) 0%,
+    #8155ff38 60.42%,
+    #002fff5c 169%
+  );
   filter: blur(8vmin);
 }
 
@@ -135,18 +136,8 @@
 
 .textLink {
   color: rgb(124, 58, 237);
-  background:
-    linear-gradient(
-      to right,
-      rgba(231, 216, 246, 1),
-      rgba(231, 216, 246, 1)
-    ),
-    linear-gradient(
-      to right,
-      rgba(99, 1, 235, 1),
-      rgba(124, 58, 237, 1),
-      rgba(231, 216, 246, 1)
-  );
+  background: linear-gradient(to right, rgba(231, 216, 246, 1), rgba(231, 216, 246, 1)),
+    linear-gradient(to right, rgba(99, 1, 235, 1), rgba(124, 58, 237, 1), rgba(231, 216, 246, 1));
   background-size: 100% 1px, 0 1px;
   background-position: 100% 100%, 0 100%;
   background-repeat: no-repeat;
@@ -165,12 +156,12 @@
   width: 8px;
   height: 8px;
   border-top: 2px solid;
-  transform: scale(var(--ggs,1));
+  transform: scale(var(--ggs, 1));
   border-right: 2px solid;
   position: absolute;
   right: 6px;
   top: 6px;
-  color:#b1a5c4;
+  color: #b1a5c4;
 }
 
 .arrowIcon::after {
@@ -183,7 +174,7 @@
   background: currentColor;
   transform: rotate(-45deg);
   top: 2px;
-  right: -1px
+  right: -1px;
 }
 
 .buttonContainer {
@@ -248,7 +239,6 @@
   gap: 1rem;
 }
 
-
 .card {
   composes: frost;
   padding: 1rem 0rem;
@@ -294,9 +284,8 @@
   fill: #7450ec;
 }
 
-
 /* MOBILE */
-@media(max-width:800px) {
+@media (max-width: 800px) {
   .linkGrid {
     width: 100%;
   }
@@ -312,6 +301,4 @@
   .buttonContainer {
     flex-wrap: wrap;
   }
-
 }
-

@@ -3794,7 +3794,8 @@
       "profile": "http://tobiasjordans.de",
       "contributions": [
         "code",
-        "doc"
+        "doc",
+        "test"
       ]
     },
     {
