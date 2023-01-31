@@ -10,14 +10,9 @@ import { useMutation } from "@blitzjs/rpc"
 import Link from "next/link"
 
 const ResetPasswordPage: BlitzPage = () => {
-  const [token, setToken] = useState("")
   const router = useRouter()
+  const token = router.query.token?.toString()
   const [resetPasswordMutation, { isSuccess }] = useMutation(resetPassword)
-
-  useEffect(() => {
-    setToken(router.query.token as string)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [router.isReady])
 
   return (
     <div>
