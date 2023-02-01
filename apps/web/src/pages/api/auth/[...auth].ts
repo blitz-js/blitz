@@ -1,4 +1,4 @@
-import {passportAuth} from "@blitzjs/auth"
+import {passportAuth} from "@blitzjs/auth/adapters/passport"
 import {api} from "src/blitz-server"
 import db from "db"
 import {Strategy as TwitterStrategy} from "passport-twitter"

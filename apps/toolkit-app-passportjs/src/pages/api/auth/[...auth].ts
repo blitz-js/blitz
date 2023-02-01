@@ -1,4 +1,4 @@
-import { passportAuth } from "@blitzjs/auth"
+import { passportAuth } from "@blitzjs/auth/adapters/passport"
 import { api } from "src/blitz-server"
 import db, { User } from "db"
 import { Issuer, Strategy as OpenIdStrategy } from "openid-client"

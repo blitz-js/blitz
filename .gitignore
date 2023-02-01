@@ -68,3 +68,5 @@ test/**/*/out
 test/**/next-env.d.ts
 examples/**/next-env.d.ts
 .blitz**
+
+packages/blitz-auth/adapters

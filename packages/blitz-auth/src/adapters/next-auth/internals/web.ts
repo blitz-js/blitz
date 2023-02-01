@@ -1,6 +1,5 @@
+import {OAuthError} from "blitz"
 import {serialize, parse as parseCookie} from "cookie"
-import {UnknownAction} from "../core/errors"
-import type {ResponseInternal, RequestInternal} from "next-auth/core"
 import type {AuthAction} from "next-auth/core/types"
 
 const decoder = new TextDecoder()
@@ -45,9 +44,9 @@ async function readJSONBody(
 }
 
 // prettier-ignore
-const actions: AuthAction[] = [ "providers", "session", "csrf", "signin", "signout", "callback", "verify-request", "error", "_log" ]
+const actions: AuthAction[] = [ "signin", "callback"]
 
-export async function toInternalRequest(req: Request): Promise<RequestInternal | Error> {
+export async function toInternalRequest(req: Request): Promise<any | Error> {
   try {
     // TODO: url.toString() should not include action and providerId
     // see init.ts
@@ -56,7 +55,7 @@ export async function toInternalRequest(req: Request): Promise<RequestInternal |
 
     const action = actions.find((a) => pathname.includes(a))
     if (!action) {
-      throw new UnknownAction("Cannot detect action.")
+      throw new OAuthError("Cannot detect action.")
     }
 
     const providerIdOrAction = pathname.split("/").pop()
@@ -86,10 +85,10 @@ export async function toInternalRequest(req: Request): Promise<RequestInternal |
   }
 }
 
-export function toResponse(res: ResponseInternal): Response {
+export function toResponse(res: any): Response {
   const headers = new Headers(res.headers as unknown as HeadersInit)
 
-  res.cookies?.forEach((cookie) => {
+  res.cookies?.forEach((cookie: any) => {
     const {name, value, options} = cookie
     const cookieHeader = serialize(name, value, options)
     if (headers.has("Set-Cookie")) {
