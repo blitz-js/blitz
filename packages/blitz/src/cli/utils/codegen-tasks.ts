@@ -44,27 +44,6 @@ export const codegenTasks = async () => {
   }
 
   try {
-    const packageJson = await getPackageJson()
-    const nextAuthVersion = packageJson.dependencies["next-auth"]
-    if (nextAuthVersion) {
-      const nextAuthDir = await resolveCwd("next-auth")
-      const nextAuthPackageJson = await fs.readJSON(join(nextAuthDir, "..", "package.json"))
-      nextAuthPackageJson.exports = {
-        ...nextAuthPackageJson.exports,
-        "./core/lib/oauth/callback": "./core/lib/oauth/callback.js",
-        "./core/lib/oauth/authorization-url": "./core/lib/oauth/authorization-url.js",
-        "./core/init": "./core/init.js",
-      }
-      await fs.writeJSON(join(nextAuthDir, "..", "package.json"), nextAuthPackageJson, {spaces: 2})
-      log.success("NextAuth was successfully patched with an export fix")
-    }
-  } catch (err) {
-    if (!(err as Error).message.includes("Cannot find module")) {
-      log.error(JSON.stringify(err, null, 2))
-    }
-  }
-
-  try {
     await generateManifest()
     log.success("Routes manifest was successfully generated")
 

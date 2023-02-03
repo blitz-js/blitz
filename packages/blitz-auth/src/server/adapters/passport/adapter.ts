@@ -1,7 +1,7 @@
 /* @eslint-disable no-redeclare */
 import cookieSession from "cookie-session"
 import passport from "passport"
-import { isLocalhost } from "../shared"
+import {isLocalhost} from "../../index"
 import {
   assert,
   connectMiddleware,
@@ -12,6 +12,7 @@ import {
   secureProxyMiddleware,
   truncateString,
 } from "blitz"
+import {SessionContext} from "../../../shared"
 import {
   BlitzPassportConfig,
   ApiHandler,
@@ -19,8 +20,6 @@ import {
   ApiHandlerIncomingMessage,
   VerifyCallbackResult,
 } from "./types"
-
-export * from "./types"
 
 const isFunction = (functionToCheck: unknown): functionToCheck is Function =>
   typeof functionToCheck === "function"
@@ -93,7 +92,7 @@ export function passportAuth(config: BlitzPassportConfig): ApiHandler {
       if (req.query.redirectUrl) {
         // eslint-disable-next-line no-shadow
         middleware.push(async (req, res, next) => {
-          const session = res.blitzCtx.session
+          const session = res.blitzCtx.session as SessionContext
           assert(session, "Missing Blitz sessionMiddleware!")
           await session.$setPublicData({
             [INTERNAL_REDIRECT_URL_KEY]: req.query.redirectUrl,
@@ -109,7 +108,7 @@ export function passportAuth(config: BlitzPassportConfig): ApiHandler {
       middleware.push(
         // eslint-disable-next-line no-shadow
         connectMiddleware((req, res, next) => {
-          const session = res.blitzCtx.session
+          const session = res.blitzCtx.session as SessionContext
           assert(session, "Missing Blitz sessionMiddleware!")
 
           passport.authenticate(strategyName, async (err: any, result: any) => {

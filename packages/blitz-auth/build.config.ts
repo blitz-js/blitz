@@ -1,18 +1,8 @@
 import {BuildConfig} from "unbuild"
 
 const config: BuildConfig = {
-  entries: [
-    "./src/index-browser",
-    "./src/index-server",
-    {
-      builder: "mkdist",
-      input: "./src/adapters/",
-      outDir: "./adapters",
-      format: "cjs",
-    },
-  ],
-
-  externals: ["index-browser.cjs", "index-browser.mjs", "react"],
+  entries: ["./src/index-browser", "./src/index-server"],
+  externals: ["index-browser.cjs", "index-browser.mjs", "react", "next-auth", "next-auth/jwt"],
   declaration: true,
   rollup: {
     emitCJS: true,

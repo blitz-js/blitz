@@ -1,6 +1,7 @@
 import type {Ctx, MiddlewareResponse} from "blitz"
 import type {IncomingMessage} from "http"
 import type {AuthOptions, Profile, User} from "next-auth"
+import {SessionContext} from "../../../index-server"
 
 export type BlitzNextAuthOptions = AuthOptions & {
   successRedirectUrl: string
@@ -10,11 +11,11 @@ export type BlitzNextAuthOptions = AuthOptions & {
     user: User,
     account: any,
     profile: Profile,
-    session: Ctx["session"],
+    session: SessionContext,
   ) => Promise<void | {redirectUrl: string}>
 }
 
-export type NextAuthApiHandlerIncomingMessage = IncomingMessage & {
+export type ApiHandlerIncomingMessage = IncomingMessage & {
   query: {
     [key: string]: string | string[] | undefined
   }
@@ -25,7 +26,7 @@ export type NextAuthApiHandlerIncomingMessage = IncomingMessage & {
 }
 
 export type BlitzNextAuthApiHandler = (
-  req: NextAuthApiHandlerIncomingMessage,
+  req: ApiHandlerIncomingMessage,
   res: MiddlewareResponse & {status: (statusCode: number) => any} & {json: (data: any) => any},
   ctx: Ctx,
 ) => void | Promise<void>

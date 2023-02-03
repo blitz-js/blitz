@@ -11,25 +11,23 @@ import {
   secureProxyMiddleware,
   truncateString,
 } from "blitz"
-import {isLocalhost} from "../shared"
+import {isLocalhost, SessionContext} from "../../../index-server"
 
 // next-auth internals
-import oAuthCallback from "next-auth/core/lib/oauth/callback"
-import getAuthorizationUrl from "next-auth/core/lib/oauth/authorization-url"
-import {init} from "next-auth/core/init"
-
-import type {Cookie} from "next-auth/core/lib/cookie"
-import type {AuthAction, AuthOptions, User} from "next-auth"
+import oAuthCallback from "./internals/core/lib/oauth/callback"
+import getAuthorizationUrl from "./internals/core/lib/oauth/authorization-url"
+import {init} from "./internals/core/init"
+import {toInternalRequest, toResponse} from "./internals/utils/web"
+import {getBody, getURL, setHeaders} from "./internals/utils/node"
+import type {RequestInternal, AuthOptions, User} from "next-auth"
+import type {Cookie} from "./internals/core/lib/cookie"
+import type {AuthAction, InternalOptions} from "./internals/core/types"
 
 import type {
-  NextAuthApiHandlerIncomingMessage,
+  ApiHandlerIncomingMessage,
   BlitzNextAuthApiHandler,
   BlitzNextAuthOptions,
 } from "./types"
-import {toInternalRequest, toResponse} from "./internals/web"
-import {getBody, getURL, setHeaders} from "./internals/node"
-
-export * from "./types"
 
 const INTERNAL_REDIRECT_URL_KEY = "_redirectUrl"
 
@@ -53,7 +51,7 @@ export function NextAuthAdapter(config: BlitzNextAuthOptions): BlitzNextAuthApiH
       secure: process.env.NODE_ENV === "production" && !isLocalhost(req),
     })
 
-    const middleware: RequestMiddleware<NextAuthApiHandlerIncomingMessage, MiddlewareResponse<Ctx>>[] = [
+    const middleware: RequestMiddleware<ApiHandlerIncomingMessage, MiddlewareResponse<Ctx>>[] = [
       connectMiddleware(cookieSessionMiddleware as RequestMiddleware),
     ]
 
@@ -91,8 +89,8 @@ export function NextAuthAdapter(config: BlitzNextAuthOptions): BlitzNextAuthApiH
       providerId = providerId.split("?")[0]
     }
     const {options, cookies} = await init({
-      // @ts-expect-error
       url: new URL(
+        // @ts-ignore
         internalRequest.url!,
         process.env.APP_ORIGIN || process.env.BLITZ_DEV_SERVER_ORIGIN,
       ),
@@ -108,7 +106,7 @@ export function NextAuthAdapter(config: BlitzNextAuthOptions): BlitzNextAuthApiH
 
     await AuthHandler(middleware, config, internalRequest, action, options, cookies)
       .then(async ({middleware}) => {
-        await handleRequestWithMiddleware<NextAuthApiHandlerIncomingMessage, MiddlewareResponse<Ctx>>(
+        await handleRequestWithMiddleware<ApiHandlerIncomingMessage, MiddlewareResponse<Ctx>>(
           req,
           res,
           middleware,
@@ -129,14 +127,13 @@ export function NextAuthAdapter(config: BlitzNextAuthOptions): BlitzNextAuthApiH
 }
 
 async function AuthHandler(
-  middleware: RequestMiddleware<NextAuthApiHandlerIncomingMessage, MiddlewareResponse<Ctx>>[],
+  middleware: RequestMiddleware<ApiHandlerIncomingMessage, MiddlewareResponse<Ctx>>[],
   config: BlitzNextAuthOptions,
-  internalRequest: any,
+  internalRequest: RequestInternal,
   action: AuthAction,
-  options: any,
+  options: InternalOptions,
   cookies: Cookie[],
 ) {
-  console.log("options", options)
   if (!options.provider) {
     throw new OAuthError("MISSING_PROVIDER_ERROR")
   }
@@ -145,7 +142,7 @@ async function AuthHandler(
       try {
         const _signin = await getAuthorizationUrl({options: options, query: req.query})
         if (_signin.cookies) cookies.push(..._signin.cookies)
-        const session = res.blitzCtx.session
+        const session = res.blitzCtx.session as SessionContext
         assert(session, "Missing Blitz sessionMiddleware!")
         await session.$setPublicData({
           [INTERNAL_REDIRECT_URL_KEY]: _signin.redirect,
@@ -181,7 +178,7 @@ async function AuthHandler(
             options: options as any,
             cookies: internalRequest.cookies,
           })
-          const session = res.blitzCtx.session 
+          const session = res.blitzCtx.session as SessionContext
           assert(session, "Missing Blitz sessionMiddleware!")
           const callback = await config.callback(profile as User, account, OAuthProfile!, session)
           let _redirect = config.successRedirectUrl

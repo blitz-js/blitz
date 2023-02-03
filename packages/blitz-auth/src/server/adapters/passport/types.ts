@@ -1,6 +1,6 @@
 import type {AuthenticateOptions, Strategy} from "passport"
 import type {IncomingMessage, ServerResponse} from "http"
-import type {PublicData} from "../../shared"
+import type {PublicData} from "../../../shared"
 import type {Ctx, MiddlewareResponse} from "blitz"
 
 export interface BlitzPassportConfigCallbackParams {
