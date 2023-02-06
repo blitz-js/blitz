@@ -2,6 +2,6 @@
 "@blitzjs/auth": major
 ---
 
-Make secure-password an `optional peerDependency`. 
+BREAKING CHANGE: secure-password is now an `optional peerDependency`, if you are using `SecurePassword` api, you need to now install `secure-password` in your application.
 
-Now, to use the **Blitz wrapper** for password hashing, install `secure-password` in your projects as a depenendency.
+This helps users who do not use SecurePassword from having native package build issues.
