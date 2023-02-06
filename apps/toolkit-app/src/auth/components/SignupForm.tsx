@@ -2,7 +2,7 @@ import { LabeledTextField } from "src/core/components/LabeledTextField"
 import { Form, FORM_ERROR } from "src/core/components/Form"
 import signup from "src/auth/mutations/signup"
 import { Signup } from "src/auth/validations"
-import { useMutation } from "@blitzjs/rpc"
+import { useMutation } from "@blitzjs/rpc/react-query"
 
 type SignupFormProps = {
   onSuccess?: () => void

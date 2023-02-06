@@ -3,7 +3,7 @@ import { LabeledTextField } from "src/core/components/LabeledTextField"
 import { Form, FORM_ERROR } from "src/core/components/Form"
 import { ForgotPassword } from "src/auth/validations"
 import forgotPassword from "src/auth/mutations/forgotPassword"
-import { useMutation } from "@blitzjs/rpc"
+import { useMutation } from "@blitzjs/rpc/react-query"
 import { BlitzPage } from "@blitzjs/next"
 
 const ForgotPasswordPage: BlitzPage = () => {
