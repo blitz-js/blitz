@@ -17,16 +17,14 @@ const GhostIndex: BlitzPage = () => {
             {featureImage && (
               <div className="image-card">
                 <Link prefetch={true} href={Routes.GhostPostPage({slug})}>
-                  <a>
-                    <img loading="lazy" src={featureImage} />
-                  </a>
+                  <img loading="lazy" src={featureImage} />
                 </Link>
               </div>
             )}
             <b>{title}</b>
             <p>{custom_excerpt ?? excerpt}</p>
             <Link prefetch={true} href={Routes.GhostPostPage({slug})}>
-              <a>Read More...</a>
+              Read More...
             </Link>
 
             <hr />
