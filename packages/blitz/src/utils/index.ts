@@ -143,3 +143,11 @@ export function interopDefault(mod: any) {
 export function truncateString(str: string, maxLength: number): string {
   return str.length > maxLength ? str.substring(0, maxLength - 3) + "..." : str
 }
+
+export function isNotInUserTestEnvironment() {
+  if (process.env.VITE_BLITZ_TEST_ENVIRONMENT) {
+    return true
+  }
+
+  return process.env.JEST_WORKER_ID === undefined && process.env.VITEST_WORKER_ID === undefined
+}
