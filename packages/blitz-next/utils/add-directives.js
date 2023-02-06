@@ -1,10 +1,10 @@
 const fs = require("fs")
 
 const filesToModify = [
-  "dist\\index-browser.cjs",
-  "dist\\index-browser.mjs",
-  "dist\\chunks\\index-browser.cjs",
-  "dist\\chunks\\index-browser.mjs",
+  "dist/index-browser.cjs",
+  "dist/index-browser.mjs",
+  "dist/chunks/index-browser.cjs",
+  "dist/chunks/index-browser.mjs",
 ]
 
 const addDirectives = (filePath) => {
@@ -13,7 +13,7 @@ const addDirectives = (filePath) => {
   fs.writeFileSync(filePath, newFileContent)
 }
 
-const serverFiles = ["dist\\index-server.cjs", "dist\\index-server.mjs"]
+const serverFiles = ["dist/index-server.cjs", "dist/index-server.mjs"]
 
 const fixNextRouter = (filePath) => {
   const fileContent = fs.readFileSync(filePath, "utf8")
