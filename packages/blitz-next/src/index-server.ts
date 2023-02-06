@@ -17,17 +17,12 @@ import {
   MiddlewareResponse,
   BlitzLogger,
   initializeLogger,
+  Simplify,
+  UnionToIntersection,
 } from "blitz"
 import {handleRequestWithMiddleware, startWatcher, stopWatcher} from "blitz"
-import {
-  dehydrate,
-  getInfiniteQueryKey,
-  getQueryKey,
-  installWebpackConfig,
-  InstallWebpackConfigOptions,
-  ResolverPathOptions,
-} from "@blitzjs/rpc"
-import {DefaultOptions, QueryClient} from "@tanstack/react-query"
+import type {InstallWebpackConfigOptions, ResolverPathOptions} from "@blitzjs/rpc"
+import type {DefaultOptions, QueryClient} from "@tanstack/react-query"
 import {IncomingMessage, ServerResponse} from "http"
 import {withSuperJsonProps} from "./superjson"
 import {ParsedUrlQuery} from "querystring"
@@ -115,6 +110,8 @@ const prefetchQueryFactory = (
   return {
     getClient: () => queryClient,
     prefetchQuery: async (fn, input, defaultOptions = {}, infinite = false) => {
+      const {QueryClient} = await import("@tanstack/react-query")
+      const {getQueryKey, getInfiniteQueryKey} = await import("@blitzjs/rpc/react-query")
       if (!queryClient) {
         queryClient = new QueryClient({defaultOptions})
       }
@@ -130,11 +127,28 @@ const prefetchQueryFactory = (
   }
 }
 
-export const setupBlitzServer = ({plugins, onError, logger}: SetupBlitzOptions) => {
+type ServerPluginsExports<TPlugins extends readonly BlitzServerPlugin<object>[]> = Simplify<
+  UnionToIntersection<
+    {
+      [I in keyof TPlugins & number]: TPlugins[I]["exports"] extends () => infer R ? R : never
+    }[number]
+  >
+>
+
+export const setupBlitzServer = <TPlugins extends SetupBlitzOptions>({
+  plugins,
+  onError,
+  logger,
+}: TPlugins) => {
   initializeLogger(logger ?? BlitzLogger())
 
   const middlewares = plugins.flatMap((p) => p.requestMiddlewares)
   const contextMiddleware = plugins.flatMap((p) => p.contextMiddleware).filter(Boolean)
+  const pluginExports = plugins.reduce(
+    // @ts-ignore
+    (acc, plugin) => ({...plugin.exports!(), ...acc}),
+    {} as ServerPluginsExports<TPlugins["plugins"]>,
+  )
 
   const gSSP =
     <
@@ -216,7 +230,7 @@ export const setupBlitzServer = ({plugins, onError, logger}: SetupBlitzOptions) 
       }
     }
 
-  return {gSSP, gSP, api}
+  return {gSSP, gSP, api, ...pluginExports}
 }
 
 export interface BlitzConfig extends NextConfig {
@@ -246,6 +260,8 @@ export function withBlitz(nextConfig: BlitzConfig = {}) {
       void stopWatcher()
     })
   }
+
+  const {installWebpackConfig} = require("@blitzjs/rpc")
 
   const config = Object.assign({}, nextConfig, {
     webpack: (config: InstallWebpackConfigOptions["webpackConfig"], options: any) => {
@@ -280,6 +296,7 @@ function withDehydratedState<T extends Result>(result: T, queryClient: QueryClie
   if (!queryClient) {
     return result
   }
+  const {dehydrate} = require("@tanstack/react-query")
   const dehydratedState = dehydrate(queryClient)
   return {...result, props: {...("props" in result ? result.props : undefined), dehydratedState}}
 }

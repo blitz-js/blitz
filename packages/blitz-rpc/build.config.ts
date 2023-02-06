@@ -7,6 +7,7 @@ const config: BuildConfig = {
     "./src/loader-server",
     "./src/loader-server-resolvers",
     "./src/loader-client",
+    "./src/react-query/index",
   ],
   externals: [
     "index-browser.cjs",

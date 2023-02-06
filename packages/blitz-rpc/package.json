@@ -2,7 +2,7 @@
   "name": "@blitzjs/rpc",
   "version": "2.0.0-beta.22",
   "scripts": {
-    "build": "unbuild",
+    "build": "unbuild && node ./utils/add-directives.js",
     "predev": "wait-on -d 400 ../blitz/dist/index-server.d.ts && wait-on -d 400 ../blitz-auth/dist/index-browser.d.ts",
     "dev": "pnpm run predev && watch unbuild src --wait=0.2",
     "lint": "eslint . --fix",
@@ -17,7 +17,8 @@
   "sideEffects": false,
   "license": "MIT",
   "files": [
-    "dist/**"
+    "dist/**",
+    "react-query/*"
   ],
   "dependencies": {
     "@swc/core": "1.3.7",

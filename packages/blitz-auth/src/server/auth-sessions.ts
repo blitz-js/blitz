@@ -35,6 +35,8 @@ import {
   AuthenticatedSessionContext,
 } from "../shared"
 import {generateToken, hash256} from "./auth-utils"
+import {Socket} from "net"
+import {getAntiCSRFToken} from "../client"
 
 export function isLocalhost(req: any): boolean {
   let {host} = req.headers
@@ -150,6 +152,7 @@ export async function getSession(
   debug("cookiePrefix", globalThis.__BLITZ_SESSION_COOKIE_PREFIX)
 
   if (res.blitzCtx.session) {
+    debug("Returning existing session")
     return res.blitzCtx.session
   }
 
@@ -165,8 +168,22 @@ export async function getSession(
   }
 
   const sessionContext = makeProxyToPublicData(new SessionContextClass(req, res, sessionKernel))
+  debug("New session context")
   res.blitzCtx.session = sessionContext
   return sessionContext
+}
+
+export async function getServerSession(_cookies: any, _headers: Headers): Promise<SessionContext> {
+  const req = new IncomingMessage(new Socket()) as IncomingMessage & {
+    cookies: {[key: string]: string}
+  }
+  req.headers = Object.fromEntries(_headers as any)
+  req.headers[HEADER_CSRF] = _cookies.get(COOKIE_CSRF_TOKEN()).value
+  req.cookies = Object.fromEntries(
+    _cookies.getAll().map((c: {name: string; value: string}) => [c.name, c.value]),
+  )
+  const res = new ServerResponse(req)
+  return await getSession(req, res)
 }
 
 const makeProxyToPublicData = <T extends SessionContextClass>(ctxClass: T): T => {

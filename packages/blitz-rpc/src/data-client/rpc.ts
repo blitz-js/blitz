@@ -3,7 +3,6 @@ import {addBasePath} from "next/dist/client/add-base-path"
 import {deserialize, serialize, stringify} from "superjson"
 import {SuperJSONResult} from "superjson/dist/types"
 import {isServer} from "blitz"
-import {getQueryKeyFromUrlAndParams, getQueryClient} from "./react-query-utils"
 
 export function normalizeApiRoute(path: string): string {
   return normalizePathTrailingSlash(addBasePath(path))
@@ -144,8 +143,9 @@ export function __internal_buildRpcClient({
               meta: payload.meta?.result,
             })
             if (!opts.fromQueryHook) {
+              const {getQueryKeyFromUrlAndParams} = await import("../react-query/react-query-utils")
               const queryKey = getQueryKeyFromUrlAndParams(routePath, params)
-              getQueryClient().setQueryData(queryKey, data)
+              globalThis.queryClient.setQueryData(queryKey, data)
             }
             return data
           }
