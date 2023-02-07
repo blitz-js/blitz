@@ -21,9 +21,9 @@ export const Edit__ModelName__ = () => {
   const [__modelName__, {setQueryData}] = useQuery(
     get__ModelName__,
     {id: __modelId__},
-    { 
+    {
       // This ensures the query never refreshes and overwrites the form data while the user is editing.
-      staleTime: Infinity 
+      staleTime: Infinity
     }
   )
   const [update__ModelName__Mutation] = useMutation(update__ModelName__)
@@ -82,11 +82,11 @@ const Edit__ModelName__Page = () => {
       <p>
         <if condition="parentModel">
           <Link href={Routes.__ModelNames__Page({ __parentModelId__: __parentModelId__! })}>
-            <a>__ModelNames__</a>
+            __ModelNames__
           </Link>
           <else>
             <Link href={Routes.__ModelNames__Page()}>
-              <a>__ModelNames__</a>
+              __ModelNames__
             </Link>
           </else>
         </if>

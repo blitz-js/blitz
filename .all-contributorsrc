@@ -3817,6 +3817,26 @@
         "doc",
         "code"
       ]
+    },
+    {
+      "login": "jhonnymichel",
+      "name": "Jhonny Michel",
+      "avatar_url": "https://avatars.githubusercontent.com/u/7006387?v=4",
+      "profile": "https://github.com/jhonnymichel",
+      "contributions": [
+        "doc",
+        "code",
+        "test"
+      ]
+    },
+    {
+      "login": "sweetliquid",
+      "name": "sweetliquid",
+      "avatar_url": "https://avatars.githubusercontent.com/u/18693190?v=4",
+      "profile": "sweetliquid.me",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
