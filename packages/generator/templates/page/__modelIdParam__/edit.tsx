@@ -6,10 +6,10 @@ import { useRouter } from "next/router"
 import {useQuery, useMutation} from '@blitzjs/rpc'
 import {useParam} from '@blitzjs/next'
 
-import Layout from "app/core/layouts/Layout"
-import get__ModelName__ from "app/__modelNamesPath__/queries/get__ModelName__"
-import update__ModelName__ from "app/__modelNamesPath__/mutations/update__ModelName__"
-import {__ModelName__Form, FORM_ERROR} from "app/__modelNamesPath__/components/__ModelName__Form"
+import Layout from "src/core/layouts/Layout"
+import get__ModelName__ from "src/__modelNamesPath__/queries/get__ModelName__"
+import update__ModelName__ from "src/__modelNamesPath__/mutations/update__ModelName__"
+import {__ModelName__Form, FORM_ERROR} from "src/__modelNamesPath__/components/__ModelName__Form"
 
 export const Edit__ModelName__ = () => {
   const router = useRouter()
@@ -20,9 +20,9 @@ export const Edit__ModelName__ = () => {
   const [__modelName__, {setQueryData}] = useQuery(
     get__ModelName__,
     {id: __modelId__},
-    { 
+    {
       // This ensures the query never refreshes and overwrites the form data while the user is editing.
-      staleTime: Infinity 
+      staleTime: Infinity
     }
   )
   const [update__ModelName__Mutation] = useMutation(update__ModelName__)
@@ -83,11 +83,11 @@ const Edit__ModelName__Page = () => {
       <p>
         <if condition="parentModel">
           <Link href={Routes.__ModelNames__Page({ __parentModelId__: __parentModelId__! })}>
-            <a>__ModelNames__</a>
+            __ModelNames__
           </Link>
           <else>
             <Link href={Routes.__ModelNames__Page()}>
-              <a>__ModelNames__</a>
+              __ModelNames__
             </Link>
           </else>
         </if>

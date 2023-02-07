@@ -80,6 +80,7 @@ export async function executeCommand(input: CliCommand): Promise<void> {
       stdio: ["inherit", "pipe", "pipe"],
     })
     cp.on("exit", resolve)
+    cp.stdout.on("data", () => {})
   })
 }
 

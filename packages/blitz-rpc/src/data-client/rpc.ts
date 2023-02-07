@@ -1,17 +1,9 @@
 import {normalizePathTrailingSlash} from "next/dist/client/normalize-trailing-slash"
 import {addBasePath} from "next/dist/client/add-base-path"
-import {deserialize, serialize} from "superjson"
+import {deserialize, serialize, stringify} from "superjson"
 import {SuperJSONResult} from "superjson/dist/types"
-import {CSRFTokenMismatchError, isServer} from "blitz"
+import {isServer} from "blitz"
 import {getQueryKeyFromUrlAndParams, getQueryClient} from "./react-query-utils"
-import {
-  getAntiCSRFToken,
-  getPublicDataStore,
-  HEADER_CSRF,
-  HEADER_CSRF_ERROR,
-  HEADER_PUBLIC_DATA_TOKEN,
-  HEADER_SESSION_CREATED,
-} from "@blitzjs/auth"
 
 export function normalizeApiRoute(path: string): string {
   return normalizePathTrailingSlash(addBasePath(path))
@@ -23,6 +15,7 @@ export interface BuildRpcClientParams {
   resolverName: string
   resolverType: ResolverType
   routePath: string
+  httpMethod: string
 }
 
 export interface RpcOptions {
@@ -54,9 +47,10 @@ export function __internal_buildRpcClient({
   resolverName,
   resolverType,
   routePath,
+  httpMethod,
 }: BuildRpcClientParams): RpcClient {
   const fullRoutePath = normalizeApiRoute("/api/rpc" + routePath)
-
+  const routePathURL = new URL(fullRoutePath, window.location.origin)
   const httpClient: RpcClientBase = async (params, opts = {}, signal = undefined) => {
     const debug = (await import("debug")).default("blitz:rpc")
     if (!opts.fromQueryHook && !opts.fromInvoke) {
@@ -70,18 +64,6 @@ export function __internal_buildRpcClient({
     }
     debug("Starting request for", fullRoutePath, "with", params, "and", opts)
 
-    const headers: Record<string, any> = {
-      "Content-Type": "application/json",
-    }
-
-    const antiCSRFToken = getAntiCSRFToken()
-    if (antiCSRFToken) {
-      debug("Adding antiCSRFToken cookie header", antiCSRFToken)
-      headers[HEADER_CSRF] = antiCSRFToken
-    } else {
-      debug("No antiCSRFToken cookie found")
-    }
-
     let serialized: SuperJSONResult
     if (opts.alreadySerialized) {
       // params is already serialized with superjson when it gets here
@@ -93,51 +75,38 @@ export function __internal_buildRpcClient({
       serialized = serialize(params)
     }
 
+    if (httpMethod === "GET" && serialized.json) {
+      routePathURL.searchParams.set("params", stringify(serialized.json))
+      routePathURL.searchParams.set("meta", stringify(serialized.meta))
+    }
+
+    const {beforeHttpRequest, beforeHttpResponse} = globalThis.__BLITZ_MIDDLEWARE_HOOKS
+
     const promise = window
-      .fetch(fullRoutePath, {
-        method: "POST",
-        headers,
-        credentials: "include",
-        redirect: "follow",
-        body: JSON.stringify({
-          params: serialized.json,
-          meta: {
-            params: serialized.meta,
+      .fetch(
+        routePathURL,
+        beforeHttpRequest({
+          method: httpMethod,
+          headers: {
+            "Content-Type": "application/json",
           },
+          credentials: "include",
+          redirect: "follow",
+          body:
+            httpMethod === "POST"
+              ? JSON.stringify({
+                  params: serialized.json,
+                  meta: {
+                    params: serialized.meta,
+                  },
+                })
+              : undefined,
+          signal,
         }),
-        signal,
-      })
+      )
       .then(async (response) => {
         debug("Received request for", routePath)
-        if (response.headers) {
-          if (response.headers.get(HEADER_PUBLIC_DATA_TOKEN)) {
-            getPublicDataStore().updateState()
-            debug("Public data updated")
-          }
-          if (response.headers.get(HEADER_SESSION_CREATED)) {
-            // This also runs on logout, because on logout a new anon session is created
-            debug("Session created")
-            setTimeout(async () => {
-              // Do these in the next tick to prevent various bugs like https://github.com/blitz-js/blitz/issues/2207
-              debug("Invalidating react-query cache...")
-              await getQueryClient().cancelQueries()
-              await getQueryClient().resetQueries()
-              getQueryClient().getMutationCache().clear()
-              // We have a 100ms delay here to prevent unnecessary stale queries from running
-              // This prevents the case where you logout on a page with
-              // Page.authenticate = {redirectTo: '/login'}
-              // Without this delay, queries that require authentication on the original page
-              // will still run (but fail because you are now logged out)
-              // Ref: https://github.com/blitz-js/blitz/issues/1935
-            }, 100)
-          }
-          if (response.headers.get(HEADER_CSRF_ERROR)) {
-            const err = new CSRFTokenMismatchError()
-            err.stack = null!
-            throw err
-          }
-        }
-
+        response = beforeHttpResponse(response)
         if (!response.ok) {
           const error = new Error(response.statusText)
           ;(error as any).statusCode = response.status
@@ -153,24 +122,20 @@ export function __internal_buildRpcClient({
             err.stack = null!
             throw err
           }
-
           if (payload.error) {
             let error = deserialize({
               json: payload.error,
               meta: payload.meta?.error,
             }) as any
-            // We don't clear the publicDataStore for anonymous users,
-            // because there is not sensitive data
-            if (error.name === "AuthenticationError" && getPublicDataStore().getData().userId) {
-              getPublicDataStore().clear()
-            }
-
+            const rpcEvent = new CustomEvent("blitz:rpc-error", {
+              detail: error,
+            })
+            document.dispatchEvent(rpcEvent)
             const prismaError = error.message.match(/invalid.*prisma.*invocation/i)
             if (prismaError && !("code" in error)) {
               error = new Error(prismaError[0])
               error.statusCode = 500
             }
-
             error.stack = null
             throw error
           } else {
@@ -178,7 +143,6 @@ export function __internal_buildRpcClient({
               json: payload.result,
               meta: payload.meta?.result,
             })
-
             if (!opts.fromQueryHook) {
               const queryKey = getQueryKeyFromUrlAndParams(routePath, params)
               getQueryClient().setQueryData(queryKey, data)

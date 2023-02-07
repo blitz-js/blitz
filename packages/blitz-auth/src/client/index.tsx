@@ -14,6 +14,7 @@ import {
   RedirectError,
   RouteUrlObject,
   Ctx,
+  CSRFTokenMismatchError,
 } from "blitz"
 import {
   COOKIE_CSRF_TOKEN,
@@ -25,6 +26,10 @@ import {
   EmptyPublicData,
   AuthenticatedClientSession,
   ClientSession,
+  HEADER_CSRF,
+  HEADER_PUBLIC_DATA_TOKEN,
+  HEADER_SESSION_CREATED,
+  HEADER_CSRF_ERROR,
 } from "../shared"
 import _debug from "debug"
 import {formatWithValidation} from "../shared/url-utils"
@@ -50,7 +55,7 @@ export const parsePublicDataToken = (token: string) => {
   }
 }
 
-const emptyPublicData: EmptyPublicData = {userId: null}
+const emptyPublicData: EmptyPublicData = {userId: null, role: null}
 
 class PublicDataStore {
   private eventKey = `${LOCALSTORAGE_PREFIX}publicDataUpdated`
@@ -85,7 +90,11 @@ class PublicDataStore {
 
   clear() {
     deleteCookie(COOKIE_PUBLIC_DATA_TOKEN())
-    localStorage.removeItem(LOCALSTORAGE_PUBLIC_DATA_TOKEN())
+    try {
+      localStorage.removeItem(LOCALSTORAGE_PUBLIC_DATA_TOKEN())
+    } catch (err) {
+      console.error("LocalStorage is not available", err)
+    }
     this.updateState(emptyPublicData)
   }
 
@@ -100,12 +109,17 @@ class PublicDataStore {
   }
 
   private getToken() {
-    const cookieValue = readCookie(COOKIE_PUBLIC_DATA_TOKEN())
-    if (cookieValue) {
-      localStorage.setItem(LOCALSTORAGE_PUBLIC_DATA_TOKEN(), cookieValue)
-      return cookieValue
-    } else {
-      return localStorage.getItem(LOCALSTORAGE_PUBLIC_DATA_TOKEN())
+    try {
+      const cookieValue = readCookie(COOKIE_PUBLIC_DATA_TOKEN())
+      if (cookieValue) {
+        localStorage.setItem(LOCALSTORAGE_PUBLIC_DATA_TOKEN(), cookieValue)
+        return cookieValue
+      } else {
+        return localStorage.getItem(LOCALSTORAGE_PUBLIC_DATA_TOKEN())
+      }
+    } catch (err) {
+      console.error("LocalStorage is not available", err)
+      return undefined
     }
   }
 }
@@ -116,10 +130,17 @@ export const getPublicDataStore = (): PublicDataStore => {
   return (window as any).__publicDataStore
 }
 
-export const getAntiCSRFToken = () => {
+// because safari automatically deletes non-httponly cookies after 7 days
+export const backupAntiCSRFTokenToLocalStorage = () => {
   const cookieValue = readCookie(COOKIE_CSRF_TOKEN())
   if (cookieValue) {
     localStorage.setItem(LOCALSTORAGE_CSRF_TOKEN(), cookieValue)
+  }
+}
+
+export const getAntiCSRFToken = () => {
+  const cookieValue = readCookie(COOKIE_CSRF_TOKEN())
+  if (cookieValue) {
     return cookieValue
   } else {
     return localStorage.getItem(LOCALSTORAGE_CSRF_TOKEN())
@@ -164,9 +185,8 @@ export const useSession = (options: UseSessionOptions = {}): ClientSession => {
   return session
 }
 
-export const useAuthorizeIf = (condition?: boolean) => {
+export const useAuthorizeIf = (condition?: boolean, role?: string | Array<string>) => {
   const [mounted, setMounted] = useState(false)
-
   useEffect(() => {
     setMounted(true)
   }, [])
@@ -176,6 +196,29 @@ export const useAuthorizeIf = (condition?: boolean) => {
     error.stack = null!
     throw error
   }
+
+  if (isClient && condition && role && getPublicDataStore().getData().userId && mounted) {
+    const error = new AuthenticationError()
+    error.stack = null!
+    if (!authorizeRole(role, getPublicDataStore().getData().role as string)) {
+      throw error
+    }
+  }
+}
+
+const authorizeRole = (role?: string | Array<string>, currentRole?: string) => {
+  if (role && currentRole) {
+    if (Array.isArray(role)) {
+      if (role.includes(currentRole)) {
+        return true
+      }
+    } else {
+      if (currentRole === role) {
+        return true
+      }
+    }
+  }
+  return false
 }
 
 export const useAuthorize = () => {
@@ -217,7 +260,7 @@ export type RedirectAuthenticatedToFn = (
 
 export type BlitzPage<P = {}> = React.ComponentType<P> & {
   getLayout?: (component: JSX.Element) => JSX.Element
-  authenticate?: boolean | {redirectTo?: string | RouteUrlObject}
+  authenticate?: boolean | {redirectTo?: string | RouteUrlObject; role?: string | Array<string>}
   suppressFirstRenderFlicker?: boolean
   redirectAuthenticatedTo?: RedirectAuthenticatedTo | RedirectAuthenticatedToFn
 }
@@ -268,7 +311,10 @@ function withBlitzAuthPlugin<TProps = any>(Page: ComponentType<TProps> | BlitzPa
 
     let {authenticate, redirectAuthenticatedTo} = getAuthValues(Page, props)
 
-    useAuthorizeIf(authenticate === true)
+    useAuthorizeIf(
+      authenticate === true,
+      !authenticate ? undefined : typeof authenticate === "object" ? authenticate.role : undefined,
+    )
 
     if (typeof window !== "undefined") {
       const publicData = getPublicDataStore().getData()
@@ -296,6 +342,25 @@ function withBlitzAuthPlugin<TProps = any>(Page: ComponentType<TProps> | BlitzPa
             error.stack = null!
             throw error
           }
+        }
+
+        if (
+          authenticate &&
+          typeof authenticate === "object" &&
+          authenticate.redirectTo &&
+          authenticate.role &&
+          !authorizeRole(authenticate.role, publicData.role as string)
+        ) {
+          let {redirectTo} = authenticate
+          if (typeof redirectTo !== "string") {
+            redirectTo = formatWithValidation(redirectTo)
+          }
+          const url = new URL(redirectTo, window.location.href)
+          url.searchParams.append("next", window.location.pathname)
+          debug("[BlitzAuthInnerRoot] redirecting to", url.toString())
+          const error = new RedirectError(url.toString())
+          error.stack = null!
+          throw error
         }
       } else {
         debug("[BlitzAuthInnerRoot] logged out")
@@ -340,8 +405,50 @@ export const AuthClientPlugin = createClientPlugin((options: AuthPluginClientOpt
   globalThis.__BLITZ_SESSION_COOKIE_PREFIX = options.cookiePrefix || "blitz"
   return {
     withProvider: withBlitzAuthPlugin,
-    events: {},
-    middleware: {},
+    events: {
+      onRpcError: async (error) => {
+        // We don't clear the publicDataStore for anonymous users,
+        // because there is not sensitive data
+        if (error.name === "AuthenticationError" && getPublicDataStore().getData().userId) {
+          getPublicDataStore().clear()
+        }
+      },
+    },
+    middleware: {
+      beforeHttpRequest(req) {
+        const headers: Record<string, any> = {
+          "Content-Type": "application/json",
+        }
+        const antiCSRFToken = getAntiCSRFToken()
+        if (antiCSRFToken) {
+          debug("Adding antiCSRFToken cookie header", antiCSRFToken)
+          headers[HEADER_CSRF] = antiCSRFToken
+        } else {
+          debug("No antiCSRFToken cookie found")
+        }
+        req.headers = {...req.headers, ...headers}
+        return req
+      },
+      beforeHttpResponse(res) {
+        if (res.headers) {
+          backupAntiCSRFTokenToLocalStorage()
+          if (res.headers.get(HEADER_PUBLIC_DATA_TOKEN)) {
+            getPublicDataStore().updateState()
+            debug("Public data updated")
+          }
+          if (res.headers.get(HEADER_SESSION_CREATED)) {
+            const event = new Event("blitz:session-created")
+            document.dispatchEvent(event)
+          }
+          if (res.headers.get(HEADER_CSRF_ERROR)) {
+            const err = new CSRFTokenMismatchError()
+            err.stack = null!
+            throw err
+          }
+        }
+        return res
+      },
+    },
     exports: () => ({
       useSession,
       useAuthorize,

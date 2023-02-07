@@ -1,2 +1,6 @@
 const {withBlitz} = require("@blitzjs/next")
-module.exports = withBlitz({})
+module.exports = withBlitz({
+  blitz: {
+    includeRPCFolders: ["../no-suspense/app"],
+  },
+})

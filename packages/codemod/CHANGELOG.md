@@ -1,5 +1,100 @@
 # @blitzjs/codemod
 
+## 2.0.0-beta.22
+
+### Patch Changes
+
+- Updated dependencies [989691ec8]
+- Updated dependencies [bcef81fad]
+- Updated dependencies [8aa22a0b2]
+- Updated dependencies [7abfb9086]
+  - blitz@2.0.0-beta.22
+  - @blitzjs/generator@2.0.0-beta.22
+
+## 2.0.0-beta.21
+
+### Patch Changes
+
+- Updated dependencies [77b7da0f3]
+- Updated dependencies [d692b4c1d]
+- Updated dependencies [10f98c681]
+- Updated dependencies [d5b8faa86]
+  - @blitzjs/generator@2.0.0-beta.21
+  - blitz@2.0.0-beta.21
+
+## 2.0.0-beta.20
+
+### Patch Changes
+
+- Updated dependencies [74a14b70]
+- Updated dependencies [8c247e26]
+- Updated dependencies [6ece0961]
+- Updated dependencies [a0596279]
+  - blitz@2.0.0-beta.20
+  - @blitzjs/generator@2.0.0-beta.20
+
+## 2.0.0-beta.19
+
+### Patch Changes
+
+- Updated dependencies [c1e00406]
+- Updated dependencies [696f48c4]
+- Updated dependencies [b80c3d92]
+- Updated dependencies [942536d9]
+- Updated dependencies [a6f32d1d]
+- Updated dependencies [c126b819]
+- Updated dependencies [b33db082]
+  - blitz@2.0.0-beta.19
+  - @blitzjs/generator@2.0.0-beta.19
+
+## 2.0.0-beta.18
+
+### Patch Changes
+
+- @blitzjs/generator@2.0.0-beta.18
+- blitz@2.0.0-beta.18
+
+## 2.0.0-beta.17
+
+### Patch Changes
+
+- Updated dependencies [2a81af7b]
+- Updated dependencies [5ea068b2]
+- Updated dependencies [8b4bf999]
+- Updated dependencies [88caa18e]
+  - @blitzjs/generator@2.0.0-beta.17
+  - blitz@2.0.0-beta.17
+
+## 2.0.0-beta.16
+
+### Patch Changes
+
+- Updated dependencies [1569bd53]
+- Updated dependencies [ceb7db27]
+- Updated dependencies [8e5903c0]
+- Updated dependencies [45459129]
+  - blitz@2.0.0-beta.16
+  - @blitzjs/generator@2.0.0-beta.16
+
+## 2.0.0-beta.15
+
+### Patch Changes
+
+- Updated dependencies [1b798d9a]
+  - blitz@2.0.0-beta.15
+  - @blitzjs/generator@2.0.0-beta.15
+
+## 2.0.0-beta.14
+
+### Patch Changes
+
+- Updated dependencies [54761393]
+- Updated dependencies [78fd5c48]
+- Updated dependencies [60de0574]
+- Updated dependencies [0a8b0cb3]
+  - @blitzjs/generator@2.0.0-beta.14
+  - blitz@2.0.0-beta.14
+
 ## 2.0.0-beta.13
 
 ### Patch Changes

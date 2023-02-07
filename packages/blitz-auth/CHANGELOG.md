@@ -1,5 +1,103 @@
 # @blitzjs/auth
 
+## 2.0.0-beta.22
+
+### Minor Changes
+
+- 145d5a02b: fix failed localStorage access to not crash the application
+
+### Patch Changes
+
+- Updated dependencies [989691ec8]
+- Updated dependencies [8aa22a0b2]
+  - blitz@2.0.0-beta.22
+
+## 2.0.0-beta.21
+
+### Patch Changes
+
+- 82e8b64f5: Fixes adding authError query param in Passport adapter.
+- Updated dependencies [d692b4c1d]
+- Updated dependencies [10f98c681]
+- Updated dependencies [d5b8faa86]
+  - blitz@2.0.0-beta.21
+
+## 2.0.0-beta.20
+
+### Minor Changes
+
+- 6ece0961: Decoupled Blitz RPC from Blitz Auth to allow independent use.
+- 03bad317: fix Cannot read properties of null (reading 'isReady') for pnpm/yarn v3
+
+### Patch Changes
+
+- Updated dependencies [74a14b70]
+- Updated dependencies [6ece0961]
+- Updated dependencies [a0596279]
+  - blitz@2.0.0-beta.20
+
+## 2.0.0-beta.19
+
+### Minor Changes
+
+- c1e00406: transpile packages to es2015 to support older browsers
+
+### Patch Changes
+
+- Updated dependencies [c1e00406]
+- Updated dependencies [696f48c4]
+- Updated dependencies [942536d9]
+- Updated dependencies [a6f32d1d]
+- Updated dependencies [c126b819]
+- Updated dependencies [b33db082]
+  - blitz@2.0.0-beta.19
+
+## 2.0.0-beta.18
+
+### Patch Changes
+
+- blitz@2.0.0-beta.18
+
+## 2.0.0-beta.17
+
+### Patch Changes
+
+- 8b4bf999: Update dependencies
+- 97469a12: Added option `role` to `authenticate` property of `BlitzPage` to authenticate page with respect to the role of the user. `String` value or `Array` of strings can be passed to authorize users.
+- Updated dependencies [5ea068b2]
+- Updated dependencies [8b4bf999]
+- Updated dependencies [88caa18e]
+  - blitz@2.0.0-beta.17
+
+## 2.0.0-beta.16
+
+### Minor Changes
+
+- 55a43ce1: maybe fix anon session CSRF issue + add ability to customize anon session expiry time
+
+### Patch Changes
+
+- Updated dependencies [1569bd53]
+- Updated dependencies [ceb7db27]
+- Updated dependencies [8e5903c0]
+- Updated dependencies [45459129]
+  - blitz@2.0.0-beta.16
+
+## 2.0.0-beta.15
+
+### Patch Changes
+
+- Updated dependencies [1b798d9a]
+  - blitz@2.0.0-beta.15
+
+## 2.0.0-beta.14
+
+### Patch Changes
+
+- Updated dependencies [78fd5c48]
+- Updated dependencies [0a8b0cb3]
+  - blitz@2.0.0-beta.14
+
 ## 2.0.0-beta.13
 
 ### Patch Changes

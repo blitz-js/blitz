@@ -1,5 +1,107 @@
 # blitz
 
+## 2.0.0-beta.22
+
+### Minor Changes
+
+- 8aa22a0b2: add `currentPassword` to the default fields that are masked in the logger
+
+### Patch Changes
+
+- 989691ec8: Use `src` instead of `app` folder for `blitz generate custom-template`
+- Updated dependencies [bcef81fad]
+- Updated dependencies [7abfb9086]
+  - @blitzjs/generator@2.0.0-beta.22
+
+## 2.0.0-beta.21
+
+### Patch Changes
+
+- d692b4c1d: Fix suspense error codegen patch for nextjs versions 13-13.0.6
+- 10f98c681: Add an href property to the generated route manifest that will return a string of the pathname and included query params.
+- d5b8faa86: add regex to support inline and non-inline codebase and proper next.js package version check
+- Updated dependencies [77b7da0f3]
+  - @blitzjs/generator@2.0.0-beta.21
+
+## 2.0.0-beta.20
+
+### Minor Changes
+
+- 74a14b70: When db.\$reset() rejects, reject with an Error object
+- 6ece0961: Decoupled Blitz RPC from Blitz Auth to allow independent use.
+
+### Patch Changes
+
+- a0596279: Fix blitz install for recipes that use the path helper to check if ./src/pages directory is available, otherwise use ./pages
+- Updated dependencies [8c247e26]
+  - @blitzjs/generator@2.0.0-beta.20
+
+## 2.0.0-beta.19
+
+### Major Changes
+
+- 942536d9: update paginate.ts, return more params for more complex pagination control
+
+### Minor Changes
+
+- c1e00406: transpile packages to es2015 to support older browsers
+- 696f48c4: some providers need extra attributes, update for wrapAppWithProvider
+
+### Patch Changes
+
+- a6f32d1d: Export enhancePrisma for client again (Fixes #3964)
+- c126b819: using "blitz install" inside recipe with addRunCommandStep causes hangs up
+- b33db082: Fix ambigious class warning log & upgrade superjson from 1.9.1 to 1.11.0
+- Updated dependencies [b80c3d92]
+  - @blitzjs/generator@2.0.0-beta.19
+
+## 2.0.0-beta.18
+
+### Patch Changes
+
+- @blitzjs/generator@2.0.0-beta.18
+
+## 2.0.0-beta.17
+
+### Patch Changes
+
+- 5ea068b2: Check if blitz-server & blitz-client is located in either the app or src directory and return the correct path for blitz recipes.
+- 8b4bf999: Update dependencies
+- 88caa18e: Patch next13 for suspense error
+- Updated dependencies [2a81af7b]
+- Updated dependencies [8b4bf999]
+  - @blitzjs/generator@2.0.0-beta.17
+
+## 2.0.0-beta.16
+
+### Patch Changes
+
+- 1569bd53: Upgrade `tslog` to the latest version
+- ceb7db27: Add an opt-in GET request support to RPC specification by exporting a `config` object that has the `httpMethod` property.
+  from `query` files.
+- 8e5903c0: Fix `cannot find module db error` in JavaScript template. Replace requiring the config using `esbuild` with parsing using `jscodeshift` to get the `cliConfig` values. Added logic to find the `blitz-server` file in `src` directory
+- 45459129: Include resolvers in `src` directory in blitz console
+- Updated dependencies [1569bd53]
+- Updated dependencies [8e5903c0]
+  - @blitzjs/generator@2.0.0-beta.16
+
+## 2.0.0-beta.15
+
+### Patch Changes
+
+- 1b798d9a: Fix `useSession` hook by exporting `enhancePrisma` from the server entry point instead of server
+  - @blitzjs/generator@2.0.0-beta.15
+
+## 2.0.0-beta.14
+
+### Patch Changes
+
+- 78fd5c48: Fix Blitz Install issue that gets stuck on "Generating file diff"
+- 0a8b0cb3: Fix Custom Server TS error - add `es6` target config to esbuild
+- Updated dependencies [54761393]
+- Updated dependencies [60de0574]
+  - @blitzjs/generator@2.0.0-beta.14
+
 ## 2.0.0-beta.13
 
 ### Patch Changes

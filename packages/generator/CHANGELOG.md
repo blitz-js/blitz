@@ -1,5 +1,58 @@
 # @blitzjs/generator
 
+## 2.0.0-beta.22
+
+### Minor Changes
+
+- 7abfb9086: Redesign the index page for newly generated blitz projects
+
+### Patch Changes
+
+- bcef81fad: Fix missing MockRouter prop in test utils
+
+## 2.0.0-beta.21
+
+### Patch Changes
+
+- 77b7da0f3: Remove husky prepush hook & update precommit hook to only run prettier
+
+## 2.0.0-beta.20
+
+### Patch Changes
+
+- 8c247e26: Switch from jest to vitest in new app templates
+
+## 2.0.0-beta.19
+
+### Patch Changes
+
+- b80c3d92: Fix form paths when running blitz generate all
+
+## 2.0.0-beta.18
+
+## 2.0.0-beta.17
+
+### Patch Changes
+
+- 2a81af7b: Update generator templates to use the src directory instead of app
+- 8b4bf999: Update dependencies
+
+## 2.0.0-beta.16
+
+### Patch Changes
+
+- 1569bd53: Upgrade `tslog` to the latest version
+- 8e5903c0: Fix `cannot find module db error` in JavaScript template. Replace requiring the config using `esbuild` with parsing using `jscodeshift` to get the `cliConfig` values. Added logic to find the `blitz-server` file in `src` directory
+
+## 2.0.0-beta.15
+
+## 2.0.0-beta.14
+
+### Patch Changes
+
+- 54761393: Remove unnecessary `as number` assertions from new app templates
+- 60de0574: Fix reset token being undefined when passed to the resetPassword mutation
+
 ## 2.0.0-beta.13
 
 ### Patch Changes

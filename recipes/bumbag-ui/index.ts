@@ -4,21 +4,18 @@ import j from "jscodeshift"
 
 function wrapComponentWithBumbagProvider(program: Program) {
   program
-    .find(j.JSXElement)
-    .filter(
-      (path) =>
-        path.parent?.parent?.parent?.value?.id?.name === "App" &&
-        path.parent?.value.type === j.ReturnStatement.toString(),
-    )
-    .forEach((path: NodePath) => {
-      const {node} = path
+    .find(j.FunctionDeclaration, (node) => node.id.name === "MyApp")
+    .forEach((path) => {
+      const statement = path.value.body.body.filter(
+        (b) => b.type === "ReturnStatement",
+      )[0] as j.ReturnStatement
+      const argument = statement?.argument as j.JSXElement
+
       try {
-        path.replace(
-          j.jsxElement(
-            j.jsxOpeningElement(j.jsxIdentifier("BumbagProvider isSSR")),
-            j.jsxClosingElement(j.jsxIdentifier("BumbagProvider")),
-            [j.jsxText("\n"), node, j.jsxText("\n")],
-          ),
+        statement.argument = j.jsxElement(
+          j.jsxOpeningElement(j.jsxIdentifier("BumbagProvider isSSR")),
+          j.jsxClosingElement(j.jsxIdentifier("BumbagProvider")),
+          [j.jsxText("\n"), argument, j.jsxText("\n")],
         )
       } catch {
         console.error("Already installed recipe")

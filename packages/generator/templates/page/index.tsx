@@ -13,8 +13,8 @@ if (process.env.parentModel) {
   import {usePaginatedQuery} from '@blitzjs/rpc'
   import { useRouter } from "next/router"
 }
-import Layout from "app/core/layouts/Layout"
-import get__ModelNames__ from "app/__modelNamesPath__/queries/get__ModelNames__"
+import Layout from "src/core/layouts/Layout"
+import get__ModelNames__ from "src/__modelNamesPath__/queries/get__ModelNames__"
 
 const ITEMS_PER_PAGE = 100
 
@@ -39,7 +39,7 @@ export const __ModelNames__List = () => {
           {__modelNames__.map((__modelName__) => (
             <li key={__modelName__.id}>
               <Link href={Routes.Show__ModelName__Page({ __modelId__: __modelName__.id })}>
-                <a>{__modelName__.name}</a>
+                {__modelName__.name}
               </Link>
             </li>
           ))}
@@ -70,11 +70,11 @@ export const __ModelNames__List = () => {
             <li key={__modelName__.id}>
               <if condition="parentModel">
                 <Link href={Routes.Show__ModelName__Page({ __parentModelId__: __parentModelId__!, __modelId__: __modelName__.id })}>
-                  <a>{__modelName__.name}</a>
-                </Link>               
+                  {__modelName__.name}
+                </Link>
                 <else>
                   <Link href={Routes.Show__ModelName__Page({ __modelId__: __modelName__.id })}>
-                    <a>{__modelName__.name}</a>
+                    {__modelName__.name}
                   </Link>
                 </else>
               </if>
@@ -108,11 +108,11 @@ const __ModelNames__Page = () => {
         <p>
           <if condition="parentModel">
             <Link href={Routes.New__ModelName__Page({ __parentModelId__: __parentModelId__! })}>
-              <a>Create __ModelName__</a>
+              Create __ModelName__
             </Link>
             <else>
               <Link href={Routes.New__ModelName__Page()}>
-                <a>Create __ModelName__</a>
+                Create __ModelName__
               </Link>
             </else>
           </if>

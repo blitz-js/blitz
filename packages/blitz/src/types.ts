@@ -2,8 +2,33 @@ import {UrlObject} from "url"
 // Context for plugins to declaration merge stuff into
 export interface Ctx {}
 
-export interface RouteUrlObject extends Pick<UrlObject, "pathname" | "query"> {
+export interface RouteUrlObject extends Pick<UrlObject, "pathname" | "query" | "href"> {
   pathname: string
+  href: string
+}
+
+export interface AuthenticatedMiddlewareCtx {}
+
+export type EventHooks = {
+  onSessionCreated?: OnSessionCreated
+  onRpcError?: OnRpcError
+}
+
+export type BeforeHttpRequest = (request: RequestInit) => RequestInit
+
+export type BeforeHttpResponse = (response: Response) => Response
+
+export type OnRpcError = (error: Error) => Promise<void>
+
+export type OnSessionCreated = () => Promise<void>
+
+export type MiddlewareHooks = {
+  beforeHttpRequest?: BeforeHttpRequest
+  beforeHttpResponse?: BeforeHttpResponse
+}
+
+export type ResolverConfig = {
+  httpMethod: "GET" | "POST"
 }
 
 export type BlitzCliConfig = {
@@ -11,7 +36,13 @@ export type BlitzCliConfig = {
 }
 
 export const isRouteUrlObject = (x: any): x is RouteUrlObject => {
-  return typeof x === "object" && "pathname" in x && typeof x.pathname === "string"
+  return (
+    typeof x === "object" &&
+    "pathname" in x &&
+    typeof x.pathname === "string" &&
+    "href" in x &&
+    typeof x.href === "string"
+  )
 }
 
 export type AsyncFunc = (...args: any) => Promise<any>

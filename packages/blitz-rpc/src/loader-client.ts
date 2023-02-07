@@ -8,6 +8,8 @@ import {
   toPosixPath,
 } from "./loader-utils"
 import {posix} from "path"
+import {log, ResolverConfig} from "blitz"
+import {getResolverConfig} from "./parse-rpc-config"
 
 // Subset of `import type { LoaderDefinitionFunction } from 'webpack'`
 
@@ -39,12 +41,29 @@ export async function transformBlitzRpcResolverClient(
 ) {
   assertPosixPath(id)
   assertPosixPath(root)
-
   const resolverFilePath = "/" + posix.relative(root, id)
   assertPosixPath(resolverFilePath)
-  const routePath = convertPageFilePathToRoutePath(resolverFilePath, options?.resolverPath)
+  const routePath = convertPageFilePathToRoutePath({
+    appRoot: root,
+    absoluteFilePath: resolverFilePath,
+    resolverBasePath: options?.resolverPath,
+    extraRpcBasePaths: options?.includeRPCFolders,
+  })
   const resolverName = convertFilePathToResolverName(resolverFilePath)
   const resolverType = convertFilePathToResolverType(resolverFilePath)
+  const resolverConfig: ResolverConfig = {
+    httpMethod: "POST",
+  }
+  if (resolverType === "query") {
+    try {
+      const {httpMethod} = getResolverConfig(_src)
+      if (httpMethod) {
+        resolverConfig.httpMethod = httpMethod
+      }
+    } catch (e) {
+      log.error(e as string)
+    }
+  }
 
   const code = `
     // @ts-nocheck
@@ -53,6 +72,7 @@ export async function transformBlitzRpcResolverClient(
       resolverName: "${resolverName}",
       resolverType: "${resolverType}",
       routePath: "${routePath}",
+      httpMethod: "${resolverConfig.httpMethod}",
     });
   `
 

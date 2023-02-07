@@ -12,9 +12,11 @@ export default RecipeBuilder()
     stepName: "Add dependencies",
     explanation: `Add 'baseui' and Styletron as a dependency too -- it's a toolkit for CSS in JS styling which Base Web relies on.`,
     packages: [
-      {name: "baseui", version: "10.x"},
-      {name: "styletron-engine-atomic", version: "1.x"},
-      {name: "styletron-react", version: "6.x"},
+      {name: "baseui", version: "^10.5.0"},
+      {name: "styletron-engine-atomic", version: "^1.4.8"},
+      {name: "styletron-react", version: "^6.0.2"},
+      {name: "@types/styletron-engine-atomic", version: "^1.1.1"},
+      {name: "@types/styletron-react", version: "^5.0.3"},
     ],
   })
   .addNewFilesStep({
@@ -54,43 +56,40 @@ export default RecipeBuilder()
       addImport(program, themeAndBaseProviderImport)
 
       program
-        .find(j.JSXElement)
-        .filter(
-          (path) =>
-            path.parent?.parent?.parent?.value?.id?.name === "App" &&
-            path.parent?.value.type === j.ReturnStatement.toString(),
-        )
+        .find(j.FunctionDeclaration, (node) => node.id.name === "MyApp")
         .forEach((path) => {
-          const {node} = path
-          path.replace(
-            j.jsxElement(
-              j.jsxOpeningElement(j.jsxIdentifier("StyletronProvider"), [
-                j.jsxAttribute(
-                  j.jsxIdentifier("value"),
-                  j.jsxExpressionContainer(j.identifier("styletron")),
-                ),
-                j.jsxAttribute(
-                  j.jsxIdentifier("debug"),
-                  j.jsxExpressionContainer(j.identifier("debug")),
-                ),
-                j.jsxAttribute(j.jsxIdentifier("debugAfterHydration")),
-              ]),
-              j.jsxClosingElement(j.jsxIdentifier("StyletronProvider")),
-              [
-                j.literal("\n"),
-                j.jsxElement(
-                  j.jsxOpeningElement(j.jsxIdentifier("BaseProvider"), [
-                    j.jsxAttribute(
-                      j.jsxIdentifier("theme"),
-                      j.jsxExpressionContainer(j.identifier("LightTheme")),
-                    ),
-                  ]),
-                  j.jsxClosingElement(j.jsxIdentifier("BaseProvider")),
-                  [j.literal("\n"), node, j.literal("\n")],
-                ),
-                j.literal("\n"),
-              ],
-            ),
+          const statement = path.value.body.body.filter(
+            (b) => b.type === "ReturnStatement",
+          )[0] as j.ReturnStatement
+          const argument = statement?.argument as j.JSXElement
+
+          statement.argument = j.jsxElement(
+            j.jsxOpeningElement(j.jsxIdentifier("StyletronProvider"), [
+              j.jsxAttribute(
+                j.jsxIdentifier("value"),
+                j.jsxExpressionContainer(j.identifier("styletron")),
+              ),
+              j.jsxAttribute(
+                j.jsxIdentifier("debug"),
+                j.jsxExpressionContainer(j.identifier("debug")),
+              ),
+              j.jsxAttribute(j.jsxIdentifier("debugAfterHydration")),
+            ]),
+            j.jsxClosingElement(j.jsxIdentifier("StyletronProvider")),
+            [
+              j.literal("\n"),
+              j.jsxElement(
+                j.jsxOpeningElement(j.jsxIdentifier("BaseProvider"), [
+                  j.jsxAttribute(
+                    j.jsxIdentifier("theme"),
+                    j.jsxExpressionContainer(j.identifier("LightTheme")),
+                  ),
+                ]),
+                j.jsxClosingElement(j.jsxIdentifier("BaseProvider")),
+                [j.literal("\n"), argument, j.literal("\n")],
+              ),
+              j.literal("\n"),
+            ],
           )
         })
 
@@ -109,7 +108,7 @@ export default RecipeBuilder()
       )
 
       const styletronServerAndSheetImport = j.importDeclaration(
-        [j.importSpecifier(j.identifier("Sheet"))],
+        [j.importSpecifier(j.identifier("Server")), j.importSpecifier(j.identifier("Sheet"))],
         j.literal("styletron-engine-atomic"),
       )
 
@@ -122,16 +121,18 @@ export default RecipeBuilder()
       addImport(program, styletronServerAndSheetImport)
       addImport(program, styletronImport)
 
-      program.find(j.ImportDeclaration, {source: {value: "blitz"}}).forEach((blitzImportPath) => {
-        let specifiers = blitzImportPath.value.specifiers || []
-        if (
-          !specifiers
-            .filter((spec) => j.ImportSpecifier.check(spec))
-            .some((node) => (node as j.ImportSpecifier)?.imported?.name === "DocumentContext")
-        ) {
-          specifiers.push(j.importSpecifier(j.identifier("DocumentContext")))
-        }
-      })
+      program
+        .find(j.ImportDeclaration, {source: {value: "next/document"}})
+        .forEach((nextDocumentImportPath) => {
+          let specifiers = nextDocumentImportPath.value.specifiers || []
+          if (
+            !specifiers
+              .filter((spec) => j.ImportSpecifier.check(spec))
+              .some((node) => (node as j.ImportSpecifier)?.imported?.name === "DocumentContext")
+          ) {
+            specifiers.push(j.importSpecifier(j.identifier("DocumentContext")))
+          }
+        })
 
       program.find(j.ClassDeclaration).forEach((path) => {
         const props = j.typeAlias(
@@ -233,7 +234,15 @@ export default RecipeBuilder()
               j.logicalExpression(
                 "||",
                 j.callExpression(
-                  j.memberExpression(j.identifier("styletron"), j.identifier("getStylesheets")),
+                  j.memberExpression(
+                    j.parenthesizedExpression(
+                      j.tsAsExpression(
+                        j.identifier("styletron"),
+                        j.tsTypeReference(j.identifier("Server")),
+                      ),
+                    ),
+                    j.identifier("getStylesheets"),
+                  ),
                   [],
                 ),
                 j.arrayExpression([]),
@@ -263,93 +272,82 @@ export default RecipeBuilder()
         node.body.splice(0, 0, getInitialPropsMethod)
       })
 
-      program
-        .find(j.JSXElement, {openingElement: {name: {name: "DocumentHead"}}})
-        .forEach((path) => {
-          const {node} = path
-          path.replace(
-            j.jsxElement(
-              j.jsxOpeningElement(j.jsxIdentifier("DocumentHead")),
-              j.jsxClosingElement(j.jsxIdentifier("DocumentHead")),
-              [
-                ...(node.children || []),
-                j.literal("\n"),
-                j.jsxExpressionContainer(
-                  j.callExpression(
+      program.find(j.JSXElement, {openingElement: {name: {name: "Head"}}}).forEach((path) => {
+        const {node} = path
+        path.replace(
+          j.jsxElement(
+            j.jsxOpeningElement(j.jsxIdentifier("Head")),
+            j.jsxClosingElement(j.jsxIdentifier("Head")),
+            [
+              ...(node.children || []),
+              j.literal("\n"),
+              j.jsxExpressionContainer(
+                j.callExpression(
+                  j.memberExpression(
                     j.memberExpression(
-                      j.memberExpression(
-                        j.memberExpression(j.thisExpression(), j.identifier("props")),
-                        j.identifier("stylesheets"),
-                      ),
-                      j.identifier("map"),
+                      j.memberExpression(j.thisExpression(), j.identifier("props")),
+                      j.identifier("stylesheets"),
                     ),
-                    [
-                      j.arrowFunctionExpression(
-                        [j.identifier("sheet"), j.identifier("i")],
-                        j.jsxElement(
-                          j.jsxOpeningElement(
-                            j.jsxIdentifier("style"),
-                            [
-                              j.jsxAttribute(
-                                j.jsxIdentifier("className"),
-                                j.literal("_styletron_hydrate_"),
-                              ),
-                              j.jsxAttribute(
-                                j.jsxIdentifier("dangerouslySetInnerHTML"),
-                                j.jsxExpressionContainer(
-                                  j.objectExpression([
-                                    j.objectProperty(
-                                      j.identifier("__html"),
-                                      j.memberExpression(
-                                        j.identifier("sheet"),
-                                        j.identifier("css"),
-                                      ),
-                                    ),
-                                  ]),
-                                ),
-                              ),
-                              j.jsxAttribute(
-                                j.jsxIdentifier("media"),
-                                j.jsxExpressionContainer(
-                                  j.memberExpression(
-                                    j.memberExpression(
-                                      j.identifier("sheet"),
-                                      j.identifier("attrs"),
-                                    ),
-                                    j.identifier("media"),
+                    j.identifier("map"),
+                  ),
+                  [
+                    j.arrowFunctionExpression(
+                      [j.identifier("sheet"), j.identifier("i")],
+                      j.jsxElement(
+                        j.jsxOpeningElement(
+                          j.jsxIdentifier("style"),
+                          [
+                            j.jsxAttribute(
+                              j.jsxIdentifier("className"),
+                              j.literal("_styletron_hydrate_"),
+                            ),
+                            j.jsxAttribute(
+                              j.jsxIdentifier("dangerouslySetInnerHTML"),
+                              j.jsxExpressionContainer(
+                                j.objectExpression([
+                                  j.objectProperty(
+                                    j.identifier("__html"),
+                                    j.memberExpression(j.identifier("sheet"), j.identifier("css")),
                                   ),
+                                ]),
+                              ),
+                            ),
+                            j.jsxAttribute(
+                              j.jsxIdentifier("media"),
+                              j.jsxExpressionContainer(
+                                j.memberExpression(
+                                  j.memberExpression(j.identifier("sheet"), j.identifier("attrs")),
+                                  j.identifier("media"),
                                 ),
                               ),
-                              j.jsxAttribute(
-                                j.jsxIdentifier("data-hydrate"),
-                                j.jsxExpressionContainer(
-                                  j.memberExpression(
-                                    j.memberExpression(
-                                      j.identifier("sheet"),
-                                      j.identifier("attrs"),
-                                    ),
-                                    j.stringLiteral("data-hydrate"),
-                                    true,
-                                  ),
+                            ),
+                            j.jsxAttribute(
+                              j.jsxIdentifier("data-hydrate"),
+                              j.jsxExpressionContainer(
+                                j.memberExpression(
+                                  j.memberExpression(j.identifier("sheet"), j.identifier("attrs")),
+                                  j.stringLiteral("data-hydrate"),
+                                  true,
                                 ),
                               ),
-                              j.jsxAttribute(
-                                j.jsxIdentifier("key"),
-                                j.jsxExpressionContainer(j.jsxIdentifier("i")),
-                              ),
-                            ],
-                            true,
-                          ),
+                            ),
+                            j.jsxAttribute(
+                              j.jsxIdentifier("key"),
+                              j.jsxExpressionContainer(j.jsxIdentifier("i")),
+                            ),
+                          ],
+                          true,
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-                j.literal("\n"),
-              ],
-            ),
-          )
-        })
+              ),
+              j.literal("\n"),
+            ],
+          ),
+        )
+      })
 
       return program
     },

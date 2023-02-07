@@ -41,16 +41,9 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
 
   filesToIgnore() {
     if (!this.options.useTs) {
-      return [
-        "tsconfig.json",
-        "next-env.d.ts",
-        "jest.config.ts",
-        "package.ts.json",
-        "pre-push-ts",
-        "types.ts",
-      ]
+      return ["tsconfig.json", "next-env.d.ts", "vitest-config.ts", "package.ts.json", "types.ts"]
     }
-    return ["jsconfig.json", "package.js.json", "pre-push-js"]
+    return ["jsconfig.json", "package.js.json", "vitest.config.js"]
   }
 
   async getTemplateValues() {
@@ -70,19 +63,15 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
     this.fs.move(this.destinationPath("gitignore"), this.destinationPath(".gitignore"))
     this.fs.move(this.destinationPath("npmrc"), this.destinationPath(".npmrc"))
     this.fs.move(
-      this.destinationPath(this.options.useTs ? ".husky/pre-push-ts" : ".husky/pre-push-js"),
-      this.destinationPath(".husky/pre-push"),
-    )
-    this.fs.move(
       this.destinationPath(this.options.useTs ? "package.ts.json" : "package.js.json"),
       this.destinationPath("package.json"),
     )
 
-    const rpcEndpointPath = `pages/api/rpc/blitzrpcroute.${this.options.useTs ? "ts" : "js"}`
+    const rpcEndpointPath = `src/pages/api/rpc/blitzrpcroute.${this.options.useTs ? "ts" : "js"}`
     if (this.fs.exists(rpcEndpointPath)) {
       this.fs.move(
         this.destinationPath(rpcEndpointPath),
-        this.destinationPath(`pages/api/rpc/[[...blitz]].${this.options.useTs ? "ts" : "js"}`),
+        this.destinationPath(`src/pages/api/rpc/[[...blitz]].${this.options.useTs ? "ts" : "js"}`),
       )
     }
 
@@ -302,6 +291,7 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
       case "hookform":
         pkg.dependencies["react-hook-form"] = "7.x"
         pkg.dependencies["@hookform/resolvers"] = "2.x"
+        pkg.dependencies["@hookform/error-message"] = "2.x"
         break
       case "formik":
         pkg.dependencies["formik"] = "2.x"
@@ -309,11 +299,11 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
     }
     this.fs.move(
       this.destinationPath(`_forms/${type}/Form.${ext}`),
-      this.destinationPath(`app/core/components/Form.${ext}`),
+      this.destinationPath(`src/core/components/Form.${ext}`),
     )
     this.fs.move(
       this.destinationPath(`_forms/${type}/LabeledTextField.${ext}`),
-      this.destinationPath(`app/core/components/LabeledTextField.${ext}`),
+      this.destinationPath(`src/core/components/LabeledTextField.${ext}`),
     )
 
     this.fs.writeJSON(this.destinationPath("package.json"), pkg)
