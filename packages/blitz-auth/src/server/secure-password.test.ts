@@ -1,5 +1,5 @@
 import {expect, describe, it} from "vitest"
-import {SecurePassword} from "./auth-utils"
+import {SecurePassword} from "./secure-password"
 
 describe("SecurePassword", () => {
   describe("hash", () => {
