@@ -2,6 +2,7 @@ import type {Ctx, MiddlewareResponse} from "blitz"
 import type {IncomingMessage} from "http"
 import type {AuthOptions, Profile, User} from "next-auth"
 import {SessionContext} from "../../../index-server"
+import oAuthCallback from "./internals/core/lib/oauth/callback"
 
 export type BlitzNextAuthOptions = AuthOptions & {
   successRedirectUrl: string
@@ -9,7 +10,7 @@ export type BlitzNextAuthOptions = AuthOptions & {
   secureProxy?: boolean
   callback: (
     user: User,
-    account: any,
+    account: Awaited<ReturnType<typeof oAuthCallback>>["account"],
     profile: Profile,
     session: SessionContext,
   ) => Promise<void | {redirectUrl: string}>

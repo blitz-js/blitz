@@ -33,16 +33,19 @@ const INTERNAL_REDIRECT_URL_KEY = "_redirectUrl"
 
 export function NextAuthAdapter(config: BlitzNextAuthOptions): BlitzNextAuthApiHandler {
   return async function authHandler(req, res) {
-    assert(req.query.auth, "req.query.auth is not defined. Page must be named [...auth].ts/js.")
     assert(
-      Array.isArray(req.query.auth),
-      "req.query.auth must be an array. Page must be named [...auth].ts/js.",
+      req.query.nextauth,
+      "req.query.nextauth is not defined. Page must be named [...auth].ts/js.",
     )
-    if (!req.query.auth?.length) {
+    assert(
+      Array.isArray(req.query.nextauth),
+      "req.query.nextauth must be an array. Page must be named [...auth].ts/js.",
+    )
+    if (!req.query.nextauth?.length) {
       return res.status(404).end()
     }
-    const action = req.query.auth[0] as AuthAction
-    if (!action || !["signin", "callback"].includes(action)) {
+    const action = req.query.nextauth[1] as AuthAction
+    if (!action || !["login", "callback"].includes(action)) {
       return res.status(404).end()
     }
 
@@ -71,7 +74,17 @@ export function NextAuthAdapter(config: BlitzNextAuthOptions): BlitzNextAuthApiH
           "There is a problem with the server configuration. Check the server logs for more information.",
       })
     }
-    const request = new Request(url, {
+    const pathName = url.pathname.split("/")
+    const switchPathName =
+      pathName.slice(0, pathName.length - 2).join("/") +
+      "/" +
+      action +
+      "/" +
+      pathName[pathName.length - 2]
+    const switchURL = new URL(
+      `${url.protocol}//${url.host}${switchPathName}${url.search}${url.hash}`,
+    )
+    const request = new Request(switchURL, {
       headers,
       method: req.method,
       ...getBody(req),
@@ -101,6 +114,21 @@ export function NextAuthAdapter(config: BlitzNextAuthOptions): BlitzNextAuthApiH
       cookies: internalRequest.cookies,
       isPost: req.method === "POST",
     })
+
+    if (options.provider?.callbackUrl) {
+      const callbackUrl = new URL(options.provider.callbackUrl)
+      const callbackPathName = callbackUrl.pathname.split("/")
+      const switchCallbackPathName =
+        callbackPathName.slice(0, callbackPathName.length - 2).join("/") +
+        "/" +
+        callbackPathName[callbackPathName.length - 1] +
+        "/" +
+        callbackPathName[callbackPathName.length - 2]
+      const switchCallbackURL = new URL(
+        `${callbackUrl.protocol}//${callbackUrl.host}${switchCallbackPathName}${callbackUrl.search}${callbackUrl.hash}`,
+      )
+      options.provider.callbackUrl = switchCallbackURL.toString()
+    }
 
     log.debug("NEXT_AUTH_INTERNAL_OPTIONS", options)
 
@@ -137,7 +165,7 @@ async function AuthHandler(
   if (!options.provider) {
     throw new OAuthError("MISSING_PROVIDER_ERROR")
   }
-  if (action === "signin") {
+  if (action === "login") {
     middleware.push(async (req, res, next) => {
       try {
         const _signin = await getAuthorizationUrl({options: options, query: req.query})
@@ -149,6 +177,7 @@ async function AuthHandler(
         } as any)
         const response = toResponse(_signin)
         setHeaders(response.headers, res)
+        console.log(_signin.redirect)
         res.setHeader("Location", _signin.redirect)
         res.statusCode = 302
         res.end()

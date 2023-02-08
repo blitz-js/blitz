@@ -45,7 +45,7 @@ async function readJSONBody(
 }
 
 // prettier-ignore
-const actions: AuthAction[] = [ "providers", "session", "csrf", "signin", "signout", "callback", "verify-request", "error", "_log" ]
+const actions = [ "providers", "session", "csrf", "login", "signout", "callback", "verify-request", "error", "_log"]
 
 export async function toInternalRequest(req: Request): Promise<RequestInternal | Error> {
   try {
@@ -54,7 +54,7 @@ export async function toInternalRequest(req: Request): Promise<RequestInternal |
     const url = new URL(req.url.replace(/\/$/, ""))
     const {pathname} = url
 
-    const action = actions.find((a) => pathname.includes(a))
+    const action = actions.find((a) => pathname.includes(a)) as AuthAction | undefined
     if (!action) {
       throw new UnknownAction("Cannot detect action.")
     }
@@ -64,7 +64,7 @@ export async function toInternalRequest(req: Request): Promise<RequestInternal |
     if (
       providerIdOrAction &&
       !action.includes(providerIdOrAction) &&
-      ["signin", "callback"].includes(action)
+      ["login", "callback"].includes(action)
     ) {
       providerId = providerIdOrAction
     }
