@@ -47,10 +47,14 @@
   },
   "peerDependencies": {
     "blitz": "2.0.0-beta.22",
+    "next-auth": "4.18.7",
     "secure-password": "4.0.0"
   },
   "peerDependenciesMeta": {
     "secure-password": {
+      "optional": true
+    },
+    "next-auth": {
       "optional": true
     }
   },

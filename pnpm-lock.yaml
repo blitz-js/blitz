@@ -549,7 +549,7 @@ importers:
       "@vitejs/plugin-react": 1.3.0
       delay: 5.0.0
       eslint: 8.27.0
-      eslint-config-next: 13.1.5_rmayb2veg2btbq6mbmnyivgasy
+      eslint-config-next: 13.1.6_rmayb2veg2btbq6mbmnyivgasy
       eslint-plugin-testing-library: 5.0.1_rmayb2veg2btbq6mbmnyivgasy
       jsdom: 19.0.0
       typescript: 4.8.4
@@ -5101,10 +5101,10 @@ packages:
     dependencies:
       glob: 7.1.7
 
-  /@next/eslint-plugin-next/13.1.5:
+  /@next/eslint-plugin-next/13.1.6:
     resolution:
       {
-        integrity: sha512-3kvLTX35bOWOCKU8KY74Ygczc55Qk/kB2TQy0tH7Rti6hzZ6Aij7WQ8zHdIVjmnlD0n/zXWXrIf5y56RKcLQkQ==,
+        integrity: sha512-o7cauUYsXjzSJkay8wKjpKJf2uLzlggCsGUkPu3lP09Pv97jYlekTC20KJrjQKmSv5DXV0R/uks2ZXhqjNkqAw==,
       }
     dependencies:
       glob: 7.1.7
@@ -10984,10 +10984,10 @@ packages:
       - supports-color
     dev: false
 
-  /eslint-config-next/13.1.5_rmayb2veg2btbq6mbmnyivgasy:
+  /eslint-config-next/13.1.6_rmayb2veg2btbq6mbmnyivgasy:
     resolution:
       {
-        integrity: sha512-7FqkjkvGCQfvYUiPTFRiRYPR1uI6Ew+4f4mVp16lLSWcaChtWoZxQCZHM5n0yxzKKVmuEg1aM4uvDQfSXSjTww==,
+        integrity: sha512-0cg7h5wztg/SoLAlxljZ0ZPUQ7i6QKqRiP4M2+MgTZtxWwNKb2JSwNc18nJ6/kXBI6xYvPraTbQSIhAuVw6czw==,
       }
     peerDependencies:
       eslint: ^7.23.0 || ^8.0.0
@@ -10996,7 +10996,7 @@ packages:
       typescript:
         optional: true
     dependencies:
-      "@next/eslint-plugin-next": 13.1.5
+      "@next/eslint-plugin-next": 13.1.6
       "@rushstack/eslint-patch": 1.1.3
       "@typescript-eslint/parser": 5.43.0_rmayb2veg2btbq6mbmnyivgasy
       eslint: 8.27.0
