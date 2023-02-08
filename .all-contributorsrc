@@ -3817,6 +3817,17 @@
         "doc",
         "code"
       ]
+    },
+    {
+      "login": "jhonnymichel",
+      "name": "Jhonny Michel",
+      "avatar_url": "https://avatars.githubusercontent.com/u/7006387?v=4",
+      "profile": "https://github.com/jhonnymichel",
+      "contributions": [
+        "doc",
+        "code",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7,

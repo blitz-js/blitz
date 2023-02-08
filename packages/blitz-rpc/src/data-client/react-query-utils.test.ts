@@ -1,7 +1,7 @@
-import {describe, expect, it} from "vitest"
+import {describe, expect, it, vi} from "vitest"
 import superJson from "superjson"
 
-import {getQueryKey, getQueryKeyFromUrlAndParams} from "./react-query-utils"
+import {getQueryKey, getQueryKeyFromUrlAndParams, validateQueryFn} from "./react-query-utils"
 import {RpcClient} from "./rpc"
 
 const API_ENDPOINT = "http://localhost:3000"
@@ -72,6 +72,67 @@ describe("react-query-utils", () => {
     it("if no argument is passed it returns only url", () => {
       const queryKey = getQueryKey(query)
       expect(queryKey).toEqual([API_ENDPOINT])
+    })
+  })
+
+  describe("validateQueryFn", () => {
+    const originalEnv = process.env
+
+    function mockEnv() {
+      const originalEnv = process.env
+
+      process.env = {
+        ...originalEnv,
+      }
+
+      delete process.env.JEST_WORKER_ID
+      delete process.env.VITEST_WORKER_ID
+      delete process.env.BLITZ_TEST_ENVIRONMENT
+
+      return process.env
+    }
+
+    function restoreEnv() {
+      process.env = originalEnv
+    }
+
+    const notAQuery = vi.fn()
+    const realQuery = vi.fn()
+    //@ts-ignore
+    realQuery._isRpcClient = true
+
+    vi.mock("blitz", async () => {
+      const actualBlitz = await import("blitz")
+      return {
+        ...actualBlitz,
+        isClient: true,
+      }
+    })
+
+    describe("when called from test environments", () => {
+      it("always validate as true, allowing query functions to be mocked in tests")
+      const jestEnv = mockEnv()
+      jestEnv.JEST_WORKER_ID = "123"
+      expect(() => validateQueryFn(notAQuery)).not.toThrowError()
+      expect(() => validateQueryFn(realQuery)).not.toThrowError()
+      restoreEnv()
+
+      const vitestEnv = mockEnv()
+      vitestEnv.VITEST_WORKER_ID = "123"
+      expect(() => validateQueryFn(notAQuery)).not.toThrowError()
+      expect(() => validateQueryFn(realQuery)).not.toThrowError()
+      restoreEnv()
+    })
+
+    describe("when called from outside of test environments", () => {
+      it("throws an error when the passed function is not a query function")
+      // removes jest and vitest env vars
+      mockEnv()
+
+      expect(() => validateQueryFn(notAQuery)).toThrowError()
+      expect(() => validateQueryFn(realQuery)).not.toThrowError()
+
+      restoreEnv()
     })
   })
 })
