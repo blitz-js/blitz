@@ -31,6 +31,15 @@ import type {
 
 const INTERNAL_REDIRECT_URL_KEY = "_redirectUrl"
 
+function switchURL(callbackUrl: string) {
+  const url = new URL(callbackUrl)
+  const pathName = url.pathname.split("/")
+  const switchPathName = pathName.slice(0, pathName.length - 2)
+  switchPathName.push(`${pathName[pathName.length - 1]}/${pathName[pathName.length - 2]}`)
+  const switchPathNameString = switchPathName.join("/")
+  return `${url.protocol}//${url.host}${switchPathNameString}${url.search}${url.hash}`
+}
+
 export function NextAuthAdapter(config: BlitzNextAuthOptions): BlitzNextAuthApiHandler {
   return async function authHandler(req, res) {
     assert(
@@ -74,17 +83,7 @@ export function NextAuthAdapter(config: BlitzNextAuthOptions): BlitzNextAuthApiH
           "There is a problem with the server configuration. Check the server logs for more information.",
       })
     }
-    const pathName = url.pathname.split("/")
-    const switchPathName =
-      pathName.slice(0, pathName.length - 2).join("/") +
-      "/" +
-      action +
-      "/" +
-      pathName[pathName.length - 2]
-    const switchURL = new URL(
-      `${url.protocol}//${url.host}${switchPathName}${url.search}${url.hash}`,
-    )
-    const request = new Request(switchURL, {
+    const request = new Request(switchURL(url.toString()), {
       headers,
       method: req.method,
       ...getBody(req),
@@ -115,20 +114,7 @@ export function NextAuthAdapter(config: BlitzNextAuthOptions): BlitzNextAuthApiH
       isPost: req.method === "POST",
     })
 
-    if (options.provider?.callbackUrl) {
-      const callbackUrl = new URL(options.provider.callbackUrl)
-      const callbackPathName = callbackUrl.pathname.split("/")
-      const switchCallbackPathName =
-        callbackPathName.slice(0, callbackPathName.length - 2).join("/") +
-        "/" +
-        callbackPathName[callbackPathName.length - 1] +
-        "/" +
-        callbackPathName[callbackPathName.length - 2]
-      const switchCallbackURL = new URL(
-        `${callbackUrl.protocol}//${callbackUrl.host}${switchCallbackPathName}${callbackUrl.search}${callbackUrl.hash}`,
-      )
-      options.provider.callbackUrl = switchCallbackURL.toString()
-    }
+    options.provider.callbackUrl = switchURL(options.provider.callbackUrl)
 
     log.debug("NEXT_AUTH_INTERNAL_OPTIONS", options)
 
@@ -177,7 +163,6 @@ async function AuthHandler(
         } as any)
         const response = toResponse(_signin)
         setHeaders(response.headers, res)
-        console.log(_signin.redirect)
         res.setHeader("Location", _signin.redirect)
         res.statusCode = 302
         res.end()
