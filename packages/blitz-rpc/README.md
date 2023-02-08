@@ -11,7 +11,7 @@
   <a aria-label="License" href="https://github.com/blitz-js/blitz/blob/main/LICENSE">
     <img alt="" src="https://img.shields.io/npm/l/blitz.svg?style=for-the-badge&labelColor=000000&color=blue">
   </a>
-  <a aria-label="NPM version" href="https://www.npmjs.com/package/blitz">
+  <a aria-label="NPM version" href="https://www.npmjs.com/package/@blitzjs/auth">
     <img alt="" src="https://img.shields.io/npm/v/blitz.svg?style=for-the-badge&labelColor=000000&color=E65528">
   </a>
 </p>
@@ -19,44 +19,43 @@
 
 <br>
 
-<h1 align="center">The Missing Fullstack Toolkit for Next.js</h1>
-
-# Blitz Generator
-
-## `Generator`
-
-This package houses all files related to Blitz codegen. In the main `src` directory you'll find the base `generator` class and a directory of `generators` that extend it. The subclasses aren't terribly interesting, most of the fun happens in the abstract parent class. Each generator may (depending on whether it's a net new addition or modifying existing files) have a corresponding template defined in the `templates` directory.
-
-Creating a new generator requires a new `Generator` subclass inside of `src/generators`, and potentially a new template in `templates` if the generator generates net-new files. For templates, we use our own templating language. Each variable in a template surrounded by `__` (e.g. `__modelName__`) will be replaced with the corresponding value in the object returned from `Generator::getTemplateValues`. This type of replacement works in filenames as well.
-
-The generator framework also supports conditional code generation, similar to other common templating languages like handlebars. All model variables are exposed via `process.env` and can be used in conditional statements. The generator will not evaluate any expressions in the conditional, so the condition must be evaluated in the generator class and passed as a variable to the template. Both `if else` and ternary statements are supported, and for `if` statements no `else` is required:
-
-```js
-// VALID
-if (process.env.someCondition) {
-  console.log("condition was true")
-}
-
-// VALID
-if (process.env.someCondition) {
-  console.log("condition was true")
-} else {
-  console.log("condition was false")
-}
-
-// VALID
-const action = process.env.someCondition
-  ? () => console.log("condition was true")
-  : () => console.log("condition was false")
-
-// **NOT** VALID
-// This will compile fine, but will not product the expected results.
-// The template argument `someValue` will be evaluated for truthiness
-// and the conditional will be evaluated based on that, regardless of
-// the rest of the expression
-if (process.env.someValue === "some test") {
-  console.log("dynamic condition")
-}
-```
+<h1 align="center">
+Blitz "Zero-API" data layer (Blitz RPC) 
+</h1>
 
 <br>
+
+### [Documentation Link](https://blitzjs.com/docs/rpc-overview)
+
+### [GitHub Link](https://github.com/blitz-js/blitz/tree/main/packages/blitz-rpc)
+
+### Quick Start
+
+#### Install Blitz RPC
+
+```bash
+`npm i @blitzjs/rpc`
+# yarn add @blitzjs/rpc
+# pnpm add @blitzjs/rpc
+```
+
+_You can alternatively use [`npx`](https://www.npmjs.com/package/npx)_
+
+### Overview
+
+Blitz "Zero-API" data layer (Blitz RPC) is focused on making the communication between server and client seamless. It lets you
+
+import server code directly into your components instead of having to manually add API endpoints and do client-side fetching and caching.
+Here's a quick overview:
+
+![Blitz RPC Overview](https://blitzjs.com/img/architecture-alt.png)
+
+#### Queries and mutations
+
+Queries and mutations only run on the server — at build time, the direct function import is replaced with an RPC network call. So the query function code is never included in your client code. It's instead moved to an API layer.
+
+### Framework Support
+
+Currently Blitz RPC is only supported in Next.js. We are working on adding support for other frameworks.
+
+### [Setup Blitz RPC in Next.js](https://blitzjs.com/docs/rpc-setup)

@@ -3828,6 +3828,15 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "sweetliquid",
+      "name": "sweetliquid",
+      "avatar_url": "https://avatars.githubusercontent.com/u/18693190?v=4",
+      "profile": "sweetliquid.me",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
