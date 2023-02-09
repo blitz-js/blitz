@@ -1,5 +1,18 @@
 # @blitzjs/auth
 
+## 2.0.0-beta.23
+
+### Major Changes
+
+- 42a2cf951: BREAKING CHANGE: secure-password is now an `optional peerDependency`, if you are using `SecurePassword` api, you need to now install `secure-password` in your application.
+
+  This helps users who do not use SecurePassword from having native package build issues.
+
+### Patch Changes
+
+- Updated dependencies [c3c789740]
+  - blitz@2.0.0-beta.23
+
 ## 2.0.0-beta.22
 
 ### Minor Changes
