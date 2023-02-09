@@ -115,7 +115,7 @@ describe("useQuery", () => {
 
     it("works with options other than enabled & suspense without type error", () => {
       const Demo = () => {
-        useQuery(buildQueryRpc(upcase), undefined, {refetchInterval: 10000})
+        useQuery(buildQueryRpc(upcase), undefined, false, {refetchInterval: 10000})
         return <div></div>
       }
       const ui = () => <Demo />
@@ -138,7 +138,7 @@ describe("useInfiniteQuery", () => {
     queryFn: (...args: any) => any,
   ): [{data?: any; setQueryData?: any}, Function] => {
     let res = {}
-    const qc = BlitzRpcPlugin({})
+    const qc = BlitzReactQueryPlugin({})
 
     function TestHarness() {
       // TODO - fix typing

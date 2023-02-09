@@ -1,7 +1,7 @@
 import React from "react"
 import {vi} from "vitest"
 import {QueryClient} from "@tanstack/react-query"
-import {BlitzRpcPlugin, QueryClientProvider} from "@blitzjs/rpc/react-query"
+import {BlitzReactQueryPlugin, QueryClientProvider} from "@blitzjs/rpc/react-query"
 import {NextRouter} from "next/router"
 import {RouterContext} from "next/dist/shared/lib/router-context"
 import {render as defaultRender} from "@testing-library/react"
@@ -46,10 +46,7 @@ const BlitzProvider = ({
 }: BlitzProviderProps & {children: JSX.Element}) => {
   if (globalThis.queryClient) {
     return (
-      <QueryClientProvider
-        client={client || globalThis.queryClient}
-        contextSharing={contextSharing}
-      >
+      <QueryClientProvider client={globalThis.queryClient} contextSharing={contextSharing}>
         {children}
       </QueryClientProvider>
     )
@@ -80,7 +77,7 @@ const BlitzWrapper = ({plugins, children}) => {
 export function render(ui: RenderUI, {wrapper, router, ...options}: RenderOptions = {}) {
   if (!wrapper) {
     wrapper = ({children}) => {
-      return <BlitzWrapper plugins={[BlitzRpcPlugin({})]}>{children}</BlitzWrapper>
+      return <BlitzWrapper plugins={[BlitzReactQueryPlugin({})]}>{children}</BlitzWrapper>
     }
   }
 

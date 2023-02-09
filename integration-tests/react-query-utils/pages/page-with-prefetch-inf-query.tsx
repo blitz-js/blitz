@@ -19,6 +19,7 @@ const PageWithPrefetchInfQuery = () => {
       suspense: false,
       getNextPageParam: (lastPage) => lastPage,
     },
+    false,
   )
   return <div id="data">{data ? data : "no-data"}</div>
 }
