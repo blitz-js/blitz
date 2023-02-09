@@ -1,4 +1,4 @@
-import {useQuery} from "@blitzjs/rpc"
+import {useQuery} from "@blitzjs/rpc/react-query"
 import getNoauthBasic from "../queries/getNoauthBasic"
 import {Suspense} from "react"
 

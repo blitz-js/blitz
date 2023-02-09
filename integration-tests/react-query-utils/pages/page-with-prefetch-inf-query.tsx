@@ -1,4 +1,4 @@
-import {useInfiniteQuery} from "@blitzjs/rpc"
+import {useInfiniteQuery} from "@blitzjs/rpc/react-query"
 import {gSSP} from "../app/blitz-server"
 import testQuery from "../app/queries/getInfiniteData"
 

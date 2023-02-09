@@ -1,5 +1,5 @@
 import {withBlitz} from "../blitz-client"
-import {useQueryErrorResetBoundary} from "@blitzjs/rpc"
+import {useQueryErrorResetBoundary} from "@blitzjs/rpc/react-query"
 import {AppProps, ErrorBoundary, ErrorFallbackProps} from "@blitzjs/next"
 
 if (typeof window !== "undefined") {

@@ -1,6 +1,6 @@
 import {describe, it, expect, beforeAll, vi} from "vitest"
 import {act, screen} from "@testing-library/react"
-import {useMutation} from "@blitzjs/rpc"
+import {useMutation} from "@blitzjs/rpc/react-query"
 import React from "react"
 import {buildMutationRpc, buildQueryRpc, render} from "../../utils/blitz-test-utils"
 

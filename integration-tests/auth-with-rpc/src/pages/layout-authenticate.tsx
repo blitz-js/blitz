@@ -1,4 +1,4 @@
-import {useMutation, useQuery} from "@blitzjs/rpc"
+import {useMutation, useQuery} from "@blitzjs/rpc/react-query"
 import {BlitzPage} from "@blitzjs/next"
 import AuthenticateLayout from "../layouts/AuthenticateLayout"
 import logout from "../mutations/logout"

@@ -1,4 +1,4 @@
-import {BlitzRpcPlugin} from "@blitzjs/rpc"
+import {BlitzReactQueryPlugin} from "@blitzjs/rpc/react-query"
 import {setupBlitzClient} from "@blitzjs/next"
 import {AuthClientPlugin} from "@blitzjs/auth"
 
@@ -7,7 +7,7 @@ const {withBlitz} = setupBlitzClient({
     AuthClientPlugin({
       cookiePrefix: "no-suspense-tests-cookie-prefix",
     }),
-    BlitzRpcPlugin({}),
+    BlitzReactQueryPlugin({}),
   ],
 })
 

@@ -1,6 +1,11 @@
 import {describe, it, expect, beforeAll, vi} from "vitest"
 import {act, screen, waitForElementToBeRemoved, waitFor} from "@testing-library/react"
-import {useQuery, useInfiniteQuery, BlitzRpcPlugin, QueryClientProvider} from "@blitzjs/rpc"
+import {
+  useQuery,
+  useInfiniteQuery,
+  BlitzReactQueryPlugin,
+  QueryClientProvider,
+} from "@blitzjs/rpc/react-query"
 import React from "react"
 import delay from "delay"
 import {buildMutationRpc, buildQueryRpc, mockRouter, render} from "../../utils/blitz-test-utils"
@@ -19,12 +24,12 @@ describe("useQuery", () => {
     options: Parameters<typeof useQuery>[2] = {} as any,
   ): [{data?: any; setQueryData?: any}, Function] => {
     let res = {}
-    const qc = BlitzRpcPlugin({})
+    const qc = BlitzReactQueryPlugin({})
 
     function TestHarness() {
-      const [data, {setQueryData}] = useQuery(queryFn, params, {
+      const [data, {setQueryData}] = useQuery(queryFn, params, false, {
         suspense: true,
-        ...options,
+        ...(options as any),
       } as any)
 
       Object.assign(res, {data, setQueryData})

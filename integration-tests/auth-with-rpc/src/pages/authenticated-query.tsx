@@ -1,4 +1,4 @@
-import {useMutation, useQuery} from "@blitzjs/rpc"
+import {useMutation, useQuery} from "@blitzjs/rpc/react-query"
 import logout from "../mutations/logout"
 import getAuthenticatedBasic from "../queries/getAuthenticatedBasic"
 import {Suspense} from "react"

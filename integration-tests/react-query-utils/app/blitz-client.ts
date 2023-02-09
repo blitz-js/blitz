@@ -1,8 +1,8 @@
-import {BlitzRpcPlugin} from "@blitzjs/rpc"
+import {BlitzReactQueryPlugin} from "@blitzjs/rpc/react-query"
 import {setupBlitzClient} from "@blitzjs/next"
 
 const {withBlitz} = setupBlitzClient({
-  plugins: [BlitzRpcPlugin({})],
+  plugins: [BlitzReactQueryPlugin({})],
 })
 
 export {withBlitz}

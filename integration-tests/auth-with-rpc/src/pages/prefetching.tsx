@@ -1,12 +1,18 @@
 import {gSSP} from "../blitz-server"
 import {GetServerSidePropsContext} from "next"
-import {dehydrate, getQueryClient, getQueryKey, QueryClient, useQuery} from "@blitzjs/rpc"
+import {
+  dehydrate,
+  getQueryClient,
+  getQueryKey,
+  QueryClient,
+  useQuery,
+} from "@blitzjs/rpc/react-query"
 import getNoauthBasic from "../queries/getNoauthBasic"
 import {Suspense} from "react"
 import {SessionContext} from "@blitzjs/auth"
 
 function Content() {
-  const [result] = useQuery(getNoauthBasic, null, {
+  const [result] = useQuery(getNoauthBasic, null, false, {
     staleTime: 60 * 1000,
   })
 
