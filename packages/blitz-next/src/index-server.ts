@@ -30,7 +30,7 @@ import {PreviewData} from "next/types"
 import {resolveHref} from "next/dist/shared/lib/router/router"
 import {RouteUrlObject, isRouteUrlObject} from "blitz"
 
-export * from "./index-browser"
+export {setupBlitzClient} from "./index-browser"
 
 // Workaround for TS2742 "Inferred type cannot be named without a reference"
 export interface Ctx extends BlitzCtx {}

@@ -1,2 +1,2 @@
 import "./global"
-export * from "./data-client/index"
+export * from "./client/index"

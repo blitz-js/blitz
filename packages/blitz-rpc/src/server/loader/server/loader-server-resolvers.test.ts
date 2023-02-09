@@ -1,5 +1,5 @@
 import {describe, expect, it} from "vitest"
-import {transformBlitzRpcResolverServer} from "./loader-server-resolvers"
+import {transformBlitzRpcResolverServer} from "../../../server/loader/server/loader-server-resolvers"
 
 const META_TAGS_AND_EXPORT = `
 __internal_rpcHandler._resolverName = 'test'

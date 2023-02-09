@@ -1,7 +1,7 @@
 import {DefaultOptions, QueryClient} from "@tanstack/react-query"
 import {createClientPlugin} from "blitz"
-import BlitzProvider from "./provider"
-export * from "./react-query"
+import BlitzProvider from "../react-query/provider"
+export * from "../react-query/react-query"
 
 export {
   getQueryKey,
@@ -10,7 +10,7 @@ export {
   setQueryData,
   getQueryClient,
   getQueryData,
-} from "./react-query-utils"
+} from "../utils"
 
 export {
   useQueryErrorResetBoundary,
@@ -70,7 +70,6 @@ export const BlitzReactQueryPlugin = createClientPlugin<
       // Ref: https://github.com/blitz-js/blitz/issues/1935
     }, 100)
   }
-  ;("use client")
   globalThis.queryClient = queryClient
   return {
     events: {

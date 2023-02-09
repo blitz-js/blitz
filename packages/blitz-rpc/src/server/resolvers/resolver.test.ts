@@ -1,7 +1,7 @@
 import {Ctx} from "blitz"
 import {describe, expect, it} from "vitest"
 import {z} from "zod"
-import {ParserType, resolver} from "./resolver"
+import {ParserType, resolver} from "../resolvers/resolver"
 
 describe("resolver", () => {
   it("should typecheck and pass along value", async () => {

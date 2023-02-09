@@ -1,5 +1,5 @@
 import {describe, expect, it} from "vitest"
-import {getResolverConfig} from "./parse-rpc-config"
+import {getResolverConfig} from "../parsers/parse-rpc-config"
 
 describe("getResolverConfig", () => {
   it("base case: no configuration", async () => {

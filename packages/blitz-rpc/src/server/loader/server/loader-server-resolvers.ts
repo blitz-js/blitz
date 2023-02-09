@@ -6,8 +6,8 @@ import {
   Loader,
   LoaderOptions,
   toPosixPath,
-} from "./loader-utils"
-import {normalizeApiRoute} from "./data-client"
+} from "../utils/loader-utils"
+import {normalizeApiRoute} from "../../../client"
 import {posix} from "path"
 
 // Subset of `import type { LoaderDefinitionFunction } from 'webpack'`

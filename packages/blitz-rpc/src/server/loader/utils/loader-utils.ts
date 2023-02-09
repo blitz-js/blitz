@@ -1,6 +1,6 @@
 import {assert} from "blitz"
 import {posix, sep, win32, join, normalize} from "path"
-import {ResolverPathOptions} from "./index-server"
+import {ResolverPathOptions} from "../../../index-server"
 
 export interface LoaderOptions {
   resolverPath: ResolverPathOptions

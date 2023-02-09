@@ -1,7 +1,7 @@
 import {describe, expect, it, vi} from "vitest"
 import superJson from "superjson"
 
-import {getQueryKey, getQueryKeyFromUrlAndParams} from "./react-query-utils"
+import {getQueryKey, getQueryKeyFromUrlAndParams, validateQueryFn} from "./utils"
 import {RpcClient} from "../index-server"
 
 const API_ENDPOINT = "http://localhost:3000"

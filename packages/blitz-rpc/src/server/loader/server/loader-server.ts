@@ -1,4 +1,4 @@
-import {dirname, join, relative} from "path"
+import {join} from "path"
 import {promises} from "fs"
 import {
   assertPosixPath,
@@ -9,7 +9,7 @@ import {
   LoaderOptions,
   topLevelFoldersThatMayContainResolvers,
   toPosixPath,
-} from "./loader-utils"
+} from "../utils/loader-utils"
 
 // Subset of `import type { LoaderDefinitionFunction } from 'webpack'`
 

@@ -6,10 +6,10 @@ import {
   Loader,
   LoaderOptions,
   toPosixPath,
-} from "./loader-utils"
+} from "../utils/loader-utils"
 import {posix} from "path"
 import {log, ResolverConfig} from "blitz"
-import {getResolverConfig} from "./parse-rpc-config"
+import {getResolverConfig} from "../../parsers/parse-rpc-config"
 
 // Subset of `import type { LoaderDefinitionFunction } from 'webpack'`
 

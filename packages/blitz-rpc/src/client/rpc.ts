@@ -143,7 +143,7 @@ export function __internal_buildRpcClient({
               meta: payload.meta?.result,
             })
             if (!opts.fromQueryHook) {
-              const {getQueryKeyFromUrlAndParams} = await import("../react-query/react-query-utils")
+              const {getQueryKeyFromUrlAndParams} = await import("../query/utils")
               const queryKey = getQueryKeyFromUrlAndParams(routePath, params)
               globalThis.queryClient.setQueryData(queryKey, data)
             }

@@ -3,12 +3,9 @@
  */
 import {expect, beforeEach, describe, it, vi} from "vitest"
 
-import {getQueryClient, invalidateQuery, setQueryData} from "../../src/data-client"
+import {getQueryClient, invalidateQuery, setQueryData} from "../../src/client"
 
-import {
-  getQueryCacheFunctions,
-  initializeQueryClient,
-} from "../../src/data-client/react-query-utils"
+import {getQueryCacheFunctions, initializeQueryClient} from "../../src/client/react-query-utils"
 import {buildQueryRpc} from "../blitz-test-utils"
 globalThis.queryClient = initializeQueryClient()
 

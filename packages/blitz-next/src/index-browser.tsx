@@ -3,7 +3,8 @@ import type {ClientPlugin, BlitzPluginWithProvider} from "blitz"
 import {reduceBlitzPlugins, Ctx} from "blitz"
 import Head from "next/head"
 import React, {ReactNode} from "react"
-import {Hydrate, HydrateOptions, QueryClient, QueryClientProvider} from "@tanstack/react-query"
+import {QueryClient, QueryClientProvider} from "@tanstack/react-query"
+import type { HydrateOptions } from "@tanstack/react-query"
 import {withSuperJSONPage} from "./superjson"
 import {UrlObject} from "url"
 import {AppPropsType} from "next/dist/shared/lib/utils"
@@ -81,9 +82,9 @@ export const BlitzProvider = ({
         client={client || globalThis.queryClient}
         contextSharing={contextSharing}
       >
-        <Hydrate state={dehydratedState} options={hydrateOptions}>
+        {/* <Hydrate state={dehydratedState} options={hydrateOptions}> */}
           {children}
-        </Hydrate>
+        {/* </Hydrate> */}
       </QueryClientProvider>
     )
   }

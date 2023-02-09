@@ -3,8 +3,8 @@ const fs = require("fs")
 const filesToModify = [
   "dist/index.cjs",
   "dist/index.mjs",
-  "dist/chunks/react-query-utils.cjs",
-  "dist/chunks/react-query-utils.mjs",
+  "dist/chunks/utils.cjs",
+  "dist/chunks/utils.mjs",
 ]
 
 const addDirectives = (filePath) => {

@@ -19,7 +19,7 @@ import {
   sanitizeQuery,
   sanitizeMutation,
   getInfiniteQueryKey,
-} from "./react-query-utils"
+} from "../utils"
 import {useRouter} from "next/router"
 
 type QueryLazyOptions = {suspense: unknown} | {enabled: unknown}

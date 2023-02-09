@@ -4,10 +4,10 @@ const config: BuildConfig = {
   entries: [
     "./src/index-browser",
     "./src/index-server",
-    "./src/loader-server",
-    "./src/loader-server-resolvers",
-    "./src/loader-client",
-    "./src/react-query/index",
+    "./src/server/loader/server/loader-server",
+    "./src/server/loader/server/loader-server-resolvers",
+    "./src/server/loader/client/loader-client",
+    "./src/query/react-query/index",
   ],
   externals: [
     "index-browser.cjs",

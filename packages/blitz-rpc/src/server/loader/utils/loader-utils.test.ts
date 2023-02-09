@@ -1,5 +1,5 @@
 import {describe, expect, it} from "vitest"
-import {convertPageFilePathToRoutePath} from "./loader-utils"
+import {convertPageFilePathToRoutePath} from "../../../server/loader/utils/loader-utils"
 
 const APP_ROOT = "/Users/blitz/project"
 const FILE_PATH = "/Users/blitz/project/app/queries/getData.ts"
