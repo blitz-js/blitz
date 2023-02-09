@@ -1016,7 +1016,6 @@ importers:
       nanoid: 3.2.0
       passport: 0.5.2
       path: 0.12.7
-      secure-password: 4.0.0
       supports-color: 8.1.1
       url: 0.11.0
     devDependencies:
@@ -16348,7 +16347,7 @@ packages:
       {
         integrity: sha512-C40jQ3NzfkP53NsO8kEOFd79p4b9kDXQMwgiY1z8ZwrDZgUyom0AHwGegF4Dm99L+YoYhuaB0ceerUcXmqr1rQ==,
       }
-    dev: false
+    dev: true
 
   /nanoid/3.2.0:
     resolution:
@@ -16618,7 +16617,7 @@ packages:
         integrity: sha512-NTZVKn9IylLwUzaKjkas1e4u2DLNcV4rdYagA4PWdPwW87Bi7z+BznyKSRwS/761tV/lzCGXplWsiaMjLqP2zQ==,
       }
     hasBin: true
-    dev: false
+    dev: true
 
   /node-int64/0.4.0:
     resolution:

@@ -1,6 +1,11 @@
 {
   "name": "@blitzjs/rpc",
   "version": "2.0.0-beta.22",
+  "homepage": "https://blitzjs.com/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/blitz-js/blitz.git"
+  },
   "scripts": {
     "build": "unbuild && node ./utils/add-directives.js",
     "predev": "wait-on -d 400 ../blitz/dist/index-server.d.ts && wait-on -d 400 ../blitz-auth/dist/index-browser.d.ts",

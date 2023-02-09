@@ -55,11 +55,11 @@ const New__ModelName__Page = () => {
       <p>
         <if condition="parentModel">
           <Link href={Routes.__ModelNames__Page({ __parentModelId__: __parentModelId__! })}>
-            <a>__ModelNames__</a>
+            __ModelNames__
           </Link>
           <else>
             <Link href={Routes.__ModelNames__Page()}>
-              <a>__ModelNames__</a>
+              __ModelNames__
             </Link>
           </else>
         </if>

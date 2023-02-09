@@ -1,6 +1,11 @@
 {
   "name": "@blitzjs/next",
   "version": "2.0.0-beta.22",
+  "homepage": "https://blitzjs.com/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/blitz-js/blitz.git"
+  },
   "scripts": {
     "build": "unbuild && node ./utils/add-directives.js",
     "dev": "pnpm predev && pnpm watch unbuild src --wait=0.2",

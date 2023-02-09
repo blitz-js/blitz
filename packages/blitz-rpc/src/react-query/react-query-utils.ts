@@ -83,13 +83,6 @@ export const emptyQueryFn: RpcClient<unknown, unknown> = (() => {
   return fn
 })()
 
-const isNotInUserTestEnvironment = () => {
-  if (process.env.JEST_WORKER_ID === undefined) return true
-  if (process.env.VITEST_WORKER_ID === undefined) return true
-  if (process.env.BLITZ_TEST_ENVIRONMENT !== undefined) return true
-  return false
-}
-
 export const validateQueryFn = <TInput, TResult>(
   queryFn: Resolver<TInput, TResult> | RpcClient<TInput, TResult>,
 ) => {
