@@ -47,7 +47,6 @@ export function useQuery<
 >(
   queryFn: T,
   params: FirstParam<T>,
-  isApp?: boolean,
   options?: UseQueryOptions<TResult, TError, TSelectedData> & QueryNonLazyOptions,
 ): [TSelectedData, RestQueryResult<TSelectedData, TError>]
 export function useQuery<
@@ -58,7 +57,6 @@ export function useQuery<
 >(
   queryFn: T,
   params: FirstParam<T>,
-  isApp: boolean,
   options: UseQueryOptions<TResult, TError, TSelectedData> & QueryLazyOptions,
 ): [TSelectedData | undefined, RestQueryResult<TSelectedData, TError>]
 export function useQuery<
@@ -69,7 +67,6 @@ export function useQuery<
 >(
   queryFn: T,
   params: FirstParam<T>,
-  isApp = globalThis.__BLITZ_RSC,
   options: UseQueryOptions<TResult, TError, TSelectedData> = {},
 ) {
   if (typeof queryFn === "undefined") {
@@ -79,10 +76,11 @@ export function useQuery<
   const suspenseEnabled = Boolean(globalThis.__BLITZ_SUSPENSE_ENABLED)
   let enabled = isServer && suspenseEnabled ? false : options?.enabled ?? options?.enabled !== null
   let routerIsReady = false
-  if (isApp) {
+  try {
+    const router = useRouter()
+    routerIsReady = router.isReady || (isServer && suspenseEnabled)
+  } catch (e) {
     routerIsReady = true
-  } else {
-    routerIsReady = useRouter().isReady || (isServer && suspenseEnabled)
   }
   const enhancedResolverRpcClient = sanitizeQuery(queryFn)
   const queryKey = getQueryKey(queryFn, params)
@@ -136,7 +134,6 @@ export function usePaginatedQuery<
 >(
   queryFn: T,
   params: FirstParam<T>,
-  isApp?: boolean,
   options?: UseQueryOptions<TResult, TError, TSelectedData> & QueryNonLazyOptions,
 ): [TSelectedData, RestPaginatedResult<TSelectedData, TError>]
 export function usePaginatedQuery<
@@ -147,7 +144,6 @@ export function usePaginatedQuery<
 >(
   queryFn: T,
   params: FirstParam<T>,
-  isApp: boolean,
   options: UseQueryOptions<TResult, TError, TSelectedData> & QueryLazyOptions,
 ): [TSelectedData | undefined, RestPaginatedResult<TSelectedData, TError>]
 export function usePaginatedQuery<
@@ -158,7 +154,6 @@ export function usePaginatedQuery<
 >(
   queryFn: T,
   params: FirstParam<T>,
-  isApp = globalThis.__BLITZ_RSC,
   options: UseQueryOptions<TResult, TError, TSelectedData> = {},
 ) {
   if (typeof queryFn === "undefined") {
@@ -168,10 +163,11 @@ export function usePaginatedQuery<
   const suspenseEnabled = Boolean(globalThis.__BLITZ_SUSPENSE_ENABLED)
   let enabled = isServer && suspenseEnabled ? false : options?.enabled ?? options?.enabled !== null
   let routerIsReady = false
-  if (isApp) {
+  try {
+    const router = useRouter()
+    routerIsReady = router.isReady || (isServer && suspenseEnabled)
+  } catch (e) {
     routerIsReady = true
-  } else {
-    routerIsReady = useRouter().isReady || (isServer && suspenseEnabled)
   }
   const enhancedResolverRpcClient = sanitizeQuery(queryFn)
   const queryKey = getQueryKey(queryFn, params)
@@ -236,7 +232,6 @@ export function useInfiniteQuery<
   queryFn: T,
   getQueryParams: (pageParam: any) => FirstParam<T>,
   options: InfiniteQueryConfig<TResult, TError, TSelectedData> & QueryNonLazyOptions,
-  isApp?: boolean,
 ): [TSelectedData[], RestInfiniteResult<TSelectedData, TError>]
 export function useInfiniteQuery<
   T extends AsyncFunc,
@@ -247,7 +242,6 @@ export function useInfiniteQuery<
   queryFn: T,
   getQueryParams: (pageParam: any) => FirstParam<T>,
   options: InfiniteQueryConfig<TResult, TError, TSelectedData> & QueryLazyOptions,
-  isApp: boolean,
 ): [TSelectedData[] | undefined, RestInfiniteResult<TSelectedData, TError>]
 export function useInfiniteQuery<
   T extends AsyncFunc,
@@ -258,7 +252,6 @@ export function useInfiniteQuery<
   queryFn: T,
   getQueryParams: (pageParam: any) => FirstParam<T>,
   options: InfiniteQueryConfig<TResult, TError, TSelectedData>,
-  isApp = globalThis.__BLITZ_RSC,
 ) {
   if (typeof queryFn === "undefined") {
     throw new Error("useInfiniteQuery is missing the first argument - it must be a query function")
@@ -267,10 +260,11 @@ export function useInfiniteQuery<
   const suspenseEnabled = Boolean(globalThis.__BLITZ_SUSPENSE_ENABLED)
   let enabled = isServer && suspenseEnabled ? false : options?.enabled ?? options?.enabled !== null
   let routerIsReady = false
-  if (isApp) {
+  try {
+    const router = useRouter()
+    routerIsReady = router.isReady || (isServer && suspenseEnabled)
+  } catch (e) {
     routerIsReady = true
-  } else {
-    routerIsReady = useRouter().isReady || (isServer && suspenseEnabled)
   }
   const enhancedResolverRpcClient = sanitizeQuery(queryFn)
   const queryKey = getInfiniteQueryKey(queryFn, getQueryParams)

@@ -11,18 +11,8 @@ const useQueryOptions = {
 }
 
 const PageWithInvalidateQuery: React.FC = () => {
-  const [query1, {isFetching: isQ1Fetching}] = useQuery(
-    getSequence,
-    "query1",
-    false,
-    useQueryOptions,
-  )
-  const [query2, {isFetching: isQ2Fetching}] = useQuery(
-    getSequence,
-    "query2",
-    false,
-    useQueryOptions,
-  )
+  const [query1, {isFetching: isQ1Fetching}] = useQuery(getSequence, "query1", useQueryOptions)
+  const [query2, {isFetching: isQ2Fetching}] = useQuery(getSequence, "query2", useQueryOptions)
 
   const isFetching = isQ1Fetching || isQ2Fetching
 

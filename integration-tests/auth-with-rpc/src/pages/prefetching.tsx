@@ -12,7 +12,7 @@ import {Suspense} from "react"
 import {SessionContext} from "@blitzjs/auth"
 
 function Content() {
-  const [result] = useQuery(getNoauthBasic, null, false, {
+  const [result] = useQuery(getNoauthBasic, null, {
     staleTime: 60 * 1000,
   })
 

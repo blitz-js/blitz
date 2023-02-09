@@ -5,5 +5,4 @@ declare global {
     beforeHttpRequest: BeforeHttpRequest
     beforeHttpResponse: BeforeHttpResponse
   }
-  var __BLITZ_RSC: boolean
 }

@@ -27,7 +27,7 @@ describe("useQuery", () => {
     const qc = BlitzReactQueryPlugin({})
 
     function TestHarness() {
-      const [data, {setQueryData}] = useQuery(queryFn, params, false, {
+      const [data, {setQueryData}] = useQuery(queryFn, params, {
         suspense: true,
         ...(options as any),
       } as any)
@@ -115,7 +115,7 @@ describe("useQuery", () => {
 
     it("works with options other than enabled & suspense without type error", () => {
       const Demo = () => {
-        useQuery(buildQueryRpc(upcase), undefined, false, {refetchInterval: 10000})
+        useQuery(buildQueryRpc(upcase), undefined, {refetchInterval: 10000})
         return <div></div>
       }
       const ui = () => <Demo />
