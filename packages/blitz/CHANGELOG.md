@@ -1,5 +1,16 @@
 # blitz
 
+## 2.0.0-beta.23
+
+### Patch Changes
+
+- c3c789740: Updates internal functions and tests to support blitz apps that run tests with vitest
+- Updated dependencies [cb63a0ea5]
+- Updated dependencies [6ec020c6d]
+- Updated dependencies [d316d0db7]
+- Updated dependencies [79c5e86d7]
+  - @blitzjs/generator@2.0.0-beta.23
+
 ## 2.0.0-beta.22
 
 ### Minor Changes
