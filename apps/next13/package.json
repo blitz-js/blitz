@@ -13,7 +13,6 @@
     "@blitzjs/config": "workspace:*",
     "@blitzjs/next": "workspace:*",
     "@blitzjs/rpc": "workspace:*",
-    "@blitzjs/rpc": "workspace:*",
     "@prisma/client": "^4.5.0",
     "@tanstack/react-query": "4.0.10",
     "blitz": "workspace:*",

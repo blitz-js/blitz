@@ -21,8 +21,14 @@ import {
   UnionToIntersection,
 } from "blitz"
 import {handleRequestWithMiddleware, startWatcher, stopWatcher} from "blitz"
-import type {InstallWebpackConfigOptions, ResolverPathOptions} from "@blitzjs/rpc"
-import type {DefaultOptions, QueryClient} from "@tanstack/react-query"
+import {installWebpackConfig, InstallWebpackConfigOptions, ResolverPathOptions} from "@blitzjs/rpc"
+import {
+  DefaultOptions,
+  QueryClient,
+  getQueryKey,
+  getInfiniteQueryKey,
+  dehydrate,
+} from "@blitzjs/rpc/react-query"
 import {IncomingMessage, ServerResponse} from "http"
 import {withSuperJsonProps} from "./superjson"
 import {ParsedUrlQuery} from "querystring"
@@ -110,8 +116,6 @@ const prefetchQueryFactory = (
   return {
     getClient: () => queryClient,
     prefetchQuery: async (fn, input, defaultOptions = {}, infinite = false) => {
-      const {QueryClient} = await import("@tanstack/react-query")
-      const {getQueryKey, getInfiniteQueryKey} = await import("@blitzjs/rpc/react-query")
       if (!queryClient) {
         queryClient = new QueryClient({defaultOptions})
       }
@@ -261,8 +265,6 @@ export function withBlitz(nextConfig: BlitzConfig = {}) {
     })
   }
 
-  const {installWebpackConfig} = require("@blitzjs/rpc")
-
   const config = Object.assign({}, nextConfig, {
     webpack: (config: InstallWebpackConfigOptions["webpackConfig"], options: any) => {
       installWebpackConfig({
@@ -296,7 +298,6 @@ function withDehydratedState<T extends Result>(result: T, queryClient: QueryClie
   if (!queryClient) {
     return result
   }
-  const {dehydrate} = require("@tanstack/react-query")
   const dehydratedState = dehydrate(queryClient)
   return {...result, props: {...("props" in result ? result.props : undefined), dehydratedState}}
 }

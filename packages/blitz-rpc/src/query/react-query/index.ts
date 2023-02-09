@@ -17,7 +17,10 @@ export {
   QueryClientProvider,
   QueryClient,
   dehydrate,
+  Hydrate,
 } from "@tanstack/react-query"
+
+export type {HydrateOptions, DefaultOptions} from "@tanstack/react-query"
 
 interface BlitzRpcOptions {
   reactQueryOptions?: DefaultOptions

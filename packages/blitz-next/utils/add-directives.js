@@ -18,8 +18,7 @@ const serverFiles = ["dist/index-server.cjs", "dist/index-server.mjs"]
 const fixNextRouter = (filePath) => {
   const fileContent = fs.readFileSync(filePath, "utf8")
   const newFileContent = fileContent.replace("require('next/router');", "")
-  const newFileContent2 = newFileContent.replace("require('@tanstack/react-query');", "")
-  fs.writeFileSync(filePath, newFileContent2)
+  fs.writeFileSync(filePath, newFileContent)
 }
 
 filesToModify.forEach(addDirectives)
