@@ -1,4 +1,4 @@
-import {getQueryData, useQuery} from "@blitzjs/rpc/react-query"
+import {getQueryData, useQuery} from "@blitzjs/rpc"
 import {Suspense, useState} from "react"
 import getBasic from "../app/queries/getBasic"
 

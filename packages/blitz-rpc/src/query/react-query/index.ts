@@ -1,8 +1,10 @@
-import {DefaultOptions, QueryClient} from "@tanstack/react-query"
+import {QueryClient} from "@tanstack/query-core"
+import type {DefaultOptions} from "@tanstack/react-query"
 import {createClientPlugin} from "blitz"
 import BlitzProvider from "../react-query/provider"
-export * from "../react-query/react-query"
+import {dehydrate} from "@tanstack/query-core"
 
+export * from "./react-query"
 export {
   getQueryKey,
   getInfiniteQueryKey,
@@ -12,13 +14,7 @@ export {
   getQueryData,
 } from "../utils"
 
-export {
-  useQueryErrorResetBoundary,
-  QueryClientProvider,
-  QueryClient,
-  dehydrate,
-  Hydrate,
-} from "@tanstack/react-query"
+export {BlitzProvider, dehydrate, QueryClient}
 
 export type {HydrateOptions, DefaultOptions} from "@tanstack/react-query"
 

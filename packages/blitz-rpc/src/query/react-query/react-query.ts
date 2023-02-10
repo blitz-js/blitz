@@ -1,15 +1,23 @@
-import {
-  useInfiniteQuery as useInfiniteReactQuery,
+import {useQueryErrorResetBoundary, QueryClientProvider, Hydrate} from "@tanstack/react-query"
+
+export {useQueryErrorResetBoundary, QueryClientProvider, Hydrate}
+
+import {useInfiniteQuery as useInfiniteReactQuery} from "@tanstack/react-query"
+
+import {useQuery as useReactQuery} from "@tanstack/react-query"
+
+import {useMutation as useReactQueryMutation} from "@tanstack/react-query"
+
+import type {
   UseInfiniteQueryOptions,
   UseInfiniteQueryResult,
-  useQuery as useReactQuery,
   UseQueryOptions,
   UseQueryResult,
-  MutateOptions,
-  useMutation as useReactQueryMutation,
   UseMutationOptions,
   UseMutationResult,
+  MutateOptions,
 } from "@tanstack/react-query"
+
 import {isServer, FirstParam, PromiseReturnType, AsyncFunc} from "blitz"
 import {
   emptyQueryFn,

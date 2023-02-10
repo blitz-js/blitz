@@ -1,5 +1,5 @@
 import getNoSuspenseBasic from "../app/queries/getNoSuspenseBasic"
-import {useQuery} from "@blitzjs/rpc/react-query"
+import {useQuery} from "@blitzjs/rpc"
 import React from "react"
 
 function Content() {

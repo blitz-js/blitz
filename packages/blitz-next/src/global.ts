@@ -1,4 +1,4 @@
-import {QueryClient} from "@blitzjs/rpc/react-query"
+import {QueryClient} from "@blitzjs/rpc"
 
 declare global {
   var queryClient: QueryClient

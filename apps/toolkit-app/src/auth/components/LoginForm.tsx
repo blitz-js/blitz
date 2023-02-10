@@ -4,7 +4,7 @@ import { LabeledTextField } from "src/core/components/LabeledTextField"
 import { Form, FORM_ERROR } from "src/core/components/Form"
 import login from "src/auth/mutations/login"
 import { Login } from "src/auth/validations"
-import { useMutation } from "@blitzjs/rpc/react-query"
+import { useMutation } from "@blitzjs/rpc"
 import { Routes } from "@blitzjs/next"
 
 type LoginFormProps = {

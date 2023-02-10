@@ -1,6 +1,6 @@
 import {BlitzPage} from "@blitzjs/next"
 import {Suspense, useEffect} from "react"
-import {useQuery} from "@blitzjs/rpc/react-query"
+import {useQuery} from "@blitzjs/rpc"
 import getNoauthBasic from "../queries/getNoauthBasic"
 
 const Content = () => {

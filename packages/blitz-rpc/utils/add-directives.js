@@ -1,10 +1,10 @@
 const fs = require("fs")
 
 const filesToModify = [
-  "dist/index.cjs",
-  "dist/index.mjs",
   "dist/chunks/utils.cjs",
   "dist/chunks/utils.mjs",
+  "dist/index.cjs",
+  "dist/index.mjs",
 ]
 
 const addDirectives = (filePath) => {
@@ -13,4 +13,15 @@ const addDirectives = (filePath) => {
   fs.writeFileSync(filePath, newFileContent)
 }
 
+const fixNextRouter = (filePath) => {
+  const fileContent = fs.readFileSync(filePath, "utf8")
+  const newFileContent = fileContent.replace("require('next/router');", "")
+  const newFileContent2 = newFileContent.replace(
+    "require('@tanstack/react-query');",
+    "require('./index.cjs');",
+  )
+  fs.writeFileSync(filePath, newFileContent2)
+}
+
 filesToModify.forEach(addDirectives)
+fixNextRouter("dist/index-server.cjs")

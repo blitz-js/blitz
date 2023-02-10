@@ -1,11 +1,6 @@
 import {describe, it, expect, beforeAll, vi} from "vitest"
 import {act, screen, waitForElementToBeRemoved, waitFor} from "@testing-library/react"
-import {
-  useQuery,
-  useInfiniteQuery,
-  BlitzReactQueryPlugin,
-  QueryClientProvider,
-} from "@blitzjs/rpc/react-query"
+import {useQuery, useInfiniteQuery, BlitzReactQueryPlugin, QueryClientProvider} from "@blitzjs/rpc"
 import React from "react"
 import delay from "delay"
 import {buildMutationRpc, buildQueryRpc, mockRouter, render} from "../../utils/blitz-test-utils"

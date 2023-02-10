@@ -1,6 +1,6 @@
 "use client"
 
-import {useQuery, useMutation} from "@blitzjs/rpc/react-query"
+import {useQuery, useMutation} from "@blitzjs/rpc"
 import logout from "../src/auth/mutations/logout"
 import getCurrentUser from "../src/users/queries/getCurrentUser"
 import {useTransition} from "react"

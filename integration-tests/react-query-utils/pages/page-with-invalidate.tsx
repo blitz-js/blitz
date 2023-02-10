@@ -1,6 +1,6 @@
 import React, {Suspense} from "react"
 import {BlitzPage} from "@blitzjs/next"
-import {invalidateQuery, useQuery} from "@blitzjs/rpc/react-query"
+import {invalidateQuery, useQuery} from "@blitzjs/rpc"
 import getSequence from "../app/queries/getSequence"
 
 const useQueryOptions = {

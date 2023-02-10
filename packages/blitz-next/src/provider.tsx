@@ -1,5 +1,5 @@
-import {QueryClientProvider, Hydrate} from "@blitzjs/rpc/react-query"
-import type {HydrateOptions, QueryClient} from "@blitzjs/rpc/react-query"
+import {QueryClientProvider, Hydrate} from "@blitzjs/rpc"
+import type {HydrateOptions, QueryClient} from "@blitzjs/rpc"
 import React from "react"
 
 export type BlitzProviderProps = {

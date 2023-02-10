@@ -1,12 +1,6 @@
 import {gSSP} from "../blitz-server"
 import {GetServerSidePropsContext} from "next"
-import {
-  dehydrate,
-  getQueryClient,
-  getQueryKey,
-  QueryClient,
-  useQuery,
-} from "@blitzjs/rpc/react-query"
+import {dehydrate, getQueryClient, getQueryKey, QueryClient, useQuery} from "@blitzjs/rpc"
 import getNoauthBasic from "../queries/getNoauthBasic"
 import {Suspense} from "react"
 import {SessionContext} from "@blitzjs/auth"

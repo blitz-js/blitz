@@ -1,1 +1,1 @@
-export * from "./dist/secure-password"
+export * from "./dist/react"

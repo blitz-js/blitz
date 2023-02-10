@@ -28,7 +28,7 @@ import {
   getQueryKey,
   getInfiniteQueryKey,
   dehydrate,
-} from "@blitzjs/rpc/react-query"
+} from "@blitzjs/rpc"
 import {IncomingMessage, ServerResponse} from "http"
 import {withSuperJsonProps} from "./superjson"
 import {ParsedUrlQuery} from "querystring"
@@ -247,7 +247,7 @@ export interface BlitzConfig extends NextConfig {
   }
 }
 
-export function withBlitz(nextConfig: BlitzConfig = {}) {
+export function withBlitz(nextConfig: BlitzConfig = {}): NextConfig {
   if (
     process.env.NODE_ENV !== "production" &&
     process.env.NODE_ENV !== "test" &&

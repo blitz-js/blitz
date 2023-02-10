@@ -1,4 +1,4 @@
-import {invalidateQuery, useMutation, useQuery} from "@blitzjs/rpc/react-query"
+import {invalidateQuery, useMutation, useQuery} from "@blitzjs/rpc"
 import changeRole from "../mutations/changeRole"
 import getPublicDataForUser from "../queries/getPublicDataForUser"
 import {Suspense} from "react"

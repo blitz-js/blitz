@@ -1,5 +1,5 @@
 import {useRouter} from "next/router"
-import {useMutation, useQuery} from "@blitzjs/rpc/react-query"
+import {useMutation, useQuery} from "@blitzjs/rpc"
 import login from "../mutations/login"
 import logout from "../mutations/logout"
 import getCurrentUser from "../queries/getCurrentUser"

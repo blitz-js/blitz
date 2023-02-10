@@ -1,5 +1,5 @@
 import getBasic from "../app/queries/getBasic"
-import {useQuery} from "@blitzjs/rpc/react-query"
+import {useQuery} from "@blitzjs/rpc"
 import {Suspense} from "react"
 
 function Content() {

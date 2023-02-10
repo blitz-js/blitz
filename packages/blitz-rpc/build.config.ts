@@ -23,6 +23,7 @@ const config: BuildConfig = {
     esbuild: {
       target: ["es2015"],
     },
+    // replace all occurances requires f
   },
 }
 export default config

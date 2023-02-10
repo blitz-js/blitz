@@ -4,7 +4,7 @@ import {LabeledTextField} from "../../core/components/LabeledTextField"
 import {Form, FORM_ERROR} from "../../core/components/Form"
 import login from "../../auth/mutations/login"
 import {Login} from "../../auth/validations"
-import {useMutation} from "@blitzjs/rpc/react-query"
+import {useMutation} from "@blitzjs/rpc"
 import {startTransition} from "react"
 import {useRouter} from "next/navigation"
 
