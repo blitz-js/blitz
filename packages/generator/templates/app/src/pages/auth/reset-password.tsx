@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react"
 import Layout from "src/core/layouts/Layout"
 import { LabeledTextField } from "src/core/components/LabeledTextField"
 import { Form, FORM_ERROR } from "src/core/components/Form"
@@ -36,7 +35,7 @@ const ResetPasswordPage: BlitzPage = () => {
           }}
           onSubmit={async (values) => {
             try {
-              await resetPasswordMutation({ ...values, token })
+              token && await resetPasswordMutation({ ...values, token })
             } catch (error: any) {
               if (error.name === "ResetPasswordError") {
                 return {
