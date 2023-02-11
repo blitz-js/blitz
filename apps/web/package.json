@@ -26,7 +26,7 @@
     "blitz": "workspace:*",
     "jest": "29.3.0",
     "jest-environment-jsdom": "29.3.0",
-    "next": "12.2.5",
+    "next": "13.1.6",
     "passport-mock-strategy": "2.0.0",
     "passport-twitter": "1.0.4",
     "prisma": "4.6.0",

@@ -56,7 +56,7 @@
     "blitz": "2.0.0-beta.23",
     "cross-spawn": "7.0.3",
     "find-up": "4.1.0",
-    "next": "12.2.5",
+    "next": "13.1.6",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "resolve-from": "5.0.0",

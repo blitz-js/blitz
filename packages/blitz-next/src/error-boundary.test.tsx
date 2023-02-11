@@ -209,7 +209,8 @@ test("withErrorBoundary HOC", () => {
   expect(cleanStack(onErrorComponentStack)).toMatchInlineSnapshot(`
     {
       "componentStack": "
-        at ErrorBoundary
+        at ErrorBoundaryRoot
+        at withRouter
         at withErrorBoundary",
     }
   `)
@@ -223,6 +224,7 @@ test("supported but undocumented reset method", () => {
   const children = "Boundry children"
   function App() {
     const errorBoundaryRef = React.useRef<ErrorBoundary | null>(null)
+    console.log(errorBoundaryRef.current)
     const [explode, setExplode] = React.useState(false)
     return (
       <>
@@ -245,7 +247,7 @@ test("supported but undocumented reset method", () => {
   userEvent.click(screen.getByText("explode"))
 
   expect(screen.queryByText(children)).not.exist
-  expect(consoleError).toHaveBeenCalledTimes(3)
+  expect(consoleError).toHaveBeenCalledTimes(4)
   consoleError.mockClear()
 
   userEvent.click(screen.getByText("recover"))

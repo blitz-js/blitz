@@ -36,7 +36,7 @@ import {
 } from "../shared"
 import {generateToken, hash256} from "./auth-utils"
 import {Socket} from "net"
-import {getAntiCSRFToken} from "../client"
+import type {cookies} from "next/headers"
 
 export function isLocalhost(req: any): boolean {
   let {host} = req.headers
@@ -173,12 +173,15 @@ export async function getSession(
   return sessionContext
 }
 
-export async function getServerSession(_cookies: any, _headers: Headers): Promise<SessionContext> {
+export async function getServerSession(
+  _cookies: ReturnType<typeof cookies>,
+  _headers: Headers,
+): Promise<SessionContext> {
   const req = new IncomingMessage(new Socket()) as IncomingMessage & {
     cookies: {[key: string]: string}
   }
   req.headers = Object.fromEntries(_headers as any)
-  req.headers[HEADER_CSRF] = _cookies.get(COOKIE_CSRF_TOKEN()).value
+  req.headers[HEADER_CSRF] = _cookies.get(COOKIE_CSRF_TOKEN())!.value
   req.cookies = Object.fromEntries(
     _cookies.getAll().map((c: {name: string; value: string}) => [c.name, c.value]),
   )
