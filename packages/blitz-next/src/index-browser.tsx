@@ -22,13 +22,15 @@ const buildWithBlitz = (withPlugins: BlitzPluginWithProvider) => {
         })
       }, [])
 
+      const children = (
+        <>
+          {props.Component.suppressFirstRenderFlicker && <NoPageFlicker />}
+          <UserAppRoot {...props} Component={component} />
+        </>
+      )
+
       return (
-        <BlitzProvider dehydratedState={props.pageProps?.dehydratedState}>
-          <>
-            {props.Component.suppressFirstRenderFlicker && <NoPageFlicker />}
-            <UserAppRoot {...props} Component={component} />
-          </>
-        </BlitzProvider>
+        <BlitzProvider dehydratedState={props.pageProps?.dehydratedState} children={children} />
       )
     }
 
