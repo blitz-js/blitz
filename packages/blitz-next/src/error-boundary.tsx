@@ -97,7 +97,6 @@ const ErrorBoundary = withRouter(
     }
 
     async componentDidCatch(error: Error, info: React.ErrorInfo) {
-      console.error(error)
       if (error instanceof RedirectError) {
         debug("Redirecting from ErrorBoundary to", error.url)
         await this.props.router.push(error.url)
@@ -114,7 +113,7 @@ const ErrorBoundary = withRouter(
       }
 
       // Automatically reset on route change
-      this.props.router.events?.on("routeChangeComplete", this.handleRouteChange)
+      this.props.router?.events?.on("routeChangeComplete", this.handleRouteChange)
     }
 
     handleRouteChange = () => {
@@ -124,7 +123,7 @@ const ErrorBoundary = withRouter(
     }
 
     componentWillUnmount() {
-      this.props.router.events?.off("routeChangeComplete", this.handleRouteChange)
+      this.props.router?.events?.off("routeChangeComplete", this.handleRouteChange)
     }
 
     componentDidUpdate(prevProps: ErrorBoundaryProps) {
