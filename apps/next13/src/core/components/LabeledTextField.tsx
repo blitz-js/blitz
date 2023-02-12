@@ -58,4 +58,6 @@ export const LabeledTextField = forwardRef<HTMLInputElement, LabeledTextFieldPro
   },
 )
 
+LabeledTextField.displayName = "LabeledTextField"
+
 export default LabeledTextField
