@@ -13,15 +13,19 @@
     "@blitzjs/config": "workspace:*",
     "@blitzjs/next": "workspace:*",
     "@blitzjs/rpc": "workspace:*",
+    "@hookform/error-message": "2.0.0",
+    "@hookform/resolvers": "2.9.10",
     "@prisma/client": "^4.5.0",
     "@tanstack/react-query": "4.0.10",
     "blitz": "workspace:*",
     "flatted": "3.2.7",
-    "next": "13.1.2",
+    "next": "13.1.6",
     "prisma": "^4.5.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "superjson": "1.11.0"
+    "react-hook-form": "7.39.1",
+    "superjson": "1.11.0",
+    "zod": "3.20.2"
   },
   "devDependencies": {
     "@types/node": "18.11.7",
