@@ -2560,7 +2560,7 @@ packages:
     peerDependencies:
       "@babel/core": ^7.0.0-0
     dependencies:
-      "@babel/core": 7.18.2
+      "@babel/core": 7.18.2_supports-color@8.1.1
       "@babel/helper-plugin-utils": 7.17.12
       "@babel/plugin-syntax-nullish-coalescing-operator": 7.8.3_@babel+core@7.18.2
     dev: false
@@ -2630,7 +2630,7 @@ packages:
     peerDependencies:
       "@babel/core": ^7.0.0-0
     dependencies:
-      "@babel/core": 7.18.2
+      "@babel/core": 7.18.2_supports-color@8.1.1
       "@babel/helper-plugin-utils": 7.17.12
       "@babel/helper-skip-transparent-expression-wrappers": 7.16.0
       "@babel/plugin-syntax-optional-chaining": 7.8.3_@babel+core@7.18.2
@@ -2766,7 +2766,7 @@ packages:
     peerDependencies:
       "@babel/core": ^7.0.0-0
     dependencies:
-      "@babel/core": 7.18.2
+      "@babel/core": 7.18.2_supports-color@8.1.1
       "@babel/helper-plugin-utils": 7.17.12
     dev: false
 
@@ -2895,7 +2895,7 @@ packages:
     peerDependencies:
       "@babel/core": ^7.0.0-0
     dependencies:
-      "@babel/core": 7.18.2
+      "@babel/core": 7.18.2_supports-color@8.1.1
       "@babel/helper-plugin-utils": 7.17.12
     dev: false
 
@@ -2995,7 +2995,7 @@ packages:
     peerDependencies:
       "@babel/core": ^7.0.0-0
     dependencies:
-      "@babel/core": 7.18.2
+      "@babel/core": 7.18.2_supports-color@8.1.1
       "@babel/helper-plugin-utils": 7.17.12
     dev: false
 
@@ -3056,7 +3056,7 @@ packages:
     peerDependencies:
       "@babel/core": ^7.0.0-0
     dependencies:
-      "@babel/core": 7.18.2
+      "@babel/core": 7.18.2_supports-color@8.1.1
       "@babel/helper-plugin-utils": 7.17.12
     dev: false
 
@@ -3255,7 +3255,7 @@ packages:
     peerDependencies:
       "@babel/core": ^7.0.0-0
     dependencies:
-      "@babel/core": 7.18.2
+      "@babel/core": 7.18.2_supports-color@8.1.1
       "@babel/helper-plugin-utils": 7.17.12
       "@babel/plugin-syntax-flow": 7.17.12_@babel+core@7.18.2
     dev: false
@@ -4001,7 +4001,7 @@ packages:
     peerDependencies:
       "@babel/core": ^7.0.0-0
     dependencies:
-      "@babel/core": 7.18.2
+      "@babel/core": 7.18.2_supports-color@8.1.1
       "@babel/helper-plugin-utils": 7.17.12
       "@babel/helper-validator-option": 7.16.7
       "@babel/plugin-transform-flow-strip-types": 7.17.12_@babel+core@7.18.2
@@ -4065,7 +4065,7 @@ packages:
     peerDependencies:
       "@babel/core": ^7.0.0-0
     dependencies:
-      "@babel/core": 7.18.2
+      "@babel/core": 7.18.2_supports-color@8.1.1
       clone-deep: 4.0.1
       find-cache-dir: 2.1.0
       make-dir: 2.1.0
@@ -8217,7 +8217,7 @@ packages:
     peerDependencies:
       "@babel/core": ^7.0.0-0
     dependencies:
-      "@babel/core": 7.18.2
+      "@babel/core": 7.18.2_supports-color@8.1.1
     dev: false
 
   /babel-jest/29.3.0_@babel+core@7.20.2:
@@ -14498,7 +14498,7 @@ packages:
       pretty-format: 29.2.1
       slash: 3.0.0
       strip-json-comments: 3.1.1
-      ts-node: 10.9.1_typescript@4.8.4
+      ts-node: 10.9.1_cbe7ovvae6zqfnmtgctpgpys54
     transitivePeerDependencies:
       - supports-color
 
@@ -20324,7 +20324,6 @@ packages:
       typescript: 4.8.4
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
-    dev: false
 
   /ts-node/10.9.1_ieummqxttktzud32hpyrer46t4:
     resolution:
@@ -20391,6 +20390,7 @@ packages:
       typescript: 4.8.4
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
+    dev: false
 
   /tsconfig-paths/3.14.1:
     resolution:

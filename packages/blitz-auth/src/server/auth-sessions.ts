@@ -176,7 +176,7 @@ export async function getSession(
 export async function getServerSession(
   _cookies: ReturnType<typeof cookies>,
   _headers: Headers,
-): Promise<SessionContext> {
+): Promise<Ctx> {
   const req = new IncomingMessage(new Socket()) as IncomingMessage & {
     cookies: {[key: string]: string}
   }
@@ -186,7 +186,11 @@ export async function getServerSession(
     _cookies.getAll().map((c: {name: string; value: string}) => [c.name, c.value]),
   )
   const res = new ServerResponse(req)
-  return await getSession(req, res)
+  const session = await getSession(req, res)
+  const ctx: Ctx = {
+    session,
+  }
+  return ctx
 }
 
 const makeProxyToPublicData = <T extends SessionContextClass>(ctxClass: T): T => {

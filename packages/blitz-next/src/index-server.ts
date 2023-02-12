@@ -19,6 +19,7 @@ import {
   initializeLogger,
   Simplify,
   UnionToIntersection,
+  reduceBlitzServerPlugins,
 } from "blitz"
 import {handleRequestWithMiddleware, startWatcher, stopWatcher} from "blitz"
 import {installWebpackConfig, InstallWebpackConfigOptions, ResolverPathOptions} from "@blitzjs/rpc"
@@ -49,12 +50,6 @@ export type NextApiHandler<TResult> = (
   req: NextApiRequest,
   res: BlitzNextApiResponse,
 ) => TResult | void | Promise<TResult | void>
-
-type SetupBlitzOptions = {
-  plugins: BlitzServerPlugin<RequestMiddleware, Ctx>[]
-  onError?: (err: Error) => void
-  logger?: ReturnType<typeof BlitzLogger>
-}
 
 export type Redirect =
   | {
@@ -131,28 +126,18 @@ const prefetchQueryFactory = (
   }
 }
 
-type ServerPluginsExports<TPlugins extends readonly BlitzServerPlugin<object>[]> = Simplify<
-  UnionToIntersection<
-    {
-      [I in keyof TPlugins & number]: TPlugins[I]["exports"] extends () => infer R ? R : never
-    }[number]
-  >
->
-
-export const setupBlitzServer = <TPlugins extends SetupBlitzOptions>({
+export const setupBlitzServer = <TPlugins extends readonly BlitzServerPlugin<object>[]>({
   plugins,
   onError,
   logger,
-}: TPlugins) => {
+}: {
+  plugins: TPlugins
+  onError?: (err: Error) => void
+  logger?: ReturnType<typeof BlitzLogger>
+}) => {
   initializeLogger(logger ?? BlitzLogger())
 
-  const middlewares = plugins.flatMap((p) => p.requestMiddlewares)
-  const contextMiddleware = plugins.flatMap((p) => p.contextMiddleware).filter(Boolean)
-  const pluginExports = plugins.reduce(
-    // @ts-ignore
-    (acc, plugin) => ({...plugin.exports!(), ...acc}),
-    {} as ServerPluginsExports<TPlugins["plugins"]>,
-  )
+  const {middlewares, contextMiddleware, pluginExports} = reduceBlitzServerPlugins({plugins})
 
   const gSSP =
     <

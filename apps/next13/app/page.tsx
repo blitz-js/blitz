@@ -6,9 +6,9 @@ import {getServerSession} from "../src/blitz-server"
 import getCurrentUser from "../src/users/queries/getCurrentUser"
 
 export default async function Home() {
-  const session = await getServerSession(cookies(), headers())
-  console.log("session", session.userId)
-  const user = await getCurrentUser(null, {session})
+  const ctx = await getServerSession(cookies(), headers())
+  console.log("session", ctx.session.userId)
+  const user = await getCurrentUser(null, ctx)
   console.log("user", user)
   return (
     <div

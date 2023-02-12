@@ -1,6 +1,6 @@
 import "./global"
 import type {ClientPlugin, BlitzPluginWithProvider} from "blitz"
-import {reduceBlitzPlugins, Ctx} from "blitz"
+import {reduceBlitzClientPlugins, Ctx} from "blitz"
 import Head from "next/head"
 import React, {ReactNode} from "react"
 import {withSuperJSONPage} from "./superjson"
@@ -67,7 +67,7 @@ const setupBlitzClient = <TPlugins extends readonly ClientPlugin<object>[]>({
 }: {
   plugins: TPlugins
 }) => {
-  const {exports, withPlugins} = reduceBlitzPlugins({plugins})
+  const {exports, withPlugins} = reduceBlitzClientPlugins({plugins})
 
   const withBlitz = buildWithBlitz(withPlugins)
 
