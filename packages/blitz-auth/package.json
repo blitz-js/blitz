@@ -35,9 +35,9 @@
     "cookie-session": "2.0.0",
     "debug": "4.3.3",
     "http": "0.0.1-security",
-    "jsonwebtoken": "8.5.1",
+    "jsonwebtoken": "9.0.0",
     "nanoid": "3.2.0",
-    "passport": "0.5.2",
+    "passport": "0.6.0",
     "path": "0.12.7",
     "supports-color": "8.1.1",
     "url": "0.11.0"
