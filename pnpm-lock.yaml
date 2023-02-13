@@ -1000,7 +1000,7 @@ importers:
       jsonwebtoken: 9.0.0
       nanoid: 3.2.0
       next: 13.1.6
-      passport: 0.5.2
+      passport: 0.6.0
       path: 0.12.7
       react: 18.2.0
       react-dom: 18.2.0
@@ -1828,7 +1828,7 @@ packages:
       "@babel/core": ^7.0.0
     dependencies:
       "@babel/compat-data": 7.17.10
-      "@babel/core": 7.18.2_supports-color@8.1.1
+      "@babel/core": 7.18.2
       "@babel/helper-validator-option": 7.16.7
       browserslist: 4.20.3
       semver: 6.3.0
