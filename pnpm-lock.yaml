@@ -1066,6 +1066,7 @@ importers:
       fs-extra: 10.0.1
       hoist-non-react-statics: 3.3.2
       next: 13.1.6
+      next-router-mock: 0.9.1
       react: 18.2.0
       react-dom: 18.2.0
       resolve-from: 5.0.0
@@ -1098,6 +1099,7 @@ importers:
       cross-spawn: 7.0.3
       find-up: 4.1.0
       next: 13.1.6_biqbaboplfbrettd7655fr4n2y
+      next-router-mock: 0.9.1_next@13.1.6+react@18.2.0
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       resolve-from: 5.0.0
@@ -1826,7 +1828,7 @@ packages:
       "@babel/core": ^7.0.0
     dependencies:
       "@babel/compat-data": 7.17.10
-      "@babel/core": 7.18.2
+      "@babel/core": 7.18.2_supports-color@8.1.1
       "@babel/helper-validator-option": 7.16.7
       browserslist: 4.20.3
       semver: 6.3.0
@@ -16391,6 +16393,19 @@ packages:
         integrity: sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==,
       }
     dev: false
+
+  /next-router-mock/0.9.1_next@13.1.6+react@18.2.0:
+    resolution:
+      {
+        integrity: sha512-GTrns944dnFNgycpinyRszOiwwk99LUJsvvX0FWRgUFHv6hOuzCns1rmTlzO+DRimYB9/XMA+87X2/dQLzjiUQ==,
+      }
+    peerDependencies:
+      next: ">=10.0.0"
+      react: ">=17.0.0"
+    dependencies:
+      next: 13.1.6_biqbaboplfbrettd7655fr4n2y
+      react: 18.2.0
+    dev: true
 
   /next/13.1.6:
     resolution:

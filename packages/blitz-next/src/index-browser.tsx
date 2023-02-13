@@ -10,6 +10,8 @@ import type {Router} from "next/router"
 import {BlitzProvider} from "./provider"
 export {Routes} from ".blitz"
 
+export {BlitzProvider} from "./provider"
+
 const buildWithBlitz = (withPlugins: BlitzPluginWithProvider) => {
   return function withBlitzAppRoot(UserAppRoot: React.ComponentType<AppProps>) {
     const BlitzOuterRoot = (props: AppProps<{dehydratedState: unknown}>) => {
