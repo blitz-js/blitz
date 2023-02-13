@@ -30,7 +30,7 @@ const buildWithBlitz = (withPlugins: BlitzPluginWithProvider) => {
       )
 
       return (
-        <BlitzProvider dehydratedState={props.pageProps?.dehydratedState} children={children} />
+        <BlitzProvider dehydratedState={props.pageProps?.dehydratedState}>{children}</BlitzProvider>
       )
     }
 
