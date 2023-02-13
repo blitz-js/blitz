@@ -135,7 +135,15 @@ Your financial contributions help ensure Blitz continues to be developed and mai
 <table>
   <tr>
     <td align="center"><a href="https://twitter.com/flybayer"><img src="https://avatars3.githubusercontent.com/u/8813276?v=4" width="100px;" alt=""/><br /><sub><b>Brandon Bayer</b></sub></a><br />Creator</td>
-    <td align="center"><a href="http://twitter.com/dillonraphael"><img src="https://avatars.githubusercontent.com/u/3496193?v=4" width="100px;" alt=""/><br /><sub><b>Dillon Raphael</b></sub></a><br />Lead Maintainer</td>
+    <td align="center"><a href="http://twitter.com/dillonraphael"><img src="https://avatars.githubusercontent.com/u/3496193?v=4" width="100px;" alt=""/><br /><sub><b>Dillon Raphael</b></sub></a><br /></td>
+      <td align="center">
+     <a href="https://siddharthsuresh.vercel.app/">
+      <img src="https://avatars.githubusercontent.com/u/83594610?v=4" width="100px;" alt="Siddharth Suresh avatar" /><br />
+        <sub>
+          <b>Siddharth Suresh</b>
+        </sub>
+      </a>
+    </td>
 
   </tr>
 </table>
@@ -155,7 +163,6 @@ _Code ownership, pull request approvals and merging, etc_ (see [Maintainers L2](
   <tr>
     <td align="center"><a href="http://simonknott.de"><img src="https://avatars1.githubusercontent.com/u/14912729?v=4" width="100px;" alt=""/><br /><sub><b>Simon Knott</b></sub></a><br />SuperJSON</td>
     <td align="center"><a href="http://jins.dev"><img src="https://avatars.githubusercontent.com/u/39466936?v=4" width="100px;" alt=""/><br /><sub><b>JH.Lee</b></sub></a><br />SuperJSON</td>
-    <td align="center"><a href="https://juanm04.com"><img src="https://avatars0.githubusercontent.com/u/16712703?v=4" width="100px;" alt=""/><br /><sub><b>Juan Martín Seery</b></sub></a><br />Website/Docs</td>
   </tr>
 </table>
 <!-- markdownlint-enable -->
@@ -173,38 +180,6 @@ _Issue triage, pull request triage, community encouragement and moderation, etc_
 <table>
   <tr>
     <td align="center"><a href="http://jeremyliberman.com/"><img src="https://avatars3.githubusercontent.com/u/2754163?v=4" width="100px;" alt=""/><br /><sub><b>Jeremy Liberman</b></td>
-     <td align="center">
-       <a href="https://mina.ca">
-        <img src="https://avatars.githubusercontent.com/mabadir" width="100px;" alt="Mina Abadir avatar" /><br />
-          <sub>
-            <b>Mina Abadir</b>
-          </sub>
-      </a>
-    </td>
-     <td align="center">
-       <a href="https://builtforfifty.com">
-        <img src="https://avatars.githubusercontent.com/abuuzayr" width="100px;" alt="Abu Uzayr avatar" /><br />
-          <sub>
-            <b>Abu Uzayr</b>
-          </sub>
-      </a>
-    </td>
-    <td align="center">
-     <a href="https://damilolarandolph.com/">
-      <img src="https://avatars.githubusercontent.com/damilolarandolph" width="100px;" alt="Damilola Randolph avatar" /><br />
-        <sub>
-          <b>Damilola Randolph</b>
-        </sub>
-      </a>
-    </td>
-      <td align="center">
-     <a href="https://siddharthsuresh.vercel.app/">
-      <img src="https://avatars.githubusercontent.com/u/83594610?v=4" width="100px;" alt="Siddharth Suresh avatar" /><br />
-        <sub>
-          <b>Siddharth Suresh</b>
-        </sub>
-      </a>
-    </td>
   </tr>
 </table>
 <!-- markdownlint-enable -->

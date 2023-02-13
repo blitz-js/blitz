@@ -10,13 +10,9 @@ import { useMutation } from "@blitzjs/rpc"
 import Link from "next/link"
 
 const ResetPasswordPage: BlitzPage = () => {
-  const [token, setToken] = useState("")
   const router = useRouter()
+  const token = router.query.token?.toString()
   const [resetPasswordMutation, { isSuccess }] = useMutation(resetPassword)
-
-  useEffect(() => {
-    setToken(router.query.token as string)
-  }, [router.isReady])
 
   return (
     <div>
@@ -40,7 +36,7 @@ const ResetPasswordPage: BlitzPage = () => {
           }}
           onSubmit={async (values) => {
             try {
-              await resetPasswordMutation({...values, token})
+              await resetPasswordMutation({ ...values, token })
             } catch (error: any) {
               if (error.name === "ResetPasswordError") {
                 return {
