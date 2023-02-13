@@ -42,7 +42,7 @@ importers:
       "@hookform/error-message": 2.0.0
       "@hookform/resolvers": 2.9.10
       "@next/bundle-analyzer": 12.0.8
-      "@prisma/client": 4.6.0
+      "@prisma/client": 4.6.1
       "@testing-library/jest-dom": 5.16.5
       "@testing-library/react": 13.4.0
       "@testing-library/react-hooks": 8.0.1
@@ -51,7 +51,7 @@ importers:
       "@types/react": 18.0.25
       "@typescript-eslint/eslint-plugin": 5.42.1
       "@vitejs/plugin-react": 2.2.0
-      blitz: workspace:2.0.0-beta.22
+      blitz: workspace:2.0.0-beta.23
       eslint: 8.27.0
       eslint-config-next: 12.3.1
       eslint-config-prettier: 8.5.0
@@ -64,7 +64,7 @@ importers:
       prettier-plugin-prisma: 4.4.0
       pretty-quick: 3.1.3
       preview-email: 3.0.7
-      prisma: 4.6.0
+      prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0
       react-hook-form: 7.39.1
@@ -80,11 +80,11 @@ importers:
       "@blitzjs/rpc": link:../../packages/blitz-rpc
       "@hookform/error-message": 2.0.0_uitc6c22ofsl6jhrdjqyu3was4
       "@hookform/resolvers": 2.9.10_react-hook-form@7.39.1
-      "@prisma/client": 4.6.0_prisma@4.6.0
+      "@prisma/client": 4.6.1_prisma@4.6.1
       blitz: link:../../packages/blitz
       next: 12.2.5_biqbaboplfbrettd7655fr4n2y
       next-auth: 4.18.7_3xcjr4wz26biff45sz3jtokgje
-      prisma: 4.6.0
+      prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       react-hook-form: 7.39.1_react@18.2.0
@@ -123,7 +123,7 @@ importers:
       "@hookform/error-message": 2.0.0
       "@hookform/resolvers": 2.9.10
       "@next/bundle-analyzer": 12.0.8
-      "@prisma/client": 4.6.0
+      "@prisma/client": 4.6.1
       "@testing-library/react": 13.4.0
       "@testing-library/react-hooks": 8.0.1
       "@types/jest": 29.2.2
@@ -131,7 +131,7 @@ importers:
       "@types/preview-email": 2.0.1
       "@types/react": 18.0.25
       "@typescript-eslint/eslint-plugin": 5.42.1
-      blitz: workspace:2.0.0-beta.22
+      blitz: workspace:2.0.0-beta.23
       eslint: 8.27.0
       eslint-config-next: 12.3.1
       eslint-config-prettier: 8.5.0
@@ -145,7 +145,7 @@ importers:
       prettier-plugin-prisma: 4.4.0
       pretty-quick: 3.1.3
       preview-email: 3.0.7
-      prisma: 4.6.0
+      prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0
       react-hook-form: 7.39.1
@@ -159,11 +159,11 @@ importers:
       "@blitzjs/rpc": link:../../packages/blitz-rpc
       "@hookform/error-message": 2.0.0_uitc6c22ofsl6jhrdjqyu3was4
       "@hookform/resolvers": 2.9.10_react-hook-form@7.39.1
-      "@prisma/client": 4.6.0_prisma@4.6.0
+      "@prisma/client": 4.6.1_prisma@4.6.1
       blitz: link:../../packages/blitz
       next: 12.2.5_biqbaboplfbrettd7655fr4n2y
       openid-client: 5.2.1
-      prisma: 4.6.0
+      prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       react-hook-form: 7.39.1_react@18.2.0
@@ -198,7 +198,7 @@ importers:
       "@blitzjs/next": workspace:*
       "@blitzjs/rpc": workspace:*
       "@next/bundle-analyzer": 12.0.8
-      "@prisma/client": 4.6.0
+      "@prisma/client": 4.6.1
       "@types/jest": 29.2.2
       "@types/passport-twitter": 1.0.37
       "@types/react": 18.0.25
@@ -209,7 +209,7 @@ importers:
       next: 12.2.5
       passport-mock-strategy: 2.0.0
       passport-twitter: 1.0.4
-      prisma: 4.6.0
+      prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0
       ts-node: 10.9.1
@@ -219,7 +219,7 @@ importers:
       "@blitzjs/config": link:../../packages/config
       "@blitzjs/next": link:../../packages/blitz-next
       "@blitzjs/rpc": link:../../packages/blitz-rpc
-      "@prisma/client": 4.6.0_prisma@4.6.0
+      "@prisma/client": 4.6.1_prisma@4.6.1
       "@types/jest": 29.2.2
       "@types/passport-twitter": 1.0.37
       blitz: link:../../packages/blitz
@@ -228,7 +228,7 @@ importers:
       next: 12.2.5_biqbaboplfbrettd7655fr4n2y
       passport-mock-strategy: 2.0.0
       passport-twitter: 1.0.4
-      prisma: 4.6.0
+      prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       ts-node: 10.9.1_typescript@4.8.4
@@ -240,25 +240,25 @@ importers:
 
   integration-tests/auth:
     specifiers:
-      "@blitzjs/auth": workspace:2.0.0-beta.22
-      "@blitzjs/config": workspace:2.0.0-beta.22
-      "@blitzjs/next": workspace:2.0.0-beta.22
+      "@blitzjs/auth": workspace:2.0.0-beta.23
+      "@blitzjs/config": workspace:2.0.0-beta.23
+      "@blitzjs/next": workspace:2.0.0-beta.23
       "@next/bundle-analyzer": 12.0.8
-      "@prisma/client": 4.6.0
+      "@prisma/client": 4.6.1
       "@types/express": 4.17.13
       "@types/fs-extra": 9.0.13
       "@types/node": 18.7.13
       "@types/node-fetch": 2.6.1
       "@types/react": 18.0.25
       b64-lite: 1.4.0
-      blitz: workspace:2.0.0-beta.22
+      blitz: workspace:2.0.0-beta.23
       eslint: 8.27.0
       fs-extra: 10.0.1
       get-port: 6.1.2
       lowdb: 3.0.0
       next: 12.2.5
       node-fetch: 3.2.3
-      prisma: 4.6.0
+      prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0
       ts-node: 10.9.1
@@ -267,11 +267,11 @@ importers:
       "@blitzjs/auth": link:../../packages/blitz-auth
       "@blitzjs/config": link:../../packages/config
       "@blitzjs/next": link:../../packages/blitz-next
-      "@prisma/client": 4.6.0_prisma@4.6.0
+      "@prisma/client": 4.6.1_prisma@4.6.1
       blitz: link:../../packages/blitz
       lowdb: 3.0.0
       next: 12.2.5_biqbaboplfbrettd7655fr4n2y
-      prisma: 4.6.0
+      prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
     devDependencies:
@@ -291,14 +291,14 @@ importers:
 
   integration-tests/auth-with-rpc:
     specifiers:
-      "@blitzjs/auth": workspace:2.0.0-beta.22
-      "@blitzjs/config": workspace:2.0.0-beta.22
-      "@blitzjs/next": workspace:2.0.0-beta.22
-      "@blitzjs/rpc": workspace:2.0.0-beta.22
+      "@blitzjs/auth": workspace:2.0.0-beta.23
+      "@blitzjs/config": workspace:2.0.0-beta.23
+      "@blitzjs/next": workspace:2.0.0-beta.23
+      "@blitzjs/rpc": workspace:2.0.0-beta.23
       "@hookform/error-message": 2.0.0
       "@hookform/resolvers": 2.9.10
       "@next/bundle-analyzer": 12.0.8
-      "@prisma/client": 4.6.0
+      "@prisma/client": 4.6.1
       "@testing-library/jest-dom": 5.16.5
       "@testing-library/react": 13.4.0
       "@testing-library/react-hooks": 8.0.1
@@ -307,7 +307,7 @@ importers:
       "@types/react": 18.0.25
       "@typescript-eslint/eslint-plugin": 5.42.1
       "@vitejs/plugin-react": 2.2.0
-      blitz: workspace:2.0.0-beta.22
+      blitz: workspace:2.0.0-beta.23
       delay: 5.0.0
       eslint: 8.27.0
       eslint-config-next: 12.3.1
@@ -321,7 +321,7 @@ importers:
       prettier-plugin-prisma: 4.4.0
       pretty-quick: 3.1.3
       preview-email: 3.0.7
-      prisma: 4.6.0
+      prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0
       react-hook-form: 7.39.1
@@ -337,11 +337,11 @@ importers:
       "@blitzjs/rpc": link:../../packages/blitz-rpc
       "@hookform/error-message": 2.0.0_uitc6c22ofsl6jhrdjqyu3was4
       "@hookform/resolvers": 2.9.10_react-hook-form@7.39.1
-      "@prisma/client": 4.6.0_prisma@4.6.0
+      "@prisma/client": 4.6.1_prisma@4.6.1
       blitz: link:../../packages/blitz
       delay: 5.0.0
       next: 12.2.5_biqbaboplfbrettd7655fr4n2y
-      prisma: 4.6.0
+      prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       react-hook-form: 7.39.1_react@18.2.0
@@ -374,25 +374,25 @@ importers:
 
   integration-tests/get-initial-props:
     specifiers:
-      "@blitzjs/auth": workspace:2.0.0-beta.22
-      "@blitzjs/config": workspace:2.0.0-beta.22
-      "@blitzjs/next": workspace:2.0.0-beta.22
-      "@blitzjs/rpc": workspace:2.0.0-beta.22
+      "@blitzjs/auth": workspace:2.0.0-beta.23
+      "@blitzjs/config": workspace:2.0.0-beta.23
+      "@blitzjs/next": workspace:2.0.0-beta.23
+      "@blitzjs/rpc": workspace:2.0.0-beta.23
       "@next/bundle-analyzer": 12.0.8
-      "@prisma/client": 4.6.0
+      "@prisma/client": 4.6.1
       "@types/express": 4.17.13
       "@types/fs-extra": 9.0.13
       "@types/node-fetch": 2.6.1
       "@types/react": 18.0.25
       b64-lite: 1.4.0
-      blitz: workspace:2.0.0-beta.22
+      blitz: workspace:2.0.0-beta.23
       eslint: 8.27.0
       fs-extra: 10.0.1
       get-port: 6.1.2
       lowdb: 3.0.0
       next: 12.2.5
       node-fetch: 3.2.3
-      prisma: 4.6.0
+      prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0
       typescript: ^4.8.4
@@ -400,11 +400,11 @@ importers:
       "@blitzjs/auth": link:../../packages/blitz-auth
       "@blitzjs/next": link:../../packages/blitz-next
       "@blitzjs/rpc": link:../../packages/blitz-rpc
-      "@prisma/client": 4.6.0_prisma@4.6.0
+      "@prisma/client": 4.6.1_prisma@4.6.1
       blitz: link:../../packages/blitz
       lowdb: 3.0.0
       next: 12.2.5_biqbaboplfbrettd7655fr4n2y
-      prisma: 4.6.0
+      prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
     devDependencies:
@@ -423,15 +423,15 @@ importers:
 
   integration-tests/middleware:
     specifiers:
-      "@blitzjs/config": workspace:2.0.0-beta.22
-      "@blitzjs/next": workspace:2.0.0-beta.22
-      "@blitzjs/rpc": workspace:2.0.0-beta.22
+      "@blitzjs/config": workspace:2.0.0-beta.23
+      "@blitzjs/next": workspace:2.0.0-beta.23
+      "@blitzjs/rpc": workspace:2.0.0-beta.23
       "@next/bundle-analyzer": 12.0.8
       "@types/express": 4.17.13
       "@types/fs-extra": 9.0.13
       "@types/node-fetch": 2.6.1
       "@types/react": 18.0.25
-      blitz: workspace:2.0.0-beta.22
+      blitz: workspace:2.0.0-beta.23
       eslint: 8.27.0
       fs-extra: 10.0.1
       get-port: 6.1.2
@@ -462,25 +462,25 @@ importers:
 
   integration-tests/no-suspense:
     specifiers:
-      "@blitzjs/auth": workspace:2.0.0-beta.22
-      "@blitzjs/config": workspace:2.0.0-beta.22
-      "@blitzjs/next": workspace:2.0.0-beta.22
-      "@blitzjs/rpc": workspace:2.0.0-beta.22
+      "@blitzjs/auth": workspace:2.0.0-beta.23
+      "@blitzjs/config": workspace:2.0.0-beta.23
+      "@blitzjs/next": workspace:2.0.0-beta.23
+      "@blitzjs/rpc": workspace:2.0.0-beta.23
       "@next/bundle-analyzer": 12.0.8
-      "@prisma/client": 4.6.0
+      "@prisma/client": 4.6.1
       "@types/express": 4.17.13
       "@types/fs-extra": 9.0.13
       "@types/node-fetch": 2.6.1
       "@types/react": 18.0.25
       b64-lite: 1.4.0
-      blitz: workspace:2.0.0-beta.22
+      blitz: workspace:2.0.0-beta.23
       eslint: 8.27.0
       fs-extra: 10.0.1
       get-port: 6.1.2
       lowdb: 3.0.0
       next: 12.2.5
       node-fetch: 3.2.3
-      prisma: 4.6.0
+      prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0
       typescript: ^4.8.4
@@ -488,11 +488,11 @@ importers:
       "@blitzjs/auth": link:../../packages/blitz-auth
       "@blitzjs/next": link:../../packages/blitz-next
       "@blitzjs/rpc": link:../../packages/blitz-rpc
-      "@prisma/client": 4.6.0_prisma@4.6.0
+      "@prisma/client": 4.6.1_prisma@4.6.1
       blitz: link:../../packages/blitz
       lowdb: 3.0.0
       next: 12.2.5_biqbaboplfbrettd7655fr4n2y
-      prisma: 4.6.0
+      prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
     devDependencies:
@@ -511,23 +511,23 @@ importers:
 
   integration-tests/qm:
     specifiers:
-      "@blitzjs/auth": workspace:2.0.0-beta.22
-      "@blitzjs/config": workspace:2.0.0-beta.22
-      "@blitzjs/next": workspace:2.0.0-beta.22
-      "@blitzjs/rpc": workspace:2.0.0-beta.22
-      "@prisma/client": 4.6.0
+      "@blitzjs/auth": workspace:2.0.0-beta.23
+      "@blitzjs/config": workspace:2.0.0-beta.23
+      "@blitzjs/next": workspace:2.0.0-beta.23
+      "@blitzjs/rpc": workspace:2.0.0-beta.23
+      "@prisma/client": 4.6.1
       "@tanstack/react-query": 4.0.10
       "@testing-library/react": 13.4.0
       "@types/react": 18.0.25
       "@vitejs/plugin-react": 1.3.0
-      blitz: workspace:2.0.0-beta.22
+      blitz: workspace:2.0.0-beta.23
       delay: 5.0.0
       eslint: 8.27.0
       eslint-config-next: latest
       eslint-plugin-testing-library: 5.0.1
       jsdom: ^19.0.0
       next: 12.2.5
-      prisma: 4.6.0
+      prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0
       typescript: ^4.8.4
@@ -536,11 +536,11 @@ importers:
       "@blitzjs/config": link:../../packages/config
       "@blitzjs/next": link:../../packages/blitz-next
       "@blitzjs/rpc": link:../../packages/blitz-rpc
-      "@prisma/client": 4.6.0_prisma@4.6.0
+      "@prisma/client": 4.6.1_prisma@4.6.1
       "@tanstack/react-query": 4.0.10_biqbaboplfbrettd7655fr4n2y
       blitz: link:../../packages/blitz
       next: 12.2.5_biqbaboplfbrettd7655fr4n2y
-      prisma: 4.6.0
+      prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
     devDependencies:
@@ -556,35 +556,35 @@ importers:
 
   integration-tests/react-query-utils:
     specifiers:
-      "@blitzjs/config": workspace:2.0.0-beta.22
-      "@blitzjs/next": workspace:2.0.0-beta.22
-      "@blitzjs/rpc": workspace:2.0.0-beta.22
+      "@blitzjs/config": workspace:2.0.0-beta.23
+      "@blitzjs/next": workspace:2.0.0-beta.23
+      "@blitzjs/rpc": workspace:2.0.0-beta.23
       "@next/bundle-analyzer": 12.0.8
-      "@prisma/client": 4.6.0
+      "@prisma/client": 4.6.1
       "@types/express": 4.17.13
       "@types/fs-extra": 9.0.13
       "@types/node-fetch": 2.6.1
       "@types/react": 18.0.25
       b64-lite: 1.4.0
-      blitz: workspace:2.0.0-beta.22
+      blitz: workspace:2.0.0-beta.23
       eslint: 8.27.0
       fs-extra: 10.0.1
       get-port: 6.1.2
       lowdb: 3.0.0
       next: 12.2.5
       node-fetch: 3.2.3
-      prisma: 4.6.0
+      prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0
       typescript: ^4.8.4
     dependencies:
       "@blitzjs/next": link:../../packages/blitz-next
       "@blitzjs/rpc": link:../../packages/blitz-rpc
-      "@prisma/client": 4.6.0_prisma@4.6.0
+      "@prisma/client": 4.6.1_prisma@4.6.1
       blitz: link:../../packages/blitz
       lowdb: 3.0.0
       next: 12.2.5_biqbaboplfbrettd7655fr4n2y
-      prisma: 4.6.0
+      prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
     devDependencies:
@@ -603,15 +603,15 @@ importers:
 
   integration-tests/rpc:
     specifiers:
-      "@blitzjs/config": workspace:2.0.0-beta.22
-      "@blitzjs/next": workspace:2.0.0-beta.22
-      "@blitzjs/rpc": workspace:2.0.0-beta.22
+      "@blitzjs/config": workspace:2.0.0-beta.23
+      "@blitzjs/next": workspace:2.0.0-beta.23
+      "@blitzjs/rpc": workspace:2.0.0-beta.23
       "@types/express": 4.17.13
       "@types/fs-extra": 9.0.13
       "@types/node-fetch": 2.6.1
       "@types/react": 18.0.25
       b64-lite: 1.4.0
-      blitz: workspace:2.0.0-beta.22
+      blitz: workspace:2.0.0-beta.23
       eslint: 8.27.0
       fs-extra: 10.0.1
       next: 12.2.5
@@ -638,15 +638,15 @@ importers:
 
   integration-tests/rpc-path-root:
     specifiers:
-      "@blitzjs/config": workspace:2.0.0-beta.22
-      "@blitzjs/next": workspace:2.0.0-beta.22
-      "@blitzjs/rpc": workspace:2.0.0-beta.22
+      "@blitzjs/config": workspace:2.0.0-beta.23
+      "@blitzjs/next": workspace:2.0.0-beta.23
+      "@blitzjs/rpc": workspace:2.0.0-beta.23
       "@types/express": 4.17.13
       "@types/fs-extra": 9.0.13
       "@types/node-fetch": 2.6.1
       "@types/react": 18.0.25
       b64-lite: 1.4.0
-      blitz: workspace:2.0.0-beta.22
+      blitz: workspace:2.0.0-beta.23
       eslint: 8.27.0
       fs-extra: 10.0.1
       next: 12.2.5
@@ -673,25 +673,25 @@ importers:
 
   integration-tests/trailing-slash:
     specifiers:
-      "@blitzjs/auth": workspace:2.0.0-beta.22
-      "@blitzjs/config": workspace:2.0.0-beta.22
-      "@blitzjs/next": workspace:2.0.0-beta.22
-      "@blitzjs/rpc": workspace:2.0.0-beta.22
+      "@blitzjs/auth": workspace:2.0.0-beta.23
+      "@blitzjs/config": workspace:2.0.0-beta.23
+      "@blitzjs/next": workspace:2.0.0-beta.23
+      "@blitzjs/rpc": workspace:2.0.0-beta.23
       "@next/bundle-analyzer": 12.0.8
-      "@prisma/client": 4.6.0
+      "@prisma/client": 4.6.1
       "@types/express": 4.17.13
       "@types/fs-extra": 9.0.13
       "@types/node-fetch": 2.6.1
       "@types/react": 18.0.25
       b64-lite: 1.4.0
-      blitz: workspace:2.0.0-beta.22
+      blitz: workspace:2.0.0-beta.23
       eslint: 8.27.0
       fs-extra: 10.0.1
       get-port: 6.1.2
       lowdb: 3.0.0
       next: 12.2.5
       node-fetch: 3.2.3
-      prisma: 4.6.0
+      prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0
       typescript: ^4.8.4
@@ -699,11 +699,11 @@ importers:
       "@blitzjs/auth": link:../../packages/blitz-auth
       "@blitzjs/next": link:../../packages/blitz-next
       "@blitzjs/rpc": link:../../packages/blitz-rpc
-      "@prisma/client": 4.6.0_prisma@4.6.0
+      "@prisma/client": 4.6.1_prisma@4.6.1
       blitz: link:../../packages/blitz
       lowdb: 3.0.0
       next: 12.2.5_biqbaboplfbrettd7655fr4n2y
-      prisma: 4.6.0
+      prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
     devDependencies:
@@ -780,8 +780,8 @@ importers:
 
   packages/blitz:
     specifiers:
-      "@blitzjs/config": workspace:2.0.0-beta.22
-      "@blitzjs/generator": 2.0.0-beta.22
+      "@blitzjs/config": workspace:2.0.0-beta.23
+      "@blitzjs/generator": 2.0.0-beta.23
       "@mrleebo/prisma-ast": 0.2.6
       "@types/cookie": 0.4.1
       "@types/cross-spawn": 6.0.2
@@ -929,7 +929,7 @@ importers:
 
   packages/blitz-auth:
     specifiers:
-      "@blitzjs/config": workspace:2.0.0-beta.22
+      "@blitzjs/config": workspace:2.0.0-beta.23
       "@testing-library/react": 13.4.0
       "@testing-library/react-hooks": 8.0.1
       "@types/b64-lite": 1.3.0
@@ -944,17 +944,17 @@ importers:
       "@types/secure-password": 3.1.1
       b64-lite: 1.4.0
       bad-behavior: 1.0.1
-      blitz: 2.0.0-beta.22
+      blitz: 2.0.0-beta.23
       cookie: 0.4.1
       cookie-session: 2.0.0
       debug: 4.3.3
       http: 0.0.1-security
-      jsonwebtoken: 8.5.1
+      jsonwebtoken: 9.0.0
       nanoid: 3.2.0
       next-auth: 4.18.7
       oauth: 0.10.0
       openid-client: 5.2.1
-      passport: 0.5.2
+      passport: 0.6.0
       path: 0.12.7
       react: 18.2.0
       react-dom: 18.2.0
@@ -976,11 +976,11 @@ importers:
       cookie-session: 2.0.0_supports-color@8.1.1
       debug: 4.3.3_supports-color@8.1.1
       http: 0.0.1-security
-      jsonwebtoken: 8.5.1
+      jsonwebtoken: 9.0.0
       nanoid: 3.2.0
       oauth: 0.10.0
       openid-client: 5.2.1
-      passport: 0.5.2
+      passport: 0.6.0
       path: 0.12.7
       supports-color: 8.1.1
       url: 0.11.0
@@ -1004,8 +1004,8 @@ importers:
 
   packages/blitz-next:
     specifiers:
-      "@blitzjs/config": workspace:2.0.0-beta.22
-      "@blitzjs/rpc": 2.0.0-beta.22
+      "@blitzjs/config": workspace:2.0.0-beta.23
+      "@blitzjs/rpc": 2.0.0-beta.23
       "@tanstack/react-query": 4.0.10
       "@testing-library/dom": 8.13.0
       "@testing-library/jest-dom": 5.16.3
@@ -1017,7 +1017,7 @@ importers:
       "@types/react": 18.0.25
       "@types/react-dom": 17.0.14
       "@types/testing-library__react-hooks": 4.0.0
-      blitz: 2.0.0-beta.22
+      blitz: 2.0.0-beta.23
       cross-spawn: 7.0.3
       debug: 4.3.3
       find-up: 4.1.0
@@ -1067,8 +1067,8 @@ importers:
 
   packages/blitz-rpc:
     specifiers:
-      "@blitzjs/auth": 2.0.0-beta.22
-      "@blitzjs/config": workspace:2.0.0-beta.22
+      "@blitzjs/auth": 2.0.0-beta.23
+      "@blitzjs/config": workspace:2.0.0-beta.23
       "@swc/core": 1.3.7
       "@tanstack/react-query": 4.0.10
       "@types/debug": 4.1.7
@@ -1076,7 +1076,7 @@ importers:
       "@types/react-dom": 17.0.14
       b64-lite: 1.4.0
       bad-behavior: 1.0.1
-      blitz: 2.0.0-beta.22
+      blitz: 2.0.0-beta.23
       chalk: ^4.1.0
       debug: 4.3.3
       next: 12.2.5
@@ -1120,12 +1120,12 @@ importers:
       "@babel/plugin-syntax-typescript": 7.17.12
       "@babel/preset-env": 7.12.10
       "@blitzjs/config": workspace:*
-      "@blitzjs/generator": 2.0.0-beta.22
+      "@blitzjs/generator": 2.0.0-beta.23
       "@types/jscodeshift": 0.11.2
       "@types/node": 18.11.9
       arg: 5.0.1
       ast-types: 0.14.2
-      blitz: 2.0.0-beta.22
+      blitz: 2.0.0-beta.23
       chalk: ^4.1.0
       cross-spawn: 7.0.3
       debug: 4.3.3
@@ -1180,7 +1180,7 @@ importers:
       "@babel/plugin-transform-typescript": 7.12.1
       "@babel/preset-env": 7.12.10
       "@babel/types": 7.12.10
-      "@blitzjs/config": 2.0.0-beta.22
+      "@blitzjs/config": 2.0.0-beta.23
       "@juanm04/cpx": 2.0.1
       "@mrleebo/prisma-ast": 0.4.1
       "@types/babel__core": 7.1.19
@@ -1275,7 +1275,7 @@ importers:
 
   packages/pkg-template:
     specifiers:
-      "@blitzjs/config": 2.0.0-beta.22
+      "@blitzjs/config": 2.0.0-beta.23
       "@types/react": 18.0.25
       "@types/react-dom": 17.0.14
       "@typescript-eslint/eslint-plugin": 5.42.1
@@ -1299,7 +1299,7 @@ importers:
   recipes/base-web:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: 2.0.0-beta.22
+      blitz: 2.0.0-beta.23
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1310,7 +1310,7 @@ importers:
   recipes/bulma:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: 2.0.0-beta.22
+      blitz: 2.0.0-beta.23
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1322,7 +1322,7 @@ importers:
     specifiers:
       "@types/jscodeshift": 0.11.2
       ast-types: 0.14.2
-      blitz: 2.0.0-beta.22
+      blitz: 2.0.0-beta.23
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1335,7 +1335,7 @@ importers:
     specifiers:
       "@types/jscodeshift": 0.11.2
       ast-types: 0.14.2
-      blitz: 2.0.0-beta.22
+      blitz: 2.0.0-beta.23
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1347,7 +1347,7 @@ importers:
   recipes/emotion:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: 2.0.0-beta.22
+      blitz: 2.0.0-beta.23
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1357,20 +1357,20 @@ importers:
 
   recipes/gh-action-yarn-mariadb:
     specifiers:
-      blitz: 2.0.0-beta.22
+      blitz: 2.0.0-beta.23
     dependencies:
       blitz: link:../../packages/blitz
 
   recipes/gh-action-yarn-postgres:
     specifiers:
-      blitz: 2.0.0-beta.22
+      blitz: 2.0.0-beta.23
     dependencies:
       blitz: link:../../packages/blitz
 
   recipes/ghost:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: 2.0.0-beta.22
+      blitz: 2.0.0-beta.23
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1381,7 +1381,7 @@ importers:
   recipes/graphql-apollo-server:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: 2.0.0-beta.22
+      blitz: 2.0.0-beta.23
       jscodeshift: 0.13.0
       uuid: ^8.3.1
     dependencies:
@@ -1394,7 +1394,7 @@ importers:
   recipes/logrocket:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: 2.0.0-beta.22
+      blitz: 2.0.0-beta.23
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1405,7 +1405,7 @@ importers:
   recipes/material-ui:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: 2.0.0-beta.22
+      blitz: 2.0.0-beta.23
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1417,7 +1417,7 @@ importers:
     specifiers:
       "@types/jscodeshift": 0.11.2
       ast-types: 0.14.2
-      blitz: 2.0.0-beta.22
+      blitz: 2.0.0-beta.23
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1428,13 +1428,13 @@ importers:
 
   recipes/passenger:
     specifiers:
-      blitz: 2.0.0-beta.22
+      blitz: 2.0.0-beta.23
     dependencies:
       blitz: link:../../packages/blitz
 
   recipes/quirrel:
     specifiers:
-      blitz: 2.0.0-beta.22
+      blitz: 2.0.0-beta.23
     dependencies:
       blitz: link:../../packages/blitz
 
@@ -1442,7 +1442,7 @@ importers:
     specifiers:
       "@types/jscodeshift": 0.11.2
       ast-types: 0.14.2
-      blitz: 2.0.0-beta.22
+      blitz: 2.0.0-beta.23
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1453,14 +1453,14 @@ importers:
 
   recipes/render:
     specifiers:
-      blitz: 2.0.0-beta.22
+      blitz: 2.0.0-beta.23
     dependencies:
       blitz: link:../../packages/blitz
 
   recipes/secureheaders:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: 2.0.0-beta.22
+      blitz: 2.0.0-beta.23
       jscodeshift: 0.13.0
       uuid: ^8.3.1
     dependencies:
@@ -1473,7 +1473,7 @@ importers:
   recipes/stitches:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: 2.0.0-beta.22
+      blitz: 2.0.0-beta.23
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1485,7 +1485,7 @@ importers:
     specifiers:
       "@types/jscodeshift": 0.11.2
       ast-types: 0.14.2
-      blitz: 2.0.0-beta.22
+      blitz: 2.0.0-beta.23
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1497,7 +1497,7 @@ importers:
   recipes/tailwind:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: 2.0.0-beta.22
+      blitz: 2.0.0-beta.23
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1509,7 +1509,7 @@ importers:
     specifiers:
       "@types/jscodeshift": 0.11.2
       ast-types: 0.14.2
-      blitz: 2.0.0-beta.22
+      blitz: 2.0.0-beta.23
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1521,7 +1521,7 @@ importers:
   recipes/vanilla-extract:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: 2.0.0-beta.22
+      blitz: 2.0.0-beta.23
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1650,7 +1650,7 @@ packages:
       "@babel/traverse": 7.18.2
       "@babel/types": 7.18.4
       convert-source-map: 1.8.0
-      debug: 4.3.4
+      debug: 4.3.3
       gensync: 1.0.0-beta.2
       json5: 2.2.1
       semver: 6.3.0
@@ -1675,7 +1675,7 @@ packages:
       "@babel/traverse": 7.18.2_supports-color@8.1.1
       "@babel/types": 7.18.4
       convert-source-map: 1.8.0
-      debug: 4.3.4_supports-color@8.1.1
+      debug: 4.3.3_supports-color@8.1.1
       gensync: 1.0.0-beta.2
       json5: 2.2.1
       semver: 6.3.0
@@ -1700,7 +1700,7 @@ packages:
       "@babel/traverse": 7.20.1
       "@babel/types": 7.20.2
       convert-source-map: 1.8.0
-      debug: 4.3.4
+      debug: 4.3.3
       gensync: 1.0.0-beta.2
       json5: 2.2.1
       semver: 6.3.0
@@ -4102,7 +4102,7 @@ packages:
       "@babel/helper-split-export-declaration": 7.16.7
       "@babel/parser": 7.18.4
       "@babel/types": 7.18.4
-      debug: 4.3.4
+      debug: 4.3.3
       globals: 11.12.0
     transitivePeerDependencies:
       - supports-color
@@ -4122,7 +4122,7 @@ packages:
       "@babel/helper-split-export-declaration": 7.16.7
       "@babel/parser": 7.18.4
       "@babel/types": 7.18.4
-      debug: 4.3.4_supports-color@8.1.1
+      debug: 4.3.3_supports-color@8.1.1
       globals: 11.12.0
     transitivePeerDependencies:
       - supports-color
@@ -4142,7 +4142,7 @@ packages:
       "@babel/helper-split-export-declaration": 7.18.6
       "@babel/parser": 7.20.3
       "@babel/types": 7.20.2
-      debug: 4.3.4
+      debug: 4.3.3
       globals: 11.12.0
     transitivePeerDependencies:
       - supports-color
@@ -4521,7 +4521,7 @@ packages:
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dependencies:
       ajv: 6.12.6
-      debug: 4.3.4
+      debug: 4.3.3
       espree: 9.4.1
       globals: 13.15.0
       ignore: 5.2.0
@@ -4540,7 +4540,7 @@ packages:
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dependencies:
       ajv: 6.12.6
-      debug: 4.3.4_supports-color@8.1.1
+      debug: 4.3.3_supports-color@8.1.1
       espree: 9.4.1
       globals: 13.15.0
       ignore: 5.2.0
@@ -4602,7 +4602,7 @@ packages:
     engines: {node: ">=10.10.0"}
     dependencies:
       "@humanwhocodes/object-schema": 1.2.1
-      debug: 4.3.4
+      debug: 4.3.3
       minimatch: 3.1.2
     transitivePeerDependencies:
       - supports-color
@@ -4615,7 +4615,7 @@ packages:
     engines: {node: ">=10.10.0"}
     dependencies:
       "@humanwhocodes/object-schema": 1.2.1
-      debug: 4.3.4_supports-color@8.1.1
+      debug: 4.3.3_supports-color@8.1.1
       minimatch: 3.1.2
     transitivePeerDependencies:
       - supports-color
@@ -5316,10 +5316,10 @@ packages:
       }
     dev: true
 
-  /@prisma/client/4.6.0_prisma@4.6.0:
+  /@prisma/client/4.6.1_prisma@4.6.1:
     resolution:
       {
-        integrity: sha512-D9LaQinDxOHinRpcJTw2tjMtjhc9HTP+aF1IRd2oLldp/8TiwIfxK8x17OhBBiX4y1PzbJXXET7kS+5wB3es/w==,
+        integrity: sha512-M1+NNrMzqaOIxT7PBGcTs3IZo7d1EW/+gVQd4C4gUgWBDGgD9AcIeZnUSidgWClmpMSgVUdnVORjsWWGUameYA==,
       }
     engines: {node: ">=14.17"}
     requiresBuild: true
@@ -5329,21 +5329,21 @@ packages:
       prisma:
         optional: true
     dependencies:
-      "@prisma/engines-version": 4.6.0-53.2e719efb80b56a3f32d18a62489de95bb9c130e3
-      prisma: 4.6.0
+      "@prisma/engines-version": 4.6.1-3.694eea289a8462c80264df36757e4fdc129b1b32
+      prisma: 4.6.1
     dev: false
 
-  /@prisma/engines-version/4.6.0-53.2e719efb80b56a3f32d18a62489de95bb9c130e3:
+  /@prisma/engines-version/4.6.1-3.694eea289a8462c80264df36757e4fdc129b1b32:
     resolution:
       {
-        integrity: sha512-0CTnfEuUbLlO6n1fM89ERDbSwI4LoyZn+1OKVSwG+aVqohj34+mXRfwOWIM0ONtYtLGGBpddvQAnAZkg+cgS6g==,
+        integrity: sha512-HUCmkXAU2jqp2O1RvNtbE+seLGLyJGEABZS/R38rZjSAafAy0WzBuHq+tbZMnD+b5OSCsTVtIPVcuvx1ySxcWQ==,
       }
     dev: false
 
-  /@prisma/engines/4.6.0:
+  /@prisma/engines/4.6.1:
     resolution:
       {
-        integrity: sha512-S+72PAl0zTCbIGou1uXD/McvzdtP+bjOs0LRmGZfcOQcVqR9x/0f6Z+dqpUU0zIcqHEl+0DOB8UXaTwRvssFsQ==,
+        integrity: sha512-3u2/XxvxB+Q7cMXHnKU0CpBiUK1QWqpgiBv28YDo1zOIJE3FCF8DI2vrp6vuwjGt5h0JGXDSvmSf4D4maVjJdw==,
       }
     requiresBuild: true
     dev: false
@@ -5401,7 +5401,7 @@ packages:
       glob: 7.2.0
       is-reference: 1.2.1
       magic-string: 0.25.9
-      resolve: 1.22.0
+      resolve: 1.22.1
       rollup: 2.77.2
     dev: true
 
@@ -5431,7 +5431,7 @@ packages:
       deepmerge: 4.2.2
       is-builtin-module: 3.1.0
       is-module: 1.0.0
-      resolve: 1.22.0
+      resolve: 1.22.1
       rollup: 2.77.2
     dev: true
 
@@ -7114,7 +7114,7 @@ packages:
       debug: 4.3.4
       globby: 11.1.0
       is-glob: 4.0.3
-      semver: 7.3.7
+      semver: 7.3.8
       tsutils: 3.21.0_typescript@4.8.4
       typescript: 4.8.4
     transitivePeerDependencies:
@@ -7138,7 +7138,7 @@ packages:
       debug: 4.3.4_supports-color@8.1.1
       globby: 11.1.0
       is-glob: 4.0.3
-      semver: 7.3.7
+      semver: 7.3.8
       tsutils: 3.21.0_typescript@4.8.4
       typescript: 4.8.4
     transitivePeerDependencies:
@@ -7162,7 +7162,7 @@ packages:
       debug: 4.3.4
       globby: 11.1.0
       is-glob: 4.0.3
-      semver: 7.3.7
+      semver: 7.3.8
       tsutils: 3.21.0_typescript@4.8.4
       typescript: 4.8.4
     transitivePeerDependencies:
@@ -7185,7 +7185,7 @@ packages:
       debug: 4.3.4
       globby: 11.1.0
       is-glob: 4.0.3
-      semver: 7.3.7
+      semver: 7.3.8
       tsutils: 3.21.0_typescript@4.8.4
       typescript: 4.8.4
     transitivePeerDependencies:
@@ -7205,10 +7205,10 @@ packages:
     dependencies:
       "@typescript-eslint/types": 5.9.1
       "@typescript-eslint/visitor-keys": 5.9.1
-      debug: 4.3.4_supports-color@8.1.1
+      debug: 4.3.3_supports-color@8.1.1
       globby: 11.1.0
       is-glob: 4.0.3
-      semver: 7.3.7
+      semver: 7.3.8
       tsutils: 3.21.0_typescript@4.8.4
       typescript: 4.8.4
     transitivePeerDependencies:
@@ -7229,10 +7229,10 @@ packages:
     dependencies:
       "@typescript-eslint/types": 5.9.1
       "@typescript-eslint/visitor-keys": 5.9.1
-      debug: 4.3.4
+      debug: 4.3.3
       globby: 11.1.0
       is-glob: 4.0.3
-      semver: 7.3.7
+      semver: 7.3.8
       tsutils: 3.21.0_typescript@4.8.4
       typescript: 4.8.4
     transitivePeerDependencies:
@@ -7277,7 +7277,7 @@ packages:
       eslint: 8.27.0_supports-color@8.1.1
       eslint-scope: 5.1.1
       eslint-utils: 3.0.0_eslint@8.27.0
-      semver: 7.3.7
+      semver: 7.3.8
     transitivePeerDependencies:
       - supports-color
       - typescript
@@ -7300,7 +7300,7 @@ packages:
       eslint: 8.27.0
       eslint-scope: 5.1.1
       eslint-utils: 3.0.0_eslint@8.27.0
-      semver: 7.3.7
+      semver: 7.3.8
     transitivePeerDependencies:
       - supports-color
       - typescript
@@ -7322,7 +7322,7 @@ packages:
       "@typescript-eslint/typescript-estree": 5.42.1_typescript@4.8.4
       eslint-scope: 5.1.1
       eslint-utils: 3.0.0
-      semver: 7.3.7
+      semver: 7.3.8
     transitivePeerDependencies:
       - supports-color
       - typescript
@@ -7506,7 +7506,7 @@ packages:
       }
     engines: {node: ">= 6.0.0"}
     dependencies:
-      debug: 4.3.4
+      debug: 4.3.3
     transitivePeerDependencies:
       - supports-color
 
@@ -8335,7 +8335,10 @@ packages:
     dev: true
 
   /buffer-equal-constant-time/1.0.1:
-    resolution: {integrity: sha1-+OcRMvf/5uAaXJaXpMbz5I1cyBk=}
+    resolution:
+      {
+        integrity: sha512-zRpUiDwd/xk6ADqPMATG8vc9VPrkck7T07OIx0gnjmJAnHnTVXNQG3vfvWNuiZIkwu9KrKdA1iJKfsfTVxE6NA==,
+      }
     dev: false
 
   /buffer-from/1.1.2:
@@ -8960,7 +8963,10 @@ packages:
     dev: false
 
   /concat-map/0.0.1:
-    resolution: {integrity: sha1-2Klr13/Wjfd5OnMDajug1UBdR3s=}
+    resolution:
+      {
+        integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==,
+      }
 
   /consola/2.15.3:
     resolution:
@@ -9369,7 +9375,6 @@ packages:
         optional: true
     dependencies:
       ms: 2.1.2
-    dev: false
 
   /debug/4.3.3_supports-color@8.1.1:
     resolution:
@@ -11958,7 +11963,7 @@ packages:
     engines: {node: ">= 10.17.0"}
     hasBin: true
     dependencies:
-      debug: 4.3.4
+      debug: 4.3.3
       get-stream: 5.2.0
       yauzl: 2.10.0
     optionalDependencies:
@@ -13006,7 +13011,7 @@ packages:
     dependencies:
       "@tootallnate/once": 2.0.0
       agent-base: 6.0.2
-      debug: 4.3.4
+      debug: 4.3.3
     transitivePeerDependencies:
       - supports-color
 
@@ -13036,7 +13041,7 @@ packages:
     engines: {node: ">= 6"}
     dependencies:
       agent-base: 6.0.2
-      debug: 4.3.4
+      debug: 4.3.3
     transitivePeerDependencies:
       - supports-color
 
@@ -13376,15 +13381,6 @@ packages:
       }
     dependencies:
       has: 1.0.3
-
-  /is-core-module/2.8.1:
-    resolution:
-      {
-        integrity: sha512-SdNCUs284hr40hFTFP6l0IfZ/RSrMXF3qgoRHd3/79unUTvrFO/JoXwkGm+5J/Oe3E/b5GsnG330uUNgRpu1PA==,
-      }
-    dependencies:
-      has: 1.0.3
-    dev: true
 
   /is-data-descriptor/0.1.4:
     resolution:
@@ -13839,7 +13835,7 @@ packages:
       }
     engines: {node: ">=10"}
     dependencies:
-      debug: 4.3.4
+      debug: 4.3.3
       istanbul-lib-coverage: 3.2.0
       source-map: 0.6.1
     transitivePeerDependencies:
@@ -14008,7 +14004,7 @@ packages:
       pretty-format: 29.2.1
       slash: 3.0.0
       strip-json-comments: 3.1.1
-      ts-node: 10.9.1_cbe7ovvae6zqfnmtgctpgpys54
+      ts-node: 10.9.1_typescript@4.8.4
     transitivePeerDependencies:
       - supports-color
 
@@ -14348,7 +14344,7 @@ packages:
       jest-util: 29.2.1
       natural-compare: 1.4.0
       pretty-format: 29.2.1
-      semver: 7.3.7
+      semver: 7.3.8
     transitivePeerDependencies:
       - supports-color
 
@@ -14856,23 +14852,17 @@ packages:
     optionalDependencies:
       graceful-fs: 4.2.10
 
-  /jsonwebtoken/8.5.1:
+  /jsonwebtoken/9.0.0:
     resolution:
       {
-        integrity: sha512-XjwVfRS6jTMsqYs0EsuJ4LGxXV14zQybNd4L2r0UvbVnSF9Af8x7p5MzbJ90Ioz/9TI41/hTCvznF/loiSzn8w==,
+        integrity: sha512-tuGfYXxkQGDPnLJ7SibiQgVgeDgfbPq2k2ICcbgqW8WxWLBAxKQM/ZCu/IT8SOSwmaYl4dpTFCW5xZv7YbbWUw==,
       }
-    engines: {node: ">=4", npm: ">=1.4.28"}
+    engines: {node: ">=12", npm: ">=6"}
     dependencies:
       jws: 3.2.2
-      lodash.includes: 4.3.0
-      lodash.isboolean: 3.0.3
-      lodash.isinteger: 4.0.4
-      lodash.isnumber: 3.0.3
-      lodash.isplainobject: 4.0.6
-      lodash.isstring: 4.0.1
-      lodash.once: 4.1.1
-      ms: 2.1.2
-      semver: 5.7.1
+      lodash: 4.17.21
+      ms: 2.1.3
+      semver: 7.3.8
     dev: false
 
   /jstransformer/1.0.0:
@@ -15203,48 +15193,6 @@ packages:
     dependencies:
       p-locate: 5.0.0
 
-  /lodash.includes/4.3.0:
-    resolution:
-      {
-        integrity: sha512-W3Bx6mdkRTGtlJISOvVD/lbqjTlPPUDTMnlXZFnVwi9NKJ6tiAk6LVdlhZMm17VZisqhKcgzpO5Wz91PCt5b0w==,
-      }
-    dev: false
-
-  /lodash.isboolean/3.0.3:
-    resolution:
-      {
-        integrity: sha512-Bz5mupy2SVbPHURB98VAcw+aHh4vRV5IPNhILUCsOzRmsTmSQ17jIuqopAentWoehktxGd9e/hbIXq980/1QJg==,
-      }
-    dev: false
-
-  /lodash.isinteger/4.0.4:
-    resolution:
-      {
-        integrity: sha512-DBwtEWN2caHQ9/imiNeEA5ys1JoRtRfY3d7V9wkqtbycnAmTvRRmbHKDV4a0EYc678/dia0jrte4tjYwVBaZUA==,
-      }
-    dev: false
-
-  /lodash.isnumber/3.0.3:
-    resolution:
-      {
-        integrity: sha512-QYqzpfwO3/CWf3XP+Z+tkQsfaLL/EnUlXWVkIk5FUPc4sBdTehEqZONuyRt2P67PXAk+NXmTBcc97zw9t1FQrw==,
-      }
-    dev: false
-
-  /lodash.isplainobject/4.0.6:
-    resolution:
-      {
-        integrity: sha512-oSXzaWypCMHkPC3NvBEaPHf0KsA5mvPrOPgQWDsbg8n7orZ290M0BmC/jgRZ4vcJ6DTAhjrsSYgdsW/F+MFOBA==,
-      }
-    dev: false
-
-  /lodash.isstring/4.0.1:
-    resolution:
-      {
-        integrity: sha512-0wJxfxH1wgO3GrbuP+dTTk7op+6L41QCXbGINEmD+ny/G/eCqGzxyCsh7159S+mgDDcoarnBw6PC1PS5+wUGgw==,
-      }
-    dev: false
-
   /lodash.memoize/4.1.2:
     resolution:
       {
@@ -15257,13 +15205,6 @@ packages:
       {
         integrity: sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==,
       }
-
-  /lodash.once/4.1.1:
-    resolution:
-      {
-        integrity: sha512-Sb487aTOCr9drQVL8pIxOzVhafOjZN9UU54hiN8PU3uAiSV7lx1yYNpbNmex2PK6dSJoNTSJUUswT651yww3Mg==,
-      }
-    dev: false
 
   /lodash.startcase/4.4.0:
     resolution:
@@ -16996,15 +16937,16 @@ packages:
       pause: 0.0.1
     dev: false
 
-  /passport/0.5.2:
+  /passport/0.6.0:
     resolution:
       {
-        integrity: sha512-w9n/Ot5I7orGD4y+7V3EFJCQEznE5RxHamUxcqLT2QoJY0f2JdN8GyHonYFvN0Vz+L6lUJfVhrk2aZz2LbuREw==,
+        integrity: sha512-0fe+p3ZnrWRW74fe8+SvCyf4a3Pb2/h7gFkQ8yTJpAO50gDzlfjZUZTO1k5Eg9kUct22OxHLqDZoKUWRHOh9ug==,
       }
     engines: {node: ">= 0.4.0"}
     dependencies:
       passport-strategy: 1.0.0
       pause: 0.0.1
+      utils-merge: 1.0.1
     dev: false
 
   /patch-console/1.0.0:
@@ -17122,7 +17064,10 @@ packages:
       }
 
   /pause/0.0.1:
-    resolution: {integrity: sha1-HUCLP9t2kjuVQ9lvtMnf1TXZy10=}
+    resolution:
+      {
+        integrity: sha512-KG8UEiEVkR3wGEb4m5yZkVCzigAD+cVEJck2CzYZO37ZGJfctvVptVO192MwrtPhzONn6go8ylnOdMhKqi4nfg==,
+      }
     dev: false
 
   /pend/1.2.0:
@@ -17458,16 +17403,16 @@ packages:
       uuid: 8.3.2
     dev: true
 
-  /prisma/4.6.0:
+  /prisma/4.6.1:
     resolution:
       {
-        integrity: sha512-TAnObUMGCM9NLt9nsRs1WWYQGPKsJOK8bN/7gSAnBcYIxMCFFDe+XtFYJbyTzsJZ/i+0rH4zg8au3m7HX354LA==,
+        integrity: sha512-BR4itMCuzrDV4tn3e2TF+nh1zIX/RVU0isKtKoN28ADeoJ9nYaMhiuRRkFd2TZN8+l/XfYzoRKyHzUFXLQhmBQ==,
       }
     engines: {node: ">=14.17"}
     hasBin: true
     requiresBuild: true
     dependencies:
-      "@prisma/engines": 4.6.0
+      "@prisma/engines": 4.6.1
     dev: false
 
   /process-nextick-args/2.0.1:
@@ -18233,7 +18178,7 @@ packages:
       }
     hasBin: true
     dependencies:
-      is-core-module: 2.8.1
+      is-core-module: 2.11.0
       path-parse: 1.0.7
       supports-preserve-symlinks-flag: 1.0.0
     dev: true
@@ -18368,7 +18313,7 @@ packages:
       rollup: ^1.20.0 || ^2.0.0
     dependencies:
       "@rollup/pluginutils": 4.2.1
-      debug: 4.3.4
+      debug: 4.3.3
       es-module-lexer: 0.9.3
       esbuild: 0.14.51
       joycon: 3.1.1
@@ -18389,7 +18334,7 @@ packages:
       rollup: ^1.20.0 || ^2.0.0
     dependencies:
       "@rollup/pluginutils": 4.2.1
-      debug: 4.3.4_supports-color@8.1.1
+      debug: 4.3.3_supports-color@8.1.1
       es-module-lexer: 0.9.3
       esbuild: 0.14.51
       joycon: 3.1.1
@@ -18607,7 +18552,6 @@ packages:
     hasBin: true
     dependencies:
       lru-cache: 6.0.0
-    dev: false
 
   /send/0.17.2:
     resolution:
@@ -19868,6 +19812,7 @@ packages:
       typescript: 4.8.4
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
+    dev: false
 
   /ts-node/10.9.1_ieummqxttktzud32hpyrer46t4:
     resolution:
@@ -19934,7 +19879,6 @@ packages:
       typescript: 4.8.4
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
-    dev: false
 
   /tsconfig-paths/3.14.1:
     resolution:
