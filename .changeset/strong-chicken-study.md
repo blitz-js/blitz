@@ -2,4 +2,4 @@
 "@blitzjs/auth": patch
 ---
 
-Fixed vulnerabilities for passport and jsonwebtoken
+Fixed security vulnerabilities in passport-adapter by upgrading `passport` and `jsonwebtoken`
