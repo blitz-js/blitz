@@ -93,7 +93,7 @@ importers:
       "@hookform/error-message": 2.0.0
       "@hookform/resolvers": 2.9.10
       "@next/bundle-analyzer": 12.0.8
-      "@prisma/client": 4.6.0
+      "@prisma/client": 4.6.1
       "@testing-library/jest-dom": 5.16.5
       "@testing-library/react": 13.4.0
       "@testing-library/react-hooks": 8.0.1
@@ -114,7 +114,7 @@ importers:
       prettier-plugin-prisma: 4.4.0
       pretty-quick: 3.1.3
       preview-email: 3.0.7
-      prisma: 4.6.0
+      prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0
       react-hook-form: 7.39.1
@@ -130,10 +130,10 @@ importers:
       "@blitzjs/rpc": link:../../packages/blitz-rpc
       "@hookform/error-message": 2.0.0_uitc6c22ofsl6jhrdjqyu3was4
       "@hookform/resolvers": 2.9.10_react-hook-form@7.39.1
-      "@prisma/client": 4.6.0_prisma@4.6.0
+      "@prisma/client": 4.6.1_prisma@4.6.1
       blitz: link:../../packages/blitz
       next: 13.1.6_biqbaboplfbrettd7655fr4n2y
-      prisma: 4.6.0
+      prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       react-hook-form: 7.39.1_react@18.2.0
@@ -172,7 +172,7 @@ importers:
       "@hookform/error-message": 2.0.0
       "@hookform/resolvers": 2.9.10
       "@next/bundle-analyzer": 12.0.8
-      "@prisma/client": 4.6.0
+      "@prisma/client": 4.6.1
       "@testing-library/react": 13.4.0
       "@testing-library/react-hooks": 8.0.1
       "@types/jest": 29.2.2
@@ -194,7 +194,7 @@ importers:
       prettier-plugin-prisma: 4.4.0
       pretty-quick: 3.1.3
       preview-email: 3.0.7
-      prisma: 4.6.0
+      prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0
       react-hook-form: 7.39.1
@@ -208,11 +208,11 @@ importers:
       "@blitzjs/rpc": link:../../packages/blitz-rpc
       "@hookform/error-message": 2.0.0_uitc6c22ofsl6jhrdjqyu3was4
       "@hookform/resolvers": 2.9.10_react-hook-form@7.39.1
-      "@prisma/client": 4.6.0_prisma@4.6.0
+      "@prisma/client": 4.6.1_prisma@4.6.1
       blitz: link:../../packages/blitz
       next: 13.1.6_biqbaboplfbrettd7655fr4n2y
       openid-client: 5.2.1
-      prisma: 4.6.0
+      prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       react-hook-form: 7.39.1_react@18.2.0
@@ -247,7 +247,7 @@ importers:
       "@blitzjs/next": workspace:*
       "@blitzjs/rpc": workspace:*
       "@next/bundle-analyzer": 12.0.8
-      "@prisma/client": 4.6.0
+      "@prisma/client": 4.6.1
       "@types/jest": 29.2.2
       "@types/passport-twitter": 1.0.37
       "@types/react": 18.0.25
@@ -258,7 +258,7 @@ importers:
       next: 13.1.6
       passport-mock-strategy: 2.0.0
       passport-twitter: 1.0.4
-      prisma: 4.6.0
+      prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0
       ts-node: 10.9.1
@@ -268,7 +268,7 @@ importers:
       "@blitzjs/config": link:../../packages/config
       "@blitzjs/next": link:../../packages/blitz-next
       "@blitzjs/rpc": link:../../packages/blitz-rpc
-      "@prisma/client": 4.6.0_prisma@4.6.0
+      "@prisma/client": 4.6.1_prisma@4.6.1
       "@types/jest": 29.2.2
       "@types/passport-twitter": 1.0.37
       blitz: link:../../packages/blitz
@@ -277,7 +277,7 @@ importers:
       next: 13.1.6_biqbaboplfbrettd7655fr4n2y
       passport-mock-strategy: 2.0.0
       passport-twitter: 1.0.4
-      prisma: 4.6.0
+      prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       ts-node: 10.9.1_typescript@4.8.4
@@ -293,7 +293,7 @@ importers:
       "@blitzjs/config": workspace:2.0.0-beta.23
       "@blitzjs/next": workspace:2.0.0-beta.23
       "@next/bundle-analyzer": 12.0.8
-      "@prisma/client": 4.6.0
+      "@prisma/client": 4.6.1
       "@types/express": 4.17.13
       "@types/fs-extra": 9.0.13
       "@types/node": 18.7.13
@@ -307,7 +307,7 @@ importers:
       lowdb: 3.0.0
       next: 13.1.6
       node-fetch: 3.2.3
-      prisma: 4.6.0
+      prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0
       ts-node: 10.9.1
@@ -316,11 +316,11 @@ importers:
       "@blitzjs/auth": link:../../packages/blitz-auth
       "@blitzjs/config": link:../../packages/config
       "@blitzjs/next": link:../../packages/blitz-next
-      "@prisma/client": 4.6.0_prisma@4.6.0
+      "@prisma/client": 4.6.1_prisma@4.6.1
       blitz: link:../../packages/blitz
       lowdb: 3.0.0
       next: 13.1.6_biqbaboplfbrettd7655fr4n2y
-      prisma: 4.6.0
+      prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
     devDependencies:
@@ -347,7 +347,7 @@ importers:
       "@hookform/error-message": 2.0.0
       "@hookform/resolvers": 2.9.10
       "@next/bundle-analyzer": 12.0.8
-      "@prisma/client": 4.6.0
+      "@prisma/client": 4.6.1
       "@testing-library/jest-dom": 5.16.5
       "@testing-library/react": 13.4.0
       "@testing-library/react-hooks": 8.0.1
@@ -370,7 +370,7 @@ importers:
       prettier-plugin-prisma: 4.4.0
       pretty-quick: 3.1.3
       preview-email: 3.0.7
-      prisma: 4.6.0
+      prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0
       react-hook-form: 7.39.1
@@ -386,11 +386,11 @@ importers:
       "@blitzjs/rpc": link:../../packages/blitz-rpc
       "@hookform/error-message": 2.0.0_uitc6c22ofsl6jhrdjqyu3was4
       "@hookform/resolvers": 2.9.10_react-hook-form@7.39.1
-      "@prisma/client": 4.6.0_prisma@4.6.0
+      "@prisma/client": 4.6.1_prisma@4.6.1
       blitz: link:../../packages/blitz
       delay: 5.0.0
       next: 13.1.6_biqbaboplfbrettd7655fr4n2y
-      prisma: 4.6.0
+      prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       react-hook-form: 7.39.1_react@18.2.0
@@ -428,7 +428,7 @@ importers:
       "@blitzjs/next": workspace:2.0.0-beta.23
       "@blitzjs/rpc": workspace:2.0.0-beta.23
       "@next/bundle-analyzer": 12.0.8
-      "@prisma/client": 4.6.0
+      "@prisma/client": 4.6.1
       "@types/express": 4.17.13
       "@types/fs-extra": 9.0.13
       "@types/node-fetch": 2.6.1
@@ -441,7 +441,7 @@ importers:
       lowdb: 3.0.0
       next: 13.1.6
       node-fetch: 3.2.3
-      prisma: 4.6.0
+      prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0
       typescript: ^4.8.4
@@ -449,11 +449,11 @@ importers:
       "@blitzjs/auth": link:../../packages/blitz-auth
       "@blitzjs/next": link:../../packages/blitz-next
       "@blitzjs/rpc": link:../../packages/blitz-rpc
-      "@prisma/client": 4.6.0_prisma@4.6.0
+      "@prisma/client": 4.6.1_prisma@4.6.1
       blitz: link:../../packages/blitz
       lowdb: 3.0.0
       next: 13.1.6_biqbaboplfbrettd7655fr4n2y
-      prisma: 4.6.0
+      prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
     devDependencies:
@@ -516,7 +516,7 @@ importers:
       "@blitzjs/next": workspace:2.0.0-beta.23
       "@blitzjs/rpc": workspace:2.0.0-beta.23
       "@next/bundle-analyzer": 12.0.8
-      "@prisma/client": 4.6.0
+      "@prisma/client": 4.6.1
       "@types/express": 4.17.13
       "@types/fs-extra": 9.0.13
       "@types/node-fetch": 2.6.1
@@ -529,7 +529,7 @@ importers:
       lowdb: 3.0.0
       next: 13.1.6
       node-fetch: 3.2.3
-      prisma: 4.6.0
+      prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0
       typescript: ^4.8.4
@@ -537,11 +537,11 @@ importers:
       "@blitzjs/auth": link:../../packages/blitz-auth
       "@blitzjs/next": link:../../packages/blitz-next
       "@blitzjs/rpc": link:../../packages/blitz-rpc
-      "@prisma/client": 4.6.0_prisma@4.6.0
+      "@prisma/client": 4.6.1_prisma@4.6.1
       blitz: link:../../packages/blitz
       lowdb: 3.0.0
       next: 13.1.6_biqbaboplfbrettd7655fr4n2y
-      prisma: 4.6.0
+      prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
     devDependencies:
@@ -564,7 +564,7 @@ importers:
       "@blitzjs/config": workspace:2.0.0-beta.23
       "@blitzjs/next": workspace:2.0.0-beta.23
       "@blitzjs/rpc": workspace:2.0.0-beta.23
-      "@prisma/client": 4.6.0
+      "@prisma/client": 4.6.1
       "@tanstack/react-query": 4.0.10
       "@testing-library/react": 13.4.0
       "@types/react": 18.0.25
@@ -576,7 +576,7 @@ importers:
       eslint-plugin-testing-library: 5.0.1
       jsdom: ^19.0.0
       next: 13.1.6
-      prisma: 4.6.0
+      prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0
       typescript: ^4.8.4
@@ -585,11 +585,11 @@ importers:
       "@blitzjs/config": link:../../packages/config
       "@blitzjs/next": link:../../packages/blitz-next
       "@blitzjs/rpc": link:../../packages/blitz-rpc
-      "@prisma/client": 4.6.0_prisma@4.6.0
+      "@prisma/client": 4.6.1_prisma@4.6.1
       "@tanstack/react-query": 4.0.10_biqbaboplfbrettd7655fr4n2y
       blitz: link:../../packages/blitz
       next: 13.1.6_biqbaboplfbrettd7655fr4n2y
-      prisma: 4.6.0
+      prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
     devDependencies:
@@ -609,7 +609,7 @@ importers:
       "@blitzjs/next": workspace:2.0.0-beta.23
       "@blitzjs/rpc": workspace:2.0.0-beta.23
       "@next/bundle-analyzer": 12.0.8
-      "@prisma/client": 4.6.0
+      "@prisma/client": 4.6.1
       "@types/express": 4.17.13
       "@types/fs-extra": 9.0.13
       "@types/node-fetch": 2.6.1
@@ -622,18 +622,18 @@ importers:
       lowdb: 3.0.0
       next: 13.1.6
       node-fetch: 3.2.3
-      prisma: 4.6.0
+      prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0
       typescript: ^4.8.4
     dependencies:
       "@blitzjs/next": link:../../packages/blitz-next
       "@blitzjs/rpc": link:../../packages/blitz-rpc
-      "@prisma/client": 4.6.0_prisma@4.6.0
+      "@prisma/client": 4.6.1_prisma@4.6.1
       blitz: link:../../packages/blitz
       lowdb: 3.0.0
       next: 13.1.6_biqbaboplfbrettd7655fr4n2y
-      prisma: 4.6.0
+      prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
     devDependencies:
@@ -727,7 +727,7 @@ importers:
       "@blitzjs/next": workspace:2.0.0-beta.23
       "@blitzjs/rpc": workspace:2.0.0-beta.23
       "@next/bundle-analyzer": 12.0.8
-      "@prisma/client": 4.6.0
+      "@prisma/client": 4.6.1
       "@types/express": 4.17.13
       "@types/fs-extra": 9.0.13
       "@types/node-fetch": 2.6.1
@@ -740,7 +740,7 @@ importers:
       lowdb: 3.0.0
       next: 13.1.6
       node-fetch: 3.2.3
-      prisma: 4.6.0
+      prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0
       typescript: ^4.8.4
@@ -748,11 +748,11 @@ importers:
       "@blitzjs/auth": link:../../packages/blitz-auth
       "@blitzjs/next": link:../../packages/blitz-next
       "@blitzjs/rpc": link:../../packages/blitz-rpc
-      "@prisma/client": 4.6.0_prisma@4.6.0
+      "@prisma/client": 4.6.1_prisma@4.6.1
       blitz: link:../../packages/blitz
       lowdb: 3.0.0
       next: 13.1.6_biqbaboplfbrettd7655fr4n2y
-      prisma: 4.6.0
+      prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
     devDependencies:
@@ -5364,10 +5364,10 @@ packages:
       }
     dev: true
 
-  /@prisma/client/4.6.0_prisma@4.6.0:
+  /@prisma/client/4.6.1_prisma@4.6.1:
     resolution:
       {
-        integrity: sha512-D9LaQinDxOHinRpcJTw2tjMtjhc9HTP+aF1IRd2oLldp/8TiwIfxK8x17OhBBiX4y1PzbJXXET7kS+5wB3es/w==,
+        integrity: sha512-M1+NNrMzqaOIxT7PBGcTs3IZo7d1EW/+gVQd4C4gUgWBDGgD9AcIeZnUSidgWClmpMSgVUdnVORjsWWGUameYA==,
       }
     engines: {node: ">=14.17"}
     requiresBuild: true
@@ -5377,21 +5377,21 @@ packages:
       prisma:
         optional: true
     dependencies:
-      "@prisma/engines-version": 4.6.0-53.2e719efb80b56a3f32d18a62489de95bb9c130e3
-      prisma: 4.6.0
+      "@prisma/engines-version": 4.6.1-3.694eea289a8462c80264df36757e4fdc129b1b32
+      prisma: 4.6.1
     dev: false
 
-  /@prisma/engines-version/4.6.0-53.2e719efb80b56a3f32d18a62489de95bb9c130e3:
+  /@prisma/engines-version/4.6.1-3.694eea289a8462c80264df36757e4fdc129b1b32:
     resolution:
       {
-        integrity: sha512-0CTnfEuUbLlO6n1fM89ERDbSwI4LoyZn+1OKVSwG+aVqohj34+mXRfwOWIM0ONtYtLGGBpddvQAnAZkg+cgS6g==,
+        integrity: sha512-HUCmkXAU2jqp2O1RvNtbE+seLGLyJGEABZS/R38rZjSAafAy0WzBuHq+tbZMnD+b5OSCsTVtIPVcuvx1ySxcWQ==,
       }
     dev: false
 
-  /@prisma/engines/4.6.0:
+  /@prisma/engines/4.6.1:
     resolution:
       {
-        integrity: sha512-S+72PAl0zTCbIGou1uXD/McvzdtP+bjOs0LRmGZfcOQcVqR9x/0f6Z+dqpUU0zIcqHEl+0DOB8UXaTwRvssFsQ==,
+        integrity: sha512-3u2/XxvxB+Q7cMXHnKU0CpBiUK1QWqpgiBv28YDo1zOIJE3FCF8DI2vrp6vuwjGt5h0JGXDSvmSf4D4maVjJdw==,
       }
     requiresBuild: true
     dev: false
@@ -17669,16 +17669,16 @@ packages:
       uuid: 8.3.2
     dev: true
 
-  /prisma/4.6.0:
+  /prisma/4.6.1:
     resolution:
       {
-        integrity: sha512-TAnObUMGCM9NLt9nsRs1WWYQGPKsJOK8bN/7gSAnBcYIxMCFFDe+XtFYJbyTzsJZ/i+0rH4zg8au3m7HX354LA==,
+        integrity: sha512-BR4itMCuzrDV4tn3e2TF+nh1zIX/RVU0isKtKoN28ADeoJ9nYaMhiuRRkFd2TZN8+l/XfYzoRKyHzUFXLQhmBQ==,
       }
     engines: {node: ">=14.17"}
     hasBin: true
     requiresBuild: true
     dependencies:
-      "@prisma/engines": 4.6.0
+      "@prisma/engines": 4.6.1
     dev: false
 
   /process-nextick-args/2.0.1:
