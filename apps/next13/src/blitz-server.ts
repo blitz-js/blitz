@@ -5,7 +5,7 @@ import db from "../prisma"
 import {simpleRolesIsAuthorized} from "@blitzjs/auth"
 import {BlitzLogger} from "blitz"
 
-const {api, getServerSession} = setupBlitzServer({
+const {api, getAppSession, useAuthenticatedAppSession} = setupBlitzServer({
   plugins: [
     AuthServerPlugin({
       cookiePrefix: "web-cookie-prefix",
@@ -16,7 +16,7 @@ const {api, getServerSession} = setupBlitzServer({
   logger: BlitzLogger({}),
 })
 
-export {api, getServerSession}
+export {api, getAppSession, useAuthenticatedAppSession}
 
 export const cliConfig: BlitzCliConfig = {
   customTemplates: "src/templates",

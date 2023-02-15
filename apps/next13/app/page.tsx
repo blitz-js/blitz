@@ -1,12 +1,16 @@
 import Link from "next/link"
 import styles from "src/styles/Home.module.css"
 import Test from "./react-query"
-import {cookies, headers} from "next/headers"
-import {getServerSession} from "../src/blitz-server"
+import {getAppSession, useAuthenticatedAppSession} from "../src/blitz-server"
 import getCurrentUser from "../src/users/queries/getCurrentUser"
 
 export default async function Home() {
-  const ctx = await getServerSession(cookies(), headers())
+  await useAuthenticatedAppSession({
+    redirectTo: "/auth/login",
+    role: ["admin"],
+    redirectAuthenticatedTo: "/dashboard",
+  })
+  const ctx = await getAppSession()
   console.log("session", ctx.session.userId)
   const user = await getCurrentUser(null, ctx)
   console.log("user", user)

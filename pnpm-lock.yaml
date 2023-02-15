@@ -65,12 +65,12 @@ importers:
       "@blitzjs/rpc": link:../../packages/blitz-rpc
       "@hookform/error-message": 2.0.0_uitc6c22ofsl6jhrdjqyu3was4
       "@hookform/resolvers": 2.9.10_react-hook-form@7.39.1
-      "@prisma/client": 4.6.0_prisma@4.6.0
+      "@prisma/client": 4.6.1_prisma@4.6.1
       "@tanstack/react-query": 4.0.10_biqbaboplfbrettd7655fr4n2y
       blitz: link:../../packages/blitz
       flatted: 3.2.7
       next: 13.1.6_biqbaboplfbrettd7655fr4n2y
-      prisma: 4.6.0
+      prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       react-hook-form: 7.39.1_react@18.2.0

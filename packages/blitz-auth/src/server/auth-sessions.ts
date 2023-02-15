@@ -12,6 +12,7 @@ import {
   AuthenticationError,
   AuthorizationError,
   CSRFTokenMismatchError,
+  log,
 } from "blitz"
 import {
   EmptyPublicData,
@@ -36,7 +37,8 @@ import {
 } from "../shared"
 import {generateToken, hash256} from "./auth-utils"
 import {Socket} from "net"
-import type {cookies} from "next/headers"
+import {UrlObject} from "url"
+import {formatWithValidation} from "../shared/url-utils"
 
 export function isLocalhost(req: any): boolean {
   let {host} = req.headers
@@ -173,17 +175,21 @@ export async function getSession(
   return sessionContext
 }
 
-export async function getServerSession(
-  _cookies: ReturnType<typeof cookies>,
-  _headers: Headers,
-): Promise<Ctx> {
+export async function getAppSession(): Promise<Ctx> {
+  const {headers, cookies} = await import("next/headers").catch(() => {
+    throw new Error(
+      "getAppSession() can only be used in React Server Components in Nextjs 13 or higher",
+    )
+  })
   const req = new IncomingMessage(new Socket()) as IncomingMessage & {
     cookies: {[key: string]: string}
   }
-  req.headers = Object.fromEntries(_headers as any)
-  req.headers[HEADER_CSRF] = _cookies.get(COOKIE_CSRF_TOKEN())!.value
+  req.headers = Object.fromEntries(headers())
+  req.headers[HEADER_CSRF] = cookies().get(COOKIE_CSRF_TOKEN())!.value
   req.cookies = Object.fromEntries(
-    _cookies.getAll().map((c: {name: string; value: string}) => [c.name, c.value]),
+    cookies()
+      .getAll()
+      .map((c: {name: string; value: string}) => [c.name, c.value]),
   )
   const res = new ServerResponse(req)
   const session = await getSession(req, res)
@@ -191,6 +197,70 @@ export async function getServerSession(
     session,
   }
   return ctx
+}
+
+interface RouteUrlObject extends Pick<UrlObject, "pathname" | "query" | "href"> {
+  pathname: string
+}
+
+export async function useAuthenticatedAppSession({
+  redirectTo,
+  redirectAuthenticatedTo,
+  role,
+}: {
+  redirectTo?: string | RouteUrlObject
+  redirectAuthenticatedTo?: string | RouteUrlObject | ((ctx: Ctx) => string | RouteUrlObject)
+  role?: string | string[]
+}): Promise<void> {
+  const ctx: Ctx = await getAppSession()
+  const userId = ctx.session.userId
+  const {redirect} = await import("next/navigation").catch(() => {
+    throw new Error(
+      "useAuthenticatedAppSession() can only be used in React Server Components in Nextjs 13 or higher",
+    )
+  })
+  const {headers} = await import("next/headers").catch(() => {
+    throw new Error(
+      "useAuthenticatedAppSession() can only be used in React Server Components in Nextjs 13 or higher",
+    )
+  })
+  const _headers = headers()
+  const currentUrl = _headers.get("referer") || _headers.get("origin") || _headers.get("host")
+  if (userId) {
+    console.log("[useAuthenticatedAppSession] User is authenticated")
+    if (redirectAuthenticatedTo) {
+      if (typeof redirectAuthenticatedTo === "function") {
+        redirectAuthenticatedTo = redirectAuthenticatedTo(ctx)
+      }
+      const redirectUrl =
+        typeof redirectAuthenticatedTo === "string"
+          ? redirectAuthenticatedTo
+          : formatWithValidation(redirectAuthenticatedTo)
+      redirect(redirectUrl)
+    }
+    if (redirectTo && role) {
+      console.log("[useAuthenticatedAppSession] redirectTo and role are both defined.")
+      try {
+        ctx.session.$authorize(role)
+      } catch (e) {
+        log.error((e as Error).message)
+        if (typeof redirectTo !== "string") {
+          redirectTo = formatWithValidation(redirectTo)
+        }
+        redirect(redirectTo)
+      }
+    }
+  } else {
+    console.log("[useAuthenticatedAppSession] User is not authenticated")
+    if (redirectTo) {
+      if (typeof redirectTo !== "string") {
+        redirectTo = formatWithValidation(redirectTo)
+      }
+      redirect(redirectTo + "?next=" + currentUrl)
+    } else {
+      redirect("/?next=" + currentUrl)
+    }
+  }
 }
 
 const makeProxyToPublicData = <T extends SessionContextClass>(ctxClass: T): T => {
