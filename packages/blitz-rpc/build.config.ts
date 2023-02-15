@@ -14,6 +14,8 @@ const config: BuildConfig = {
     "index-browser.mjs",
     "index-server.cjs",
     "index-server.mjs",
+    "index.cjs",
+    "index.mjs",
     "@blitzjs/auth",
     "zod",
   ],
@@ -23,7 +25,6 @@ const config: BuildConfig = {
     esbuild: {
       target: ["es2015"],
     },
-    // replace all occurances requires f
   },
 }
 export default config
