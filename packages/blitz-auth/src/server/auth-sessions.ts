@@ -227,7 +227,7 @@ export async function useAuthenticatedAppSession({
   const _headers = headers()
   const currentUrl = _headers.get("referer") || _headers.get("origin") || _headers.get("host")
   if (userId) {
-    console.log("[useAuthenticatedAppSession] User is authenticated")
+    debug("[useAuthenticatedAppSession] User is authenticated")
     if (redirectAuthenticatedTo) {
       if (typeof redirectAuthenticatedTo === "function") {
         redirectAuthenticatedTo = redirectAuthenticatedTo(ctx)
@@ -239,7 +239,7 @@ export async function useAuthenticatedAppSession({
       redirect(redirectUrl)
     }
     if (redirectTo && role) {
-      console.log("[useAuthenticatedAppSession] redirectTo and role are both defined.")
+      debug("[useAuthenticatedAppSession] redirectTo and role are both defined.")
       try {
         ctx.session.$authorize(role)
       } catch (e) {
@@ -251,7 +251,7 @@ export async function useAuthenticatedAppSession({
       }
     }
   } else {
-    console.log("[useAuthenticatedAppSession] User is not authenticated")
+    debug("[useAuthenticatedAppSession] User is not authenticated")
     if (redirectTo) {
       if (typeof redirectTo !== "string") {
         redirectTo = formatWithValidation(redirectTo)
