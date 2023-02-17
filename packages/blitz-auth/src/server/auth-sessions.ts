@@ -185,7 +185,10 @@ export async function getAppSession(): Promise<Ctx> {
     cookies: {[key: string]: string}
   }
   req.headers = Object.fromEntries(headers())
-  req.headers[HEADER_CSRF] = cookies().get(COOKIE_CSRF_TOKEN())!.value
+  const csrfToken = cookies().get(COOKIE_CSRF_TOKEN())
+  if (csrfToken) {
+    req.headers[HEADER_CSRF] = csrfToken.value
+  }
   req.cookies = Object.fromEntries(
     cookies()
       .getAll()
@@ -243,7 +246,7 @@ export async function useAuthenticatedAppSession({
       try {
         ctx.session.$authorize(role)
       } catch (e) {
-        log.error((e as Error).message)
+        log.error("Authorization Error: " + (e as Error).message)
         if (typeof redirectTo !== "string") {
           redirectTo = formatWithValidation(redirectTo)
         }

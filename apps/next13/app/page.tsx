@@ -7,8 +7,8 @@ import getCurrentUser from "../src/users/queries/getCurrentUser"
 export default async function Home() {
   await useAuthenticatedAppSession({
     redirectTo: "/auth/login",
-    role: ["admin"],
-    redirectAuthenticatedTo: "/dashboard",
+    // role: ["admin"],
+    // redirectAuthenticatedTo: "/dashboard",
   })
   const ctx = await getAppSession()
   console.log("session", ctx.session.userId)
