@@ -1,4 +1,4 @@
-import { SecurePassword } from "@blitzjs/auth/secure-password"
+import { SecurePassword } from "@blitzjs/auth"
 import { resolver } from "@blitzjs/rpc"
 import db from "db"
 import { Role } from "types"

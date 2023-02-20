@@ -1,6 +1,6 @@
 import {api} from "src/blitz-server"
 import db from "db"
-import {SecurePassword} from "@blitzjs/auth/secure-password"
+import {SecurePassword} from "@blitzjs/auth"
 
 export default api(async (req, res, ctx) => {
   const blitzContext = ctx

@@ -1,5 +1,5 @@
 import { hash256 } from "@blitzjs/auth"
-import { SecurePassword } from "@blitzjs/auth/secure-password"
+import { SecurePassword } from "@blitzjs/auth"
 import db from "db"
 import { ResetPassword } from "../validations"
 import login from "./login"

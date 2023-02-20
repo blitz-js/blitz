@@ -1,5 +1,5 @@
 import prisma from "./index"
-import {SecurePassword} from "@blitzjs/auth/secure-password"
+import {SecurePassword} from "@blitzjs/auth"
 
 const seed = async () => {
   const hashedPassword = await SecurePassword.hash("abcd1234")
