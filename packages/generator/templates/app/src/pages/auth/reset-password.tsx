@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react"
 import Layout from "src/core/layouts/Layout"
 import { LabeledTextField } from "src/core/components/LabeledTextField"
 import { Form, FORM_ERROR } from "src/core/components/Form"
@@ -8,6 +7,7 @@ import { BlitzPage, Routes } from "@blitzjs/next"
 import { useRouter } from "next/router"
 import { useMutation } from "@blitzjs/rpc"
 import Link from "next/link"
+import { assert } from "blitz"
 
 const ResetPasswordPage: BlitzPage = () => {
   const router = useRouter()
@@ -36,6 +36,7 @@ const ResetPasswordPage: BlitzPage = () => {
           }}
           onSubmit={async (values) => {
             try {
+              assert(token, "token is required.")
               await resetPasswordMutation({ ...values, token })
             } catch (error: any) {
               if (error.name === "ResetPasswordError") {
