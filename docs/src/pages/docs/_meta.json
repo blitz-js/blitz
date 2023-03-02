@@ -1,10 +1,16 @@
 {
-  "index": {
-    "title": "Home",
-    "theme": {
-      "layout": "raw"
-    }
-  },
+  "introduction": "Introduction",
+  "community": "Community",
+  "basics": "Basics",
+  "framweworks": "Framework Adapters",
+  "blitz-auth": "Blitz Auth",
+  "blitz-rpc": "Blitz RPC",
+  "blitz-recipies": "Blitz Recipies",
+  "blitz-generator": "Blitz Generator",
+  "backend-architecture": "Backend Architecture",
+  "databse": "Database",
+  "cli" : "CLI",
+  "migration":"Migration Guides",
   "docs": {
     "title": "Documentation",
     "type": "page"
@@ -20,13 +26,13 @@
   "releases": {
     "title": "Releases ↗",
     "type": "page",
-    "href": "https://github.com/blitz-js/blitz/releases",
+    "href" : "https://github.com/blitz-js/blitz/releases",
     "newWindow": true
   },
   "swag": {
     "title": "Swag ↗",
     "type": "page",
-    "href": "https://store.blitzjs.com/",
+    "href" : "https://store.blitzjs.com/",
     "newWindow": true
   },
   "deploy": {
