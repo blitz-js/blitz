@@ -1,0 +1,511 @@
+:root {
+  --docs-accent-color: #9580ff;
+  --docs-accent-color-opacity: #9580ff60;
+  --docs-accent-color-link: #9580ff;
+  --docs-light-bg: #e5e5e560;
+  --docs-light-bg-hover: #d0d0d060;
+  --docs-dark-bg: #2a2a2a90;
+  --docs-dark-bg-hover: #2a2a2a60;
+  --nextra-navbar-height: 8rem;
+}
+
+html[class~="dark"] {
+  --nextra-primary-hue: 267;
+  --nextra-primary-hue-saturation: 100%;
+  --nextra-primary-hue-lightness: 75%;
+
+  --docs-secondary-bg: var(--docs-dark-bg);
+  --docs-secondary-bg-hover: var(--docs-dark-bg-hover);
+}
+
+html[class~="light"] {
+  --docs-accent-color: #644be1;
+  --docs-dark-bg: #e5e5e560;
+
+  --docs-secondary-bg: var(--docs-light-bg);
+  --docs-secondary-bg-hover: var(--docs-light-bg-hover);
+}
+
+/* General
+    ------------------------ */
+html,
+body,
+kbd {
+  font-family: "Inter", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
+  -webkit-font-smoothing: "antialiased";
+}
+
+html {
+  font-size: 17px;
+}
+
+.nextra-nav-container nav {
+  height: 7rem;
+}
+
+aside {
+  height: calc(100vh - 7rem);
+  top: calc(7rem + 4px) !important;
+}
+
+.nextra-nav-container nav {
+  box-sizing: border-box;
+  padding: 0 2.5rem;
+}
+
+.nextra-sidebar-container {
+  box-sizing: border-box;
+  padding-left: 1rem;
+}
+
+.nextra-toc {
+  padding-right: 1rem;
+}
+
+@media (max-width: 640px) {
+  .nextra-nav-container {
+    padding: 0;
+  }
+
+  .nextra-nav-container nav {
+    padding: 0 2rem;
+  }
+
+  aside {
+    top: 0;
+    height: 100%;
+  }
+
+  .nextra-sidebar-container {
+    padding-top: 0;
+  }
+}
+
+.nextra-breadcrumb {
+  display: none !important;
+}
+
+/* General colors
+    ------------------------ */
+
+html[class~="dark"] .dark\:nx-text-gray-400,
+html[class~="dark"] .nx-text-gray-500 {
+  color: #999 !important;
+}
+
+html[class~=dark] .folderAsHeader .nextra-sidebar-container ul li a {
+    color: #c5c5c5;
+    font-size: 1.05rem;
+}
+
+html[class~=dark] .dark\:nx-bg-\[linear-gradient\(1deg\,\#383838\,\#212121\)\]{
+    background: rgba(23,23,23,var(--tw-bg-opacity));
+}
+
+html[class~="dark"] .dark\:bg-dark {
+  background-color: #0e0e0e;
+}
+
+html[class~="light"] body {
+  color: #0e0e0e;
+}
+
+html[class~="dark"] body {
+  color: #c5c5c5;
+}
+
+html[class~="dark"] p strong,
+html[class~="dark"] h1,
+html[class~="dark"] h2,
+html[class~="dark"] h3,
+html[class~="dark"] h4 {
+  color: #fff;
+}
+
+/* Link
+    ------------------------ */
+p a,
+p li a {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.01em;
+  text-decoration-color: var(--docs-accent-color-opacity);
+}
+
+p a:hover,
+p li a:hover {
+  text-decoration-color: var(--docs-accent-color-link);
+}
+
+/* Nav
+    ------------------------ */
+
+.nextra-nav-container {
+  border-top: 4px solid var(--docs-accent-color);
+}
+
+.nextra-nav-container .nextra-nav-container-blur {
+  border: none;
+  box-shadow: none !important;
+}
+
+.nx-max-w-\[90rem\] {
+  max-width: 164rem !important;
+}
+
+/* Search Input
+    ------------------------ */
+html[class~="dark"] .nextra-search input,
+html[class~="dark"] .nextra-search input:focus {
+  background-color: #0d0d0d;
+  border-color: #252525ff;
+}
+
+html[class~="dark"] .nextra-search input::placeholder {
+  color: #e5e5e560;
+}
+
+/* Sidebar
+    ------------------------ */
+.nextra-sidebar-container-menu {
+  border: none;
+}
+
+.nextra-sidebar-container > div {
+  margin-top: 10px;
+  padding-top: 0;
+}
+
+.nextra-toc-meta,
+.nextra-sidebar-container-menu {
+  box-shadow: none !important;
+}
+
+.nextra-sidebar-container .nextra-scrollbar + div {
+  border-width: 0;
+  height: 4rem;
+}
+
+.nextra-toc ul li a,
+.nextra-sidebar-container ul li.active > a,
+.nextra-sidebar-container ul li.active > a:hover {
+  font-weight: normal;
+}
+
+html[class~="light"] .nextra-sidebar-container ul li a {
+  color: #0e0e0e;
+}
+
+html[class~="light"] .nextra-sidebar-container ul li a:hover,
+html[class~="light"] .nextra-sidebar-container ul li.active > a:hover {
+  background-color: var(--docs-light-bg);
+}
+
+html[class~="dark"] .nextra-sidebar-container ul li a:hover,
+html[class~="dark"] .nextra-sidebar-container ul li.active > a:hover {
+  background-color: var(--docs-dark-bg);
+}
+
+html[class~="dark"] .folderAsHeader .nextra-sidebar-container ul li a {
+  color: rgb(197, 197, 197);
+  font-size: 1.05rem;
+}
+
+html[class~="dark"] .folderAsHeader .nextra-sidebar-container ul li ul li a {
+  color: #999999;
+  font-size: 0.875rem;
+}
+
+html[class~="dark"] .folderAsHeader .nextra-sidebar-container ul li.active > a,
+html[class~="dark"] .nextra-toc ul li a[aria-selected="true"],
+html[class~="light"] .folderAsHeader .nextra-sidebar-container ul li.active > a,
+html[class~="light"] .nextra-toc ul li a[aria-selected="true"] {
+  color: var(--docs-accent-color);
+  background-color: transparent;
+}
+
+html[class~="dark"] .nextra-sidebar-container ul li.active > a:hover,
+html[class~="dark"] .nextra-toc ul li a[aria-selected="true"]:hover {
+  color: var(--docs-accent-color);
+}
+
+html[class~="dark"] .nx-text-primary-500,
+html[class~="dark"] .nx-text-primary-600 {
+  color: var(--docs-accent-color);
+}
+
+html[class~="light"] .nx-text-primary-500,
+html[class~="light"] .nx-text-primary-600 {
+  color: var(--docs-accent-color);
+}
+
+@media (max-width: 640px) {
+  html[class~="dark"] .folderAsHeader .nextra-sidebar-container ul li.active > a {
+    color: currentColor;
+    text-align: left;
+  }
+
+  .folderAsHeader .nextra-sidebar-container ul ul li a {
+    justify-content: normal;
+  }
+}
+
+/*  Remove lines when you apply `.folderAsHeader` the class in the doc 
+     */
+.folderAsHeader .nextra-sidebar-container ul ul {
+  padding-left: 0;
+  margin-left: 0;
+  margin: 0.3rem 0 1.2rem 0;
+}
+
+.folderAsHeader .nextra-sidebar-container ul div {
+  padding-left: 0;
+}
+
+.folderAsHeader .nextra-sidebar-container ul ul::before {
+  content: none;
+}
+
+.folderAsHeader .nextra-sidebar-container ul li a {
+  font-size: 16px;
+}
+
+/* arrow dropdown */
+.folderAsHeader .nextra-sidebar-container a svg {
+  transition: opacity 100ms;
+  opacity: 0;
+}
+
+.folderAsHeader .nextra-sidebar-container a:hover svg {
+  opacity: 1;
+}
+
+svg:hover {
+  background: transparent !important;
+}
+
+/* Bold only on the header */
+.folderAsHeader .nextra-sidebar-container ul > li > a,
+.folderAsHeader .nextra-sidebar-container ul > li > a:hover {
+  font-weight: 600;
+  cursor: default;
+  line-height: 1.3;
+}
+
+.folderAsHeader .nextra-sidebar-container ul > li li a,
+.folderAsHeader .nextra-sidebar-container ul > li li a:hover {
+  font-weight: normal;
+  cursor: pointer;
+}
+
+.folderAsHeader .nextra-sidebar-container ul li ul li a {
+  font-size: 14px;
+}
+
+.wip {
+  position: relative;
+  display: flex;
+  opacity: 0.5;
+}
+
+.wip:after {
+  content: "WIP";
+  border-radius: 2px;
+  padding: 2px;
+  font-size: 9px;
+  line-height: 13px;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translate(0, -35%);
+  opacity: 0.6;
+}
+
+/* Content
+    ------------------------ */
+
+main div.mt-12 {
+  display: none;
+}
+
+.nextra-breadcrumb {
+  pointer-events: none;
+  display: none;
+}
+
+.nextra-navigation-links {
+  margin-top: 6rem;
+  padding-bottom: 4rem;
+  border: none;
+}
+
+html[class~="dark"] article p a,
+html[class~="dark"] article li a,
+html[class~="dark"] .dark\:hover\:text-primary-500:hover,
+html[class~="light"] article p a,
+html[class~="light"] article li a,
+html[class~="light"] .dark\:hover\:text-primary-500:hover {
+  color: var(--docs-accent-color-link) !important;
+}
+
+/* Keyboard Shortcut
+    ------------------------ */
+p kbd {
+  border-radius: 4px;
+  font-size: 13px;
+  padding: 6px;
+  padding-bottom: 7px;
+  line-height: 14px;
+  font-weight: bold;
+}
+
+html[class~="light"] p kbd {
+  color: rgb(75, 85, 99);
+  background: rgb(75 85 99 / 12%);
+  box-shadow: rgb(75 85 99 / 24%) 0px -2px 0px inset;
+}
+
+html[class~="dark"] p kbd {
+  background: rgb(42 42 42);
+  box-shadow: rgb(255 255 255 / 12%) 0px -2px 0px inset;
+  color: #c5c5c5;
+}
+
+/* Inline Code Snippet
+    ------------------------ */
+
+html[class~="light"] p code {
+  background-color: var(--docs-light-bg);
+  border: solid 1px #e5e7eb;
+}
+
+html[class~="dark"] p code {
+  background-color: var(--docs-dark-bg);
+  border: solid 1px #373737;
+  color: #c5c5c5;
+}
+
+/* Callout
+    ------------------------ */
+
+.nextra-callout {
+  box-sizing: border-box;
+  border-radius: 6px;
+  padding: 16px;
+  display: flex;
+  align-items: flex-start;
+}
+
+.nextra-callout .pr-2 {
+  padding-right: 1rem;
+}
+
+html[class~="light"] .nextra-callout {
+  color: rgb(65 65 65 / 90%);
+  background-color: var(--docs-light-bg);
+  border: none !important;
+}
+html[class~="dark"] .nextra-callout {
+  border: none !important;
+  background: var(--docs-dark-bg) !important;
+  color: #999999 !important;
+}
+
+html[class~="dark"] .nextra-callout h4 {
+  color: #fff;
+}
+
+html[class~="light"] .nextra-callout h4 {
+  color: #000;
+}
+
+/* CTA Container
+    ------------------------ */
+.ctaContainer {
+  display: flex;
+  gap: 1.3rem;
+  margin: 2rem 0;
+}
+
+@media (max-width: 920px) {
+  .ctaContainer {
+    flex-direction: column;
+  }
+}
+
+/* Headings
+    ------------------------ */
+
+.cbs article h1 {
+  font-size: 3.5rem;
+  margin-top: 0;
+  line-height: 100%;
+  letter-spacing: -0.05em;
+  font-weight: bold;
+}
+
+@media (max-width: 640px) {
+  .cbs article h1 {
+    font-size: 3rem;
+  }
+}
+
+.cbs article h2 {
+  border: none;
+  font-size: 2rem;
+  line-height: 120%;
+  letter-spacing: -0.025em;
+  font-weight: bold;
+}
+
+.cbs article h2 .nx-absolute,
+.cbs article h3 .nx-absolute {
+  margin-top: -7rem;
+}
+
+.cbs article h1:first-of-type {
+  margin-top: -0.16em;
+}
+
+.cbs article h2 {
+  margin-top: 2em;
+}
+
+.cbs article h2 + p:not(:first-child),
+.cbs article h3 + p:not(:first-child) {
+  margin-top: 0.6rem;
+}
+
+.cbs article h3 {
+  margin-top: 1.5em;
+}
+
+.cbs article img {
+  border-radius: 4px;
+}
+
+.cbs article .subheading-anchor {
+  margin-top: -110px;
+}
+
+/* Code Snippet
+    ------------------------ */
+
+html[class~="light"] article pre {
+  background-color: var(--docs-light-bg);
+  border: solid 1px #e5e7eb;
+}
+
+html[class~="dark"] article pre {
+  background-color: var(--docs-dark-bg);
+  border: solid 1px #2a2a2a;
+}
+
+.blitz-logo {
+  display: inline;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  width: auto;
+  height: 3rem;
+  fill: currentColor;
+}
