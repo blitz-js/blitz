@@ -175,10 +175,10 @@ export async function getSession(
   return sessionContext
 }
 
-export async function getAppSession(): Promise<Ctx> {
+export async function getBlitzContext(): Promise<Ctx> {
   const {headers, cookies} = await import("next/headers").catch(() => {
     throw new Error(
-      "getAppSession() can only be used in React Server Components in Nextjs 13 or higher",
+      "getBlitzContext() can only be used in React Server Components in Nextjs 13 or higher",
     )
   })
   const req = new IncomingMessage(new Socket()) as IncomingMessage & {
@@ -206,7 +206,7 @@ interface RouteUrlObject extends Pick<UrlObject, "pathname" | "query" | "href"> 
   pathname: string
 }
 
-export async function useAuthenticatedAppSession({
+export async function useAuthenticatedBlitzContext({
   redirectTo,
   redirectAuthenticatedTo,
   role,
@@ -215,22 +215,15 @@ export async function useAuthenticatedAppSession({
   redirectAuthenticatedTo?: string | RouteUrlObject | ((ctx: Ctx) => string | RouteUrlObject)
   role?: string | string[]
 }): Promise<void> {
-  const ctx: Ctx = await getAppSession()
+  const ctx: Ctx = await getBlitzContext()
   const userId = ctx.session.userId
   const {redirect} = await import("next/navigation").catch(() => {
     throw new Error(
-      "useAuthenticatedAppSession() can only be used in React Server Components in Nextjs 13 or higher",
+      "useAuthenticatedBlitzContext() can only be used in React Server Components in Nextjs 13 or higher",
     )
   })
-  const {headers} = await import("next/headers").catch(() => {
-    throw new Error(
-      "useAuthenticatedAppSession() can only be used in React Server Components in Nextjs 13 or higher",
-    )
-  })
-  const _headers = headers()
-  const currentUrl = _headers.get("referer") || _headers.get("origin") || _headers.get("host")
   if (userId) {
-    debug("[useAuthenticatedAppSession] User is authenticated")
+    debug("[useAuthenticatedBlitzContext] User is authenticated")
     if (redirectAuthenticatedTo) {
       if (typeof redirectAuthenticatedTo === "function") {
         redirectAuthenticatedTo = redirectAuthenticatedTo(ctx)
@@ -242,7 +235,7 @@ export async function useAuthenticatedAppSession({
       redirect(redirectUrl)
     }
     if (redirectTo && role) {
-      debug("[useAuthenticatedAppSession] redirectTo and role are both defined.")
+      debug("[useAuthenticatedBlitzContext] redirectTo and role are both defined.")
       try {
         ctx.session.$authorize(role)
       } catch (e) {
@@ -254,14 +247,14 @@ export async function useAuthenticatedAppSession({
       }
     }
   } else {
-    debug("[useAuthenticatedAppSession] User is not authenticated")
+    debug("[useAuthenticatedBlitzContext] User is not authenticated")
     if (redirectTo) {
       if (typeof redirectTo !== "string") {
         redirectTo = formatWithValidation(redirectTo)
       }
-      redirect(redirectTo + "?next=" + currentUrl)
+      redirect(redirectTo)
     } else {
-      redirect("/?next=" + currentUrl)
+      redirect("/")
     }
   }
 }
