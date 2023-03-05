@@ -1,6 +1,6 @@
 import {api} from "src/blitz-server"
 import db from "db"
-import {SecurePassword} from "@blitzjs/auth"
+import {SecurePassword} from "@blitzjs/auth/secure-password"
 
 export const authenticateUser = async (email: string, password: string) => {
   const user = await db.user.findFirst({where: {email}})
