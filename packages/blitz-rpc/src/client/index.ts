@@ -1,3 +1,2 @@
 export * from "./rpc"
-export {invoke} from "./invoke"
-export {invokeWithCtx} from "./invokeWithCtx"
+export {invoke, invokeWithCtx} from "./invoke"

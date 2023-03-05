@@ -147,6 +147,7 @@ function ensureMiddlewareResponse(
 export async function getSession(
   req: IncomingMessage,
   res: ServerResponse,
+  appDir = false,
 ): Promise<SessionContext> {
   ensureApiRequest(req)
   ensureMiddlewareResponse(res)
@@ -169,7 +170,9 @@ export async function getSession(
     sessionKernel = await createAnonymousSession(req, res)
   }
 
-  const sessionContext = makeProxyToPublicData(new SessionContextClass(req, res, sessionKernel))
+  const sessionContext = makeProxyToPublicData(
+    new SessionContextClass(req, res, sessionKernel, appDir),
+  )
   debug("New session context")
   res.blitzCtx.session = sessionContext
   return sessionContext
@@ -195,7 +198,7 @@ export async function getBlitzContext(): Promise<Ctx> {
       .map((c: {name: string; value: string}) => [c.name, c.value]),
   )
   const res = new ServerResponse(req)
-  const session = await getSession(req, res)
+  const session = await getSession(req, res, true)
   const ctx: Ctx = {
     session,
   }
@@ -271,19 +274,30 @@ const makeProxyToPublicData = <T extends SessionContextClass>(ctxClass: T): T =>
   })
 }
 
+const unSupportedMessage = async (method: string) => {
+  const message = log.chalk.magentaBright(
+    `Method ${method} is not yet supported in React Server Components`,
+  )
+  const _box = await log.box(message, "Blitz Auth")
+  console.log(_box)
+}
+
 export class SessionContextClass implements SessionContext {
   private _req: IncomingMessage & {cookies: {[key: string]: string}}
   private _res: ServerResponse & {blitzCtx: Ctx}
   private _kernel: SessionKernel
+  private _appDir: boolean
 
   constructor(
     req: IncomingMessage & {cookies: {[key: string]: string}},
     res: ServerResponse & {blitzCtx: Ctx},
     kernel: SessionKernel,
+    appDir: boolean,
   ) {
     this._req = req
     this._res = res
     this._kernel = kernel
+    this._appDir = appDir
   }
 
   get $handle() {
@@ -319,6 +333,10 @@ export class SessionContextClass implements SessionContext {
   }
 
   async $create(publicData: PublicData, privateData?: Record<any, any>) {
+    if (this._appDir) {
+      unSupportedMessage("$create")
+      return
+    }
     this._kernel = await createNewSession({
       req: this._req,
       res: this._res,
@@ -330,10 +348,18 @@ export class SessionContextClass implements SessionContext {
   }
 
   async $revoke() {
+    if (this._appDir) {
+      unSupportedMessage("$revoke")
+      return
+    }
     this._kernel = await revokeSession(this._req, this._res, this.$handle)
   }
 
   async $revokeAll() {
+    if (this._appDir) {
+      unSupportedMessage("$revokeAll")
+      return
+    }
     // revoke the current session which uses req/res
     await this.$revoke()
     // revoke other sessions for which there is no req/res object
@@ -342,6 +368,10 @@ export class SessionContextClass implements SessionContext {
   }
 
   async $setPublicData(data: Record<any, any>) {
+    if (this._appDir) {
+      unSupportedMessage("$setPublicData")
+      return
+    }
     if (this.userId) {
       await syncPubicDataFieldsForUserIfNeeded(this.userId, data)
     }
@@ -352,6 +382,10 @@ export class SessionContextClass implements SessionContext {
     return (await getPrivateData(this.$handle)) || {}
   }
   $setPrivateData(data: Record<any, any>) {
+    if (this._appDir) {
+      unSupportedMessage("$setPrivateData")
+      return Promise.resolve()
+    }
     return setPrivateData(this._kernel, data)
   }
 }

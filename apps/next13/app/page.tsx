@@ -5,12 +5,12 @@ import {getBlitzContext, useAuthenticatedBlitzContext} from "../src/blitz-server
 import getCurrentUser from "../src/users/queries/getCurrentUser"
 
 export default async function Home() {
-  await useAuthenticatedBlitzContext({
-    redirectTo: "/auth/login",
-    // role: ["admin"],
-    // redirectAuthenticatedTo: "/dashboard",
-  })
+  // await useAuthenticatedBlitzContext({
+  //   redirectTo: "/auth/login",
+  //   // redirectAuthenticatedTo: "/dashboard",
+  // })
   const ctx = await getBlitzContext()
+  ctx.session.$create({userId: 1})
   console.log("session", ctx.session.userId)
   const user = await getCurrentUser(null, ctx)
   console.log("user", user)
