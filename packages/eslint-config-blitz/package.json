@@ -1,0 +1,13 @@
+{
+  "name": "eslint-config-blitz",
+  "version": "2.0.0-beta.23",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "eslint-config-next": "latest",
+    "eslint-config-prettier": "^8.3.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
