@@ -2,9 +2,6 @@ import {describe, it, expect, beforeAll, afterAll} from "vitest"
 import {
   killApp,
   findPort,
-  launchApp,
-  nextBuild,
-  nextStart,
   runBlitzCommand,
   blitzLaunchApp,
   blitzBuild,
@@ -47,7 +44,7 @@ const runTests = (mode?: string) => {
         async () => {
           const browser = await webdriver(appPort, "/authenticated-page")
           let errorMsg = await browser.elementById(`error`).text()
-          expect(errorMsg).toMatch(/Error: You are not authenticated/) 
+          expect(errorMsg).toMatch(/Error: You are not authenticated/)
           if (browser) browser.close()
         },
         5000 * 60 * 2,
