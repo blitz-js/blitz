@@ -42,6 +42,7 @@
     "@types/jscodeshift": "0.11.2",
     "@types/node": "18.11.9",
     "ast-types": "0.14.2",
+    "eslint-config-blitz-next": "workspace:2.0.0-beta.23",
     "unbuild": "0.7.6",
     "watch": "1.0.2"
   },

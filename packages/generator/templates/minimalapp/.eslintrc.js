@@ -1,1 +1,7 @@
-module.exports = require("@blitzjs/next/eslint")
+module.exports = {
+    "extends": "blitz-next",
+    "rules": {
+        // enable additional rules
+
+    }
+}

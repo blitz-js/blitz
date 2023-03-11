@@ -28,6 +28,7 @@
     "@blitzjs/config": "2.0.0-beta.23",
     "@types/react": "18.0.25",
     "@types/react-dom": "17.0.14",
+    "eslint-config-blitz-next": "workspace:2.0.0-beta.23",
     "react": "18.2.0",
     "typescript": "^4.8.4",
     "unbuild": "0.7.6",
