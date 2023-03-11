@@ -14,6 +14,7 @@ const args = arg(commonArgs, {
 
 const commands: {[command: string]: () => Promise<() => void>} = {
   "upgrade-legacy": () => import("./upgrade-legacy").then((i) => i.upgradeLegacy),
+  eslint: () => import("./eslint").then((i) => i.eslintBreakingChange),
 }
 
 const foundCommand = Boolean(commands[args._[0] as string])
