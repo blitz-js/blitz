@@ -1,3 +1,0 @@
-[submodule "packages/blitz-auth/src/server/adapters/next-auth/next-auth"]
-	path = packages/blitz-auth/src/server/adapters/next-auth/next-auth
-	url = https://github.com/nextauthjs/next-auth
