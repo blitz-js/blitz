@@ -141,7 +141,6 @@ describe("Auth Tests", () => {
     }, 5000 * 60 * 2)
     afterAll(async () => {
       await killApp(app)
-      process.kill(app.pid, "SIGINT")
     })
     runTests()
   })
