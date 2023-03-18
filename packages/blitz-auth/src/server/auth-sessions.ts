@@ -13,6 +13,8 @@ import {
   AuthorizationError,
   CSRFTokenMismatchError,
   log,
+  baseLogger,
+  chalk,
 } from "blitz"
 import {
   EmptyPublicData,
@@ -218,6 +220,10 @@ export async function useAuthenticatedBlitzContext({
   redirectAuthenticatedTo?: string | RouteUrlObject | ((ctx: Ctx) => string | RouteUrlObject)
   role?: string | string[]
 }): Promise<void> {
+  const log = baseLogger().getChildLogger()
+  const customChalk = new chalk.Instance({
+    level: log.settings.type === "json" ? 0 : chalk.level,
+  })
   const ctx: Ctx = await getBlitzContext()
   const userId = ctx.session.userId
   const {redirect} = await import("next/navigation").catch(() => {
@@ -235,6 +241,8 @@ export async function useAuthenticatedBlitzContext({
         typeof redirectAuthenticatedTo === "string"
           ? redirectAuthenticatedTo
           : formatWithValidation(redirectAuthenticatedTo)
+      debug("[useAuthenticatedBlitzContext] Redirecting to", redirectUrl)
+      log.info("Authentication Redirect: " + customChalk.dim("(Authenticated)"), redirectUrl)
       redirect(redirectUrl)
     }
     if (redirectTo && role) {
@@ -246,6 +254,7 @@ export async function useAuthenticatedBlitzContext({
         if (typeof redirectTo !== "string") {
           redirectTo = formatWithValidation(redirectTo)
         }
+        log.info("Authorization Redirect: " + customChalk.dim(`Role ${role}`), redirectTo)
         redirect(redirectTo)
       }
     }
@@ -255,9 +264,8 @@ export async function useAuthenticatedBlitzContext({
       if (typeof redirectTo !== "string") {
         redirectTo = formatWithValidation(redirectTo)
       }
+      log.info("Authentication Redirect: " + customChalk.dim("(Not authenticated)"), redirectTo)
       redirect(redirectTo)
-    } else {
-      redirect("/")
     }
   }
 }
