@@ -256,11 +256,14 @@ importers:
       lowdb: 3.0.0
       next: 12.2.5
       node-fetch: 3.2.3
+      playwright: 1.28.0
       prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0
+      secure-password: 4.0.0
       ts-node: 10.9.1
       typescript: ^4.8.4
+      wait-port: 1.0.4
     dependencies:
       "@blitzjs/auth": link:../../packages/blitz-auth
       "@blitzjs/config": link:../../packages/config
@@ -272,6 +275,8 @@ importers:
       prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
+      secure-password: 4.0.0
+      wait-port: 1.0.4
     devDependencies:
       "@next/bundle-analyzer": 12.0.8
       "@types/express": 4.17.13
@@ -284,6 +289,7 @@ importers:
       fs-extra: 10.0.1
       get-port: 6.1.2
       node-fetch: 3.2.3
+      playwright: 1.28.0
       ts-node: 10.9.1_ieummqxttktzud32hpyrer46t4
       typescript: 4.8.4
 
@@ -547,7 +553,7 @@ importers:
       "@vitejs/plugin-react": 1.3.0
       delay: 5.0.0
       eslint: 8.27.0
-      eslint-config-next: 13.1.6_rmayb2veg2btbq6mbmnyivgasy
+      eslint-config-next: 13.2.4_rmayb2veg2btbq6mbmnyivgasy
       eslint-plugin-testing-library: 5.0.1_rmayb2veg2btbq6mbmnyivgasy
       jsdom: 19.0.0
       typescript: 4.8.4
@@ -5091,10 +5097,10 @@ packages:
     dependencies:
       glob: 7.1.7
 
-  /@next/eslint-plugin-next/13.1.6:
+  /@next/eslint-plugin-next/13.2.4:
     resolution:
       {
-        integrity: sha512-o7cauUYsXjzSJkay8wKjpKJf2uLzlggCsGUkPu3lP09Pv97jYlekTC20KJrjQKmSv5DXV0R/uks2ZXhqjNkqAw==,
+        integrity: sha512-ck1lI+7r1mMJpqLNa3LJ5pxCfOB1lfJncKmRJeJxcJqcngaFwylreLP7da6Rrjr6u2gVRTfmnkSkjc80IiQCwQ==,
       }
     dependencies:
       glob: 7.1.7
@@ -10957,10 +10963,10 @@ packages:
       - supports-color
     dev: false
 
-  /eslint-config-next/13.1.6_rmayb2veg2btbq6mbmnyivgasy:
+  /eslint-config-next/13.2.4_rmayb2veg2btbq6mbmnyivgasy:
     resolution:
       {
-        integrity: sha512-0cg7h5wztg/SoLAlxljZ0ZPUQ7i6QKqRiP4M2+MgTZtxWwNKb2JSwNc18nJ6/kXBI6xYvPraTbQSIhAuVw6czw==,
+        integrity: sha512-lunIBhsoeqw6/Lfkd6zPt25w1bn0znLA/JCL+au1HoEpSb4/PpsOYsYtgV/q+YPsoKIOzFyU5xnb04iZnXjUvg==,
       }
     peerDependencies:
       eslint: ^7.23.0 || ^8.0.0
@@ -10969,7 +10975,7 @@ packages:
       typescript:
         optional: true
     dependencies:
-      "@next/eslint-plugin-next": 13.1.6
+      "@next/eslint-plugin-next": 13.2.4
       "@rushstack/eslint-patch": 1.1.3
       "@typescript-eslint/parser": 5.43.0_rmayb2veg2btbq6mbmnyivgasy
       eslint: 8.27.0
@@ -13972,7 +13978,7 @@ packages:
       pretty-format: 29.2.1
       slash: 3.0.0
       strip-json-comments: 3.1.1
-      ts-node: 10.9.1_typescript@4.8.4
+      ts-node: 10.9.1_cbe7ovvae6zqfnmtgctpgpys54
     transitivePeerDependencies:
       - supports-color
 
@@ -15864,7 +15870,6 @@ packages:
       {
         integrity: sha512-C40jQ3NzfkP53NsO8kEOFd79p4b9kDXQMwgiY1z8ZwrDZgUyom0AHwGegF4Dm99L+YoYhuaB0ceerUcXmqr1rQ==,
       }
-    dev: true
 
   /nanoid/3.2.0:
     resolution:
@@ -16100,7 +16105,6 @@ packages:
         integrity: sha512-amJnQCcgtRVw9SvoebO3BKGESClrfXGCUTX9hSn1OuGQTQBOZmVd0Z0OlecpuRksKvbsUqALE8jls/ErClAPuQ==,
       }
     hasBin: true
-    dev: true
 
   /node-int64/0.4.0:
     resolution:
@@ -18355,7 +18359,6 @@ packages:
     dependencies:
       nanoassert: 1.1.0
       sodium-native: 3.3.0
-    dev: true
 
   /selderee/0.6.0:
     resolution:
@@ -18787,7 +18790,6 @@ packages:
     requiresBuild: true
     dependencies:
       node-gyp-build: 4.4.0
-    dev: true
 
   /source-map-js/1.0.2:
     resolution:
@@ -19698,7 +19700,6 @@ packages:
       typescript: 4.8.4
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
-    dev: false
 
   /ts-node/10.9.1_ieummqxttktzud32hpyrer46t4:
     resolution:
@@ -19765,6 +19766,7 @@ packages:
       typescript: 4.8.4
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
+    dev: false
 
   /tsconfig-paths/3.14.1:
     resolution:
@@ -20765,6 +20767,21 @@ packages:
       rxjs: 7.5.5
     transitivePeerDependencies:
       - debug
+    dev: false
+
+  /wait-port/1.0.4:
+    resolution:
+      {
+        integrity: sha512-w8Ftna3h6XSFWWc2JC5gZEgp64nz8bnaTp5cvzbJSZ53j+omktWTDdwXxEF0jM8YveviLgFWvNGrSvRHnkyHyw==,
+      }
+    engines: {node: ">=10"}
+    hasBin: true
+    dependencies:
+      chalk: 4.1.2
+      commander: 9.4.1
+      debug: 4.3.4
+    transitivePeerDependencies:
+      - supports-color
     dev: false
 
   /walker/1.0.8:

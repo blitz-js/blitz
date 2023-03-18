@@ -1,6 +1,6 @@
 import {api} from "../../app/blitz-server"
 import prisma from "../../db/index"
-import {SecurePassword} from "@blitzjs/auth"
+import {SecurePassword} from "@blitzjs/auth/secure-password"
 import {Role} from "../../types"
 
 export const authenticateUser = async (email: string, password: string) => {
