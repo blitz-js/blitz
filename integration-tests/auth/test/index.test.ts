@@ -46,6 +46,7 @@ const runTests = (mode?: string) => {
       it(
         "should render error for protected query",
         async () => {
+          await waitPort({port: appPort})
           const browser = await webdriver(appPort, "/authenticated-page")
           let errorMsg = await browser.elementById(`error`).text()
           expect(errorMsg).toMatch(/Error: You are not authenticated/)
@@ -155,23 +156,13 @@ describe("Auth Tests", () => {
         await runBlitzCommand(["prisma", "generate"])
         await runBlitzCommand(["prisma", "migrate", "deploy"])
         await blitzBuild()
-        appPort = (await findPort()) + 1
+        appPort = await findPort()
         app = await blitzStart(appPort, {cwd: process.cwd()})
       } catch (err) {
         console.log(err)
       }
     }, 5000 * 60 * 2)
     afterAll(async () => await killApp(app))
-    const params = {
-      host: "localhost",
-      port: appPort,
-    }
-    //wait for the appPort to be available
-    waitPort(params)
-      .then(() => {})
-      .catch((err) => {
-        console.log(err)
-      })
     runTests()
   })
 })
