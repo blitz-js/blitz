@@ -26,9 +26,7 @@ function Content() {
 export function PageWithGetQueryData() {
   return (
     <div id="page">
-      <Suspense fallback={"Loading..."}>
-        <Content />
-      </Suspense>
+      <Content />
     </div>
   )
 }
