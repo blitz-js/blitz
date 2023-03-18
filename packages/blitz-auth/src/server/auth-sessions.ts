@@ -209,6 +209,59 @@ interface RouteUrlObject extends Pick<UrlObject, "pathname" | "query" | "href"> 
   pathname: string
 }
 
+export async function useAuthenticatedBlitzContext({
+  redirectTo,
+  redirectAuthenticatedTo,
+  role,
+}: {
+  redirectTo?: string | RouteUrlObject
+  redirectAuthenticatedTo?: string | RouteUrlObject | ((ctx: Ctx) => string | RouteUrlObject)
+  role?: string | string[]
+}): Promise<void> {
+  const ctx: Ctx = await getBlitzContext()
+  const userId = ctx.session.userId
+  const {redirect} = await import("next/navigation").catch(() => {
+    throw new Error(
+      "useAuthenticatedBlitzContext() can only be used in React Server Components in Nextjs 13 or higher",
+    )
+  })
+  if (userId) {
+    debug("[useAuthenticatedBlitzContext] User is authenticated")
+    if (redirectAuthenticatedTo) {
+      if (typeof redirectAuthenticatedTo === "function") {
+        redirectAuthenticatedTo = redirectAuthenticatedTo(ctx)
+      }
+      const redirectUrl =
+        typeof redirectAuthenticatedTo === "string"
+          ? redirectAuthenticatedTo
+          : formatWithValidation(redirectAuthenticatedTo)
+      redirect(redirectUrl)
+    }
+    if (redirectTo && role) {
+      debug("[useAuthenticatedBlitzContext] redirectTo and role are both defined.")
+      try {
+        ctx.session.$authorize(role)
+      } catch (e) {
+        log.error("Authorization Error: " + (e as Error).message)
+        if (typeof redirectTo !== "string") {
+          redirectTo = formatWithValidation(redirectTo)
+        }
+        redirect(redirectTo)
+      }
+    }
+  } else {
+    debug("[useAuthenticatedBlitzContext] User is not authenticated")
+    if (redirectTo) {
+      if (typeof redirectTo !== "string") {
+        redirectTo = formatWithValidation(redirectTo)
+      }
+      redirect(redirectTo)
+    } else {
+      redirect("/")
+    }
+  }
+}
+
 const makeProxyToPublicData = <T extends SessionContextClass>(ctxClass: T): T => {
   return new Proxy(ctxClass, {
     get(target, prop, receiver) {
@@ -281,7 +334,7 @@ export class SessionContextClass implements SessionContext {
 
   async $create(publicData: PublicData, privateData?: Record<any, any>) {
     if (this._appDir) {
-      unSupportedMessage("$create").finally(() => {})
+      unSupportedMessage("$create")
       return
     }
     this._kernel = await createNewSession({
@@ -296,7 +349,7 @@ export class SessionContextClass implements SessionContext {
 
   async $revoke() {
     if (this._appDir) {
-      unSupportedMessage("$revoke").finally(() => {})
+      unSupportedMessage("$revoke")
       return
     }
     this._kernel = await revokeSession(this._req, this._res, this.$handle)
@@ -304,7 +357,7 @@ export class SessionContextClass implements SessionContext {
 
   async $revokeAll() {
     if (this._appDir) {
-      unSupportedMessage("$revokeAll").finally(() => {})
+      unSupportedMessage("$revokeAll")
       return
     }
     // revoke the current session which uses req/res
@@ -316,7 +369,7 @@ export class SessionContextClass implements SessionContext {
 
   async $setPublicData(data: Record<any, any>) {
     if (this._appDir) {
-      unSupportedMessage("$setPublicData").finally(() => {})
+      unSupportedMessage("$setPublicData")
       return
     }
     if (this.userId) {
@@ -330,7 +383,7 @@ export class SessionContextClass implements SessionContext {
   }
   $setPrivateData(data: Record<any, any>) {
     if (this._appDir) {
-      unSupportedMessage("$setPrivateData").finally(() => {})
+      unSupportedMessage("$setPrivateData")
       return Promise.resolve()
     }
     return setPrivateData(this._kernel, data)
