@@ -34,7 +34,7 @@ function readCookie(cookieHeader, name) {
 }
 
 const runTests = (mode?: string) => {
-  describe("Auth", () => {
+  describe("Tests", () => {
     describe("unauthenticated", () => {
       it(
         "should render error for protected query - client",
@@ -95,6 +95,25 @@ const runTests = (mode?: string) => {
       })
     })
 
+    describe("RPC get query data", () => {
+      it(
+        "should work",
+        async () => {
+          const browser = await webdriver(appPort, "/react-query")
+
+          browser.waitForElementByCss("#button", 0)
+          await browser.elementByCss("#button").click()
+
+          browser.waitForElementByCss("#new-data", 0)
+          const newText = await browser.elementByCss("#new-data").text()
+          expect(newText).toMatch(/basic-result/)
+
+          if (browser) await browser.close()
+        },
+        5000 * 60 * 2,
+      )
+    })
+
     describe("authenticated", () => {
       it("should login successfully", async () => {
         const res = await fetch(
@@ -136,26 +155,6 @@ const runTests = (mode?: string) => {
 
         expect(headRes.status).toBe(200)
       })
-    })
-  })
-  describe("RPC", () => {
-    describe("get query data", () => {
-      it(
-        "should work",
-        async () => {
-          const browser = await webdriver(appPort, "/react-query")
-
-          browser.waitForElementByCss("#button", 0)
-          await browser.elementByCss("#button").click()
-
-          browser.waitForElementByCss("#new-data", 0)
-          const newText = await browser.elementByCss("#new-data").text()
-          expect(newText).toMatch(/basic-result/)
-
-          if (browser) await browser.close()
-        },
-        5000 * 60 * 2,
-      )
     })
   })
 }

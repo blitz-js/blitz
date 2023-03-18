@@ -274,11 +274,9 @@ const makeProxyToPublicData = <T extends SessionContextClass>(ctxClass: T): T =>
   })
 }
 
-const unSupportedMessage = async (method: string) => {
-  const message = log.chalk.magentaBright(
-    `Method ${method} is not yet supported in React Server Components`,
-  )
-  const _box = await log.box(message, "Blitz Auth")
+const NotSupportedMessage = async (method: string) => {
+  const message = `Method ${method} is not yet supported in React Server Components`
+  const _box = await log.box(message, log.chalk.hex("8a3df0").bold("Blitz Auth"))
   console.log(_box)
 }
 
@@ -334,7 +332,7 @@ export class SessionContextClass implements SessionContext {
 
   async $create(publicData: PublicData, privateData?: Record<any, any>) {
     if (this._appDir) {
-      unSupportedMessage("$create")
+      NotSupportedMessage("$create").then(() => {})
       return
     }
     this._kernel = await createNewSession({
@@ -349,7 +347,7 @@ export class SessionContextClass implements SessionContext {
 
   async $revoke() {
     if (this._appDir) {
-      unSupportedMessage("$revoke")
+      NotSupportedMessage("$revoke").then(() => {})
       return
     }
     this._kernel = await revokeSession(this._req, this._res, this.$handle)
@@ -357,7 +355,7 @@ export class SessionContextClass implements SessionContext {
 
   async $revokeAll() {
     if (this._appDir) {
-      unSupportedMessage("$revokeAll")
+      NotSupportedMessage("$revokeAll").then(() => {})
       return
     }
     // revoke the current session which uses req/res
@@ -369,7 +367,7 @@ export class SessionContextClass implements SessionContext {
 
   async $setPublicData(data: Record<any, any>) {
     if (this._appDir) {
-      unSupportedMessage("$setPublicData")
+      NotSupportedMessage("$setPublicData").then(() => {})
       return
     }
     if (this.userId) {
@@ -383,7 +381,7 @@ export class SessionContextClass implements SessionContext {
   }
   $setPrivateData(data: Record<any, any>) {
     if (this._appDir) {
-      unSupportedMessage("$setPrivateData")
+      NotSupportedMessage("$setPrivateData").then(() => {})
       return Promise.resolve()
     }
     return setPrivateData(this._kernel, data)
