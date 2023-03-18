@@ -1,5 +1,5 @@
 {
-  "name": "test-auth",
+  "name": "test-app-dir",
   "version": "0.0.0",
   "private": true,
   "prisma": {
