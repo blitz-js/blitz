@@ -1,4 +1,5 @@
 import {describe, it, expect, beforeAll, afterAll} from "vitest"
+import waitPort from "wait-port"
 import {
   killApp,
   findPort,
@@ -134,7 +135,7 @@ const runTests = (mode?: string) => {
 }
 
 describe("Auth Tests", () => {
-  describe("dev mode", () => {
+  describe("dev mode", async () => {
     beforeAll(async () => {
       try {
         await runBlitzCommand(["prisma", "migrate", "reset", "--force"])
@@ -161,7 +162,16 @@ describe("Auth Tests", () => {
       }
     }, 5000 * 60 * 2)
     afterAll(async () => await killApp(app))
-
+    const params = {
+      host: "localhost",
+      port: appPort,
+    }
+    //wait for the appPort to be available
+    waitPort(params)
+      .then(() => {})
+      .catch((err) => {
+        console.log(err)
+      })
     runTests()
   })
 })
