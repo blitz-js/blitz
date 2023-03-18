@@ -332,7 +332,7 @@ export class SessionContextClass implements SessionContext {
 
   async $create(publicData: PublicData, privateData?: Record<any, any>) {
     if (this._appDir) {
-      NotSupportedMessage("$create").then(() => {})
+      void NotSupportedMessage("$create")
       return
     }
     this._kernel = await createNewSession({
@@ -347,7 +347,7 @@ export class SessionContextClass implements SessionContext {
 
   async $revoke() {
     if (this._appDir) {
-      NotSupportedMessage("$revoke").then(() => {})
+      void NotSupportedMessage("$revoke")
       return
     }
     this._kernel = await revokeSession(this._req, this._res, this.$handle)
@@ -355,7 +355,7 @@ export class SessionContextClass implements SessionContext {
 
   async $revokeAll() {
     if (this._appDir) {
-      NotSupportedMessage("$revokeAll").then(() => {})
+      void NotSupportedMessage("$revokeAll")
       return
     }
     // revoke the current session which uses req/res
@@ -367,7 +367,7 @@ export class SessionContextClass implements SessionContext {
 
   async $setPublicData(data: Record<any, any>) {
     if (this._appDir) {
-      NotSupportedMessage("$setPublicData").then(() => {})
+      void NotSupportedMessage("$setPublicData")
       return
     }
     if (this.userId) {
@@ -381,7 +381,7 @@ export class SessionContextClass implements SessionContext {
   }
   $setPrivateData(data: Record<any, any>) {
     if (this._appDir) {
-      NotSupportedMessage("$setPrivateData").then(() => {})
+      void NotSupportedMessage("$setPrivateData")
       return Promise.resolve()
     }
     return setPrivateData(this._kernel, data)
