@@ -22,7 +22,8 @@
   "sideEffects": false,
   "license": "MIT",
   "files": [
-    "dist/**"
+    "dist/**",
+    "secure-password.*"
   ],
   "dependencies": {
     "@types/b64-lite": "1.3.0",
