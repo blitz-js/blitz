@@ -3,9 +3,6 @@ import waitPort from "wait-port"
 import {
   killApp,
   findPort,
-  launchApp,
-  nextBuild,
-  nextStart,
   runBlitzCommand,
   blitzLaunchApp,
   blitzBuild,
@@ -13,15 +10,11 @@ import {
 } from "../../utils/next-test-utils"
 import webdriver from "../../utils/next-webdriver"
 
-import {join} from "path"
 import fetch from "node-fetch"
 import {fromBase64} from "b64-lite"
-import seed from "../db/seed"
-import prisma from "../db"
 
 let app: any
 let appPort: number
-const appDir = join(__dirname, "../")
 const HEADER_CSRF = "anti-csrf"
 const COOKIE_PUBLIC_DATA_TOKEN = "auth-tests-cookie-prefix_sPublicDataToken"
 const COOKIE_SESSION_TOKEN = "auth-tests-cookie-prefix_sSessionToken"
@@ -156,7 +149,7 @@ describe("Auth Tests", () => {
         await runBlitzCommand(["prisma", "generate"])
         await runBlitzCommand(["prisma", "migrate", "deploy"])
         await blitzBuild()
-        appPort = await findPort()
+        // appPort = await findPort()
         app = await blitzStart(appPort, {cwd: process.cwd()})
       } catch (err) {
         console.log(err)
