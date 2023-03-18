@@ -34,15 +34,20 @@ export function invokeWithCtx<T extends (...args: any) => any, TInput = FirstPar
   return queryFn(params, ctx)
 }
 
-export function invokeServer<T extends (...args: any) => any, TInput = FirstParam<T>>(
+export async function invokeResolver<T extends (...args: any) => any, TInput = FirstParam<T>>(
   queryFn: T,
   params: TInput,
-  ctx: Ctx,
 ): Promise<PromiseReturnType<T>> {
   if (typeof queryFn === "undefined") {
     throw new Error(
       "invokeServer is missing the first argument - it must be a query or mutation function",
     )
   }
+  const {getBlitzContext} = await import("@blitzjs/auth").catch((e) => {
+    throw new Error(
+      `invokeResolver can only be used in a Blitz powered Nextjs app directory. Make sure you have installed the @blitzjs/auth package.`,
+    )
+  })
+  const ctx = await getBlitzContext()
   return queryFn(params, ctx)
 }

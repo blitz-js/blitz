@@ -1,7 +1,7 @@
 import Link from "next/link"
 import styles from "src/styles/Home.module.css"
 import Test from "./react-query"
-import {getBlitzContext, useAuthenticatedBlitzContext} from "../src/blitz-server"
+import {getBlitzContext, invokeResolver, useAuthenticatedBlitzContext} from "../src/blitz-server"
 import getCurrentUser from "../src/users/queries/getCurrentUser"
 
 export default async function Home() {
@@ -9,10 +9,11 @@ export default async function Home() {
   //   redirectTo: "/auth/login",
   //   // redirectAuthenticatedTo: "/dashboard",
   // })
-  const ctx = await getBlitzContext()
-  ctx.session.$create({userId: 1})
-  console.log("session", ctx.session.userId)
-  const user = await getCurrentUser(null, ctx)
+  // const ctx = await getBlitzContext()
+  // ctx.session.$create({userId: 1})
+  // console.log("session", ctx.session.userId)
+  // const user = await getCurrentUser(null, ctx)
+  const user = await invokeResolver(getCurrentUser, null)
   console.log("user", user)
   return (
     <div
