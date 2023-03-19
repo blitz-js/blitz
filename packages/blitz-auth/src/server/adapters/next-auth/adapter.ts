@@ -14,13 +14,10 @@ import {
 import {isLocalhost, SessionContext} from "../../../index-server"
 
 // next-auth internals
-import oAuthCallback from "./internals/core/lib/oauth/callback"
-import getAuthorizationUrl from "./internals/core/lib/oauth/authorization-url"
-import {init} from "./internals/core/init"
 import {toInternalRequest, toResponse} from "./internals/utils/web"
 import {getBody, getURL, setHeaders} from "./internals/utils/node"
 import type {RequestInternal, AuthOptions, User} from "next-auth"
-import type {Cookie} from "./internals/core/lib/cookie"
+import type {Cookie} from "next-auth/core/lib/cookie"
 import type {AuthAction, InternalOptions} from "./internals/core/types"
 
 import type {
@@ -28,6 +25,8 @@ import type {
   BlitzNextAuthApiHandler,
   BlitzNextAuthOptions,
 } from "./types"
+
+export {withNextAuthAdapter} from "./webpack"
 
 const INTERNAL_REDIRECT_URL_KEY = "_redirectUrl"
 
@@ -100,7 +99,9 @@ export function NextAuthAdapter(config: BlitzNextAuthOptions): BlitzNextAuthApiH
     if (providerId?.includes("?")) {
       providerId = providerId.split("?")[0]
     }
+    const {init} = await import("next-auth/core/init").then((m) => m)
     const {options, cookies} = await init({
+      // @ts-ignore
       url: new URL(
         // @ts-ignore
         internalRequest.url!,
@@ -154,6 +155,9 @@ async function AuthHandler(
   if (action === "login") {
     middleware.push(async (req, res, next) => {
       try {
+        const getAuthorizationUrl = await import("next-auth/core/lib/oauth/authorization-url").then(
+          (m) => m.default,
+        )
         const _signin = await getAuthorizationUrl({options: options, query: req.query})
         if (_signin.cookies) cookies.push(..._signin.cookies)
         const session = res.blitzCtx.session as SessionContext
@@ -184,6 +188,9 @@ async function AuthHandler(
     middleware.push(
       // eslint-disable-next-line no-shadow
       connectMiddleware(async (req, res, next) => {
+        const oAuthCallback = await import("next-auth/core/lib/oauth/callback").then(
+          (m) => m.default,
+        )
         try {
           const {profile, account, OAuthProfile} = await oAuthCallback({
             query: internalRequest.query,

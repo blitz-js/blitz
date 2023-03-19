@@ -542,7 +542,8 @@ export async function generateManifest() {
 
   const {declaration, implementation} = setupManifest(routes)
 
-  const dotBlitz = join(await findNodeModulesRoot(process.cwd()), ".blitz")
+  // const dotBlitz = join(await findNodeModulesRoot(process.cwd()), ".blitz")
+  const dotBlitz = join(process.cwd(), ".blitz")
 
   await outputFile(join(dotBlitz, "index.js"), implementation, {
     encoding: "utf-8",
@@ -555,30 +556,6 @@ export async function generateManifest() {
   })
 }
 
-async function findNodeModulesRoot(src: string) {
-  let root: string
-  if (isInternalBlitzMonorepoDevelopment) {
-    root = join(__dirname, "..", "..", "..", "..", "/node_modules")
-  } else {
-    const blitzPkgLocation = dirname(
-      (await findUp("package.json", {
-        cwd: resolveFrom(src, "blitz"),
-      })) ?? "",
-    )
-
-    if (!blitzPkgLocation) {
-      throw new Error("Internal Blitz Error: unable to find 'blitz' package location")
-    }
-
-    if (blitzPkgLocation.includes(".pnpm")) {
-      root = join(blitzPkgLocation, "../../../../")
-    } else {
-      root = join(blitzPkgLocation, "../")
-    }
-  }
-
-  return root
-}
 let webpackWatcher: Watchpack | null = null
 
 export async function startWatcher(pagesDir = ""): Promise<void> {

@@ -1,5 +1,5 @@
+import {OAuthError} from "blitz"
 import {serialize, parse as parseCookie} from "cookie"
-import {UnknownAction} from "../core/errors"
 import type {ResponseInternal, RequestInternal} from "next-auth/core"
 import type {AuthAction} from "next-auth/core/types"
 
@@ -56,7 +56,7 @@ export async function toInternalRequest(req: Request): Promise<RequestInternal |
 
     const action = actions.find((a) => pathname.includes(a)) as AuthAction | undefined
     if (!action) {
-      throw new UnknownAction("Cannot detect action.")
+      throw new OAuthError("Cannot detect action.")
     }
 
     const providerIdOrAction = pathname.split("/").pop()

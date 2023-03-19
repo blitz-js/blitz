@@ -22,36 +22,6 @@ try {
   // noop
 }
 
-// todo: we should reuse `findNodeModulesRoot` from /nextjs/packages/next/build/routes.ts
-async function findNodeModulesRoot(src) {
-  let root
-  if (isInBlitzMonorepo) {
-    root = path.join(src, "node_modules")
-  } else if (src.includes(".pnpm")) {
-    const blitzPkgLocation = path.dirname(
-      (await findUp("package.json", {
-        cwd: resolveFrom(src, "blitz"),
-      })) || "",
-    )
-    if (!blitzPkgLocation) {
-      throw new Error("Internal Blitz Error: unable to find 'blitz' package location")
-    }
-    root = path.join(blitzPkgLocation, "../../../../")
-  } else {
-    const blitzPkgLocation = path.dirname(
-      (await findUp("package.json", {
-        cwd: resolveFrom(src, "blitz"),
-      })) || "",
-    )
-    if (!blitzPkgLocation) {
-      throw new Error("Internal Blitz Error: unable to find 'blitz' package location")
-    }
-
-    root = path.join(blitzPkgLocation, "../")
-  }
-  return path.join(root, ".blitz")
-}
-
 /*
   Adapted from https://github.com/prisma/prisma/blob/974cbeff4a7f616137ce540d0ec88a2a86365892/src/packages/client/scripts/postinstall.js
 */
@@ -164,10 +134,7 @@ function codegen() {
 
   async function ensureEmptyDotBlitz() {
     try {
-      const dotBlitzDir = isInBlitzMonorepo
-        ? path.join(process.cwd(), "node_modules/.blitz")
-        : await findNodeModulesRoot(__dirname)
-
+      const dotBlitzDir = path.join(process.cwd(), ".blitz")
       await makeDir(dotBlitzDir)
       const defaultIndexJsPath = path.join(dotBlitzDir, "index.js")
       const defaultIndexBrowserJSPath = path.join(dotBlitzDir, "index-browser.js")

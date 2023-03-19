@@ -33,7 +33,7 @@ const config: BlitzNextAuthOptions = {
       source: "github",
     }
     await session.$create(publicData)
-    return { redirectUrl: "/github" }
+    return { redirectUrl: "/" }
   },
 }
 
