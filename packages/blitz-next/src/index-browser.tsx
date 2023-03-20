@@ -14,6 +14,7 @@ export * from "./error-boundary"
 export * from "./error-component"
 export * from "./use-params"
 export * from "./router-context"
+export {Routes} from ".blitz"
 
 const buildWithBlitz = (withPlugins: BlitzPluginWithProvider) => {
   return function withBlitzAppRoot(UserAppRoot: React.ComponentType<AppProps>) {

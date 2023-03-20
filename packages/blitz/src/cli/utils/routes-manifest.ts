@@ -7,6 +7,7 @@ import findUp from "find-up"
 import resolveFrom from "resolve-from"
 import Watchpack from "watchpack"
 import {isInternalBlitzMonorepoDevelopment} from "./helpers"
+import {findNodeModulesRoot} from "./find-node-modules"
 export const CONFIG_FILE = ".blitz.config.compiled.js"
 export const NEXT_CONFIG_FILE = "next.config.js"
 export const PHASE_PRODUCTION_SERVER = "phase-production-server"
@@ -542,8 +543,7 @@ export async function generateManifest() {
 
   const {declaration, implementation} = setupManifest(routes)
 
-  // const dotBlitz = join(await findNodeModulesRoot(process.cwd()), ".blitz")
-  const dotBlitz = join(process.cwd(), ".blitz")
+  const dotBlitz = join(await findNodeModulesRoot(process.cwd()), ".blitz")
 
   await outputFile(join(dotBlitz, "index.js"), implementation, {
     encoding: "utf-8",

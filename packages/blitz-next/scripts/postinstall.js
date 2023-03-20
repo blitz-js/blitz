@@ -132,13 +132,40 @@ function codegen() {
     })
   }
 
+  async function findNodeModulesRoot(src) {
+    let root
+    if (isInBlitzMonorepo) {
+      root = path.join(src, "node_modules")
+    } else if (src.includes(".pnpm")) {
+      const blitzPkgLocation = path.dirname(
+        (await findUp("package.json", {
+          cwd: resolveFrom(src, "blitz"),
+        })) || "",
+      )
+      if (!blitzPkgLocation) {
+        throw new Error("Internal Blitz Error: unable to find 'blitz' package location")
+      }
+      root = path.join(blitzPkgLocation, "../../../../")
+    } else {
+      const blitzPkgLocation = path.dirname(
+        (await findUp("package.json", {
+          cwd: resolveFrom(src, "blitz"),
+        })) || "",
+      )
+      if (!blitzPkgLocation) {
+        throw new Error("Internal Blitz Error: unable to find 'blitz' package location")
+      }
+
+      root = path.join(blitzPkgLocation, "../")
+    }
+    return path.join(root, ".blitz")
+  }
+
   async function ensureEmptyDotBlitz() {
     try {
-      let dotBlitzDir = path.join(process.cwd(), ".blitz")
-      if (isInBlitzMonorepo) {
-        dotBlitzDir = path.join(__dirname, "..", ".blitz")
-      }
-      console.log(dotBlitzDir, process.cwd())
+      const dotBlitzDir = isInBlitzMonorepo
+        ? path.join(process.cwd(), "node_modules/.blitz")
+        : await findNodeModulesRoot(__dirname)
       await makeDir(dotBlitzDir)
       const defaultIndexJsPath = path.join(dotBlitzDir, "index.js")
       const defaultIndexBrowserJSPath = path.join(dotBlitzDir, "index-browser.js")
