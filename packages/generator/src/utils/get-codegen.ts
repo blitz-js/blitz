@@ -138,7 +138,7 @@ const getIsTypeScript = async () =>
 export const getCodegen = async () => {
   try {
     const isTypeScript = await getIsTypeScript()
-    const blitzServerPath = isTypeScript ? "app/blitz-server.ts" : "app/blitz-server.js"
+    const blitzServerPath = isTypeScript ? "src/blitz-server.ts" : "src/blitz-server.js"
     const blitzServer = require("path").join(process.cwd(), blitzServerPath)
     const {register} = require("esbuild-register/dist/node")
     const {unregister} = register({
@@ -149,16 +149,19 @@ export const getCodegen = async () => {
     const {cliConfig} = config
     unregister()
 
-    //merge with default config
-    const _config = {...defaultCodegenConfig, ...cliConfig.codegen}
+    const _config = {...defaultCodegenConfig.fieldTypeMap, ...cliConfig.codegen.fieldTypeMap}
+    const combined = {
+      fieldTypeMap: _config,
+    }
+    console.log("_config", combined)
 
     if (cliConfig.codegen !== undefined) {
-      const result = CodegenSchema.safeParse(_config)
+      const result = CodegenSchema.safeParse(combined)
       if (!result.success) {
         log.error("Failed parsing codegen config. Check if it is well formed. Using default config")
         return defaultCodegenConfig
       }
-      return _config
+      return combined
     }
     return defaultCodegenConfig
   } catch (ex) {

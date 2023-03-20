@@ -20,4 +20,14 @@ export { gSSP, gSP, api }
 
 export const cliConfig: BlitzCliConfig = {
   customTemplates: "src/templates",
+  codegen: {
+    fieldTypeMap: {
+      string: {
+        component: "LabeledTextField",
+        inputType: "text",
+        zodType: "date",
+        prismaType: "String",
+      },
+    },
+  },
 }
