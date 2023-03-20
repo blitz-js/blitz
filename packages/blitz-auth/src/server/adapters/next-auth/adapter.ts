@@ -204,12 +204,7 @@ async function AuthHandler<P extends Provider[]>(
           })
           const session = res.blitzCtx.session as SessionContext
           assert(session, "Missing Blitz sessionMiddleware!")
-          const callback = await config.callback(
-            profile as User,
-            account,
-            OAuthProfile! as any,
-            session,
-          )
+          const callback = await config.callback(profile as User, account, OAuthProfile!, session)
           let _redirect = config.successRedirectUrl
           if (callback instanceof Object) {
             _redirect = callback.redirectUrl
