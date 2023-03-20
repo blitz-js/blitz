@@ -4,15 +4,17 @@ import { NextAuthAdapter, BlitzNextAuthOptions } from "@blitzjs/auth/next-auth"
 import db, { User } from "db"
 import { Role } from "types"
 
-const config: BlitzNextAuthOptions = {
+const providers = [
+  GithubProvider({
+    clientId: process.env.GITHUB_CLIENT_ID as string,
+    clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
+  }),
+]
+
+const config: BlitzNextAuthOptions<typeof providers> = {
   successRedirectUrl: "/",
   errorRedirectUrl: "/error",
-  providers: [
-    GithubProvider({
-      clientId: process.env.GITHUB_CLIENT_ID as string,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
-    }),
-  ],
+  providers,
   callback: async (user, account, profile, session) => {
     console.log("USER SIDE PROFILE_DATA", { user, account, profile })
     let newUser: User

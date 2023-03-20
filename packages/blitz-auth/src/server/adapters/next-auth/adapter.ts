@@ -25,6 +25,7 @@ import type {
   BlitzNextAuthApiHandler,
   BlitzNextAuthOptions,
 } from "./types"
+import {Provider} from "next-auth/providers"
 
 export {withNextAuthAdapter} from "./webpack"
 
@@ -39,7 +40,9 @@ function switchURL(callbackUrl: string) {
   return `${url.protocol}//${url.host}${switchPathNameString}${url.search}${url.hash}`
 }
 
-export function NextAuthAdapter(config: BlitzNextAuthOptions): BlitzNextAuthApiHandler {
+export function NextAuthAdapter<P extends Provider[]>(
+  config: BlitzNextAuthOptions<P>,
+): BlitzNextAuthApiHandler {
   return async function authHandler(req, res) {
     assert(
       req.query.nextauth,
@@ -141,9 +144,9 @@ export function NextAuthAdapter(config: BlitzNextAuthOptions): BlitzNextAuthApiH
   }
 }
 
-async function AuthHandler(
+async function AuthHandler<P extends Provider[]>(
   middleware: RequestMiddleware<ApiHandlerIncomingMessage, MiddlewareResponse<Ctx>>[],
-  config: BlitzNextAuthOptions,
+  config: BlitzNextAuthOptions<P>,
   internalRequest: RequestInternal,
   action: AuthAction,
   options: InternalOptions,
@@ -201,7 +204,12 @@ async function AuthHandler(
           })
           const session = res.blitzCtx.session as SessionContext
           assert(session, "Missing Blitz sessionMiddleware!")
-          const callback = await config.callback(profile as User, account, OAuthProfile!, session)
+          const callback = await config.callback(
+            profile as User,
+            account,
+            OAuthProfile! as any,
+            session,
+          )
           let _redirect = config.successRedirectUrl
           if (callback instanceof Object) {
             _redirect = callback.redirectUrl
