@@ -149,13 +149,16 @@ export const getCodegen = async () => {
     const {cliConfig} = config
     unregister()
 
+    //merge with default config
+    const _config = {...defaultCodegenConfig, ...cliConfig.codegen}
+
     if (cliConfig.codegen !== undefined) {
-      const result = CodegenSchema.safeParse(cliConfig.codegen)
+      const result = CodegenSchema.safeParse(_config)
       if (!result.success) {
         log.error("Failed parsing codegen config. Check if it is well formed. Using default config")
         return defaultCodegenConfig
       }
-      return cliConfig.codegen
+      return _config
     }
     return defaultCodegenConfig
   } catch (ex) {
