@@ -226,6 +226,7 @@ export interface BlitzConfig extends NextConfig {
     customServer?: {
       hotReload?: boolean
     }
+    nextAuth?: boolean
   }
 }
 
@@ -256,6 +257,15 @@ export function withBlitz(nextConfig: BlitzConfig = {}) {
           includeRPCFolders: nextConfig.blitz?.includeRPCFolders,
         },
       })
+      if (nextConfig.blitz?.nextAuth) {
+        config.resolve.alias["next-auth/core/lib/oauth/callback"] =
+          process.cwd() + "/node_modules/next-auth/core/lib/oauth/callback.js"
+        config.resolve.alias["next-auth/core/lib/oauth/authorization-url"] =
+          process.cwd() + "/node_modules/next-auth/core/lib/oauth/authorization-url.js"
+        config.resolve.alias["next-auth/core/init"] =
+          process.cwd() + "/node_modules/next-auth/core/init.js"
+      }
+
       if (typeof nextConfig.webpack === "function") {
         return nextConfig.webpack(config, options)
       }
