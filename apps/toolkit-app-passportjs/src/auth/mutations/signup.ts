@@ -1,5 +1,5 @@
 import db from "db"
-import { SecurePassword } from "@blitzjs/auth"
+import { SecurePassword } from "@blitzjs/auth/secure-password"
 import { Role } from "types"
 
 export default async function signup(input, ctx) {
