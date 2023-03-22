@@ -111,7 +111,7 @@ export default RecipeBuilder()
     stepId: "updateLabeledTextField",
     stepName: "Update the `LabeledTextField` with Next UI's `Input` component",
     explanation: `The LabeledTextField component uses Next UI's input component`,
-    singleFileSearch: "app/core/components/LabeledTextField.tsx",
+    singleFileSearch: "src/core/components/LabeledTextField.tsx",
     transform(program) {
       // Add ComponentPropsWithoutRef import
       program.find(j.ImportDeclaration, {source: {value: "react"}}).forEach((path) => {
