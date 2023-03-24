@@ -53,3 +53,16 @@ export function invokeWithCtx<T extends (...args: any) => any, TInput = FirstPar
 
   return queryFn(params, ctx)
 }
+
+export function invokeServer<T extends (...args: any) => any, TInput = FirstParam<T>>(
+  queryFn: T,
+  params: TInput,
+  ctx: Ctx,
+): Promise<PromiseReturnType<T>> {
+  if (typeof queryFn === "undefined") {
+    throw new Error(
+      "invokeServer is missing the first argument - it must be a query or mutation function",
+    )
+  }
+  return queryFn(params, ctx)
+}
