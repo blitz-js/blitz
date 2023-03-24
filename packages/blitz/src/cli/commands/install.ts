@@ -12,6 +12,7 @@ import {setupTsnode} from "../utils/setup-ts-node"
 import {isInternalBlitzMonorepoDevelopment} from "../utils/helpers"
 import findUp from "find-up"
 import resolveFrom from "resolve-from"
+import {findNodeModulesRoot} from "../utils/find-node-modules"
 
 interface GlobalAgent {
   HTTP_PROXY?: string
@@ -155,31 +156,6 @@ const normalizeRecipePath = (recipeArg: string): RecipeMeta => {
       location: RecipeLocation.Local,
     }
   }
-}
-
-async function findNodeModulesRoot(src: string) {
-  let root: string
-  if (isInternalBlitzMonorepoDevelopment) {
-    root = join(__dirname, "..", "..", "..", "..", "/node_modules")
-  } else {
-    const blitzPkgLocation = dirname(
-      (await findUp("package.json", {
-        cwd: resolveFrom(src, "blitz"),
-      })) ?? "",
-    )
-
-    if (!blitzPkgLocation) {
-      throw new Error("Internal Blitz Error: unable to find 'blitz' package location")
-    }
-
-    if (blitzPkgLocation.includes(".pnpm")) {
-      root = join(blitzPkgLocation, "../../../../")
-    } else {
-      root = join(blitzPkgLocation, "../")
-    }
-  }
-
-  return root
 }
 
 const cloneRepo = async (
