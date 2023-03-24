@@ -9,6 +9,8 @@ export * from "./utils/enhance-prisma"
 export * from "./middleware"
 export * from "./paginate"
 export * from "./logging"
+export {reduceBlitzServerPlugins} from "./plugin"
+export {findNodeModulesRoot, findNodeModulesRootSync} from "./cli/utils/find-node-modules"
 
 export {startWatcher, stopWatcher} from "./cli/utils/routes-manifest"
 
@@ -30,13 +32,13 @@ export type RequestMiddleware<
 }
 
 export type BlitzServerPlugin<
+  TExports extends object,
   RequestMiddlewareType = RequestMiddleware<any, any>,
   TCtx extends Ctx = Ctx,
-  TExports extends object = {},
 > = {
   requestMiddlewares: RequestMiddlewareType[]
   contextMiddleware?: (ctx: TCtx) => TCtx
-  exports?: TExports
+  exports: () => TExports
 }
 
 export function createServerPlugin<
@@ -47,7 +49,7 @@ export function createServerPlugin<
 >(
   pluginConstructor: (
     options: TPluginOptions,
-  ) => BlitzServerPlugin<TMiddleware, TCtx, TPluginExports>,
+  ) => BlitzServerPlugin<TPluginExports, TMiddleware, TCtx>,
 ) {
   return pluginConstructor
 }
@@ -62,6 +64,7 @@ export const BlitzServerMiddleware = <
   TMiddleware extends RequestMiddleware<any, any> = RequestMiddleware,
 >(
   middleware: TMiddleware,
-): BlitzServerPlugin => ({
+): BlitzServerPlugin<{}> => ({
   requestMiddlewares: [middleware],
+  exports: () => ({}),
 })

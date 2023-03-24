@@ -7,6 +7,7 @@ import {
   NotFoundError,
   PaginationArgumentError,
   RedirectError,
+  OAuthError,
 } from "./errors"
 import type {EventHooks, MiddlewareHooks} from "./types"
 export {
@@ -16,6 +17,7 @@ export {
   NotFoundError,
   PaginationArgumentError,
   RedirectError,
+  OAuthError,
 }
 
 export type BlitzProviderComponentType = <TProps = any>(
@@ -84,4 +86,4 @@ export * from "./utils"
 export * from "./types"
 export * from "./utils/enhance-prisma"
 export * from "./utils/zod"
-export {reduceBlitzPlugins} from "./plugin"
+export {reduceBlitzClientPlugins} from "./plugin"

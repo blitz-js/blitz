@@ -46,10 +46,7 @@ const BlitzProvider = ({
 }: BlitzProviderProps & {children: JSX.Element}) => {
   if (globalThis.queryClient) {
     return (
-      <QueryClientProvider
-        client={client || globalThis.queryClient}
-        contextSharing={contextSharing}
-      >
+      <QueryClientProvider client={globalThis.queryClient} contextSharing={contextSharing}>
         {children}
       </QueryClientProvider>
     )

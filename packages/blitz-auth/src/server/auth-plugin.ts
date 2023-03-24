@@ -1,8 +1,8 @@
-import type {BlitzServerPlugin, RequestMiddleware, Ctx} from "blitz"
+import {BlitzServerPlugin, RequestMiddleware, Ctx, createServerPlugin} from "blitz"
 import {assert} from "blitz"
 import {IncomingMessage, ServerResponse} from "http"
 import {PublicData, SessionModel, SessionConfigMethods} from "../shared/types"
-import {getSession} from "./auth-sessions"
+import {getBlitzContext, getSession} from "./auth-sessions"
 
 interface SessionConfigOptions {
   cookiePrefix?: string
@@ -81,9 +81,15 @@ export interface AuthPluginOptions extends Partial<SessionConfigOptions>, IsAuth
   storage: SessionConfigMethods
 }
 
-export function AuthServerPlugin(options: AuthPluginOptions): BlitzServerPlugin<any, any> {
+export const AuthServerPlugin = createServerPlugin((options: AuthPluginOptions) => {
   // pass types
   globalThis.__BLITZ_SESSION_COOKIE_PREFIX = options.cookiePrefix || "blitz"
+
+  globalThis.sessionConfig = {
+    ...defaultConfig_,
+    ...options.storage,
+    ...options,
+  }
 
   function authPluginSessionMiddleware() {
     assert(
@@ -121,5 +127,8 @@ export function AuthServerPlugin(options: AuthPluginOptions): BlitzServerPlugin<
   }
   return {
     requestMiddlewares: [authPluginSessionMiddleware()],
+    exports: () => ({
+      getBlitzContext,
+    }),
   }
-}
+})
