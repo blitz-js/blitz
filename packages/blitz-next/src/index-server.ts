@@ -259,6 +259,7 @@ export function withBlitz(nextConfig: BlitzConfig = {}): NextConfig {
           includeRPCFolders: nextConfig.blitz?.includeRPCFolders,
         },
       })
+
       if (typeof nextConfig.webpack === "function") {
         return nextConfig.webpack(config, options)
       }

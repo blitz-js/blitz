@@ -4,7 +4,8 @@ import Layout from "src/core/layouts/Layout"
 import { useCurrentUser } from "src/users/hooks/useCurrentUser"
 import logout from "src/auth/mutations/logout"
 import { useMutation } from "@blitzjs/rpc"
-import { Routes, BlitzPage } from "@blitzjs/next"
+import { BlitzPage } from "@blitzjs/next"
+import { Routes } from ".blitz"
 import styles from "src/styles/Home.module.css"
 
 /*
@@ -42,6 +43,11 @@ const UserInfo = () => {
         </Link>
         <Link href={Routes.LoginPage()} className={styles.loginButton}>
           <strong>Login</strong>
+        </Link>
+        <Link href="/api/auth/github/login" passHref>
+          <a className="button small">
+            <strong>Sign in with GitHub</strong>
+          </a>
         </Link>
       </>
     )

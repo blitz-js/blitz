@@ -76,7 +76,7 @@ export interface InstallWebpackConfigOptions {
   webpackConfig: {
     resolve: {
       alias: {
-        [key: string]: boolean
+        [key: string]: boolean | string
       }
     }
     module: {
