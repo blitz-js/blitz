@@ -13,7 +13,7 @@ export async function invoke<T extends (...args: any) => any, TInput = FirstPara
 export async function invoke<T extends (...args: any) => any, TInput = FirstParam<T>>(
   queryFn: T,
   params: TInput,
-  isServer = false,
+  isServer = typeof window === "undefined" ? true : false,
 ): Promise<T> {
   if (typeof queryFn === "undefined") {
     throw new Error(

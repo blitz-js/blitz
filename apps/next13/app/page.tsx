@@ -8,7 +8,7 @@ export default async function Home() {
   await useAuthenticatedBlitzContext({
     redirectTo: "/auth/login",
   })
-  const user = await invoke(getCurrentUser, null, true)
+  const user = await invoke(getCurrentUser, null)
   console.log("user", user)
   return (
     <div
