@@ -5,7 +5,8 @@ import { Role } from "types"
 export default async function signup(input, ctx) {
   const blitzContext = ctx
 
-  const hashedPassword = await SecurePassword.hash((input.password as string) || "test-password")
+  // const hashedPassword = await SecurePassword.hash((input.password as string) || "test-password")
+  const hashedPassword = (input.password as string) || "test-password"
   const email = (input.email as string) || "test" + Math.random() + "@test.com"
   const user = await db.user.create({
     data: { email, hashedPassword, role: "user" },

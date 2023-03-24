@@ -1,7 +1,7 @@
 import {ErrorFallbackProps, ErrorComponent, ErrorBoundary, AppProps} from "@blitzjs/next"
 import {AuthenticationError, AuthorizationError} from "blitz"
 import React, {Suspense} from "react"
-import {withBlitz} from "../app/blitz-client"
+import {withBlitz} from "../src/blitz-client"
 
 function RootErrorFallback({error}: ErrorFallbackProps) {
   if (error instanceof AuthenticationError) {

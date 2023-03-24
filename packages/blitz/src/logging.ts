@@ -175,6 +175,16 @@ const variable = (val: any) => {
   return c.cyan.bold(`${val}`)
 }
 
+const box = async (mes: string, title: string) => {
+  const boxen = (await import("boxen")).default
+  return boxen(mes, {
+    padding: 1,
+    margin: 1,
+    textAlignment: "left",
+    title,
+  })
+}
+
 /**
  * If the DEBUG env var is set this will write to the console
  * @param str msg
@@ -195,4 +205,6 @@ export const log = {
   variable,
   debug,
   Table,
+  chalk,
+  box,
 }
