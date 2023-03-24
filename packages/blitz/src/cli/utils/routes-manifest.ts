@@ -7,6 +7,7 @@ import findUp from "find-up"
 import resolveFrom from "resolve-from"
 import Watchpack from "watchpack"
 import {isInternalBlitzMonorepoDevelopment} from "./helpers"
+import {findNodeModulesRoot} from "./find-node-modules"
 export const CONFIG_FILE = ".blitz.config.compiled.js"
 export const NEXT_CONFIG_FILE = "next.config.js"
 export const PHASE_PRODUCTION_SERVER = "phase-production-server"
@@ -555,30 +556,6 @@ export async function generateManifest() {
   })
 }
 
-async function findNodeModulesRoot(src: string) {
-  let root: string
-  if (isInternalBlitzMonorepoDevelopment) {
-    root = join(__dirname, "..", "..", "..", "..", "/node_modules")
-  } else {
-    const blitzPkgLocation = dirname(
-      (await findUp("package.json", {
-        cwd: resolveFrom(src, "blitz"),
-      })) ?? "",
-    )
-
-    if (!blitzPkgLocation) {
-      throw new Error("Internal Blitz Error: unable to find 'blitz' package location")
-    }
-
-    if (blitzPkgLocation.includes(".pnpm")) {
-      root = join(blitzPkgLocation, "../../../../")
-    } else {
-      root = join(blitzPkgLocation, "../")
-    }
-  }
-
-  return root
-}
 let webpackWatcher: Watchpack | null = null
 
 export async function startWatcher(pagesDir = ""): Promise<void> {

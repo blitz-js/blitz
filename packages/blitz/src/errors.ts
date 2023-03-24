@@ -33,6 +33,19 @@ export class CSRFTokenMismatchError extends Error {
   }
 }
 
+export class OAuthError extends Error {
+  name = "OAuthError"
+  statusCode = 500
+  redirect?: string
+  get _clearStack() {
+    return true
+  }
+  constructor(message: string, redirect?: string) {
+    super(message)
+    this.redirect = redirect
+  }
+}
+
 export class AuthorizationError extends Error {
   name = "AuthorizationError"
   statusCode = 403
@@ -104,6 +117,11 @@ if (isNotInUserTestEnvironment() && !globalThis._BLITZ_ERROR_CLASS_REGISTERED) {
 
   SuperJson.registerClass(PaginationArgumentError, {
     identifier: "BlitzPaginationArgumentError",
+    allowProps: errorProps,
+  })
+
+  SuperJson.registerClass(OAuthError, {
+    identifier: "OAuthError",
     allowProps: errorProps,
   })
 
