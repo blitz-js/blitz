@@ -1,8 +1,4 @@
-// @ts-check
-
-const withBundleAnalyzer = require("@next/bundle-analyzer")({
-  enabled: process.env.ANALYZE === "true",
-})
+const { withNextAuthAdapter } = require("@blitzjs/auth/next-auth")
 const { withBlitz } = require("@blitzjs/next")
 
 /**
@@ -12,4 +8,4 @@ const config = {
   reactStrictMode: true,
 }
 
-module.exports = withBlitz(withBundleAnalyzer(config))
+module.exports = withBlitz(withNextAuthAdapter(config))

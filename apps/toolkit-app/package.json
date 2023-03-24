@@ -33,6 +33,7 @@
     "@prisma/client": "4.6.1",
     "blitz": "workspace:2.0.0-beta.23",
     "next": "13.1.6",
+    "next-auth": "4.18.7",
     "prisma": "4.6.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
