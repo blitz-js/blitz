@@ -12,6 +12,7 @@ import {
   AuthenticationError,
   AuthorizationError,
   CSRFTokenMismatchError,
+  log,
 } from "blitz"
 import {
   EmptyPublicData,
@@ -35,6 +36,9 @@ import {
   AuthenticatedSessionContext,
 } from "../shared"
 import {generateToken, hash256} from "./auth-utils"
+import {Socket} from "net"
+import {UrlObject} from "url"
+import {formatWithValidation} from "../shared/url-utils"
 
 export function isLocalhost(req: any): boolean {
   let {host} = req.headers
@@ -143,6 +147,7 @@ function ensureMiddlewareResponse(
 export async function getSession(
   req: IncomingMessage,
   res: ServerResponse,
+  appDir = false,
 ): Promise<SessionContext> {
   ensureApiRequest(req)
   ensureMiddlewareResponse(res)
@@ -150,6 +155,7 @@ export async function getSession(
   debug("cookiePrefix", globalThis.__BLITZ_SESSION_COOKIE_PREFIX)
 
   if (res.blitzCtx.session) {
+    debug("Returning existing session")
     return res.blitzCtx.session
   }
 
@@ -164,9 +170,43 @@ export async function getSession(
     sessionKernel = await createAnonymousSession(req, res)
   }
 
-  const sessionContext = makeProxyToPublicData(new SessionContextClass(req, res, sessionKernel))
+  const sessionContext = makeProxyToPublicData(
+    new SessionContextClass(req, res, sessionKernel, appDir),
+  )
+  debug("New session context")
   res.blitzCtx.session = sessionContext
   return sessionContext
+}
+
+export async function getBlitzContext(): Promise<Ctx> {
+  const {headers, cookies} = await import("next/headers").catch(() => {
+    throw new Error(
+      "getBlitzContext() can only be used in React Server Components in Nextjs 13 or higher",
+    )
+  })
+  const req = new IncomingMessage(new Socket()) as IncomingMessage & {
+    cookies: {[key: string]: string}
+  }
+  req.headers = Object.fromEntries(headers())
+  const csrfToken = cookies().get(COOKIE_CSRF_TOKEN())
+  if (csrfToken) {
+    req.headers[HEADER_CSRF] = csrfToken.value
+  }
+  req.cookies = Object.fromEntries(
+    cookies()
+      .getAll()
+      .map((c: {name: string; value: string}) => [c.name, c.value]),
+  )
+  const res = new ServerResponse(req)
+  const session = await getSession(req, res, true)
+  const ctx: Ctx = {
+    session,
+  }
+  return ctx
+}
+
+interface RouteUrlObject extends Pick<UrlObject, "pathname" | "query" | "href"> {
+  pathname: string
 }
 
 const makeProxyToPublicData = <T extends SessionContextClass>(ctxClass: T): T => {
@@ -181,19 +221,28 @@ const makeProxyToPublicData = <T extends SessionContextClass>(ctxClass: T): T =>
   })
 }
 
+const NotSupportedMessage = async (method: string) => {
+  const message = `Method ${method} is not yet supported in React Server Components`
+  const _box = await log.box(message, log.chalk.hex("8a3df0").bold("Blitz Auth"))
+  console.log(_box)
+}
+
 export class SessionContextClass implements SessionContext {
   private _req: IncomingMessage & {cookies: {[key: string]: string}}
   private _res: ServerResponse & {blitzCtx: Ctx}
   private _kernel: SessionKernel
+  private _appDir: boolean
 
   constructor(
     req: IncomingMessage & {cookies: {[key: string]: string}},
     res: ServerResponse & {blitzCtx: Ctx},
     kernel: SessionKernel,
+    appDir: boolean,
   ) {
     this._req = req
     this._res = res
     this._kernel = kernel
+    this._appDir = appDir
   }
 
   get $handle() {
@@ -229,6 +278,10 @@ export class SessionContextClass implements SessionContext {
   }
 
   async $create(publicData: PublicData, privateData?: Record<any, any>) {
+    if (this._appDir) {
+      void NotSupportedMessage("$create")
+      return
+    }
     this._kernel = await createNewSession({
       req: this._req,
       res: this._res,
@@ -240,10 +293,18 @@ export class SessionContextClass implements SessionContext {
   }
 
   async $revoke() {
+    if (this._appDir) {
+      void NotSupportedMessage("$revoke")
+      return
+    }
     this._kernel = await revokeSession(this._req, this._res, this.$handle)
   }
 
   async $revokeAll() {
+    if (this._appDir) {
+      void NotSupportedMessage("$revokeAll")
+      return
+    }
     // revoke the current session which uses req/res
     await this.$revoke()
     // revoke other sessions for which there is no req/res object
@@ -252,6 +313,10 @@ export class SessionContextClass implements SessionContext {
   }
 
   async $setPublicData(data: Record<any, any>) {
+    if (this._appDir) {
+      void NotSupportedMessage("$setPublicData")
+      return
+    }
     if (this.userId) {
       await syncPubicDataFieldsForUserIfNeeded(this.userId, data)
     }
@@ -262,6 +327,10 @@ export class SessionContextClass implements SessionContext {
     return (await getPrivateData(this.$handle)) || {}
   }
   $setPrivateData(data: Record<any, any>) {
+    if (this._appDir) {
+      void NotSupportedMessage("$setPrivateData")
+      return Promise.resolve()
+    }
     return setPrivateData(this._kernel, data)
   }
 }

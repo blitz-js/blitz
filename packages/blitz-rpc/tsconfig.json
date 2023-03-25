@@ -1,8 +1,9 @@
 {
   "extends": "@blitzjs/config/tsconfig.library.json",
   "compilerOptions": {
-    "lib": ["DOM", "ES2015"]
+    "lib": ["DOM", "ES2015"],
+    "preserveSymlinks": true
   },
-  "include": ["."],
+  "include": [".", "src/query/react-query/react.ts"],
   "exclude": ["dist", "build", "node_modules"]
 }
