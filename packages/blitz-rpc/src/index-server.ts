@@ -6,6 +6,7 @@ import chalk from "chalk"
 
 // TODO - optimize end user server bundles by not exporting all client stuff here
 export * from "./index-browser"
+export {RpcServerPlugin} from "./server/plugin"
 
 export * from "./server/resolvers/resolver"
 

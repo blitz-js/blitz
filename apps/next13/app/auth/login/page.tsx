@@ -7,16 +7,7 @@ import {useSearchParams} from "next/navigation"
 const LoginPage = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
-  return (
-    <LoginForm
-      onSuccess={(_user) => {
-        const next = searchParams.get("next")
-          ? decodeURIComponent(searchParams.get("next") as string)
-          : "/"
-        return router.push(next)
-      }}
-    />
-  )
+  return <LoginForm onSuccess={(_user) => {}} />
 }
 
 export default LoginPage
