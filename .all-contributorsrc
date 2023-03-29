@@ -3856,6 +3856,16 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "jafarlihi",
+      "name": "Hikmat Jafarli",
+      "avatar_url": "https://avatars.githubusercontent.com/u/43515211?v=4",
+      "profile": "https://github.com/jafarlihi",
+      "contributions": [
+        "doc",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
