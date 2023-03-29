@@ -41,9 +41,9 @@ export type ResolverConfig = {
   httpMethod: "GET" | "POST"
 }
 
-export type BlitzCliConfig = {
-  codegen?: {
-    fieldTypeMap?: Record<
+type Codegen = {
+  fieldTypeMap?: Partial<
+    Record<
       | "string"
       | "boolean"
       | "int"
@@ -56,7 +56,11 @@ export type BlitzCliConfig = {
       | "json",
       CodegenField
     >
-  }
+  >
+}
+
+export type BlitzCliConfig = {
+  codegen?: Codegen
   customTemplates?: string
 }
 
