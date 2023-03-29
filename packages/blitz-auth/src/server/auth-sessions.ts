@@ -13,6 +13,8 @@ import {
   AuthorizationError,
   CSRFTokenMismatchError,
   log,
+  baseLogger,
+  chalk,
 } from "blitz"
 import {
   EmptyPublicData,
@@ -207,6 +209,65 @@ export async function getBlitzContext(): Promise<Ctx> {
 
 interface RouteUrlObject extends Pick<UrlObject, "pathname" | "query" | "href"> {
   pathname: string
+}
+
+export async function useAuthenticatedBlitzContext({
+  redirectTo,
+  redirectAuthenticatedTo,
+  role,
+}: {
+  redirectTo?: string | RouteUrlObject
+  redirectAuthenticatedTo?: string | RouteUrlObject | ((ctx: Ctx) => string | RouteUrlObject)
+  role?: string | string[]
+}): Promise<void> {
+  const log = baseLogger().getChildLogger()
+  const customChalk = new chalk.Instance({
+    level: log.settings.type === "json" ? 0 : chalk.level,
+  })
+  const ctx: Ctx = await getBlitzContext()
+  const userId = ctx.session.userId
+  const {redirect} = await import("next/navigation").catch(() => {
+    throw new Error(
+      "useAuthenticatedBlitzContext() can only be used in React Server Components in Nextjs 13 or higher",
+    )
+  })
+  if (userId) {
+    debug("[useAuthenticatedBlitzContext] User is authenticated")
+    if (redirectAuthenticatedTo) {
+      if (typeof redirectAuthenticatedTo === "function") {
+        redirectAuthenticatedTo = redirectAuthenticatedTo(ctx)
+      }
+      const redirectUrl =
+        typeof redirectAuthenticatedTo === "string"
+          ? redirectAuthenticatedTo
+          : formatWithValidation(redirectAuthenticatedTo)
+      debug("[useAuthenticatedBlitzContext] Redirecting to", redirectUrl)
+      log.info("Authentication Redirect: " + customChalk.dim("(Authenticated)"), redirectUrl)
+      redirect(redirectUrl)
+    }
+    if (redirectTo && role) {
+      debug("[useAuthenticatedBlitzContext] redirectTo and role are both defined.")
+      try {
+        ctx.session.$authorize(role)
+      } catch (e) {
+        log.error("Authorization Error: " + (e as Error).message)
+        if (typeof redirectTo !== "string") {
+          redirectTo = formatWithValidation(redirectTo)
+        }
+        log.info("Authorization Redirect: " + customChalk.dim(`Role ${role}`), redirectTo)
+        redirect(redirectTo)
+      }
+    }
+  } else {
+    debug("[useAuthenticatedBlitzContext] User is not authenticated")
+    if (redirectTo) {
+      if (typeof redirectTo !== "string") {
+        redirectTo = formatWithValidation(redirectTo)
+      }
+      log.info("Authentication Redirect: " + customChalk.dim("(Not authenticated)"), redirectTo)
+      redirect(redirectTo)
+    }
+  }
 }
 
 const makeProxyToPublicData = <T extends SessionContextClass>(ctxClass: T): T => {
