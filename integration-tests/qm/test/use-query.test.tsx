@@ -24,7 +24,7 @@ describe("useQuery", () => {
     function TestHarness() {
       const [data, {setQueryData}] = useQuery(queryFn, params, {
         suspense: true,
-        ...options,
+        ...(options as any),
       } as any)
 
       Object.assign(res, {data, setQueryData})

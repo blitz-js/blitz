@@ -1,3 +1,4 @@
+//@ts-nocheck
 import {Ctx} from "blitz"
 
 export interface Session {
