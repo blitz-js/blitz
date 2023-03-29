@@ -1,5 +1,6 @@
 import {getTemplateRoot} from "../utils/get-template-root"
 import {camelCaseToKebabCase} from "../utils/inflector"
+import j from "jscodeshift"
 import {
   CommonTemplateValues,
   createFieldTemplateValues,
@@ -7,28 +8,21 @@ import {
   ResourceGeneratorOptions,
 } from ".."
 import {customTsParser, Generator, SourceRootType} from "../generator"
-import j from "jscodeshift"
-import {
-  insertImportPagnatedQuery,
-  insertImportQuery,
-  insertLabeledSelectField,
-  updateFormWithParent,
-} from "../../src/utils/codemod-utils"
+import {replaceImportDbWithPrismaFolder} from "../../src/utils/codemod-utils"
 
-export interface FormGeneratorOptions extends ResourceGeneratorOptions {}
+export interface ValidationsGeneratorOptions extends ResourceGeneratorOptions {}
 
-export class FormGenerator extends Generator<FormGeneratorOptions> {
+export class ValidationsGenerator extends Generator<ValidationsGeneratorOptions> {
   sourceRoot: SourceRootType
-  constructor(options: FormGeneratorOptions) {
+  constructor(options: ValidationsGeneratorOptions) {
     super(options)
-    this.sourceRoot = getTemplateRoot(options.templateDir, {type: "template", path: "form"})
+    this.sourceRoot = getTemplateRoot(options.templateDir, {type: "template", path: "validations"})
   }
+  static subdirectory = "validations"
 
-  static subdirectory = "queries"
+  templateValuesBuilder = new FieldValuesBuilder(this.fs)
 
-  templateValuesBuilder = new FieldValuesBuilder()
-
-  async preFileWrite(): Promise<CommonTemplateValues> {
+  async preFileWrite(filePath: string): Promise<CommonTemplateValues> {
     let templateValues = await this.getTemplateValues()
     if (templateValues.parentModel) {
       const newFieldTemplateValues = await createFieldTemplateValues(
@@ -42,25 +36,19 @@ export class FormGenerator extends Generator<FormGeneratorOptions> {
         templateValues.fieldTemplateValues = [newFieldTemplateValues]
       }
     }
-    return templateValues
-  }
-
-  async postFileWrite(filePath: string, templateValues: CommonTemplateValues): Promise<void> {
-    if (templateValues.parentModel && filePath.match(/components/g)) {
-      let program = j(this.fs.read(filePath), {
+    if (this.fs.exists(filePath)) {
+      let program = j(this.fs.read(filePath) as any, {
         parser: customTsParser,
       })
-      program = insertLabeledSelectField(program)
-      program = insertImportQuery(program, templateValues)
-      program = insertImportPagnatedQuery(program)
-      program = updateFormWithParent(program, templateValues)
+      program = replaceImportDbWithPrismaFolder(program)
       this.fs.write(filePath, program.toSource())
     }
+    return templateValues
   }
 
   getTargetDirectory() {
     const context = this.options.context ? `${camelCaseToKebabCase(this.options.context)}/` : ""
     const kebabCaseModelName = camelCaseToKebabCase(this.options.modelNames)
-    return `src/${context}${kebabCaseModelName}/components`
+    return `src/${context}${kebabCaseModelName}`
   }
 }

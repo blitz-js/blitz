@@ -2,6 +2,16 @@ import {UrlObject} from "url"
 // Context for plugins to declaration merge stuff into
 export interface Ctx {}
 
+export interface AuthenticatedMiddlewareCtx {}
+
+export type CodegenField = {
+  component: string
+  inputType: string
+  zodType: string
+  prismaType: string
+  default?: string
+}
+
 export interface RouteUrlObject extends Pick<UrlObject, "pathname" | "query" | "href"> {
   pathname: string
   href: string
@@ -31,8 +41,36 @@ export type ResolverConfig = {
   httpMethod: "GET" | "POST"
 }
 
+type Codegen = {
+  fieldTypeMap?: Partial<
+    Record<
+      | "string"
+      | "boolean"
+      | "int"
+      | "number"
+      | "bigint"
+      | "float"
+      | "decimal"
+      | "datetime"
+      | "uuid"
+      | "json",
+      CodegenField
+    >
+  >
+}
+
 export type BlitzCliConfig = {
+  codegen?: Codegen
   customTemplates?: string
+}
+
+export type CodegenConfig = {
+  templateDir?: string
+  fieldTypeMap?: Record<string, CodegenField>
+}
+
+export interface RouteUrlObject extends Pick<UrlObject, "pathname" | "query"> {
+  pathname: string
 }
 
 export const isRouteUrlObject = (x: any): x is RouteUrlObject => {

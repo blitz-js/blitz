@@ -1,17 +1,11 @@
-import {Generator, GeneratorOptions, SourceRootType} from "../generator"
+import {CommonTemplateValues, FieldValuesBuilder, ResourceGeneratorOptions} from ".."
+import {customTsParser, Generator, SourceRootType} from "../generator"
 import {getTemplateRoot} from "../utils/get-template-root"
 import {camelCaseToKebabCase} from "../utils/inflector"
+import j from "jscodeshift"
+import {replaceImportDbWithPrismaFolder} from "../../src/utils/codemod-utils"
 
-export interface QueriesGeneratorOptions extends GeneratorOptions {
-  ModelName: string
-  ModelNames: string
-  modelName: string
-  modelNames: string
-  parentModel?: string
-  parentModels?: string
-  ParentModel?: string
-  ParentModels?: string
-}
+export interface QueriesGeneratorOptions extends ResourceGeneratorOptions {}
 
 export class QueriesGenerator extends Generator<QueriesGeneratorOptions> {
   sourceRoot: SourceRootType
@@ -21,32 +15,19 @@ export class QueriesGenerator extends Generator<QueriesGeneratorOptions> {
   }
   static subdirectory = "queries"
 
-  private getId(input: string = "") {
-    if (!input) return input
-    return `${input}Id`
-  }
+  templateValuesBuilder = new FieldValuesBuilder(this.fs)
 
-  private getParam(input: string = "") {
-    if (!input) return input
-    return `[${input}]`
-  }
-
-  // eslint-disable-next-line require-await
-  async getTemplateValues() {
-    return {
-      parentModelId: this.getId(this.options.parentModel),
-      parentModelParam: this.getParam(this.getId(this.options.parentModel)),
-      parentModel: this.options.parentModel,
-      parentModels: this.options.parentModels,
-      ParentModel: this.options.ParentModel,
-      ParentModels: this.options.ParentModels,
-      modelId: this.getId(this.options.modelName),
-      modelIdParam: this.getParam(this.getId(this.options.modelName)),
-      modelName: this.options.modelName,
-      modelNames: this.options.modelNames,
-      ModelName: this.options.ModelName,
-      ModelNames: this.options.ModelNames,
+  async preFileWrite(filePath: string): Promise<CommonTemplateValues> {
+    let templateValues = await this.getTemplateValues()
+    if (this.fs.exists(filePath)) {
+      let program = j(this.fs.read(filePath) as any, {
+        parser: customTsParser,
+      })
+      program = replaceImportDbWithPrismaFolder(program)
+      this.fs.write(filePath, program.toSource())
     }
+
+    return templateValues
   }
 
   getTargetDirectory() {

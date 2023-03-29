@@ -1,17 +1,16 @@
-import {Generator, GeneratorOptions, SourceRootType} from "../generator"
 import {getTemplateRoot} from "../utils/get-template-root"
 import {camelCaseToKebabCase} from "../utils/inflector"
+import j from "jscodeshift"
+import {
+  CommonTemplateValues,
+  createFieldTemplateValues,
+  FieldValuesBuilder,
+  ResourceGeneratorOptions,
+} from ".."
+import {customTsParser, Generator, SourceRootType} from "../generator"
+import {replaceImportDbWithPrismaFolder} from "../../src/utils/codemod-utils"
 
-export interface MutationsGeneratorOptions extends GeneratorOptions {
-  ModelName: string
-  ModelNames: string
-  modelName: string
-  modelNames: string
-  parentModel?: string
-  parentModels?: string
-  ParentModel?: string
-  ParentModels?: string
-}
+export interface MutationsGeneratorOptions extends ResourceGeneratorOptions {}
 
 export class MutationsGenerator extends Generator<MutationsGeneratorOptions> {
   sourceRoot: SourceRootType
@@ -21,32 +20,31 @@ export class MutationsGenerator extends Generator<MutationsGeneratorOptions> {
   }
   static subdirectory = "mutations"
 
-  private getId(input: string = "") {
-    if (!input) return input
-    return `${input}Id`
-  }
+  templateValuesBuilder = new FieldValuesBuilder(this.fs)
 
-  private getParam(input: string = "") {
-    if (!input) return input
-    return `[${input}]`
-  }
-
-  // eslint-disable-next-line require-await
-  async getTemplateValues() {
-    return {
-      parentModelId: this.getId(this.options.parentModel),
-      parentModelParam: this.getParam(this.getId(this.options.parentModel)),
-      parentModel: this.options.parentModel,
-      parentModels: this.options.parentModels,
-      ParentModel: this.options.ParentModel,
-      ParentModels: this.options.ParentModels,
-      modelId: this.getId(this.options.modelName),
-      modelIdParam: this.getParam(this.getId(this.options.modelName)),
-      modelName: this.options.modelName,
-      modelNames: this.options.modelNames,
-      ModelName: this.options.ModelName,
-      ModelNames: this.options.ModelNames,
+  async preFileWrite(filePath: string): Promise<CommonTemplateValues> {
+    let templateValues = await this.getTemplateValues()
+    if (templateValues.parentModel && filePath.match(/.*mutations.*create.*/g)) {
+      const newFieldTemplateValues = await createFieldTemplateValues(
+        templateValues.parentModelId,
+        templateValues.parentModelIdZodType,
+        true,
+      )
+      if (templateValues.fieldTemplateValues) {
+        templateValues.fieldTemplateValues.push(newFieldTemplateValues)
+      } else {
+        templateValues.fieldTemplateValues = [newFieldTemplateValues]
+      }
     }
+    if (this.fs.exists(filePath)) {
+      let program = j(this.fs.read(filePath) as any, {
+        parser: customTsParser,
+      })
+      program = replaceImportDbWithPrismaFolder(program)
+      this.fs.write(filePath, program.toSource())
+    }
+
+    return templateValues
   }
 
   getTargetDirectory() {

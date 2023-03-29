@@ -1,19 +1,12 @@
-import {Generator, GeneratorOptions, SourceRootType} from "../generator"
+import {CommonTemplateValues, FieldValuesBuilder, ResourceGeneratorOptions} from ".."
+import {Generator, SourceRootType} from "../generator"
 import {getTemplateRoot} from "../utils/get-template-root"
 import {camelCaseToKebabCase} from "../utils/inflector"
 import {spawn} from "cross-spawn"
 import which from "npm-which"
+import * as fs from "fs-extra"
 
-export interface PageGeneratorOptions extends GeneratorOptions {
-  ModelName: string
-  ModelNames: string
-  modelName: string
-  modelNames: string
-  parentModel?: string
-  parentModels?: string
-  ParentModel?: string
-  ParentModels?: string
-}
+export interface PageGeneratorOptions extends ResourceGeneratorOptions {}
 
 export class PageGenerator extends Generator<PageGeneratorOptions> {
   sourceRoot: SourceRootType
@@ -23,34 +16,7 @@ export class PageGenerator extends Generator<PageGeneratorOptions> {
   }
   static subdirectory = "../../.."
 
-  private getId(input: string = "") {
-    if (!input) return input
-    return `${input}Id`
-  }
-
-  private getParam(input: string = "") {
-    if (!input) return input
-    return `[${input}]`
-  }
-
-  // eslint-disable-next-line require-await
-  async getTemplateValues() {
-    return {
-      parentModelId: this.getId(this.options.parentModel),
-      parentModelParam: this.getParam(this.getId(this.options.parentModel)),
-      parentModel: this.options.parentModel,
-      parentModels: this.options.parentModels,
-      ParentModel: this.options.ParentModel,
-      ParentModels: this.options.ParentModels,
-      modelId: this.getId(this.options.modelName),
-      modelIdParam: this.getParam(this.getId(this.options.modelName)),
-      modelName: this.options.modelName,
-      modelNames: this.options.modelNames,
-      ModelName: this.options.ModelName,
-      ModelNames: this.options.ModelNames,
-      modelNamesPath: this.getModelNamesPath(),
-    }
-  }
+  templateValuesBuilder = new FieldValuesBuilder(this.fs)
 
   getModelNamesPath() {
     const kebabCaseContext = this.options.context
@@ -66,6 +32,28 @@ export class PageGenerator extends Generator<PageGeneratorOptions> {
       ? `${this.options.parentModels}/__parentModelParam__/`
       : ""
     return `src/pages/${parent}${kebabCaseModelName}`
+  }
+
+  async preFileWrite(): Promise<CommonTemplateValues> {
+    const templateValues = await this.getTemplateValues()
+    const targetDirectory = this.getTargetDirectory().replace(
+      "__parentModelParam__",
+      templateValues.parentModelParam,
+    )
+    if (templateValues.parentModel) {
+      const modelPages = fs.existsSync(
+        `src/pages/${camelCaseToKebabCase(templateValues.modelNames)}`,
+      )
+      if (modelPages) {
+        if (!fs.existsSync(targetDirectory)) {
+          fs.moveSync(
+            `src/pages/${camelCaseToKebabCase(templateValues.modelNames)}`,
+            targetDirectory,
+          )
+        }
+      }
+    }
+    return templateValues
   }
 
   async postWrite() {

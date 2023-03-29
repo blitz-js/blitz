@@ -3,18 +3,13 @@ import {Field} from "../../src/prisma/field"
 import {Model} from "../../src/prisma/model"
 
 describe("Prisma Model", () => {
-  it("generates a proper model", () => {
-    expect(
-      new Model(
-        "user",
-        [
-          Field.parse("email:string:unique"),
-          Field.parse("updated:dateTime:updatedAt"),
-          Field.parse("recentLogins:dateTime[]"),
-          Field.parse("twoFactorEnabled:boolean"),
-          Field.parse("twoFactorMethod:string?"),
-        ].flat(),
-      ).toString(),
-    ).toMatchSnapshot()
+  it("generates a proper model", async () => {
+    const email = await Field.parse("email:string:unique")
+    const updated = await Field.parse("updated:dateTime:updatedAt")
+    const recentLogins = await Field.parse("recentLogins:dateTime[]")
+    const twoFactorEnabled = await Field.parse("twoFactorEnabled:boolean")
+    const twoFactorMethod = await Field.parse("twoFactorMethod:string?")
+    const fields = [email, updated, recentLogins, twoFactorEnabled, twoFactorMethod].flat()
+    expect(new Model("user", fields).toString()).toMatchSnapshot()
   })
 })

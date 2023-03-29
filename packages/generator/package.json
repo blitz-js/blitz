@@ -35,6 +35,7 @@
     "cross-spawn": "7.0.3",
     "diff": "5.0.0",
     "enquirer": "2.3.6",
+    "fast-glob": "3.2.12",
     "fs-extra": "10.0.1",
     "globby": "13.1.2",
     "got": "^11.8.1",
@@ -49,7 +50,8 @@
     "supports-color": "8.1.1",
     "tslog": "3.3.4",
     "username": "5.1.0",
-    "vinyl": "2.2.1"
+    "vinyl": "2.2.1",
+    "zod": "3.20.2"
   },
   "devDependencies": {
     "@blitzjs/config": "2.0.0-beta.23",
