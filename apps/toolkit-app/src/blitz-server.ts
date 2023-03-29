@@ -5,19 +5,6 @@ import db from "db"
 import { simpleRolesIsAuthorized } from "@blitzjs/auth"
 import { BlitzLogger } from "blitz"
 
-const { gSSP, gSP, api } = setupBlitzServer({
-  plugins: [
-    AuthServerPlugin({
-      cookiePrefix: "web-cookie-prefix",
-      storage: PrismaStorage(db),
-      isAuthorized: simpleRolesIsAuthorized,
-    }),
-  ],
-  logger: BlitzLogger({}),
-})
-
-export { gSSP, gSP, api }
-
 export const cliConfig: BlitzCliConfig = {
   customTemplates: "src/templates",
   codegen: {
@@ -31,3 +18,16 @@ export const cliConfig: BlitzCliConfig = {
     },
   },
 }
+
+const { gSSP, gSP, api } = setupBlitzServer({
+  plugins: [
+    AuthServerPlugin({
+      cookiePrefix: "web-cookie-prefix",
+      storage: PrismaStorage(db),
+      isAuthorized: simpleRolesIsAuthorized,
+    }),
+  ],
+  logger: BlitzLogger({}),
+})
+
+export { gSSP, gSP, api }
