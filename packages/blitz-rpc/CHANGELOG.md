@@ -1,5 +1,36 @@
 # @blitzjs/rpc
 
+## 2.0.0-beta.23
+
+### Patch Changes
+
+- c3c789740: Updates internal functions and tests to support blitz apps that run tests with vitest
+- Updated dependencies [c3c789740]
+  - blitz@2.0.0-beta.23
+
+## 2.0.0-beta.22
+
+### Minor Changes
+
+- 270361886: change rpc route basepath to be one folder higher when using includeRPC in monorepos
+
+### Patch Changes
+
+- Updated dependencies [989691ec8]
+- Updated dependencies [8aa22a0b2]
+  - blitz@2.0.0-beta.22
+
+## 2.0.0-beta.21
+
+### Patch Changes
+
+- d692b4c1d: Fix suspense error codegen patch for nextjs versions 13-13.0.6
+- 0025856b9: Support full api of tanstack invalidateQueries
+- Updated dependencies [d692b4c1d]
+- Updated dependencies [10f98c681]
+- Updated dependencies [d5b8faa86]
+  - blitz@2.0.0-beta.21
+
 ## 2.0.0-beta.20
 
 ### Minor Changes

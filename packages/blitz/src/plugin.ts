@@ -4,6 +4,7 @@ import type {
   Simplify,
   UnionToIntersection,
 } from "./index-browser"
+import {BlitzServerPlugin} from "./index-server"
 import {isClient} from "./utils"
 
 export function merge<T, U>([...fns]: Array<(args: T) => U>) {
@@ -19,7 +20,7 @@ const compose =
   (x: React.ComponentType<any>) =>
     rest.reduceRight((y, f) => f(y), x)
 
-export type PluginsExports<TPlugins extends readonly ClientPlugin<object>[]> = Simplify<
+export type ClientPluginsExports<TPlugins extends readonly ClientPlugin<object>[]> = Simplify<
   UnionToIntersection<
     {
       [I in keyof TPlugins & number]: ReturnType<TPlugins[I]["exports"]>
@@ -27,7 +28,15 @@ export type PluginsExports<TPlugins extends readonly ClientPlugin<object>[]> = S
   >
 >
 
-export function reduceBlitzPlugins<TPlugins extends readonly ClientPlugin<object>[]>({
+export type ServerPluginsExports<TPlugins extends readonly BlitzServerPlugin<object>[]> = Simplify<
+  UnionToIntersection<
+    {
+      [I in keyof TPlugins & number]: ReturnType<TPlugins[I]["exports"]>
+    }[number]
+  >
+>
+
+export function reduceBlitzClientPlugins<TPlugins extends readonly ClientPlugin<object>[]>({
   plugins,
 }: {
   plugins: TPlugins
@@ -72,7 +81,7 @@ export function reduceBlitzPlugins<TPlugins extends readonly ClientPlugin<object
         onRpcError: merge<Error, Promise<void>>([]),
         onSessionCreated: merge<void, Promise<void>>([]),
       },
-      exports: {} as PluginsExports<TPlugins>,
+      exports: {} as ClientPluginsExports<TPlugins>,
       providers: [] as BlitzProviderComponentType[],
     },
   )
@@ -97,4 +106,22 @@ export function reduceBlitzPlugins<TPlugins extends readonly ClientPlugin<object
     events,
     withPlugins,
   }
+}
+
+export function reduceBlitzServerPlugins<TPlugins extends readonly BlitzServerPlugin<object>[]>({
+  plugins,
+}: {
+  plugins: TPlugins
+}) {
+  const middlewares = plugins.flatMap((p) => p.requestMiddlewares)
+  const contextMiddleware = plugins.flatMap((p) => p.contextMiddleware).filter(Boolean)
+  const {pluginExports} = plugins.reduce(
+    (acc, plugin) => ({
+      pluginExports: {...plugin.exports(), ...acc.pluginExports},
+    }),
+    {
+      pluginExports: {} as ServerPluginsExports<TPlugins>,
+    },
+  )
+  return {pluginExports, middlewares, contextMiddleware}
 }

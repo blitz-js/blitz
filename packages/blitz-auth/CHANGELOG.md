@@ -1,5 +1,40 @@
 # @blitzjs/auth
 
+## 2.0.0-beta.23
+
+### Major Changes
+
+- 42a2cf951: BREAKING CHANGE: secure-password is now an `optional peerDependency`, if you are using `SecurePassword` api, you need to now install `secure-password` in your application.
+
+  This helps users who do not use SecurePassword from having native package build issues.
+
+### Patch Changes
+
+- Updated dependencies [c3c789740]
+  - blitz@2.0.0-beta.23
+
+## 2.0.0-beta.22
+
+### Minor Changes
+
+- 145d5a02b: fix failed localStorage access to not crash the application
+
+### Patch Changes
+
+- Updated dependencies [989691ec8]
+- Updated dependencies [8aa22a0b2]
+  - blitz@2.0.0-beta.22
+
+## 2.0.0-beta.21
+
+### Patch Changes
+
+- 82e8b64f5: Fixes adding authError query param in Passport adapter.
+- Updated dependencies [d692b4c1d]
+- Updated dependencies [10f98c681]
+- Updated dependencies [d5b8faa86]
+  - blitz@2.0.0-beta.21
+
 ## 2.0.0-beta.20
 
 ### Minor Changes

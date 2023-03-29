@@ -206,30 +206,4 @@ describe("RPC", () => {
     },
     5000 * 60 * 2,
   )
-
-  describe(
-    "serverless mode",
-    () => {
-      let nextConfigContent = ""
-      const nextConfigPath = join(appDir, "next.config.js")
-      beforeAll(async () => {
-        nextConfigContent = await fs.readFile(nextConfigPath, "utf8")
-        await fs.writeFile(
-          nextConfigPath,
-          nextConfigContent.replace("// update me", `target: 'experimental-serverless-trace',`),
-        )
-        await nextBuild(appDir)
-        mode = "serverless"
-        appPort = await findPort()
-        app = await nextStart(appDir, appPort, {cwd: process.cwd()})
-      })
-      afterAll(async () => {
-        await killApp(app)
-        await fs.writeFile(nextConfigPath, nextConfigContent)
-      })
-
-      runTests()
-    },
-    5000 * 60 * 2,
-  )
 })

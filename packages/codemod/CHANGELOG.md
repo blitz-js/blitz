@@ -1,5 +1,39 @@
 # @blitzjs/codemod
 
+## 2.0.0-beta.23
+
+### Patch Changes
+
+- Updated dependencies [cb63a0ea5]
+- Updated dependencies [6ec020c6d]
+- Updated dependencies [c3c789740]
+- Updated dependencies [d316d0db7]
+- Updated dependencies [79c5e86d7]
+  - @blitzjs/generator@2.0.0-beta.23
+  - blitz@2.0.0-beta.23
+
+## 2.0.0-beta.22
+
+### Patch Changes
+
+- Updated dependencies [989691ec8]
+- Updated dependencies [bcef81fad]
+- Updated dependencies [8aa22a0b2]
+- Updated dependencies [7abfb9086]
+  - blitz@2.0.0-beta.22
+  - @blitzjs/generator@2.0.0-beta.22
+
+## 2.0.0-beta.21
+
+### Patch Changes
+
+- Updated dependencies [77b7da0f3]
+- Updated dependencies [d692b4c1d]
+- Updated dependencies [10f98c681]
+- Updated dependencies [d5b8faa86]
+  - @blitzjs/generator@2.0.0-beta.21
+  - blitz@2.0.0-beta.21
+
 ## 2.0.0-beta.20
 
 ### Patch Changes

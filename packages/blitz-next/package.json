@@ -1,8 +1,13 @@
 {
   "name": "@blitzjs/next",
-  "version": "2.0.0-beta.20",
+  "version": "2.0.0-beta.23",
+  "homepage": "https://blitzjs.com/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/blitz-js/blitz.git"
+  },
   "scripts": {
-    "build": "unbuild",
+    "build": "unbuild && node ./utils/add-directives.js",
     "dev": "pnpm predev && pnpm watch unbuild src --wait=0.2",
     "predev": "wait-on -d 250 ../blitz/dist/index-server.d.ts && wait-on -d 250 ../blitz-rpc/dist/index-server.d.ts",
     "lint": "eslint . --fix",
@@ -24,8 +29,7 @@
     "eslint.js"
   ],
   "dependencies": {
-    "@blitzjs/rpc": "2.0.0-beta.20",
-    "@tanstack/react-query": "4.0.10",
+    "@blitzjs/rpc": "2.0.0-beta.23",
     "@types/hoist-non-react-statics": "3.3.1",
     "debug": "4.3.3",
     "fs-extra": "10.0.1",
@@ -34,12 +38,12 @@
     "supports-color": "8.1.1"
   },
   "peerDependencies": {
-    "blitz": "2.0.0-beta.20",
+    "blitz": "2.0.0-beta.23",
     "next": "*",
     "react": "*"
   },
   "devDependencies": {
-    "@blitzjs/config": "workspace:2.0.0-beta.20",
+    "@blitzjs/config": "workspace:2.0.0-beta.23",
     "@testing-library/dom": "8.13.0",
     "@testing-library/jest-dom": "5.16.3",
     "@testing-library/react": "13.4.0",
@@ -49,10 +53,11 @@
     "@types/react": "18.0.25",
     "@types/react-dom": "17.0.14",
     "@types/testing-library__react-hooks": "4.0.0",
-    "blitz": "2.0.0-beta.20",
+    "blitz": "2.0.0-beta.23",
     "cross-spawn": "7.0.3",
     "find-up": "4.1.0",
-    "next": "12.2.5",
+    "next": "13.1.6",
+    "next-router-mock": "0.9.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "resolve-from": "5.0.0",

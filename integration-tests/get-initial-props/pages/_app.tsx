@@ -28,6 +28,7 @@ function MyApp({Component, pageProps, testProp}: AppProps & {testProp: any}) {
   return (
     <Suspense fallback="Loading...">
       <ErrorBoundary FallbackComponent={RootErrorFallback}>
+        {/* @ts-ignore */}
         <Component {...pageProps} testProp={testProp} />
       </ErrorBoundary>
     </Suspense>

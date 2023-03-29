@@ -9,6 +9,8 @@ import * as React from "react"
 import type {ErrorFallbackProps} from "./error-boundary"
 import {ErrorBoundary, useErrorHandler} from "./error-boundary"
 
+vi.mock("next/router", () => require("next-router-mock"))
+
 beforeEach(() => {
   global.IS_REACT_ACT_ENVIRONMENT = true
   vi.spyOn(console, "error").mockImplementation(() => {})

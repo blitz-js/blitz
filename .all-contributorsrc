@@ -2941,7 +2941,8 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/230500?v=4",
       "profile": "https://github.com/bravo-kernel",
       "contributions": [
-        "code"
+        "code",
+        "doc"
       ]
     },
     {
@@ -3793,7 +3794,8 @@
       "profile": "http://tobiasjordans.de",
       "contributions": [
         "code",
-        "doc"
+        "doc",
+        "test"
       ]
     },
     {
@@ -3804,6 +3806,55 @@
       "contributions": [
         "doc",
         "code"
+      ]
+    },
+    {
+      "login": "Trancever",
+      "name": "Dawid Urbaniak",
+      "avatar_url": "https://avatars.githubusercontent.com/u/18584155?v=4",
+      "profile": "https://twitter.com/trensik",
+      "contributions": [
+        "doc",
+        "code"
+      ]
+    },
+    {
+      "login": "jhonnymichel",
+      "name": "Jhonny Michel",
+      "avatar_url": "https://avatars.githubusercontent.com/u/7006387?v=4",
+      "profile": "https://github.com/jhonnymichel",
+      "contributions": [
+        "doc",
+        "code",
+        "test"
+      ]
+    },
+    {
+      "login": "sweetliquid",
+      "name": "sweetliquid",
+      "avatar_url": "https://avatars.githubusercontent.com/u/18693190?v=4",
+      "profile": "sweetliquid.me",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "exKAZUu",
+      "name": "Sakamoto, Kazunori",
+      "avatar_url": "https://avatars.githubusercontent.com/u/436237?v=4",
+      "profile": "https://github.com/exKAZUu",
+      "contributions": [
+        "doc",
+        "code"
+      ]
+    },
+    {
+      "login": "jeliasson",
+      "name": "Johan Eliasson",
+      "avatar_url": "https://avatars.githubusercontent.com/u/865493?v=4",
+      "profile": "https://github.com/jeliasson",
+      "contributions": [
+        "doc"
       ]
     }
   ],

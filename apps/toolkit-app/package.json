@@ -30,15 +30,16 @@
     "@blitzjs/rpc": "workspace:*",
     "@hookform/error-message": "2.0.0",
     "@hookform/resolvers": "2.9.10",
-    "@prisma/client": "4.6.0",
-    "blitz": "workspace:2.0.0-beta.20",
-    "next": "12.2.5",
-    "prisma": "4.6.0",
+    "@prisma/client": "4.6.1",
+    "blitz": "workspace:2.0.0-beta.23",
+    "next": "13.1.6",
+    "next-auth": "4.18.7",
+    "prisma": "4.6.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "7.39.1",
     "ts-node": "10.9.1",
-    "zod": "3.19.1"
+    "zod": "3.20.2"
   },
   "devDependencies": {
     "@next/bundle-analyzer": "12.0.8",

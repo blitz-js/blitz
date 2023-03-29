@@ -1,5 +1,39 @@
 # blitz
 
+## 2.0.0-beta.23
+
+### Patch Changes
+
+- c3c789740: Updates internal functions and tests to support blitz apps that run tests with vitest
+- Updated dependencies [cb63a0ea5]
+- Updated dependencies [6ec020c6d]
+- Updated dependencies [d316d0db7]
+- Updated dependencies [79c5e86d7]
+  - @blitzjs/generator@2.0.0-beta.23
+
+## 2.0.0-beta.22
+
+### Minor Changes
+
+- 8aa22a0b2: add `currentPassword` to the default fields that are masked in the logger
+
+### Patch Changes
+
+- 989691ec8: Use `src` instead of `app` folder for `blitz generate custom-template`
+- Updated dependencies [bcef81fad]
+- Updated dependencies [7abfb9086]
+  - @blitzjs/generator@2.0.0-beta.22
+
+## 2.0.0-beta.21
+
+### Patch Changes
+
+- d692b4c1d: Fix suspense error codegen patch for nextjs versions 13-13.0.6
+- 10f98c681: Add an href property to the generated route manifest that will return a string of the pathname and included query params.
+- d5b8faa86: add regex to support inline and non-inline codebase and proper next.js package version check
+- Updated dependencies [77b7da0f3]
+  - @blitzjs/generator@2.0.0-beta.21
+
 ## 2.0.0-beta.20
 
 ### Minor Changes
