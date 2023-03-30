@@ -56,7 +56,7 @@
     "blitz": "2.0.0-beta.23",
     "cross-spawn": "7.0.3",
     "find-up": "4.1.0",
-    "next": "13.1.6",
+    "next": "13.2.4",
     "next-router-mock": "0.9.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",

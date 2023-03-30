@@ -38,6 +38,15 @@ export const codegenTasks = async () => {
         )
       await fs.writeFile(nextClientIndex, updatedFile)
       log.success("Next.js was successfully patched with a React Suspense fix")
+    } else if (nextVersion && semver.satisfies(nextVersion, ">=13.2")) {
+      const updatedFile = readFile
+        .toString()
+        .replace(
+          /_onRecoverableError\.default/,
+          `(err) => (err.toString().includes("DYNAMIC_SERVER_USAGE") || err.toString().includes("could not finish this Suspense boundary") || err.toString().includes("Minified React error #419")) ? null : _onRecoverableError.default(err)`,
+        )
+      await fs.writeFile(nextClientIndex, updatedFile)
+      log.success("Next.js was successfully patched with a React Suspense fix")
     }
   } catch (err) {
     log.error(JSON.stringify(err, null, 2))
