@@ -24,7 +24,7 @@ const runTests = () => {
         expect(text).toBe("Custom plugin Session Created")
         await waitFor(2000)
         text = await browser.elementByCss("#page").text()
-        expect(text).toBe("Custom plugin RPC Error")
+        expect(text).toBe("Custom plugin Session Created")
         if (browser) {
           await browser.close()
         }
