@@ -1,5 +1,87 @@
 # blitz
 
+## 2.0.0-beta.24
+
+### Minor Changes
+
+- cadefb88e: - New Blitz Auth Function `getAppSession`, This function will use the cookies and headers provided by the server component and returns the current session.
+  - New Blitz Auth Hook `useAuthenticatedAppSession`, This hook is implemented as the replacement of the BlitzPage seurity auth utilities provided for the pages directory to work with React Server Components in the Nextjs 13 app directory
+  - New Blitz React Server Component Wrapper, `BlitzProvider` is to be imported from setupBlitzClient in src/blitz-client.ts and to used to ideally wrap the entire application in the `RootLayout` in the root layout.ts file of next app directory.
+  - Fix failing tests due to the error `NextRouter is not mounted` in next 13 blitz apps
+- 6f18cbdc9: feature: Next Auth Adapter
+
+### Patch Changes
+
+- ea7561b8e: Consolidate mutations schema to new schema.{ts|js} file.
+- ea7561b8e: Multiple fields forms using templates during generation - TODO
+- 37aeaa7fa: feature: Nextjs 13 App Directory Utility Methods
+
+  ### 🔧 New Blitz Auth Hook `useAuthenticatedBlitzContext`
+
+  This hook is implemented as the replacement of the [`BlitzPage` seurity auth utilities](https://blitzjs.com/docs/authorization#secure-your-pages) provided for the pages directory to work with React Server Components in the Nextjs 13 app directory
+  It can be used in any asynchronous server component be it in `page.ts` or in the layouts in `layout.ts`
+  It uses the new [`redirect` function](https://beta.nextjs.org/docs/api-reference/redirect) to provide the required authorization in server side
+
+  #### API
+
+  ```ts
+  useAuthenticatedBlitzContext({
+    redirectTo,
+    redirectAuthenticatedTo,
+    role,
+  }: {
+    redirectTo?: string | RouteUrlObject
+    redirectAuthenticatedTo?: string | RouteUrlObject | ((ctx: Ctx) => string | RouteUrlObject)
+    role?: string | string[]
+  }): Promise<void>
+  ```
+
+  #### Usage
+
+  **Example Usage in React Server Component in `app` directory in Next 13**
+
+  ```ts
+  import {getAppSession, useAuthenticatedBlitzContext} from "src/blitz-server"
+  ...
+  await useAuthenticatedBlitzContext({
+      redirectTo: "/auth/login",
+      role: ["admin"],
+      redirectAuthenticatedTo: "/dashboard",
+  })
+  ```
+
+  ### 🔧 New Blitz RPC Hook `invokeResolver`
+
+  #### API
+
+  ```ts
+  invokeResolver<T extends (...args: any) => any, TInput = FirstParam<T>>(
+    queryFn: T,
+    params: TInput,
+  ): Promise<PromiseReturnType<T>>
+  ```
+
+  #### Example Usage
+
+  ```ts
+  ...
+  import {invokeResolver, useAuthenticatedBlitzContext} from "../src/blitz-server"
+  import getCurrentUser from "../src/users/queries/getCurrentUser"
+
+  export default async function Home() {
+    await useAuthenticatedBlitzContext({
+      redirectTo: "/auth/login",
+    })
+    const user = await invokeResolver(getCurrentUser, null)
+  ...
+  ```
+
+- Updated dependencies [e228ba5de]
+- Updated dependencies [ea7561b8e]
+- Updated dependencies [430f0b52d]
+- Updated dependencies [ea7561b8e]
+  - @blitzjs/generator@2.0.0-beta.24
+
 ## 2.0.0-beta.23
 
 ### Patch Changes
