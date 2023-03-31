@@ -1,5 +1,4 @@
 ---
-"next-blitz-auth": patch
 "@blitzjs/auth": patch
 "@blitzjs/rpc": patch
 "blitz": patch
@@ -11,9 +10,10 @@ feature: Nextjs 13 App Directory Utility Methods
 
 This hook is implemented as the replacement of the [`BlitzPage` seurity auth utilities](https://blitzjs.com/docs/authorization#secure-your-pages) provided for the pages directory to work with React Server Components in the Nextjs 13 app directory
 It can be used in any asynchronous server component be it in `page.ts` or in the layouts in `layout.ts`
-It uses the new [`redirect` function](https://beta.nextjs.org/docs/api-reference/redirect) to provide the required authorization in server side 
+It uses the new [`redirect` function](https://beta.nextjs.org/docs/api-reference/redirect) to provide the required authorization in server side
 
 #### API
+
 ```ts
 useAuthenticatedBlitzContext({
   redirectTo,
@@ -27,7 +27,9 @@ useAuthenticatedBlitzContext({
 ```
 
 #### Usage
+
 **Example Usage in React Server Component in `app` directory in Next 13**
+
 ```ts
 import {getAppSession, useAuthenticatedBlitzContext} from "src/blitz-server"
 ...
@@ -41,11 +43,12 @@ await useAuthenticatedBlitzContext({
 ### 🔧 New Blitz RPC Hook `invokeResolver`
 
 #### API
+
 ```ts
 invokeResolver<T extends (...args: any) => any, TInput = FirstParam<T>>(
   queryFn: T,
   params: TInput,
-): Promise<PromiseReturnType<T>> 
+): Promise<PromiseReturnType<T>>
 ```
 
 #### Example Usage
