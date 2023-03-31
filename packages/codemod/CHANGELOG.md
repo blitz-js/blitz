@@ -1,5 +1,37 @@
 # @blitzjs/codemod
 
+## 2.0.0-beta.24
+
+### Minor Changes
+
+- 9529dbd6f: ## ⚠️ Breaking Changes for Blitz Auth
+
+  Automatically upgrade using codemod
+  (Make sure to git commit before running this command to avoid losing changes)
+
+  ```bash
+  npx @blitz/codemod secure-password
+  ```
+
+  Introduce a new import path for the Blitz wrapper `SecurePassword` to fully decouple the library from `@blitzjs/auth`
+
+  ```diff
+  - import {SecurePassword} from "@blitzjs/auth"
+  + import {SecurePassword} from "@blitzjs/auth/secure-password"
+  ```
+
+### Patch Changes
+
+- Updated dependencies [e228ba5de]
+- Updated dependencies [cadefb88e]
+- Updated dependencies [6f18cbdc9]
+- Updated dependencies [ea7561b8e]
+- Updated dependencies [430f0b52d]
+- Updated dependencies [ea7561b8e]
+- Updated dependencies [37aeaa7fa]
+  - @blitzjs/generator@2.0.0-beta.24
+  - blitz@2.0.0-beta.24
+
 ## 2.0.0-beta.23
 
 ### Patch Changes
