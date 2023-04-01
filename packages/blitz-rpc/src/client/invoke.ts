@@ -28,7 +28,7 @@ export async function invoke<T extends (...args: any) => any, TInput = FirstPara
       )
     })
     const ctx = await getBlitzContext()
-    return queryFn(params, ctx)
+    return queryFn(params, ctx) as ReturnType<T>
   }
 
   if (isClient) {
