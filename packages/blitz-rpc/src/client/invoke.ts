@@ -4,17 +4,17 @@ import {RpcClient} from "./rpc"
 export async function invoke<T extends (...args: any) => any, TInput = FirstParam<T>>(
   queryFn: T,
   params: TInput,
-): Promise<T>
+): Promise<PromiseReturnType<T>>
 export async function invoke<T extends (...args: any) => any, TInput = FirstParam<T>>(
   queryFn: T,
   params: TInput,
   isServer: boolean,
-): Promise<T>
+): Promise<PromiseReturnType<T>>
 export async function invoke<T extends (...args: any) => any, TInput = FirstParam<T>>(
   queryFn: T,
   params: TInput,
   isServer = typeof window === "undefined" ? true : false,
-): Promise<T> {
+): Promise<PromiseReturnType<T>> {
   if (typeof queryFn === "undefined") {
     throw new Error(
       "invoke is missing the first argument - it must be a query or mutation function",
@@ -28,15 +28,15 @@ export async function invoke<T extends (...args: any) => any, TInput = FirstPara
       )
     })
     const ctx = await getBlitzContext()
-    return queryFn(params, ctx) as ReturnType<T>
+    return queryFn(params, ctx) as PromiseReturnType<T>
   }
 
   if (isClient) {
     const fn = queryFn as unknown as RpcClient
-    return fn(params, {fromInvoke: true}) as ReturnType<T>
+    return fn(params, {fromInvoke: true}) as PromiseReturnType<T>
   } else {
     const fn = queryFn as unknown as RpcClient
-    return fn(params) as ReturnType<T>
+    return fn(params) as PromiseReturnType<T>
   }
 }
 
