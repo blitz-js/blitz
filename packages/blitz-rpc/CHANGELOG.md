@@ -1,5 +1,12 @@
 # @blitzjs/rpc
 
+## 2.0.0-beta.25
+
+### Patch Changes
+
+- f84d77a42: Fix return type of the `invoke` method from returning type function to return the type of resolved data
+  - blitz@2.0.0-beta.25
+
 ## 2.0.0-beta.24
 
 ### Minor Changes
