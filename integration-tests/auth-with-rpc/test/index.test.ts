@@ -34,7 +34,7 @@ const runTests = () => {
         await waitFor(100)
         let text = await browser.elementByCss("#before-req").text()
         expect(text).toBe("customHeaderValue")
-        await waitFor(1000)
+        await waitFor(2000)
         text = await browser.elementByCss("#before-res").text()
         expect(text).toBe("55")
         if (browser) {
