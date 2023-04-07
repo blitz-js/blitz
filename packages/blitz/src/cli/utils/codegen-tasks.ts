@@ -18,7 +18,8 @@ export const codegenTasks = async () => {
     const nextClientIndex = join(nextDir, "../..", "client", "index.js")
     const readFile = await fs.readFile(nextClientIndex)
     const packageJson = await getPackageJson()
-    const nextVersion = packageJson.dependencies.next
+    const version = packageJson.dependencies.next
+    const nextVersion = semver.clean(version, {loose: true}) || semver.valid(semver.coerce(version))
 
     if (nextVersion && /^([~^])?12/.test(nextVersion)) {
       const updatedFile = readFile
