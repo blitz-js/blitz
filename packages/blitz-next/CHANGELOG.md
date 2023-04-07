@@ -1,5 +1,65 @@
 # @blitzjs/next
 
+## 2.0.0-beta.25
+
+### Patch Changes
+
+- Updated dependencies [f84d77a42]
+  - @blitzjs/rpc@2.0.0-beta.25
+  - blitz@2.0.0-beta.25
+
+## 2.0.0-beta.24
+
+### Minor Changes
+
+- cadefb88e: - New Blitz Auth Function `getAppSession`, This function will use the cookies and headers provided by the server component and returns the current session.
+  - New Blitz Auth Hook `useAuthenticatedAppSession`, This hook is implemented as the replacement of the BlitzPage seurity auth utilities provided for the pages directory to work with React Server Components in the Nextjs 13 app directory
+  - New Blitz React Server Component Wrapper, `BlitzProvider` is to be imported from setupBlitzClient in src/blitz-client.ts and to used to ideally wrap the entire application in the `RootLayout` in the root layout.ts file of next app directory.
+  - Fix failing tests due to the error `NextRouter is not mounted` in next 13 blitz apps
+- acc07ce94: Fix Next 13.2 compatibility
+
+  This updates the suspense patch to work with Next.js 13.2+. Hopefully soon we can stop patching once Next.js catches up with all the other frameworks and properly [exposes the `onRecoverableError` react hook](https://github.com/vercel/next.js/discussions/36641).
+
+### Patch Changes
+
+- Updated dependencies [cadefb88e]
+- Updated dependencies [6f18cbdc9]
+- Updated dependencies [ea7561b8e]
+- Updated dependencies [ea7561b8e]
+- Updated dependencies [37aeaa7fa]
+  - blitz@2.0.0-beta.24
+  - @blitzjs/rpc@2.0.0-beta.24
+
+## 2.0.0-beta.23
+
+### Patch Changes
+
+- Updated dependencies [c3c789740]
+  - blitz@2.0.0-beta.23
+  - @blitzjs/rpc@2.0.0-beta.23
+
+## 2.0.0-beta.22
+
+### Patch Changes
+
+- Updated dependencies [270361886]
+- Updated dependencies [989691ec8]
+- Updated dependencies [8aa22a0b2]
+  - @blitzjs/rpc@2.0.0-beta.22
+  - blitz@2.0.0-beta.22
+
+## 2.0.0-beta.21
+
+### Patch Changes
+
+- 10f98c681: Add an href property to the generated route manifest that will return a string of the pathname and included query params.
+- Updated dependencies [d692b4c1d]
+- Updated dependencies [0025856b9]
+- Updated dependencies [10f98c681]
+- Updated dependencies [d5b8faa86]
+  - @blitzjs/rpc@2.0.0-beta.21
+  - blitz@2.0.0-beta.21
+
 ## 2.0.0-beta.20
 
 ### Minor Changes

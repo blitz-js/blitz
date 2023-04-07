@@ -1,10 +1,13 @@
 import * as babel from "@babel/core"
 // @ts-ignore TS wants types for this module but none exist
 import babelTransformTypescript from "@babel/plugin-transform-typescript"
+import {escapePath} from "fast-glob"
 import Enquirer from "enquirer"
 import {EventEmitter} from "events"
 import * as fs from "fs-extra"
 import j from "jscodeshift"
+import {CommonTemplateValues, IBuilder} from "./generators/template-builders/builder"
+import {NullBuilder} from "./generators/template-builders/null-builder"
 import {create as createStore, Store} from "mem-fs"
 import {create as createEditor, Editor} from "mem-fs-editor"
 import * as path from "path"
@@ -14,6 +17,7 @@ import {ConflictChecker} from "./conflict-checker"
 import {pipe} from "./utils/pipe"
 import {readdirRecursive} from "./utils/readdir-recursive"
 import prettier from "prettier"
+import {log} from "./utils/log"
 const debug = require("debug")("blitz:generator")
 
 export function getProjectRootSync() {
@@ -40,7 +44,7 @@ export const customTemplatesBlitzConfig = async (
   if (blitzServer.length > 1) {
     throw new Error("Found more than one blitz-server.js or blitz-server.ts in app or src folder")
   }
-  const blitzServerPath = require("path").join(process.cwd(), blitzServer.at(0))
+  const blitzServerPath = require("path").join(process.cwd(), blitzServer[0])
   const userConfigModuleSource = fs.readFileSync(blitzServerPath, {encoding: "utf-8"})
   const userConfigModule = j(userConfigModuleSource, {parser: customTsParser})
   const program = userConfigModule.get()
@@ -267,7 +271,16 @@ export abstract class Generator<
     if (!this.options.destinationRoot) this.options.destinationRoot = process.cwd()
   }
 
-  abstract getTemplateValues(): Promise<any>
+  public templateValuesBuilder: IBuilder<T, any> = NullBuilder
+
+  async getTemplateValues(): Promise<any> {
+    const values = await this.templateValuesBuilder.getTemplateValues(this.options)
+    return values
+  }
+
+  public fieldTemplateRegExp: RegExp = new RegExp(
+    /({?\/\*\s*template: (.*) \*\/}?|\s*\/\/\s*template: (.*))/g,
+  )
 
   abstract getTargetDirectory(): string
 
@@ -297,6 +310,12 @@ export abstract class Generator<
     for (let templateKey in templateValues) {
       const token = `__${templateKey}__`
       if (result.includes(token)) {
+        result = result.replace(new RegExp(token, "g"), templateValues[templateKey] as string)
+      }
+    }
+    for (let templateKey in templateValues.fieldTemplateValues) {
+      const token = `__${templateKey}__`
+      if (result.includes(token)) {
         result = result.replace(new RegExp(token, "g"), templateValues[templateKey])
       }
     }
@@ -318,6 +337,21 @@ export abstract class Generator<
 
     if (codeFileExtensions.test(pathEnding)) {
       templatedFile = this.replaceConditionals(inputStr, templateValues, prettierOptions || {})
+    }
+    const fieldTemplateString = templatedFile
+      ?.match(this.fieldTemplateRegExp)
+      ?.at(0)
+      ?.replace(this.fieldTemplateRegExp, "$2$3")
+
+    if (fieldTemplateString) {
+      const fieldTemplatePosition = templatedFile.search(this.fieldTemplateRegExp)
+      templatedFile = [
+        templatedFile.slice(0, fieldTemplatePosition),
+        ...(templateValues.fieldTemplateValues?.map((values: any) =>
+          this.replaceTemplateValues(fieldTemplateString, values),
+        ) || []),
+        templatedFile.slice(fieldTemplatePosition),
+      ].join("")
     }
     templatedFile = this.replaceTemplateValues(templatedFile, templateValues)
     if (!this.useTs && tsExtension.test(pathEnding)) {
@@ -343,10 +377,19 @@ export abstract class Generator<
       try {
         templatedFile = this.prettier.format(templatedFile, options)
       } catch (error) {
-        console.warn(`Failed trying to run prettier: ` + error)
+        console.error(`Failed trying to run prettier: ` + error)
       }
     }
     return templatedFile
+  }
+
+  async preFileWrite(filePath: string): Promise<CommonTemplateValues> {
+    // allow subclasses to do something before writing a file
+    return this.getTemplateValues()
+  }
+
+  async postFileWrite(filePath: string, templateValues: CommonTemplateValues): Promise<void> {
+    // allow subclasses to do something after writing a file
   }
 
   async write(): Promise<void> {
@@ -356,33 +399,45 @@ export abstract class Generator<
       const additionalFilesToIgnore = this.filesToIgnore()
       return ![...alwaysIgnoreFiles, ...additionalFilesToIgnore].includes(name)
     })
-
     const prettierOptions = await this.prettier?.resolveConfig(sourcePath)
-
     for (let filePath of paths) {
       try {
-        let pathSuffix = filePath
-        pathSuffix = path.join(this.getTargetDirectory(), pathSuffix)
-        const templateValues = await this.getTemplateValues()
-
+        let templateValues = await this.getTemplateValues()
+        const pathSuffix = path.join(this.getTargetDirectory(), filePath)
+        const sourcePath = this.sourcePath(filePath)
+        const destinationPath = this.destinationPath(pathSuffix)
         let templatedPathSuffix = this.replaceTemplateValues(pathSuffix, templateValues)
+        const templatedDestinationPath = this.destinationPath(templatedPathSuffix)
+        const destinationExists = fs.existsSync(templatedDestinationPath)
 
-        const newContent = this.process(
-          this.fs.read(this.sourcePath(filePath), {raw: true}) as any,
-          pathSuffix,
-          templateValues,
-          prettierOptions ?? undefined,
-        )
-        this.fs.write(this.destinationPath(pathSuffix), newContent)
+        templateValues = await this.preFileWrite(templatedPathSuffix)
 
         if (!this.useTs && tsExtension.test(this.destinationPath(pathSuffix))) {
           templatedPathSuffix = templatedPathSuffix.replace(tsExtension, ".js")
         }
-        if (templatedPathSuffix !== pathSuffix) {
-          this.fs.move(this.destinationPath(pathSuffix), this.destinationPath(templatedPathSuffix))
+
+        if (destinationExists) {
+          const newContent = this.process(
+            this.fs.read(templatedDestinationPath, {raw: true}) as any,
+            pathSuffix,
+            templateValues,
+            prettierOptions ?? undefined,
+          )
+          this.fs.write(templatedDestinationPath, newContent)
+        } else {
+          this.fs.copy(escapePath(sourcePath), escapePath(destinationPath), {
+            process: (input) =>
+              this.process(input, pathSuffix, templateValues, prettierOptions ?? undefined),
+          })
+
+          if (templatedPathSuffix !== pathSuffix) {
+            this.fs.move(destinationPath, templatedDestinationPath)
+          }
         }
+
+        await this.postFileWrite(templatedPathSuffix, templateValues)
       } catch (error) {
-        console.error(`Error generating ${filePath}`)
+        log.error(`Error generating ${filePath}`)
         throw error
       }
     }

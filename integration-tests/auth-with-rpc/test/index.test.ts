@@ -22,7 +22,7 @@ const runTests = () => {
         await waitFor(250)
         text = await browser.elementByCss("#page").text()
         expect(text).toBe("Custom plugin Session Created")
-        await waitFor(2000)
+        await waitFor(3000)
         text = await browser.elementByCss("#page").text()
         expect(text).toBe("Custom plugin RPC Error")
         if (browser) {

@@ -6,8 +6,9 @@ import chalk from "chalk"
 
 // TODO - optimize end user server bundles by not exporting all client stuff here
 export * from "./index-browser"
+export {RpcServerPlugin} from "./server/plugin"
 
-export * from "./resolver"
+export * from "./server/resolvers/resolver"
 
 // Mechanism used by Vite/Next/Nuxt plugins for automatically loading query and mutation resolvers
 function isObject(value: unknown): value is Record<string | symbol, unknown> {
@@ -76,7 +77,7 @@ export interface InstallWebpackConfigOptions {
   webpackConfig: {
     resolve: {
       alias: {
-        [key: string]: boolean
+        [key: string]: boolean | string
       }
     }
     module: {

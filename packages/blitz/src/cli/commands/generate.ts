@@ -15,6 +15,11 @@ import {
   MutationsGenerator,
   ModelGenerator,
   QueryGenerator,
+  ValidationsGenerator,
+  ModelName,
+  modelName,
+  ModelNames,
+  modelNames,
   customTemplatesBlitzConfig,
 } from "@blitzjs/generator"
 import {log} from "../../logging"
@@ -35,24 +40,11 @@ enum ResourceType {
   CustomTemplates = "custom-templates",
 }
 
-function modelName(input: string = "") {
-  return singleCamel(input)
-}
-function modelNames(input: string = "") {
-  return pluralCamel(input)
-}
-function ModelName(input: string = "") {
-  return singlePascal(input)
-}
-function ModelNames(input: string = "") {
-  return pluralPascal(input)
-}
-
 const createCustomTemplates = async () => {
   const continuePrompt = await prompts({
     type: "confirm",
     name: "value",
-    message: `This will copy the default templates to your app/templates folder. Do you want to continue?`,
+    message: `This will copy the default templates to your src/templates folder. Do you want to continue?`,
   })
   if (!continuePrompt.value) {
     process.exit(0)
@@ -61,12 +53,11 @@ const createCustomTemplates = async () => {
     type: "text",
     name: "value",
     message: `Enter the path to save the custom templates folder`,
-    initial: "app/templates",
+    initial: "src/templates",
   })
   const templatesPathValue: string = templatesPath.value
   const isTypeScript = await getIsTypeScript()
   await customTemplatesBlitzConfig(isTypeScript, templatesPathValue, true) // to run the codemod
-  log.success(`🚀 Custom templates path added/updated in app/blitz-server file`)
   const customTemplatesPath = require("path").join(process.cwd(), templatesPathValue)
   const fsExtra = await import("fs-extra")
   const blitzGeneratorPath = require.resolve("@blitzjs/generator")
@@ -87,16 +78,22 @@ const generatorMap = {
     FormGenerator,
     QueriesGenerator,
     MutationsGenerator,
+    ValidationsGenerator,
     ModelGenerator,
   ],
-  [ResourceType.Crud]: [MutationsGenerator, QueriesGenerator],
+  [ResourceType.Crud]: [MutationsGenerator, QueriesGenerator, ValidationsGenerator],
   [ResourceType.Model]: [ModelGenerator],
   [ResourceType.Pages]: [PageGenerator, FormGenerator],
   [ResourceType.Queries]: [QueriesGenerator],
   [ResourceType.Query]: [QueryGenerator],
-  [ResourceType.Mutations]: [MutationsGenerator],
+  [ResourceType.Mutations]: [MutationsGenerator, ValidationsGenerator],
   [ResourceType.Mutation]: [MutationGenerator],
-  [ResourceType.Resource]: [QueriesGenerator, MutationsGenerator, ModelGenerator],
+  [ResourceType.Resource]: [
+    QueriesGenerator,
+    MutationsGenerator,
+    ModelGenerator,
+    ValidationsGenerator,
+  ],
   [ResourceType.CustomTemplates]: [],
 }
 
@@ -286,6 +283,7 @@ const generate: CliCommand = async () => {
         modelNames: modelNames(singularRootContext),
         ModelName: ModelName(singularRootContext),
         ModelNames: ModelNames(singularRootContext),
+        rawParentModelName: args["--parent"],
         parentModel: modelName(selectedParent),
         parentModels: modelNames(selectedParent),
         ParentModel: ModelName(selectedParent),

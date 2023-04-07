@@ -84,6 +84,7 @@ export const mockRouter: NextRouter = {
   isReady: true,
   isLocaleDomain: false,
   isPreview: false,
+  forward: vi.fn(),
   push: vi.fn(),
   replace: vi.fn(),
   reload: vi.fn(),

@@ -1,6 +1,11 @@
 {
   "name": "@blitzjs/generator",
-  "version": "2.0.0-beta.20",
+  "version": "2.0.0-beta.25",
+  "homepage": "https://blitzjs.com/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/blitz-js/blitz.git"
+  },
   "scripts": {
     "dev": "watch unbuild src --wait=0.2",
     "build": "unbuild && pnpm build:templates",
@@ -30,6 +35,7 @@
     "cross-spawn": "7.0.3",
     "diff": "5.0.0",
     "enquirer": "2.3.6",
+    "fast-glob": "3.2.12",
     "fs-extra": "10.0.1",
     "globby": "13.1.2",
     "got": "^11.8.1",
@@ -44,10 +50,11 @@
     "supports-color": "8.1.1",
     "tslog": "3.3.4",
     "username": "5.1.0",
-    "vinyl": "2.2.1"
+    "vinyl": "2.2.1",
+    "zod": "3.20.2"
   },
   "devDependencies": {
-    "@blitzjs/config": "2.0.0-beta.20",
+    "@blitzjs/config": "2.0.0-beta.25",
     "@juanm04/cpx": "2.0.1",
     "@types/babel__core": "7.1.19",
     "@types/diff": "5.0.2",

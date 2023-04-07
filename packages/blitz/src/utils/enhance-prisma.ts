@@ -1,5 +1,6 @@
 import {spawn} from "cross-spawn"
 import which from "npm-which"
+import {isNotInUserTestEnvironment} from "../index-browser"
 
 export interface Constructor<T = unknown> {
   new (...args: never[]): T
@@ -19,7 +20,7 @@ export const enhancePrisma = <TPrismaClientCtor extends Constructor>(
 ): EnhancedPrismaClientConstructor<TPrismaClientCtor> => {
   return new Proxy(client as EnhancedPrismaClientConstructor<TPrismaClientCtor>, {
     construct(target, args) {
-      if (typeof window !== "undefined" && process.env.JEST_WORKER_ID === undefined) {
+      if (typeof window !== "undefined" && isNotInUserTestEnvironment()) {
         // Return object with $use method if in the browser
         // Skip in Jest tests because window is defined in Jest tests
         return {$use: () => {}}

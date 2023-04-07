@@ -39,6 +39,7 @@ describe("PageGenerator", () => {
         ParentModels: undefined,
         modelNamesPath: "projects",
         modelId: "projectId",
+        modelIdZodType: "number",
         modelIdParam: "[projectId]",
         modelName: "project",
         modelNames: "projects",
@@ -46,6 +47,7 @@ describe("PageGenerator", () => {
         parentModelId: "",
         parentModelParam: "",
         parentModels: undefined,
+        prismaFolder: "db",
       })
     })
 

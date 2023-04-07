@@ -1,5 +1,146 @@
 # @blitzjs/auth
 
+## 2.0.0-beta.25
+
+### Patch Changes
+
+- blitz@2.0.0-beta.25
+
+## 2.0.0-beta.24
+
+### Major Changes
+
+- 9529dbd6f: ## ⚠️ Breaking Changes for Blitz Auth
+
+  Automatically upgrade using codemod
+  (Make sure to git commit before running this command to avoid losing changes)
+
+  ```bash
+  npx @blitz/codemod secure-password
+  ```
+
+  Introduce a new import path for the Blitz wrapper `SecurePassword` to fully decouple the library from `@blitzjs/auth`
+
+  ```diff
+  - import {SecurePassword} from "@blitzjs/auth"
+  + import {SecurePassword} from "@blitzjs/auth/secure-password"
+  ```
+
+### Minor Changes
+
+- cadefb88e: - New Blitz Auth Function `getAppSession`, This function will use the cookies and headers provided by the server component and returns the current session.
+  - New Blitz Auth Hook `useAuthenticatedAppSession`, This hook is implemented as the replacement of the BlitzPage seurity auth utilities provided for the pages directory to work with React Server Components in the Nextjs 13 app directory
+  - New Blitz React Server Component Wrapper, `BlitzProvider` is to be imported from setupBlitzClient in src/blitz-client.ts and to used to ideally wrap the entire application in the `RootLayout` in the root layout.ts file of next app directory.
+  - Fix failing tests due to the error `NextRouter is not mounted` in next 13 blitz apps
+- 6f18cbdc9: feature: Next Auth Adapter
+
+### Patch Changes
+
+- 6e88a847f: Fixed security vulnerabilities in passport-adapter by upgrading `passport` and `jsonwebtoken`
+- 37aeaa7fa: feature: Nextjs 13 App Directory Utility Methods
+
+  ### 🔧 New Blitz Auth Hook `useAuthenticatedBlitzContext`
+
+  This hook is implemented as the replacement of the [`BlitzPage` seurity auth utilities](https://blitzjs.com/docs/authorization#secure-your-pages) provided for the pages directory to work with React Server Components in the Nextjs 13 app directory
+  It can be used in any asynchronous server component be it in `page.ts` or in the layouts in `layout.ts`
+  It uses the new [`redirect` function](https://beta.nextjs.org/docs/api-reference/redirect) to provide the required authorization in server side
+
+  #### API
+
+  ```ts
+  useAuthenticatedBlitzContext({
+    redirectTo,
+    redirectAuthenticatedTo,
+    role,
+  }: {
+    redirectTo?: string | RouteUrlObject
+    redirectAuthenticatedTo?: string | RouteUrlObject | ((ctx: Ctx) => string | RouteUrlObject)
+    role?: string | string[]
+  }): Promise<void>
+  ```
+
+  #### Usage
+
+  **Example Usage in React Server Component in `app` directory in Next 13**
+
+  ```ts
+  import {getAppSession, useAuthenticatedBlitzContext} from "src/blitz-server"
+  ...
+  await useAuthenticatedBlitzContext({
+      redirectTo: "/auth/login",
+      role: ["admin"],
+      redirectAuthenticatedTo: "/dashboard",
+  })
+  ```
+
+  ### 🔧 New Blitz RPC Hook `invokeResolver`
+
+  #### API
+
+  ```ts
+  invokeResolver<T extends (...args: any) => any, TInput = FirstParam<T>>(
+    queryFn: T,
+    params: TInput,
+  ): Promise<PromiseReturnType<T>>
+  ```
+
+  #### Example Usage
+
+  ```ts
+  ...
+  import {invokeResolver, useAuthenticatedBlitzContext} from "../src/blitz-server"
+  import getCurrentUser from "../src/users/queries/getCurrentUser"
+
+  export default async function Home() {
+    await useAuthenticatedBlitzContext({
+      redirectTo: "/auth/login",
+    })
+    const user = await invokeResolver(getCurrentUser, null)
+  ...
+  ```
+
+- Updated dependencies [cadefb88e]
+- Updated dependencies [6f18cbdc9]
+- Updated dependencies [ea7561b8e]
+- Updated dependencies [ea7561b8e]
+- Updated dependencies [37aeaa7fa]
+  - blitz@2.0.0-beta.24
+
+## 2.0.0-beta.23
+
+### Major Changes
+
+- 42a2cf951: BREAKING CHANGE: secure-password is now an `optional peerDependency`, if you are using `SecurePassword` api, you need to now install `secure-password` in your application.
+
+  This helps users who do not use SecurePassword from having native package build issues.
+
+### Patch Changes
+
+- Updated dependencies [c3c789740]
+  - blitz@2.0.0-beta.23
+
+## 2.0.0-beta.22
+
+### Minor Changes
+
+- 145d5a02b: fix failed localStorage access to not crash the application
+
+### Patch Changes
+
+- Updated dependencies [989691ec8]
+- Updated dependencies [8aa22a0b2]
+  - blitz@2.0.0-beta.22
+
+## 2.0.0-beta.21
+
+### Patch Changes
+
+- 82e8b64f5: Fixes adding authError query param in Passport adapter.
+- Updated dependencies [d692b4c1d]
+- Updated dependencies [10f98c681]
+- Updated dependencies [d5b8faa86]
+  - blitz@2.0.0-beta.21
+
 ## 2.0.0-beta.20
 
 ### Minor Changes

@@ -1,14 +1,9 @@
 import { resolver } from "@blitzjs/rpc"
-import db from "db"
-import {z} from "zod"
-
-const Update__ModelName__ = z.object({
-  id: z.number(),
-  name: z.string(),
-})
+import db from "__prismaFolder__"
+import { Update__ModelName__Schema } from "../schemas"
 
 export default resolver.pipe(
-  resolver.zod(Update__ModelName__),
+  resolver.zod(Update__ModelName__Schema),
   resolver.authorize(),
   async ({id, ... data}) => {
     // TODO: in multi-tenant app, you must add validation to ensure correct tenant

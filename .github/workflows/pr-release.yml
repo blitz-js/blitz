@@ -1,0 +1,101 @@
+# https://github.com/withastro/astro/blob/main/.github/workflows/snapshot-release.yml
+
+name: Create a Snapshot Release
+
+on:
+  issue_comment:
+    types: [created]
+
+defaults:
+  run:
+    shell: bash
+jobs:
+  snapshot-release:
+    name: Create a snapshot release of a pull request
+    if: ${{ github.repository_owner == 'blitz-js' && github.event.issue.pull_request && startsWith(github.event.comment.body, '!preview') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Check if user has admin access (only admins can publish snapshot releases)."
+        uses: "lannonbr/repo-permission-check-action@2.0.0"
+        with:
+          permission: "admin"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: resolve pr refs
+        id: refs
+        uses: eficode/resolve-pr-refs@main
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ steps.refs.outputs.head_ref }}
+
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v2.2.1
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'pnpm'
+      
+      - name: Short SHA
+        id: vars
+        run: echo "sha_short=$(git rev-parse --short "$GITHUB_SHA")" >> $GITHUB_OUTPUT
+          
+      - name: Extract the snapshot name from comment body
+        id: getSnapshotName
+        uses: actions/github-script@v6
+        with:
+          script:  |
+            const splitComment = context.payload.comment.body.split(' ');
+            if(splitComment.length !== 2) {
+              return "${{ steps.vars.outputs.sha_short }}";
+            }
+            return splitComment[1].trim();
+          result-encoding: string
+
+      - name: Install dependencies
+        run: pnpm install
+        env: 
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
+
+      - name: Build Packages
+        run: pnpm run build
+
+      - name: Bump Package Versions
+        id: changesets
+        run: |
+          pnpm changeset pre exit
+          pnpm changeset version --snapshot ${{ steps.getSnapshotName.outputs.result }} > changesets.output.txt 2>&1
+          echo ::set-output name=result::`cat changesets.output.txt`
+        env:
+          # Needs access to run the script
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish Release
+        id: publish
+        run: |
+          pnpm run release --tag next--${{ steps.getSnapshotName.outputs.result }} > publish.output.txt 2>&1
+          echo ::set-output name=result::`cat publish.output.txt`
+        env:
+          # Needs access to publish to npm
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Pull Request Notification
+        uses: actions/github-script@v6
+        env:
+          MESSAGE: ${{ steps.publish.outputs.result }}
+        with:
+          script: |
+            console.log(process.env.MESSAGE);
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '```\n' + process.env.MESSAGE + '\n```',
+            })

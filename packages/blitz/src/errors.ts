@@ -1,5 +1,6 @@
 import _SuperJson from "superjson"
 import type {UrlObject} from "url"
+import {isNotInUserTestEnvironment} from "./utils"
 
 declare module globalThis {
   let _BLITZ_ERROR_CLASS_REGISTERED: boolean
@@ -9,7 +10,7 @@ const SuperJson: typeof _SuperJson =
   "default" in _SuperJson ? (_SuperJson as any).default : _SuperJson
 
 const errorProps = ["name", "message", "code", "statusCode", "meta", "url"]
-if (process.env.JEST_WORKER_ID === undefined) {
+if (isNotInUserTestEnvironment()) {
   SuperJson.allowErrorProps(...errorProps)
 }
 
@@ -29,6 +30,19 @@ export class CSRFTokenMismatchError extends Error {
   statusCode = 401
   get _clearStack() {
     return true
+  }
+}
+
+export class OAuthError extends Error {
+  name = "OAuthError"
+  statusCode = 500
+  redirect?: string
+  get _clearStack() {
+    return true
+  }
+  constructor(message: string, redirect?: string) {
+    super(message)
+    this.redirect = redirect
   }
 }
 
@@ -75,7 +89,7 @@ export class PaginationArgumentError extends Error {
   }
 }
 
-if (process.env.JEST_WORKER_ID === undefined && !globalThis._BLITZ_ERROR_CLASS_REGISTERED) {
+if (isNotInUserTestEnvironment() && !globalThis._BLITZ_ERROR_CLASS_REGISTERED) {
   SuperJson.registerClass(AuthenticationError, {
     identifier: "BlitzAuthenticationError",
     allowProps: errorProps,
@@ -103,6 +117,11 @@ if (process.env.JEST_WORKER_ID === undefined && !globalThis._BLITZ_ERROR_CLASS_R
 
   SuperJson.registerClass(PaginationArgumentError, {
     identifier: "BlitzPaginationArgumentError",
+    allowProps: errorProps,
+  })
+
+  SuperJson.registerClass(OAuthError, {
+    identifier: "OAuthError",
     allowProps: errorProps,
   })
 

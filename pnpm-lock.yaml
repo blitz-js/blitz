@@ -9,7 +9,7 @@ importers:
       husky: 8.0.2
       jsdom: ^19.0.0
       lint-staged: 13.0.3
-      next: 12.2.5
+      next: 13.2.4
       only-allow: 1.1.0
       prettier: ^2.7.1
       prettier-plugin-prisma: 4.4.0
@@ -33,6 +33,57 @@ importers:
       vitest: 0.25.3_jsdom@19.0.0
       wait-on: 6.0.1
 
+  apps/next13:
+    specifiers:
+      "@blitzjs/auth": workspace:*
+      "@blitzjs/config": workspace:*
+      "@blitzjs/next": workspace:*
+      "@blitzjs/rpc": workspace:*
+      "@hookform/error-message": 2.0.0
+      "@hookform/resolvers": 2.9.10
+      "@prisma/client": ^4.5.0
+      "@tanstack/react-query": 4.0.10
+      "@types/node": 18.11.7
+      "@types/react": 18.0.23
+      "@types/react-dom": 18.0.7
+      blitz: workspace:*
+      eslint: 8.26.0
+      eslint-config-next: 13.0.0
+      flatted: 3.2.7
+      next: 13.2.4
+      prisma: ^4.5.0
+      react: 18.2.0
+      react-dom: 18.2.0
+      react-hook-form: 7.39.1
+      superjson: 1.11.0
+      typescript: 4.8.4
+      zod: 3.20.2
+    dependencies:
+      "@blitzjs/auth": link:../../packages/blitz-auth
+      "@blitzjs/config": link:../../packages/config
+      "@blitzjs/next": link:../../packages/blitz-next
+      "@blitzjs/rpc": link:../../packages/blitz-rpc
+      "@hookform/error-message": 2.0.0_uitc6c22ofsl6jhrdjqyu3was4
+      "@hookform/resolvers": 2.9.10_react-hook-form@7.39.1
+      "@prisma/client": 4.6.1_prisma@4.6.1
+      "@tanstack/react-query": 4.0.10_biqbaboplfbrettd7655fr4n2y
+      blitz: link:../../packages/blitz
+      flatted: 3.2.7
+      next: 13.2.4_biqbaboplfbrettd7655fr4n2y
+      prisma: 4.6.1
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      react-hook-form: 7.39.1_react@18.2.0
+      superjson: 1.11.0
+      zod: 3.20.2
+    devDependencies:
+      "@types/node": 18.11.7
+      "@types/react": 18.0.23
+      "@types/react-dom": 18.0.7
+      eslint: 8.26.0
+      eslint-config-next: 13.0.0_wyqvi574yv7oiwfeinomdzmc3m
+      typescript: 4.8.4
+
   apps/toolkit-app:
     specifiers:
       "@blitzjs/auth": workspace:*
@@ -42,7 +93,7 @@ importers:
       "@hookform/error-message": 2.0.0
       "@hookform/resolvers": 2.9.10
       "@next/bundle-analyzer": 12.0.8
-      "@prisma/client": 4.6.0
+      "@prisma/client": 4.6.1
       "@testing-library/jest-dom": 5.16.5
       "@testing-library/react": 13.4.0
       "@testing-library/react-hooks": 8.0.1
@@ -51,19 +102,20 @@ importers:
       "@types/react": 18.0.25
       "@typescript-eslint/eslint-plugin": 5.42.1
       "@vitejs/plugin-react": 2.2.0
-      blitz: workspace:2.0.0-beta.20
+      blitz: workspace:2.0.0-beta.25
       eslint: 8.27.0
       eslint-config-next: 12.3.1
       eslint-config-prettier: 8.5.0
       husky: 8.0.2
       jsdom: 20.0.3
       lint-staged: 13.0.3
-      next: 12.2.5
+      next: 13.2.4
+      next-auth: 4.18.7
       prettier: ^2.7.1
       prettier-plugin-prisma: 4.4.0
       pretty-quick: 3.1.3
       preview-email: 3.0.7
-      prisma: 4.6.0
+      prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0
       react-hook-form: 7.39.1
@@ -71,7 +123,7 @@ importers:
       typescript: ^4.8.4
       vite-tsconfig-paths: 3.6.0
       vitest: 0.25.3
-      zod: 3.19.1
+      zod: 3.20.2
     dependencies:
       "@blitzjs/auth": link:../../packages/blitz-auth
       "@blitzjs/config": link:../../packages/config
@@ -79,7 +131,7 @@ importers:
       "@blitzjs/rpc": link:../../packages/blitz-rpc
       "@hookform/error-message": 2.0.0_uitc6c22ofsl6jhrdjqyu3was4
       "@hookform/resolvers": 2.9.10_react-hook-form@7.39.1
-      "@prisma/client": 4.6.0_prisma@4.6.0
+      "@prisma/client": 4.6.1_prisma@4.6.1
       blitz: link:../../packages/blitz
       next: 12.2.5_mqvh5p7ejg4taogoj6tpk3gd5a
       prisma: 4.6.0
@@ -87,7 +139,7 @@ importers:
       react-dom: 18.2.0_react@18.2.0
       react-hook-form: 7.39.1_react@18.2.0
       ts-node: 10.9.1_cbe7ovvae6zqfnmtgctpgpys54
-      zod: 3.19.1
+      zod: 3.20.2
     devDependencies:
       "@next/bundle-analyzer": 12.0.8
       "@testing-library/jest-dom": 5.16.5
@@ -121,7 +173,7 @@ importers:
       "@hookform/error-message": 2.0.0
       "@hookform/resolvers": 2.9.10
       "@next/bundle-analyzer": 12.0.8
-      "@prisma/client": 4.6.0
+      "@prisma/client": 4.6.1
       "@testing-library/react": 13.4.0
       "@testing-library/react-hooks": 8.0.1
       "@types/jest": 29.2.2
@@ -129,7 +181,7 @@ importers:
       "@types/preview-email": 2.0.1
       "@types/react": 18.0.25
       "@typescript-eslint/eslint-plugin": 5.42.1
-      blitz: workspace:2.0.0-beta.20
+      blitz: workspace:2.0.0-beta.25
       eslint: 8.27.0
       eslint-config-next: 12.3.1
       eslint-config-prettier: 8.5.0
@@ -137,19 +189,19 @@ importers:
       jest: 29.3.0
       jest-environment-jsdom: 29.3.0
       lint-staged: 13.0.3
-      next: 12.2.5
+      next: 13.2.4
       openid-client: 5.2.1
       prettier: ^2.7.1
       prettier-plugin-prisma: 4.4.0
       pretty-quick: 3.1.3
       preview-email: 3.0.7
-      prisma: 4.6.0
+      prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0
       react-hook-form: 7.39.1
       ts-node: 10.9.1
       typescript: ^4.8.4
-      zod: 3.19.1
+      zod: 3.20.2
     dependencies:
       "@blitzjs/auth": link:../../packages/blitz-auth
       "@blitzjs/config": link:../../packages/config
@@ -157,16 +209,16 @@ importers:
       "@blitzjs/rpc": link:../../packages/blitz-rpc
       "@hookform/error-message": 2.0.0_uitc6c22ofsl6jhrdjqyu3was4
       "@hookform/resolvers": 2.9.10_react-hook-form@7.39.1
-      "@prisma/client": 4.6.0_prisma@4.6.0
+      "@prisma/client": 4.6.1_prisma@4.6.1
       blitz: link:../../packages/blitz
       next: 12.2.5_mqvh5p7ejg4taogoj6tpk3gd5a
       openid-client: 5.2.1
-      prisma: 4.6.0
+      prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       react-hook-form: 7.39.1_react@18.2.0
       ts-node: 10.9.1_cbe7ovvae6zqfnmtgctpgpys54
-      zod: 3.19.1
+      zod: 3.20.2
     devDependencies:
       "@next/bundle-analyzer": 12.0.8
       "@testing-library/react": 13.4.0_biqbaboplfbrettd7655fr4n2y
@@ -196,7 +248,7 @@ importers:
       "@blitzjs/next": workspace:*
       "@blitzjs/rpc": workspace:*
       "@next/bundle-analyzer": 12.0.8
-      "@prisma/client": 4.6.0
+      "@prisma/client": 4.6.1
       "@types/jest": 29.2.2
       "@types/passport-twitter": 1.0.37
       "@types/react": 18.0.25
@@ -204,10 +256,10 @@ importers:
       eslint: 8.27.0
       jest: 29.3.0
       jest-environment-jsdom: 29.3.0
-      next: 12.2.5
+      next: 13.2.4
       passport-mock-strategy: 2.0.0
       passport-twitter: 1.0.4
-      prisma: 4.6.0
+      prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0
       ts-node: 10.9.1
@@ -217,7 +269,7 @@ importers:
       "@blitzjs/config": link:../../packages/config
       "@blitzjs/next": link:../../packages/blitz-next
       "@blitzjs/rpc": link:../../packages/blitz-rpc
-      "@prisma/client": 4.6.0_prisma@4.6.0
+      "@prisma/client": 4.6.1_prisma@4.6.1
       "@types/jest": 29.2.2
       "@types/passport-twitter": 1.0.37
       blitz: link:../../packages/blitz
@@ -226,7 +278,7 @@ importers:
       next: 12.2.5_mqvh5p7ejg4taogoj6tpk3gd5a
       passport-mock-strategy: 2.0.0
       passport-twitter: 1.0.4
-      prisma: 4.6.0
+      prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       ts-node: 10.9.1_cbe7ovvae6zqfnmtgctpgpys54
@@ -238,40 +290,45 @@ importers:
 
   integration-tests/auth:
     specifiers:
-      "@blitzjs/auth": workspace:2.0.0-beta.20
-      "@blitzjs/config": workspace:2.0.0-beta.20
-      "@blitzjs/next": workspace:2.0.0-beta.20
+      "@blitzjs/auth": workspace:2.0.0-beta.25
+      "@blitzjs/config": workspace:2.0.0-beta.25
+      "@blitzjs/next": workspace:2.0.0-beta.25
       "@next/bundle-analyzer": 12.0.8
-      "@prisma/client": 4.6.0
+      "@prisma/client": 4.6.1
       "@types/express": 4.17.13
       "@types/fs-extra": 9.0.13
       "@types/node": 18.7.13
       "@types/node-fetch": 2.6.1
       "@types/react": 18.0.25
       b64-lite: 1.4.0
-      blitz: workspace:2.0.0-beta.20
+      blitz: workspace:2.0.0-beta.25
       eslint: 8.27.0
       fs-extra: 10.0.1
       get-port: 6.1.2
       lowdb: 3.0.0
-      next: 12.2.5
+      next: 13.2.4
       node-fetch: 3.2.3
-      prisma: 4.6.0
+      playwright: 1.28.0
+      prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0
+      secure-password: 4.0.0
       ts-node: 10.9.1
       typescript: ^4.8.4
+      wait-port: 1.0.4
     dependencies:
       "@blitzjs/auth": link:../../packages/blitz-auth
       "@blitzjs/config": link:../../packages/config
       "@blitzjs/next": link:../../packages/blitz-next
-      "@prisma/client": 4.6.0_prisma@4.6.0
+      "@prisma/client": 4.6.1_prisma@4.6.1
       blitz: link:../../packages/blitz
       lowdb: 3.0.0
-      next: 12.2.5_biqbaboplfbrettd7655fr4n2y
-      prisma: 4.6.0
+      next: 13.2.4_biqbaboplfbrettd7655fr4n2y
+      prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
+      secure-password: 4.0.0
+      wait-port: 1.0.4
     devDependencies:
       "@next/bundle-analyzer": 12.0.8
       "@types/express": 4.17.13
@@ -284,19 +341,20 @@ importers:
       fs-extra: 10.0.1
       get-port: 6.1.2
       node-fetch: 3.2.3
+      playwright: 1.28.0
       ts-node: 10.9.1_ieummqxttktzud32hpyrer46t4
       typescript: 4.8.4
 
   integration-tests/auth-with-rpc:
     specifiers:
-      "@blitzjs/auth": workspace:2.0.0-beta.20
-      "@blitzjs/config": workspace:2.0.0-beta.20
-      "@blitzjs/next": workspace:2.0.0-beta.20
-      "@blitzjs/rpc": workspace:2.0.0-beta.20
+      "@blitzjs/auth": workspace:2.0.0-beta.25
+      "@blitzjs/config": workspace:2.0.0-beta.25
+      "@blitzjs/next": workspace:2.0.0-beta.25
+      "@blitzjs/rpc": workspace:2.0.0-beta.25
       "@hookform/error-message": 2.0.0
       "@hookform/resolvers": 2.9.10
       "@next/bundle-analyzer": 12.0.8
-      "@prisma/client": 4.6.0
+      "@prisma/client": 4.6.1
       "@testing-library/jest-dom": 5.16.5
       "@testing-library/react": 13.4.0
       "@testing-library/react-hooks": 8.0.1
@@ -305,7 +363,7 @@ importers:
       "@types/react": 18.0.25
       "@typescript-eslint/eslint-plugin": 5.42.1
       "@vitejs/plugin-react": 2.2.0
-      blitz: workspace:2.0.0-beta.20
+      blitz: workspace:2.0.0-beta.25
       delay: 5.0.0
       eslint: 8.27.0
       eslint-config-next: 12.3.1
@@ -313,13 +371,13 @@ importers:
       husky: 8.0.2
       jsdom: 20.0.3
       lint-staged: 13.0.3
-      next: 12.2.5
+      next: 13.2.4
       playwright: 1.28.0
       prettier: ^2.7.1
       prettier-plugin-prisma: 4.4.0
       pretty-quick: 3.1.3
       preview-email: 3.0.7
-      prisma: 4.6.0
+      prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0
       react-hook-form: 7.39.1
@@ -327,7 +385,7 @@ importers:
       typescript: ^4.8.4
       vite-tsconfig-paths: 3.6.0
       vitest: 0.25.3
-      zod: 3.19.1
+      zod: 3.20.2
     dependencies:
       "@blitzjs/auth": link:../../packages/blitz-auth
       "@blitzjs/config": link:../../packages/config
@@ -335,7 +393,7 @@ importers:
       "@blitzjs/rpc": link:../../packages/blitz-rpc
       "@hookform/error-message": 2.0.0_uitc6c22ofsl6jhrdjqyu3was4
       "@hookform/resolvers": 2.9.10_react-hook-form@7.39.1
-      "@prisma/client": 4.6.0_prisma@4.6.0
+      "@prisma/client": 4.6.1_prisma@4.6.1
       blitz: link:../../packages/blitz
       delay: 5.0.0
       next: 12.2.5_mqvh5p7ejg4taogoj6tpk3gd5a
@@ -344,7 +402,7 @@ importers:
       react-dom: 18.2.0_react@18.2.0
       react-hook-form: 7.39.1_react@18.2.0
       ts-node: 10.9.1_cbe7ovvae6zqfnmtgctpgpys54
-      zod: 3.19.1
+      zod: 3.20.2
     devDependencies:
       "@next/bundle-analyzer": 12.0.8
       "@testing-library/jest-dom": 5.16.5
@@ -372,25 +430,25 @@ importers:
 
   integration-tests/get-initial-props:
     specifiers:
-      "@blitzjs/auth": workspace:2.0.0-beta.20
-      "@blitzjs/config": workspace:2.0.0-beta.20
-      "@blitzjs/next": workspace:2.0.0-beta.20
-      "@blitzjs/rpc": workspace:2.0.0-beta.20
+      "@blitzjs/auth": workspace:2.0.0-beta.25
+      "@blitzjs/config": workspace:2.0.0-beta.25
+      "@blitzjs/next": workspace:2.0.0-beta.25
+      "@blitzjs/rpc": workspace:2.0.0-beta.25
       "@next/bundle-analyzer": 12.0.8
-      "@prisma/client": 4.6.0
+      "@prisma/client": 4.6.1
       "@types/express": 4.17.13
       "@types/fs-extra": 9.0.13
       "@types/node-fetch": 2.6.1
       "@types/react": 18.0.25
       b64-lite: 1.4.0
-      blitz: workspace:2.0.0-beta.20
+      blitz: workspace:2.0.0-beta.25
       eslint: 8.27.0
       fs-extra: 10.0.1
       get-port: 6.1.2
       lowdb: 3.0.0
-      next: 12.2.5
+      next: 13.2.4
       node-fetch: 3.2.3
-      prisma: 4.6.0
+      prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0
       typescript: ^4.8.4
@@ -398,11 +456,11 @@ importers:
       "@blitzjs/auth": link:../../packages/blitz-auth
       "@blitzjs/next": link:../../packages/blitz-next
       "@blitzjs/rpc": link:../../packages/blitz-rpc
-      "@prisma/client": 4.6.0_prisma@4.6.0
+      "@prisma/client": 4.6.1_prisma@4.6.1
       blitz: link:../../packages/blitz
       lowdb: 3.0.0
-      next: 12.2.5_biqbaboplfbrettd7655fr4n2y
-      prisma: 4.6.0
+      next: 13.2.4_biqbaboplfbrettd7655fr4n2y
+      prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
     devDependencies:
@@ -421,19 +479,19 @@ importers:
 
   integration-tests/middleware:
     specifiers:
-      "@blitzjs/config": workspace:2.0.0-beta.20
-      "@blitzjs/next": workspace:2.0.0-beta.20
-      "@blitzjs/rpc": workspace:2.0.0-beta.20
+      "@blitzjs/config": workspace:2.0.0-beta.25
+      "@blitzjs/next": workspace:2.0.0-beta.25
+      "@blitzjs/rpc": workspace:2.0.0-beta.25
       "@next/bundle-analyzer": 12.0.8
       "@types/express": 4.17.13
       "@types/fs-extra": 9.0.13
       "@types/node-fetch": 2.6.1
       "@types/react": 18.0.25
-      blitz: workspace:2.0.0-beta.20
+      blitz: workspace:2.0.0-beta.25
       eslint: 8.27.0
       fs-extra: 10.0.1
       get-port: 6.1.2
-      next: 12.2.5
+      next: 13.2.4
       node-fetch: 3.2.3
       react: 18.2.0
       react-dom: 18.2.0
@@ -443,7 +501,7 @@ importers:
       "@blitzjs/next": link:../../packages/blitz-next
       "@blitzjs/rpc": link:../../packages/blitz-rpc
       blitz: link:../../packages/blitz
-      next: 12.2.5_biqbaboplfbrettd7655fr4n2y
+      next: 13.2.4_biqbaboplfbrettd7655fr4n2y
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
     devDependencies:
@@ -458,27 +516,86 @@ importers:
       node-fetch: 3.2.3
       typescript: 4.8.4
 
+  integration-tests/next-13-app-dir:
+    specifiers:
+      "@blitzjs/auth": workspace:2.0.0-beta.25
+      "@blitzjs/config": workspace:2.0.0-beta.25
+      "@blitzjs/next": workspace:2.0.0-beta.25
+      "@blitzjs/rpc": workspace:2.0.0-beta.25
+      "@next/bundle-analyzer": 12.0.8
+      "@prisma/client": 4.6.1
+      "@types/express": 4.17.13
+      "@types/fs-extra": 9.0.13
+      "@types/node": 18.7.13
+      "@types/node-fetch": 2.6.1
+      "@types/react": 18.0.25
+      b64-lite: 1.4.0
+      blitz: workspace:2.0.0-beta.25
+      eslint: 8.27.0
+      fs-extra: 10.0.1
+      get-port: 6.1.2
+      lowdb: 3.0.0
+      next: 13.2.4
+      node-fetch: 3.2.3
+      playwright: 1.28.0
+      prisma: 4.6.1
+      react: 18.2.0
+      react-dom: 18.2.0
+      secure-password: 4.0.0
+      ts-node: 10.9.1
+      typescript: ^4.8.4
+      wait-port: 1.0.4
+    dependencies:
+      "@blitzjs/auth": link:../../packages/blitz-auth
+      "@blitzjs/config": link:../../packages/config
+      "@blitzjs/next": link:../../packages/blitz-next
+      "@blitzjs/rpc": link:../../packages/blitz-rpc
+      "@prisma/client": 4.6.1_prisma@4.6.1
+      blitz: link:../../packages/blitz
+      lowdb: 3.0.0
+      next: 13.2.4_biqbaboplfbrettd7655fr4n2y
+      prisma: 4.6.1
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      secure-password: 4.0.0
+      wait-port: 1.0.4
+    devDependencies:
+      "@next/bundle-analyzer": 12.0.8
+      "@types/express": 4.17.13
+      "@types/fs-extra": 9.0.13
+      "@types/node": 18.7.13
+      "@types/node-fetch": 2.6.1
+      "@types/react": 18.0.25
+      b64-lite: 1.4.0
+      eslint: 8.27.0
+      fs-extra: 10.0.1
+      get-port: 6.1.2
+      node-fetch: 3.2.3
+      playwright: 1.28.0
+      ts-node: 10.9.1_ieummqxttktzud32hpyrer46t4
+      typescript: 4.8.4
+
   integration-tests/no-suspense:
     specifiers:
-      "@blitzjs/auth": workspace:2.0.0-beta.20
-      "@blitzjs/config": workspace:2.0.0-beta.20
-      "@blitzjs/next": workspace:2.0.0-beta.20
-      "@blitzjs/rpc": workspace:2.0.0-beta.20
+      "@blitzjs/auth": workspace:2.0.0-beta.25
+      "@blitzjs/config": workspace:2.0.0-beta.25
+      "@blitzjs/next": workspace:2.0.0-beta.25
+      "@blitzjs/rpc": workspace:2.0.0-beta.25
       "@next/bundle-analyzer": 12.0.8
-      "@prisma/client": 4.6.0
+      "@prisma/client": 4.6.1
       "@types/express": 4.17.13
       "@types/fs-extra": 9.0.13
       "@types/node-fetch": 2.6.1
       "@types/react": 18.0.25
       b64-lite: 1.4.0
-      blitz: workspace:2.0.0-beta.20
+      blitz: workspace:2.0.0-beta.25
       eslint: 8.27.0
       fs-extra: 10.0.1
       get-port: 6.1.2
       lowdb: 3.0.0
-      next: 12.2.5
+      next: 13.2.4
       node-fetch: 3.2.3
-      prisma: 4.6.0
+      prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0
       typescript: ^4.8.4
@@ -486,11 +603,11 @@ importers:
       "@blitzjs/auth": link:../../packages/blitz-auth
       "@blitzjs/next": link:../../packages/blitz-next
       "@blitzjs/rpc": link:../../packages/blitz-rpc
-      "@prisma/client": 4.6.0_prisma@4.6.0
+      "@prisma/client": 4.6.1_prisma@4.6.1
       blitz: link:../../packages/blitz
       lowdb: 3.0.0
-      next: 12.2.5_biqbaboplfbrettd7655fr4n2y
-      prisma: 4.6.0
+      next: 13.2.4_biqbaboplfbrettd7655fr4n2y
+      prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
     devDependencies:
@@ -509,23 +626,23 @@ importers:
 
   integration-tests/qm:
     specifiers:
-      "@blitzjs/auth": workspace:2.0.0-beta.20
-      "@blitzjs/config": workspace:2.0.0-beta.20
-      "@blitzjs/next": workspace:2.0.0-beta.20
-      "@blitzjs/rpc": workspace:2.0.0-beta.20
-      "@prisma/client": 4.6.0
+      "@blitzjs/auth": workspace:2.0.0-beta.25
+      "@blitzjs/config": workspace:2.0.0-beta.25
+      "@blitzjs/next": workspace:2.0.0-beta.25
+      "@blitzjs/rpc": workspace:2.0.0-beta.25
+      "@prisma/client": 4.6.1
       "@tanstack/react-query": 4.0.10
       "@testing-library/react": 13.4.0
       "@types/react": 18.0.25
       "@vitejs/plugin-react": 1.3.0
-      blitz: workspace:2.0.0-beta.20
+      blitz: workspace:2.0.0-beta.25
       delay: 5.0.0
       eslint: 8.27.0
       eslint-config-next: latest
       eslint-plugin-testing-library: 5.0.1
       jsdom: ^19.0.0
-      next: 12.2.5
-      prisma: 4.6.0
+      next: 13.2.4
+      prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0
       typescript: ^4.8.4
@@ -534,7 +651,7 @@ importers:
       "@blitzjs/config": link:../../packages/config
       "@blitzjs/next": link:../../packages/blitz-next
       "@blitzjs/rpc": link:../../packages/blitz-rpc
-      "@prisma/client": 4.6.0_prisma@4.6.0
+      "@prisma/client": 4.6.1_prisma@4.6.1
       "@tanstack/react-query": 4.0.10_biqbaboplfbrettd7655fr4n2y
       blitz: link:../../packages/blitz
       next: 12.2.5_w53b3ma4oycvgh3v4dwmhz6z6q
@@ -547,42 +664,42 @@ importers:
       "@vitejs/plugin-react": 1.3.0
       delay: 5.0.0
       eslint: 8.27.0
-      eslint-config-next: 13.1.1_rmayb2veg2btbq6mbmnyivgasy
+      eslint-config-next: 13.2.4_rmayb2veg2btbq6mbmnyivgasy
       eslint-plugin-testing-library: 5.0.1_rmayb2veg2btbq6mbmnyivgasy
       jsdom: 19.0.0
       typescript: 4.8.4
 
   integration-tests/react-query-utils:
     specifiers:
-      "@blitzjs/config": workspace:2.0.0-beta.20
-      "@blitzjs/next": workspace:2.0.0-beta.20
-      "@blitzjs/rpc": workspace:2.0.0-beta.20
+      "@blitzjs/config": workspace:2.0.0-beta.25
+      "@blitzjs/next": workspace:2.0.0-beta.25
+      "@blitzjs/rpc": workspace:2.0.0-beta.25
       "@next/bundle-analyzer": 12.0.8
-      "@prisma/client": 4.6.0
+      "@prisma/client": 4.6.1
       "@types/express": 4.17.13
       "@types/fs-extra": 9.0.13
       "@types/node-fetch": 2.6.1
       "@types/react": 18.0.25
       b64-lite: 1.4.0
-      blitz: workspace:2.0.0-beta.20
+      blitz: workspace:2.0.0-beta.25
       eslint: 8.27.0
       fs-extra: 10.0.1
       get-port: 6.1.2
       lowdb: 3.0.0
-      next: 12.2.5
+      next: 13.2.4
       node-fetch: 3.2.3
-      prisma: 4.6.0
+      prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0
       typescript: ^4.8.4
     dependencies:
       "@blitzjs/next": link:../../packages/blitz-next
       "@blitzjs/rpc": link:../../packages/blitz-rpc
-      "@prisma/client": 4.6.0_prisma@4.6.0
+      "@prisma/client": 4.6.1_prisma@4.6.1
       blitz: link:../../packages/blitz
       lowdb: 3.0.0
-      next: 12.2.5_biqbaboplfbrettd7655fr4n2y
-      prisma: 4.6.0
+      next: 13.2.4_biqbaboplfbrettd7655fr4n2y
+      prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
     devDependencies:
@@ -601,18 +718,18 @@ importers:
 
   integration-tests/rpc:
     specifiers:
-      "@blitzjs/config": workspace:2.0.0-beta.20
-      "@blitzjs/next": workspace:2.0.0-beta.20
-      "@blitzjs/rpc": workspace:2.0.0-beta.20
+      "@blitzjs/config": workspace:2.0.0-beta.25
+      "@blitzjs/next": workspace:2.0.0-beta.25
+      "@blitzjs/rpc": workspace:2.0.0-beta.25
       "@types/express": 4.17.13
       "@types/fs-extra": 9.0.13
       "@types/node-fetch": 2.6.1
       "@types/react": 18.0.25
       b64-lite: 1.4.0
-      blitz: workspace:2.0.0-beta.20
+      blitz: workspace:2.0.0-beta.25
       eslint: 8.27.0
       fs-extra: 10.0.1
-      next: 12.2.5
+      next: 13.2.4
       react: 18.2.0
       react-dom: 18.2.0
       typescript: ^4.8.4
@@ -621,7 +738,7 @@ importers:
       "@blitzjs/next": link:../../packages/blitz-next
       "@blitzjs/rpc": link:../../packages/blitz-rpc
       blitz: link:../../packages/blitz
-      next: 12.2.5_biqbaboplfbrettd7655fr4n2y
+      next: 13.2.4_biqbaboplfbrettd7655fr4n2y
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
     devDependencies:
@@ -636,18 +753,18 @@ importers:
 
   integration-tests/rpc-path-root:
     specifiers:
-      "@blitzjs/config": workspace:2.0.0-beta.20
-      "@blitzjs/next": workspace:2.0.0-beta.20
-      "@blitzjs/rpc": workspace:2.0.0-beta.20
+      "@blitzjs/config": workspace:2.0.0-beta.25
+      "@blitzjs/next": workspace:2.0.0-beta.25
+      "@blitzjs/rpc": workspace:2.0.0-beta.25
       "@types/express": 4.17.13
       "@types/fs-extra": 9.0.13
       "@types/node-fetch": 2.6.1
       "@types/react": 18.0.25
       b64-lite: 1.4.0
-      blitz: workspace:2.0.0-beta.20
+      blitz: workspace:2.0.0-beta.25
       eslint: 8.27.0
       fs-extra: 10.0.1
-      next: 12.2.5
+      next: 13.2.4
       react: 18.2.0
       react-dom: 18.2.0
       typescript: ^4.8.4
@@ -656,7 +773,7 @@ importers:
       "@blitzjs/next": link:../../packages/blitz-next
       "@blitzjs/rpc": link:../../packages/blitz-rpc
       blitz: link:../../packages/blitz
-      next: 12.2.5_biqbaboplfbrettd7655fr4n2y
+      next: 13.2.4_biqbaboplfbrettd7655fr4n2y
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
     devDependencies:
@@ -671,25 +788,25 @@ importers:
 
   integration-tests/trailing-slash:
     specifiers:
-      "@blitzjs/auth": workspace:2.0.0-beta.20
-      "@blitzjs/config": workspace:2.0.0-beta.20
-      "@blitzjs/next": workspace:2.0.0-beta.20
-      "@blitzjs/rpc": workspace:2.0.0-beta.20
+      "@blitzjs/auth": workspace:2.0.0-beta.25
+      "@blitzjs/config": workspace:2.0.0-beta.25
+      "@blitzjs/next": workspace:2.0.0-beta.25
+      "@blitzjs/rpc": workspace:2.0.0-beta.25
       "@next/bundle-analyzer": 12.0.8
-      "@prisma/client": 4.6.0
+      "@prisma/client": 4.6.1
       "@types/express": 4.17.13
       "@types/fs-extra": 9.0.13
       "@types/node-fetch": 2.6.1
       "@types/react": 18.0.25
       b64-lite: 1.4.0
-      blitz: workspace:2.0.0-beta.20
+      blitz: workspace:2.0.0-beta.25
       eslint: 8.27.0
       fs-extra: 10.0.1
       get-port: 6.1.2
       lowdb: 3.0.0
-      next: 12.2.5
+      next: 13.2.4
       node-fetch: 3.2.3
-      prisma: 4.6.0
+      prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0
       typescript: ^4.8.4
@@ -697,11 +814,11 @@ importers:
       "@blitzjs/auth": link:../../packages/blitz-auth
       "@blitzjs/next": link:../../packages/blitz-next
       "@blitzjs/rpc": link:../../packages/blitz-rpc
-      "@prisma/client": 4.6.0_prisma@4.6.0
+      "@prisma/client": 4.6.1_prisma@4.6.1
       blitz: link:../../packages/blitz
       lowdb: 3.0.0
-      next: 12.2.5_biqbaboplfbrettd7655fr4n2y
-      prisma: 4.6.0
+      next: 13.2.4_biqbaboplfbrettd7655fr4n2y
+      prisma: 4.6.1
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
     devDependencies:
@@ -722,7 +839,7 @@ importers:
     specifiers:
       "@blitzjs/config": "workspace: *"
       "@blitzjs/rpc": "workspace: *"
-      "@tanstack/react-query": 4.0.10
+      "@tanstack/react-query": 4.13.0
       "@testing-library/react": 13.4.0
       "@types/express": 4.17.13
       "@types/fs-extra": 9.0.13
@@ -750,7 +867,7 @@ importers:
     devDependencies:
       "@blitzjs/config": link:../../packages/config
       "@blitzjs/rpc": link:../../packages/blitz-rpc
-      "@tanstack/react-query": 4.0.10_biqbaboplfbrettd7655fr4n2y
+      "@tanstack/react-query": 4.13.0_biqbaboplfbrettd7655fr4n2y
       "@testing-library/react": 13.4.0_biqbaboplfbrettd7655fr4n2y
       "@types/express": 4.17.13
       "@types/fs-extra": 9.0.13
@@ -778,8 +895,8 @@ importers:
 
   packages/blitz:
     specifiers:
-      "@blitzjs/config": workspace:2.0.0-beta.20
-      "@blitzjs/generator": 2.0.0-beta.20
+      "@blitzjs/config": workspace:2.0.0-beta.25
+      "@blitzjs/generator": 2.0.0-beta.25
       "@mrleebo/prisma-ast": 0.2.6
       "@types/cookie": 0.4.1
       "@types/cross-spawn": 6.0.2
@@ -787,6 +904,7 @@ importers:
       "@types/detect-port": 1.3.2
       "@types/envinfo": 7.8.1
       "@types/express": 4.17.13
+      "@types/findup-sync": 4.0.2
       "@types/fs-extra": 9.0.13
       "@types/global-agent": 2.1.1
       "@types/hasbin": 1.2.0
@@ -816,6 +934,7 @@ importers:
       esbuild-register: 3.3.3
       express: 4.17.3
       find-up: 4.1.0
+      findup-sync: 5.0.0
       fs-extra: 10.0.1
       global-agent: 3.0.0
       globby: 13.1.2
@@ -837,6 +956,7 @@ importers:
       resolve-cwd: 3.0.0
       resolve-from: 5.0.0
       rimraf: 3.0.2
+      semver: 7.3.8
       superjson: 1.11.0
       supports-color: 8.1.1
       tar: 6.1.11
@@ -848,7 +968,7 @@ importers:
       unbuild: 0.7.6
       watch: 1.0.2
       watchpack: 2.1.1
-      zod: 3.19.1
+      zod: 3.20.2
     dependencies:
       "@blitzjs/generator": link:../generator
       "@mrleebo/prisma-ast": 0.2.6
@@ -869,6 +989,7 @@ importers:
       esbuild: 0.14.34
       esbuild-register: 3.3.3_esbuild@0.14.34
       find-up: 4.1.0
+      findup-sync: 5.0.0
       fs-extra: 10.0.1
       global-agent: 3.0.0
       globby: 13.1.2
@@ -889,6 +1010,7 @@ importers:
       resolve-cwd: 3.0.0
       resolve-from: 5.0.0
       rimraf: 3.0.2
+      semver: 7.3.8
       superjson: 1.11.0
       supports-color: 8.1.1
       tar: 6.1.11
@@ -904,6 +1026,7 @@ importers:
       "@types/detect-port": 1.3.2
       "@types/envinfo": 7.8.1
       "@types/express": 4.17.13
+      "@types/findup-sync": 4.0.2
       "@types/fs-extra": 9.0.13
       "@types/hasbin": 1.2.0
       "@types/jscodeshift": 0.11.2
@@ -921,11 +1044,11 @@ importers:
       typescript: 4.8.4
       unbuild: 0.7.6_supports-color@8.1.1
       watch: 1.0.2
-      zod: 3.19.1
+      zod: 3.20.2
 
   packages/blitz-auth:
     specifiers:
-      "@blitzjs/config": workspace:2.0.0-beta.20
+      "@blitzjs/config": workspace:2.0.0-beta.25
       "@testing-library/react": 13.4.0
       "@testing-library/react-hooks": 8.0.1
       "@types/b64-lite": 1.3.0
@@ -933,20 +1056,25 @@ importers:
       "@types/cookie-session": 2.0.44
       "@types/debug": 4.1.7
       "@types/jsonwebtoken": 8.5.8
+      "@types/oauth": 0.9.1
       "@types/passport": 1.0.7
       "@types/react": 18.0.25
       "@types/react-dom": 17.0.14
       "@types/secure-password": 3.1.1
       b64-lite: 1.4.0
       bad-behavior: 1.0.1
-      blitz: 2.0.0-beta.20
+      blitz: 2.0.0-beta.25
       cookie: 0.4.1
       cookie-session: 2.0.0
       debug: 4.3.3
       http: 0.0.1-security
-      jsonwebtoken: 8.5.1
+      jsonwebtoken: 9.0.0
       nanoid: 3.2.0
-      passport: 0.5.2
+      next: 13.2.4
+      next-auth: 4.18.7
+      oauth: 0.10.0
+      openid-client: 5.2.1
+      passport: 0.6.0
       path: 0.12.7
       react: 18.2.0
       react-dom: 18.2.0
@@ -959,6 +1087,7 @@ importers:
     dependencies:
       "@types/b64-lite": 1.3.0
       "@types/cookie-session": 2.0.44
+      "@types/oauth": 0.9.1
       "@types/passport": 1.0.7
       "@types/secure-password": 3.1.1
       b64-lite: 1.4.0
@@ -967,11 +1096,12 @@ importers:
       cookie-session: 2.0.0_supports-color@8.1.1
       debug: 4.3.3_supports-color@8.1.1
       http: 0.0.1-security
-      jsonwebtoken: 8.5.1
+      jsonwebtoken: 9.0.0
       nanoid: 3.2.0
-      passport: 0.5.2
+      oauth: 0.10.0
+      openid-client: 5.2.1
+      passport: 0.6.0
       path: 0.12.7
-      secure-password: 4.0.0
       supports-color: 8.1.1
       url: 0.11.0
     devDependencies:
@@ -984,17 +1114,19 @@ importers:
       "@types/react": 18.0.25
       "@types/react-dom": 17.0.14
       blitz: link:../blitz
+      next: 13.2.4_biqbaboplfbrettd7655fr4n2y
+      next-auth: 4.18.7_ld2jel3hspngo3u5lti2kgl2sq
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
+      secure-password: 4.0.0
       typescript: 4.8.4
       unbuild: 0.7.6_supports-color@8.1.1
       watch: 1.0.2
 
   packages/blitz-next:
     specifiers:
-      "@blitzjs/config": workspace:2.0.0-beta.20
-      "@blitzjs/rpc": 2.0.0-beta.20
-      "@tanstack/react-query": 4.0.10
+      "@blitzjs/config": workspace:2.0.0-beta.25
+      "@blitzjs/rpc": 2.0.0-beta.25
       "@testing-library/dom": 8.13.0
       "@testing-library/jest-dom": 5.16.3
       "@testing-library/react": 13.4.0
@@ -1005,13 +1137,14 @@ importers:
       "@types/react": 18.0.25
       "@types/react-dom": 17.0.14
       "@types/testing-library__react-hooks": 4.0.0
-      blitz: 2.0.0-beta.20
+      blitz: 2.0.0-beta.25
       cross-spawn: 7.0.3
       debug: 4.3.3
       find-up: 4.1.0
       fs-extra: 10.0.1
       hoist-non-react-statics: 3.3.2
-      next: 12.2.5
+      next: 13.2.4
+      next-router-mock: 0.9.1
       react: 18.2.0
       react-dom: 18.2.0
       resolve-from: 5.0.0
@@ -1023,7 +1156,6 @@ importers:
       watch: 1.0.2
     dependencies:
       "@blitzjs/rpc": link:../blitz-rpc
-      "@tanstack/react-query": 4.0.10_biqbaboplfbrettd7655fr4n2y
       "@types/hoist-non-react-statics": 3.3.1
       debug: 4.3.3_supports-color@8.1.1
       fs-extra: 10.0.1
@@ -1055,19 +1187,20 @@ importers:
 
   packages/blitz-rpc:
     specifiers:
-      "@blitzjs/auth": 2.0.0-beta.20
-      "@blitzjs/config": workspace:2.0.0-beta.20
+      "@blitzjs/auth": 2.0.0-beta.25
+      "@blitzjs/config": workspace:2.0.0-beta.25
       "@swc/core": 1.3.7
-      "@tanstack/react-query": 4.0.10
+      "@tanstack/query-core": 4.24.4
+      "@tanstack/react-query": 4.24.4
       "@types/debug": 4.1.7
       "@types/react": 18.0.25
       "@types/react-dom": 17.0.14
       b64-lite: 1.4.0
       bad-behavior: 1.0.1
-      blitz: 2.0.0-beta.20
+      blitz: 2.0.0-beta.25
       chalk: ^4.1.0
       debug: 4.3.3
-      next: 12.2.5
+      next: 13.2.4
       react: 18.2.0
       react-dom: 18.2.0
       superjson: 1.11.0
@@ -1075,10 +1208,10 @@ importers:
       typescript: ^4.8.4
       unbuild: 0.7.6
       watch: 1.0.2
-      zod: 3.19.1
+      zod: 3.20.2
     dependencies:
       "@swc/core": 1.3.7
-      "@tanstack/react-query": 4.0.10_biqbaboplfbrettd7655fr4n2y
+      "@tanstack/react-query": 4.24.4_biqbaboplfbrettd7655fr4n2y
       b64-lite: 1.4.0
       bad-behavior: 1.0.1
       chalk: 4.1.2
@@ -1088,6 +1221,7 @@ importers:
     devDependencies:
       "@blitzjs/auth": link:../blitz-auth
       "@blitzjs/config": link:../config
+      "@tanstack/query-core": 4.24.4
       "@types/debug": 4.1.7
       "@types/react": 18.0.25
       "@types/react-dom": 17.0.14
@@ -1098,7 +1232,7 @@ importers:
       typescript: 4.8.4
       unbuild: 0.7.6_supports-color@8.1.1
       watch: 1.0.2
-      zod: 3.19.1
+      zod: 3.20.2
 
   packages/codemod:
     specifiers:
@@ -1108,12 +1242,12 @@ importers:
       "@babel/plugin-syntax-typescript": 7.17.12
       "@babel/preset-env": 7.12.10
       "@blitzjs/config": workspace:*
-      "@blitzjs/generator": 2.0.0-beta.20
+      "@blitzjs/generator": 2.0.0-beta.25
       "@types/jscodeshift": 0.11.2
       "@types/node": 18.11.9
       arg: 5.0.1
       ast-types: 0.14.2
-      blitz: 2.0.0-beta.20
+      blitz: 2.0.0-beta.25
       chalk: ^4.1.0
       cross-spawn: 7.0.3
       debug: 4.3.3
@@ -1168,7 +1302,7 @@ importers:
       "@babel/plugin-transform-typescript": 7.12.1
       "@babel/preset-env": 7.12.10
       "@babel/types": 7.12.10
-      "@blitzjs/config": 2.0.0-beta.20
+      "@blitzjs/config": 2.0.0-beta.25
       "@juanm04/cpx": 2.0.1
       "@mrleebo/prisma-ast": 0.4.1
       "@types/babel__core": 7.1.19
@@ -1192,6 +1326,7 @@ importers:
       diff: 5.0.0
       enquirer: 2.3.6
       eslint: 8.27.0
+      fast-glob: 3.2.12
       fs-extra: 10.0.1
       globby: 13.1.2
       got: ^11.8.1
@@ -1211,6 +1346,7 @@ importers:
       username: 5.1.0
       vinyl: 2.2.1
       watch: 1.0.2
+      zod: 3.20.2
     dependencies:
       "@babel/core": 7.12.10_supports-color@8.1.1
       "@babel/plugin-transform-typescript": 7.12.1_ps3yxa7qdojvlda5ukda3zlwie
@@ -1222,6 +1358,7 @@ importers:
       cross-spawn: 7.0.3
       diff: 5.0.0
       enquirer: 2.3.6
+      fast-glob: 3.2.12
       fs-extra: 10.0.1
       globby: 13.1.2
       got: 11.8.1
@@ -1237,6 +1374,7 @@ importers:
       tslog: 3.3.4
       username: 5.1.0
       vinyl: 2.2.1
+      zod: 3.20.2
     devDependencies:
       "@blitzjs/config": link:../config
       "@juanm04/cpx": 2.0.1_supports-color@8.1.1
@@ -1263,7 +1401,7 @@ importers:
 
   packages/pkg-template:
     specifiers:
-      "@blitzjs/config": 2.0.0-beta.20
+      "@blitzjs/config": 2.0.0-beta.25
       "@types/react": 18.0.25
       "@types/react-dom": 17.0.14
       "@typescript-eslint/eslint-plugin": 5.42.1
@@ -1287,7 +1425,7 @@ importers:
   recipes/base-web:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: 2.0.0-beta.20
+      blitz: 2.0.0-beta.25
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1298,7 +1436,7 @@ importers:
   recipes/bulma:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: 2.0.0-beta.20
+      blitz: 2.0.0-beta.25
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1310,7 +1448,7 @@ importers:
     specifiers:
       "@types/jscodeshift": 0.11.2
       ast-types: 0.14.2
-      blitz: 2.0.0-beta.20
+      blitz: 2.0.0-beta.25
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1323,7 +1461,7 @@ importers:
     specifiers:
       "@types/jscodeshift": 0.11.2
       ast-types: 0.14.2
-      blitz: 2.0.0-beta.20
+      blitz: 2.0.0-beta.25
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1335,7 +1473,7 @@ importers:
   recipes/emotion:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: 2.0.0-beta.20
+      blitz: 2.0.0-beta.25
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1345,20 +1483,20 @@ importers:
 
   recipes/gh-action-yarn-mariadb:
     specifiers:
-      blitz: 2.0.0-beta.20
+      blitz: 2.0.0-beta.25
     dependencies:
       blitz: link:../../packages/blitz
 
   recipes/gh-action-yarn-postgres:
     specifiers:
-      blitz: 2.0.0-beta.20
+      blitz: 2.0.0-beta.25
     dependencies:
       blitz: link:../../packages/blitz
 
   recipes/ghost:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: 2.0.0-beta.20
+      blitz: 2.0.0-beta.25
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1369,7 +1507,7 @@ importers:
   recipes/graphql-apollo-server:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: 2.0.0-beta.20
+      blitz: 2.0.0-beta.25
       jscodeshift: 0.13.0
       uuid: ^8.3.1
     dependencies:
@@ -1382,7 +1520,7 @@ importers:
   recipes/logrocket:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: 2.0.0-beta.20
+      blitz: 2.0.0-beta.25
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1393,7 +1531,7 @@ importers:
   recipes/material-ui:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: 2.0.0-beta.20
+      blitz: 2.0.0-beta.25
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1405,7 +1543,7 @@ importers:
     specifiers:
       "@types/jscodeshift": 0.11.2
       ast-types: 0.14.2
-      blitz: 2.0.0-beta.20
+      blitz: 2.0.0-beta.25
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1416,13 +1554,13 @@ importers:
 
   recipes/passenger:
     specifiers:
-      blitz: 2.0.0-beta.20
+      blitz: 2.0.0-beta.25
     dependencies:
       blitz: link:../../packages/blitz
 
   recipes/quirrel:
     specifiers:
-      blitz: 2.0.0-beta.20
+      blitz: 2.0.0-beta.25
     dependencies:
       blitz: link:../../packages/blitz
 
@@ -1430,7 +1568,7 @@ importers:
     specifiers:
       "@types/jscodeshift": 0.11.2
       ast-types: 0.14.2
-      blitz: 2.0.0-beta.20
+      blitz: 2.0.0-beta.25
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1441,14 +1579,14 @@ importers:
 
   recipes/render:
     specifiers:
-      blitz: 2.0.0-beta.20
+      blitz: 2.0.0-beta.25
     dependencies:
       blitz: link:../../packages/blitz
 
   recipes/secureheaders:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: 2.0.0-beta.20
+      blitz: 2.0.0-beta.25
       jscodeshift: 0.13.0
       uuid: ^8.3.1
     dependencies:
@@ -1461,7 +1599,7 @@ importers:
   recipes/stitches:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: 2.0.0-beta.20
+      blitz: 2.0.0-beta.25
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1473,7 +1611,7 @@ importers:
     specifiers:
       "@types/jscodeshift": 0.11.2
       ast-types: 0.14.2
-      blitz: 2.0.0-beta.20
+      blitz: 2.0.0-beta.25
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1485,7 +1623,7 @@ importers:
   recipes/tailwind:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: 2.0.0-beta.20
+      blitz: 2.0.0-beta.25
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1497,7 +1635,7 @@ importers:
     specifiers:
       "@types/jscodeshift": 0.11.2
       ast-types: 0.14.2
-      blitz: 2.0.0-beta.20
+      blitz: 2.0.0-beta.25
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1509,7 +1647,7 @@ importers:
   recipes/vanilla-extract:
     specifiers:
       "@types/jscodeshift": 0.11.2
-      blitz: 2.0.0-beta.20
+      blitz: 2.0.0-beta.25
       jscodeshift: 0.13.0
     dependencies:
       blitz: link:../../packages/blitz
@@ -1638,7 +1776,7 @@ packages:
       "@babel/traverse": 7.18.2
       "@babel/types": 7.18.4
       convert-source-map: 1.8.0
-      debug: 4.3.4
+      debug: 4.3.3
       gensync: 1.0.0-beta.2
       json5: 2.2.1
       semver: 6.3.0
@@ -1663,7 +1801,7 @@ packages:
       "@babel/traverse": 7.18.2_supports-color@8.1.1
       "@babel/types": 7.18.4
       convert-source-map: 1.8.0
-      debug: 4.3.4_supports-color@8.1.1
+      debug: 4.3.3_supports-color@8.1.1
       gensync: 1.0.0-beta.2
       json5: 2.2.1
       semver: 6.3.0
@@ -1689,7 +1827,7 @@ packages:
       "@babel/traverse": 7.20.1
       "@babel/types": 7.20.2
       convert-source-map: 1.8.0
-      debug: 4.3.4
+      debug: 4.3.3
       gensync: 1.0.0-beta.2
       json5: 2.2.1
       semver: 6.3.0
@@ -4991,7 +5129,7 @@ packages:
       "@babel/helper-split-export-declaration": 7.16.7
       "@babel/parser": 7.18.4
       "@babel/types": 7.18.4
-      debug: 4.3.4
+      debug: 4.3.3
       globals: 11.12.0
     transitivePeerDependencies:
       - supports-color
@@ -5011,7 +5149,7 @@ packages:
       "@babel/helper-split-export-declaration": 7.16.7
       "@babel/parser": 7.18.4
       "@babel/types": 7.18.4
-      debug: 4.3.4_supports-color@8.1.1
+      debug: 4.3.3_supports-color@8.1.1
       globals: 11.12.0
     transitivePeerDependencies:
       - supports-color
@@ -5032,7 +5170,7 @@ packages:
       "@babel/helper-split-export-declaration": 7.18.6
       "@babel/parser": 7.20.3
       "@babel/types": 7.20.2
-      debug: 4.3.4
+      debug: 4.3.3
       globals: 11.12.0
     transitivePeerDependencies:
       - supports-color
@@ -5431,7 +5569,7 @@ packages:
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dependencies:
       ajv: 6.12.6
-      debug: 4.3.4
+      debug: 4.3.3
       espree: 9.4.1
       globals: 13.15.0
       ignore: 5.2.0
@@ -5450,7 +5588,7 @@ packages:
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dependencies:
       ajv: 6.12.6
-      debug: 4.3.4_supports-color@8.1.1
+      debug: 4.3.3_supports-color@8.1.1
       espree: 9.4.1
       globals: 13.15.0
       ignore: 5.2.0
@@ -5512,7 +5650,7 @@ packages:
     engines: {node: ">=10.10.0"}
     dependencies:
       "@humanwhocodes/object-schema": 1.2.1
-      debug: 4.3.4
+      debug: 4.3.3
       minimatch: 3.1.2
     transitivePeerDependencies:
       - supports-color
@@ -5525,7 +5663,7 @@ packages:
     engines: {node: ">=10.10.0"}
     dependencies:
       "@humanwhocodes/object-schema": 1.2.1
-      debug: 4.3.4_supports-color@8.1.1
+      debug: 4.3.3_supports-color@8.1.1
       minimatch: 3.1.2
     transitivePeerDependencies:
       - supports-color
@@ -6214,10 +6352,10 @@ packages:
       - utf-8-validate
     dev: true
 
-  /@next/env/12.2.5:
+  /@next/env/13.2.4:
     resolution:
       {
-        integrity: sha512-vLPLV3cpPGjUPT3PjgRj7e3nio9t6USkuew3JE/jMeon/9Mvp1WyR18v3iwnCuX7eUAm1HmAbJHHLAbcu/EJcw==,
+        integrity: sha512-+Mq3TtpkeeKFZanPturjcXt+KHfKYnLlX6jMLyCrmpq6OOs4i1GqBOAauSkii9QeKCMTYzGppar21JU57b/GEA==,
       }
 
   /@next/eslint-plugin-next/12.3.1:
@@ -6228,19 +6366,28 @@ packages:
     dependencies:
       glob: 7.1.7
 
-  /@next/eslint-plugin-next/13.1.1:
+  /@next/eslint-plugin-next/13.0.0:
     resolution:
       {
-        integrity: sha512-SBrOFS8PC3nQ5aeZmawJkjKkWjwK9RoxvBSv/86nZp0ubdoVQoko8r8htALd9ufp16NhacCdqhu9bzZLDWtALQ==,
+        integrity: sha512-z+gnX4Zizatqatc6f4CQrcC9oN8Us3Vrq/OLyc98h7K/eWctrnV91zFZodmJHUjx0cITY8uYM7LXD7IdYkg3kg==,
       }
     dependencies:
       glob: 7.1.7
     dev: true
 
-  /@next/swc-android-arm-eabi/12.2.5:
+  /@next/eslint-plugin-next/13.2.4:
     resolution:
       {
-        integrity: sha512-cPWClKxGhgn2dLWnspW+7psl3MoLQUcNqJqOHk2BhNcou9ARDtC0IjQkKe5qcn9qg7I7U83Gp1yh2aesZfZJMA==,
+        integrity: sha512-ck1lI+7r1mMJpqLNa3LJ5pxCfOB1lfJncKmRJeJxcJqcngaFwylreLP7da6Rrjr6u2gVRTfmnkSkjc80IiQCwQ==,
+      }
+    dependencies:
+      glob: 7.1.7
+    dev: true
+
+  /@next/swc-android-arm-eabi/13.2.4:
+    resolution:
+      {
+        integrity: sha512-DWlalTSkLjDU11MY11jg17O1gGQzpRccM9Oes2yTqj2DpHndajrXHGxj9HGtJ+idq2k7ImUdJVWS2h2l/EDJOw==,
       }
     engines: {node: ">= 10"}
     cpu: [arm]
@@ -6248,10 +6395,10 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@next/swc-android-arm64/12.2.5:
+  /@next/swc-android-arm64/13.2.4:
     resolution:
       {
-        integrity: sha512-vMj0efliXmC5b7p+wfcQCX0AfU8IypjkzT64GiKJD9PgiA3IILNiGJr1fw2lyUDHkjeWx/5HMlMEpLnTsQslwg==,
+        integrity: sha512-sRavmUImUCf332Gy+PjIfLkMhiRX1Ez4SI+3vFDRs1N5eXp+uNzjFUK/oLMMOzk6KFSkbiK/3Wt8+dHQR/flNg==,
       }
     engines: {node: ">= 10"}
     cpu: [arm64]
@@ -6259,10 +6406,10 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@next/swc-darwin-arm64/12.2.5:
+  /@next/swc-darwin-arm64/13.2.4:
     resolution:
       {
-        integrity: sha512-VOPWbO5EFr6snla/WcxUKtvzGVShfs302TEMOtzYyWni6f9zuOetijJvVh9CCTzInnXAZMtHyNhefijA4HMYLg==,
+        integrity: sha512-S6vBl+OrInP47TM3LlYx65betocKUUlTZDDKzTiRDbsRESeyIkBtZ6Qi5uT2zQs4imqllJznVjFd1bXLx3Aa6A==,
       }
     engines: {node: ">= 10"}
     cpu: [arm64]
@@ -6270,10 +6417,10 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@next/swc-darwin-x64/12.2.5:
+  /@next/swc-darwin-x64/13.2.4:
     resolution:
       {
-        integrity: sha512-5o8bTCgAmtYOgauO/Xd27vW52G2/m3i5PX7MUYePquxXAnX73AAtqA3WgPXBRitEB60plSKZgOTkcpqrsh546A==,
+        integrity: sha512-a6LBuoYGcFOPGd4o8TPo7wmv5FnMr+Prz+vYHopEDuhDoMSHOnC+v+Ab4D7F0NMZkvQjEJQdJS3rqgFhlZmKlw==,
       }
     engines: {node: ">= 10"}
     cpu: [x64]
@@ -6281,10 +6428,10 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@next/swc-freebsd-x64/12.2.5:
+  /@next/swc-freebsd-x64/13.2.4:
     resolution:
       {
-        integrity: sha512-yYUbyup1JnznMtEBRkK4LT56N0lfK5qNTzr6/DEyDw5TbFVwnuy2hhLBzwCBkScFVjpFdfiC6SQAX3FrAZzuuw==,
+        integrity: sha512-kkbzKVZGPaXRBPisoAQkh3xh22r+TD+5HwoC5bOkALraJ0dsOQgSMAvzMXKsN3tMzJUPS0tjtRf1cTzrQ0I5vQ==,
       }
     engines: {node: ">= 10"}
     cpu: [x64]
@@ -6292,10 +6439,10 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@next/swc-linux-arm-gnueabihf/12.2.5:
+  /@next/swc-linux-arm-gnueabihf/13.2.4:
     resolution:
       {
-        integrity: sha512-2ZE2/G921Acks7UopJZVMgKLdm4vN4U0yuzvAMJ6KBavPzqESA2yHJlm85TV/K9gIjKhSk5BVtauIUntFRP8cg==,
+        integrity: sha512-7qA1++UY0fjprqtjBZaOA6cas/7GekpjVsZn/0uHvquuITFCdKGFCsKNBx3S0Rpxmx6WYo0GcmhNRM9ru08BGg==,
       }
     engines: {node: ">= 10"}
     cpu: [arm]
@@ -6303,10 +6450,10 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@next/swc-linux-arm64-gnu/12.2.5:
+  /@next/swc-linux-arm64-gnu/13.2.4:
     resolution:
       {
-        integrity: sha512-/I6+PWVlz2wkTdWqhlSYYJ1pWWgUVva6SgX353oqTh8njNQp1SdFQuWDqk8LnM6ulheVfSsgkDzxrDaAQZnzjQ==,
+        integrity: sha512-xzYZdAeq883MwXgcwc72hqo/F/dwUxCukpDOkx/j1HTq/J0wJthMGjinN9wH5bPR98Mfeh1MZJ91WWPnZOedOg==,
       }
     engines: {node: ">= 10"}
     cpu: [arm64]
@@ -6314,10 +6461,10 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@next/swc-linux-arm64-musl/12.2.5:
+  /@next/swc-linux-arm64-musl/13.2.4:
     resolution:
       {
-        integrity: sha512-LPQRelfX6asXyVr59p5sTpx5l+0yh2Vjp/R8Wi4X9pnqcayqT4CUJLiHqCvZuLin3IsFdisJL0rKHMoaZLRfmg==,
+        integrity: sha512-8rXr3WfmqSiYkb71qzuDP6I6R2T2tpkmf83elDN8z783N9nvTJf2E7eLx86wu2OJCi4T05nuxCsh4IOU3LQ5xw==,
       }
     engines: {node: ">= 10"}
     cpu: [arm64]
@@ -6325,10 +6472,10 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@next/swc-linux-x64-gnu/12.2.5:
+  /@next/swc-linux-x64-gnu/13.2.4:
     resolution:
       {
-        integrity: sha512-0szyAo8jMCClkjNK0hknjhmAngUppoRekW6OAezbEYwHXN/VNtsXbfzgYOqjKWxEx3OoAzrT3jLwAF0HdX2MEw==,
+        integrity: sha512-Ngxh51zGSlYJ4EfpKG4LI6WfquulNdtmHg1yuOYlaAr33KyPJp4HeN/tivBnAHcZkoNy0hh/SbwDyCnz5PFJQQ==,
       }
     engines: {node: ">= 10"}
     cpu: [x64]
@@ -6336,10 +6483,10 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@next/swc-linux-x64-musl/12.2.5:
+  /@next/swc-linux-x64-musl/13.2.4:
     resolution:
       {
-        integrity: sha512-zg/Y6oBar1yVnW6Il1I/08/2ukWtOG6s3acdJdEyIdsCzyQi4RLxbbhkD/EGQyhqBvd3QrC6ZXQEXighQUAZ0g==,
+        integrity: sha512-gOvwIYoSxd+j14LOcvJr+ekd9fwYT1RyMAHOp7znA10+l40wkFiMONPLWiZuHxfRk+Dy7YdNdDh3ImumvL6VwA==,
       }
     engines: {node: ">= 10"}
     cpu: [x64]
@@ -6347,10 +6494,10 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@next/swc-win32-arm64-msvc/12.2.5:
+  /@next/swc-win32-arm64-msvc/13.2.4:
     resolution:
       {
-        integrity: sha512-3/90DRNSqeeSRMMEhj4gHHQlLhhKg5SCCoYfE3kBjGpE63EfnblYUqsszGGZ9ekpKL/R4/SGB40iCQr8tR5Jiw==,
+        integrity: sha512-q3NJzcfClgBm4HvdcnoEncmztxrA5GXqKeiZ/hADvC56pwNALt3ngDC6t6qr1YW9V/EPDxCYeaX4zYxHciW4Dw==,
       }
     engines: {node: ">= 10"}
     cpu: [arm64]
@@ -6358,10 +6505,10 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@next/swc-win32-ia32-msvc/12.2.5:
+  /@next/swc-win32-ia32-msvc/13.2.4:
     resolution:
       {
-        integrity: sha512-hGLc0ZRAwnaPL4ulwpp4D2RxmkHQLuI8CFOEEHdzZpS63/hMVzv81g8jzYA0UXbb9pus/iTc3VRbVbAM03SRrw==,
+        integrity: sha512-/eZ5ncmHUYtD2fc6EUmAIZlAJnVT2YmxDsKs1Ourx0ttTtvtma/WKlMV5NoUsyOez0f9ExLyOpeCoz5aj+MPXw==,
       }
     engines: {node: ">= 10"}
     cpu: [ia32]
@@ -6369,10 +6516,10 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@next/swc-win32-x64-msvc/12.2.5:
+  /@next/swc-win32-x64-msvc/13.2.4:
     resolution:
       {
-        integrity: sha512-7h5/ahY7NeaO2xygqVrSG/Y8Vs4cdjxIjowTZ5W6CKoTKn7tmnuxlUc2h74x06FKmbhAd9agOjr/AOKyxYYm9Q==,
+        integrity: sha512-0MffFmyv7tBLlji01qc0IaPP/LVExzvj7/R5x1Jph1bTAIj4Vu81yFQWHHQAP6r4ff9Ukj1mBK6MDNVXm7Tcvw==,
       }
     engines: {node: ">= 10"}
     cpu: [x64]
@@ -6415,6 +6562,12 @@ packages:
       "@nodelib/fs.scandir": 2.1.5
       fastq: 1.13.0
 
+  /@panva/hkdf/1.0.2:
+    resolution:
+      {
+        integrity: sha512-MSAs9t3Go7GUkMhpKC44T58DJ5KGk2vBo+h1cqQeqlMfdGkxaVB78ZWpv9gYi/g2fa4sopag9gJsNvS8XGgWJA==,
+      }
+
   /@pkgr/utils/2.3.1:
     resolution:
       {
@@ -6437,10 +6590,10 @@ packages:
       }
     dev: true
 
-  /@prisma/client/4.6.0_prisma@4.6.0:
+  /@prisma/client/4.6.1_prisma@4.6.1:
     resolution:
       {
-        integrity: sha512-D9LaQinDxOHinRpcJTw2tjMtjhc9HTP+aF1IRd2oLldp/8TiwIfxK8x17OhBBiX4y1PzbJXXET7kS+5wB3es/w==,
+        integrity: sha512-M1+NNrMzqaOIxT7PBGcTs3IZo7d1EW/+gVQd4C4gUgWBDGgD9AcIeZnUSidgWClmpMSgVUdnVORjsWWGUameYA==,
       }
     engines: {node: ">=14.17"}
     requiresBuild: true
@@ -6450,21 +6603,21 @@ packages:
       prisma:
         optional: true
     dependencies:
-      "@prisma/engines-version": 4.6.0-53.2e719efb80b56a3f32d18a62489de95bb9c130e3
-      prisma: 4.6.0
+      "@prisma/engines-version": 4.6.1-3.694eea289a8462c80264df36757e4fdc129b1b32
+      prisma: 4.6.1
     dev: false
 
-  /@prisma/engines-version/4.6.0-53.2e719efb80b56a3f32d18a62489de95bb9c130e3:
+  /@prisma/engines-version/4.6.1-3.694eea289a8462c80264df36757e4fdc129b1b32:
     resolution:
       {
-        integrity: sha512-0CTnfEuUbLlO6n1fM89ERDbSwI4LoyZn+1OKVSwG+aVqohj34+mXRfwOWIM0ONtYtLGGBpddvQAnAZkg+cgS6g==,
+        integrity: sha512-HUCmkXAU2jqp2O1RvNtbE+seLGLyJGEABZS/R38rZjSAafAy0WzBuHq+tbZMnD+b5OSCsTVtIPVcuvx1ySxcWQ==,
       }
     dev: false
 
-  /@prisma/engines/4.6.0:
+  /@prisma/engines/4.6.1:
     resolution:
       {
-        integrity: sha512-S+72PAl0zTCbIGou1uXD/McvzdtP+bjOs0LRmGZfcOQcVqR9x/0f6Z+dqpUU0zIcqHEl+0DOB8UXaTwRvssFsQ==,
+        integrity: sha512-3u2/XxvxB+Q7cMXHnKU0CpBiUK1QWqpgiBv28YDo1zOIJE3FCF8DI2vrp6vuwjGt5h0JGXDSvmSf4D4maVjJdw==,
       }
     requiresBuild: true
     dev: false
@@ -6522,7 +6675,7 @@ packages:
       glob: 7.2.0
       is-reference: 1.2.1
       magic-string: 0.25.9
-      resolve: 1.22.0
+      resolve: 1.22.1
       rollup: 2.77.2
     dev: true
 
@@ -6552,7 +6705,7 @@ packages:
       deepmerge: 4.2.2
       is-builtin-module: 3.1.0
       is-module: 1.0.0
-      resolve: 1.22.0
+      resolve: 1.22.1
       rollup: 2.77.2
     dev: true
 
@@ -6886,10 +7039,10 @@ packages:
       "@swc/core-win32-x64-msvc": 1.3.7
     dev: false
 
-  /@swc/helpers/0.4.3:
+  /@swc/helpers/0.4.14:
     resolution:
       {
-        integrity: sha512-6JrF+fdUK2zbGpJIlN7G3v966PQjyx/dPt1T9km2wj+EUBqgrxCk3uX4Kct16MIm9gGxfKRcfax2hVf5jvlTzA==,
+        integrity: sha512-4C7nX/dvpzB7za4Ql9K81xK3HPxCpHMgwTZVyf+9JQ6VUbn9jjZVN7/Nkdz/Ugzs2CSjqnL/UPXroiVBVHUWUw==,
       }
     dependencies:
       tslib: 2.4.0
@@ -6932,10 +7085,17 @@ packages:
       defer-to-connect: 2.0.1
     dev: false
 
-  /@tanstack/query-core/4.0.10:
+  /@tanstack/query-core/4.13.0:
     resolution:
       {
-        integrity: sha512-9LsABpZXkWZHi4P1ozRETEDXQocLAxVzQaIhganxbNuz/uA3PsCAJxJTiQrknG5htLMzOF5MqM9G10e6DCxV1A==,
+        integrity: sha512-PzmLQcEgC4rl2OzkiPHYPC9O79DFcMGaKsOzDEP+U4PJ+tbkcEP+Z+FQDlfvX8mCwYC7UNH7hXrQ5EdkGlJjVg==,
+      }
+    dev: true
+
+  /@tanstack/query-core/4.24.4:
+    resolution:
+      {
+        integrity: sha512-9dqjv9eeB6VHN7lD3cLo16ZAjfjCsdXetSAD5+VyKqLUvcKTL0CklGQRJu+bWzdrS69R6Ea4UZo8obHYZnG6aA==,
       }
 
   /@tanstack/react-query/4.0.10_biqbaboplfbrettd7655fr4n2y:
@@ -6953,11 +7113,54 @@ packages:
       react-native:
         optional: true
     dependencies:
-      "@tanstack/query-core": 4.0.10
+      "@tanstack/query-core": 4.24.4
       "@types/use-sync-external-store": 0.0.3
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       use-sync-external-store: 1.2.0_react@18.2.0
+    dev: false
+
+  /@tanstack/react-query/4.13.0_biqbaboplfbrettd7655fr4n2y:
+    resolution:
+      {
+        integrity: sha512-dI/5hJ/pGQ74P5hxBLC9h6K0/Cap2T3k0ZjjjFLBCNnohDYgl7LNmMopzrRzBHk2mMjf2hgXHIzcKNG8GOZ5hg==,
+      }
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react-native: "*"
+    peerDependenciesMeta:
+      react-dom:
+        optional: true
+      react-native:
+        optional: true
+    dependencies:
+      "@tanstack/query-core": 4.13.0
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      use-sync-external-store: 1.2.0_react@18.2.0
+    dev: true
+
+  /@tanstack/react-query/4.24.4_biqbaboplfbrettd7655fr4n2y:
+    resolution:
+      {
+        integrity: sha512-RpaS/3T/a3pHuZJbIAzAYRu+1nkp+/enr9hfRXDS/mojwx567UiMksoqW4wUFWlwIvWTXyhot2nbIipTKEg55Q==,
+      }
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react-native: "*"
+    peerDependenciesMeta:
+      react-dom:
+        optional: true
+      react-native:
+        optional: true
+    dependencies:
+      "@tanstack/query-core": 4.24.4
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      use-sync-external-store: 1.2.0_react@18.2.0
+    dev: false
 
   /@testim/chrome-version/1.1.2:
     resolution:
@@ -7057,7 +7260,7 @@ packages:
     dependencies:
       "@babel/runtime": 7.18.3
       "@testing-library/dom": 8.13.0
-      "@types/react-dom": 18.0.5
+      "@types/react-dom": 18.0.7
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
     dev: true
@@ -7173,6 +7376,13 @@ packages:
     dependencies:
       "@types/connect": 3.4.35
       "@types/node": 18.11.9
+
+  /@types/braces/3.0.1:
+    resolution:
+      {
+        integrity: sha512-+euflG6ygo4bn0JHtn4pYqcXwRtLvElQ7/nnjDu7iYG56H0+OhCd7d6Ug0IE3WcFpZozBKW2+80FUbv5QGk5AQ==,
+      }
+    dev: true
 
   /@types/cacheable-request/6.0.2:
     resolution:
@@ -7322,6 +7532,15 @@ packages:
       "@types/express-serve-static-core": 4.17.28
       "@types/qs": 6.9.7
       "@types/serve-static": 1.13.10
+
+  /@types/findup-sync/4.0.2:
+    resolution:
+      {
+        integrity: sha512-MY2Acwvq6O+/rOMRtbV31phQOj1A+sbVWRbp47PvcZ5+VoofiSZHhj8ByATusuzJE+q/u+PA1SlkfPu3thhsjw==,
+      }
+    dependencies:
+      "@types/micromatch": 4.0.2
+    dev: true
 
   /@types/fs-extra/9.0.13:
     resolution:
@@ -7508,6 +7727,15 @@ packages:
       "@types/vinyl": 2.0.6
     dev: true
 
+  /@types/micromatch/4.0.2:
+    resolution:
+      {
+        integrity: sha512-oqXqVb0ci19GtH0vOA/U2TmHTcRY9kuZl4mqUxe0QmJAlIW13kzhuK5pi1i9+ngav8FjpSb9FVS/GE00GLX1VA==,
+      }
+    dependencies:
+      "@types/braces": 3.0.1
+    dev: true
+
   /@types/mime/1.3.2:
     resolution:
       {
@@ -7595,6 +7823,15 @@ packages:
     dependencies:
       "@types/node": 18.11.9
     dev: true
+
+  /@types/oauth/0.9.1:
+    resolution:
+      {
+        integrity: sha512-a1iY62/a3yhZ7qH7cNUsxoI3U/0Fe9+RnuFrpTKr+0WVOzbKlSLojShCKe20aOD1Sppv+i8Zlq0pLDuTJnwS4A==,
+      }
+    dependencies:
+      "@types/node": 18.11.9
+    dev: false
 
   /@types/passport-twitter/1.0.37:
     resolution:
@@ -7698,13 +7935,24 @@ packages:
       "@types/react": 18.0.25
     dev: true
 
-  /@types/react-dom/18.0.5:
+  /@types/react-dom/18.0.7:
     resolution:
       {
-        integrity: sha512-OWPWTUrY/NIrjsAPkAk1wW9LZeIjSvkXRhclsFO8CZcZGCOg2G0YZy4ft+rOyYxy8B7ui5iZzi9OkDebZ7/QSA==,
+        integrity: sha512-HaXc+BbqAZE1RdsK3tC8SbkFy6UL2xF76lT9rQs5JkPrJg3rWA3Ou/Lhw3YJQzEDkBpmJ79nBsfnd05WrBd2QQ==,
       }
     dependencies:
       "@types/react": 18.0.25
+    dev: true
+
+  /@types/react/18.0.23:
+    resolution:
+      {
+        integrity: sha512-R1wTULtCiJkudAN2DJGoYYySbGtOdzZyUWAACYinKdiQC8auxso4kLDUhQ7AJ2kh3F6A6z4v69U6tNY39hihVQ==,
+      }
+    dependencies:
+      "@types/prop-types": 15.7.5
+      "@types/scheduler": 0.16.2
+      csstype: 3.1.0
     dev: true
 
   /@types/react/18.0.25:
@@ -7839,6 +8087,7 @@ packages:
       {
         integrity: sha512-EwmlvuaxPNej9+T4v5AuBPJa2x2UOJVdjCtDHgcDqitUeOtjnJKJ+apYjVcAoBEMjKW1VVFGZLUb5+qqa09XFA==,
       }
+    dev: false
 
   /@types/vinyl/2.0.6:
     resolution:
@@ -8208,7 +8457,7 @@ packages:
       debug: 4.3.4
       globby: 11.1.0
       is-glob: 4.0.3
-      semver: 7.3.7
+      semver: 7.3.8
       tsutils: 3.21.0_typescript@4.8.4
       typescript: 4.8.4
     transitivePeerDependencies:
@@ -8232,7 +8481,7 @@ packages:
       debug: 4.3.4_supports-color@8.1.1
       globby: 11.1.0
       is-glob: 4.0.3
-      semver: 7.3.7
+      semver: 7.3.8
       tsutils: 3.21.0_typescript@4.8.4
       typescript: 4.8.4
     transitivePeerDependencies:
@@ -8256,7 +8505,7 @@ packages:
       debug: 4.3.4
       globby: 11.1.0
       is-glob: 4.0.3
-      semver: 7.3.7
+      semver: 7.3.8
       tsutils: 3.21.0_typescript@4.8.4
       typescript: 4.8.4
     transitivePeerDependencies:
@@ -8279,7 +8528,7 @@ packages:
       debug: 4.3.4
       globby: 11.1.0
       is-glob: 4.0.3
-      semver: 7.3.7
+      semver: 7.3.8
       tsutils: 3.21.0_typescript@4.8.4
       typescript: 4.8.4
     transitivePeerDependencies:
@@ -8299,10 +8548,10 @@ packages:
     dependencies:
       "@typescript-eslint/types": 5.9.1
       "@typescript-eslint/visitor-keys": 5.9.1
-      debug: 4.3.4_supports-color@8.1.1
+      debug: 4.3.3_supports-color@8.1.1
       globby: 11.1.0
       is-glob: 4.0.3
-      semver: 7.3.7
+      semver: 7.3.8
       tsutils: 3.21.0_typescript@4.8.4
       typescript: 4.8.4
     transitivePeerDependencies:
@@ -8323,10 +8572,10 @@ packages:
     dependencies:
       "@typescript-eslint/types": 5.9.1
       "@typescript-eslint/visitor-keys": 5.9.1
-      debug: 4.3.4
+      debug: 4.3.3
       globby: 11.1.0
       is-glob: 4.0.3
-      semver: 7.3.7
+      semver: 7.3.8
       tsutils: 3.21.0_typescript@4.8.4
       typescript: 4.8.4
     transitivePeerDependencies:
@@ -8371,7 +8620,7 @@ packages:
       eslint: 8.27.0_supports-color@8.1.1
       eslint-scope: 5.1.1
       eslint-utils: 3.0.0_eslint@8.27.0
-      semver: 7.3.7
+      semver: 7.3.8
     transitivePeerDependencies:
       - supports-color
       - typescript
@@ -8394,7 +8643,7 @@ packages:
       eslint: 8.27.0
       eslint-scope: 5.1.1
       eslint-utils: 3.0.0_eslint@8.27.0
-      semver: 7.3.7
+      semver: 7.3.8
     transitivePeerDependencies:
       - supports-color
       - typescript
@@ -8578,7 +8827,7 @@ packages:
       }
     engines: {node: ">= 6.0.0"}
     dependencies:
-      debug: 4.3.4
+      debug: 4.3.3
     transitivePeerDependencies:
       - supports-color
 
@@ -9481,7 +9730,10 @@ packages:
     dev: true
 
   /buffer-equal-constant-time/1.0.1:
-    resolution: {integrity: sha1-+OcRMvf/5uAaXJaXpMbz5I1cyBk=}
+    resolution:
+      {
+        integrity: sha512-zRpUiDwd/xk6ADqPMATG8vc9VPrkck7T07OIx0gnjmJAnHnTVXNQG3vfvWNuiZIkwu9KrKdA1iJKfsfTVxE6NA==,
+      }
     dev: false
 
   /buffer-from/1.1.2:
@@ -9887,6 +10139,12 @@ packages:
       slice-ansi: 5.0.0
       string-width: 5.1.2
 
+  /client-only/0.0.1:
+    resolution:
+      {
+        integrity: sha512-IV3Ou0jSMzZrd3pZ48nLkT9DA7Ag1pnPzaiQhpW7c3RbcqqzvzzVu+L8gfqMp/8IM2MQtSiqaCxrrcfu8I8rMA==,
+      }
+
   /cliui/6.0.0:
     resolution:
       {
@@ -10229,6 +10487,13 @@ packages:
     engines: {node: ">= 0.6"}
     dev: true
 
+  /cookie/0.5.0:
+    resolution:
+      {
+        integrity: sha512-YZ3GUyn/o8gfKJlnlX7g7xq4gyO6OSuhGPKaaGssGB2qgDUS0gPgtTvoyZLTt9Ab6dC4hfc9dV5arkvc/OCmrw==,
+      }
+    engines: {node: ">= 0.6"}
+
   /cookies/0.8.0:
     resolution:
       {
@@ -10544,7 +10809,6 @@ packages:
         optional: true
     dependencies:
       ms: 2.1.2
-    dev: false
 
   /debug/4.3.3_supports-color@8.1.1:
     resolution:
@@ -10824,6 +11088,14 @@ packages:
         integrity: sha512-3NdhDuEXnfun/z7x9GOElY49LoqVHoGScmOKwmxhsS8N5Y+Z8KyPPDnaSzqWgYt/ji4mqwfTS34Htrk0zPIXVg==,
       }
     dev: true
+
+  /detect-file/1.0.0:
+    resolution:
+      {
+        integrity: sha512-DtCOLG98P007x7wiiOmfI0fi3eIKyWiLTGJ2MDnVi/E04lWGbf+JzrRHMm0rgIIZJGtHpKpbVgLWHrv8xXpc3Q==,
+      }
+    engines: {node: ">=0.10.0"}
+    dev: false
 
   /detect-indent/6.1.0:
     resolution:
@@ -12151,10 +12423,10 @@ packages:
       - eslint-import-resolver-webpack
       - supports-color
 
-  /eslint-config-next/13.1.1_rmayb2veg2btbq6mbmnyivgasy:
+  /eslint-config-next/13.0.0_wyqvi574yv7oiwfeinomdzmc3m:
     resolution:
       {
-        integrity: sha512-/5S2XGWlGaiqrRhzpn51ux5JUSLwx8PVK2keLi5xk7QmhfYB8PqE6R6SlVw6hgnf/VexvUXSrlNJ/su00NhtHQ==,
+        integrity: sha512-y2nqWS2tycWySdVhb+rhp6CuDmDazGySqkzzQZf3UTyfHyC7og1m5m/AtMFwCo5mtvDqvw1BENin52kV9733lg==,
       }
     peerDependencies:
       eslint: ^7.23.0 || ^8.0.0
@@ -12163,7 +12435,35 @@ packages:
       typescript:
         optional: true
     dependencies:
-      "@next/eslint-plugin-next": 13.1.1
+      "@next/eslint-plugin-next": 13.0.0
+      "@rushstack/eslint-patch": 1.1.3
+      "@typescript-eslint/parser": 5.43.0_wyqvi574yv7oiwfeinomdzmc3m
+      eslint: 8.26.0
+      eslint-import-resolver-node: 0.3.6
+      eslint-import-resolver-typescript: 2.7.1_mynvxvmq5qtyojffiqgev4x7mm
+      eslint-plugin-import: 2.26.0_lcezp3og7ox4rmwnvswasffmgu
+      eslint-plugin-jsx-a11y: 6.5.1_eslint@8.26.0
+      eslint-plugin-react: 7.31.8_eslint@8.26.0
+      eslint-plugin-react-hooks: 4.5.0_eslint@8.26.0
+      typescript: 4.8.4
+    transitivePeerDependencies:
+      - eslint-import-resolver-webpack
+      - supports-color
+    dev: true
+
+  /eslint-config-next/13.2.4_rmayb2veg2btbq6mbmnyivgasy:
+    resolution:
+      {
+        integrity: sha512-lunIBhsoeqw6/Lfkd6zPt25w1bn0znLA/JCL+au1HoEpSb4/PpsOYsYtgV/q+YPsoKIOzFyU5xnb04iZnXjUvg==,
+      }
+    peerDependencies:
+      eslint: ^7.23.0 || ^8.0.0
+      typescript: ">=3.3.1"
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+    dependencies:
+      "@next/eslint-plugin-next": 13.2.4
       "@rushstack/eslint-patch": 1.1.3
       "@typescript-eslint/parser": 5.43.0_rmayb2veg2btbq6mbmnyivgasy
       eslint: 8.27.0
@@ -12217,6 +12517,27 @@ packages:
       glob: 7.2.0
       is-glob: 4.0.3
       resolve: 1.22.0
+      tsconfig-paths: 3.14.1
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
+
+  /eslint-import-resolver-typescript/2.7.1_mynvxvmq5qtyojffiqgev4x7mm:
+    resolution:
+      {
+        integrity: sha512-00UbgGwV8bSgUv34igBDbTOtKhqoRMy9bFjNehT40bXg6585PNIct8HhXZ0SybqB9rWtXj9crcku8ndDn/gIqQ==,
+      }
+    engines: {node: ">=4"}
+    peerDependencies:
+      eslint: "*"
+      eslint-plugin-import: "*"
+    dependencies:
+      debug: 4.3.4
+      eslint: 8.26.0
+      eslint-plugin-import: 2.26.0_lcezp3og7ox4rmwnvswasffmgu
+      glob: 7.2.0
+      is-glob: 4.0.3
+      resolve: 1.22.1
       tsconfig-paths: 3.14.1
     transitivePeerDependencies:
       - supports-color
@@ -12366,6 +12687,30 @@ packages:
       - eslint-import-resolver-webpack
       - supports-color
 
+  /eslint-plugin-jsx-a11y/6.5.1_eslint@8.26.0:
+    resolution:
+      {
+        integrity: sha512-sVCFKX9fllURnXT2JwLN5Qgo24Ug5NF6dxhkmxsMEUZhXRcGg+X3e1JbJ84YePQKBl5E0ZjAH5Q4rkdcGY99+g==,
+      }
+    engines: {node: ">=4.0"}
+    peerDependencies:
+      eslint: ^3 || ^4 || ^5 || ^6 || ^7 || ^8
+    dependencies:
+      "@babel/runtime": 7.18.3
+      aria-query: 4.2.2
+      array-includes: 3.1.5
+      ast-types-flow: 0.0.7
+      axe-core: 4.4.2
+      axobject-query: 2.2.0
+      damerau-levenshtein: 1.0.8
+      emoji-regex: 9.2.2
+      eslint: 8.26.0
+      has: 1.0.3
+      jsx-ast-utils: 3.3.0
+      language-tags: 1.0.5
+      minimatch: 3.1.2
+    dev: true
+
   /eslint-plugin-jsx-a11y/6.5.1_eslint@8.27.0:
     resolution:
       {
@@ -12389,6 +12734,18 @@ packages:
       language-tags: 1.0.5
       minimatch: 3.1.2
 
+  /eslint-plugin-react-hooks/4.5.0_eslint@8.26.0:
+    resolution:
+      {
+        integrity: sha512-8k1gRt7D7h03kd+SAAlzXkQwWK22BnK6GKZG+FJA6BAGy22CFvl8kCIXKpVux0cCxMWDQUPqSok0LKaZ0aOcCw==,
+      }
+    engines: {node: ">=10"}
+    peerDependencies:
+      eslint: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0-0
+    dependencies:
+      eslint: 8.26.0
+    dev: true
+
   /eslint-plugin-react-hooks/4.5.0_eslint@8.27.0:
     resolution:
       {
@@ -12399,6 +12756,32 @@ packages:
       eslint: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0-0
     dependencies:
       eslint: 8.27.0
+
+  /eslint-plugin-react/7.31.8_eslint@8.26.0:
+    resolution:
+      {
+        integrity: sha512-5lBTZmgQmARLLSYiwI71tiGVTLUuqXantZM6vlSY39OaDSV0M7+32K5DnLkmFrwTe+Ksz0ffuLUC91RUviVZfw==,
+      }
+    engines: {node: ">=4"}
+    peerDependencies:
+      eslint: ^3 || ^4 || ^5 || ^6 || ^7 || ^8
+    dependencies:
+      array-includes: 3.1.5
+      array.prototype.flatmap: 1.3.0
+      doctrine: 2.1.0
+      eslint: 8.26.0
+      estraverse: 5.3.0
+      jsx-ast-utils: 3.3.0
+      minimatch: 3.1.2
+      object.entries: 1.1.5
+      object.fromentries: 2.0.5
+      object.hasown: 1.1.1
+      object.values: 1.1.5
+      prop-types: 15.8.1
+      resolve: 2.0.0-next.3
+      semver: 6.3.0
+      string.prototype.matchall: 4.0.7
+    dev: true
 
   /eslint-plugin-react/7.31.8_eslint@8.27.0:
     resolution:
@@ -12487,6 +12870,56 @@ packages:
       }
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
 
+  /eslint/8.26.0:
+    resolution:
+      {
+        integrity: sha512-kzJkpaw1Bfwheq4VXUezFriD1GxszX6dUekM7Z3aC2o4hju+tsR/XyTC3RcoSD7jmy9VkPU3+N6YjVU2e96Oyg==,
+      }
+    engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
+    hasBin: true
+    dependencies:
+      "@eslint/eslintrc": 1.3.3
+      "@humanwhocodes/config-array": 0.11.7
+      "@humanwhocodes/module-importer": 1.0.1
+      "@nodelib/fs.walk": 1.2.8
+      ajv: 6.12.6
+      chalk: 4.1.2
+      cross-spawn: 7.0.3
+      debug: 4.3.4
+      doctrine: 3.0.0
+      escape-string-regexp: 4.0.0
+      eslint-scope: 7.1.1
+      eslint-utils: 3.0.0_eslint@8.26.0
+      eslint-visitor-keys: 3.3.0
+      espree: 9.4.1
+      esquery: 1.4.0
+      esutils: 2.0.3
+      fast-deep-equal: 3.1.3
+      file-entry-cache: 6.0.1
+      find-up: 5.0.0
+      glob-parent: 6.0.2
+      globals: 13.15.0
+      grapheme-splitter: 1.0.4
+      ignore: 5.2.0
+      import-fresh: 3.3.0
+      imurmurhash: 0.1.4
+      is-glob: 4.0.3
+      is-path-inside: 3.0.3
+      js-sdsl: 4.1.5
+      js-yaml: 4.1.0
+      json-stable-stringify-without-jsonify: 1.0.1
+      levn: 0.4.1
+      lodash.merge: 4.6.2
+      minimatch: 3.1.2
+      natural-compare: 1.4.0
+      optionator: 0.9.1
+      regexpp: 3.2.0
+      strip-ansi: 6.0.1
+      strip-json-comments: 3.1.1
+      text-table: 0.2.0
+    transitivePeerDependencies:
+      - supports-color
+
   /eslint/8.27.0:
     resolution:
       {
@@ -12502,7 +12935,7 @@ packages:
       ajv: 6.12.6
       chalk: 4.1.2
       cross-spawn: 7.0.3
-      debug: 4.3.4
+      debug: 4.3.3
       doctrine: 3.0.0
       escape-string-regexp: 4.0.0
       eslint-scope: 7.1.1
@@ -12552,7 +12985,7 @@ packages:
       ajv: 6.12.6
       chalk: 4.1.2
       cross-spawn: 7.0.3
-      debug: 4.3.4_supports-color@8.1.1
+      debug: 4.3.3_supports-color@8.1.1
       doctrine: 3.0.0
       escape-string-regexp: 4.0.0
       eslint-scope: 7.1.1
@@ -12997,7 +13430,7 @@ packages:
     engines: {node: ">= 10.17.0"}
     hasBin: true
     dependencies:
-      debug: 4.3.4
+      debug: 4.3.3
       get-stream: 5.2.0
       yauzl: 2.10.0
     optionalDependencies:
@@ -13033,6 +13466,19 @@ packages:
     resolution:
       {
         integrity: sha512-xrO3+1bxSo3ZVHAnqzyuewYT6aMFHRAd4Kcs92MAonjwQZLsK9d0SF1IyQ3k5PoirxTW0Oe/RqFgMQ6TcNE5Ew==,
+      }
+    engines: {node: ">=8.6.0"}
+    dependencies:
+      "@nodelib/fs.stat": 2.0.5
+      "@nodelib/fs.walk": 1.2.8
+      glob-parent: 5.1.2
+      merge2: 1.4.1
+      micromatch: 4.0.5
+
+  /fast-glob/3.2.12:
+    resolution:
+      {
+        integrity: sha512-DVj4CQIYYow0BlaelwK1pHl5n5cRSJfM60UA0zK891sVInoPri2Ekj7+e1CT3/3qxXenpI+nBBmQAcJPJgaj4w==,
       }
     engines: {node: ">=8.6.0"}
     dependencies:
@@ -13233,6 +13679,19 @@ packages:
       pkg-dir: 4.2.0
     dev: false
 
+  /findup-sync/5.0.0:
+    resolution:
+      {
+        integrity: sha512-MzwXju70AuyflbgeOhzvQWAvvQdo1XL0A9bVvlXsYcFEBM87WR4OakL4OfZq+QRmr+duJubio+UtNQCPsVESzQ==,
+      }
+    engines: {node: ">= 10.13.0"}
+    dependencies:
+      detect-file: 1.0.0
+      is-glob: 4.0.3
+      micromatch: 4.0.5
+      resolve-dir: 1.0.1
+    dev: false
+
   /first-chunk-stream/2.0.0:
     resolution:
       {
@@ -13250,13 +13709,13 @@ packages:
       }
     engines: {node: ^10.12.0 || >=12.0.0}
     dependencies:
-      flatted: 3.2.5
+      flatted: 3.2.7
       rimraf: 3.0.2
 
-  /flatted/3.2.5:
+  /flatted/3.2.7:
     resolution:
       {
-        integrity: sha512-WIWGi2L3DyTUvUrwRKgGi9TwxQMUEqPOPQBVi71R96jZXJdFskXEmf54BoZaS1kknGODoIGASGEzBUYdyMCBJg==,
+        integrity: sha512-5nqDSxl8nn5BSNxyR3n4I6eDmbolI6WT+QqR547RwxQapgjQBmtktdP+HTBb/a/zLsbzERTONyUB5pefh5TtjQ==,
       }
 
   /flow-parser/0.179.0:
@@ -13673,8 +14132,34 @@ packages:
       es6-error: 4.1.1
       matcher: 3.0.0
       roarr: 2.15.4
-      semver: 7.3.7
+      semver: 7.3.8
       serialize-error: 7.0.1
+    dev: false
+
+  /global-modules/1.0.0:
+    resolution:
+      {
+        integrity: sha512-sKzpEkf11GpOFuw0Zzjzmt4B4UZwjOcG757PPvrfhxcLFbq0wpsgpOqxpxtxFiCG4DtG93M6XRVbF2oGdev7bg==,
+      }
+    engines: {node: ">=0.10.0"}
+    dependencies:
+      global-prefix: 1.0.2
+      is-windows: 1.0.2
+      resolve-dir: 1.0.1
+    dev: false
+
+  /global-prefix/1.0.2:
+    resolution:
+      {
+        integrity: sha512-5lsx1NUDHtSjfg0eHlmYvZKv8/nVqX4ckFbM+FrGcQ+04KWcWFo9P5MxPZYSzUvyzmdTbI7Eix8Q4IbELDqzKg==,
+      }
+    engines: {node: ">=0.10.0"}
+    dependencies:
+      expand-tilde: 2.0.2
+      homedir-polyfill: 1.0.3
+      ini: 1.3.8
+      is-windows: 1.0.2
+      which: 1.3.1
     dev: false
 
   /globals/11.12.0:
@@ -13719,7 +14204,7 @@ packages:
     dependencies:
       array-union: 2.1.0
       dir-glob: 3.0.1
-      fast-glob: 3.2.11
+      fast-glob: 3.2.12
       ignore: 5.2.0
       merge2: 1.4.1
       slash: 3.0.0
@@ -13955,6 +14440,16 @@ packages:
       react-is: 16.13.1
     dev: false
 
+  /homedir-polyfill/1.0.3:
+    resolution:
+      {
+        integrity: sha512-eSmmWE5bZTK2Nou4g0AI3zZ9rswp7GRKoKXS1BLUkvPviOqs4YTN1djQIqrXy9k5gEtdLPy86JjRwsNM9tnDcA==,
+      }
+    engines: {node: ">=0.10.0"}
+    dependencies:
+      parse-passwd: 1.0.0
+    dev: false
+
   /hookable/5.1.1:
     resolution:
       {
@@ -14066,7 +14561,7 @@ packages:
     dependencies:
       "@tootallnate/once": 2.0.0
       agent-base: 6.0.2
-      debug: 4.3.4
+      debug: 4.3.3
     transitivePeerDependencies:
       - supports-color
 
@@ -14934,7 +15429,7 @@ packages:
       }
     engines: {node: ">=10"}
     dependencies:
-      debug: 4.3.4
+      debug: 4.3.3
       istanbul-lib-coverage: 3.2.0
       source-map: 0.6.1
     transitivePeerDependencies:
@@ -15854,7 +16349,7 @@ packages:
       jest-util: 29.2.1
       natural-compare: 1.4.0
       pretty-format: 29.2.1
-      semver: 7.3.7
+      semver: 7.3.8
     transitivePeerDependencies:
       - supports-color
 
@@ -16039,12 +16534,11 @@ packages:
       "@sideway/pinpoint": 2.0.0
     dev: false
 
-  /jose/4.11.0:
+  /jose/4.11.2:
     resolution:
       {
-        integrity: sha512-wLe+lJHeG8Xt6uEubS4x0LVjS/3kXXu9dGoj9BNnlhYq7Kts0Pbb2pvv5KiI0yaKH/eaiR0LUOBhOVo9ktd05A==,
+        integrity: sha512-njj0VL2TsIxCtgzhO+9RRobBvws4oYyCM8TpvoUQwl/MbIM3NFJRR9+e6x0sS5xXaP1t6OCBkaBME98OV9zU5A==,
       }
-    dev: false
 
   /joycon/3.1.1:
     resolution:
@@ -16387,23 +16881,17 @@ packages:
     optionalDependencies:
       graceful-fs: 4.2.10
 
-  /jsonwebtoken/8.5.1:
+  /jsonwebtoken/9.0.0:
     resolution:
       {
-        integrity: sha512-XjwVfRS6jTMsqYs0EsuJ4LGxXV14zQybNd4L2r0UvbVnSF9Af8x7p5MzbJ90Ioz/9TI41/hTCvznF/loiSzn8w==,
+        integrity: sha512-tuGfYXxkQGDPnLJ7SibiQgVgeDgfbPq2k2ICcbgqW8WxWLBAxKQM/ZCu/IT8SOSwmaYl4dpTFCW5xZv7YbbWUw==,
       }
-    engines: {node: ">=4", npm: ">=1.4.28"}
+    engines: {node: ">=12", npm: ">=6"}
     dependencies:
       jws: 3.2.2
-      lodash.includes: 4.3.0
-      lodash.isboolean: 3.0.3
-      lodash.isinteger: 4.0.4
-      lodash.isnumber: 3.0.3
-      lodash.isplainobject: 4.0.6
-      lodash.isstring: 4.0.1
-      lodash.once: 4.1.1
-      ms: 2.1.2
-      semver: 5.7.1
+      lodash: 4.17.21
+      ms: 2.1.3
+      semver: 7.3.8
     dev: false
 
   /jstransformer/1.0.0:
@@ -16728,48 +17216,6 @@ packages:
     dependencies:
       p-locate: 5.0.0
 
-  /lodash.includes/4.3.0:
-    resolution:
-      {
-        integrity: sha512-W3Bx6mdkRTGtlJISOvVD/lbqjTlPPUDTMnlXZFnVwi9NKJ6tiAk6LVdlhZMm17VZisqhKcgzpO5Wz91PCt5b0w==,
-      }
-    dev: false
-
-  /lodash.isboolean/3.0.3:
-    resolution:
-      {
-        integrity: sha512-Bz5mupy2SVbPHURB98VAcw+aHh4vRV5IPNhILUCsOzRmsTmSQ17jIuqopAentWoehktxGd9e/hbIXq980/1QJg==,
-      }
-    dev: false
-
-  /lodash.isinteger/4.0.4:
-    resolution:
-      {
-        integrity: sha512-DBwtEWN2caHQ9/imiNeEA5ys1JoRtRfY3d7V9wkqtbycnAmTvRRmbHKDV4a0EYc678/dia0jrte4tjYwVBaZUA==,
-      }
-    dev: false
-
-  /lodash.isnumber/3.0.3:
-    resolution:
-      {
-        integrity: sha512-QYqzpfwO3/CWf3XP+Z+tkQsfaLL/EnUlXWVkIk5FUPc4sBdTehEqZONuyRt2P67PXAk+NXmTBcc97zw9t1FQrw==,
-      }
-    dev: false
-
-  /lodash.isplainobject/4.0.6:
-    resolution:
-      {
-        integrity: sha512-oSXzaWypCMHkPC3NvBEaPHf0KsA5mvPrOPgQWDsbg8n7orZ290M0BmC/jgRZ4vcJ6DTAhjrsSYgdsW/F+MFOBA==,
-      }
-    dev: false
-
-  /lodash.isstring/4.0.1:
-    resolution:
-      {
-        integrity: sha512-0wJxfxH1wgO3GrbuP+dTTk7op+6L41QCXbGINEmD+ny/G/eCqGzxyCsh7159S+mgDDcoarnBw6PC1PS5+wUGgw==,
-      }
-    dev: false
-
   /lodash.memoize/4.1.2:
     resolution:
       {
@@ -16782,13 +17228,6 @@ packages:
       {
         integrity: sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==,
       }
-
-  /lodash.once/4.1.1:
-    resolution:
-      {
-        integrity: sha512-Sb487aTOCr9drQVL8pIxOzVhafOjZN9UU54hiN8PU3uAiSV7lx1yYNpbNmex2PK6dSJoNTSJUUswT651yww3Mg==,
-      }
-    dev: false
 
   /lodash.startcase/4.4.0:
     resolution:
@@ -17473,7 +17912,6 @@ packages:
       {
         integrity: sha512-C40jQ3NzfkP53NsO8kEOFd79p4b9kDXQMwgiY1z8ZwrDZgUyom0AHwGegF4Dm99L+YoYhuaB0ceerUcXmqr1rQ==,
       }
-    dev: false
 
   /nanoid/3.2.0:
     resolution:
@@ -17627,17 +18065,61 @@ packages:
   /next/12.2.5_mqvh5p7ejg4taogoj6tpk3gd5a:
     resolution:
       {
-        integrity: sha512-tBdjqX5XC/oFs/6gxrZhjmiq90YWizUYU6qOWAfat7zJwrwapJ+BYgX2PmiacunXMaRpeVT4vz5MSPSLgNkrpA==,
+        integrity: sha512-kR3s1JVPMaDuSAlFxcGyv7Ec3fdE6za71r1F77IOII5zJmW2wfkIA2xj223fM0D20ip2pzFpHfk/qN4L6l5XMA==,
       }
-    engines: {node: ">=12.22.0"}
+    engines: {node: ^12.19.0 || ^14.15.0 || ^16.13.0 || ^18.12.0}
+    peerDependencies:
+      next: ^12.2.5 || ^13
+      nodemailer: ^6.6.5
+      react: ^17.0.2 || ^18
+      react-dom: ^17.0.2 || ^18
+    peerDependenciesMeta:
+      nodemailer:
+        optional: true
+    dependencies:
+      "@babel/runtime": 7.18.3
+      "@panva/hkdf": 1.0.2
+      cookie: 0.5.0
+      jose: 4.11.2
+      next: 13.2.4_biqbaboplfbrettd7655fr4n2y
+      oauth: 0.9.15
+      openid-client: 5.2.1
+      preact: 10.11.3
+      preact-render-to-string: 5.2.6_preact@10.11.3
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      uuid: 8.3.2
+
+  /next-router-mock/0.9.1_next@13.2.4+react@18.2.0:
+    resolution:
+      {
+        integrity: sha512-GTrns944dnFNgycpinyRszOiwwk99LUJsvvX0FWRgUFHv6hOuzCns1rmTlzO+DRimYB9/XMA+87X2/dQLzjiUQ==,
+      }
+    peerDependencies:
+      next: ">=10.0.0"
+      react: ">=17.0.0"
+    dependencies:
+      next: 13.2.4_biqbaboplfbrettd7655fr4n2y
+      react: 18.2.0
+    dev: true
+
+  /next/13.2.4:
+    resolution:
+      {
+        integrity: sha512-g1I30317cThkEpvzfXujf0O4wtaQHtDCLhlivwlTJ885Ld+eOgcz7r3TGQzeU+cSRoNHtD8tsJgzxVdYojFssw==,
+      }
+    engines: {node: ">=14.6.0"}
     hasBin: true
     peerDependencies:
+      "@opentelemetry/api": ^1.4.0
       fibers: ">= 3.1.0"
       node-sass: ^6.0.0 || ^7.0.0
-      react: ^17.0.2 || ^18.0.0-0
-      react-dom: ^17.0.2 || ^18.0.0-0
+      react: ^18.2.0
+      react-dom: ^18.2.0
       sass: ^1.3.0
     peerDependenciesMeta:
+      "@opentelemetry/api":
+        optional: true
       fibers:
         optional: true
       node-sass:
@@ -17645,8 +18127,8 @@ packages:
       sass:
         optional: true
     dependencies:
-      "@next/env": 12.2.5
-      "@swc/helpers": 0.4.3
+      "@next/env": 13.2.4
+      "@swc/helpers": 0.4.14
       caniuse-lite: 1.0.30001434
       postcss: 8.4.14
       react: 18.2.0
@@ -17654,19 +18136,19 @@ packages:
       styled-jsx: 5.0.4_3lzqd2prgnu7gkxqqdmtvzna5u
       use-sync-external-store: 1.2.0_react@18.2.0
     optionalDependencies:
-      "@next/swc-android-arm-eabi": 12.2.5
-      "@next/swc-android-arm64": 12.2.5
-      "@next/swc-darwin-arm64": 12.2.5
-      "@next/swc-darwin-x64": 12.2.5
-      "@next/swc-freebsd-x64": 12.2.5
-      "@next/swc-linux-arm-gnueabihf": 12.2.5
-      "@next/swc-linux-arm64-gnu": 12.2.5
-      "@next/swc-linux-arm64-musl": 12.2.5
-      "@next/swc-linux-x64-gnu": 12.2.5
-      "@next/swc-linux-x64-musl": 12.2.5
-      "@next/swc-win32-arm64-msvc": 12.2.5
-      "@next/swc-win32-ia32-msvc": 12.2.5
-      "@next/swc-win32-x64-msvc": 12.2.5
+      "@next/swc-android-arm-eabi": 13.2.4
+      "@next/swc-android-arm64": 13.2.4
+      "@next/swc-darwin-arm64": 13.2.4
+      "@next/swc-darwin-x64": 13.2.4
+      "@next/swc-freebsd-x64": 13.2.4
+      "@next/swc-linux-arm-gnueabihf": 13.2.4
+      "@next/swc-linux-arm64-gnu": 13.2.4
+      "@next/swc-linux-arm64-musl": 13.2.4
+      "@next/swc-linux-x64-gnu": 13.2.4
+      "@next/swc-linux-x64-musl": 13.2.4
+      "@next/swc-win32-arm64-msvc": 13.2.4
+      "@next/swc-win32-ia32-msvc": 13.2.4
+      "@next/swc-win32-x64-msvc": 13.2.4
     transitivePeerDependencies:
       - "@babel/core"
       - babel-plugin-macros
@@ -17674,17 +18156,20 @@ packages:
   /next/12.2.5_w53b3ma4oycvgh3v4dwmhz6z6q:
     resolution:
       {
-        integrity: sha512-tBdjqX5XC/oFs/6gxrZhjmiq90YWizUYU6qOWAfat7zJwrwapJ+BYgX2PmiacunXMaRpeVT4vz5MSPSLgNkrpA==,
+        integrity: sha512-g1I30317cThkEpvzfXujf0O4wtaQHtDCLhlivwlTJ885Ld+eOgcz7r3TGQzeU+cSRoNHtD8tsJgzxVdYojFssw==,
       }
-    engines: {node: ">=12.22.0"}
+    engines: {node: ">=14.6.0"}
     hasBin: true
     peerDependencies:
+      "@opentelemetry/api": ^1.4.0
       fibers: ">= 3.1.0"
       node-sass: ^6.0.0 || ^7.0.0
-      react: ^17.0.2 || ^18.0.0-0
-      react-dom: ^17.0.2 || ^18.0.0-0
+      react: ^18.2.0
+      react-dom: ^18.2.0
       sass: ^1.3.0
     peerDependenciesMeta:
+      "@opentelemetry/api":
+        optional: true
       fibers:
         optional: true
       node-sass:
@@ -17692,8 +18177,8 @@ packages:
       sass:
         optional: true
     dependencies:
-      "@next/env": 12.2.5
-      "@swc/helpers": 0.4.3
+      "@next/env": 13.2.4
+      "@swc/helpers": 0.4.14
       caniuse-lite: 1.0.30001434
       postcss: 8.4.14
       react: 18.2.0
@@ -17701,19 +18186,19 @@ packages:
       styled-jsx: 5.0.4_sasuucfpbij2caq7q6lwrr6olm
       use-sync-external-store: 1.2.0_react@18.2.0
     optionalDependencies:
-      "@next/swc-android-arm-eabi": 12.2.5
-      "@next/swc-android-arm64": 12.2.5
-      "@next/swc-darwin-arm64": 12.2.5
-      "@next/swc-darwin-x64": 12.2.5
-      "@next/swc-freebsd-x64": 12.2.5
-      "@next/swc-linux-arm-gnueabihf": 12.2.5
-      "@next/swc-linux-arm64-gnu": 12.2.5
-      "@next/swc-linux-arm64-musl": 12.2.5
-      "@next/swc-linux-x64-gnu": 12.2.5
-      "@next/swc-linux-x64-musl": 12.2.5
-      "@next/swc-win32-arm64-msvc": 12.2.5
-      "@next/swc-win32-ia32-msvc": 12.2.5
-      "@next/swc-win32-x64-msvc": 12.2.5
+      "@next/swc-android-arm-eabi": 13.2.4
+      "@next/swc-android-arm64": 13.2.4
+      "@next/swc-darwin-arm64": 13.2.4
+      "@next/swc-darwin-x64": 13.2.4
+      "@next/swc-freebsd-x64": 13.2.4
+      "@next/swc-linux-arm-gnueabihf": 13.2.4
+      "@next/swc-linux-arm64-gnu": 13.2.4
+      "@next/swc-linux-arm64-musl": 13.2.4
+      "@next/swc-linux-x64-gnu": 13.2.4
+      "@next/swc-linux-x64-musl": 13.2.4
+      "@next/swc-win32-arm64-msvc": 13.2.4
+      "@next/swc-win32-ia32-msvc": 13.2.4
+      "@next/swc-win32-x64-msvc": 13.2.4
     transitivePeerDependencies:
       - "@babel/core"
       - babel-plugin-macros
@@ -17759,7 +18244,6 @@ packages:
         integrity: sha512-amJnQCcgtRVw9SvoebO3BKGESClrfXGCUTX9hSn1OuGQTQBOZmVd0Z0OlecpuRksKvbsUqALE8jls/ErClAPuQ==,
       }
     hasBin: true
-    dev: false
 
   /node-int64/0.4.0:
     resolution:
@@ -17893,12 +18377,18 @@ packages:
         integrity: sha512-90yv+6538zuvUMnN+zCr8LuV6bPFdq50304114vJYJ8RDyK8D5O9Phpbd6SZWgI7PwzmmfN1upeOJlvybDSgCw==,
       }
 
+  /oauth/0.10.0:
+    resolution:
+      {
+        integrity: sha512-1orQ9MT1vHFGQxhuy7E/0gECD3fd2fCC+PIX+/jgmU/gI3EpRocXtmtvxCO5x3WZ443FLTLFWNDjl5MPJf9u+Q==,
+      }
+    dev: false
+
   /oauth/0.9.15:
     resolution:
       {
         integrity: sha512-a5ERWK1kh38ExDEfoO6qUHJb32rd7aYmPHuyCu3Fta/cnICvYmgd2uhuKXvPD+PXB+gCEYYEaQdIRAjCOwAKNA==,
       }
-    dev: false
 
   /object-assign/4.1.1:
     resolution:
@@ -17925,7 +18415,6 @@ packages:
         integrity: sha512-gScRMn0bS5fH+IuwyIFgnh9zBdo4DV+6GhygmWM9HyNJSgS0hScp1f5vjtm7oIIOiT9trXrShAkLFSc2IqKNgw==,
       }
     engines: {node: ">= 6"}
-    dev: false
 
   /object-inspect/1.12.2:
     resolution:
@@ -18020,7 +18509,6 @@ packages:
         integrity: sha512-EvoOtz6FIEBzE+9q253HsLCVRiK/0doEJ2HCvvqMQb3dHZrP3WlJKYtJ55CRTw4jmYomzH4wkPuCj/I3ZvpKxQ==,
       }
     engines: {node: ^10.13.0 || >=12.0.0}
-    dev: false
 
   /on-finished/2.3.0:
     resolution:
@@ -18114,11 +18602,10 @@ packages:
         integrity: sha512-KPxqWnxobG/70Cxqyvd43RWfCfHedFnCdHSBpw5f7WnTnuBAeBnvot/BIo+brrcTr0wyAYUlL/qejQSGwWtdIg==,
       }
     dependencies:
-      jose: 4.11.0
+      jose: 4.11.2
       lru-cache: 6.0.0
       object-hash: 2.2.0
       oidc-token-hash: 5.0.1
-    dev: false
 
   /optionator/0.8.3:
     resolution:
@@ -18413,6 +18900,14 @@ packages:
       json-parse-even-better-errors: 2.3.1
       lines-and-columns: 1.2.4
 
+  /parse-passwd/1.0.0:
+    resolution:
+      {
+        integrity: sha512-1Y1A//QUXEZK7YKz+rD9WydcE1+EuPr6ZBgKecAB8tmoW6UFv0NREVJe1p+jRxtThkcbbKkfwIbWJe/IeE6m2Q==,
+      }
+    engines: {node: ">=0.10.0"}
+    dev: false
+
   /parse5/6.0.1:
     resolution:
       {
@@ -18505,15 +19000,16 @@ packages:
       pause: 0.0.1
     dev: false
 
-  /passport/0.5.2:
+  /passport/0.6.0:
     resolution:
       {
-        integrity: sha512-w9n/Ot5I7orGD4y+7V3EFJCQEznE5RxHamUxcqLT2QoJY0f2JdN8GyHonYFvN0Vz+L6lUJfVhrk2aZz2LbuREw==,
+        integrity: sha512-0fe+p3ZnrWRW74fe8+SvCyf4a3Pb2/h7gFkQ8yTJpAO50gDzlfjZUZTO1k5Eg9kUct22OxHLqDZoKUWRHOh9ug==,
       }
     engines: {node: ">= 0.4.0"}
     dependencies:
       passport-strategy: 1.0.0
       pause: 0.0.1
+      utils-merge: 1.0.1
     dev: false
 
   /patch-console/1.0.0:
@@ -18628,7 +19124,10 @@ packages:
       }
 
   /pause/0.0.1:
-    resolution: {integrity: sha1-HUCLP9t2kjuVQ9lvtMnf1TXZy10=}
+    resolution:
+      {
+        integrity: sha512-KG8UEiEVkR3wGEb4m5yZkVCzigAD+cVEJck2CzYZO37ZGJfctvVptVO192MwrtPhzONn6go8ylnOdMhKqi4nfg==,
+      }
     dev: false
 
   /pend/1.2.0:
@@ -18800,6 +19299,23 @@ packages:
       picocolors: 1.0.0
       source-map-js: 1.0.2
 
+  /preact-render-to-string/5.2.6_preact@10.11.3:
+    resolution:
+      {
+        integrity: sha512-JyhErpYOvBV1hEPwIxc/fHWXPfnEGdRKxc8gFdAZ7XV4tlzyzG847XAyEZqoDnynP88akM4eaHcSOzNcLWFguw==,
+      }
+    peerDependencies:
+      preact: ">=10"
+    dependencies:
+      preact: 10.11.3
+      pretty-format: 3.8.0
+
+  /preact/10.11.3:
+    resolution:
+      {
+        integrity: sha512-eY93IVpod/zG3uMF22Unl8h9KkrcKIRs2EGar8hwLZZDU1lkjph303V9HZBwufh2s736U6VXuhD109LYqPoffg==,
+      }
+
   /preferred-pm/3.0.3:
     resolution:
       {
@@ -18903,6 +19419,12 @@ packages:
       ansi-styles: 5.2.0
       react-is: 18.2.0
 
+  /pretty-format/3.8.0:
+    resolution:
+      {
+        integrity: sha512-WuxUnVtlWL1OfZFQFuqvnvs6MiAGk9UNsBostyBOB0Is9wb5uRESevA6rnl/rkksXaGX3GzZhPup5d6Vp1nFew==,
+      }
+
   /pretty-quick/3.1.3_prettier@2.7.1:
     resolution:
       {
@@ -18941,16 +19463,16 @@ packages:
       uuid: 8.3.2
     dev: true
 
-  /prisma/4.6.0:
+  /prisma/4.6.1:
     resolution:
       {
-        integrity: sha512-TAnObUMGCM9NLt9nsRs1WWYQGPKsJOK8bN/7gSAnBcYIxMCFFDe+XtFYJbyTzsJZ/i+0rH4zg8au3m7HX354LA==,
+        integrity: sha512-BR4itMCuzrDV4tn3e2TF+nh1zIX/RVU0isKtKoN28ADeoJ9nYaMhiuRRkFd2TZN8+l/XfYzoRKyHzUFXLQhmBQ==,
       }
     engines: {node: ">=14.17"}
     hasBin: true
     requiresBuild: true
     dependencies:
-      "@prisma/engines": 4.6.0
+      "@prisma/engines": 4.6.1
     dev: false
 
   /process-nextick-args/2.0.1:
@@ -19680,6 +20202,17 @@ packages:
     dependencies:
       resolve-from: 5.0.0
 
+  /resolve-dir/1.0.1:
+    resolution:
+      {
+        integrity: sha512-R7uiTjECzvOsWSfdM0QKFNBVFcK27aHOUwdvK53BcW8zqnGdYp0Fbj82cy54+2A4P2tFM22J5kRfe1R+lM/1yg==,
+      }
+    engines: {node: ">=0.10.0"}
+    dependencies:
+      expand-tilde: 2.0.2
+      global-modules: 1.0.0
+    dev: false
+
   /resolve-from/4.0.0:
     resolution:
       {
@@ -19716,7 +20249,7 @@ packages:
       }
     hasBin: true
     dependencies:
-      is-core-module: 2.8.1
+      is-core-module: 2.11.0
       path-parse: 1.0.7
       supports-preserve-symlinks-flag: 1.0.0
 
@@ -19850,7 +20383,7 @@ packages:
       rollup: ^1.20.0 || ^2.0.0
     dependencies:
       "@rollup/pluginutils": 4.2.1
-      debug: 4.3.4
+      debug: 4.3.3
       es-module-lexer: 0.9.3
       esbuild: 0.14.51
       joycon: 3.1.1
@@ -19871,7 +20404,7 @@ packages:
       rollup: ^1.20.0 || ^2.0.0
     dependencies:
       "@rollup/pluginutils": 4.2.1
-      debug: 4.3.4_supports-color@8.1.1
+      debug: 4.3.3_supports-color@8.1.1
       es-module-lexer: 0.9.3
       esbuild: 0.14.51
       joycon: 3.1.1
@@ -20006,7 +20539,6 @@ packages:
     dependencies:
       nanoassert: 1.1.0
       sodium-native: 3.3.0
-    dev: false
 
   /selderee/0.6.0:
     resolution:
@@ -20074,6 +20606,16 @@ packages:
     resolution:
       {
         integrity: sha512-QlYTucUYOews+WeEujDoEGziz4K6c47V/Bd+LjSSYcA94p+DmINdf7ncaUinThfvZyu13lN9OY1XDxt8C0Tw0g==,
+      }
+    engines: {node: ">=10"}
+    hasBin: true
+    dependencies:
+      lru-cache: 6.0.0
+
+  /semver/7.3.8:
+    resolution:
+      {
+        integrity: sha512-NB1ctGL5rlHrPJtFDVIVzTyQylMLu9N9VICA6HSFJo8MCGVTMW6gfpicwKmmK/dAjTOrqu5l63JJOpDSrAis3A==,
       }
     engines: {node: ">=10"}
     hasBin: true
@@ -20428,7 +20970,6 @@ packages:
     requiresBuild: true
     dependencies:
       node-gyp-build: 4.4.0
-    dev: false
 
   /source-map-js/1.0.2:
     resolution:
@@ -20840,7 +21381,7 @@ packages:
   /styled-jsx/5.0.4_3lzqd2prgnu7gkxqqdmtvzna5u:
     resolution:
       {
-        integrity: sha512-sDFWLbg4zR+UkNzfk5lPilyIgtpddfxXEULxhujorr5jtePTUqiPDc5BC0v1NRqTr/WaFBGQQUoYToGlF4B2KQ==,
+        integrity: sha512-pW7uC1l4mBZ8ugbiZrcIsiIvVx1UmTfw7UkC3Um2tmfUq9Bhk8IiyEIPl6F8agHgjzku6j0xQEZbfA5uSgSaCw==,
       }
     engines: {node: ">= 12.0.0"}
     peerDependencies:
@@ -20856,10 +21397,10 @@ packages:
       "@babel/core": 7.20.2
       react: 18.2.0
 
-  /styled-jsx/5.0.4_react@18.2.0:
+  /styled-jsx/5.1.1_react@18.2.0:
     resolution:
       {
-        integrity: sha512-sDFWLbg4zR+UkNzfk5lPilyIgtpddfxXEULxhujorr5jtePTUqiPDc5BC0v1NRqTr/WaFBGQQUoYToGlF4B2KQ==,
+        integrity: sha512-pW7uC1l4mBZ8ugbiZrcIsiIvVx1UmTfw7UkC3Um2tmfUq9Bhk8IiyEIPl6F8agHgjzku6j0xQEZbfA5uSgSaCw==,
       }
     engines: {node: ">= 12.0.0"}
     peerDependencies:
@@ -20872,6 +21413,7 @@ packages:
       babel-plugin-macros:
         optional: true
     dependencies:
+      client-only: 0.0.1
       react: 18.2.0
     dev: false
 
@@ -22467,6 +23009,21 @@ packages:
       - debug
     dev: false
 
+  /wait-port/1.0.4:
+    resolution:
+      {
+        integrity: sha512-w8Ftna3h6XSFWWc2JC5gZEgp64nz8bnaTp5cvzbJSZ53j+omktWTDdwXxEF0jM8YveviLgFWvNGrSvRHnkyHyw==,
+      }
+    engines: {node: ">=10"}
+    hasBin: true
+    dependencies:
+      chalk: 4.1.2
+      commander: 9.4.1
+      debug: 4.3.4
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
+
   /walker/1.0.8:
     resolution:
       {
@@ -23029,8 +23586,8 @@ packages:
       "@types/yoga-layout": 1.9.2
     dev: false
 
-  /zod/3.19.1:
+  /zod/3.20.2:
     resolution:
       {
-        integrity: sha512-LYjZsEDhCdYET9ikFu6dVPGp2YH9DegXjdJToSzD9rO6fy4qiRYFoyEYwps88OseJlPyl2NOe2iJuhEhL7IpEA==,
+        integrity: sha512-1MzNQdAvO+54H+EaK5YpyEy0T+Ejo/7YLHS93G3RnYWh5gaotGHwGeN/ZO687qEDU2y4CdStQYXVHIgrUl5UVQ==,
       }

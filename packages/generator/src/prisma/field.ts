@@ -1,5 +1,7 @@
 import * as ast from "@mrleebo/prisma-ast"
+import {getResourceConfigFromCodegen} from "../utils/get-codegen"
 import {capitalize, singlePascal, uncapitalize} from "../utils/inflector"
+const debug = require("debug")("blitz:field")
 
 export enum FieldType {
   Boolean = "Boolean",
@@ -54,7 +56,8 @@ export class Field {
   relationToFields?: string[]
 
   // 'name:type?[]:attribute' => Field
-  static parse(input: string, schema?: ast.Schema): Field[] {
+  static async parse(input: string, schema?: ast.Schema): Promise<Field[]> {
+    debug(`parsing "Field" for input ${input}`)
     const [_fieldName, _fieldType = "String", _attribute] = input.split(":")
     let attribute = _attribute as string
     let fieldName = uncapitalize(_fieldName as string)
@@ -73,6 +76,16 @@ export class Field {
       fieldType = fieldType.replace("?", "")
       isRequired = false
     }
+
+    const {prismaType, default: defaultConfigValue} =
+      (await Field.getConfigForPrismaType(fieldType)) ?? {}
+    if (prismaType) {
+      fieldType = prismaType
+    }
+    if (defaultConfigValue) {
+      attribute = `default=${defaultConfigValue}`
+    }
+
     if (fieldType.includes("[]")) {
       fieldType = fieldType.replace("[]", "")
       fieldName = uncapitalize(fieldName)
@@ -84,9 +97,9 @@ export class Field {
     }
     // use original unmodified field name in case the list handling code
     // has modified fieldName
-    if (isRelation(_fieldName as string)) {
+    if (typeof _fieldName === "string" && isRelation(_fieldName)) {
       // this field is an object type, not a scalar type
-      const relationType = Relation[_fieldName]
+      const relationType = Relation[_fieldName as keyof typeof Relation]
       // translate the type into the name since they should stay in sync
       fieldName = uncapitalize(fieldType)
       fieldType = singlePascal(fieldType)
@@ -159,6 +172,10 @@ export class Field {
     }
   }
 
+  public static getConfigForPrismaType = async (fieldType: string) => {
+    return await getResourceConfigFromCodegen(fieldType.toLowerCase())
+  }
+
   constructor(name: string, options: FieldArgs) {
     if (!name) throw new MissingFieldNameError("[PrismaField]: A field name is required")
     if (!options.type) {
@@ -214,7 +231,12 @@ export class Field {
       args: [
         {
           type: "attributeArgument",
-          value: typeof this.default === "object" ? `${this.default.name}()` : String(this.default),
+          value:
+            typeof this.default === "object"
+              ? `${this.default.name}()`
+              : this.type === FieldType.String
+              ? `"${this.default}"`
+              : this.default,
         },
       ],
     }

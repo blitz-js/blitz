@@ -1,7 +1,12 @@
 import {BuildConfig} from "unbuild"
 
 const config: BuildConfig = {
-  entries: ["./src/index-browser", "./src/index-server"],
+  entries: [
+    "./src/index-browser",
+    "./src/index-server",
+    "./src/server/secure-password",
+    "./src/server/adapters/next-auth",
+  ],
   externals: ["index-browser.cjs", "index-browser.mjs", "react"],
   declaration: true,
   rollup: {

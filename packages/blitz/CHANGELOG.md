@@ -1,5 +1,127 @@
 # blitz
 
+## 2.0.0-beta.25
+
+### Patch Changes
+
+- @blitzjs/generator@2.0.0-beta.25
+
+## 2.0.0-beta.24
+
+### Minor Changes
+
+- cadefb88e: - New Blitz Auth Function `getAppSession`, This function will use the cookies and headers provided by the server component and returns the current session.
+  - New Blitz Auth Hook `useAuthenticatedAppSession`, This hook is implemented as the replacement of the BlitzPage seurity auth utilities provided for the pages directory to work with React Server Components in the Nextjs 13 app directory
+  - New Blitz React Server Component Wrapper, `BlitzProvider` is to be imported from setupBlitzClient in src/blitz-client.ts and to used to ideally wrap the entire application in the `RootLayout` in the root layout.ts file of next app directory.
+  - Fix failing tests due to the error `NextRouter is not mounted` in next 13 blitz apps
+- 6f18cbdc9: feature: Next Auth Adapter
+
+### Patch Changes
+
+- ea7561b8e: Consolidate mutations schema to new schema.{ts|js} file.
+- ea7561b8e: Multiple fields forms using templates during generation - TODO
+- 37aeaa7fa: feature: Nextjs 13 App Directory Utility Methods
+
+  ### 🔧 New Blitz Auth Hook `useAuthenticatedBlitzContext`
+
+  This hook is implemented as the replacement of the [`BlitzPage` seurity auth utilities](https://blitzjs.com/docs/authorization#secure-your-pages) provided for the pages directory to work with React Server Components in the Nextjs 13 app directory
+  It can be used in any asynchronous server component be it in `page.ts` or in the layouts in `layout.ts`
+  It uses the new [`redirect` function](https://beta.nextjs.org/docs/api-reference/redirect) to provide the required authorization in server side
+
+  #### API
+
+  ```ts
+  useAuthenticatedBlitzContext({
+    redirectTo,
+    redirectAuthenticatedTo,
+    role,
+  }: {
+    redirectTo?: string | RouteUrlObject
+    redirectAuthenticatedTo?: string | RouteUrlObject | ((ctx: Ctx) => string | RouteUrlObject)
+    role?: string | string[]
+  }): Promise<void>
+  ```
+
+  #### Usage
+
+  **Example Usage in React Server Component in `app` directory in Next 13**
+
+  ```ts
+  import {getAppSession, useAuthenticatedBlitzContext} from "src/blitz-server"
+  ...
+  await useAuthenticatedBlitzContext({
+      redirectTo: "/auth/login",
+      role: ["admin"],
+      redirectAuthenticatedTo: "/dashboard",
+  })
+  ```
+
+  ### 🔧 New Blitz RPC Hook `invokeResolver`
+
+  #### API
+
+  ```ts
+  invokeResolver<T extends (...args: any) => any, TInput = FirstParam<T>>(
+    queryFn: T,
+    params: TInput,
+  ): Promise<PromiseReturnType<T>>
+  ```
+
+  #### Example Usage
+
+  ```ts
+  ...
+  import {invokeResolver, useAuthenticatedBlitzContext} from "../src/blitz-server"
+  import getCurrentUser from "../src/users/queries/getCurrentUser"
+
+  export default async function Home() {
+    await useAuthenticatedBlitzContext({
+      redirectTo: "/auth/login",
+    })
+    const user = await invokeResolver(getCurrentUser, null)
+  ...
+  ```
+
+- Updated dependencies [e228ba5de]
+- Updated dependencies [ea7561b8e]
+- Updated dependencies [430f0b52d]
+- Updated dependencies [ea7561b8e]
+  - @blitzjs/generator@2.0.0-beta.24
+
+## 2.0.0-beta.23
+
+### Patch Changes
+
+- c3c789740: Updates internal functions and tests to support blitz apps that run tests with vitest
+- Updated dependencies [cb63a0ea5]
+- Updated dependencies [6ec020c6d]
+- Updated dependencies [d316d0db7]
+- Updated dependencies [79c5e86d7]
+  - @blitzjs/generator@2.0.0-beta.23
+
+## 2.0.0-beta.22
+
+### Minor Changes
+
+- 8aa22a0b2: add `currentPassword` to the default fields that are masked in the logger
+
+### Patch Changes
+
+- 989691ec8: Use `src` instead of `app` folder for `blitz generate custom-template`
+- Updated dependencies [bcef81fad]
+- Updated dependencies [7abfb9086]
+  - @blitzjs/generator@2.0.0-beta.22
+
+## 2.0.0-beta.21
+
+### Patch Changes
+
+- d692b4c1d: Fix suspense error codegen patch for nextjs versions 13-13.0.6
+- 10f98c681: Add an href property to the generated route manifest that will return a string of the pathname and included query params.
+- d5b8faa86: add regex to support inline and non-inline codebase and proper next.js package version check
+- Updated dependencies [77b7da0f3]
+  - @blitzjs/generator@2.0.0-beta.21
+
 ## 2.0.0-beta.20
 
 ### Minor Changes

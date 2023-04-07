@@ -1,5 +1,41 @@
 # @blitzjs/generator
 
+## 2.0.0-beta.25
+
+## 2.0.0-beta.24
+
+### Patch Changes
+
+- e228ba5de: Fix a type error in reset password templates.
+- ea7561b8e: Consolidate mutations schema to new schema.{ts|js} file.
+- 430f0b52d: For new applications, update Prisma (`prisma` and `@prisma/client`) from `4.6.0` to `4.6.1` to solve enum issue with postgresql https://github.com/prisma/prisma/issues/16180
+- ea7561b8e: Multiple fields forms using templates during generation - TODO
+
+## 2.0.0-beta.23
+
+### Patch Changes
+
+- cb63a0ea5: Guard `blitz g` input via an allow-list of characters; throw if unwanted characters are found. Prevents to break the blitz command by accident (https://github.com/blitz-js/blitz/issues/4021).
+- 6ec020c6d: Remove useEffect from reset password templates.
+- d316d0db7: Update all links to follow Next 13 format without a child anchor tag.
+- 79c5e86d7: Add missing Layout.tsx for generated mimimalapp
+
+## 2.0.0-beta.22
+
+### Minor Changes
+
+- 7abfb9086: Redesign the index page for newly generated blitz projects
+
+### Patch Changes
+
+- bcef81fad: Fix missing MockRouter prop in test utils
+
+## 2.0.0-beta.21
+
+### Patch Changes
+
+- 77b7da0f3: Remove husky prepush hook & update precommit hook to only run prettier
+
 ## 2.0.0-beta.20
 
 ### Patch Changes

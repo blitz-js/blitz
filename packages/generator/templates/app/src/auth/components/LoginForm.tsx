@@ -3,7 +3,7 @@ import Link from "next/link"
 import { LabeledTextField } from "src/core/components/LabeledTextField"
 import { Form, FORM_ERROR } from "src/core/components/Form"
 import login from "src/auth/mutations/login"
-import { Login } from "src/auth/validations"
+import { Login } from "src/auth/schemas"
 import { useMutation } from "@blitzjs/rpc"
 import { Routes } from "@blitzjs/next"
 
@@ -41,7 +41,7 @@ export const LoginForm = (props: LoginFormProps) => {
         <LabeledTextField name="password" label="Password" placeholder="Password" type="password" />
         <div>
           <Link href={Routes.ForgotPasswordPage()}>
-            <a>Forgot your password?</a>
+            Forgot your password?
           </Link>
         </div>
       </Form>
@@ -49,7 +49,7 @@ export const LoginForm = (props: LoginFormProps) => {
       <div style={{ marginTop: "1rem" }}>
         Or{" "}
         <Link href={Routes.SignupPage()}>
-          <a>Sign Up</a>
+          Sign Up
         </Link>
       </div>
     </div>

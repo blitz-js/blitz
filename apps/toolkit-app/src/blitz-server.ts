@@ -5,6 +5,20 @@ import db from "db"
 import { simpleRolesIsAuthorized } from "@blitzjs/auth"
 import { BlitzLogger } from "blitz"
 
+export const cliConfig: BlitzCliConfig = {
+  customTemplates: "src/templates",
+  codegen: {
+    fieldTypeMap: {
+      string: {
+        component: "LabeledTextField",
+        inputType: "text",
+        zodType: "date",
+        prismaType: "String",
+      },
+    },
+  },
+}
+
 const { gSSP, gSP, api } = setupBlitzServer({
   plugins: [
     AuthServerPlugin({
@@ -17,7 +31,3 @@ const { gSSP, gSP, api } = setupBlitzServer({
 })
 
 export { gSSP, gSP, api }
-
-export const cliConfig: BlitzCliConfig = {
-  customTemplates: "app/templates",
-}

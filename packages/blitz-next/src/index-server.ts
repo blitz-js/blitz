@@ -17,22 +17,24 @@ import {
   MiddlewareResponse,
   BlitzLogger,
   initializeLogger,
+  Simplify,
+  UnionToIntersection,
+  reduceBlitzServerPlugins,
 } from "blitz"
 import {handleRequestWithMiddleware, startWatcher, stopWatcher} from "blitz"
+import {installWebpackConfig, InstallWebpackConfigOptions, ResolverPathOptions} from "@blitzjs/rpc"
 import {
-  dehydrate,
-  getInfiniteQueryKey,
+  DefaultOptions,
+  QueryClient,
   getQueryKey,
-  installWebpackConfig,
-  InstallWebpackConfigOptions,
-  ResolverPathOptions,
+  getInfiniteQueryKey,
+  dehydrate,
 } from "@blitzjs/rpc"
-import {DefaultOptions, QueryClient} from "@tanstack/react-query"
 import {IncomingMessage, ServerResponse} from "http"
 import {withSuperJsonProps} from "./superjson"
 import {ParsedUrlQuery} from "querystring"
 import {PreviewData} from "next/types"
-import {resolveHref} from "next/dist/shared/lib/router/router"
+import {resolveHref} from "next/dist/shared/lib/router/utils/resolve-href"
 import {RouteUrlObject, isRouteUrlObject} from "blitz"
 
 export * from "./index-browser"
@@ -48,12 +50,6 @@ export type NextApiHandler<TResult> = (
   req: NextApiRequest,
   res: BlitzNextApiResponse,
 ) => TResult | void | Promise<TResult | void>
-
-type SetupBlitzOptions = {
-  plugins: BlitzServerPlugin<RequestMiddleware, Ctx>[]
-  onError?: (err: Error) => void
-  logger?: ReturnType<typeof BlitzLogger>
-}
 
 export type Redirect =
   | {
@@ -130,11 +126,18 @@ const prefetchQueryFactory = (
   }
 }
 
-export const setupBlitzServer = ({plugins, onError, logger}: SetupBlitzOptions) => {
+export const setupBlitzServer = <TPlugins extends readonly BlitzServerPlugin<object>[]>({
+  plugins,
+  onError,
+  logger,
+}: {
+  plugins: TPlugins
+  onError?: (err: Error) => void
+  logger?: ReturnType<typeof BlitzLogger>
+}) => {
   initializeLogger(logger ?? BlitzLogger())
 
-  const middlewares = plugins.flatMap((p) => p.requestMiddlewares)
-  const contextMiddleware = plugins.flatMap((p) => p.contextMiddleware).filter(Boolean)
+  const {middlewares, contextMiddleware, pluginExports} = reduceBlitzServerPlugins({plugins})
 
   const gSSP =
     <
@@ -216,7 +219,7 @@ export const setupBlitzServer = ({plugins, onError, logger}: SetupBlitzOptions) 
       }
     }
 
-  return {gSSP, gSP, api}
+  return {gSSP, gSP, api, ...pluginExports}
 }
 
 export interface BlitzConfig extends NextConfig {
@@ -229,7 +232,7 @@ export interface BlitzConfig extends NextConfig {
   }
 }
 
-export function withBlitz(nextConfig: BlitzConfig = {}) {
+export function withBlitz(nextConfig: BlitzConfig = {}): NextConfig {
   if (
     process.env.NODE_ENV !== "production" &&
     process.env.NODE_ENV !== "test" &&
@@ -256,6 +259,7 @@ export function withBlitz(nextConfig: BlitzConfig = {}) {
           includeRPCFolders: nextConfig.blitz?.includeRPCFolders,
         },
       })
+
       if (typeof nextConfig.webpack === "function") {
         return nextConfig.webpack(config, options)
       }
