@@ -1829,7 +1829,7 @@ packages:
       "@babel/traverse": 7.20.1
       "@babel/types": 7.20.2
       convert-source-map: 1.8.0
-      debug: 4.3.3
+      debug: 4.3.4
       gensync: 1.0.0-beta.2
       json5: 2.2.1
       semver: 6.3.0
@@ -1854,7 +1854,7 @@ packages:
       "@babel/traverse": 7.20.1_supports-color@8.1.1
       "@babel/types": 7.20.2
       convert-source-map: 1.8.0
-      debug: 4.3.3_supports-color@8.1.1
+      debug: 4.3.4_supports-color@8.1.1
       gensync: 1.0.0-beta.2
       json5: 2.2.1
       semver: 6.3.0
@@ -5611,7 +5611,7 @@ packages:
       glob: 7.2.0
       is-reference: 1.2.1
       magic-string: 0.25.9
-      resolve: 1.22.0
+      resolve: 1.22.1
       rollup: 2.77.2
     dev: true
 
@@ -13641,7 +13641,7 @@ packages:
     dependencies:
       "@tootallnate/once": 2.0.0
       agent-base: 6.0.2
-      debug: 4.3.3
+      debug: 4.3.4
     transitivePeerDependencies:
       - supports-color
 
@@ -14634,7 +14634,7 @@ packages:
       pretty-format: 29.2.1
       slash: 3.0.0
       strip-json-comments: 3.1.1
-      ts-node: 10.9.1_typescript@4.8.4
+      ts-node: 10.9.1_cbe7ovvae6zqfnmtgctpgpys54
     transitivePeerDependencies:
       - supports-color
 
@@ -14877,7 +14877,7 @@ packages:
       jest-pnp-resolver: 1.2.2_jest-resolve@29.3.0
       jest-util: 29.2.1
       jest-validate: 29.2.2
-      resolve: 1.22.0
+      resolve: 1.22.1
       resolve.exports: 1.1.0
       slash: 3.0.0
 
@@ -16838,7 +16838,7 @@ packages:
       }
     dependencies:
       hosted-git-info: 2.8.9
-      resolve: 1.22.0
+      resolve: 1.22.1
       semver: 5.7.1
       validate-npm-package-license: 3.0.4
     dev: false
@@ -18804,6 +18804,7 @@ packages:
       is-core-module: 2.11.0
       path-parse: 1.0.7
       supports-preserve-symlinks-flag: 1.0.0
+    dev: true
 
   /resolve/1.22.1:
     resolution:
@@ -20432,7 +20433,6 @@ packages:
       typescript: 4.8.4
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
-    dev: false
 
   /ts-node/10.9.1_ieummqxttktzud32hpyrer46t4:
     resolution:
@@ -20499,6 +20499,7 @@ packages:
       typescript: 4.8.4
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
+    dev: false
 
   /tsconfig-paths/3.14.1:
     resolution:

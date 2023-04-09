@@ -1,6 +1,6 @@
 import {assert, baseLogger, Ctx, newLine, prettyMs, ResolverConfig} from "blitz"
 import {NextApiRequest, NextApiResponse} from "next"
-import {deserialize, serialize as superjsonSerialize, parse} from "superjson"
+import {deserialize, parse, serialize as superjsonSerialize} from "superjson"
 import {resolve} from "path"
 import chalk from "chalk"
 
@@ -149,6 +149,7 @@ async function getResolverMap(): Promise<ResolverFiles | null | undefined> {
 
 interface RpcConfig {
   onError?: (error: Error) => void
+  formatError?: (error: Error, ctx: Ctx) => Error
 }
 
 export function rpcHandler(config: RpcConfig) {
@@ -265,7 +266,8 @@ export function rpcHandler(config: RpcConfig) {
           error.statusCode = 500
         }
 
-        const serializedError = superjsonSerialize(error)
+        const formattedError = config.formatError?.(error, ctx) ?? error
+        const serializedError = superjsonSerialize(formattedError)
 
         res.json({
           result: null,

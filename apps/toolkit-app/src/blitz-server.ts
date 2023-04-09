@@ -1,9 +1,8 @@
 import type { BlitzCliConfig } from "blitz"
-import { setupBlitzServer } from "@blitzjs/next"
-import { AuthServerPlugin, PrismaStorage } from "@blitzjs/auth"
-import db from "db"
-import { simpleRolesIsAuthorized } from "@blitzjs/auth"
 import { BlitzLogger } from "blitz"
+import { setupBlitzServer } from "@blitzjs/next"
+import { AuthServerPlugin, PrismaStorage, simpleRolesIsAuthorized } from "@blitzjs/auth"
+import db from "db"
 
 export const cliConfig: BlitzCliConfig = {
   customTemplates: "src/templates",
@@ -27,6 +26,9 @@ const { gSSP, gSP, api } = setupBlitzServer({
       isAuthorized: simpleRolesIsAuthorized,
     }),
   ],
+  formatError: (error) => {
+    return new Error("Formatted error" + error.message)
+  },
   logger: BlitzLogger({}),
 })
 
