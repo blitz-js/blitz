@@ -1,14 +1,13 @@
-import {describe, it, expect, beforeAll, afterAll} from "vitest"
-import fs from "fs-extra"
+import {afterAll, beforeAll, describe, expect, it} from "vitest"
 import {join} from "path"
 import {
-  killApp,
-  findPort,
-  launchApp,
   fetchViaHTTP,
+  findPort,
+  killApp,
+  launchApp,
   nextBuild,
-  nextStart,
   nextExport,
+  nextStart,
 } from "../../utils/next-test-utils"
 
 // jest.setTimeout(1000 * 60 * 2)
@@ -139,10 +138,33 @@ function runTests(dev = false) {
           body: JSON.stringify({params: {}}),
         })
         const json = await res.json()
-        expect(res.status).toEqual(200)
+        expect(res.status).toEqual(500)
         expect(json).toEqual({
           result: null,
           error: {name: "Error", message: "error on purpose for test", statusCode: 500},
+          meta: {error: {values: ["Error"]}},
+        })
+      },
+      5000 * 60 * 2,
+    )
+
+    it(
+      "handles resolver errors with custom status codes",
+      async () => {
+        const res = await fetchViaHTTP(appPort, "/api/rpc/getCustomStatusCodeFailure", null, {
+          method: "POST",
+          headers: {"Content-Type": "application/json; charset=utf-8"},
+          body: JSON.stringify({params: {}}),
+        })
+        const json = await res.json()
+        expect(res.status).toEqual(418)
+        expect(json).toEqual({
+          result: null,
+          error: {
+            name: "Error",
+            message: "Error with custom status code for test",
+            statusCode: 418,
+          },
           meta: {error: {values: ["Error"]}},
         })
       },
