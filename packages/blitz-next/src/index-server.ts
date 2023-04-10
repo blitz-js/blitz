@@ -218,9 +218,11 @@ export const setupBlitzServer = <TPlugins extends readonly BlitzServerPlugin<obj
           (req, res) => handler(req, res, res.blitzCtx),
         ])
       } catch (error: any) {
+        console.log("Inside error", 222222222222)
         onError?.(error)
         const formattedError = formatError?.(error) ?? error
-        return res.status(400).send(formattedError)
+        console.log(formattedError.statusCode)
+        return res.status(formattedError.statusCode ?? 400).send(error)
       }
     }
 

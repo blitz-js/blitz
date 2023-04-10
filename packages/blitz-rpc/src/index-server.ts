@@ -269,7 +269,7 @@ export function rpcHandler(config: RpcConfig) {
         const formattedError = config.formatError?.(error, ctx) ?? error
         const serializedError = superjsonSerialize(formattedError)
 
-        res.json({
+        res.status(formattedError.statusCode ?? 400).json({
           result: null,
           error: serializedError.json,
           meta: {

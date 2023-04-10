@@ -1,13 +1,10 @@
-import {join, dirname} from "path"
+import {join} from "path"
 import os from "os"
 import {promises} from "fs"
-const readFile = promises.readFile
-import {outputFile, readdir} from "fs-extra"
-import findUp from "find-up"
-import resolveFrom from "resolve-from"
+import {outputFile, readdir, readFile} from "fs-extra"
 import Watchpack from "watchpack"
-import {isInternalBlitzMonorepoDevelopment} from "./helpers"
 import {findNodeModulesRoot} from "./find-node-modules"
+
 export const CONFIG_FILE = ".blitz.config.compiled.js"
 export const NEXT_CONFIG_FILE = "next.config.js"
 export const PHASE_PRODUCTION_SERVER = "phase-production-server"
