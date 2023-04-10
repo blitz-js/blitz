@@ -141,7 +141,7 @@ function runTests(dev = false) {
         expect(res.status).toEqual(200)
         expect(json).toEqual({
           result: null,
-          error: {name: "Error", message: "error on purpose for test", statusCode: 200},
+          error: {name: "Error", message: "error on purpose for test", statusCode: 500},
           meta: {error: {values: ["Error"]}},
         })
       },
