@@ -1,5 +1,11 @@
 # @blitzjs/generator
 
+## 2.0.0-beta.26
+
+### Patch Changes
+
+- e82a79be5: Update the version of next in the new template from 13.2 to 13.3.0
+
 ## 2.0.0-beta.25
 
 ## 2.0.0-beta.24

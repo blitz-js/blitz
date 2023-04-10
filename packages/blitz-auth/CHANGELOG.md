@@ -1,5 +1,14 @@
 # @blitzjs/auth
 
+## 2.0.0-beta.26
+
+### Patch Changes
+
+- e82a79be5: Update the version of next in the new template from 13.2 to 13.3.0
+- Updated dependencies [e82a79be5]
+- Updated dependencies [38d945a3f]
+  - blitz@2.0.0-beta.26
+
 ## 2.0.0-beta.25
 
 ### Patch Changes
