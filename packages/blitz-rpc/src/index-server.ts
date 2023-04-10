@@ -149,7 +149,7 @@ async function getResolverMap(): Promise<ResolverFiles | null | undefined> {
 
 interface RpcConfig {
   onError?: (error: Error) => void
-  formatError?: (error: Error, ctx: Ctx) => Error
+  formatError?: (error: Error) => Error
 }
 
 export function rpcHandler(config: RpcConfig) {
@@ -262,14 +262,10 @@ export function rpcHandler(config: RpcConfig) {
         log.error(error)
         newLine()
 
-        if (!error.statusCode) {
-          error.statusCode = 500
-        }
-
-        const formattedError = config.formatError?.(error, ctx) ?? error
+        const formattedError = config.formatError?.(error) ?? error
         const serializedError = superjsonSerialize(formattedError)
 
-        res.status(formattedError.statusCode ?? 400).json({
+        res.json({
           result: null,
           error: serializedError.json,
           meta: {

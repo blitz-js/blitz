@@ -1,11 +1,11 @@
-import {describe, it, expect, beforeAll, afterAll} from "vitest"
+import {afterAll, beforeAll, describe, expect, it} from "vitest"
 import {
-  killApp,
-  findPort,
-  runBlitzCommand,
-  blitzLaunchApp,
   blitzBuild,
+  blitzLaunchApp,
   blitzStart,
+  findPort,
+  killApp,
+  runBlitzCommand,
   waitFor,
 } from "../../utils/next-test-utils"
 import webdriver from "../../utils/next-webdriver"
@@ -15,7 +15,7 @@ let appPort: number
 
 const runTests = () => {
   describe("Auth", () => {
-   /* TODO - Add a non flaky Integration Test for custom plugin 
+    /* TODO - Add a non flaky Integration Test for custom plugin
    describe("custom plugin", () => {
       it("custom plugin - events", async () => {
         const browser = await webdriver(appPort, "/custom-plugin")
