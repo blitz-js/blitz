@@ -262,6 +262,10 @@ export function rpcHandler(config: RpcConfig) {
         log.error(error)
         newLine()
 
+        if (!error.statusCode) {
+          error.statusCode = 500
+        }
+
         const formattedError = config.formatError?.(error) ?? error
         const serializedError = superjsonSerialize(formattedError)
 
