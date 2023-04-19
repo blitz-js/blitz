@@ -27,7 +27,7 @@ export const LabeledSelectField = forwardRef<HTMLSelectElement, LabeledSelectFie
         <label>
           {label}
           <select {...input} disabled={submitting} {...props} ref={ref}>
-          {options && options.map((value) => <option value={value.id}>{value[name]}</option>)}
+          {options && options.map((value) => <option key={value.id} value={value.id}>{value[name]}</option>)}
           </select>
         </label>
 
