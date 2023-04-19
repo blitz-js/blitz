@@ -5,6 +5,7 @@ import {outputFile, readdir, readFile} from "fs-extra"
 import Watchpack from "watchpack"
 import {findNodeModulesRoot} from "./find-node-modules"
 
+const debug = require("debug")("blitz")
 export const CONFIG_FILE = ".blitz.config.compiled.js"
 export const NEXT_CONFIG_FILE = "next.config.js"
 export const PHASE_PRODUCTION_SERVER = "phase-production-server"
@@ -157,7 +158,7 @@ export const loadConfig = (pagesDir: string) => {
     // eslint-disable-next-line no-eval -- block webpack from following this module path
     userConfigModule = eval("require")(path)
   } catch {
-    console.log("Did not find custom config file")
+    debug("Did not find custom config file")
     // In case user does not have custom config
     userConfigModule = {}
   }
