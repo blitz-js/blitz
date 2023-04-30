@@ -111,7 +111,7 @@ jobs:
           echo "folders=$folders" >> $GITHUB_OUTPUT
   
   Generator:
-    name: :"Generator Test ${{language}}"
+    name: :"Generator Test ${{matrix.language}}"
     strategy:
       matrix:
         language:
@@ -143,10 +143,10 @@ jobs:
         run: |
           mkdir test
           cd test
-          pnpm blitz new . --language=${{language}}
+          pnpm blitz new . --language=${{matrix.language}}
       
   Integration-Tests:
-    name: "Integration Test: ${{matrix.folder}} @ ${{ matrix.os }} "
+    name: "Integration Test: ${{matrix.folder}} @ ${{matrix.os}} "
     needs: [find-integration-tests]
     strategy:
       matrix:
