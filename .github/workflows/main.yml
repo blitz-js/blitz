@@ -109,7 +109,42 @@ jobs:
           tree -J -d -L 1 | jq -c  '.[0].contents | map(.name | tostring) | map(select(. != "utils"))'
           folders=$(tree -J -d -L 1 | jq -c  '.[0].contents | map(.name | tostring) | map(select(. != "utils"))')
           echo "folders=$folders" >> $GITHUB_OUTPUT
-
+  
+  Generator:
+    name: :"Generator Test ${{language}}"
+    strategy:
+      matrix:
+        language:
+          - javascript
+          - typescript
+        os:
+          - ubuntu-latest
+      fail-fast: false
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup PNPM
+        uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
+        with:
+          version: 7.11.0
+      - name: Setup node@${{ matrix.NODE_VERSION }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.NODE_VERSION }}
+          cache: "pnpm"
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        shell: bash
+      - name: Build
+        run: pnpm build
+        shell: bash
+      - name: Generate
+        run: |
+          mkdir test
+          cd test
+          pnpm blitz new . --language=${{language}}
+      
   Integration-Tests:
     name: "Integration Test: ${{matrix.folder}} @ ${{ matrix.os }} "
     needs: [find-integration-tests]
@@ -119,7 +154,6 @@ jobs:
         os:
           - ubuntu-latest
           - windows-latest
-      fail-fast: false
     runs-on: ${{ matrix.os }}
     steps:
       - run: echo ${{matrix.folder}}
