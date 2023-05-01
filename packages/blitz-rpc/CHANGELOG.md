@@ -1,5 +1,15 @@
 # @blitzjs/rpc
 
+## 2.0.0-beta.27
+
+### Minor Changes
+
+- eda14fa8a: Add ability to format the error on the server before returning it to the client.
+
+### Patch Changes
+
+- blitz@2.0.0-beta.27
+
 ## 2.0.0-beta.26
 
 ### Patch Changes
