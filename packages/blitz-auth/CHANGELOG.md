@@ -1,5 +1,12 @@
 # @blitzjs/auth
 
+## 2.0.0-beta.27
+
+### Patch Changes
+
+- 29c2b029a: Fix: Add missing entry to expose next-auth adapter in Blitz Auth
+  - blitz@2.0.0-beta.27
+
 ## 2.0.0-beta.26
 
 ### Patch Changes
