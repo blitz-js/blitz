@@ -1,14 +1,13 @@
-import {describe, it, expect, beforeAll, afterAll} from "vitest"
-import fs from "fs-extra"
+import {afterAll, beforeAll, describe, expect, it} from "vitest"
 import {join} from "path"
 import {
-  killApp,
-  findPort,
-  launchApp,
   fetchViaHTTP,
+  findPort,
+  killApp,
+  launchApp,
   nextBuild,
-  nextStart,
   nextExport,
+  nextStart,
 } from "../../utils/next-test-utils"
 
 // jest.setTimeout(1000 * 60 * 2)

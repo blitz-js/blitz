@@ -10,6 +10,7 @@ type SignupFormProps = {
 
 export const SignupForm = (props: SignupFormProps) => {
   const [signupMutation] = useMutation(signup)
+
   return (
     <div>
       <h1>Create an Account</h1>

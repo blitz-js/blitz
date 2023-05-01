@@ -1,13 +1,6 @@
-import {describe, it, expect, beforeAll, afterAll} from "vitest"
+import {afterAll, beforeAll, describe, expect, it} from "vitest"
 import waitPort from "wait-port"
-import {
-  killApp,
-  findPort,
-  runBlitzCommand,
-  blitzLaunchApp,
-  blitzBuild,
-  blitzStart,
-} from "../../utils/next-test-utils"
+import {blitzLaunchApp, findPort, killApp, runBlitzCommand} from "../../utils/next-test-utils"
 import webdriver from "../../utils/next-webdriver"
 
 import fetch from "node-fetch"
@@ -43,7 +36,7 @@ const runTests = (mode?: string) => {
           const browser = await webdriver(appPort, "/authenticated-client")
           let errorMsg = await browser.elementById(`error`).text()
           expect(errorMsg).toMatch(/Error: You are not authenticated/)
-          if (browser) browser.close()
+          if (browser) await browser.close()
         },
         5000 * 60 * 2,
       )
@@ -55,7 +48,7 @@ const runTests = (mode?: string) => {
           const browser = await webdriver(appPort, "/authenticated-server")
           let errorMsg = await browser.elementById(`error`).text()
           expect(errorMsg).toMatch(/Error: You are not authenticated/)
-          if (browser) browser.close()
+          if (browser) await browser.close()
         },
         5000 * 60 * 2,
       )
