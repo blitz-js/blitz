@@ -1,41 +1,43 @@
 import type {
-  NextConfig,
   GetServerSideProps,
   GetServerSidePropsResult,
   GetStaticProps,
   GetStaticPropsResult,
   NextApiRequest,
   NextApiResponse,
+  NextConfig,
 } from "next"
 import {
   AddParameters,
   AsyncFunc,
+  BlitzLogger,
   BlitzServerPlugin,
   Ctx as BlitzCtx,
   FirstParam,
-  RequestMiddleware,
-  MiddlewareResponse,
-  BlitzLogger,
+  handleRequestWithMiddleware,
   initializeLogger,
-  Simplify,
-  UnionToIntersection,
+  isRouteUrlObject,
+  MiddlewareResponse,
   reduceBlitzServerPlugins,
+  RouteUrlObject,
+  startWatcher,
+  stopWatcher,
 } from "blitz"
-import {handleRequestWithMiddleware, startWatcher, stopWatcher} from "blitz"
-import {installWebpackConfig, InstallWebpackConfigOptions, ResolverPathOptions} from "@blitzjs/rpc"
 import {
   DefaultOptions,
-  QueryClient,
-  getQueryKey,
-  getInfiniteQueryKey,
   dehydrate,
+  getInfiniteQueryKey,
+  getQueryKey,
+  installWebpackConfig,
+  InstallWebpackConfigOptions,
+  QueryClient,
+  ResolverPathOptions,
 } from "@blitzjs/rpc"
 import {IncomingMessage, ServerResponse} from "http"
 import {withSuperJsonProps} from "./superjson"
 import {ParsedUrlQuery} from "querystring"
 import {PreviewData} from "next/types"
 import {resolveHref} from "next/dist/shared/lib/router/utils/resolve-href"
-import {RouteUrlObject, isRouteUrlObject} from "blitz"
 
 export * from "./index-browser"
 
@@ -130,10 +132,12 @@ export const setupBlitzServer = <TPlugins extends readonly BlitzServerPlugin<obj
   plugins,
   onError,
   logger,
+  formatError,
 }: {
   plugins: TPlugins
   onError?: (err: Error) => void
   logger?: ReturnType<typeof BlitzLogger>
+  formatError?: (err: Error) => Error
 }) => {
   initializeLogger(logger ?? BlitzLogger())
 
@@ -168,9 +172,9 @@ export const setupBlitzServer = <TPlugins extends readonly BlitzServerPlugin<obj
             getClient(),
           ),
         )
-      } catch (err: any) {
-        onError?.(err)
-        throw err
+      } catch (error: any) {
+        onError?.(error)
+        throw formatError?.(error) ?? error
       }
     }
 
@@ -197,9 +201,9 @@ export const setupBlitzServer = <TPlugins extends readonly BlitzServerPlugin<obj
             getClient(),
           ),
         )
-      } catch (err: any) {
-        onError?.(err)
-        throw err
+      } catch (error: any) {
+        onError?.(error)
+        throw formatError?.(error) ?? error
       }
     }
 
@@ -215,7 +219,8 @@ export const setupBlitzServer = <TPlugins extends readonly BlitzServerPlugin<obj
         ])
       } catch (error: any) {
         onError?.(error)
-        return res.status(400).send(error)
+        const formattedError = formatError?.(error) ?? error
+        return res.status(400).send(formattedError)
       }
     }
 

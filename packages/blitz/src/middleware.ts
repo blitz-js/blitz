@@ -1,5 +1,5 @@
 import {IncomingMessage, ServerResponse} from "http"
-import {compose, Ctx, RequestMiddleware, MiddlewareNext, MiddlewareResponse} from "./index-server"
+import {compose, Ctx, MiddlewareNext, MiddlewareResponse, RequestMiddleware} from "./index-server"
 
 export async function handleRequestWithMiddleware<
   Req extends IncomingMessage = IncomingMessage,
