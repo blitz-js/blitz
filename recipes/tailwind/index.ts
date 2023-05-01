@@ -29,7 +29,7 @@ export default RecipeBuilder()
     stepId: "addStyles",
     stepName: "Stylesheet",
     explanation: `Adds a root CSS stylesheet where Tailwind is imported and where you can add global styles`,
-    targetDirectory: "./app/core",
+    targetDirectory: `./${paths.appSrcDirectory()}/core`,
     templatePath: join(__dirname, "templates", "styles"),
     templateValues: {},
   })
