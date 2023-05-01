@@ -1,5 +1,18 @@
 # @blitzjs/next
 
+## 2.0.0-beta.27
+
+### Minor Changes
+
+- eda14fa8a: Add ability to format the error on the server before returning it to the client.
+- 3d004dc41: Fix the DYNAMIC_SERVER_USAGE error for Next.js 13.3.1+
+
+### Patch Changes
+
+- Updated dependencies [eda14fa8a]
+  - @blitzjs/rpc@2.0.0-beta.27
+  - blitz@2.0.0-beta.27
+
 ## 2.0.0-beta.26
 
 ### Patch Changes

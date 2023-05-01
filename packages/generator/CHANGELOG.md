@@ -1,5 +1,11 @@
 # @blitzjs/generator
 
+## 2.0.0-beta.27
+
+### Patch Changes
+
+- d814c2d2d: fix: add missing key prop to LabelSelectField
+
 ## 2.0.0-beta.26
 
 ### Patch Changes
