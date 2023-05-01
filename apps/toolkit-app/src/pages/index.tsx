@@ -44,7 +44,7 @@ const UserInfo = () => {
         <Link href={Routes.LoginPage()} className={styles.loginButton}>
           <strong>Login</strong>
         </Link>
-        <Link href="/api/auth/github/login" passHref>
+        <Link href="/api/auth/github/login" passHref legacyBehavior>
           <a className="button small">
             <strong>Sign in with GitHub</strong>
           </a>
