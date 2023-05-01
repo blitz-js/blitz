@@ -3907,6 +3907,16 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "gjmoed",
+      "name": "G.J. Moed",
+      "avatar_url": "https://avatars.githubusercontent.com/u/4458993?v=4",
+      "profile": "https://github.com/gjmoed",
+      "contributions": [
+        "doc",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
