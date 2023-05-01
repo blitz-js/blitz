@@ -16,6 +16,7 @@ export const codegenTasks = async () => {
     */
     const nextDir = await resolveCwd("next")
     const nextClientIndex = join(nextDir, "../..", "client", "index.js")
+    console.log(nextClientIndex)
     const readFile = await fs.readFile(nextClientIndex)
     const packageJson = await getPackageJson()
     const version = packageJson.dependencies.next
@@ -43,7 +44,7 @@ export const codegenTasks = async () => {
       const updatedFile = readFile
         .toString()
         .replace(
-          /_onRecoverableError\.default$/,
+          /_onRecoverableError\.default$/gm,
           `(err) => (err.toString().includes("DYNAMIC_SERVER_USAGE") || err.toString().includes("could not finish this Suspense boundary") || err.toString().includes("Minified React error #419")) ? null : _onRecoverableError.default(err)`,
         )
       await fs.writeFile(nextClientIndex, updatedFile)
@@ -52,7 +53,7 @@ export const codegenTasks = async () => {
       const updatedFile = readFile
         .toString()
         .replace(
-          /_onrecoverableerror\.default$/,
+          /_onrecoverableerror\.default$/gm,
           `(err) => (err.toString().includes("DYNAMIC_SERVER_USAGE") || err.toString().includes("could not finish this Suspense boundary") || err.toString().includes("Minified React error #419")) ? null : _onrecoverableerror.default(err)`,
         )
       await fs.writeFile(nextClientIndex, updatedFile)
