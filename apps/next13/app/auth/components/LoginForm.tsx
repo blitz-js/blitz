@@ -7,40 +7,25 @@ import {Login} from "../../auth/validations"
 import {useMutation} from "@blitzjs/rpc"
 import {startTransition, useMemo} from "react"
 import {useRouter} from "next/navigation"
-import {
-  FieldApi,
-  FormApi,
-  createFormFactory,
-  useField,
-} from "@tanstack/react-form";
+import {FieldApi, FormApi, createFormFactory, useField} from "@tanstack/react-form"
+import * as z from "zod"
 
-type Person = {
-  firstName: string;
-  lastName: string;
-};
-
-type Hobby = {
-  name: string;
-  description: string;
-  yearsOfExperience: number;
-};
+type Person = z.infer<typeof Login>
 
 const formFactory = createFormFactory<Person>({
   defaultValues: {
-    firstName: "",
-    lastName: "",
+    email: "",
+    password: "",
   },
-});
+})
 
-function FieldInfo({ field }: { field: FieldApi<any, any> }) {
+function FieldInfo({field}: {field: FieldApi<any, any>}) {
   return (
     <>
-      {field.state.meta.touchedError ? (
-        <em>{field.state.meta.touchedError}</em>
-      ) : null}{" "}
+      {field.state.meta.touchedError ? <em>{field.state.meta.touchedError}</em> : null}{" "}
       {field.state.meta.isValidating ? "Validating..." : null}
     </>
-  );
+  )
 }
 
 export const LoginForm = () => {
@@ -49,9 +34,9 @@ export const LoginForm = () => {
   const form = formFactory.useForm({
     onSubmit: async (values, formApi) => {
       // Do something with form data
-      console.log(values);
+      console.log(values)
     },
-  });
+  })
   return (
     <div>
       <h1>Login</h1>
@@ -61,19 +46,22 @@ export const LoginForm = () => {
           <div>
             {/* A type-safe and pre-bound field component*/}
             <form.Field
-              name="firstName"
-              onChange={(value) =>
-                !value
-                  ? "A first name is required"
-                  : value.length < 3
-                  ? "First name must be at least 3 characters"
-                  : undefined
-              }
-              onChangeAsync={async (value) => {
-                await new Promise((resolve) => setTimeout(resolve, 1000));
-                return (
-                  value.includes("error") && 'No "error" allowed in first name'
-                );
+              name="email"
+              validate={(value) => {
+                if (!value) {
+                  return "Email is required"
+                }
+                const result = Login.partial({
+                  email: true,
+                }).safeParse({
+                  email: value,
+                })
+                console.log(result)
+                if (result.success) {
+                  return null
+                } else {
+                  return JSON.parse(result.error.message)[0].message
+                }
               }}
               children={(field) => {
                 // Avoid hasty abstractions. Render props are great!
@@ -82,7 +70,7 @@ export const LoginForm = () => {
                     <input {...field.getInputProps()} />
                     <FieldInfo field={field} />
                   </>
-                );
+                )
               }}
             />
           </div>
