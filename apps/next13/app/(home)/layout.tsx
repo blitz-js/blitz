@@ -1,64 +1,20 @@
-import { Suspense } from "react"
 import Link from "next/link"
-import Layout from "src/core/layouts/Layout"
-import { useCurrentUser } from "src/users/hooks/useCurrentUser"
-import logout from "src/auth/mutations/logout"
-import { useMutation } from "@blitzjs/rpc"
-import { BlitzPage } from "@blitzjs/next"
-import { Routes } from ".blitz"
-import styles from "src/styles/Home.module.css"
+import {invoke} from "@/app/blitz-server"
+import getCurrentUser from "@/app/users/queries/getCurrentUser"
+import styles from "./Home.module.css"
 
-/*
- * This file is just for a pleasant getting started page for your new app.
- * You can delete everything in here and start from scratch if you like.
- */
-
-const UserInfo = () => {
-  const currentUser = useCurrentUser()
-  const [logoutMutation] = useMutation(logout)
-
-  if (currentUser) {
-    return (
-      <>
-        <button
-          className={styles.button}
-          onClick={async () => {
-            await logoutMutation()
-          }}
-        >
-          Logout
-        </button>
-        <div>
-          User id: <code>{currentUser.id}</code>
-          <br />
-          User role: <code>{currentUser.role}</code>
-        </div>
-      </>
-    )
-  } else {
-    return (
-      <>
-        <Link href={"/auth/signup"} className={styles.button}>
-          <strong>Sign Up</strong>
-        </Link>
-        <Link href={"/auth/login"} className={styles.loginButton}>
-          <strong>Login</strong>
-        </Link>
-        <Link href="/api/auth/github/login" passHref legacyBehavior>
-          <a className="button small">
-            <strong>Sign in with GitHub</strong>
-          </a>
-        </Link>
-      </>
-    )
-  }
-}
-
-const Home: BlitzPage = () => {
+export default async function HomeLayout({
+  auth,
+  starter,
+}: {
+  children: React.ReactNode
+  auth: React.ReactNode
+  starter: React.ReactNode
+}) {
+  const user = await invoke(getCurrentUser, null)
   return (
-    <Layout title="Home">
+    <>
       <div className={styles.globe} />
-
       <div className={styles.container}>
         <div className={styles.toastContainer}>
           <p>
@@ -81,11 +37,7 @@ const Home: BlitzPage = () => {
 
               {/* Auth */}
 
-              <div className={styles.buttonContainer}>
-                <Suspense fallback="Loading...">
-                  <UserInfo />
-                </Suspense>
-              </div>
+              <div className={styles.buttonContainer}>{user ? <>{auth}</> : <>{starter}</>}</div>
             </div>
 
             <div className={styles.body}>
@@ -194,8 +146,6 @@ const Home: BlitzPage = () => {
           </a>
         </footer>
       </div>
-    </Layout>
+    </>
   )
 }
-
-export default Home

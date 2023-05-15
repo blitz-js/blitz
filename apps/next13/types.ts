@@ -1,12 +1,15 @@
-import {SimpleRolesIsAuthorized} from "@blitzjs/auth"
-import {User} from "./prisma"
+import { SimpleRolesIsAuthorized } from "@blitzjs/auth"
+import { User } from "@/db"
+
+export type Role = "ADMIN" | "USER"
 
 declare module "@blitzjs/auth" {
   export interface Session {
-    isAuthorized: SimpleRolesIsAuthorized
+    isAuthorized: SimpleRolesIsAuthorized<Role>
     PublicData: {
       userId: User["id"]
-      email: User["email"]
+      role: Role
+      views?: number
     }
   }
 }
