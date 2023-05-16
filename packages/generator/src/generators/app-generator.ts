@@ -284,17 +284,13 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
 
     const type = this.options.form
     switch (type) {
-      case "finalform":
-        pkg.dependencies["final-form"] = "4.x"
-        pkg.dependencies["react-final-form"] = "6.x"
+      case "tanstack":
+        pkg.dependencies["@tanstack/react-form"] = "0.x" 
         break
       case "hookform":
         pkg.dependencies["react-hook-form"] = "7.x"
         pkg.dependencies["@hookform/resolvers"] = "2.x"
         pkg.dependencies["@hookform/error-message"] = "2.x"
-        break
-      case "formik":
-        pkg.dependencies["formik"] = "2.x"
         break
     }
     this.fs.move(
