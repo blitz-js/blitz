@@ -33,7 +33,7 @@ export interface AppGeneratorOptions extends GeneratorOptions {
   version: string
   skipInstall: boolean
   skipGit: boolean
-  form: "finalform" | "hookform" | "formik"
+  form: "tanstack" | "hookform"
   onPostInstall?: () => Promise<void>
 }
 

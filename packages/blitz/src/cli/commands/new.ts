@@ -12,9 +12,8 @@ import {codegenTasks} from "../utils/codegen-tasks"
 
 type NotUndefined<T> = T extends undefined ? never : T
 const forms: Record<NotUndefined<AppGeneratorOptions["form"]>, string> = {
-  finalform: "React Final Form (recommended)",
+  tanstack: "Tanstack Form (Recommended)",
   hookform: "React Hook Form",
-  formik: "Formik",
 }
 
 const language = {
@@ -75,7 +74,7 @@ const args = arg(
 let projectName: string = ""
 let projectPath: string = ""
 let projectLanguage: string | TLanguage = ""
-let projectFormLib: AppGeneratorOptions["form"] = "finalform"
+let projectFormLib: AppGeneratorOptions["form"] = "tanstack"
 let projectTemplate: AppGeneratorOptions["template"] = templates.full
 let projectPkgManger: TPkgManager = PREFERABLE_PKG_MANAGER
 let shouldInstallDeps: boolean = true
