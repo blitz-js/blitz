@@ -34,7 +34,7 @@ const installCommandMap: Record<TPkgManager, string> = {
 type TTemplate = "full" | "minimal"
 const templates: {[key in TTemplate]: AppGeneratorOptions["template"]} = {
   full: {
-    path: "app",
+    path: "pages",
   },
   minimal: {
     path: "minimalapp",
