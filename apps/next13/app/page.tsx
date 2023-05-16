@@ -1,17 +1,11 @@
 import Link from "next/link"
-import {invoke} from "@/app/blitz-server"
-import getCurrentUser from "@/app/users/queries/getCurrentUser"
-import styles from "./Home.module.css"
+import {invoke} from "./blitz-server"
+import LogoutButton from "./core/components/Logout"
+import styles from "./styles/Home.module.css"
+import getCurrentUser from "./users/queries/getCurrentUser"
 
-export default async function HomeLayout({
-  auth,
-  starter,
-}: {
-  children: React.ReactNode
-  auth: React.ReactNode
-  starter: React.ReactNode
-}) {
-  const user = await invoke(getCurrentUser, null)
+export default async function Home() {
+  const currentUser = await invoke(getCurrentUser, null)
   return (
     <>
       <div className={styles.globe} />
@@ -37,7 +31,27 @@ export default async function HomeLayout({
 
               {/* Auth */}
 
-              <div className={styles.buttonContainer}>{user ? <>{auth}</> : <>{starter}</>}</div>
+              <div className={styles.buttonContainer}>
+                {currentUser ? (
+                  <>
+                    <LogoutButton />
+                    <div>
+                      User id: <code>{currentUser.id}</code>
+                      <br />
+                      User role: <code>{currentUser.role}</code>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <Link href="/signup" className={styles.button}>
+                      <strong>Sign Up</strong>
+                    </Link>
+                    <Link href="/login" className={styles.loginButton}>
+                      <strong>Login</strong>
+                    </Link>
+                  </>
+                )}
+              </div>
             </div>
 
             <div className={styles.body}>
@@ -74,6 +88,7 @@ export default async function HomeLayout({
                     <pre>
                       <code>
                         Go to{" "}
+                        {/* @ts-ignore: TODO remove after scaffolding */}
                         <Link href="/projects" className={styles.textLink}>
                           /projects
                         </Link>
