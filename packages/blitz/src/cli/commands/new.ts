@@ -31,9 +31,12 @@ const installCommandMap: Record<TPkgManager, string> = {
   npm: "npm install",
 }
 
-type TTemplate = "full" | "minimal"
+type TTemplate = "app" | "pages" | "minimal"
 const templates: {[key in TTemplate]: AppGeneratorOptions["template"]} = {
-  full: {
+  app: {
+    path: "app",
+  },
+  pages: {
     path: "pages",
   },
   minimal: {
@@ -76,7 +79,7 @@ let projectName: string = ""
 let projectPath: string = ""
 let projectLanguage: string | TLanguage = ""
 let projectFormLib: AppGeneratorOptions["form"] = "finalform"
-let projectTemplate: AppGeneratorOptions["template"] = templates.full
+let projectTemplate: AppGeneratorOptions["template"] = templates.app
 let projectPkgManger: TPkgManager = PREFERABLE_PKG_MANAGER
 let shouldInstallDeps: boolean = true
 
@@ -149,7 +152,8 @@ const determineTemplate = async () => {
     (args["--template"] && !Object.keys(templates).includes(args["--template"].toLowerCase()))
   ) {
     const choices: Array<{value: keyof typeof templates; title: string}> = [
-      {value: "full", title: "Full - includes DB and auth (Recommended)"},
+      {value: "app", title: "App Router: Full Includes DB and auth (Recommended)"},
+      {value: "pages", title: "Pages Router: Full - includes DB and auth"},
       {value: "minimal", title: "Minimal — no DB, no auth"},
     ]
 
