@@ -3917,6 +3917,16 @@
         "doc",
         "code"
       ]
+    },
+    {
+      "login": "GHKEN",
+      "name": "Tetsuya Fukuda",
+      "avatar_url": "https://avatars.githubusercontent.com/u/5304351?v=4",
+      "profile": "https://ghken.com",
+      "contributions": [
+        "doc",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
