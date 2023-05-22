@@ -64,12 +64,12 @@ export async function transformBlitzRpcServer(
       extraRpcBasePaths: options?.includeRPCFolders,
     })
 
-    code += `__internal_addBlitzRpcResolver('${routePath}',() => import('${slash(
+    code += `__internal_addBlitzRpcResolver('${routePath}',() => require('${slash(
       resolverFilePath,
     )}'));`
     code += "\n"
   }
-  // console.log("NEW CODE", code)
+
   return code
 }
 
