@@ -27,6 +27,10 @@ import type {
 } from "./types"
 import {Provider} from "next-auth/providers"
 
+import {init} from "next-auth/core/init"
+import getAuthorizationUrl from "next-auth/core/lib/oauth/authorization-url"
+import oAuthCallback from "next-auth/core/lib/oauth/callback"
+
 export {withNextAuthAdapter} from "./webpack"
 
 const INTERNAL_REDIRECT_URL_KEY = "_redirectUrl"
@@ -102,7 +106,6 @@ export function NextAuthAdapter<P extends Provider[]>(
     if (providerId?.includes("?")) {
       providerId = providerId.split("?")[0]
     }
-    const {init} = await import("next-auth/core/init").then((m) => m)
     const {options, cookies} = await init({
       // @ts-ignore
       url: new URL(
@@ -158,9 +161,6 @@ async function AuthHandler<P extends Provider[]>(
   if (action === "login") {
     middleware.push(async (req, res, next) => {
       try {
-        const getAuthorizationUrl = await import("next-auth/core/lib/oauth/authorization-url").then(
-          (m) => m.default,
-        )
         const _signin = await getAuthorizationUrl({options: options, query: req.query})
         if (_signin.cookies) cookies.push(..._signin.cookies)
         const session = res.blitzCtx.session as SessionContext
@@ -191,9 +191,6 @@ async function AuthHandler<P extends Provider[]>(
     middleware.push(
       // eslint-disable-next-line no-shadow
       connectMiddleware(async (req, res, next) => {
-        const oAuthCallback = await import("next-auth/core/lib/oauth/callback").then(
-          (m) => m.default,
-        )
         try {
           const {profile, account, OAuthProfile} = await oAuthCallback({
             query: internalRequest.query,
