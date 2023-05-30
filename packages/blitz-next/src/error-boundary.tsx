@@ -72,7 +72,7 @@ type ErrorBoundaryState = {error: Error | null}
 
 const initialState: ErrorBoundaryState = {error: null}
 
-const ErrorBoundary = withRouter(
+const ErrorBoundary: ReturnType<typeof withRouter> = withRouter(
   class ErrorBoundaryRoot extends React.Component<
     React.PropsWithRef<React.PropsWithChildren<ErrorBoundaryProps>>,
     ErrorBoundaryState

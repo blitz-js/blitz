@@ -41,11 +41,9 @@ export class RecipeExecutor<Options extends RecipeMeta> {
         {exitOnCtrlC: false},
       )
       await waitUntilExit()
-      baseLogger({displayDateTime: false, displayLogLevel: false}).info(
-        `\n🎉 The ${this.options.name} recipe has been installed!\n`,
-      )
+      baseLogger().info(`\n🎉 The ${this.options.name} recipe has been installed!\n`)
     } catch (e) {
-      baseLogger({displayDateTime: false}).error(e as any)
+      baseLogger().error(e as any)
       return
     }
   }

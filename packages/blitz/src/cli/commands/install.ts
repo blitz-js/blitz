@@ -45,7 +45,7 @@ const pipeline = promisify(Stream.pipeline)
 const got = async (url: string) => {
   return require("got")(url).catch((e: any) => {
     if (e.response.statusCode === 403) {
-      baseLogger({displayDateTime: false}).error(e.response.body)
+      baseLogger().error(e.response.body)
     } else {
       return e
     }
@@ -264,7 +264,7 @@ const install: CliCommand = async () => {
 
       if (!(await isUrlValid(packageJsonPath))) {
         debug("Url is invalid for ", packageJsonPath)
-        baseLogger({displayDateTime: false}).error(`Could not find recipe "${args._[1]}"\n`)
+        baseLogger().error(`Could not find recipe "${args._[1]}"\n`)
         console.log(`${chalk.bold("Please provide one of the following:")}
 
 1. The name of a recipe to install (e.g. "tailwind")
