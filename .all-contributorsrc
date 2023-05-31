@@ -3927,6 +3927,15 @@
         "doc",
         "code"
       ]
+    },
+    {
+      "login": "nerixim",
+      "name": "Nikita Kamaev",
+      "avatar_url": "https://avatars.githubusercontent.com/u/26106502?v=4",
+      "profile": "https://github.com/nerixim",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
