@@ -3936,6 +3936,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "nikola-wd",
+      "name": "Nikola Ivanov",
+      "avatar_url": "https://avatars.githubusercontent.com/u/11588823?v=4",
+      "profile": "https://webredone.com/",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
