@@ -23,7 +23,7 @@ importers:
         version: 13.0.3
       next:
         specifier: 13.3.0
-        version: 13.3.0(@babel/core@7.18.2)(react-dom@18.2.0)(react@18.2.0)
+        version: 13.3.0(@babel/core@7.12.10)(react-dom@18.2.0)(react@18.2.0)
       only-allow:
         specifier: 1.1.0
         version: 1.1.0
@@ -80,7 +80,7 @@ importers:
         version: 3.2.7
       next:
         specifier: 13.3.0
-        version: 13.3.0(@babel/core@7.18.2)(react-dom@18.2.0)(react@18.2.0)
+        version: 13.3.0(@babel/core@7.12.10)(react-dom@18.2.0)(react@18.2.0)
       prisma:
         specifier: ^4.5.0
         version: 4.6.1
@@ -438,7 +438,7 @@ importers:
         version: 3.0.0
       next:
         specifier: 13.3.0
-        version: 13.3.0(@babel/core@7.18.2)(react-dom@18.2.0)(react@18.2.0)
+        version: 13.3.0(@babel/core@7.12.10)(react-dom@18.2.0)(react@18.2.0)
       prisma:
         specifier: 4.6.1
         version: 4.6.1
@@ -641,7 +641,7 @@ importers:
         version: 3.0.0
       next:
         specifier: 13.3.0
-        version: 13.3.0(@babel/core@7.18.2)(react-dom@18.2.0)(react@18.2.0)
+        version: 13.3.0(@babel/core@7.12.10)(react-dom@18.2.0)(react@18.2.0)
       prisma:
         specifier: 4.6.1
         version: 4.6.1
@@ -705,7 +705,7 @@ importers:
         version: link:../../packages/blitz
       next:
         specifier: 13.3.0
-        version: 13.3.0(@babel/core@7.18.2)(react-dom@18.2.0)(react@18.2.0)
+        version: 13.3.0(@babel/core@7.12.10)(react-dom@18.2.0)(react@18.2.0)
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -769,7 +769,7 @@ importers:
         version: 3.0.0
       next:
         specifier: 13.3.0
-        version: 13.3.0(@babel/core@7.18.2)(react-dom@18.2.0)(react@18.2.0)
+        version: 13.3.0(@babel/core@7.12.10)(react-dom@18.2.0)(react@18.2.0)
       prisma:
         specifier: 4.6.1
         version: 4.6.1
@@ -851,7 +851,7 @@ importers:
         version: 3.0.0
       next:
         specifier: 13.3.0
-        version: 13.3.0(@babel/core@7.18.2)(react-dom@18.2.0)(react@18.2.0)
+        version: 13.3.0(@babel/core@7.12.10)(react-dom@18.2.0)(react@18.2.0)
       prisma:
         specifier: 4.6.1
         version: 4.6.1
@@ -982,7 +982,7 @@ importers:
         version: 3.0.0
       next:
         specifier: 13.3.0
-        version: 13.3.0(@babel/core@7.18.2)(react-dom@18.2.0)(react@18.2.0)
+        version: 13.3.0(@babel/core@7.12.10)(react-dom@18.2.0)(react@18.2.0)
       prisma:
         specifier: 4.6.1
         version: 4.6.1
@@ -1046,7 +1046,7 @@ importers:
         version: link:../../packages/blitz
       next:
         specifier: 13.3.0
-        version: 13.3.0(@babel/core@7.18.2)(react-dom@18.2.0)(react@18.2.0)
+        version: 13.3.0(@babel/core@7.12.10)(react-dom@18.2.0)(react@18.2.0)
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -1095,7 +1095,7 @@ importers:
         version: link:../../packages/blitz
       next:
         specifier: 13.3.0
-        version: 13.3.0(@babel/core@7.18.2)(react-dom@18.2.0)(react@18.2.0)
+        version: 13.3.0(@babel/core@7.12.10)(react-dom@18.2.0)(react@18.2.0)
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -1150,7 +1150,7 @@ importers:
         version: 3.0.0
       next:
         specifier: 13.3.0
-        version: 13.3.0(@babel/core@7.18.2)(react-dom@18.2.0)(react@18.2.0)
+        version: 13.3.0(@babel/core@7.12.10)(react-dom@18.2.0)(react@18.2.0)
       prisma:
         specifier: 4.6.1
         version: 4.6.1
@@ -1788,7 +1788,7 @@ importers:
         version: 7.12.10(supports-color@8.1.1)
       "@babel/plugin-proposal-class-properties":
         specifier: 7.17.12
-        version: 7.17.12(@babel/core@7.18.2)(supports-color@8.1.1)
+        version: 7.17.12(@babel/core@7.12.10)(supports-color@8.1.1)
       "@babel/plugin-syntax-jsx":
         specifier: 7.17.12
         version: 7.17.12(@babel/core@7.12.10)
@@ -2419,7 +2419,7 @@ packages:
       "@babel/traverse": 7.18.2(supports-color@8.1.1)
       "@babel/types": 7.18.4
       convert-source-map: 1.8.0
-      debug: 4.3.4(supports-color@8.1.1)
+      debug: 4.3.3(supports-color@8.1.1)
       gensync: 1.0.0-beta.2
       json5: 2.2.1
       semver: 6.3.0
