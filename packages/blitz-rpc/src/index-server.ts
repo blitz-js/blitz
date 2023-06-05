@@ -164,7 +164,7 @@ export function rpcHandler(config: RpcConfig) {
     const relativeRoutePath = (req.query.blitz as string[])?.join("/")
     const routePath = "/" + relativeRoutePath
 
-    const log = baseLogger().getChildLogger({
+    const log = baseLogger().getSubLogger({
       prefix: [routePath.replace(/(\/api\/rpc)?\//, "") + "()"],
     })
     const customChalk = new chalk.Instance({
