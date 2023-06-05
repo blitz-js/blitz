@@ -1,4 +1,4 @@
-import {ISettingsParam, Logger} from "tslog"
+import {ILogObj, ISettingsParam, Logger} from "tslog"
 import c from "chalk"
 import {Table} from "console-table-printer"
 import ora from "ora"
@@ -8,7 +8,7 @@ import {defaultConfig} from "./default-config"
 
 // eslint-disable-next-line
 declare module globalThis {
-  let _blitz_baseLogger: Logger
+  let _blitz_baseLogger: Logger<ILogObj>
   let _blitz_logLevel: LogLevel
 }
 
@@ -103,7 +103,7 @@ export const newline = () => {
   }
 }
 
-export const baseLogger = (options?: ISettingsParam): Logger => {
+export const baseLogger = (options?: ISettingsParam<ILogObj>): Logger<ILogObj> => {
   if (globalThis._blitz_baseLogger) return globalThis._blitz_baseLogger
 
   let config
@@ -114,28 +114,14 @@ export const baseLogger = (options?: ISettingsParam): Logger => {
   }
 
   globalThis._blitz_baseLogger = new Logger({
-    minLevel: config.log?.level || "info",
+    minLevel: config.log?.level || 3,
     type: config.log?.type || "pretty",
-    dateTimePattern:
+    prettyLogTemplate:
       process.env.NODE_ENV === "production"
-        ? "year-month-day hour:minute:second.millisecond"
-        : "hour:minute:second.millisecond",
-    displayFunctionName: false,
-    displayFilePath: "hidden",
-    displayRequestId: false,
-    dateTimeTimezone:
-      process.env.NODE_ENV === "production"
-        ? "utc"
-        : Intl.DateTimeFormat().resolvedOptions().timeZone,
-    prettyInspectHighlightStyles: {
-      name: "yellow",
-      number: "blue",
-      bigint: "blue",
-      boolean: "blue",
-    },
-    colorizePrettyLogs: process.env.FORCE_COLOR === "0" ? false : true,
-    maskValuesOfKeys: ["password", "passwordConfirmation"],
-    exposeErrorCodeFrame: process.env.NODE_ENV !== "production",
+        ? "{{yyyy}}-{{mm}}-{{dd}} {{hh}}:{{MM}}:{{ss}}:{{ms}}"
+        : "{{hh}}:{{MM}}:{{ss}}:{{ms}}",
+    prettyLogTimeZone: process.env.NODE_ENV === "production" ? "UTC" : "local",
+    maskValuesOfKeys: ["password", "passwordConfirmation", "currentPassword"],
     ...options,
   })
 

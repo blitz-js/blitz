@@ -3,6 +3,7 @@ import {NextRouter, withRouter} from "next/router"
 import * as React from "react"
 import {RouterContext} from "./router-context"
 import _debug from "debug"
+import {ExcludeRouterProps} from "next/dist/client/with-router"
 
 const debug = _debug("blitz:errorboundary")
 
@@ -72,7 +73,9 @@ type ErrorBoundaryState = {error: Error | null}
 
 const initialState: ErrorBoundaryState = {error: null}
 
-const ErrorBoundary: ReturnType<typeof withRouter> = withRouter(
+const ErrorBoundary: React.ComponentType<
+  ExcludeRouterProps<React.PropsWithChildren<ErrorBoundaryProps>>
+> = withRouter(
   class ErrorBoundaryRoot extends React.Component<
     React.PropsWithRef<React.PropsWithChildren<ErrorBoundaryProps>>,
     ErrorBoundaryState
