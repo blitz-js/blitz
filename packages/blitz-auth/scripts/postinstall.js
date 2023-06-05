@@ -36,13 +36,10 @@ async function findNodeModulesRoot(src) {
 
 async function patchNextAuth() {
   try {
-    console.log("1")
     const nodeModulesRoot = await findNodeModulesRoot(__dirname)
-    console.log(nodeModulesRoot)
     const nextAuthPackageJson = require.resolve("next-auth", {
       paths: [nodeModulesRoot],
     })
-    console.log(nextAuthPackageJson)
     const nextAuthPackageJsonContents = require(path.join(
       nextAuthPackageJson,
       "..",
@@ -52,9 +49,8 @@ async function patchNextAuth() {
       ...nextAuthPackageJsonContents.exports,
       "./core/*": "./core/*.js",
     }
-    console.log(nextAuthPackageJsonContents)
     fs.writeFileSync(nextAuthPackageJson, JSON.stringify(nextAuthPackageJsonContents, null, 2))
-    console.log("Patched next-auth package.json exports")
+    console.debug("Patched next-auth package.json exports")
   } catch (e) {
     console.log("Failed to patch next-auth package.json exports")
     console.log(e)
