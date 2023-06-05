@@ -48,7 +48,7 @@
     "prettier": "^2.7.1",
     "recast": "0.20.5",
     "supports-color": "8.1.1",
-    "tslog": "3.3.4",
+    "tslog": "4.8.2",
     "username": "5.1.0",
     "vinyl": "2.2.1",
     "zod": "3.20.2"
