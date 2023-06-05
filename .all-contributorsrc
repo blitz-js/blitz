@@ -3927,6 +3927,24 @@
         "doc",
         "code"
       ]
+    },
+    {
+      "login": "nerixim",
+      "name": "Nikita Kamaev",
+      "avatar_url": "https://avatars.githubusercontent.com/u/26106502?v=4",
+      "profile": "https://github.com/nerixim",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "nikola-wd",
+      "name": "Nikola Ivanov",
+      "avatar_url": "https://avatars.githubusercontent.com/u/11588823?v=4",
+      "profile": "https://webredone.com/",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
