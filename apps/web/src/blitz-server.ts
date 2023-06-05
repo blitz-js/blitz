@@ -13,7 +13,6 @@ const {gSSP, gSP, api} = setupBlitzServer({
     }),
   ],
   logger: BlitzLogger({
-    colorizePrettyLogs: true,
     prefix: ["[blitz]>>>>>"],
   }),
 })
