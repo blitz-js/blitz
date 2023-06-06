@@ -76,7 +76,7 @@
     "tar": "6.1.11",
     "ts-node": "10.9.1",
     "tsconfig-paths": "4.0.0",
-    "tslog": "3.3.4",
+    "tslog": "4.8.2",
     "watchpack": "2.1.1"
   },
   "devDependencies": {
