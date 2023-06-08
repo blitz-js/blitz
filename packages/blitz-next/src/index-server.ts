@@ -230,6 +230,7 @@ export const setupBlitzServer = <TPlugins extends readonly BlitzServerPlugin<obj
 export interface BlitzConfig extends NextConfig {
   blitz?: {
     resolverPath?: ResolverPathOptions
+    resolversDynamicImport: boolean
     includeRPCFolders?: string[]
     customServer?: {
       hotReload?: boolean

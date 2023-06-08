@@ -5,6 +5,7 @@ import {ResolverPathOptions} from "../../../index-server"
 export interface LoaderOptions {
   resolverPath: ResolverPathOptions
   includeRPCFolders?: string[]
+  resolversDynamicImport?: boolean
 }
 
 export interface Loader {

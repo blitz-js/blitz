@@ -6,6 +6,9 @@ const { withBlitz } = require("@blitzjs/next")
  **/
 const config = {
   reactStrictMode: true,
+  blitz: {
+    resolversDynamicImport: true,
+  },
 }
 
 module.exports = withBlitz(withNextAuthAdapter(config))

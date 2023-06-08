@@ -165,6 +165,7 @@ export function rpcHandler(config: RpcConfig) {
     const routePath = "/" + relativeRoutePath
 
     const log = baseLogger().getSubLogger({
+      name: "blitz-rpc",
       prefix: [routePath.replace(/(\/api\/rpc)?\//, "") + "()"],
     })
     const customChalk = new chalk.Instance({
@@ -220,7 +221,7 @@ export function rpcHandler(config: RpcConfig) {
         const startTime = Date.now()
         const result = await resolver(data, (res as any).blitzCtx)
         const resolverDuration = Date.now() - startTime
-        log.debug(customChalk.dim("Result:"), result ? result : JSON.stringify(result))
+        log.info(customChalk.dim("Result:"), result ? result : JSON.stringify(result))
 
         const serializerStartTime = Date.now()
         const serializedResult = superjsonSerialize(result)
@@ -242,7 +243,7 @@ export function rpcHandler(config: RpcConfig) {
         const serializerDuration = Date.now() - serializerStartTime
         const duration = Date.now() - startTime
 
-        log.info(
+        log.debug(
           customChalk.dim(
             `Finished: resolver:${prettyMs(resolverDuration)} serializer:${prettyMs(
               serializerDuration,
