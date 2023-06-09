@@ -19,7 +19,7 @@ const config = {
 }
 ```
 
-When `resolversDynamicImport` is set to `true`, the default import strategy will be "import" instead of "require".
+When `resolversDynamicImport` is set to `true`, the import strategy will be "import" instead of "require".
 
 ### On Vercel
 
