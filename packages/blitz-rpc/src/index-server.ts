@@ -3,6 +3,7 @@ import {NextApiRequest, NextApiResponse} from "next"
 import {deserialize, parse, serialize as superjsonSerialize} from "superjson"
 import {resolve} from "path"
 import chalk from "chalk"
+import {LoaderOptions} from "./server/loader/utils/loader-utils"
 
 // TODO - optimize end user server bundles by not exporting all client stuff here
 export * from "./index-browser"
@@ -60,16 +61,11 @@ const loaderClient = resolve(dir, "./loader-client.cjs")
 const loaderServer = resolve(dir, "./loader-server.cjs")
 const loaderServerResolvers = resolve(dir, "./loader-server-resolvers.cjs")
 
-interface WebpackRuleOptions {
-  resolverPath: ResolverPathOptions | undefined
-  includeRPCFolders: string[] | undefined
-}
-
 interface WebpackRule {
   test: RegExp
   use: Array<{
     loader: string
-    options: WebpackRuleOptions
+    options: LoaderOptions
   }>
 }
 
@@ -84,7 +80,7 @@ export interface InstallWebpackConfigOptions {
       rules: WebpackRule[]
     }
   }
-  webpackRuleOptions: WebpackRuleOptions
+  webpackRuleOptions: LoaderOptions
 }
 
 export function installWebpackConfig({
