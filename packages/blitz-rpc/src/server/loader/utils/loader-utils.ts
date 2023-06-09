@@ -3,7 +3,7 @@ import {posix, sep, win32, join, normalize} from "path"
 import {ResolverPathOptions} from "../../../index-server"
 
 export interface LoaderOptions {
-  resolverPath: ResolverPathOptions
+  resolverPath?: ResolverPathOptions
   includeRPCFolders?: string[]
   resolversDynamicImport?: boolean
 }
