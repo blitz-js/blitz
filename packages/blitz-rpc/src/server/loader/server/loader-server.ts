@@ -64,6 +64,11 @@ export async function transformBlitzRpcServer(
       extraRpcBasePaths: options?.includeRPCFolders,
     })
 
+    if (options && !options?.resolversDynamicImport) {
+      //set resolverDynamicImport to default be true if on vercel
+      options.resolversDynamicImport = process.env.VERCEL ? true : false
+    }
+
     const importStrategy = options?.resolversDynamicImport ? "import" : "require"
 
     code += `__internal_addBlitzRpcResolver('${routePath}',() => ${importStrategy}('${slash(
