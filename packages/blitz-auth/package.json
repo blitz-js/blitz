@@ -1,6 +1,6 @@
 {
   "name": "@blitzjs/auth",
-  "version": "2.0.0-beta.27",
+  "version": "2.0.0-beta.28",
   "homepage": "https://blitzjs.com/",
   "repository": {
     "type": "git",
@@ -48,7 +48,7 @@
     "url": "0.11.0"
   },
   "peerDependencies": {
-    "blitz": "2.0.0-beta.27",
+    "blitz": "2.0.0-beta.28",
     "next": "*",
     "next-auth": "*",
     "secure-password": "4.0.0"
@@ -65,7 +65,7 @@
     }
   },
   "devDependencies": {
-    "@blitzjs/config": "workspace:2.0.0-beta.27",
+    "@blitzjs/config": "workspace:2.0.0-beta.28",
     "@testing-library/react": "13.4.0",
     "@testing-library/react-hooks": "8.0.1",
     "@types/cookie": "0.4.1",
@@ -73,7 +73,7 @@
     "@types/jsonwebtoken": "8.5.8",
     "@types/react": "18.0.25",
     "@types/react-dom": "17.0.14",
-    "blitz": "2.0.0-beta.27",
+    "blitz": "2.0.0-beta.28",
     "next": "13.3.0",
     "next-auth": "4.18.7",
     "react": "18.2.0",

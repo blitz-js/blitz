@@ -1,5 +1,17 @@
 # @blitzjs/auth
 
+## 2.0.0-beta.28
+
+### Minor Changes
+
+- 1bb3a6556: Stop exporting `useAuthenticatedBlitzContext` from `@blitzjs/auth` this must be imported from `app/blitz-server.ts` file in order to work correctly
+
+### Patch Changes
+
+- 5166e5e03: (feat) upgrade tslog to v4.8.2
+- Updated dependencies [5166e5e03]
+  - blitz@2.0.0-beta.28
+
 ## 2.0.0-beta.27
 
 ### Patch Changes
