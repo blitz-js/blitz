@@ -26,7 +26,7 @@ export const BlitzLogger = (settings: BlitzLoggerSettings = {}) => {
     maskValuesOfKeys: ["password", "passwordConfirmation", "currentPassword"],
     type: process.env.NODE_ENV === "production" ? "json" : "pretty",
     prettyLogTemplate:
-      "{{yyyy}}.{{mm}}.{{dd}} {{hh}}:{{MM}}:{{ss}}:{{ms}}\t{{logLevelName}}\t{{name}}]\t",
+      "{{yyyy}}.{{mm}}.{{dd}} {{hh}}:{{MM}}:{{ss}}:{{ms}}\t{{logLevelName}}\t[{{filePathWithLine}}{{name}}]\t",
     ...settings,
   })
 
