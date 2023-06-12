@@ -13,8 +13,7 @@
     "lint": "eslint . --fix",
     "test": "vitest run",
     "test-watch": "vitest",
-    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
-    "postinstall": "node scripts/postinstall.js"
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
   "main": "./dist/index-server.cjs",
   "module": "./dist/index-server.mjs",

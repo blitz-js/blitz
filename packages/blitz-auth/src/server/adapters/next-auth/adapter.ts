@@ -31,8 +31,6 @@ import {init} from "next-auth/core/init"
 import getAuthorizationUrl from "next-auth/core/lib/oauth/authorization-url"
 import oAuthCallback from "next-auth/core/lib/oauth/callback"
 
-export {withNextAuthAdapter} from "./webpack"
-
 const INTERNAL_REDIRECT_URL_KEY = "_redirectUrl"
 
 function switchURL(callbackUrl: string) {
