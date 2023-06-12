@@ -7,8 +7,8 @@ on:
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
-  
-env: 
+
+env:
   PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
 
 jobs:
@@ -143,7 +143,7 @@ jobs:
 
       - name: Install playwright
         run: |
-            pnpx playwright@1.28.0 install --with-deps
+          pnpx playwright@1.28.0 install --with-deps
         shell: bash
 
       - name: Build

@@ -1,6 +1,6 @@
 {
   "name": "@blitzjs/next",
-  "version": "2.0.0-beta.27",
+  "version": "2.0.0-beta.28",
   "homepage": "https://blitzjs.com/",
   "repository": {
     "type": "git",
@@ -29,7 +29,7 @@
     "eslint.js"
   ],
   "dependencies": {
-    "@blitzjs/rpc": "2.0.0-beta.27",
+    "@blitzjs/rpc": "2.0.0-beta.28",
     "@types/hoist-non-react-statics": "3.3.1",
     "debug": "4.3.3",
     "fs-extra": "10.0.1",
@@ -38,12 +38,12 @@
     "supports-color": "8.1.1"
   },
   "peerDependencies": {
-    "blitz": "2.0.0-beta.27",
+    "blitz": "2.0.0-beta.28",
     "next": "*",
     "react": "*"
   },
   "devDependencies": {
-    "@blitzjs/config": "workspace:2.0.0-beta.27",
+    "@blitzjs/config": "workspace:2.0.0-beta.28",
     "@testing-library/dom": "8.13.0",
     "@testing-library/jest-dom": "5.16.3",
     "@testing-library/react": "13.4.0",
@@ -53,7 +53,7 @@
     "@types/react": "18.0.25",
     "@types/react-dom": "17.0.14",
     "@types/testing-library__react-hooks": "4.0.0",
-    "blitz": "2.0.0-beta.27",
+    "blitz": "2.0.0-beta.28",
     "cross-spawn": "7.0.3",
     "find-up": "4.1.0",
     "next": "13.3.0",
