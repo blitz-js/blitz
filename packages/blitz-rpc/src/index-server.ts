@@ -3,6 +3,7 @@ import {NextApiRequest, NextApiResponse} from "next"
 import {deserialize, parse, serialize as superjsonSerialize} from "superjson"
 import {resolve} from "path"
 import chalk from "chalk"
+import {LoaderOptions} from "./server/loader/utils/loader-utils"
 
 // TODO - optimize end user server bundles by not exporting all client stuff here
 export * from "./index-browser"
@@ -60,16 +61,11 @@ const loaderClient = resolve(dir, "./loader-client.cjs")
 const loaderServer = resolve(dir, "./loader-server.cjs")
 const loaderServerResolvers = resolve(dir, "./loader-server-resolvers.cjs")
 
-interface WebpackRuleOptions {
-  resolverPath: ResolverPathOptions | undefined
-  includeRPCFolders: string[] | undefined
-}
-
 interface WebpackRule {
   test: RegExp
   use: Array<{
     loader: string
-    options: WebpackRuleOptions
+    options: LoaderOptions
   }>
 }
 
@@ -84,7 +80,7 @@ export interface InstallWebpackConfigOptions {
       rules: WebpackRule[]
     }
   }
-  webpackRuleOptions: WebpackRuleOptions
+  webpackRuleOptions: LoaderOptions
 }
 
 export function installWebpackConfig({
@@ -165,6 +161,7 @@ export function rpcHandler(config: RpcConfig) {
     const routePath = "/" + relativeRoutePath
 
     const log = baseLogger().getSubLogger({
+      name: "blitz-rpc",
       prefix: [routePath.replace(/(\/api\/rpc)?\//, "") + "()"],
     })
     const customChalk = new chalk.Instance({
@@ -220,7 +217,7 @@ export function rpcHandler(config: RpcConfig) {
         const startTime = Date.now()
         const result = await resolver(data, (res as any).blitzCtx)
         const resolverDuration = Date.now() - startTime
-        log.debug(customChalk.dim("Result:"), result ? result : JSON.stringify(result))
+        log.info(customChalk.dim("Result:"), result ? result : JSON.stringify(result))
 
         const serializerStartTime = Date.now()
         const serializedResult = superjsonSerialize(result)
@@ -242,7 +239,7 @@ export function rpcHandler(config: RpcConfig) {
         const serializerDuration = Date.now() - serializerStartTime
         const duration = Date.now() - startTime
 
-        log.info(
+        log.debug(
           customChalk.dim(
             `Finished: resolver:${prettyMs(resolverDuration)} serializer:${prettyMs(
               serializerDuration,

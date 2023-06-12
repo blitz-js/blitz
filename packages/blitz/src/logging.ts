@@ -22,15 +22,11 @@ export const baseLogger = (options: BlitzLoggerSettings = {}): Logger<ILogObj> =
 
 export const BlitzLogger = (settings: BlitzLoggerSettings = {}) => {
   const baseLogger = new Logger({
-    minLevel: 3,
-    type: "pretty",
-    prettyLogTemplate:
-      process.env.NODE_ENV === "production"
-        ? "{{yyyy}}-{{mm}}-{{dd}} {{hh}}:{{MM}}:{{ss}}:{{ms}}"
-        : "{{hh}}:{{MM}}:{{ss}}:{{ms}}",
     prettyLogTimeZone: process.env.NODE_ENV === "production" ? "UTC" : "local",
     maskValuesOfKeys: ["password", "passwordConfirmation", "currentPassword"],
-    // exposeErrorCodeFrame: process.env.NODE_ENV !== "production",
+    type: process.env.NODE_ENV === "production" ? "json" : "pretty",
+    prettyLogTemplate:
+      "{{yyyy}}.{{mm}}.{{dd}} {{hh}}:{{MM}}:{{ss}}:{{ms}}\t{{logLevelName}}\t[{{filePathWithLine}}{{name}}]\t",
     ...settings,
   })
 

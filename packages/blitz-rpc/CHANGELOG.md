@@ -1,5 +1,37 @@
 # @blitzjs/rpc
 
+## 2.0.0-beta.28
+
+### Patch Changes
+
+- 5166e5e03: (feat) upgrade tslog to v4.8.2
+- 2533caf48: Fix return type of `requestMiddlewares` in `RpcServerPlugin`
+- c7ac86b85: Fixes enormous memory consumption of the dev server by changing the default import strategy to "require" instead of "import" which in webpack causes multiple chunks to be created for each import.
+
+  ## Blitz Configuration
+
+  To configure this behaviour, you can add the following to your next.config.js:
+
+  ```js
+  /**
+   * @type {import('@blitzjs/next').BlitzConfig}
+   **/
+  const config = {
+    blitz: {
+      resolversDynamicImport: true,
+    },
+  }
+  ```
+
+  When `resolversDynamicImport` is set to `true`, the import strategy will be "import" instead of "require".
+
+  ### On Vercel
+
+  If you are using Vercel, `resolversDynamicImport` will be set to `true` by default, since it is better for the separate chunks to be create for serverless lambdas.
+
+- Updated dependencies [5166e5e03]
+  - blitz@2.0.0-beta.28
+
 ## 2.0.0-beta.27
 
 ### Minor Changes

@@ -1,6 +1,6 @@
 {
   "name": "next-blitz-auth",
-  "version": "0.1.1-beta.3",
+  "version": "0.1.1-beta.4",
   "private": true,
   "scripts": {
     "blitz:dev": "next dev",
