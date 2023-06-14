@@ -8,13 +8,13 @@
     "clean": "rm -rf .turbo && rm -rf node_modules"
   },
   "dependencies": {
-    "@blitzjs/auth": "workspace:2.0.0-beta.28",
-    "@blitzjs/config": "workspace:2.0.0-beta.28",
-    "@blitzjs/next": "workspace:2.0.0-beta.28",
-    "@blitzjs/rpc": "workspace:2.0.0-beta.28",
+    "@blitzjs/auth": "workspace:2.0.0-beta.29",
+    "@blitzjs/config": "workspace:2.0.0-beta.29",
+    "@blitzjs/next": "workspace:2.0.0-beta.29",
+    "@blitzjs/rpc": "workspace:2.0.0-beta.29",
     "@prisma/client": "4.6.1",
     "@tanstack/react-query": "4.0.10",
-    "blitz": "workspace:2.0.0-beta.28",
+    "blitz": "workspace:2.0.0-beta.29",
     "next": "13.3.0",
     "prisma": "4.6.1",
     "react": "18.2.0",

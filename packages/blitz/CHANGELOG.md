@@ -1,5 +1,14 @@
 # blitz
 
+## 2.0.0-beta.29
+
+### Patch Changes
+
+- b6b9a1c5a: Fix Next-Auth integration: `Unable to use next-auth with provider: Error [ERR_PACKAGE_PATH_NOT_EXPORTED]`
+- 61888d1a3: Fix log formatting to not show the path of blitz rpc
+- Updated dependencies [7aef610d8]
+  - @blitzjs/generator@2.0.0-beta.29
+
 ## 2.0.0-beta.28
 
 ### Patch Changes
