@@ -40,7 +40,8 @@
   "peerDependencies": {
     "blitz": "2.0.0-beta.28",
     "next": "*",
-    "react": "*"
+    "react": "*",
+    "tslog": "*"
   },
   "devDependencies": {
     "@blitzjs/config": "workspace:2.0.0-beta.28",
@@ -49,6 +50,7 @@
     "@testing-library/react": "13.4.0",
     "@testing-library/react-hooks": "8.0.1",
     "@testing-library/user-event": "13.5.0",
+    "@types/debug": "4.1.7",
     "@types/node": "18.11.9",
     "@types/react": "18.0.25",
     "@types/react-dom": "17.0.14",
@@ -62,6 +64,7 @@
     "react-dom": "18.2.0",
     "resolve-from": "5.0.0",
     "ts-jest": "27.1.4",
+    "tslog": "4.8.2",
     "typescript": "^4.8.4",
     "unbuild": "0.7.6",
     "watch": "1.0.2"

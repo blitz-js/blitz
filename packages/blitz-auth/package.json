@@ -37,6 +37,7 @@
     "cookie": "0.4.1",
     "cookie-session": "2.0.0",
     "debug": "4.3.3",
+    "find-up": "4.1.0",
     "http": "0.0.1-security",
     "jsonwebtoken": "9.0.0",
     "nanoid": "3.2.0",
@@ -44,6 +45,7 @@
     "openid-client": "5.2.1",
     "passport": "0.6.0",
     "path": "0.12.7",
+    "resolve-from": "5.0.0",
     "supports-color": "8.1.1",
     "url": "0.11.0"
   },

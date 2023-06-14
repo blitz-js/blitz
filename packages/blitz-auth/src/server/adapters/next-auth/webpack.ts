@@ -1,15 +1,27 @@
 //@ts-nocheck
+import fs from "fs-extra"
+import path from "path"
+
 export function withNextAuthAdapter(nextConfig) {
   const config = Object.assign({}, nextConfig)
-  config.webpack = (config) => {
-    //add a required resolve alias
-    config.resolve.alias["next-auth/core/lib/oauth/callback"] =
-      process.cwd() + "/node_modules/next-auth/core/lib/oauth/callback.js"
-    config.resolve.alias["next-auth/core/lib/oauth/authorization-url"] =
-      process.cwd() + "/node_modules/next-auth/core/lib/oauth/authorization-url.js"
-    config.resolve.alias["next-auth/core/init"] =
-      process.cwd() + "/node_modules/next-auth/core/init.js"
+  const nextAuthPath = path.dirname(require.resolve("next-auth"))
+  const webpack = (config) => {
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      "next-auth/core/lib/oauth/callback": path.join(nextAuthPath, "core/lib/oauth/callback.js"),
+      "next-auth/core/lib/oauth/authorization-url": path.join(
+        nextAuthPath,
+        "core/lib/oauth/authorization-url.js",
+      ),
+      "next-auth/core/init": path.join(nextAuthPath, "core/init.js"),
+    }
     return config
   }
+  if (typeof nextConfig.webpack === "function") {
+    config.webpack = (config, options) => {
+      return nextConfig.webpack(webpack(config), options)
+    }
+  }
+  config.webpack = webpack
   return config
 }
