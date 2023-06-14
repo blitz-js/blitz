@@ -189,7 +189,6 @@ export async function getBlitzContext(): Promise<Ctx> {
   const req = new IncomingMessage(new Socket()) as IncomingMessage & {
     cookies: {[key: string]: string}
   }
-  // @ts-expect-error TODO
   req.headers = Object.fromEntries(headers())
   const csrfToken = cookies().get(COOKIE_CSRF_TOKEN())
   if (csrfToken) {
