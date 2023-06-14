@@ -1,5 +1,11 @@
 # @blitzjs/generator
 
+## 2.0.0-beta.29
+
+### Patch Changes
+
+- 7aef610d8: Make Next.js version stick to 13.4.5 when generating a new app
+
 ## 2.0.0-beta.28
 
 ### Patch Changes

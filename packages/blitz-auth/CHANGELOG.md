@@ -1,5 +1,14 @@
 # @blitzjs/auth
 
+## 2.0.0-beta.29
+
+### Patch Changes
+
+- b6b9a1c5a: Fix Next-Auth integration: `Unable to use next-auth with provider: Error [ERR_PACKAGE_PATH_NOT_EXPORTED]`
+- Updated dependencies [b6b9a1c5a]
+- Updated dependencies [61888d1a3]
+  - blitz@2.0.0-beta.29
+
 ## 2.0.0-beta.28
 
 ### Minor Changes
