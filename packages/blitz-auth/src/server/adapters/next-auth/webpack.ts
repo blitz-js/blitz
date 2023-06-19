@@ -1,10 +1,10 @@
 //@ts-nocheck
-import fs from "fs-extra"
 import path from "path"
 
 export function withNextAuthAdapter(nextConfig) {
   const config = Object.assign({}, nextConfig)
-  const nextAuthPath = path.dirname(require.resolve("next-auth"))
+  const nextAuthPackageName = "next-auth"
+  const nextAuthPath = path.dirname(require.resolve(`${nextAuthPackageName}`))
   const webpack = (config) => {
     config.resolve.alias = {
       ...config.resolve.alias,
