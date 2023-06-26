@@ -8,5 +8,9 @@ export default api(
       error.message = `FormatError handler: ${error.message}`
       return error
     },
+    logging: {
+      verbose: true,
+      blackList: ["/getCurrentUser"],
+    },
   })
 )

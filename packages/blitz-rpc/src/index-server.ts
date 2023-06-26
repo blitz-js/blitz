@@ -146,29 +146,61 @@ async function getResolverMap(): Promise<ResolverFiles | null | undefined> {
 interface RpcConfig {
   onError?: (error: Error) => void
   formatError?: (error: Error) => Error
-  logging: {
+  logging?: {
+    /**
+     * WhiteList Represents the list of routes for which logging should be enabled
+     * If whiteList is defined then only those routes will be logged
+     */
     whiteList?: string[]
+    /**
+     * BlackList Represents the list of routes for which logging should be disabled
+     * If blackList is defined then all routes except those will be logged
+     */
     blackList?: string[]
-    VERBOSE?: boolean
+    /**
+     * verbose Represents the flag to enable/disable logging
+     * If verbose is true then Blitz RPC will log the input and output of each resolver
+     */
+    verbose?: boolean
+    /**
+     * disablelevel Represents the flag to enable/disable logging for a particular level
+     */
     disablelevel?: "debug" | "info"
   }
 }
 
 function isBlitzRPCVerbose(routePath: string, config: RpcConfig, level: string) {
-  const isLevelDisabled = config.logging.disablelevel === level
-  if (config.logging.VERBOSE) {
-    if (
-      (config.logging.whiteList?.includes(routePath) ||
-        !config.logging.blackList?.includes(routePath)) &&
-      !isLevelDisabled
-    ) {
+  const isLevelDisabled = config.logging?.disablelevel === level
+  if (config.logging?.verbose) {
+    // If whiteList array is defined then allow only those routes in whiteList
+    if (config.logging?.whiteList) {
+      if (config.logging?.whiteList?.includes(routePath) && !isLevelDisabled) {
+        return true
+      }
+    }
+    // If blackList array is defined then allow all routes except those in blackList
+    if (config.logging?.blackList) {
+      if (!config.logging?.blackList?.includes(routePath) && !isLevelDisabled) {
+        return true
+      }
+    }
+    // if both whiteList and blackList are not defined, then allow all routes
+    if (!config.logging?.whiteList && !config.logging?.blackList && !isLevelDisabled) {
       return true
     }
+    return false
   }
   return false
 }
 
-export function rpcHandler(config: RpcConfig) {
+export function rpcHandler(
+  config: RpcConfig = {
+    // keeping this for backwards compatibility
+    logging: {
+      verbose: true,
+    },
+  },
+) {
   return async function handleRpcRequest(req: NextApiRequest, res: NextApiResponse, ctx: Ctx) {
     const resolverMap = await getResolverMap()
     assert(resolverMap, "No query or mutation resolvers found")
