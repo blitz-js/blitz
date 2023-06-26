@@ -146,6 +146,26 @@ async function getResolverMap(): Promise<ResolverFiles | null | undefined> {
 interface RpcConfig {
   onError?: (error: Error) => void
   formatError?: (error: Error) => Error
+  logging: {
+    whiteList?: string[]
+    blackList?: string[]
+    VERBOSE?: boolean
+    disablelevel?: "debug" | "info"
+  }
+}
+
+function isBlitzRPCVerbose(routePath: string, config: RpcConfig, level: string) {
+  const isLevelDisabled = config.logging.disablelevel === level
+  if (config.logging.VERBOSE) {
+    if (
+      (config.logging.whiteList?.includes(routePath) ||
+        !config.logging.blackList?.includes(routePath)) &&
+      !isLevelDisabled
+    ) {
+      return true
+    }
+  }
+  return false
 }
 
 export function rpcHandler(config: RpcConfig) {
@@ -213,11 +233,16 @@ export function rpcHandler(config: RpcConfig) {
               ? parse(`${req.query.meta}`)
               : undefined,
         })
-        log.info(customChalk.dim("Starting with input:"), data ? data : JSON.stringify(data))
+        if (isBlitzRPCVerbose(routePath, config, "info")) {
+          log.info(customChalk.dim("Starting with input:"), data ? data : JSON.stringify(data))
+        }
         const startTime = Date.now()
         const result = await resolver(data, (res as any).blitzCtx)
         const resolverDuration = Date.now() - startTime
-        log.info(customChalk.dim("Result:"), result ? result : JSON.stringify(result))
+
+        if (isBlitzRPCVerbose(routePath, config, "info")) {
+          log.info(customChalk.dim("Result:"), result ? result : JSON.stringify(result))
+        }
 
         const serializerStartTime = Date.now()
         const serializedResult = superjsonSerialize(result)
@@ -231,21 +256,26 @@ export function rpcHandler(config: RpcConfig) {
             result: serializedResult.meta,
           },
         })
-        log.debug(
-          customChalk.dim(
-            `Next.js serialization:${prettyMs(Date.now() - nextSerializerStartTime)}`,
-          ),
-        )
+
+        if (isBlitzRPCVerbose(routePath, config, "debug")) {
+          log.debug(
+            customChalk.dim(
+              `Next.js serialization:${prettyMs(Date.now() - nextSerializerStartTime)}`,
+            ),
+          )
+        }
+
         const serializerDuration = Date.now() - serializerStartTime
         const duration = Date.now() - startTime
-
-        log.debug(
-          customChalk.dim(
-            `Finished: resolver:${prettyMs(resolverDuration)} serializer:${prettyMs(
-              serializerDuration,
-            )} total:${prettyMs(duration)}`,
-          ),
-        )
+        if (isBlitzRPCVerbose(routePath, config, "debug")) {
+          log.debug(
+            customChalk.dim(
+              `Finished: resolver:${prettyMs(resolverDuration)} serializer:${prettyMs(
+                serializerDuration,
+              )} total:${prettyMs(duration)}`,
+            ),
+          )
+        }
         newLine()
 
         return
