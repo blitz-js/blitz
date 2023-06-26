@@ -170,6 +170,7 @@ interface RpcConfig {
 }
 
 function isBlitzRPCVerbose(resolverName: string, config: RpcConfig, level: string) {
+  // blitz rpc is by default verbose - to keep current behaviour
   if (!config.logging) {
     return true
   }
