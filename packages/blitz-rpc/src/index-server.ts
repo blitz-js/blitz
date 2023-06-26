@@ -170,6 +170,9 @@ interface RpcConfig {
 }
 
 function isBlitzRPCVerbose(routePath: string, config: RpcConfig, level: string) {
+  if (!config.logging) {
+    return true
+  }
   const isLevelDisabled = config.logging?.disablelevel === level
   if (config.logging?.verbose) {
     // If whiteList array is defined then allow only those routes in whiteList
@@ -193,14 +196,7 @@ function isBlitzRPCVerbose(routePath: string, config: RpcConfig, level: string) 
   return false
 }
 
-export function rpcHandler(
-  config: RpcConfig = {
-    // keeping this for backwards compatibility
-    logging: {
-      verbose: true,
-    },
-  },
-) {
+export function rpcHandler(config: RpcConfig) {
   return async function handleRpcRequest(req: NextApiRequest, res: NextApiResponse, ctx: Ctx) {
     const resolverMap = await getResolverMap()
     assert(resolverMap, "No query or mutation resolvers found")
