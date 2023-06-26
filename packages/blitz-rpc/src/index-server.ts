@@ -169,7 +169,7 @@ interface RpcConfig {
   }
 }
 
-function isBlitzRPCVerbose(routePath: string, config: RpcConfig, level: string) {
+function isBlitzRPCVerbose(resolverName: string, config: RpcConfig, level: string) {
   if (!config.logging) {
     return true
   }
@@ -177,13 +177,13 @@ function isBlitzRPCVerbose(routePath: string, config: RpcConfig, level: string) 
   if (config.logging?.verbose) {
     // If whiteList array is defined then allow only those routes in whiteList
     if (config.logging?.whiteList) {
-      if (config.logging?.whiteList?.includes(routePath) && !isLevelDisabled) {
+      if (config.logging?.whiteList?.includes(resolverName) && !isLevelDisabled) {
         return true
       }
     }
     // If blackList array is defined then allow all routes except those in blackList
     if (config.logging?.blackList) {
-      if (!config.logging?.blackList?.includes(routePath) && !isLevelDisabled) {
+      if (!config.logging?.blackList?.includes(resolverName) && !isLevelDisabled) {
         return true
       }
     }
@@ -207,10 +207,11 @@ export function rpcHandler(config: RpcConfig) {
 
     const relativeRoutePath = (req.query.blitz as string[])?.join("/")
     const routePath = "/" + relativeRoutePath
+    const resolverName = routePath.replace(/(\/api\/rpc)?\//, "")
 
     const log = baseLogger().getSubLogger({
       name: "blitz-rpc",
-      prefix: [routePath.replace(/(\/api\/rpc)?\//, "") + "()"],
+      prefix: [resolverName + "()"],
     })
     const customChalk = new chalk.Instance({
       level: log.settings.type === "json" ? 0 : chalk.level,
@@ -261,14 +262,14 @@ export function rpcHandler(config: RpcConfig) {
               ? parse(`${req.query.meta}`)
               : undefined,
         })
-        if (isBlitzRPCVerbose(routePath, config, "info")) {
+        if (isBlitzRPCVerbose(resolverName, config, "info")) {
           log.info(customChalk.dim("Starting with input:"), data ? data : JSON.stringify(data))
         }
         const startTime = Date.now()
         const result = await resolver(data, (res as any).blitzCtx)
         const resolverDuration = Date.now() - startTime
 
-        if (isBlitzRPCVerbose(routePath, config, "info")) {
+        if (isBlitzRPCVerbose(resolverName, config, "info")) {
           log.info(customChalk.dim("Result:"), result ? result : JSON.stringify(result))
         }
 
@@ -285,7 +286,7 @@ export function rpcHandler(config: RpcConfig) {
           },
         })
 
-        if (isBlitzRPCVerbose(routePath, config, "debug")) {
+        if (isBlitzRPCVerbose(resolverName, config, "debug")) {
           log.debug(
             customChalk.dim(
               `Next.js serialization:${prettyMs(Date.now() - nextSerializerStartTime)}`,
@@ -295,7 +296,7 @@ export function rpcHandler(config: RpcConfig) {
 
         const serializerDuration = Date.now() - serializerStartTime
         const duration = Date.now() - startTime
-        if (isBlitzRPCVerbose(routePath, config, "debug")) {
+        if (isBlitzRPCVerbose(resolverName, config, "debug")) {
           log.debug(
             customChalk.dim(
               `Finished: resolver:${prettyMs(resolverDuration)} serializer:${prettyMs(
