@@ -3,7 +3,7 @@
 "blitz": patch
 ---
 
-### Now we can configure this in the following way,
+### Now we can configure Blitz RPC in the following way,
 
 In your `[[...blitz]].ts` api file you can see the following settings
 ```ts
@@ -64,5 +64,5 @@ export default api(
 )
 ```
 
-This is enable verbose blitz rpc logging for all resolvers except the resolvers `getCurrentUser` and others mentioned in the `blackList`
+This is enable verbose blitz rpc logging for all resolvers except the resolvers `getCurrentUser` and others mentioned in the `blockList`
 
