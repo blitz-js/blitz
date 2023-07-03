@@ -3,9 +3,8 @@ import path from "path"
 
 export function withNextAuthAdapter(nextConfig) {
   const config = Object.assign({}, nextConfig)
-  const nextAuthPackageName = "next-auth"
   try {
-    const nextAuthPath = path.dirname(require.resolve(`${nextAuthPackageName}`))
+    const nextAuthPath = path.dirname(require.resolve("next-auth"))
     const webpack = (config) => {
       config.resolve.alias = {
         ...config.resolve.alias,
