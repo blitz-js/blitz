@@ -174,6 +174,10 @@ function isBlitzRPCVerbose(resolverName: string, config: RpcConfig, level: strin
   if (!config.logging) {
     return true
   }
+  //if logging exists and verbose is not defined then default to true
+  if (config.logging && !config.logging.verbose) {
+    return true
+  }
   const isLevelDisabled = config.logging?.disablelevel === level
   if (config.logging?.verbose) {
     // If allowList array is defined then allow only those routes in allowList
@@ -271,7 +275,7 @@ export function rpcHandler(config: RpcConfig) {
         const resolverDuration = Date.now() - startTime
 
         if (isBlitzRPCVerbose(resolverName, config, "info")) {
-          log.info(customChalk.dim("Result:"), result ? result : JSON.stringify(result))
+          log.debug(customChalk.dim("Result:"), result ? result : JSON.stringify(result))
         }
 
         const serializerStartTime = Date.now()
