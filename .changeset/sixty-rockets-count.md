@@ -14,10 +14,10 @@ logging?: {
    */
   allowList?: string[]
   /**
-   * blackList Represents the list of routes for which logging should be disabled
-   * If blackList is defined then all routes except those will be logged
+   * blockList Represents the list of routes for which logging should be disabled
+   * If blockList is defined then all routes except those will be logged
    */
-  blackList?: string[]
+  blockList?: string[]
   /**
    * verbose Represents the flag to enable/disable logging
    * If verbose is true then Blitz RPC will log the input and output of each resolver
