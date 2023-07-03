@@ -175,7 +175,7 @@ function isBlitzRPCVerbose(resolverName: string, config: RpcConfig, level: strin
     return true
   }
   //if logging exists and verbose is not defined then default to true
-  if (config.logging && !config.logging.verbose) {
+  if (config.logging && !("verbose" in config.logging)) {
     return true
   }
   const isLevelDisabled = config.logging?.disablelevel === level
