@@ -148,15 +148,15 @@ interface RpcConfig {
   formatError?: (error: Error) => Error
   logging?: {
     /**
-     * WhiteList Represents the list of routes for which logging should be enabled
-     * If whiteList is defined then only those routes will be logged
+     * allowList Represents the list of routes for which logging should be enabled
+     * If allowList is defined then only those routes will be logged
      */
-    whiteList?: string[]
+    allowList?: string[]
     /**
-     * BlackList Represents the list of routes for which logging should be disabled
-     * If blackList is defined then all routes except those will be logged
+     * blockList Represents the list of routes for which logging should be disabled
+     * If blockList is defined then all routes except those will be logged
      */
-    blackList?: string[]
+    blockList?: string[]
     /**
      * verbose Represents the flag to enable/disable logging
      * If verbose is true then Blitz RPC will log the input and output of each resolver
@@ -176,20 +176,20 @@ function isBlitzRPCVerbose(resolverName: string, config: RpcConfig, level: strin
   }
   const isLevelDisabled = config.logging?.disablelevel === level
   if (config.logging?.verbose) {
-    // If whiteList array is defined then allow only those routes in whiteList
-    if (config.logging?.whiteList) {
-      if (config.logging?.whiteList?.includes(resolverName) && !isLevelDisabled) {
+    // If allowList array is defined then allow only those routes in allowList
+    if (config.logging?.allowList) {
+      if (config.logging?.allowList?.includes(resolverName) && !isLevelDisabled) {
         return true
       }
     }
-    // If blackList array is defined then allow all routes except those in blackList
-    if (config.logging?.blackList) {
-      if (!config.logging?.blackList?.includes(resolverName) && !isLevelDisabled) {
+    // If blockList array is defined then allow all routes except those in blockList
+    if (config.logging?.blockList) {
+      if (!config.logging?.blockList?.includes(resolverName) && !isLevelDisabled) {
         return true
       }
     }
-    // if both whiteList and blackList are not defined, then allow all routes
-    if (!config.logging?.whiteList && !config.logging?.blackList && !isLevelDisabled) {
+    // if both allowList and blockList are not defined, then allow all routes
+    if (!config.logging?.allowList && !config.logging?.blockList && !isLevelDisabled) {
       return true
     }
     return false

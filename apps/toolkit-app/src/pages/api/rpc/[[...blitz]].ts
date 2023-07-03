@@ -10,7 +10,7 @@ export default api(
     },
     // logging: {
     //   verbose: true,
-    //   blackList: ["/getCurrentUser"],
+    //   blockList: ["/getCurrentUser"],
     // },
   })
 )
