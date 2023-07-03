@@ -274,7 +274,7 @@ export function rpcHandler(config: RpcConfig) {
         const result = await resolver(data, (res as any).blitzCtx)
         const resolverDuration = Date.now() - startTime
 
-        if (isBlitzRPCVerbose(resolverName, config, "info")) {
+        if (isBlitzRPCVerbose(resolverName, config, "debug")) {
           log.debug(customChalk.dim("Result:"), result ? result : JSON.stringify(result))
         }
 
@@ -301,8 +301,8 @@ export function rpcHandler(config: RpcConfig) {
 
         const serializerDuration = Date.now() - serializerStartTime
         const duration = Date.now() - startTime
-        if (isBlitzRPCVerbose(resolverName, config, "debug")) {
-          log.debug(
+        if (isBlitzRPCVerbose(resolverName, config, "info")) {
+          log.info(
             customChalk.dim(
               `Finished: resolver:${prettyMs(resolverDuration)} serializer:${prettyMs(
                 serializerDuration,
