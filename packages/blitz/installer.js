@@ -1,1 +1,1 @@
-module.exports = require("./dist/installer.cjs")
+module.exports = require("./dist/installer.js")

@@ -143,7 +143,7 @@ export function getCommandBin(
 
 export function runBlitzCommand(argv, options: RunNextCommandOptions = {}) {
   const nextnextbin = getCommandBin("blitz", options.cwd)
-  const blitzBin = path.join(nextnextbin, "dist/index.cjs")
+  const blitzBin = path.join(nextnextbin, "dist/index.js")
   const cwd = options.cwd || process.cwd()
   // Let Next.js decide the environment
   const env = {
@@ -222,7 +222,7 @@ export function runBlitzCommand(argv, options: RunNextCommandOptions = {}) {
 
 export function runBlitzCommandDev(argv, stdOut, opts: RunNextCommandDevOptions = {}) {
   const nextnextbin = getCommandBin("blitz", opts.cwd)
-  const blitzBin = path.join(nextnextbin, "dist/index.cjs")
+  const blitzBin = path.join(nextnextbin, "dist/index.js")
 
   const cwd = opts.cwd
   const env = {

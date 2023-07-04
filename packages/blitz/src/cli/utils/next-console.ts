@@ -174,7 +174,7 @@ const setupSelfRolledHistory = (repl: any, path: string) => {
       const nonEmptyLines = history.split(os.EOL).filter((line) => line.trim())
       repl.history.push(...nonEmptyLines.reverse())
     } catch (err) {
-      if (err.code !== "ENOENT") {
+      if ((err as any).code !== "ENOENT") {
         throw err
       }
     }
