@@ -2,14 +2,14 @@
   "name": "@blitzjs/codemod",
   "version": "2.0.0-beta.30",
   "scripts": {
-    "build": "unbuild",
-    "dev": "watch unbuild src --wait=0.2",
+    "build": "tsup",
+    "dev": "tsup --watch",
     "lint": "eslint . --fix",
     "test": "vitest run",
     "test-watch": "vitest",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
-  "main": "./dist/index.cjs",
+  "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "browser": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -42,8 +42,7 @@
     "@types/jscodeshift": "0.11.2",
     "@types/node": "18.11.9",
     "ast-types": "0.14.2",
-    "unbuild": "0.7.6",
-    "watch": "1.0.2"
+    "tsup": "7.1.0"
   },
   "publishConfig": {
     "access": "public"
