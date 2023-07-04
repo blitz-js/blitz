@@ -127,11 +127,11 @@ export const customTemplatesBlitzConfig = async (
 }
 
 export const customTsParser = {
-  parse(source: string, options?: Overrides) {
+  parse(source: string, options?: Overrides): babel.types.File {
     const babelOptions = getBabelOptions(options)
     babelOptions.plugins.push("typescript")
     babelOptions.plugins.push("jsx")
-    return babelParser.parser.parse(source, babelOptions)
+    return babelParser.parser.parse(source, babelOptions) as babel.types.File
   },
 }
 
