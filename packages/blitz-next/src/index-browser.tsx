@@ -1,3 +1,4 @@
+"use client"
 import "./global"
 import type {ClientPlugin, BlitzPluginWithProvider} from "blitz"
 import {reduceBlitzClientPlugins, Ctx} from "blitz"
@@ -45,9 +46,15 @@ interface RouteUrlObject extends Pick<UrlObject, "pathname" | "query" | "href"> 
   pathname: string
 }
 
+export type RegisteredCtx = Ctx extends {
+  session: {$publicData: any}
+}
+  ? Ctx["session"]["$publicData"]
+  : never
+
 type RedirectAuthenticatedTo = string | RouteUrlObject | false
 type RedirectAuthenticatedToFnCtx = {
-  session: Ctx["session"]["$publicData"]
+  session: RegisteredCtx
 }
 type RedirectAuthenticatedToFn = (args: RedirectAuthenticatedToFnCtx) => RedirectAuthenticatedTo
 export type BlitzPage<P = {}> = React.ComponentType<P> & {
