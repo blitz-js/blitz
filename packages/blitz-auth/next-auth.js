@@ -1,1 +1,1 @@
-module.exports = require("./dist/next-auth.cjs")
+module.exports = require("./dist/next-auth.js")

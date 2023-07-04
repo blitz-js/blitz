@@ -1,1 +1,1 @@
-module.exports = require("./dist/secure-password.cjs")
+module.exports = require("./dist/secure-password.js")
