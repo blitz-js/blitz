@@ -36,8 +36,6 @@ export async function loader(this: Loader, input: string): Promise<string> {
   return input
 }
 
-module.exports = loader
-
 function slash(str: string) {
   return str.replace(/\\/g, "/")
 }

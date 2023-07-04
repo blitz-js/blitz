@@ -31,8 +31,6 @@ export async function loader(this: Loader, input: string): Promise<string> {
   return input
 }
 
-module.exports = loader
-
 export async function transformBlitzRpcResolverClient(
   _src: string,
   id: string,

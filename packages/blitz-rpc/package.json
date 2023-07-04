@@ -7,15 +7,14 @@
     "url": "https://github.com/blitz-js/blitz.git"
   },
   "scripts": {
-    "build": "unbuild && node ./utils/add-directives.js",
-    "predev": "wait-on -d 400 ../blitz/dist/index-server.d.ts && wait-on -d 400 ../blitz-auth/dist/index-browser.d.ts",
-    "dev": "pnpm run predev && watch unbuild src --wait=0.2",
+    "build": "tsup",
+    "dev": "tsup --watch",
     "lint": "eslint . --fix",
     "test": "vitest run",
     "test-watch": "vitest",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
-  "main": "./dist/index-server.cjs",
+  "main": "./dist/index-server.js",
   "module": "./dist/index-server.mjs",
   "browser": "./dist/index-browser.mjs",
   "types": "./dist/index-server.d.ts",
@@ -52,9 +51,8 @@
     "next": "13.3.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "tsup": "7.1.0",
     "typescript": "^4.8.4",
-    "unbuild": "0.7.6",
-    "watch": "1.0.2",
     "zod": "3.20.2"
   },
   "publishConfig": {

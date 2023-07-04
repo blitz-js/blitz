@@ -1,3 +1,4 @@
+"use client"
 import {QueryClient} from "@tanstack/query-core"
 import type {DefaultOptions} from "@tanstack/react-query"
 import {createClientPlugin} from "blitz"
