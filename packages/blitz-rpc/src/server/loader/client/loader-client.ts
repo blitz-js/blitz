@@ -76,3 +76,4 @@ export async function transformBlitzRpcResolverClient(
 
   return code
 }
+export default loader

@@ -1,3 +1,4 @@
+import "./global"
 import {assert, baseLogger, Ctx, newLine, prettyMs, ResolverConfig} from "blitz"
 import {NextApiRequest, NextApiResponse} from "next"
 import {deserialize, parse, serialize as superjsonSerialize} from "superjson"
@@ -6,10 +7,11 @@ import chalk from "chalk"
 import {LoaderOptions} from "./server/loader/utils/loader-utils"
 
 // TODO - optimize end user server bundles by not exporting all client stuff here
-export * from "./index-browser"
+export * from "./query/react-query"
+export * from "./query/utils"
 export {RpcServerPlugin} from "./server/plugin"
 
-export * from "./server/resolvers/resolver"
+export {resolver, type ParserType} from "./server/resolvers/resolver"
 
 // Mechanism used by Vite/Next/Nuxt plugins for automatically loading query and mutation resolvers
 function isObject(value: unknown): value is Record<string | symbol, unknown> {
@@ -57,9 +59,9 @@ export function __internal_addBlitzRpcResolver(
 }
 
 const dir = __dirname + (() => "")() // trick to avoid `@vercel/ncc` to glob import
-const loaderClient = resolve(dir, "./loader-client.cjs")
-const loaderServer = resolve(dir, "./loader-server.cjs")
-const loaderServerResolvers = resolve(dir, "./loader-server-resolvers.cjs")
+const loaderClient = resolve(dir, "./loader-client.js")
+const loaderServer = resolve(dir, "./loader-server.js")
+const loaderServerResolvers = resolve(dir, "./loader-server-resolvers.js")
 
 interface WebpackRule {
   test: RegExp

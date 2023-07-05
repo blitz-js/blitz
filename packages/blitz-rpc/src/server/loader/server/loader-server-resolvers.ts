@@ -69,3 +69,5 @@ __internal_rpcHandler._routePath = '${fullRoutePath}'
 
 export default __internal_rpcHandler`
 }
+
+export default loader

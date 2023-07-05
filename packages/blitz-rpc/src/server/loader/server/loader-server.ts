@@ -130,3 +130,5 @@ export async function recursiveFindResolvers(
 
   return arr.sort()
 }
+
+export default loader

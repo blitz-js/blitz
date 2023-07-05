@@ -4,6 +4,6 @@
     "lib": ["DOM", "ES2015"],
     "preserveSymlinks": true
   },
-  "include": [".", "src/query/react-query/react.ts"],
+  "include": ["."],
   "exclude": ["dist", "build", "node_modules"]
 }
