@@ -101,6 +101,7 @@ export function reduceBlitzClientPlugins<TPlugins extends readonly ClientPlugin<
     }
     document.addEventListener("blitz:session-created", onSessionCreated)
     document.addEventListener("blitz:rpc-error", onRpcError)
+
     globalThis.__BLITZ_CLEAN_UP_LISTENERS = () => {
       document.removeEventListener("blitz:session-created", onSessionCreated)
       document.removeEventListener("blitz:rpc-error", onRpcError)
