@@ -89,13 +89,22 @@ export function reduceBlitzClientPlugins<TPlugins extends readonly ClientPlugin<
   globalThis.__BLITZ_MIDDLEWARE_HOOKS = middleware
 
   if (isClient) {
-    document.addEventListener("blitz:session-created", async () => {
+    if (globalThis.__BLITZ_CLEAN_UP_LISTENERS) {
+      globalThis.__BLITZ_CLEAN_UP_LISTENERS()
+    }
+    const onSessionCreated = async () => {
       await Promise.all(events.onSessionCreated())
-    })
-    document.addEventListener("blitz:rpc-error", async (e) => {
+    }
+    const onRpcError = async (e: Event): Promise<void> => {
       const customEvent = e as CustomEvent<Error>
       await Promise.all(events.onRpcError(customEvent.detail))
-    })
+    }
+    document.addEventListener("blitz:session-created", onSessionCreated)
+    document.addEventListener("blitz:rpc-error", onRpcError)
+    globalThis.__BLITZ_CLEAN_UP_LISTENERS = () => {
+      document.removeEventListener("blitz:session-created", onSessionCreated)
+      document.removeEventListener("blitz:rpc-error", onRpcError)
+    }
   }
 
   const withPlugins = compose(...providers)

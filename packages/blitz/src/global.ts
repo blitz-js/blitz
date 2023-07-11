@@ -5,4 +5,5 @@ declare global {
     beforeHttpRequest: BeforeHttpRequest
     beforeHttpResponse: BeforeHttpResponse
   }
+  var __BLITZ_CLEAN_UP_LISTENERS: () => void
 }
