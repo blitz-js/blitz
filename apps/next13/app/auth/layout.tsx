@@ -1,4 +1,4 @@
-import {useAuthenticatedBlitzContext} from "@blitzjs/auth"
+import {useAuthenticatedBlitzContext} from "../../src/blitz-server"
 
 export default async function RootLayout({children}: {children: React.ReactNode}) {
   await useAuthenticatedBlitzContext({
