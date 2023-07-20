@@ -1,5 +1,17 @@
 # @blitzjs/auth
 
+## 2.0.0-beta.31
+
+### Patch Changes
+
+- 90f1741da: blitz-auth: Support for Prisma v5
+
+  Internal: Make `handle` a required paramter while updating the `session` modal.
+
+- Updated dependencies [90f1741da]
+- Updated dependencies [df3265b85]
+  - blitz@2.0.0-beta.31
+
 ## 2.0.0-beta.30
 
 ### Patch Changes

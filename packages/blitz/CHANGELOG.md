@@ -1,5 +1,16 @@
 # blitz
 
+## 2.0.0-beta.31
+
+### Patch Changes
+
+- 90f1741da: blitz-auth: Support for Prisma v5
+
+  Internal: Make `handle` a required paramter while updating the `session` modal.
+
+- df3265b85: blitz-rpc: Cleanup Event Listeners - Fix potential memory leak by cleaning up any residual event listeners set by blitz.
+  - @blitzjs/generator@2.0.0-beta.31
+
 ## 2.0.0-beta.30
 
 ### Patch Changes
