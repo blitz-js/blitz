@@ -1,5 +1,4 @@
 ---
-"next-blitz-auth": patch
 "@blitzjs/next": patch
 "blitz": patch
 ---
