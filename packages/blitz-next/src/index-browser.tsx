@@ -1,13 +1,13 @@
 import "./global"
 import type {ClientPlugin, BlitzPluginWithProvider} from "blitz"
 import {reduceBlitzClientPlugins, Ctx} from "blitz"
-import Head from "next/head"
 import React, {ReactNode} from "react"
 import {withSuperJSONPage} from "./superjson"
 import {UrlObject} from "url"
 import {AppPropsType} from "next/dist/shared/lib/utils"
 import type {Router} from "next/router"
 import {BlitzProvider} from "./provider"
+import dynamic from "next/dynamic"
 export {Routes} from ".blitz"
 
 export {BlitzProvider} from "./provider"
@@ -109,6 +109,7 @@ const noscriptCSS = `
 `
 
 export const NoPageFlicker = () => {
+  const Head = dynamic(() => import("next/head"))
   return (
     <Head>
       <style dangerouslySetInnerHTML={{__html: customCSS}} />
