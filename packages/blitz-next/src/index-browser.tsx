@@ -9,6 +9,7 @@ import type {Router} from "next/router"
 import {BlitzProvider} from "./provider"
 import dynamic from "next/dynamic"
 export {Routes} from ".blitz"
+const Head = dynamic(() => import("next/head"))
 
 export {BlitzProvider} from "./provider"
 
@@ -109,7 +110,6 @@ const noscriptCSS = `
 `
 
 export const NoPageFlicker = () => {
-  const Head = dynamic(() => import("next/head"))
   return (
     <Head>
       <style dangerouslySetInnerHTML={{__html: customCSS}} />
