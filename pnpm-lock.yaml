@@ -4,6 +4,11 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  "@auth/core@0.10.0":
+    hash: yi6lijhd4lptf5wbdzbvoec35u
+    path: patches/@auth__core@0.10.0.patch
+
 importers:
   .:
     dependencies:
@@ -125,6 +130,9 @@ importers:
 
   apps/toolkit-app:
     dependencies:
+      "@auth/core":
+        specifier: 0.10.0
+        version: 0.10.0(patch_hash=yi6lijhd4lptf5wbdzbvoec35u)
       "@blitzjs/auth":
         specifier: workspace:*
         version: link:../../packages/blitz-auth
@@ -152,9 +160,6 @@ importers:
       next:
         specifier: 13.3.0
         version: 13.3.0(@babel/core@7.20.2)(react-dom@18.2.0)(react@18.2.0)
-      next-auth:
-        specifier: 4.18.7
-        version: 4.18.7(next@13.3.0)(react-dom@18.2.0)(react@18.2.0)
       prisma:
         specifier: 4.6.1
         version: 4.6.1
@@ -1580,7 +1585,7 @@ importers:
     devDependencies:
       "@auth/core":
         specifier: 0.10.0
-        version: 0.10.0
+        version: 0.10.0(patch_hash=yi6lijhd4lptf5wbdzbvoec35u)
       "@blitzjs/config":
         specifier: workspace:2.0.0-beta.31
         version: link:../config
@@ -2358,7 +2363,7 @@ packages:
       "@jridgewell/gen-mapping": 0.1.1
       "@jridgewell/trace-mapping": 0.3.17
 
-  /@auth/core@0.10.0:
+  /@auth/core@0.10.0(patch_hash=yi6lijhd4lptf5wbdzbvoec35u):
     resolution:
       {
         integrity: sha512-mmvAzFUcDHG0m6avQ6/sYI3wtQtt3Tjbk4wCr27OlCeNnlzqK8lDQJIDFbJOTXEu/dNUx8sUQ0xMp7A6GAaHQw==,
@@ -2375,7 +2380,7 @@ packages:
       oauth4webapi: 2.3.0
       preact: 10.11.3
       preact-render-to-string: 5.2.3(preact@10.11.3)
-    dev: true
+    patched: true
 
   /@babel/code-frame@7.16.7:
     resolution:
@@ -5736,19 +5741,11 @@ packages:
       "@nodelib/fs.scandir": 2.1.5
       fastq: 1.13.0
 
-  /@panva/hkdf@1.0.2:
-    resolution:
-      {
-        integrity: sha512-MSAs9t3Go7GUkMhpKC44T58DJ5KGk2vBo+h1cqQeqlMfdGkxaVB78ZWpv9gYi/g2fa4sopag9gJsNvS8XGgWJA==,
-      }
-    dev: false
-
   /@panva/hkdf@1.1.1:
     resolution:
       {
         integrity: sha512-dhPeilub1NuIG0X5Kvhh9lH4iW3ZsHlnzwgwbOlgwQ2wG1IqFzsgHqmKPk3WzsdWAeaxKJxgM0+W433RmN45GA==,
       }
-    dev: true
 
   /@pkgr/utils@2.3.1:
     resolution:
@@ -16742,35 +16739,6 @@ packages:
       }
     dev: false
 
-  /next-auth@4.18.7(next@13.3.0)(react-dom@18.2.0)(react@18.2.0):
-    resolution:
-      {
-        integrity: sha512-kR3s1JVPMaDuSAlFxcGyv7Ec3fdE6za71r1F77IOII5zJmW2wfkIA2xj223fM0D20ip2pzFpHfk/qN4L6l5XMA==,
-      }
-    engines: {node: ^12.19.0 || ^14.15.0 || ^16.13.0 || ^18.12.0}
-    peerDependencies:
-      next: ^12.2.5 || ^13
-      nodemailer: ^6.6.5
-      react: ^17.0.2 || ^18
-      react-dom: ^17.0.2 || ^18
-    peerDependenciesMeta:
-      nodemailer:
-        optional: true
-    dependencies:
-      "@babel/runtime": 7.18.3
-      "@panva/hkdf": 1.0.2
-      cookie: 0.5.0
-      jose: 4.11.2
-      next: 13.3.0(@babel/core@7.20.2)(react-dom@18.2.0)(react@18.2.0)
-      oauth: 0.9.15
-      openid-client: 5.2.1
-      preact: 10.11.3
-      preact-render-to-string: 5.2.6(preact@10.11.3)
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
-      uuid: 8.3.2
-    dev: false
-
   /next-router-mock@0.9.1(next@13.3.0)(react@18.2.0):
     resolution:
       {
@@ -17101,7 +17069,6 @@ packages:
       {
         integrity: sha512-JGkb5doGrwzVDuHwgrR4nHJayzN4h59VCed6EW8Tql6iHDfZIabCJvg6wtbn5q6pyB2hZruI3b77Nudvq7NmvA==,
       }
-    dev: true
 
   /oauth@0.10.0:
     resolution:
@@ -18039,19 +18006,6 @@ packages:
     dependencies:
       preact: 10.11.3
       pretty-format: 3.8.0
-    dev: true
-
-  /preact-render-to-string@5.2.6(preact@10.11.3):
-    resolution:
-      {
-        integrity: sha512-JyhErpYOvBV1hEPwIxc/fHWXPfnEGdRKxc8gFdAZ7XV4tlzyzG847XAyEZqoDnynP88akM4eaHcSOzNcLWFguw==,
-      }
-    peerDependencies:
-      preact: ">=10"
-    dependencies:
-      preact: 10.11.3
-      pretty-format: 3.8.0
-    dev: false
 
   /preact@10.11.3:
     resolution:

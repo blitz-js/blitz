@@ -1,6 +1,6 @@
 import { api } from "src/blitz-server"
-import GithubProvider from "next-auth/providers/github"
-import { NextAuthAdapter, BlitzNextAuthOptions } from "@blitzjs/auth/next-auth"
+import GithubProvider from "@auth/core/providers/github"
+import { NextAuthAdapter } from "@blitzjs/auth/authjs"
 import db, { User } from "db"
 import { Role } from "types"
 
@@ -21,12 +21,12 @@ export default api(
       console.log("USER SIDE PROFILE_DATA", { user, account, profile })
       let newUser: User
       try {
-        newUser = await db.user.findFirstOrThrow({ where: { name: { equals: user.name } } })
+        newUser = await db.user.findFirstOrThrow({ where: { name: { equals: user?.name } } })
       } catch (e) {
         newUser = await db.user.create({
           data: {
-            email: user.email as string,
-            name: user.name as string,
+            email: user?.email ?? "",
+            name: user?.name ?? "",
             role: "USER",
           },
         })

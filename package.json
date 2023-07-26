@@ -44,5 +44,10 @@
     "ignoredRules": [
       "EXTERNAL_MISMATCH"
     ]
+  },
+  "pnpm": {
+    "patchedDependencies": {
+      "@auth/core@0.10.0": "patches/@auth__core@0.10.0.patch"
+    }
   }
 }

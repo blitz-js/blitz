@@ -1,0 +1,35 @@
+diff --git a/package.json b/package.json
+index dbd1f7f8e24dd70d74bb1bd5ad7bb1a244919ead..4ec80d59d82a79e5ae1af79e1692cf9fde6ea959 100644
+--- a/package.json
++++ b/package.json
+@@ -57,6 +57,30 @@
+     },
+     "./types": {
+       "types": "./types.d.ts"
++    },
++    "./lib/init": {
++      "types": "./lib/init.d.ts",
++      "import": "./lib/init.js"
++    },
++    "./lib/oauth/authorization-url": {
++      "types": "./lib/oauth/authorization-url.d.ts",
++      "import": "./lib/oauth/authorization-url.js"
++    },
++    "./lib/oauth/callback": {
++      "types": "./lib/oauth/callback.d.ts",
++      "import": "./lib/oauth/callback.js"
++    },
++    "./lib/oauth/handle-state": {
++      "types": "./lib/oauth/handle-state.d.ts",
++      "import": "./lib/oauth/handle-state.js"
++    },
++    "./lib/assert": {
++      "types": "./lib/assert.d.ts",
++      "import": "./lib/assert.js"
++    },
++    "./lib/web": {
++      "types": "./lib/web.d.ts",
++      "import": "./lib/web.js"
+     }
+   },
+   "license": "ISC",
