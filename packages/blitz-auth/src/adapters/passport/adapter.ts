@@ -1,7 +1,7 @@
 /* @eslint-disable no-redeclare */
 import cookieSession from "cookie-session"
 import passport from "passport"
-import {isLocalhost} from "../../index"
+import {isLocalhost} from "../../server/index"
 import {
   assert,
   connectMiddleware,
@@ -12,7 +12,7 @@ import {
   secureProxyMiddleware,
   truncateString,
 } from "blitz"
-import {SessionContext} from "../../../shared"
+import {SessionContext} from "../../shared"
 import {
   BlitzPassportConfig,
   ApiHandler,

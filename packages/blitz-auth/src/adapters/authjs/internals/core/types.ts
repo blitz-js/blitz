@@ -1,6 +1,7 @@
-import type {CallbacksOptions, CookiesOptions, EventCallbacks} from "next-auth"
-import type {Adapter} from "next-auth/adapters"
-import type {JWTOptions} from "next-auth/jwt"
+import type {AuthConfig} from "@auth/core"
+import {EventCallbacks, PagesOptions, CookiesOptions, CallbacksOptions} from "@auth/core/types"
+import type {Adapter} from "@auth/core/adapters"
+import type {JWTOptions} from "@auth/core/jwt"
 import type {
   OAuthConfig,
   ProviderType,
@@ -9,7 +10,7 @@ import type {
   AuthorizationEndpointHandler,
   EmailConfig,
   CredentialsConfig,
-} from "next-auth/providers"
+} from "@auth/core/providers"
 
 export interface OAuthConfigInternal<P>
   extends Omit<OAuthConfig<P>, "authorization" | "token" | "userinfo"> {
@@ -61,26 +62,40 @@ export interface LoggerInstance extends Record<string, Function> {
   debug: (code: string, metadata: unknown) => void
 }
 
-export interface InternalOptions<
-  TProviderType = ProviderType,
-  WithVerificationToken = TProviderType extends "email" ? true : false,
-> {
+export interface RequestInternal {
+  url: URL
+  method: "GET" | "POST"
+  cookies?: Partial<Record<string, string>>
+  headers?: Record<string, any>
+  query?: Record<string, any>
+  body?: Record<string, any>
+  action: AuthAction
+  providerId?: string
+  error?: string
+}
+
+export interface InternalOptions<TProviderType = ProviderType> {
   providers: InternalProvider[]
   url: URL
   action: AuthAction
   provider: InternalProvider<TProviderType>
+  csrfToken?: string
+  csrfTokenVerified?: boolean
   secret: string
   theme: Theme
   debug: boolean
   logger: LoggerInstance
-  session: Required<LoggerInstance>
-  pages: any
+  session: NonNullable<Required<AuthConfig["session"]>>
+  pages: Partial<PagesOptions>
   jwt: JWTOptions
   events: Partial<EventCallbacks>
-  adapter: WithVerificationToken extends true
-    ? Adapter<WithVerificationToken>
-    : Adapter<WithVerificationToken> | undefined
+  adapter: Required<Adapter> | undefined
   callbacks: CallbacksOptions
   cookies: CookiesOptions
   callbackUrl: string
+  /**
+   * If true, the OAuth callback is being proxied by the server to the original URL.
+   * See also {@link OAuthConfigInternal.redirectProxyUrl}.
+   */
+  isOnRedirectProxy: boolean
 }

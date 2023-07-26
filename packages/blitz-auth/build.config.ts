@@ -5,7 +5,7 @@ const config: BuildConfig = {
     "./src/index-browser",
     "./src/index-server",
     "./src/server/secure-password",
-    "./src/server/adapters/next-auth",
+    "./src/adapters/authjs",
   ],
   externals: ["index-browser.cjs", "index-browser.mjs", "react"],
   declaration: true,

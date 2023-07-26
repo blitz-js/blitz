@@ -11,25 +11,26 @@ import {
   secureProxyMiddleware,
   truncateString,
 } from "blitz"
-import {isLocalhost, SessionContext} from "../../../index-server"
+import {isLocalhost} from "../../index-server"
 
 // next-auth internals
-import {toInternalRequest, toResponse} from "./internals/utils/web"
-import {getBody, getURL, setHeaders} from "./internals/utils/node"
-import type {RequestInternal, AuthOptions, User} from "next-auth"
-import type {Cookie} from "next-auth/core/lib/cookie"
-import type {AuthAction, InternalOptions} from "./internals/core/types"
+import {getBody, getURL, setHeaders} from "./internals/core/node"
+import type {AuthAction, InternalOptions, RequestInternal} from "./internals/core/types"
+import type {Provider} from "@auth/core/providers"
+import type {Cookie} from "@auth/core/lib/cookie"
 
 import type {
   ApiHandlerIncomingMessage,
   BlitzNextAuthApiHandler,
   BlitzNextAuthOptions,
 } from "./types"
-import {Provider} from "next-auth/providers"
 
-import {init} from "next-auth/core/init"
-import getAuthorizationUrl from "next-auth/core/lib/oauth/authorization-url"
-import oAuthCallback from "next-auth/core/lib/oauth/callback"
+import {init} from "@auth/core/lib/init"
+import {getAuthorizationUrl} from "@auth/core/lib/oauth/authorization-url"
+import {handleOAuth} from "@auth/core/lib/oauth/callback"
+import {handleState} from "@auth/core/lib/oauth/handle-state"
+import {toInternalRequest, toResponse} from "@auth/core/lib/web"
+import {assertConfig} from "@auth/core/lib/assert"
 
 const INTERNAL_REDIRECT_URL_KEY = "_redirectUrl"
 
@@ -48,11 +49,11 @@ export function NextAuthAdapter<P extends Provider[]>(
   return async function authHandler(req, res) {
     assert(
       req.query.nextauth,
-      "req.query.nextauth is not defined. Page must be named [...auth].ts/js.",
+      "req.query.nextauth is not defined. Page must be named [...nextauth].ts/js.",
     )
     assert(
       Array.isArray(req.query.nextauth),
-      "req.query.nextauth must be an array. Page must be named [...auth].ts/js.",
+      "req.query.nextauth must be an array. Page must be named [...nextauth].ts/js.",
     )
     if (!req.query.nextauth?.length) {
       return res.status(404).end()
@@ -100,23 +101,41 @@ export function NextAuthAdapter<P extends Provider[]>(
         status: 400,
       })
     }
+
+    const assertionResult = assertConfig(internalRequest, config)
+
+    if (Array.isArray(assertionResult)) {
+      assertionResult.forEach(log.error)
+    } else if (assertionResult instanceof Error) {
+      // Bail out early if there's an error in the user config
+      log.error(assertionResult.message)
+      return new Response(
+        JSON.stringify({
+          message:
+            "There was a problem with the server configuration. Check the server logs for more information.",
+          code: assertionResult.name,
+        }),
+        {status: 500, headers: {"Content-Type": "application/json"}},
+      )
+    }
     let {providerId} = internalRequest
-    if (providerId?.includes("?")) {
+    if (providerId.includes("?")) {
       providerId = providerId.split("?")[0]
     }
+    const callbackUrl = req.body?.callbackUrl ?? req.query?.callbackUrl?.toString()
+    assert(callbackUrl, "callbackUrl is required")
     const {options, cookies} = await init({
-      // @ts-ignore
       url: new URL(
-        // @ts-ignore
-        internalRequest.url!,
+        internalRequest.url,
         process.env.APP_ORIGIN || process.env.BLITZ_DEV_SERVER_ORIGIN,
       ),
-      authOptions: config as unknown as AuthOptions,
+      authOptions: config,
       action,
       providerId,
-      callbackUrl: req.body?.callbackUrl ?? (req.query?.callbackUrl as string),
+      callbackUrl,
       cookies: internalRequest.cookies,
       isPost: req.method === "POST",
+      csrfDisabled: config.csrf?.enabled ?? false,
     })
 
     options.provider.callbackUrl = switchURL(options.provider.callbackUrl)
@@ -157,11 +176,11 @@ async function AuthHandler<P extends Provider[]>(
     throw new OAuthError("MISSING_PROVIDER_ERROR")
   }
   if (action === "login") {
-    middleware.push(async (req, res, next) => {
+    middleware.push(async (req, res, _next) => {
       try {
-        const _signin = await getAuthorizationUrl({options: options, query: req.query})
+        const _signin = await getAuthorizationUrl(req.query, options)
         if (_signin.cookies) cookies.push(..._signin.cookies)
-        const session = res.blitzCtx.session as SessionContext
+        const session = res.blitzCtx.session
         assert(session, "Missing Blitz sessionMiddleware!")
         await session.$setPublicData({
           [INTERNAL_REDIRECT_URL_KEY]: _signin.redirect,
@@ -187,19 +206,27 @@ async function AuthHandler<P extends Provider[]>(
     return {middleware}
   } else if (action === "callback") {
     middleware.push(
-      // eslint-disable-next-line no-shadow
-      connectMiddleware(async (req, res, next) => {
+      connectMiddleware(async (req, res, _next) => {
         try {
-          const {profile, account, OAuthProfile} = await oAuthCallback({
-            query: internalRequest.query,
-            body: internalRequest.body || {code: req.query.code, state: req.query.state},
-            method: "POST",
-            options: options as any,
-            cookies: internalRequest.cookies,
-          })
-          const session = res.blitzCtx.session as SessionContext
+          const {proxyRedirect, randomState} = handleState(
+            req.query,
+            options.provider,
+            options.isOnRedirectProxy,
+          )
+          if (proxyRedirect) {
+            log.debug("proxy redirect", {proxyRedirect, randomState})
+            res.setHeader("Location", proxyRedirect)
+            res.statusCode = 302
+            res.end()
+          }
+          const {cookies, profile, account, user} = await handleOAuth(
+            req.query,
+            internalRequest.cookies,
+            options,
+          )
+          const session = res.blitzCtx.session
           assert(session, "Missing Blitz sessionMiddleware!")
-          const callback = await config.callback(profile as User, account, OAuthProfile!, session)
+          const callback = await config.callback(user, account, profile, session)
           let _redirect = config.successRedirectUrl
           if (callback instanceof Object) {
             _redirect = callback.redirectUrl
@@ -210,6 +237,7 @@ async function AuthHandler<P extends Provider[]>(
           })
 
           setHeaders(response.headers, res)
+
           res.setHeader("Location", _redirect)
           res.statusCode = 302
           res.end()

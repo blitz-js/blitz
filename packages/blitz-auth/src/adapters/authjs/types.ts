@@ -1,19 +1,26 @@
 import type {Ctx, MiddlewareResponse} from "blitz"
 import type {IncomingMessage} from "http"
-import type {AuthOptions, Profile, User} from "next-auth"
-import {SessionContext} from "../../../index-server"
-import oAuthCallback from "next-auth/core/lib/oauth/callback"
-import {OAuthConfig, Provider} from "next-auth/providers"
+import type {Account, Profile, User} from "@auth/core/types"
+import type {AuthConfig} from "@auth/core"
+import {SessionContext} from "../../index-server"
+import {OAuthConfig, Provider} from "@auth/core/providers"
 
-export type BlitzNextAuthOptions<P extends Provider[]> = Omit<AuthOptions, "providers"> & {
+export type BlitzNextAuthOptions<P extends Provider[]> = Omit<AuthConfig, "providers"> & {
   providers: P
   successRedirectUrl: string
   errorRedirectUrl: string
   secureProxy?: boolean
+  csrf?: {
+    enabled: boolean
+  }
   callback: (
-    user: User,
-    account: Awaited<ReturnType<typeof oAuthCallback>>["account"],
-    profile: P[0] extends OAuthConfig<any> ? Parameters<P[0]["profile"]>[0] : Profile,
+    user: User | undefined,
+    account: Account | undefined,
+    profile: P[0] extends OAuthConfig<any>
+      ? P[0]["profile"] extends (...args: any) => any
+        ? Parameters<P[0]["profile"]>[0]
+        : Profile
+      : Profile,
     session: SessionContext,
   ) => Promise<void | {redirectUrl: string}>
 }

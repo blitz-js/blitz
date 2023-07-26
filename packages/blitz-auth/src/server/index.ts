@@ -1,7 +1,5 @@
 export * from "./auth-utils"
 export * from "./auth-plugin"
-export * from "./adapters"
-
 export {
   SessionContextClass,
   getAllSessionHandlesForUser,

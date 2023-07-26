@@ -1578,6 +1578,9 @@ importers:
         specifier: 0.11.0
         version: 0.11.0
     devDependencies:
+      "@auth/core":
+        specifier: 0.10.0
+        version: 0.10.0
       "@blitzjs/config":
         specifier: workspace:2.0.0-beta.31
         version: link:../config
@@ -1608,9 +1611,6 @@ importers:
       next:
         specifier: 13.3.0
         version: 13.3.0(@babel/core@7.20.2)(react-dom@18.2.0)(react@18.2.0)
-      next-auth:
-        specifier: 4.18.7
-        version: 4.18.7(next@13.3.0)(react-dom@18.2.0)(react@18.2.0)
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -2357,6 +2357,25 @@ packages:
     dependencies:
       "@jridgewell/gen-mapping": 0.1.1
       "@jridgewell/trace-mapping": 0.3.17
+
+  /@auth/core@0.10.0:
+    resolution:
+      {
+        integrity: sha512-mmvAzFUcDHG0m6avQ6/sYI3wtQtt3Tjbk4wCr27OlCeNnlzqK8lDQJIDFbJOTXEu/dNUx8sUQ0xMp7A6GAaHQw==,
+      }
+    peerDependencies:
+      nodemailer: ^6.8.0
+    peerDependenciesMeta:
+      nodemailer:
+        optional: true
+    dependencies:
+      "@panva/hkdf": 1.1.1
+      cookie: 0.5.0
+      jose: 4.11.2
+      oauth4webapi: 2.3.0
+      preact: 10.11.3
+      preact-render-to-string: 5.2.3(preact@10.11.3)
+    dev: true
 
   /@babel/code-frame@7.16.7:
     resolution:
@@ -5722,6 +5741,14 @@ packages:
       {
         integrity: sha512-MSAs9t3Go7GUkMhpKC44T58DJ5KGk2vBo+h1cqQeqlMfdGkxaVB78ZWpv9gYi/g2fa4sopag9gJsNvS8XGgWJA==,
       }
+    dev: false
+
+  /@panva/hkdf@1.1.1:
+    resolution:
+      {
+        integrity: sha512-dhPeilub1NuIG0X5Kvhh9lH4iW3ZsHlnzwgwbOlgwQ2wG1IqFzsgHqmKPk3WzsdWAeaxKJxgM0+W433RmN45GA==,
+      }
+    dev: true
 
   /@pkgr/utils@2.3.1:
     resolution:
@@ -16742,6 +16769,7 @@ packages:
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       uuid: 8.3.2
+    dev: false
 
   /next-router-mock@0.9.1(next@13.3.0)(react@18.2.0):
     resolution:
@@ -17068,6 +17096,13 @@ packages:
         integrity: sha512-90yv+6538zuvUMnN+zCr8LuV6bPFdq50304114vJYJ8RDyK8D5O9Phpbd6SZWgI7PwzmmfN1upeOJlvybDSgCw==,
       }
 
+  /oauth4webapi@2.3.0:
+    resolution:
+      {
+        integrity: sha512-JGkb5doGrwzVDuHwgrR4nHJayzN4h59VCed6EW8Tql6iHDfZIabCJvg6wtbn5q6pyB2hZruI3b77Nudvq7NmvA==,
+      }
+    dev: true
+
   /oauth@0.10.0:
     resolution:
       {
@@ -17080,6 +17115,7 @@ packages:
       {
         integrity: sha512-a5ERWK1kh38ExDEfoO6qUHJb32rd7aYmPHuyCu3Fta/cnICvYmgd2uhuKXvPD+PXB+gCEYYEaQdIRAjCOwAKNA==,
       }
+    dev: false
 
   /object-assign@4.1.1:
     resolution:
@@ -17106,6 +17142,7 @@ packages:
         integrity: sha512-gScRMn0bS5fH+IuwyIFgnh9zBdo4DV+6GhygmWM9HyNJSgS0hScp1f5vjtm7oIIOiT9trXrShAkLFSc2IqKNgw==,
       }
     engines: {node: ">= 6"}
+    dev: false
 
   /object-inspect@1.12.2:
     resolution:
@@ -17200,6 +17237,7 @@ packages:
         integrity: sha512-EvoOtz6FIEBzE+9q253HsLCVRiK/0doEJ2HCvvqMQb3dHZrP3WlJKYtJ55CRTw4jmYomzH4wkPuCj/I3ZvpKxQ==,
       }
     engines: {node: ^10.13.0 || >=12.0.0}
+    dev: false
 
   /on-finished@2.3.0:
     resolution:
@@ -17297,6 +17335,7 @@ packages:
       lru-cache: 6.0.0
       object-hash: 2.2.0
       oidc-token-hash: 5.0.1
+    dev: false
 
   /optionator@0.8.3:
     resolution:
@@ -17990,6 +18029,18 @@ packages:
       picocolors: 1.0.0
       source-map-js: 1.0.2
 
+  /preact-render-to-string@5.2.3(preact@10.11.3):
+    resolution:
+      {
+        integrity: sha512-aPDxUn5o3GhWdtJtW0svRC2SS/l8D9MAgo2+AWml+BhDImb27ALf04Q2d+AHqUUOc6RdSXFIBVa2gxzgMKgtZA==,
+      }
+    peerDependencies:
+      preact: ">=10"
+    dependencies:
+      preact: 10.11.3
+      pretty-format: 3.8.0
+    dev: true
+
   /preact-render-to-string@5.2.6(preact@10.11.3):
     resolution:
       {
@@ -18000,6 +18051,7 @@ packages:
     dependencies:
       preact: 10.11.3
       pretty-format: 3.8.0
+    dev: false
 
   /preact@10.11.3:
     resolution:
