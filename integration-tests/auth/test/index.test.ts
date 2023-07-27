@@ -14,7 +14,7 @@ import fetch from "node-fetch"
 import {fromBase64} from "b64-lite"
 
 let app: any
-let appPort: number
+let appPort: number = 3000
 const HEADER_CSRF = "anti-csrf"
 const COOKIE_PUBLIC_DATA_TOKEN = "auth-tests-cookie-prefix_sPublicDataToken"
 const COOKIE_SESSION_TOKEN = "auth-tests-cookie-prefix_sSessionToken"

@@ -11,7 +11,7 @@ import {
 import webdriver from "../../utils/next-webdriver"
 
 let app: any
-let appPort: number
+let appPort: number = 3000
 
 const runTests = () => {
   describe("Auth", () => {

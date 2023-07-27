@@ -13,7 +13,7 @@ import {
 import {join} from "path"
 
 let app: any
-let appPort: number
+let appPort: number = 3000
 const appDir = join(__dirname, "../")
 
 const runTests = () => {
