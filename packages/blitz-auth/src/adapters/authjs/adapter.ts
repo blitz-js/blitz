@@ -95,8 +95,9 @@ export function NextAuthAdapter<P extends Provider[]>(
     log.debug("NEXT_AUTH_INTERNAL_REQUEST", internalRequest)
     if (internalRequest instanceof Error) {
       console.error((request as any).code, request)
-      return new Response(`Error: This action with HTTP ${request.method} is not supported.`, {
-        status: 400,
+      return res.status(500).json({
+        message:
+          "There was a problem with the server configuration. Check the server logs for more information.",
       })
     }
     const assertionResult = assertConfig(internalRequest, config)
@@ -105,18 +106,11 @@ export function NextAuthAdapter<P extends Provider[]>(
     } else if (assertionResult instanceof Error) {
       // Bail out early if there's an error in the user config
       log.error(assertionResult.message)
-      return new Response(
-        JSON.stringify({
-          message:
-            "There was a problem with the server configuration. Check the server logs for more information.",
-          code: assertionResult.name,
-        }),
-        {status: 500, headers: {"Content-Type": "application/json"}},
-      )
-    }
-    let {providerId} = internalRequest
-    if (providerId.includes("?")) {
-      providerId = providerId.split("?")[0]
+      return res.status(500).json({
+        message:
+          "There was a problem with the server configuration. Check the server logs for more information.",
+        code: assertionResult.name,
+      })
     }
     const callbackUrl = req.body?.callbackUrl ?? req.query?.callbackUrl?.toString()
     const {options, cookies} = await init({
@@ -126,7 +120,9 @@ export function NextAuthAdapter<P extends Provider[]>(
       ),
       authOptions: config,
       action,
-      providerId,
+      providerId: internalRequest.providerId.includes("?")
+        ? internalRequest.providerId.split("?")[0]
+        : internalRequest.providerId,
       callbackUrl,
       cookies: internalRequest.cookies,
       isPost: req.method === "POST",
