@@ -189,7 +189,7 @@ export async function getBlitzContext(): Promise<Ctx> {
   const req = new IncomingMessage(new Socket()) as IncomingMessage & {
     cookies: {[key: string]: string}
   }
-  req.headers = Object.fromEntries(headers())
+  req.headers = Object.fromEntries(headers() as any)
   const csrfToken = cookies().get(COOKIE_CSRF_TOKEN())
   if (csrfToken) {
     req.headers[HEADER_CSRF] = csrfToken.value

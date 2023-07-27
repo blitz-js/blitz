@@ -16,12 +16,12 @@ import type {
   BlitzNextAuthApiHandler,
   BlitzNextAuthOptions,
 } from "./types"
-import {isLocalhost} from "../../index-server"
+import {isLocalhost} from "../utils"
 
 // next-auth internals
 import {getBody, getURL, setHeaders} from "./internals/core/node"
 import type {AuthAction, InternalOptions, RequestInternal} from "./internals/core/types"
-import type {Provider} from "@auth/core/providers"
+import type {OAuthConfig, Provider} from "@auth/core/providers"
 import type {Cookie} from "@auth/core/lib/cookie"
 
 import {init} from "@auth/core/lib/init"
@@ -43,7 +43,7 @@ function switchURL(callbackUrl: string) {
   return `${url.protocol}//${url.host}${switchPathNameString}${url.search}${url.hash}`
 }
 
-export function NextAuthAdapter<P extends Provider[]>(
+export function AuthAdapter<P extends OAuthConfig<any>[]>(
   config: BlitzNextAuthOptions<P>,
 ): BlitzNextAuthApiHandler {
   return async function authHandler(req, res) {
@@ -159,7 +159,7 @@ function defaultNormalizer(email?: string) {
   return `${local}@${domain}`
 }
 
-export async function AuthHandler<P extends Provider[]>(
+export async function AuthHandler<P extends OAuthConfig<any>[]>(
   middleware: RequestMiddleware<ApiHandlerIncomingMessage, MiddlewareResponse<Ctx>>[],
   config: BlitzNextAuthOptions<P>,
   internalRequest: RequestInternal,
@@ -197,7 +197,7 @@ export async function AuthHandler<P extends Provider[]>(
           throw new OAuthError("UNSUPPORTED_PROVIDER_ERROR")
         }
       } catch (e) {
-        log.error("OAUTH_SIGNIN_Error in NextAuthAdapter " + (e as Error).toString())
+        log.error("OAUTH_SIGNIN_Error in AuthAdapter " + (e as Error).toString())
         console.log(e)
         const authErrorQueryStringKey = config.errorRedirectUrl.includes("?")
           ? "&authError="
@@ -247,7 +247,7 @@ export async function AuthHandler<P extends Provider[]>(
           res.statusCode = 302
           res.end()
         } catch (e) {
-          log.error("OAUTH_CALLBACK_Error in NextAuthAdapter " + (e as Error).toString())
+          log.error("OAUTH_CALLBACK_Error in AuthAdapter " + (e as Error).toString())
           console.log(e)
           const authErrorQueryStringKey = config.errorRedirectUrl.includes("?")
             ? "&authError="

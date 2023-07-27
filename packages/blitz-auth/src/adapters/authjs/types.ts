@@ -5,10 +5,7 @@ import type {AuthConfig} from "@auth/core"
 import {SessionContext} from "../../index-server"
 import {OAuthConfig} from "@auth/core/providers"
 
-export type BlitzNextAuthOptions<P extends AuthConfig["providers"]> = Omit<
-  AuthConfig,
-  "providers"
-> & {
+export type BlitzNextAuthOptions<P extends OAuthConfig<any>[]> = Omit<AuthConfig, "providers"> & {
   providers: P
   successRedirectUrl: string
   errorRedirectUrl: string

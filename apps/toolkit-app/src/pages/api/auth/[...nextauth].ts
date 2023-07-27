@@ -1,6 +1,6 @@
 import { api } from "src/blitz-server"
 import GithubProvider from "@auth/core/providers/github"
-import { NextAuthAdapter } from "@blitzjs/auth/authjs"
+import { AuthAdapter } from "@blitzjs/auth/adapters/authjs"
 import db, { User } from "db"
 import { Role } from "types"
 
@@ -13,22 +13,23 @@ const providers = [
 ]
 
 export default api(
-  NextAuthAdapter({
+  AuthAdapter({
     successRedirectUrl: "/",
     errorRedirectUrl: "/error",
     providers,
     trustHost: true,
-    secret: "8551511ada3be2996ceb0b82be4b9bd2",
+    secret: process.env.AUTH_SECRET,
     callback: async (user, account, profile, session) => {
       console.log("USER SIDE PROFILE_DATA", { user, account, profile })
       let newUser: User
+      if (!user) throw new Error("No user found")
       try {
-        newUser = await db.user.findFirstOrThrow({ where: { name: { equals: user?.name } } })
+        newUser = await db.user.findFirstOrThrow({ where: { name: { equals: user.name } } })
       } catch (e) {
         newUser = await db.user.create({
           data: {
-            email: user?.email ?? "",
-            name: user?.name ?? "",
+            email: user.email ?? "",
+            name: user.name ?? "",
             role: "USER",
           },
         })

@@ -5,7 +5,11 @@ const config: BuildConfig = {
     "./src/index-browser",
     "./src/index-server",
     "./src/server/secure-password",
-    "./src/adapters/authjs",
+    {
+      builder: "mkdist",
+      input: "./src/adapters/",
+      outDir: "./adapters",
+    },
   ],
   externals: ["index-browser.cjs", "index-browser.mjs", "react"],
   declaration: true,
