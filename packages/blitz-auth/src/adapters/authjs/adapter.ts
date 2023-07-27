@@ -154,11 +154,7 @@ export function NextAuthAdapter<P extends Provider[]>(
 
 function defaultNormalizer(email?: string) {
   if (!email) throw new Error("Missing email from request body.")
-  // Get the first two elements only,
-  // separated by `@` from user input.
   let [local, domain] = email.toLowerCase().trim().split("@")
-  // The part before "@" can contain a ","
-  // but we remove it on the domain part
   domain = domain?.split(",")[0]
   return `${local}@${domain}`
 }
@@ -178,9 +174,7 @@ async function AuthHandler<P extends Provider[]>(
     middleware.push(async (req, res, _next) => {
       try {
         if (options.provider.type === "oauth" || options.provider.type === "oidc") {
-          let _signin
-
-          _signin = await getAuthorizationUrl(req.query, options)
+          const _signin = await getAuthorizationUrl(req.query, options)
           log.debug("NEXT_AUTH_SIGNIN", _signin)
           if (_signin.cookies) cookies.push(..._signin.cookies)
           await res.blitzCtx.session.$setPublicData({
