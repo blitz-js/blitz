@@ -6,7 +6,7 @@ settings:
 
 patchedDependencies:
   "@auth/core@0.10.0":
-    hash: yi6lijhd4lptf5wbdzbvoec35u
+    hash: jkkk4das3mr53z5xj5wygbcfda
     path: patches/@auth__core@0.10.0.patch
 
 importers:
@@ -132,7 +132,7 @@ importers:
     dependencies:
       "@auth/core":
         specifier: 0.10.0
-        version: 0.10.0(patch_hash=yi6lijhd4lptf5wbdzbvoec35u)
+        version: 0.10.0(patch_hash=jkkk4das3mr53z5xj5wygbcfda)
       "@blitzjs/auth":
         specifier: workspace:*
         version: link:../../packages/blitz-auth
@@ -1585,7 +1585,7 @@ importers:
     devDependencies:
       "@auth/core":
         specifier: 0.10.0
-        version: 0.10.0(patch_hash=yi6lijhd4lptf5wbdzbvoec35u)
+        version: 0.10.0(patch_hash=jkkk4das3mr53z5xj5wygbcfda)
       "@blitzjs/config":
         specifier: workspace:2.0.0-beta.31
         version: link:../config
@@ -2363,7 +2363,7 @@ packages:
       "@jridgewell/gen-mapping": 0.1.1
       "@jridgewell/trace-mapping": 0.3.17
 
-  /@auth/core@0.10.0(patch_hash=yi6lijhd4lptf5wbdzbvoec35u):
+  /@auth/core@0.10.0(patch_hash=jkkk4das3mr53z5xj5wygbcfda):
     resolution:
       {
         integrity: sha512-mmvAzFUcDHG0m6avQ6/sYI3wtQtt3Tjbk4wCr27OlCeNnlzqK8lDQJIDFbJOTXEu/dNUx8sUQ0xMp7A6GAaHQw==,
