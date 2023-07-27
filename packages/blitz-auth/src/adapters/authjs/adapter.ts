@@ -159,7 +159,7 @@ function defaultNormalizer(email?: string) {
   return `${local}@${domain}`
 }
 
-async function AuthHandler<P extends Provider[]>(
+export async function AuthHandler<P extends Provider[]>(
   middleware: RequestMiddleware<ApiHandlerIncomingMessage, MiddlewareResponse<Ctx>>[],
   config: BlitzNextAuthOptions<P>,
   internalRequest: RequestInternal,
@@ -230,7 +230,7 @@ async function AuthHandler<P extends Provider[]>(
             internalRequest.cookies,
             options,
           )
-          console.log("NEXT_AUTH_CALLBACK", {cookies, profile, account, user})
+          log.debug("NEXT_AUTH_CALLBACK", {cookies, profile, account, user})
           const session = res.blitzCtx.session
           assert(session, "Missing Blitz sessionMiddleware!")
           const callback = await config.callback(user, account, profile, session)
@@ -242,9 +242,7 @@ async function AuthHandler<P extends Provider[]>(
             redirect: _redirect,
             cookies: cookies,
           })
-
           setHeaders(response.headers, res)
-
           res.setHeader("Location", _redirect)
           res.statusCode = 302
           res.end()
