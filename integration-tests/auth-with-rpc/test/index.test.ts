@@ -263,7 +263,7 @@ describe("Auth Tests", () => {
   describe("dev mode", () => {
     beforeAll(async () => {
       try {
-        await runBlitzCommand(["prisma", "migrate", "reset", "--force"])
+        await runBlitzCommand(["prisma", "migrate", "dev"])
         appPort = await findPort()
         app = await blitzLaunchApp(appPort, {cwd: process.cwd()})
       } catch (error) {
