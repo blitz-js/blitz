@@ -59,7 +59,7 @@ export function NextAuthAdapter<P extends Provider[]>(
       return res.status(404).end()
     }
     const action = req.query.nextauth[1] as AuthAction
-    if (!action || !["login", "callback"].includes(action)) {
+    if (!action || !["signin", "callback"].includes(action)) {
       return res.status(404).end()
     }
 
@@ -78,6 +78,7 @@ export function NextAuthAdapter<P extends Provider[]>(
 
     const headers = new Headers(req.headers as any)
     const url = getURL(req.url, headers)
+    console.log("NEXT_AUTH_URL", url)
     if (url instanceof Error) {
       if (process.env.NODE_ENV !== "production") throw url
       const errorLogger = config.logger?.error ?? console.error
@@ -94,7 +95,12 @@ export function NextAuthAdapter<P extends Provider[]>(
       ...getBody(req),
     })
 
+    log.debug("NEXT_AUTH_REQUEST")
+
     const internalRequest = await toInternalRequest(request)
+
+    log.debug("NEXT_AUTH_INTERNAL_REQUEST", internalRequest)
+
     if (internalRequest instanceof Error) {
       console.error((request as any).code, request)
       return new Response(`Error: This action with HTTP ${request.method} is not supported.`, {
@@ -123,7 +129,6 @@ export function NextAuthAdapter<P extends Provider[]>(
       providerId = providerId.split("?")[0]
     }
     const callbackUrl = req.body?.callbackUrl ?? req.query?.callbackUrl?.toString()
-    assert(callbackUrl, "callbackUrl is required")
     const {options, cookies} = await init({
       url: new URL(
         internalRequest.url,
@@ -175,10 +180,11 @@ async function AuthHandler<P extends Provider[]>(
   if (!options.provider) {
     throw new OAuthError("MISSING_PROVIDER_ERROR")
   }
-  if (action === "login") {
+  if (action === "signin") {
     middleware.push(async (req, res, _next) => {
       try {
         const _signin = await getAuthorizationUrl(req.query, options)
+        log.debug("NEXT_AUTH_SIGNIN", _signin)
         if (_signin.cookies) cookies.push(..._signin.cookies)
         const session = res.blitzCtx.session
         assert(session, "Missing Blitz sessionMiddleware!")
@@ -187,6 +193,7 @@ async function AuthHandler<P extends Provider[]>(
         } as any)
         const response = toResponse(_signin)
         setHeaders(response.headers, res)
+        log.debug("NEXT_AUTH_SIGNIN_REDIRECT", _signin.redirect)
         res.setHeader("Location", _signin.redirect)
         res.statusCode = 302
         res.end()
@@ -224,6 +231,7 @@ async function AuthHandler<P extends Provider[]>(
             internalRequest.cookies,
             options,
           )
+          console.log("NEXT_AUTH_CALLBACK", {cookies, profile, account, user})
           const session = res.blitzCtx.session
           assert(session, "Missing Blitz sessionMiddleware!")
           const callback = await config.callback(user, account, profile, session)

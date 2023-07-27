@@ -7,6 +7,7 @@ import { useMutation } from "@blitzjs/rpc"
 import { BlitzPage } from "@blitzjs/next"
 import { Routes } from ".blitz"
 import styles from "src/styles/Home.module.css"
+import { getAntiCSRFToken } from "@blitzjs/auth"
 
 /*
  * This file is just for a pleasant getting started page for your new app.
@@ -44,11 +45,11 @@ const UserInfo = () => {
         <Link href={"/login"} className={styles.loginButton}>
           <strong>Login</strong>
         </Link>
-        <Link href="/api/auth/github/login" passHref legacyBehavior>
-          <a className="button small">
+        <a href="/api/auth/github/signin">
+          <p className="button small">
             <strong>Sign in with GitHub</strong>
-          </a>
-        </Link>
+          </p>
+        </a>
       </>
     )
   }

@@ -34,7 +34,7 @@ export type AuthAction =
   | "providers"
   | "session"
   | "csrf"
-  | "login"
+  | "signin"
   | "signout"
   | "callback"
   | "verify-request"

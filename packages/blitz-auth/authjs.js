@@ -1,1 +1,1 @@
-module.exports = require("./dist/authjs.cjs")
+export * from "./dist/authjs.mjs"
