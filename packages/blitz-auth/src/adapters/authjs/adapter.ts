@@ -25,6 +25,7 @@ import type {Provider} from "@auth/core/providers"
 import type {Cookie} from "@auth/core/lib/cookie"
 
 import {init} from "@auth/core/lib/init"
+import emailSignIn from "@auth/core/lib/email/signin"
 import {getAuthorizationUrl} from "@auth/core/lib/oauth/authorization-url"
 import {handleOAuth} from "@auth/core/lib/oauth/callback"
 import {handleState} from "@auth/core/lib/oauth/handle-state"
@@ -155,6 +156,17 @@ export function NextAuthAdapter<P extends Provider[]>(
   }
 }
 
+function defaultNormalizer(email?: string) {
+  if (!email) throw new Error("Missing email from request body.")
+  // Get the first two elements only,
+  // separated by `@` from user input.
+  let [local, domain] = email.toLowerCase().trim().split("@")
+  // The part before "@" can contain a ","
+  // but we remove it on the domain part
+  domain = domain?.split(",")[0]
+  return `${local}@${domain}`
+}
+
 async function AuthHandler<P extends Provider[]>(
   middleware: RequestMiddleware<ApiHandlerIncomingMessage, MiddlewareResponse<Ctx>>[],
   config: BlitzNextAuthOptions<P>,
@@ -169,20 +181,31 @@ async function AuthHandler<P extends Provider[]>(
   if (action === "signin") {
     middleware.push(async (req, res, _next) => {
       try {
-        const _signin = await getAuthorizationUrl(req.query, options)
-        log.debug("NEXT_AUTH_SIGNIN", _signin)
-        if (_signin.cookies) cookies.push(..._signin.cookies)
-        const session = res.blitzCtx.session
-        assert(session, "Missing Blitz sessionMiddleware!")
-        await session.$setPublicData({
-          [INTERNAL_REDIRECT_URL_KEY]: _signin.redirect,
-        } as any)
-        const response = toResponse(_signin)
-        setHeaders(response.headers, res)
-        log.debug("NEXT_AUTH_SIGNIN_REDIRECT", _signin.redirect)
-        res.setHeader("Location", _signin.redirect)
-        res.statusCode = 302
-        res.end()
+        if (options.provider.type === "oauth" || options.provider.type === "oidc") {
+          let _signin
+
+          _signin = await getAuthorizationUrl(req.query, options)
+          log.debug("NEXT_AUTH_SIGNIN", _signin)
+          if (_signin.cookies) cookies.push(..._signin.cookies)
+          await res.blitzCtx.session.$setPublicData({
+            [INTERNAL_REDIRECT_URL_KEY]: _signin.redirect,
+          } as any)
+          const response = toResponse(_signin)
+          setHeaders(response.headers, res)
+          log.debug("NEXT_AUTH_SIGNIN_REDIRECT", _signin.redirect)
+          res.setHeader("Location", _signin.redirect)
+          res.statusCode = 302
+          res.end()
+        } else if (options.provider.type === "email") {
+          const normalizer = options.provider.normalizeIdentifier ?? defaultNormalizer
+          const email = normalizer(internalRequest.body?.email)
+          const redirect = await emailSignIn(email, options, internalRequest)
+          res.setHeader("Location", redirect)
+          res.statusCode = 302
+          res.end()
+        } else {
+          throw new OAuthError("UNSUPPORTED_PROVIDER_ERROR")
+        }
       } catch (e) {
         log.error("OAUTH_SIGNIN_Error in NextAuthAdapter " + (e as Error).toString())
         console.log(e)
