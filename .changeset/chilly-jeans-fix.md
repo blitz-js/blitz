@@ -1,5 +1,4 @@
 ---
-"toolkit-app": patch
 "@blitzjs/generator": patch
 ---
 
