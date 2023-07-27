@@ -3,9 +3,12 @@ import type {IncomingMessage} from "http"
 import type {Account, Profile, User} from "@auth/core/types"
 import type {AuthConfig} from "@auth/core"
 import {SessionContext} from "../../index-server"
-import {OAuthConfig, Provider} from "@auth/core/providers"
+import {OAuthConfig} from "@auth/core/providers"
 
-export type BlitzNextAuthOptions<P extends Provider[]> = Omit<AuthConfig, "providers"> & {
+export type BlitzNextAuthOptions<P extends AuthConfig["providers"]> = Omit<
+  AuthConfig,
+  "providers"
+> & {
   providers: P
   successRedirectUrl: string
   errorRedirectUrl: string

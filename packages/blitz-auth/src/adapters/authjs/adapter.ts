@@ -11,6 +11,11 @@ import {
   secureProxyMiddleware,
   truncateString,
 } from "blitz"
+import type {
+  ApiHandlerIncomingMessage,
+  BlitzNextAuthApiHandler,
+  BlitzNextAuthOptions,
+} from "./types"
 import {isLocalhost} from "../../index-server"
 
 // next-auth internals
@@ -18,12 +23,6 @@ import {getBody, getURL, setHeaders} from "./internals/core/node"
 import type {AuthAction, InternalOptions, RequestInternal} from "./internals/core/types"
 import type {Provider} from "@auth/core/providers"
 import type {Cookie} from "@auth/core/lib/cookie"
-
-import type {
-  ApiHandlerIncomingMessage,
-  BlitzNextAuthApiHandler,
-  BlitzNextAuthOptions,
-} from "./types"
 
 import {init} from "@auth/core/lib/init"
 import {getAuthorizationUrl} from "@auth/core/lib/oauth/authorization-url"
@@ -62,23 +61,19 @@ export function NextAuthAdapter<P extends Provider[]>(
     if (!action || !["signin", "callback"].includes(action)) {
       return res.status(404).end()
     }
-
     const cookieSessionMiddleware = cookieSession({
       secret: process.env.SESSION_SECRET_KEY || "default-dev-secret",
       secure: process.env.NODE_ENV === "production" && !isLocalhost(req),
     })
-
     const middleware: RequestMiddleware<ApiHandlerIncomingMessage, MiddlewareResponse<Ctx>>[] = [
       connectMiddleware(cookieSessionMiddleware as RequestMiddleware),
     ]
-
     if (config.secureProxy) {
       middleware.push(secureProxyMiddleware)
     }
-
     const headers = new Headers(req.headers as any)
     const url = getURL(req.url, headers)
-    console.log("NEXT_AUTH_URL", url)
+    log.debug("NEXT_AUTH_URL", url)
     if (url instanceof Error) {
       if (process.env.NODE_ENV !== "production") throw url
       const errorLogger = config.logger?.error ?? console.error
@@ -94,22 +89,16 @@ export function NextAuthAdapter<P extends Provider[]>(
       method: req.method,
       ...getBody(req),
     })
-
     log.debug("NEXT_AUTH_REQUEST")
-
     const internalRequest = await toInternalRequest(request)
-
     log.debug("NEXT_AUTH_INTERNAL_REQUEST", internalRequest)
-
     if (internalRequest instanceof Error) {
       console.error((request as any).code, request)
       return new Response(`Error: This action with HTTP ${request.method} is not supported.`, {
         status: 400,
       })
     }
-
     const assertionResult = assertConfig(internalRequest, config)
-
     if (Array.isArray(assertionResult)) {
       assertionResult.forEach(log.error)
     } else if (assertionResult instanceof Error) {
@@ -142,11 +131,8 @@ export function NextAuthAdapter<P extends Provider[]>(
       isPost: req.method === "POST",
       csrfDisabled: config.csrf?.enabled ?? false,
     })
-
     options.provider.callbackUrl = switchURL(options.provider.callbackUrl)
-
     log.debug("NEXT_AUTH_INTERNAL_OPTIONS", options)
-
     await AuthHandler(middleware, config, internalRequest, action, options, cookies)
       .then(async ({middleware}) => {
         await handleRequestWithMiddleware<ApiHandlerIncomingMessage, MiddlewareResponse<Ctx>>(

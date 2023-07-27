@@ -19,7 +19,6 @@ export default api(
     providers,
     trustHost: true,
     secret: "8551511ada3be2996ceb0b82be4b9bd2",
-
     callback: async (user, account, profile, session) => {
       console.log("USER SIDE PROFILE_DATA", { user, account, profile })
       let newUser: User
