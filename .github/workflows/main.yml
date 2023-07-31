@@ -21,7 +21,7 @@ jobs:
         with:
           version: 8.6.5
       - name: Setup node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: 18
           cache: "pnpm"
@@ -42,7 +42,7 @@ jobs:
         with:
           version: 8.6.5
       - name: Setup node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: 18
           cache: "pnpm"
@@ -73,7 +73,7 @@ jobs:
           version: 8.6.5
 
       - name: Setup node@16
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: 18
           cache: "pnpm"
@@ -132,7 +132,7 @@ jobs:
           version: 8.6.5
 
       - name: Setup node@${{ matrix.NODE_VERSION }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: 18
           cache: "pnpm"
