@@ -144,8 +144,8 @@ importers:
         specifier: 2.9.10
         version: 2.9.10(react-hook-form@7.39.1)
       "@prisma/client":
-        specifier: 4.6.1
-        version: 4.6.1(prisma@4.6.1)
+        specifier: 5.1.0-dev.88
+        version: 5.1.0-dev.88(prisma@5.1.0-dev.88)
       blitz:
         specifier: workspace:2.0.0-beta.31
         version: link:../../packages/blitz
@@ -156,8 +156,8 @@ importers:
         specifier: 4.18.7
         version: 4.18.7(next@13.3.0)(react-dom@18.2.0)(react@18.2.0)
       prisma:
-        specifier: 4.6.1
-        version: 4.6.1
+        specifier: 5.1.0-dev.88
+        version: 5.1.0-dev.88
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -262,8 +262,8 @@ importers:
         specifier: 2.9.10
         version: 2.9.10(react-hook-form@7.39.1)
       "@prisma/client":
-        specifier: 4.6.1
-        version: 4.6.1(prisma@4.6.1)
+        specifier: 5.1.0-dev.88
+        version: 5.1.0-dev.88(prisma@5.1.0-dev.88)
       blitz:
         specifier: workspace:2.0.0-beta.31
         version: link:../../packages/blitz
@@ -274,8 +274,8 @@ importers:
         specifier: 5.2.1
         version: 5.2.1
       prisma:
-        specifier: 4.6.1
-        version: 4.6.1
+        specifier: 5.1.0-dev.88
+        version: 5.1.0-dev.88
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -368,8 +368,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/blitz-rpc
       "@prisma/client":
-        specifier: 4.6.1
-        version: 4.6.1(prisma@4.6.1)
+        specifier: 5.1.0-dev.88
+        version: 5.1.0-dev.88(prisma@5.1.0-dev.88)
       "@types/jest":
         specifier: 29.2.2
         version: 29.2.2
@@ -395,8 +395,8 @@ importers:
         specifier: 1.0.4
         version: 1.0.4
       prisma:
-        specifier: 4.6.1
-        version: 4.6.1
+        specifier: 5.1.0-dev.88
+        version: 5.1.0-dev.88
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -432,8 +432,8 @@ importers:
         specifier: workspace:2.0.0-beta.31
         version: link:../../packages/blitz-next
       "@prisma/client":
-        specifier: 4.6.1
-        version: 4.6.1(prisma@4.6.1)
+        specifier: 5.1.0-dev.88
+        version: 5.1.0-dev.88(prisma@5.1.0-dev.88)
       blitz:
         specifier: workspace:2.0.0-beta.31
         version: link:../../packages/blitz
@@ -444,8 +444,8 @@ importers:
         specifier: 13.3.0
         version: 13.3.0(@babel/core@7.12.10)(react-dom@18.2.0)(react@18.2.0)
       prisma:
-        specifier: 4.6.1
-        version: 4.6.1
+        specifier: 5.1.0-dev.88
+        version: 5.1.0-dev.88
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -523,8 +523,8 @@ importers:
         specifier: 2.9.10
         version: 2.9.10(react-hook-form@7.39.1)
       "@prisma/client":
-        specifier: 4.6.1
-        version: 4.6.1(prisma@4.6.1)
+        specifier: 5.1.0-dev.88
+        version: 5.1.0-dev.88(prisma@5.1.0-dev.88)
       blitz:
         specifier: workspace:2.0.0-beta.31
         version: link:../../packages/blitz
@@ -535,8 +535,8 @@ importers:
         specifier: 13.3.0
         version: 13.3.0(@babel/core@7.20.2)(react-dom@18.2.0)(react@18.2.0)
       prisma:
-        specifier: 4.6.1
-        version: 4.6.1
+        specifier: 5.1.0-dev.88
+        version: 5.1.0-dev.88
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -635,8 +635,8 @@ importers:
         specifier: workspace:2.0.0-beta.31
         version: link:../../packages/blitz-rpc
       "@prisma/client":
-        specifier: 4.6.1
-        version: 4.6.1(prisma@4.6.1)
+        specifier: 5.1.0-dev.88
+        version: 5.1.0-dev.88(prisma@5.1.0-dev.88)
       blitz:
         specifier: workspace:2.0.0-beta.31
         version: link:../../packages/blitz
@@ -647,8 +647,8 @@ importers:
         specifier: 13.3.0
         version: 13.3.0(@babel/core@7.12.10)(react-dom@18.2.0)(react@18.2.0)
       prisma:
-        specifier: 4.6.1
-        version: 4.6.1
+        specifier: 5.1.0-dev.88
+        version: 5.1.0-dev.88
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -763,8 +763,8 @@ importers:
         specifier: workspace:2.0.0-beta.31
         version: link:../../packages/blitz-rpc
       "@prisma/client":
-        specifier: 4.6.1
-        version: 4.6.1(prisma@4.6.1)
+        specifier: 5.1.0-dev.88
+        version: 5.1.0-dev.88(prisma@5.1.0-dev.88)
       blitz:
         specifier: workspace:2.0.0-beta.31
         version: link:../../packages/blitz
@@ -775,8 +775,8 @@ importers:
         specifier: 13.3.0
         version: 13.3.0(@babel/core@7.12.10)(react-dom@18.2.0)(react@18.2.0)
       prisma:
-        specifier: 4.6.1
-        version: 4.6.1
+        specifier: 5.1.0-dev.88
+        version: 5.1.0-dev.88
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -845,8 +845,8 @@ importers:
         specifier: workspace:2.0.0-beta.31
         version: link:../../packages/blitz-rpc
       "@prisma/client":
-        specifier: 4.6.1
-        version: 4.6.1(prisma@4.6.1)
+        specifier: 5.1.0-dev.88
+        version: 5.1.0-dev.88(prisma@5.1.0-dev.88)
       blitz:
         specifier: workspace:2.0.0-beta.31
         version: link:../../packages/blitz
@@ -857,8 +857,8 @@ importers:
         specifier: 13.3.0
         version: 13.3.0(@babel/core@7.12.10)(react-dom@18.2.0)(react@18.2.0)
       prisma:
-        specifier: 4.6.1
-        version: 4.6.1
+        specifier: 5.1.0-dev.88
+        version: 5.1.0-dev.88
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -918,8 +918,8 @@ importers:
         specifier: workspace:2.0.0-beta.31
         version: link:../../packages/blitz-rpc
       "@prisma/client":
-        specifier: 4.6.1
-        version: 4.6.1(prisma@4.6.1)
+        specifier: 5.1.0-dev.88
+        version: 5.1.0-dev.88(prisma@5.1.0-dev.88)
       "@tanstack/react-query":
         specifier: 4.0.10
         version: 4.0.10(react-dom@18.2.0)(react@18.2.0)
@@ -930,8 +930,8 @@ importers:
         specifier: 13.3.0
         version: 13.3.0(@babel/core@7.18.2)(react-dom@18.2.0)(react@18.2.0)
       prisma:
-        specifier: 4.6.1
-        version: 4.6.1
+        specifier: 5.1.0-dev.88
+        version: 5.1.0-dev.88
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -976,8 +976,8 @@ importers:
         specifier: workspace:2.0.0-beta.31
         version: link:../../packages/blitz-rpc
       "@prisma/client":
-        specifier: 4.6.1
-        version: 4.6.1(prisma@4.6.1)
+        specifier: 5.1.0-dev.88
+        version: 5.1.0-dev.88(prisma@5.1.0-dev.88)
       blitz:
         specifier: workspace:2.0.0-beta.31
         version: link:../../packages/blitz
@@ -988,8 +988,8 @@ importers:
         specifier: 13.3.0
         version: 13.3.0(@babel/core@7.12.10)(react-dom@18.2.0)(react@18.2.0)
       prisma:
-        specifier: 4.6.1
-        version: 4.6.1
+        specifier: 5.1.0-dev.88
+        version: 5.1.0-dev.88
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -1144,8 +1144,8 @@ importers:
         specifier: workspace:2.0.0-beta.31
         version: link:../../packages/blitz-rpc
       "@prisma/client":
-        specifier: 4.6.1
-        version: 4.6.1(prisma@4.6.1)
+        specifier: 5.1.0-dev.88
+        version: 5.1.0-dev.88(prisma@5.1.0-dev.88)
       blitz:
         specifier: workspace:2.0.0-beta.31
         version: link:../../packages/blitz
@@ -1156,8 +1156,8 @@ importers:
         specifier: 13.3.0
         version: 13.3.0(@babel/core@7.12.10)(react-dom@18.2.0)(react@18.2.0)
       prisma:
-        specifier: 4.6.1
-        version: 4.6.1
+        specifier: 5.1.0-dev.88
+        version: 5.1.0-dev.88
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -5762,6 +5762,23 @@ packages:
       prisma: 4.6.1
     dev: false
 
+  /@prisma/client@5.1.0-dev.88(prisma@5.1.0-dev.88):
+    resolution:
+      {
+        integrity: sha512-OO9++AvABYSGzO/N0GPOzgtpOAXq0cbTAegok9jBpMbymqaj4vHo6F9c870BZYnlZ/agWZGhPQbVQborKBucrg==,
+      }
+    engines: {node: ">=16.13"}
+    requiresBuild: true
+    peerDependencies:
+      prisma: "*"
+    peerDependenciesMeta:
+      prisma:
+        optional: true
+    dependencies:
+      "@prisma/engines-version": 5.1.0-22.4b132e0d5319952d155d8bbe2ba802464ebf8c6e
+      prisma: 5.1.0-dev.88
+    dev: false
+
   /@prisma/engines-version@4.6.1-3.694eea289a8462c80264df36757e4fdc129b1b32:
     resolution:
       {
@@ -5769,10 +5786,25 @@ packages:
       }
     dev: false
 
+  /@prisma/engines-version@5.1.0-22.4b132e0d5319952d155d8bbe2ba802464ebf8c6e:
+    resolution:
+      {
+        integrity: sha512-XlybQI2nuNV0TMtu+koasybFniRslGNuq0WNHNVqyJ6dmBiTRbhofns+IFLqb0dqsxxP7kCw/XRhxgq1YvmOvw==,
+      }
+    dev: false
+
   /@prisma/engines@4.6.1:
     resolution:
       {
         integrity: sha512-3u2/XxvxB+Q7cMXHnKU0CpBiUK1QWqpgiBv28YDo1zOIJE3FCF8DI2vrp6vuwjGt5h0JGXDSvmSf4D4maVjJdw==,
+      }
+    requiresBuild: true
+    dev: false
+
+  /@prisma/engines@5.1.0-dev.88:
+    resolution:
+      {
+        integrity: sha512-4M+qB0P7zp+ZDhkbH3z6FxK+W3a5CWFLJU0D6ZrSVX+huIePG2s5P5IFDk5Uu0+ilvHf+7mkvgQeGvHbqlXL+w==,
       }
     requiresBuild: true
     dev: false
@@ -18164,6 +18196,18 @@ packages:
     requiresBuild: true
     dependencies:
       "@prisma/engines": 4.6.1
+    dev: false
+
+  /prisma@5.1.0-dev.88:
+    resolution:
+      {
+        integrity: sha512-llrV7vytjvMjQ9baFQqhkSV2mC0CHVyRiOf8YJX2ap6oVA+fBBZZCeLpKX9dhVxW3eewDVyC7TBxm+GLUB3cHw==,
+      }
+    engines: {node: ">=16.13"}
+    hasBin: true
+    requiresBuild: true
+    dependencies:
+      "@prisma/engines": 5.1.0-dev.88
     dev: false
 
   /process-nextick-args@2.0.1:

@@ -33,7 +33,7 @@ jobs:
       # Node
       - name: Read .node-version
         id: node_version
-        run: echo ::set-output name=NODE_VERSION::$(cat .node-version || echo "14")
+        run: echo ::set-output name=NODE_VERSION::$(cat .node-version || echo "18")
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
