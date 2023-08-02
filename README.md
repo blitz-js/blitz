@@ -89,10 +89,13 @@ Your financial contributions help ensure Blitz continues to be developed and mai
 <table>
   <tr>
 <td><a aria-label="RIT" href="https://rit-inc.co.jp/?utm_source=BlitzJS&utm_medium=sponsorship&utm_campaign=BlitzJS_Sponsorship_2021">
-<img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/main/assets/rit_logo.png" width="200px">
+<img alt="RIT" src="https://raw.githubusercontent.com/blitz-js/blitz/main/assets/rit_logo.png" width="200px">
 </a></td>
 <td><a aria-label="Boostry" href="https://boostry.co.jp/?utm_source=BlitzJS&utm_medium=sponsorship&utm_campaign=BlitzJS_Sponsorship_2021">
-<img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/main/assets/boostry.svg" width="200px">
+<img alt="Boostry" src="https://raw.githubusercontent.com/blitz-js/blitz/main/assets/boostry.svg" width="200px">
+</a></td>
+        <td><a aria-label="Byteflow" href="https://byteflow.app/?ref=blitzjs">
+<img alt="Byteflow" src="https://github.com/blitz-js/blitz/assets/83594610/e10a3772-3a4e-4e62-9f48-687ebf6aca9e" width="70px">
 </a></td>
   </tr>
 </table>
