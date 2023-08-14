@@ -4,6 +4,6 @@
 "@blitzjs/generator": patch
 ---
 
-Downgrade tslog to `4.7.4`.
+Upgrade tslog to `4.9.0`.
 
-This is a workaround for a [tslog issue](https://github.com/fullstack-build/tslog/issues/227) that causes tslog to crash when attempting to log an error whose constructor expects more than one argument.
+This due a [tslog issue](https://github.com/fullstack-build/tslog/issues/227) that causes tslog to crash when attempting to log an error whose constructor expects more than one argument.
