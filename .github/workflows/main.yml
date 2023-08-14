@@ -151,7 +151,7 @@ jobs:
         shell: bash
 
       - name: Prepare test
-        run: pnpm blitz prisma migrate reset
+        run: pnpm blitz prisma migrate reset --force
         shell: bash
 
       - name: Test Packages
