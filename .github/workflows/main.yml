@@ -131,10 +131,10 @@ jobs:
         with:
           version: 8.6.5
 
-      - name: Setup node@${{ matrix.NODE_VERSION }}
+      - name: Setup node@18
         uses: actions/setup-node@v2
         with:
-          node-version: ${{ matrix.NODE_VERSION }}
+          node-version: 18
           cache: "pnpm"
 
       - name: Install dependencies

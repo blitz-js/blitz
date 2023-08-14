@@ -58,16 +58,16 @@ importers:
   apps/next13:
     dependencies:
       "@blitzjs/auth":
-        specifier: workspace:*
+        specifier: 2.0.0-beta.31
         version: link:../../packages/blitz-auth
       "@blitzjs/config":
-        specifier: workspace:*
+        specifier: 2.0.0-beta.31
         version: link:../../packages/config
       "@blitzjs/next":
-        specifier: workspace:*
+        specifier: 2.0.0-beta.31
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: workspace:*
+        specifier: 2.0.0-beta.31
         version: link:../../packages/blitz-rpc
       "@hookform/error-message":
         specifier: 2.0.0
@@ -82,7 +82,7 @@ importers:
         specifier: 4.0.10
         version: 4.0.10(react-dom@18.2.0)(react@18.2.0)
       blitz:
-        specifier: workspace:*
+        specifier: 2.0.0-beta.31
         version: link:../../packages/blitz
       flatted:
         specifier: 3.2.7
@@ -134,16 +134,16 @@ importers:
         specifier: 0.10.0
         version: 0.10.0(patch_hash=jkkk4das3mr53z5xj5wygbcfda)
       "@blitzjs/auth":
-        specifier: workspace:*
+        specifier: 2.0.0-beta.31
         version: link:../../packages/blitz-auth
       "@blitzjs/config":
-        specifier: workspace:*
+        specifier: 2.0.0-beta.31
         version: link:../../packages/config
       "@blitzjs/next":
-        specifier: workspace:*
+        specifier: 2.0.0-beta.31
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: workspace:*
+        specifier: 2.0.0-beta.31
         version: link:../../packages/blitz-rpc
       "@hookform/error-message":
         specifier: 2.0.0
@@ -155,7 +155,7 @@ importers:
         specifier: 4.6.1
         version: 4.6.1(prisma@4.6.1)
       blitz:
-        specifier: workspace:2.0.0-beta.31
+        specifier: 2.0.0-beta.31
         version: link:../../packages/blitz
       next:
         specifier: 13.3.0
@@ -249,16 +249,16 @@ importers:
   apps/toolkit-app-passportjs:
     dependencies:
       "@blitzjs/auth":
-        specifier: workspace:*
+        specifier: 2.0.0-beta.31
         version: link:../../packages/blitz-auth
       "@blitzjs/config":
-        specifier: workspace:*
+        specifier: 2.0.0-beta.31
         version: link:../../packages/config
       "@blitzjs/next":
-        specifier: workspace:*
+        specifier: 2.0.0-beta.31
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: workspace:*
+        specifier: 2.0.0-beta.31
         version: link:../../packages/blitz-rpc
       "@hookform/error-message":
         specifier: 2.0.0
@@ -270,7 +270,7 @@ importers:
         specifier: 4.6.1
         version: 4.6.1(prisma@4.6.1)
       blitz:
-        specifier: workspace:2.0.0-beta.31
+        specifier: 2.0.0-beta.31
         version: link:../../packages/blitz
       next:
         specifier: 13.3.0
@@ -361,16 +361,16 @@ importers:
   apps/web:
     dependencies:
       "@blitzjs/auth":
-        specifier: workspace:*
+        specifier: 2.0.0-beta.31
         version: link:../../packages/blitz-auth
       "@blitzjs/config":
-        specifier: workspace:*
+        specifier: 2.0.0-beta.31
         version: link:../../packages/config
       "@blitzjs/next":
-        specifier: workspace:*
+        specifier: 2.0.0-beta.31
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: workspace:*
+        specifier: 2.0.0-beta.31
         version: link:../../packages/blitz-rpc
       "@prisma/client":
         specifier: 4.6.1
@@ -382,7 +382,7 @@ importers:
         specifier: 1.0.37
         version: 1.0.37
       blitz:
-        specifier: workspace:*
+        specifier: 2.0.0-beta.31
         version: link:../../packages/blitz
       jest:
         specifier: 29.3.0
@@ -428,19 +428,19 @@ importers:
   integration-tests/auth:
     dependencies:
       "@blitzjs/auth":
-        specifier: workspace:2.0.0-beta.31
+        specifier: 2.0.0-beta.31
         version: link:../../packages/blitz-auth
       "@blitzjs/config":
-        specifier: workspace:2.0.0-beta.31
+        specifier: 2.0.0-beta.31
         version: link:../../packages/config
       "@blitzjs/next":
-        specifier: workspace:2.0.0-beta.31
+        specifier: 2.0.0-beta.31
         version: link:../../packages/blitz-next
       "@prisma/client":
         specifier: 4.6.1
         version: 4.6.1(prisma@4.6.1)
       blitz:
-        specifier: workspace:2.0.0-beta.31
+        specifier: 2.0.0-beta.31
         version: link:../../packages/blitz
       lowdb:
         specifier: 3.0.0
@@ -510,16 +510,16 @@ importers:
   integration-tests/auth-with-rpc:
     dependencies:
       "@blitzjs/auth":
-        specifier: workspace:2.0.0-beta.31
+        specifier: 2.0.0-beta.31
         version: link:../../packages/blitz-auth
       "@blitzjs/config":
-        specifier: workspace:2.0.0-beta.31
+        specifier: 2.0.0-beta.31
         version: link:../../packages/config
       "@blitzjs/next":
-        specifier: workspace:2.0.0-beta.31
+        specifier: 2.0.0-beta.31
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: workspace:2.0.0-beta.31
+        specifier: 2.0.0-beta.31
         version: link:../../packages/blitz-rpc
       "@hookform/error-message":
         specifier: 2.0.0
@@ -531,7 +531,7 @@ importers:
         specifier: 4.6.1
         version: 4.6.1(prisma@4.6.1)
       blitz:
-        specifier: workspace:2.0.0-beta.31
+        specifier: 2.0.0-beta.31
         version: link:../../packages/blitz
       delay:
         specifier: 5.0.0
@@ -631,19 +631,19 @@ importers:
   integration-tests/get-initial-props:
     dependencies:
       "@blitzjs/auth":
-        specifier: workspace:2.0.0-beta.31
+        specifier: 2.0.0-beta.31
         version: link:../../packages/blitz-auth
       "@blitzjs/next":
-        specifier: workspace:2.0.0-beta.31
+        specifier: 2.0.0-beta.31
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: workspace:2.0.0-beta.31
+        specifier: 2.0.0-beta.31
         version: link:../../packages/blitz-rpc
       "@prisma/client":
         specifier: 4.6.1
         version: 4.6.1(prisma@4.6.1)
       blitz:
-        specifier: workspace:2.0.0-beta.31
+        specifier: 2.0.0-beta.31
         version: link:../../packages/blitz
       lowdb:
         specifier: 3.0.0
@@ -662,7 +662,7 @@ importers:
         version: 18.2.0(react@18.2.0)
     devDependencies:
       "@blitzjs/config":
-        specifier: workspace:2.0.0-beta.31
+        specifier: 2.0.0-beta.31
         version: link:../../packages/config
       "@next/bundle-analyzer":
         specifier: 12.0.8
@@ -701,16 +701,16 @@ importers:
   integration-tests/middleware:
     dependencies:
       "@blitzjs/config":
-        specifier: workspace:2.0.0-beta.31
+        specifier: 2.0.0-beta.31
         version: link:../../packages/config
       "@blitzjs/next":
-        specifier: workspace:2.0.0-beta.31
+        specifier: 2.0.0-beta.31
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: workspace:2.0.0-beta.31
+        specifier: 2.0.0-beta.31
         version: link:../../packages/blitz-rpc
       blitz:
-        specifier: workspace:2.0.0-beta.31
+        specifier: 2.0.0-beta.31
         version: link:../../packages/blitz
       next:
         specifier: 13.3.0
@@ -756,22 +756,22 @@ importers:
   integration-tests/next-13-app-dir:
     dependencies:
       "@blitzjs/auth":
-        specifier: workspace:2.0.0-beta.31
+        specifier: 2.0.0-beta.31
         version: link:../../packages/blitz-auth
       "@blitzjs/config":
-        specifier: workspace:2.0.0-beta.31
+        specifier: 2.0.0-beta.31
         version: link:../../packages/config
       "@blitzjs/next":
-        specifier: workspace:2.0.0-beta.31
+        specifier: 2.0.0-beta.31
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: workspace:2.0.0-beta.31
+        specifier: 2.0.0-beta.31
         version: link:../../packages/blitz-rpc
       "@prisma/client":
         specifier: 4.6.1
         version: 4.6.1(prisma@4.6.1)
       blitz:
-        specifier: workspace:2.0.0-beta.31
+        specifier: 2.0.0-beta.31
         version: link:../../packages/blitz
       lowdb:
         specifier: 3.0.0
@@ -841,19 +841,19 @@ importers:
   integration-tests/no-suspense:
     dependencies:
       "@blitzjs/auth":
-        specifier: workspace:2.0.0-beta.31
+        specifier: 2.0.0-beta.31
         version: link:../../packages/blitz-auth
       "@blitzjs/next":
-        specifier: workspace:2.0.0-beta.31
+        specifier: 2.0.0-beta.31
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: workspace:2.0.0-beta.31
+        specifier: 2.0.0-beta.31
         version: link:../../packages/blitz-rpc
       "@prisma/client":
         specifier: 4.6.1
         version: 4.6.1(prisma@4.6.1)
       blitz:
-        specifier: workspace:2.0.0-beta.31
+        specifier: 2.0.0-beta.31
         version: link:../../packages/blitz
       lowdb:
         specifier: 3.0.0
@@ -872,7 +872,7 @@ importers:
         version: 18.2.0(react@18.2.0)
     devDependencies:
       "@blitzjs/config":
-        specifier: workspace:2.0.0-beta.31
+        specifier: 2.0.0-beta.31
         version: link:../../packages/config
       "@next/bundle-analyzer":
         specifier: 12.0.8
@@ -911,16 +911,16 @@ importers:
   integration-tests/qm:
     dependencies:
       "@blitzjs/auth":
-        specifier: workspace:2.0.0-beta.31
+        specifier: 2.0.0-beta.31
         version: link:../../packages/blitz-auth
       "@blitzjs/config":
-        specifier: workspace:2.0.0-beta.31
+        specifier: 2.0.0-beta.31
         version: link:../../packages/config
       "@blitzjs/next":
-        specifier: workspace:2.0.0-beta.31
+        specifier: 2.0.0-beta.31
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: workspace:2.0.0-beta.31
+        specifier: 2.0.0-beta.31
         version: link:../../packages/blitz-rpc
       "@prisma/client":
         specifier: 4.6.1
@@ -929,7 +929,7 @@ importers:
         specifier: 4.0.10
         version: 4.0.10(react-dom@18.2.0)(react@18.2.0)
       blitz:
-        specifier: workspace:2.0.0-beta.31
+        specifier: 2.0.0-beta.31
         version: link:../../packages/blitz
       next:
         specifier: 13.3.0
@@ -975,16 +975,16 @@ importers:
   integration-tests/react-query-utils:
     dependencies:
       "@blitzjs/next":
-        specifier: workspace:2.0.0-beta.31
+        specifier: 2.0.0-beta.31
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: workspace:2.0.0-beta.31
+        specifier: 2.0.0-beta.31
         version: link:../../packages/blitz-rpc
       "@prisma/client":
         specifier: 4.6.1
         version: 4.6.1(prisma@4.6.1)
       blitz:
-        specifier: workspace:2.0.0-beta.31
+        specifier: 2.0.0-beta.31
         version: link:../../packages/blitz
       lowdb:
         specifier: 3.0.0
@@ -1003,7 +1003,7 @@ importers:
         version: 18.2.0(react@18.2.0)
     devDependencies:
       "@blitzjs/config":
-        specifier: workspace:2.0.0-beta.31
+        specifier: 2.0.0-beta.31
         version: link:../../packages/config
       "@next/bundle-analyzer":
         specifier: 12.0.8
@@ -1042,16 +1042,16 @@ importers:
   integration-tests/rpc:
     dependencies:
       "@blitzjs/config":
-        specifier: workspace:2.0.0-beta.31
+        specifier: 2.0.0-beta.31
         version: link:../../packages/config
       "@blitzjs/next":
-        specifier: workspace:2.0.0-beta.31
+        specifier: 2.0.0-beta.31
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: workspace:2.0.0-beta.31
+        specifier: 2.0.0-beta.31
         version: link:../../packages/blitz-rpc
       blitz:
-        specifier: workspace:2.0.0-beta.31
+        specifier: 2.0.0-beta.31
         version: link:../../packages/blitz
       next:
         specifier: 13.3.0
@@ -1091,16 +1091,16 @@ importers:
   integration-tests/rpc-path-root:
     dependencies:
       "@blitzjs/config":
-        specifier: workspace:2.0.0-beta.31
+        specifier: 2.0.0-beta.31
         version: link:../../packages/config
       "@blitzjs/next":
-        specifier: workspace:2.0.0-beta.31
+        specifier: 2.0.0-beta.31
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: workspace:2.0.0-beta.31
+        specifier: 2.0.0-beta.31
         version: link:../../packages/blitz-rpc
       blitz:
-        specifier: workspace:2.0.0-beta.31
+        specifier: 2.0.0-beta.31
         version: link:../../packages/blitz
       next:
         specifier: 13.3.0
@@ -1140,19 +1140,19 @@ importers:
   integration-tests/trailing-slash:
     dependencies:
       "@blitzjs/auth":
-        specifier: workspace:2.0.0-beta.31
+        specifier: 2.0.0-beta.31
         version: link:../../packages/blitz-auth
       "@blitzjs/next":
-        specifier: workspace:2.0.0-beta.31
+        specifier: 2.0.0-beta.31
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: workspace:2.0.0-beta.31
+        specifier: 2.0.0-beta.31
         version: link:../../packages/blitz-rpc
       "@prisma/client":
         specifier: 4.6.1
         version: 4.6.1(prisma@4.6.1)
       blitz:
-        specifier: workspace:2.0.0-beta.31
+        specifier: 2.0.0-beta.31
         version: link:../../packages/blitz
       lowdb:
         specifier: 3.0.0
@@ -1171,7 +1171,7 @@ importers:
         version: 18.2.0(react@18.2.0)
     devDependencies:
       "@blitzjs/config":
-        specifier: workspace:2.0.0-beta.31
+        specifier: 2.0.0-beta.31
         version: link:../../packages/config
       "@next/bundle-analyzer":
         specifier: 12.0.8
@@ -1439,7 +1439,7 @@ importers:
         version: 2.1.1
     devDependencies:
       "@blitzjs/config":
-        specifier: workspace:2.0.0-beta.31
+        specifier: 2.0.0-beta.31
         version: link:../config
       "@types/cookie":
         specifier: 0.4.1
@@ -1587,7 +1587,7 @@ importers:
         specifier: 0.10.0
         version: 0.10.0(patch_hash=jkkk4das3mr53z5xj5wygbcfda)
       "@blitzjs/config":
-        specifier: workspace:2.0.0-beta.31
+        specifier: 2.0.0-beta.31
         version: link:../config
       "@testing-library/react":
         specifier: 13.4.0
@@ -1660,7 +1660,7 @@ importers:
         version: 8.1.1
     devDependencies:
       "@blitzjs/config":
-        specifier: workspace:2.0.0-beta.31
+        specifier: 2.0.0-beta.31
         version: link:../config
       "@testing-library/dom":
         specifier: 8.13.0
@@ -1763,7 +1763,7 @@ importers:
         specifier: 2.0.0-beta.31
         version: link:../blitz-auth
       "@blitzjs/config":
-        specifier: workspace:2.0.0-beta.31
+        specifier: 2.0.0-beta.31
         version: link:../config
       "@tanstack/query-core":
         specifier: 4.24.4
@@ -1851,7 +1851,7 @@ importers:
         specifier: 7.12.10
         version: 7.12.10(@babel/core@7.12.10)(supports-color@8.1.1)
       "@blitzjs/config":
-        specifier: workspace:*
+        specifier: 2.0.0-beta.31
         version: link:../config
       "@types/jscodeshift":
         specifier: 0.11.2
