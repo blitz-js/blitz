@@ -16,14 +16,14 @@ jobs:
     name: Lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: pnpm/action-setup@v2.2.4
         with:
           version: 8.6.5
       - name: Setup node
         uses: actions/setup-node@v2
         with:
-          node-version: 16
+          node-version: 18
           cache: "pnpm"
       - name: Install dependencies
         run: pnpm install  --frozen-lockfile
@@ -37,14 +37,14 @@ jobs:
     runs-on: ubuntu-latest
     name: Build
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: pnpm/action-setup@v2.2.4
         with:
           version: 8.6.5
       - name: Setup node
         uses: actions/setup-node@v2
         with:
-          node-version: 16
+          node-version: 18
           cache: "pnpm"
       - run: pnpm install --frozen-lockfile
       - name: Build
@@ -62,7 +62,7 @@ jobs:
           - windows-latest
       fail-fast: false
     env:
-      NODE_VERSION: 16
+      NODE_VERSION: 18
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -75,7 +75,7 @@ jobs:
       - name: Setup node@16
         uses: actions/setup-node@v2
         with:
-          node-version: 16
+          node-version: 18
           cache: "pnpm"
 
       - name: Install dependencies
@@ -100,7 +100,7 @@ jobs:
     outputs:
       folders: ${{ steps.set-matrix.outputs.folders }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - id: set-matrix
         name: "Find all folders"
         shell: bash
@@ -134,7 +134,7 @@ jobs:
       - name: Setup node@${{ matrix.NODE_VERSION }}
         uses: actions/setup-node@v2
         with:
-          node-version: ${{ matrix.NODE_VERSION }}
+          node-version: 18
           cache: "pnpm"
 
       - name: Install dependencies
