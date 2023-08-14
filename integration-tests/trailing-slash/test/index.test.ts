@@ -39,7 +39,6 @@ describe("Trailing Slash Tests", () => {
   describe("dev mode", () => {
     beforeAll(async () => {
       try {
-        await runBlitzCommand(["prisma", "migrate", "reset", "--force"])
         appPort = await findPort()
         app = await blitzLaunchApp(appPort, {cwd: process.cwd()})
       } catch (error) {
