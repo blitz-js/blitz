@@ -150,10 +150,6 @@ jobs:
         run: pnpm build
         shell: bash
 
-      - name: Prepare
-        run: cd ./integration-tests/${{matrix.folder}}
-        shell: bash
-
       - name: Test Packages
-        run: pnpm test
+        run: set DEBUG=* && pnpm test -- --filter=./integration-tests/${{matrix.folder}}
         shell: bash
