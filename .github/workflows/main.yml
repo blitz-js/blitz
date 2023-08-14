@@ -152,12 +152,9 @@ jobs:
         run: pnpm build
         shell: bash
 
-      - name: Prepare
-        run: |
-          cd ./integration-tests/${{matrix.folder}}
-          set DEBUG=* pnpm prisma migrate reset --force
-          pnpm prisma generate
-          cd ../..
+      - working-directory: ./integration-tests/${{matrix.folder}}
+        name: Prepare
+        run: set DEBUG=* pnpm prisma migrate reset --force
 
       - name: Test Packages
         run: set DEBUG=* && pnpm test -- --filter=./integration-tests/${{matrix.folder}}
