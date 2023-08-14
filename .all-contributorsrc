@@ -3955,6 +3955,16 @@
         "doc",
         "code"
       ]
+    },
+    {
+      "login": "maciej-ka",
+      "name": "Maciej Kasprzyk",
+      "avatar_url": "https://avatars.githubusercontent.com/u/5403694?v=4",
+      "profile": "https://github.com/maciej-ka",
+      "contributions": [
+        "doc",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
