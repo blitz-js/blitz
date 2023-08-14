@@ -150,10 +150,14 @@ jobs:
         run: pnpm build
         shell: bash
 
+      - name: Cd into integration test folder
+        run: cd ./integration-tests/${{matrix.folder}}
+        shell: bash
+
       - name: Prepare test
         run: pnpm blitz prisma migrate reset --force
         shell: bash
 
       - name: Test Packages
-        run: pnpm test -- --filter=./integration-tests/${{matrix.folder}}
+        run: pnpm test
         shell: bash
