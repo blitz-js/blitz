@@ -154,8 +154,8 @@ jobs:
 
       - working-directory: ./integration-tests/${{matrix.folder}}
         name: Prepare
-        run: set DEBUG=* pnpm prisma migrate reset --force
+        run: DEBUG=* pnpm prisma migrate reset --force
 
       - name: Test Packages
-        run: set DEBUG=* && pnpm test -- --filter=./integration-tests/${{matrix.folder}}
+        run: DEBUG=* && pnpm test -- --filter=./integration-tests/${{matrix.folder}}
         shell: bash
