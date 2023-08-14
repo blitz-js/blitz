@@ -43,7 +43,7 @@ const runTests = (mode?: string) => {
           const browser = await webdriver(appPort, "/authenticated-page")
           let errorMsg = await browser.elementById(`error`).text()
           expect(errorMsg).toMatch(/Error: You are not authenticated/)
-          if (browser) browser.close()
+          if (browser) void browser.close()
         },
         5000 * 60 * 2,
       )
