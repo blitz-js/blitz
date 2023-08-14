@@ -155,7 +155,7 @@ jobs:
       - name: Prepare
         run: |
           cd ./integration-tests/${{matrix.folder}}
-          pnpm prisma migrate reset --force
+          set DEBUG=* pnpm prisma migrate reset --force
           pnpm prisma generate
           cd ../..
 
