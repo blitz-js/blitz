@@ -131,7 +131,7 @@ jobs:
         with:
           version: 8.6.5
 
-      - name: Setup node@${{ matrix.NODE_VERSION }}
+      - name: Setup node@18
         uses: actions/setup-node@v2
         with:
           node-version: 18
@@ -148,6 +148,10 @@ jobs:
 
       - name: Build
         run: pnpm build
+        shell: bash
+
+      - name: Prepare test
+        run: pnpm blitz prisma migrate rest
         shell: bash
 
       - name: Test Packages

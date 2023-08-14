@@ -43,7 +43,7 @@ const runTests = (mode?: string) => {
           const browser = await webdriver(appPort, "/authenticated-page")
           let errorMsg = await browser.elementById(`error`).text()
           expect(errorMsg).toMatch(/Error: You are not authenticated/)
-          if (browser) browser.close()
+          if (browser) void browser.close()
         },
         5000 * 60 * 2,
       )
@@ -132,7 +132,6 @@ describe("Auth Tests", () => {
   describe("dev mode", async () => {
     beforeAll(async () => {
       try {
-        await runBlitzCommand(["prisma", "migrate", "reset", "--force"])
         appPort = await findPort()
         app = await blitzLaunchApp(appPort, {cwd: process.cwd()})
       } catch (error) {
@@ -144,20 +143,4 @@ describe("Auth Tests", () => {
     })
     runTests()
   })
-
-  // describe("server mode", () => {
-  //   beforeAll(async () => {
-  //     try {
-  //       await runBlitzCommand(["prisma", "generate"])
-  //       await runBlitzCommand(["prisma", "migrate", "deploy"])
-  //       await blitzBuild()
-  //       // appPort = await findPort()
-  //       app = await blitzStart(appPort, {cwd: process.cwd()})
-  //     } catch (err) {
-  //       console.log(err)
-  //     }
-  //   }, 5000 * 60 * 2)
-  //   afterAll(async () => await killApp(app))
-  //   runTests()
-  // })
 })
