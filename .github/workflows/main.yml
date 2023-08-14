@@ -10,6 +10,8 @@ concurrency:
 
 env:
   PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
+  SESSION_SECRET_KEY: hsdenhJfpLHrGjgdgg3jdF8g2bYD2PaQ
+  HEADLESS: true
 
 jobs:
   lint:
@@ -149,6 +151,13 @@ jobs:
       - name: Build
         run: pnpm build
         shell: bash
+
+      - name: Prepare
+        run: |
+          cd ./integration-tests/${{matrix.folder}}
+          pnpm prisma migrate reset --force
+          pnpm prisma generate
+          cd ../..
 
       - name: Test Packages
         run: set DEBUG=* && pnpm test -- --filter=./integration-tests/${{matrix.folder}}

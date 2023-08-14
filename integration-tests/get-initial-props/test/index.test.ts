@@ -63,8 +63,6 @@ describe("getInitialProps Tests", () => {
   describe("server mode", () => {
     beforeAll(async () => {
       try {
-        await runBlitzCommand(["prisma", "generate"])
-        await runBlitzCommand(["prisma", "migrate", "deploy"])
         await blitzBuild()
         appPort = await findPort()
         app = await blitzStart(appPort, {cwd: process.cwd()})
