@@ -1427,8 +1427,8 @@ importers:
         specifier: 4.0.0
         version: 4.0.0
       tslog:
-        specifier: 4.8.2
-        version: 4.8.2
+        specifier: 4.9.0
+        version: 4.9.0
       watchpack:
         specifier: 2.1.1
         version: 2.1.1
@@ -1715,8 +1715,8 @@ importers:
         specifier: 27.1.4
         version: 27.1.4(@babel/core@7.12.10)(esbuild@0.14.51)(jest@27.5.1)(typescript@4.8.4)
       tslog:
-        specifier: 4.8.2
-        version: 4.8.2
+        specifier: 4.9.0
+        version: 4.9.0
       typescript:
         specifier: ^4.8.4
         version: 4.8.4
@@ -1955,8 +1955,8 @@ importers:
         specifier: 8.1.1
         version: 8.1.1
       tslog:
-        specifier: 4.8.2
-        version: 4.8.2
+        specifier: 4.9.0
+        version: 4.9.0
       username:
         specifier: 5.1.0
         version: 5.1.0
@@ -20640,10 +20640,10 @@ packages:
         integrity: sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==,
       }
 
-  /tslog@4.8.2:
+  /tslog@4.9.0:
     resolution:
       {
-        integrity: sha512-eAKIRjxfSKYLs06r1wT7oou6Uv9VN6NW9g0JPidBlqQwPBBl5+84dm7r8zSOPVq1kyfEw1P6B3/FLSpZCorAgA==,
+        integrity: sha512-YEb55YxukbKO0bSAAsd9eSnw6RA0e3jt3cniZ00wj9offySAbp20lBrjOh1OTn11L51r58V4kFy8h7dMPnbpmg==,
       }
     engines: {node: ">=16"}
 
