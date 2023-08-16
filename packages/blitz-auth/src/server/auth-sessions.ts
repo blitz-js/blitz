@@ -15,6 +15,7 @@ import {
   log,
   baseLogger,
   chalk,
+  AuthenticatedCtx,
 } from "blitz"
 import {
   EmptyPublicData,
@@ -219,7 +220,7 @@ export async function useAuthenticatedBlitzContext({
   redirectTo?: string | RouteUrlObject
   redirectAuthenticatedTo?: string | RouteUrlObject | ((ctx: Ctx) => string | RouteUrlObject)
   role?: string | string[]
-}): Promise<Ctx> {
+}): Promise<AuthenticatedCtx> {
   const log = baseLogger().getSubLogger({name: "useAuthenticatedBlitzContext"})
   const customChalk = new chalk.Instance({
     level: log.settings.type === "json" ? 0 : chalk.level,
@@ -268,7 +269,7 @@ export async function useAuthenticatedBlitzContext({
       redirect(redirectTo)
     }
   }
-  return ctx
+  return ctx as AuthenticatedCtx
 }
 
 const makeProxyToPublicData = <T extends SessionContextClass>(ctxClass: T): T => {
