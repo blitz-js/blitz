@@ -151,7 +151,6 @@ export async function getSession(
   res: ServerResponse,
   appDir = false,
 ): Promise<SessionContext> {
-  // clear any existing session-create headers
   res.setHeader(HEADER_SESSION_CREATED, "")
 
   ensureApiRequest(req)
