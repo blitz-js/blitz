@@ -21,7 +21,7 @@ import {isLocalhost} from "../utils"
 // next-auth internals
 import {getBody, getURL, setHeaders} from "./internals/core/node"
 import type {AuthAction, InternalOptions, RequestInternal} from "./internals/core/types"
-import type {OAuthConfig, Provider} from "@auth/core/providers"
+import type {OAuthConfig} from "@auth/core/providers"
 import type {Cookie} from "@auth/core/lib/cookie"
 
 import {init} from "@auth/core/lib/init"
@@ -232,8 +232,7 @@ export async function AuthHandler<P extends OAuthConfig<any>[]>(
           )
           log.debug("NEXT_AUTH_CALLBACK", {cookies, profile, account, user})
           const session = res.blitzCtx.session
-          assert(session, "Missing Blitz sessionMiddleware!")
-          const callback = await config.callback(user, account, profile, session)
+          const callback = await config.callback(user, account, profile as any, session)
           let _redirect = config.successRedirectUrl
           if (callback instanceof Object) {
             _redirect = callback.redirectUrl

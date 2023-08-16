@@ -2,8 +2,8 @@ import type {Ctx, MiddlewareResponse} from "blitz"
 import type {IncomingMessage} from "http"
 import type {Account, Profile, User} from "@auth/core/types"
 import type {AuthConfig} from "@auth/core"
-import {SessionContext} from "../../index-server"
-import {OAuthConfig} from "@auth/core/providers"
+import type {SessionContext} from "../../index-server"
+import type {OAuthConfig} from "@auth/core/providers"
 
 export type BlitzNextAuthOptions<P extends OAuthConfig<any>[]> = Omit<AuthConfig, "providers"> & {
   providers: P
@@ -16,11 +16,7 @@ export type BlitzNextAuthOptions<P extends OAuthConfig<any>[]> = Omit<AuthConfig
   callback: (
     user: User | undefined,
     account: Account | undefined,
-    profile: P[0] extends OAuthConfig<any>
-      ? P[0]["profile"] extends (...args: any) => any
-        ? Parameters<P[0]["profile"]>[0]
-        : Profile
-      : Profile,
+    profile: P[number] extends OAuthConfig<infer T> ? T : Profile,
     session: SessionContext,
   ) => Promise<void | {redirectUrl: string}>
 }
