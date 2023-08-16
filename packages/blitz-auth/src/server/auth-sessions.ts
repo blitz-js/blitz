@@ -151,9 +151,11 @@ export async function getSession(
   res: ServerResponse,
   appDir = false,
 ): Promise<SessionContext> {
+  // clear any existing session-create headers
+  res.setHeader(HEADER_SESSION_CREATED, "")
+
   ensureApiRequest(req)
   ensureMiddlewareResponse(res)
-
   debug("cookiePrefix", globalThis.__BLITZ_SESSION_COOKIE_PREFIX)
 
   if (res.blitzCtx.session) {
