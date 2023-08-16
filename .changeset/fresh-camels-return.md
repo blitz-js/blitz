@@ -2,4 +2,4 @@
 "@blitzjs/auth": patch
 ---
 
-`useAuthenticatedBlitzContext` returns `ctx`
+`useAuthenticatedBlitzContext` returns `AuthenticatedCtx`
