@@ -5,9 +5,7 @@ import { useCurrentUser } from "src/users/hooks/useCurrentUser"
 import logout from "src/auth/mutations/logout"
 import { useMutation } from "@blitzjs/rpc"
 import { BlitzPage } from "@blitzjs/next"
-import { Routes } from ".blitz"
 import styles from "src/styles/Home.module.css"
-import { getAntiCSRFToken } from "@blitzjs/auth"
 
 /*
  * This file is just for a pleasant getting started page for your new app.
@@ -81,8 +79,6 @@ const Home: BlitzPage = () => {
               </div>
 
               <h1>Your database & authentication is ready. Try it by signing up.</h1>
-
-              {/* Auth */}
 
               <div className={styles.buttonContainer}>
                 <Suspense fallback="Loading...">
