@@ -1,5 +1,17 @@
 # @blitzjs/next
 
+## 2.0.0-beta.32
+
+### Patch Changes
+
+- 82649f341: Upgrade tslog to `4.9.0`.
+
+  This due a [tslog issue](https://github.com/fullstack-build/tslog/issues/227) that causes tslog to crash when attempting to log an error whose constructor expects more than one argument.
+
+- Updated dependencies [82649f341]
+  - blitz@2.0.0-beta.32
+  - @blitzjs/rpc@2.0.0-beta.32
+
 ## 2.0.0-beta.31
 
 ### Patch Changes
