@@ -96,7 +96,7 @@ Your financial contributions help ensure Blitz continues to be developed and mai
 </a></td>
 <td>
 <a aria-label="Byteflow" href="https://byteflow.app/?ref=blitzjs">
-<img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/main/assets/Byteflow.png" width="70px">
+<img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/main/assets/byteflow.png" width="70px">
 </a>
 </td>
   </tr>
