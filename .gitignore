@@ -34,3 +34,5 @@ test/**/blitz-env.d.ts
 examples/**/blitz-env.d.ts
 .blitz**
 
+/examples/playwright/playwright-report/
+/examples/playwright/test-results/
