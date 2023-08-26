@@ -202,39 +202,16 @@ function isBlitzRPCVerbose(resolverName: string, config: RpcConfig, level: strin
 }
 
 export function rpcHandler(config: RpcConfig) {
-  return async function handleRpcRequest(req: NextApiRequest, res: NextApiResponse, ctx: Ctx) {
+  return async function handleRpcRequest(req: NextApiRequest, res: NextApiResponse) {
     const resolverMap = await getResolverMap()
     assert(resolverMap, "No query or mutation resolvers found")
     assert(
       Array.isArray(req.query.blitz),
       "It seems your Blitz RPC endpoint file is not named [[...blitz]].(jt)s. Please ensure it is",
     )
-
-    const relativeRoutePath = (req.query.blitz as string[])?.join("/")
-    const routePath = "/" + relativeRoutePath
-    const resolverName = routePath.replace(/(\/api\/rpc)?\//, "")
-
-    const log = baseLogger().getSubLogger({
-      name: "blitz-rpc",
-      prefix: [resolverName + "()"],
-    })
-    const customChalk = new chalk.Instance({
-      level: log.settings.type === "json" ? 0 : chalk.level,
-    })
-
-    const loadableResolver = resolverMap?.[routePath]
-    if (!loadableResolver) {
-      throw new Error("No resolver for path: " + routePath)
-    }
-
-    const {default: resolver, config: resolverConfig} = await loadableResolver()
-
-    if (!resolver) {
-      throw new Error("No default export for resolver path: " + routePath)
-    }
-
-    const resolverConfigWithDefaults = {...defaultConfig, ...resolverConfig}
-
+    const {resolverName, routePath} = parseResolverFromRequest(req.query.blitz as string[])
+    const logger = initRpcLogger(resolverName)
+    const {resolver, resolverConfigWithDefaults} = await loadResolver(resolverMap, routePath)
     if (req.method === "HEAD") {
       // We used to initiate database connection here
       res.status(200).end()
@@ -245,7 +222,7 @@ export function rpcHandler(config: RpcConfig) {
     ) {
       if (req.method === "POST" && typeof req.body.params === "undefined") {
         const error = {message: "Request body is missing the `params` key"}
-        log.error(error.message)
+        logger.log.error(error.message)
         res.status(400).json({
           result: null,
           error,
@@ -267,69 +244,24 @@ export function rpcHandler(config: RpcConfig) {
               ? parse(`${req.query.meta}`)
               : undefined,
         })
-        if (isBlitzRPCVerbose(resolverName, config, "info")) {
-          log.info(customChalk.dim("Starting with input:"), data ? data : JSON.stringify(data))
-        }
-        const startTime = Date.now()
-        const result = await resolver(data, (res as any).blitzCtx)
-        const resolverDuration = Date.now() - startTime
-
-        if (isBlitzRPCVerbose(resolverName, config, "debug")) {
-          log.debug(customChalk.dim("Result:"), result ? result : JSON.stringify(result))
-        }
-
-        const serializerStartTime = Date.now()
-        const serializedResult = superjsonSerialize(result)
-
-        const nextSerializerStartTime = Date.now()
+        const {result, serializedResult} = await executeBlitzResolver({
+          resolverName,
+          config,
+          data,
+          resolver,
+          ctx: (req as any).blitzCtx,
+          ...logger,
+        })
         ;(res as any).blitzResult = result
-        res.json({
+        return res.json({
           result: serializedResult.json,
           error: null,
           meta: {
             result: serializedResult.meta,
           },
         })
-
-        if (isBlitzRPCVerbose(resolverName, config, "debug")) {
-          log.debug(
-            customChalk.dim(
-              `Next.js serialization:${prettyMs(Date.now() - nextSerializerStartTime)}`,
-            ),
-          )
-        }
-
-        const serializerDuration = Date.now() - serializerStartTime
-        const duration = Date.now() - startTime
-        if (isBlitzRPCVerbose(resolverName, config, "info")) {
-          log.info(
-            customChalk.dim(
-              `Finished: resolver:${prettyMs(resolverDuration)} serializer:${prettyMs(
-                serializerDuration,
-              )} total:${prettyMs(duration)}`,
-            ),
-          )
-        }
-        newLine()
-
-        return
       } catch (error: any) {
-        if (error._clearStack) {
-          delete error.stack
-        }
-
-        config.onError?.(error)
-
-        log.error(error)
-        newLine()
-
-        if (!error.statusCode) {
-          error.statusCode = 500
-        }
-
-        const formattedError = config.formatError?.(error) ?? error
-        const serializedError = superjsonSerialize(formattedError)
-
+        const serializedError = handleRpcError({error, config, log: logger.log})
         res.json({
           result: null,
           error: serializedError.json,
@@ -341,9 +273,208 @@ export function rpcHandler(config: RpcConfig) {
       }
     } else {
       // Everything else is error
-      log.warn(`${req.method} method not supported`)
+      logger.log.warn(`${req.method} method not supported`)
       res.status(404).end()
       return
     }
   }
+}
+
+interface RpcQuery {
+  query: {
+    blitz: string[]
+    [key: string]: string | string[]
+  }
+  meta: {
+    params: string | string[]
+  }
+  params: string | string[]
+}
+
+export function rpcApiHandler(config: RpcConfig) {
+  return async function handleRpcRequest(request: Request, rpcQuery: RpcQuery, ctx?: Ctx) {
+    const body = await request.json()
+    const resolverMap = await getResolverMap()
+    assert(resolverMap, "No query or mutation resolvers found")
+    assert(
+      Array.isArray(rpcQuery.query.blitz),
+      "It seems your Blitz RPC endpoint file is not named [[...blitz]].(jt)s. Please ensure it is",
+    )
+    const {resolverName, routePath} = parseResolverFromRequest(rpcQuery.query.blitz)
+    const logger = initRpcLogger(resolverName)
+    const {resolver, resolverConfigWithDefaults} = await loadResolver(resolverMap, routePath)
+
+    if (request.method === "HEAD") {
+      // We used to initiate database connection here
+      return new Response(null, {status: 200})
+    } else if (
+      request.method === "POST" ||
+      (request.method === "GET" && resolverConfigWithDefaults.httpMethod === "GET")
+    ) {
+      if (request.method === "POST" && typeof rpcQuery.params === "undefined") {
+        const error = {message: "Request body is missing the `params` key"}
+        logger.log.error(error.message)
+        return new Response(
+          JSON.stringify({
+            result: null,
+            error,
+          }),
+          {status: 400},
+        )
+      }
+      try {
+        const data = deserialize({
+          json:
+            request.method === "POST"
+              ? body.params
+              : rpcQuery.params
+              ? parse(`${rpcQuery.params}`)
+              : undefined,
+          meta:
+            request.method === "POST"
+              ? body.meta?.params
+              : rpcQuery.meta
+              ? parse(`${rpcQuery.meta}`)
+              : undefined,
+        })
+        const {result, serializedResult} = await executeBlitzResolver({
+          resolverName,
+          config,
+          data,
+          resolver,
+          ctx,
+          ...logger,
+        })
+        return new Response(
+          JSON.stringify({
+            result: serializedResult.json,
+            error: null,
+            meta: {
+              result: serializedResult.meta,
+            },
+            blitzResult: result,
+          }),
+        )
+      } catch (error: any) {
+        const serializedError = handleRpcError({error, config, log: logger.log})
+        return new Response(
+          JSON.stringify({
+            result: null,
+            error: serializedError.json,
+            meta: {
+              error: serializedError.meta,
+            },
+          }),
+          {status: error.statusCode},
+        )
+      }
+    } else {
+      // Everything else is error
+      logger.log.warn(`${request.method} method not supported`)
+      return new Response(null, {status: 404})
+    }
+  }
+}
+
+function initRpcLogger(resolverName: string) {
+  const log = baseLogger().getSubLogger({
+    name: "blitz-rpc",
+    prefix: [resolverName + "()"],
+  })
+  const customChalk = new chalk.Instance({
+    level: log.settings.type === "json" ? 0 : chalk.level,
+  })
+  return {log, customChalk}
+}
+
+async function loadResolver(resolverMap: ResolverFiles | null | undefined, routePath: string) {
+  const loadableResolver = resolverMap?.[routePath]
+  if (!loadableResolver) {
+    throw new Error("No resolver for path: " + routePath)
+  }
+  const {default: resolver, config} = await loadableResolver()
+  if (!resolver) {
+    throw new Error("No default export for resolver path: " + routePath)
+  }
+  const resolverConfigWithDefaults: ResolverConfig = {...defaultConfig, ...config}
+  return {resolver, resolverConfigWithDefaults}
+}
+
+async function executeBlitzResolver({
+  resolverName,
+  config,
+  data,
+  log,
+  customChalk,
+  resolver,
+  ctx,
+}: {
+  resolverName: string
+  config: RpcConfig
+  data: any
+  log: ReturnType<typeof initRpcLogger>["log"]
+  customChalk: ReturnType<typeof initRpcLogger>["customChalk"]
+  resolver: Resolver
+  ctx?: Ctx
+}) {
+  if (isBlitzRPCVerbose(resolverName, config, "info")) {
+    log.info(customChalk.dim("Starting with input:"), data ? data : JSON.stringify(data))
+  }
+  const startTime = Date.now()
+  const result = await resolver(data, ctx)
+  const resolverDuration = Date.now() - startTime
+  if (isBlitzRPCVerbose(resolverName, config, "debug")) {
+    log.debug(customChalk.dim("Result:"), result ? result : JSON.stringify(result))
+  }
+  const serializerStartTime = Date.now()
+  const serializedResult = superjsonSerialize(result)
+  const nextSerializerStartTime = Date.now()
+  if (isBlitzRPCVerbose(resolverName, config, "debug")) {
+    log.debug(
+      customChalk.dim(`Next.js serialization:${prettyMs(Date.now() - nextSerializerStartTime)}`),
+    )
+  }
+  const serializerDuration = Date.now() - serializerStartTime
+  const duration = Date.now() - startTime
+  if (isBlitzRPCVerbose(resolverName, config, "info")) {
+    log.info(
+      customChalk.dim(
+        `Finished: resolver:${prettyMs(resolverDuration)} serializer:${prettyMs(
+          serializerDuration,
+        )} total:${prettyMs(duration)}`,
+      ),
+    )
+  }
+  newLine()
+  return {result, serializedResult}
+}
+
+function handleRpcError({
+  error,
+  config,
+  log,
+}: {
+  error: any
+  config: RpcConfig
+  log: ReturnType<typeof initRpcLogger>["log"]
+}) {
+  if (error._clearStack) {
+    delete error.stack
+  }
+  config.onError?.(error)
+  log.error(error)
+  newLine()
+  if (!error.statusCode) {
+    error.statusCode = 500
+  }
+  const formattedError = config.formatError?.(error) ?? error
+  const serializedError = superjsonSerialize(formattedError)
+  return serializedError
+}
+
+function parseResolverFromRequest(blitz?: string[]) {
+  const relativeRoutePath = blitz?.join("/")
+  const routePath = "/" + relativeRoutePath
+  const resolverName = routePath.replace(/(\/api\/rpc)?\//, "")
+  return {resolverName, routePath}
 }
