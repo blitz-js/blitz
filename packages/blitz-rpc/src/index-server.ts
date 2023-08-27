@@ -292,7 +292,11 @@ interface RpcQuery {
 }
 
 export function rpcRequestHandler(config: RpcConfig) {
-  return async function handleRpcRequest(request: Request, rpcQuery: RpcQuery, ctx?: Ctx) {
+  return async function handleRpcRequest(
+    request: Request,
+    rpcQuery: RpcQuery,
+    ctx?: Ctx,
+  ): Promise<Response> {
     const body = await request.json()
     const resolverMap = await getResolverMap()
     assert(resolverMap, "No query or mutation resolvers found")
