@@ -291,7 +291,7 @@ interface RpcQuery {
   params: string | string[]
 }
 
-export function rpcApiHandler(config: RpcConfig) {
+export function rpcRequestHandler(config: RpcConfig) {
   return async function handleRpcRequest(request: Request, rpcQuery: RpcQuery, ctx?: Ctx) {
     const body = await request.json()
     const resolverMap = await getResolverMap()
