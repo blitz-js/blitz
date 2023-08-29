@@ -42,9 +42,23 @@ import {generateToken, hash256} from "./auth-utils"
 import {Socket} from "net"
 import {UrlObject} from "url"
 import {formatWithValidation} from "../shared/url-utils"
+import {headers} from "next/headers"
 
-export function isLocalhost(req: any): boolean {
-  let {host} = req.headers
+export function isLocalhost(
+  props:
+    | {
+        req: IncomingMessage
+      }
+    | {
+        headers: Headers
+      },
+): boolean {
+  let host: string | undefined
+  if ("req" in props) {
+    host = props.req.headers.host || ""
+  } else {
+    host = props.headers.get("host") || ""
+  }
   let localhost = false
   if (host) {
     host = host.split(":")[0]
@@ -131,14 +145,6 @@ type AuthedSessionKernel = {
 }
 type SessionKernel = AnonSessionKernel | AuthedSessionKernel
 
-function ensureApiRequest(
-  req: IncomingMessage & {[key: string]: any},
-): asserts req is IncomingMessage & {cookies: {[key: string]: string}} {
-  if (!("cookies" in req)) {
-    // Cookie parser isn't include inside getServerSideProps, so we have to add it
-    req.cookies = getCookieParser(req.headers)()
-  }
-}
 function ensureMiddlewareResponse(
   res: ServerResponse & {[key: string]: any},
 ): asserts res is ServerResponse & {blitzCtx: Ctx} {
@@ -147,22 +153,60 @@ function ensureMiddlewareResponse(
   }
 }
 
-export async function getSession(
-  req: IncomingMessage,
-  res: ServerResponse,
-  appDir = false,
-): Promise<SessionContext> {
-  ensureApiRequest(req)
-  ensureMiddlewareResponse(res)
+type GetSession =
+  | {
+      req: IncomingMessage
+      res: ServerResponse & {blitzCtx?: Ctx}
+      appDir?: boolean
+    }
+  | {
+      req: Request
+    }
 
-  debug("cookiePrefix", globalThis.__BLITZ_SESSION_COOKIE_PREFIX)
+function convertRequestToHeader(req: IncomingMessage | Request): Headers {
+  const headersFromRequest = req.headers
+  if (headersFromRequest instanceof Headers) {
+    return headersFromRequest
+  } else {
+    const headers = new Headers()
+    Object.entries(headersFromRequest).forEach(([key, value]) => {
+      if (value) {
+        if (Array.isArray(value)) {
+          headers.append(key, value.join(","))
+        } else {
+          headers.append(key, value)
+        }
+      }
+    })
+    return headers
+  }
+}
 
-  if (res.blitzCtx.session) {
-    debug("Returning existing session")
-    return res.blitzCtx.session
+function getCookiesFromHeader(headers: Headers) {
+  const cookieHeader = headers.get("Cookie")
+  if (cookieHeader) {
+    return cookie.parse(cookieHeader)
+  } else {
+    return {}
+  }
+}
+
+export async function getSession(props: GetSession): Promise<SessionContext> {
+  if ("res" in props) {
+    const {res} = props
+    ensureMiddlewareResponse(res)
+
+    debug("cookiePrefix", globalThis.__BLITZ_SESSION_COOKIE_PREFIX)
+
+    if (res.blitzCtx.session) {
+      debug("Returning existing session")
+      return res.blitzCtx.session
+    }
   }
 
-  let sessionKernel = await getSessionKernel(req, res)
+  const headers = convertRequestToHeader(props.req)
+
+  let sessionKernel = await getSessionKernel({headers, method: props.req.method})
 
   if (sessionKernel) {
     debug("Got existing session", sessionKernel)
@@ -170,14 +214,24 @@ export async function getSession(
 
   if (!sessionKernel) {
     debug("No session found, creating anonymous session")
-    sessionKernel = await createAnonymousSession(req, res)
+    sessionKernel = await createAnonymousSession({headers})
   }
 
+  const appDir = "appDir" in props ? Boolean(props.appDir) : false
+
   const sessionContext = makeProxyToPublicData(
-    new SessionContextClass(req, res, sessionKernel, appDir),
+    new SessionContextClass(headers, sessionKernel, appDir),
   )
   debug("New session context")
-  res.blitzCtx.session = sessionContext
+  if ("res" in props) {
+    console.log(headers)
+    headers.forEach((value, key) => {
+      props.res.setHeader(key, value)
+    })
+    props.res.blitzCtx = {
+      session: sessionContext,
+    }
+  }
   return sessionContext
 }
 
@@ -201,7 +255,7 @@ export async function getBlitzContext(): Promise<Ctx> {
       .map((c: {name: string; value: string}) => [c.name, c.value]),
   )
   const res = new ServerResponse(req)
-  const session = await getSession(req, res, true)
+  const session = await getSession({req, res, appDir: true})
   const ctx: Ctx = {
     session,
   }
@@ -291,19 +345,12 @@ const NotSupportedMessage = async (method: string) => {
 }
 
 export class SessionContextClass implements SessionContext {
-  private _req: IncomingMessage & {cookies: {[key: string]: string}}
-  private _res: ServerResponse & {blitzCtx: Ctx}
+  private _headers: Headers
   private _kernel: SessionKernel
   private _appDir: boolean
 
-  constructor(
-    req: IncomingMessage & {cookies: {[key: string]: string}},
-    res: ServerResponse & {blitzCtx: Ctx},
-    kernel: SessionKernel,
-    appDir: boolean,
-  ) {
-    this._req = req
-    this._res = res
+  constructor(headers: Headers, kernel: SessionKernel, appDir: boolean) {
+    this._headers = headers
     this._kernel = kernel
     this._appDir = appDir
   }
@@ -333,7 +380,12 @@ export class SessionContextClass implements SessionContext {
   $isAuthorized(...args: IsAuthorizedArgs) {
     if (!this.userId) return false
 
-    return global.sessionConfig.isAuthorized({ctx: this._res.blitzCtx, args})
+    return global.sessionConfig.isAuthorized({
+      ctx: {
+        session: this as AuthenticatedSessionContext,
+      },
+      args,
+    })
   }
 
   $thisIsAuthorized(...args: IsAuthorizedArgs): this is AuthenticatedSessionContext {
@@ -346,8 +398,7 @@ export class SessionContextClass implements SessionContext {
       return
     }
     this._kernel = await createNewSession({
-      req: this._req,
-      res: this._res,
+      headers: this._headers,
       publicData,
       privateData,
       jwtPayload: this._kernel.jwtPayload,
@@ -360,7 +411,7 @@ export class SessionContextClass implements SessionContext {
       void NotSupportedMessage("$revoke")
       return
     }
-    this._kernel = await revokeSession(this._req, this._res, this.$handle)
+    this._kernel = await revokeSession(this._headers, this.$handle)
   }
 
   async $revokeAll() {
@@ -383,7 +434,7 @@ export class SessionContextClass implements SessionContext {
     if (this.userId) {
       await syncPubicDataFieldsForUserIfNeeded(this.userId, data)
     }
-    this._kernel.publicData = await setPublicData(this._req, this._res, this._kernel, data)
+    this._kernel.publicData = await setPublicData(this._headers, this._kernel, data)
   }
 
   async $getPrivateData() {
@@ -517,55 +568,31 @@ const parseAnonymousSessionToken = (token: string) => {
   }
 }
 
-export const setCookie = (res: ServerResponse, cookieStr: string) => {
-  const getCookieName = (c: string) => c.split("=", 2)[0]
-  const appendCookie = () => append(res, "Set-Cookie", cookieStr)
-
-  const cookiesHeader = res.getHeader("Set-Cookie")
-  const cookieName = getCookieName(cookieStr)
-
-  if (typeof cookiesHeader !== "string" && !Array.isArray(cookiesHeader)) {
-    appendCookie()
-    return
-  }
-
-  if (typeof cookiesHeader === "string") {
-    if (cookieName === getCookieName(cookiesHeader)) {
-      res.setHeader("Set-Cookie", cookieStr)
-    } else {
-      appendCookie()
-    }
+export const setCookie = (headers: Headers, cookieStr: string) => {
+  const setCookieHeaders = headers.get("Set-Cookie")
+  if (setCookieHeaders !== null) {
+    let parsedCookie = cookie.parse(setCookieHeaders)
+    parsedCookie = {...parsedCookie, cookieStr}
+    const stringifiedCookie = Object.entries(parsedCookie)
+      .map(([key, value]) => cookie.serialize(key, value))
+      .join(";")
+    headers.set("Set-Cookie", stringifiedCookie)
   } else {
-    for (let i = 0; i < cookiesHeader.length; i++) {
-      if (cookieName === getCookieName(cookiesHeader[i] || "")) {
-        cookiesHeader[i] = cookieStr
-        res.setHeader("Set-Cookie", cookiesHeader)
-        return
-      }
-    }
-    appendCookie()
+    headers.set("Set-Cookie", cookieStr)
   }
 }
 
-const setHeader = (res: ServerResponse, name: string, value: string) => {
-  res.setHeader(name, value)
-  if ("_blitz" in res) {
-    ;(res as any)._blitz[name] = value
-  }
-}
-
-const setSessionCookie = (
-  req: IncomingMessage,
-  res: ServerResponse,
-  sessionToken: string,
-  expiresAt: Date,
-) => {
+const setSessionCookie = (headers: Headers, sessionToken: string, expiresAt: Date) => {
   setCookie(
-    res,
+    headers,
     cookie.serialize(COOKIE_SESSION_TOKEN(), sessionToken, {
       path: "/",
       httpOnly: true,
-      secure: global.sessionConfig.secureCookies && !isLocalhost(req),
+      secure:
+        global.sessionConfig.secureCookies &&
+        !isLocalhost({
+          headers,
+        }),
       sameSite: global.sessionConfig.sameSite,
       domain: global.sessionConfig.domain,
       expires: expiresAt,
@@ -573,18 +600,17 @@ const setSessionCookie = (
   )
 }
 
-const setAnonymousSessionCookie = (
-  req: IncomingMessage,
-  res: ServerResponse,
-  token: string,
-  expiresAt: Date,
-) => {
+const setAnonymousSessionCookie = (headers: Headers, token: string, expiresAt: Date) => {
   setCookie(
-    res,
+    headers,
     cookie.serialize(COOKIE_ANONYMOUS_SESSION_TOKEN(), token, {
       path: "/",
       httpOnly: true,
-      secure: global.sessionConfig.secureCookies && !isLocalhost(req),
+      secure:
+        global.sessionConfig.secureCookies &&
+        !isLocalhost({
+          headers,
+        }),
       sameSite: global.sessionConfig.sameSite,
       domain: global.sessionConfig.domain,
       expires: expiresAt,
@@ -592,19 +618,18 @@ const setAnonymousSessionCookie = (
   )
 }
 
-const setCSRFCookie = (
-  req: IncomingMessage,
-  res: ServerResponse,
-  antiCSRFToken: string,
-  expiresAt: Date,
-) => {
+const setCSRFCookie = (headers: Headers, antiCSRFToken: string, expiresAt: Date) => {
   debug("setCSRFCookie", antiCSRFToken)
   assert(antiCSRFToken !== undefined, "Internal error: antiCSRFToken is being set to undefined")
   setCookie(
-    res,
+    headers,
     cookie.serialize(COOKIE_CSRF_TOKEN(), antiCSRFToken, {
       path: "/",
-      secure: global.sessionConfig.secureCookies && !isLocalhost(req),
+      secure:
+        global.sessionConfig.secureCookies &&
+        !isLocalhost({
+          headers,
+        }),
       sameSite: global.sessionConfig.sameSite,
       domain: global.sessionConfig.domain,
       expires: expiresAt,
@@ -612,18 +637,17 @@ const setCSRFCookie = (
   )
 }
 
-const setPublicDataCookie = (
-  req: IncomingMessage,
-  res: ServerResponse,
-  publicDataToken: string,
-  expiresAt: Date,
-) => {
-  setHeader(res, HEADER_PUBLIC_DATA_TOKEN, "updated")
+const setPublicDataCookie = (headers: Headers, publicDataToken: string, expiresAt: Date) => {
+  headers.set(HEADER_PUBLIC_DATA_TOKEN, "updated")
   setCookie(
-    res,
+    headers,
     cookie.serialize(COOKIE_PUBLIC_DATA_TOKEN(), publicDataToken, {
       path: "/",
-      secure: global.sessionConfig.secureCookies && !isLocalhost(req),
+      secure:
+        global.sessionConfig.secureCookies &&
+        !isLocalhost({
+          headers,
+        }),
       sameSite: global.sessionConfig.sameSite,
       domain: global.sessionConfig.domain,
       expires: expiresAt,
@@ -634,19 +658,24 @@ const setPublicDataCookie = (
 // --------------------------------
 // Get Session
 // --------------------------------
-async function getSessionKernel(
-  req: IncomingMessage & {cookies: {[key: string]: string}},
-  res: ServerResponse,
-): Promise<SessionKernel | null> {
-  const anonymousSessionToken = req.cookies[COOKIE_ANONYMOUS_SESSION_TOKEN()]
-  const sessionToken = req.cookies[COOKIE_SESSION_TOKEN()] // for essential method
-  const idRefreshToken = req.cookies[COOKIE_REFRESH_TOKEN()] // for advanced method
+async function getSessionKernel({
+  headers,
+  method,
+}: {
+  headers: Headers
+  method: string | undefined
+}): Promise<SessionKernel | null> {
+  const cookies = getCookiesFromHeader(headers)
+  const anonymousSessionToken = cookies[COOKIE_ANONYMOUS_SESSION_TOKEN()]
+  const sessionToken = cookies[COOKIE_SESSION_TOKEN()] // for essential method
+  const idRefreshToken = cookies[COOKIE_REFRESH_TOKEN()] // for advanced method
+  const antiCSRFToken = headers.get(HEADER_CSRF)
+
   const enableCsrfProtection =
-    req.method !== "GET" &&
-    req.method !== "OPTIONS" &&
-    req.method !== "HEAD" &&
+    method !== "GET" &&
+    method !== "OPTIONS" &&
+    method !== "HEAD" &&
     !process.env.DANGEROUSLY_DISABLE_CSRF_PROTECTION
-  const antiCSRFToken = req.headers[HEADER_CSRF] as string | undefined
 
   if (sessionToken) {
     debug("[getSessionKernel] Request has sessionToken")
@@ -689,7 +718,7 @@ async function getSessionKernel(
         )
       }
 
-      setHeader(res, HEADER_CSRF_ERROR, "true")
+      headers.set(HEADER_CSRF_ERROR, "true")
       throw new CSRFTokenMismatchError()
     }
 
@@ -701,7 +730,7 @@ async function getSessionKernel(
      *  But only renew with non-GET requests because a GET request could be from a
      *  browser level navigation
      */
-    if (req.method !== "GET") {
+    if (method !== "GET") {
       // The publicData in the DB could have been updated since this client last made
       // a request. If so, then we generate a new access token
       const hasPublicDataChanged =
@@ -724,8 +753,7 @@ async function getSessionKernel(
 
       if (hasPublicDataChanged || hasQuarterExpiryTimePassed) {
         await refreshSession(
-          req,
-          res,
+          headers,
           {
             handle,
             publicData: JSON.parse(persistedSession.publicData || ""),
@@ -765,7 +793,7 @@ async function getSessionKernel(
         )
       }
 
-      setHeader(res, HEADER_CSRF_ERROR, "true")
+      headers.set(HEADER_CSRF_ERROR, "true")
       throw new CSRFTokenMismatchError()
     }
 
@@ -786,16 +814,14 @@ async function getSessionKernel(
 // Create Session
 // --------------------------------
 interface CreateNewAnonSession {
-  req: IncomingMessage
-  res: ServerResponse
+  headers: Headers
   publicData: EmptyPublicData
   privateData?: Record<any, any>
   anonymous: true
   jwtPayload?: JwtPayload
 }
 interface CreateNewAuthedSession {
-  req: IncomingMessage
-  res: ServerResponse
+  headers: Headers
   publicData: PublicData
   privateData?: Record<any, any>
   anonymous: false
@@ -805,7 +831,6 @@ interface CreateNewAuthedSession {
 async function createNewSession(
   args: CreateNewAnonSession | CreateNewAuthedSession,
 ): Promise<SessionKernel> {
-  const {req, res} = args
   assert(args.publicData.userId !== undefined, "You must provide publicData.userId")
 
   const antiCSRFToken = createAntiCSRFToken()
@@ -826,12 +851,12 @@ async function createNewSession(
       new Date(),
       global.sessionConfig.anonSessionExpiryMinutes as number,
     )
-    setAnonymousSessionCookie(req, res, anonymousSessionToken, expiresAt)
-    setCSRFCookie(req, res, antiCSRFToken, expiresAt)
-    setPublicDataCookie(req, res, publicDataToken, expiresAt)
+    setAnonymousSessionCookie(args.headers, anonymousSessionToken, expiresAt)
+    setCSRFCookie(args.headers, antiCSRFToken, expiresAt)
+    setPublicDataCookie(args.headers, publicDataToken, expiresAt)
     // Clear the essential session cookie in case it was previously set
-    setSessionCookie(req, res, "", new Date(0))
-    setHeader(res, HEADER_SESSION_CREATED, "true")
+    setSessionCookie(args.headers, "", new Date(0))
+    args.headers.set(HEADER_SESSION_CREATED, "true")
 
     return {
       handle,
@@ -882,12 +907,12 @@ async function createNewSession(
       privateData: JSON.stringify(newPrivateData),
     })
 
-    setSessionCookie(req, res, sessionToken, expiresAt)
-    setCSRFCookie(req, res, antiCSRFToken, expiresAt)
-    setPublicDataCookie(req, res, publicDataToken, expiresAt)
+    setSessionCookie(args.headers, sessionToken, expiresAt)
+    setCSRFCookie(args.headers, antiCSRFToken, expiresAt)
+    setPublicDataCookie(args.headers, publicDataToken, expiresAt)
     // Clear the anonymous session cookie in case it was previously set
-    setAnonymousSessionCookie(req, res, "", new Date(0))
-    setHeader(res, HEADER_SESSION_CREATED, "true")
+    setAnonymousSessionCookie(args.headers, "", new Date(0))
+    args.headers.set(HEADER_SESSION_CREATED, "true")
 
     return {
       handle,
@@ -905,10 +930,9 @@ async function createNewSession(
   }
 }
 
-async function createAnonymousSession(req: IncomingMessage, res: ServerResponse) {
+async function createAnonymousSession({headers}: {headers: Headers}) {
   return await createNewSession({
-    req,
-    res,
+    headers,
     publicData: {userId: null},
     anonymous: true,
   })
@@ -919,8 +943,7 @@ async function createAnonymousSession(req: IncomingMessage, res: ServerResponse)
 // --------------------------------
 
 async function refreshSession(
-  req: IncomingMessage,
-  res: ServerResponse,
+  headers: Headers,
   sessionKernel: SessionKernel,
   {publicDataChanged}: {publicDataChanged: boolean},
 ) {
@@ -934,8 +957,8 @@ async function refreshSession(
     const publicDataToken = createPublicDataToken(sessionKernel.publicData)
 
     const expiresAt = addYears(new Date(), 30)
-    setAnonymousSessionCookie(req, res, anonymousSessionToken, expiresAt)
-    setPublicDataCookie(req, res, publicDataToken, expiresAt)
+    setAnonymousSessionCookie(headers, anonymousSessionToken, expiresAt)
+    setPublicDataCookie(headers, publicDataToken, expiresAt)
   } else if (global.sessionConfig.method === "essential" && "sessionToken" in sessionKernel) {
     const expiresAt = addMinutes(new Date(), global.sessionConfig.sessionExpiryMinutes as number)
 
@@ -943,7 +966,7 @@ async function refreshSession(
     if (publicDataChanged) {
       debug("Public data has changed")
       const publicDataToken = createPublicDataToken(sessionKernel.publicData)
-      setPublicDataCookie(req, res, publicDataToken, expiresAt)
+      setPublicDataCookie(headers, publicDataToken, expiresAt)
       await global.sessionConfig.updateSession(sessionKernel.handle, {
         expiresAt,
         publicData: JSON.stringify(sessionKernel.publicData),
@@ -985,12 +1008,7 @@ async function syncPubicDataFieldsForUserIfNeeded(
   }
 }
 
-async function revokeSession(
-  req: IncomingMessage,
-  res: ServerResponse,
-  handle: string,
-  anonymous: boolean = false,
-) {
+async function revokeSession(headers: Headers, handle: string, anonymous: boolean = false) {
   debug("Revoking session", handle)
   if (!anonymous) {
     try {
@@ -1003,7 +1021,9 @@ async function revokeSession(
   // This fixes race condition where all client side queries get refreshed
   // in parallel and each creates a new anon session
   // https://github.com/blitz-js/blitz/issues/2746
-  return createAnonymousSession(req, res)
+  return createAnonymousSession({
+    headers,
+  })
 }
 
 async function revokeAllSessionsForUser(userId: PublicData["userId"]) {
@@ -1069,8 +1089,7 @@ async function setPrivateData(sessionKernel: SessionKernel, data: Record<any, an
 }
 
 async function setPublicData(
-  req: IncomingMessage,
-  res: ServerResponse,
+  headers: Headers,
   sessionKernel: SessionKernel,
   data: Record<any, any>,
 ) {
@@ -1082,7 +1101,7 @@ async function setPublicData(
     ...data,
   } as PublicData
 
-  await refreshSession(req, res, {...sessionKernel, publicData}, {publicDataChanged: true})
+  await refreshSession(headers, {...sessionKernel, publicData}, {publicDataChanged: true})
   return publicData
 }
 
@@ -1106,34 +1125,4 @@ export async function setPublicDataForUser(userId: PublicData["userId"], data: R
 
     await global.sessionConfig.updateSession(session.handle, {publicData})
   }
-}
-
-/**
- * Append additional header `field` with value `val`.
- *
- * Example:
- *
- *    append(res, 'Set-Cookie', 'foo=bar; Path=/; HttpOnly');
- *
- * @param {ServerResponse} res
- * @param {string} field
- * @param {string| string[]} val
- */
-function append(res: ServerResponse, field: string, val: string | string[]) {
-  let prev: string | string[] | undefined = res.getHeader(field) as string | string[] | undefined
-  let value = val
-
-  if (prev !== undefined) {
-    // concat the new and prev vals
-    value = Array.isArray(prev)
-      ? prev.concat(val)
-      : Array.isArray(val)
-      ? [prev].concat(val)
-      : [prev, val]
-  }
-
-  value = Array.isArray(value) ? value.map(String) : String(value)
-
-  res.setHeader(field, value)
-  return res
 }

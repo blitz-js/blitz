@@ -223,11 +223,10 @@ export function rpcHandler(config: RpcConfig) {
       if (req.method === "POST" && typeof req.body.params === "undefined") {
         const error = {message: "Request body is missing the `params` key"}
         logger.log.error(error.message)
-        res.status(400).json({
+        return res.status(400).json({
           result: null,
           error,
         })
-        return
       }
       try {
         const data = deserialize({
@@ -249,7 +248,7 @@ export function rpcHandler(config: RpcConfig) {
           config,
           data,
           resolver,
-          ctx: (req as any).blitzCtx,
+          ctx: (res as any).blitzCtx,
           ...logger,
         })
         ;(res as any).blitzResult = result
@@ -262,14 +261,13 @@ export function rpcHandler(config: RpcConfig) {
         })
       } catch (error: any) {
         const serializedError = handleRpcError({error, config, log: logger.log})
-        res.json({
+        return res.json({
           result: null,
           error: serializedError.json,
           meta: {
             error: serializedError.meta,
           },
         })
-        return
       }
     } else {
       // Everything else is error
