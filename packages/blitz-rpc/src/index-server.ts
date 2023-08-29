@@ -223,7 +223,7 @@ export function rpcHandler(config: RpcConfig) {
       if (req.method === "POST" && typeof req.body.params === "undefined") {
         const error = {message: "Request body is missing the `params` key"}
         logger.log.error(error.message)
-        return res.status(400).json({
+        res.status(400).json({
           result: null,
           error,
         })
@@ -252,7 +252,7 @@ export function rpcHandler(config: RpcConfig) {
           ...logger,
         })
         ;(res as any).blitzResult = result
-        return res.json({
+        res.json({
           result: serializedResult.json,
           error: null,
           meta: {
@@ -261,7 +261,7 @@ export function rpcHandler(config: RpcConfig) {
         })
       } catch (error: any) {
         const serializedError = handleRpcError({error, config, log: logger.log})
-        return res.json({
+        res.json({
           result: null,
           error: serializedError.json,
           meta: {
@@ -273,7 +273,6 @@ export function rpcHandler(config: RpcConfig) {
       // Everything else is error
       logger.log.warn(`${req.method} method not supported`)
       res.status(404).end()
-      return
     }
   }
 }

@@ -42,7 +42,6 @@ import {generateToken, hash256} from "./auth-utils"
 import {Socket} from "net"
 import {UrlObject} from "url"
 import {formatWithValidation} from "../shared/url-utils"
-import {headers} from "next/headers"
 
 export function isLocalhost(
   props:
@@ -191,7 +190,9 @@ function getCookiesFromHeader(headers: Headers) {
   }
 }
 
-export async function getSession(props: GetSession): Promise<SessionContext> {
+export async function getSession(
+  props: GetSession,
+): Promise<{sessionContext: SessionContext; headers: Headers}> {
   if ("res" in props) {
     const {res} = props
     ensureMiddlewareResponse(res)
@@ -200,12 +201,13 @@ export async function getSession(props: GetSession): Promise<SessionContext> {
 
     if (res.blitzCtx.session) {
       debug("Returning existing session")
-      return res.blitzCtx.session
+      return {
+        sessionContext: res.blitzCtx.session,
+        headers: convertRequestToHeader(props.req),
+      }
     }
   }
-
   const headers = convertRequestToHeader(props.req)
-
   let sessionKernel = await getSessionKernel({headers, method: props.req.method})
 
   if (sessionKernel) {
@@ -232,7 +234,10 @@ export async function getSession(props: GetSession): Promise<SessionContext> {
       session: sessionContext,
     }
   }
-  return sessionContext
+  return {
+    sessionContext,
+    headers,
+  }
 }
 
 export async function getBlitzContext(): Promise<Ctx> {
@@ -255,9 +260,9 @@ export async function getBlitzContext(): Promise<Ctx> {
       .map((c: {name: string; value: string}) => [c.name, c.value]),
   )
   const res = new ServerResponse(req)
-  const session = await getSession({req, res, appDir: true})
-  const ctx: Ctx = {
-    session,
+  const {sessionContext} = await getSession({req, res, appDir: true})
+  const ctx = {
+    session: sessionContext,
   }
   return ctx
 }
