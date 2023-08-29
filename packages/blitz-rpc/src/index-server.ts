@@ -320,7 +320,7 @@ export function rpcHandler(config: RpcConfig) {
 
         config.onError?.(error)
 
-        log.error(error)
+        log.error(new Error(error))
         newLine()
 
         if (!error.statusCode) {
