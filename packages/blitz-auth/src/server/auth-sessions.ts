@@ -639,7 +639,7 @@ async function getSessionKernel({
   const sessionToken = cookies[COOKIE_SESSION_TOKEN()] // for essential method
   const idRefreshToken = cookies[COOKIE_REFRESH_TOKEN()] // for advanced method
   const antiCSRFToken = headers.get(HEADER_CSRF)
-  console.log("getSessionKernel", {
+  debug("getSessionKernel", {
     anonymousSessionToken,
     sessionToken,
     idRefreshToken,
