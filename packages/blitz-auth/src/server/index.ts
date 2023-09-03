@@ -9,7 +9,6 @@ export {
   getSession,
   isLocalhost,
   setPublicDataForUser,
-  setCookie,
   simpleRolesIsAuthorized,
   getBlitzContext,
 } from "./auth-sessions"

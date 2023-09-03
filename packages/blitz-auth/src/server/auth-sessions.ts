@@ -215,7 +215,6 @@ export async function getSession(
   }
 
   if (!sessionKernel) {
-    debug("No session found, creating anonymous session")
     sessionKernel = await createAnonymousSession({headers})
   }
 
@@ -226,10 +225,6 @@ export async function getSession(
   )
   debug("New session context")
   if ("res" in props) {
-    console.log(headers)
-    headers.forEach((value, key) => {
-      props.res.setHeader(key, value)
-    })
     props.res.blitzCtx = {
       session: sessionContext,
     }
@@ -358,6 +353,10 @@ export class SessionContextClass implements SessionContext {
     this._headers = headers
     this._kernel = kernel
     this._appDir = appDir
+  }
+
+  $headers() {
+    return this._headers
   }
 
   get $handle() {
@@ -573,90 +572,55 @@ const parseAnonymousSessionToken = (token: string) => {
   }
 }
 
-export const setCookie = (headers: Headers, cookieStr: string) => {
-  const setCookieHeaders = headers.get("Set-Cookie")
-  if (setCookieHeaders !== null) {
-    let parsedCookie = cookie.parse(setCookieHeaders)
-    parsedCookie = {...parsedCookie, cookieStr}
-    const stringifiedCookie = Object.entries(parsedCookie)
-      .map(([key, value]) => cookie.serialize(key, value))
-      .join(";")
-    headers.set("Set-Cookie", stringifiedCookie)
-  } else {
-    headers.set("Set-Cookie", cookieStr)
+const cookieOptions = (headers: Headers, expires: Date) => {
+  return {
+    path: "/",
+    secure:
+      global.sessionConfig.secureCookies &&
+      !isLocalhost({
+        headers,
+      }),
+    sameSite: global.sessionConfig.sameSite,
+    domain: global.sessionConfig.domain,
+    expires: new Date(expires),
   }
 }
 
 const setSessionCookie = (headers: Headers, sessionToken: string, expiresAt: Date) => {
-  setCookie(
-    headers,
-    cookie.serialize(COOKIE_SESSION_TOKEN(), sessionToken, {
-      path: "/",
-      httpOnly: true,
-      secure:
-        global.sessionConfig.secureCookies &&
-        !isLocalhost({
-          headers,
-        }),
-      sameSite: global.sessionConfig.sameSite,
-      domain: global.sessionConfig.domain,
-      expires: expiresAt,
-    }),
+  headers.append(
+    "Set-Cookie",
+    cookie.serialize(COOKIE_SESSION_TOKEN(), sessionToken, cookieOptions(headers, expiresAt)),
   )
 }
 
 const setAnonymousSessionCookie = (headers: Headers, token: string, expiresAt: Date) => {
-  setCookie(
-    headers,
-    cookie.serialize(COOKIE_ANONYMOUS_SESSION_TOKEN(), token, {
-      path: "/",
-      httpOnly: true,
-      secure:
-        global.sessionConfig.secureCookies &&
-        !isLocalhost({
-          headers,
-        }),
-      sameSite: global.sessionConfig.sameSite,
-      domain: global.sessionConfig.domain,
-      expires: expiresAt,
-    }),
+  headers.delete(COOKIE_ANONYMOUS_SESSION_TOKEN())
+  headers.append(
+    "Set-Cookie",
+    cookie.serialize(COOKIE_ANONYMOUS_SESSION_TOKEN(), token, cookieOptions(headers, expiresAt)),
   )
 }
 
 const setCSRFCookie = (headers: Headers, antiCSRFToken: string, expiresAt: Date) => {
   debug("setCSRFCookie", antiCSRFToken)
   assert(antiCSRFToken !== undefined, "Internal error: antiCSRFToken is being set to undefined")
-  setCookie(
-    headers,
-    cookie.serialize(COOKIE_CSRF_TOKEN(), antiCSRFToken, {
-      path: "/",
-      secure:
-        global.sessionConfig.secureCookies &&
-        !isLocalhost({
-          headers,
-        }),
-      sameSite: global.sessionConfig.sameSite,
-      domain: global.sessionConfig.domain,
-      expires: expiresAt,
-    }),
+  headers.delete(COOKIE_CSRF_TOKEN())
+  headers.append(
+    "Set-Cookie",
+    cookie.serialize(COOKIE_CSRF_TOKEN(), antiCSRFToken, cookieOptions(headers, expiresAt)),
   )
 }
 
 const setPublicDataCookie = (headers: Headers, publicDataToken: string, expiresAt: Date) => {
   headers.set(HEADER_PUBLIC_DATA_TOKEN, "updated")
-  setCookie(
-    headers,
-    cookie.serialize(COOKIE_PUBLIC_DATA_TOKEN(), publicDataToken, {
-      path: "/",
-      secure:
-        global.sessionConfig.secureCookies &&
-        !isLocalhost({
-          headers,
-        }),
-      sameSite: global.sessionConfig.sameSite,
-      domain: global.sessionConfig.domain,
-      expires: expiresAt,
-    }),
+  headers.delete(COOKIE_PUBLIC_DATA_TOKEN())
+  headers.append(
+    "Set-Cookie",
+    cookie.serialize(
+      COOKIE_PUBLIC_DATA_TOKEN(),
+      publicDataToken,
+      cookieOptions(headers, expiresAt),
+    ),
   )
 }
 
@@ -675,6 +639,12 @@ async function getSessionKernel({
   const sessionToken = cookies[COOKIE_SESSION_TOKEN()] // for essential method
   const idRefreshToken = cookies[COOKIE_REFRESH_TOKEN()] // for advanced method
   const antiCSRFToken = headers.get(HEADER_CSRF)
+  console.log("getSessionKernel", {
+    anonymousSessionToken,
+    sessionToken,
+    idRefreshToken,
+    antiCSRFToken,
+  })
 
   const enableCsrfProtection =
     method !== "GET" &&
@@ -871,7 +841,7 @@ async function createNewSession(
       anonymousSessionToken,
     }
   } else if (global.sessionConfig.method === "essential") {
-    debug("Creating new session")
+    console.log("Creating new session")
     const newPublicData: PublicData = {
       // This carries over any public data from the anonymous session
       ...(args.jwtPayload?.publicData || {}),

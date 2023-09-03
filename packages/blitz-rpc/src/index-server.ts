@@ -252,16 +252,26 @@ export function rpcHandler(config: RpcConfig) {
           ...logger,
         })
         ;(res as any).blitzResult = result
-        res.json({
+        const jsonResult = {
           result: serializedResult.json,
           error: null,
           meta: {
             result: serializedResult.meta,
           },
+        }
+        const cookies: Array<string> = []
+        ;((res as any).blitzCtx.session.$headers() as Headers).forEach((value, key) => {
+          if (key.toLowerCase() === "set-cookie") {
+            cookies.push(value)
+          } else {
+            res.setHeader(key, value)
+          }
         })
+        res.setHeader("Set-Cookie", cookies)
+        res.status(200).end(JSON.stringify(jsonResult))
       } catch (error: any) {
         const serializedError = handleRpcError({error, config, log: logger.log})
-        res.json({
+        res.status(200).send({
           result: null,
           error: serializedError.json,
           meta: {
