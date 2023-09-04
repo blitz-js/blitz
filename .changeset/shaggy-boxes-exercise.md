@@ -4,4 +4,6 @@
 "@blitzjs/generator": patch
 ---
 
-fixes: Blitz template
+- Updates `ts-log` peer dependency to `4.9.0`
+- Removes `javascript` from `blitz new` menu
+- Hot Fix the `Update Schema` when using blitz generator
