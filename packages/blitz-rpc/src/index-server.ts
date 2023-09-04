@@ -317,19 +317,13 @@ export function rpcHandler(config: RpcConfig) {
         if (error._clearStack) {
           delete error.stack
         }
-
         config.onError?.(error)
-
-        log.error(error)
         newLine()
-
         if (!error.statusCode) {
           error.statusCode = 500
         }
-
         const formattedError = config.formatError?.(error) ?? error
         const serializedError = superjsonSerialize(formattedError)
-
         res.json({
           result: null,
           error: serializedError.json,

@@ -2,10 +2,6 @@ import _SuperJson from "superjson"
 import type {UrlObject} from "url"
 import {isNotInUserTestEnvironment} from "./utils"
 
-declare module globalThis {
-  let _BLITZ_ERROR_CLASS_REGISTERED: boolean
-}
-
 const SuperJson: typeof _SuperJson =
   "default" in _SuperJson ? (_SuperJson as any).default : _SuperJson
 
@@ -89,7 +85,7 @@ export class PaginationArgumentError extends Error {
   }
 }
 
-if (isNotInUserTestEnvironment() && !globalThis._BLITZ_ERROR_CLASS_REGISTERED) {
+if (isNotInUserTestEnvironment()) {
   SuperJson.registerClass(AuthenticationError, {
     identifier: "BlitzAuthenticationError",
     allowProps: errorProps,
@@ -124,6 +120,4 @@ if (isNotInUserTestEnvironment() && !globalThis._BLITZ_ERROR_CLASS_REGISTERED) {
     identifier: "OAuthError",
     allowProps: errorProps,
   })
-
-  globalThis._BLITZ_ERROR_CLASS_REGISTERED = true
 }
