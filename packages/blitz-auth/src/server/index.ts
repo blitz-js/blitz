@@ -10,6 +10,5 @@ export {
   isLocalhost,
   setPublicDataForUser,
   simpleRolesIsAuthorized,
-  getBlitzContext,
 } from "./auth-sessions"
 export type {AnonymousSessionPayload, SimpleRolesIsAuthorized} from "./auth-sessions"

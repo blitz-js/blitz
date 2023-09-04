@@ -21,16 +21,6 @@ export async function invoke<T extends (...args: any) => any, TInput = FirstPara
     )
   }
 
-  if (isServer) {
-    const {getBlitzContext} = await import("@blitzjs/auth").catch((e) => {
-      throw new Error(
-        `invoke with isServer parameter can only be used in a Blitz powered Nextjs app directory. Make sure you have installed the @blitzjs/auth package.`,
-      )
-    })
-    const ctx = await getBlitzContext()
-    return queryFn(params, ctx) as PromiseReturnType<T>
-  }
-
   if (isClient) {
     const fn = queryFn as unknown as RpcClient
     return fn(params, {fromInvoke: true}) as PromiseReturnType<T>

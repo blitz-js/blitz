@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="%sveltekit.assets%/favicon.png" />
+		<meta name="viewport" content="width=device-width" />
+		<style>
+			:root {
+				--border-radius: 0.75rem;
+				--screen-width: 90vmin;
+			}
+
+			html,
+			body {
+				padding: 0;
+				margin: 0;
+				font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell,
+					Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+			}
+
+			a {
+				color: inherit;
+				text-decoration: none;
+			}
+
+			i {
+				font-size: 0.8rem;
+			}
+
+			* {
+				box-sizing: border-box;
+			}
+		</style>
+		%sveltekit.head%
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents">%sveltekit.body%</div>
+	</body>
+</html>

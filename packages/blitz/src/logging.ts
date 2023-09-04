@@ -173,7 +173,8 @@ const box = async (mes: string, title: string) => {
  * If the DEBUG env var is set this will write to the console
  * @param str msg
  */
-const debug = require("debug")("blitz")
+import Debug from "debug"
+const debug = Debug("blitz")
 
 export const log = {
   withBrand,

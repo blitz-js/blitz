@@ -1,7 +1,7 @@
 import {fromBase64, toBase64} from "b64-lite"
 import cookie, {parse} from "cookie"
-import {IncomingMessage, ServerResponse} from "http"
-import {sign as jwtSign, verify as jwtVerify} from "jsonwebtoken"
+import type {IncomingMessage, ServerResponse} from "http"
+import jsonwebtoken from "jsonwebtoken"
 import {
   assert,
   isPast,
@@ -13,9 +13,6 @@ import {
   AuthorizationError,
   CSRFTokenMismatchError,
   log,
-  baseLogger,
-  chalk,
-  AuthenticatedCtx,
 } from "blitz"
 import {
   EmptyPublicData,
@@ -82,7 +79,8 @@ export function getCookieParser(headers: {[key: string]: undefined | string | st
   }
 }
 
-const debug = require("debug")("blitz:session")
+import Debug from "debug"
+const debug = Debug("blitz:session")
 
 export interface SimpleRolesIsAuthorized<RoleType = string> {
   ({ctx, args}: {ctx: any; args: [roleOrRoles?: RoleType | RoleType[]]}): boolean
@@ -235,95 +233,8 @@ export async function getSession(
   }
 }
 
-export async function getBlitzContext(): Promise<Ctx> {
-  const {headers, cookies} = await import("next/headers").catch(() => {
-    throw new Error(
-      "getBlitzContext() can only be used in React Server Components in Nextjs 13 or higher",
-    )
-  })
-  const req = new IncomingMessage(new Socket()) as IncomingMessage & {
-    cookies: {[key: string]: string}
-  }
-  req.headers = Object.fromEntries(headers())
-  const csrfToken = cookies().get(COOKIE_CSRF_TOKEN())
-  if (csrfToken) {
-    req.headers[HEADER_CSRF] = csrfToken.value
-  }
-  req.cookies = Object.fromEntries(
-    cookies()
-      .getAll()
-      .map((c: {name: string; value: string}) => [c.name, c.value]),
-  )
-  const res = new ServerResponse(req)
-  const {sessionContext} = await getSession({req, res, appDir: true})
-  const ctx = {
-    session: sessionContext,
-  }
-  return ctx
-}
-
 interface RouteUrlObject extends Pick<UrlObject, "pathname" | "query" | "href"> {
   pathname: string
-}
-
-export async function useAuthenticatedBlitzContext({
-  redirectTo,
-  redirectAuthenticatedTo,
-  role,
-}: {
-  redirectTo?: string | RouteUrlObject
-  redirectAuthenticatedTo?: string | RouteUrlObject | ((ctx: Ctx) => string | RouteUrlObject)
-  role?: string | string[]
-}): Promise<AuthenticatedCtx> {
-  const log = baseLogger().getSubLogger({name: "useAuthenticatedBlitzContext"})
-  const customChalk = new chalk.Instance({
-    level: log.settings.type === "json" ? 0 : chalk.level,
-  })
-  const ctx: Ctx = await getBlitzContext()
-  const userId = ctx.session.userId
-  const {redirect} = await import("next/navigation").catch(() => {
-    throw new Error(
-      "useAuthenticatedBlitzContext() can only be used in React Server Components in Nextjs 13 or higher",
-    )
-  })
-  if (userId) {
-    debug("[useAuthenticatedBlitzContext] User is authenticated")
-    if (redirectAuthenticatedTo) {
-      if (typeof redirectAuthenticatedTo === "function") {
-        redirectAuthenticatedTo = redirectAuthenticatedTo(ctx)
-      }
-      const redirectUrl =
-        typeof redirectAuthenticatedTo === "string"
-          ? redirectAuthenticatedTo
-          : formatWithValidation(redirectAuthenticatedTo)
-      debug("[useAuthenticatedBlitzContext] Redirecting to", redirectUrl)
-      log.info("Authentication Redirect: " + customChalk.dim("(Authenticated)"), redirectUrl)
-      redirect(redirectUrl)
-    }
-    if (redirectTo && role) {
-      debug("[useAuthenticatedBlitzContext] redirectTo and role are both defined.")
-      try {
-        ctx.session.$authorize(role)
-      } catch (e) {
-        log.error("Authorization Error: " + (e as Error).message)
-        if (typeof redirectTo !== "string") {
-          redirectTo = formatWithValidation(redirectTo)
-        }
-        log.info("Authorization Redirect: " + customChalk.dim(`Role ${role}`), redirectTo)
-        redirect(redirectTo)
-      }
-    }
-  } else {
-    debug("[useAuthenticatedBlitzContext] User is not authenticated")
-    if (redirectTo) {
-      if (typeof redirectTo !== "string") {
-        redirectTo = formatWithValidation(redirectTo)
-      }
-      log.info("Authentication Redirect: " + customChalk.dim("(Not authenticated)"), redirectTo)
-      redirect(redirectTo)
-    }
-  }
-  return ctx as AuthenticatedCtx
 }
 
 const makeProxyToPublicData = <T extends SessionContextClass>(ctxClass: T): T => {
@@ -357,6 +268,10 @@ export class SessionContextClass implements SessionContext {
 
   $headers() {
     return this._headers
+  }
+
+  $antiCSRFToken() {
+    return this._kernel.antiCSRFToken
   }
 
   get $handle() {
@@ -541,7 +456,7 @@ const JWT_ANONYMOUS_SUBJECT = "anonymous"
 const JWT_ALGORITHM = "HS256"
 
 const createAnonymousSessionToken = (payload: AnonymousSessionPayload) => {
-  return jwtSign({[JWT_NAMESPACE]: payload}, getSessionSecretKey() || "", {
+  return jsonwebtoken.sign({[JWT_NAMESPACE]: payload}, getSessionSecretKey() || "", {
     algorithm: JWT_ALGORITHM,
     issuer: JWT_ISSUER,
     audience: JWT_AUDIENCE,
@@ -555,7 +470,7 @@ const parseAnonymousSessionToken = (token: string) => {
   const secret = getSessionSecretKey()
 
   try {
-    const fullPayload = jwtVerify(token, secret!, {
+    const fullPayload = jsonwebtoken.verify(token, secret!, {
       algorithms: [JWT_ALGORITHM],
       issuer: JWT_ISSUER,
       audience: JWT_AUDIENCE,
@@ -572,7 +487,7 @@ const parseAnonymousSessionToken = (token: string) => {
   }
 }
 
-const cookieOptions = (headers: Headers, expires: Date) => {
+const cookieOptions = (headers: Headers, expires: Date, httpOnly: boolean) => {
   return {
     path: "/",
     secure:
@@ -583,13 +498,14 @@ const cookieOptions = (headers: Headers, expires: Date) => {
     sameSite: global.sessionConfig.sameSite,
     domain: global.sessionConfig.domain,
     expires: new Date(expires),
+    httpOnly,
   }
 }
 
 const setSessionCookie = (headers: Headers, sessionToken: string, expiresAt: Date) => {
   headers.append(
     "Set-Cookie",
-    cookie.serialize(COOKIE_SESSION_TOKEN(), sessionToken, cookieOptions(headers, expiresAt)),
+    cookie.serialize(COOKIE_SESSION_TOKEN(), sessionToken, cookieOptions(headers, expiresAt, true)),
   )
 }
 
@@ -597,7 +513,11 @@ const setAnonymousSessionCookie = (headers: Headers, token: string, expiresAt: D
   headers.delete(COOKIE_ANONYMOUS_SESSION_TOKEN())
   headers.append(
     "Set-Cookie",
-    cookie.serialize(COOKIE_ANONYMOUS_SESSION_TOKEN(), token, cookieOptions(headers, expiresAt)),
+    cookie.serialize(
+      COOKIE_ANONYMOUS_SESSION_TOKEN(),
+      token,
+      cookieOptions(headers, expiresAt, true),
+    ),
   )
 }
 
@@ -607,7 +527,7 @@ const setCSRFCookie = (headers: Headers, antiCSRFToken: string, expiresAt: Date)
   headers.delete(COOKIE_CSRF_TOKEN())
   headers.append(
     "Set-Cookie",
-    cookie.serialize(COOKIE_CSRF_TOKEN(), antiCSRFToken, cookieOptions(headers, expiresAt)),
+    cookie.serialize(COOKIE_CSRF_TOKEN(), antiCSRFToken, cookieOptions(headers, expiresAt, false)),
   )
 }
 
@@ -619,7 +539,7 @@ const setPublicDataCookie = (headers: Headers, publicDataToken: string, expiresA
     cookie.serialize(
       COOKIE_PUBLIC_DATA_TOKEN(),
       publicDataToken,
-      cookieOptions(headers, expiresAt),
+      cookieOptions(headers, expiresAt, false),
     ),
   )
 }

@@ -57,7 +57,7 @@ export const parsePublicDataToken = (token: string) => {
 
 const emptyPublicData: EmptyPublicData = {userId: null, role: null}
 
-class PublicDataStore {
+export class PublicDataStore {
   private eventKey = `${LOCALSTORAGE_PREFIX}publicDataUpdated`
   readonly observable = BadBehavior<PublicData | EmptyPublicData>()
 
