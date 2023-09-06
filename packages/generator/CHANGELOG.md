@@ -1,5 +1,22 @@
 # @blitzjs/generator
 
+## 2.0.0-beta.33
+
+### Patch Changes
+
+- 022392c12: - Updates `ts-log` peer dependency to `4.9.0`
+  - Removes `javascript` from `blitz new` menu
+  - Hot Fix the `Update Schema` when using blitz generator
+
+## 2.0.0-beta.32
+
+### Patch Changes
+
+- 47c6b62dc: Update examples of generate all in docs to include one column in model.
+- 82649f341: Upgrade tslog to `4.9.0`.
+
+  This due a [tslog issue](https://github.com/fullstack-build/tslog/issues/227) that causes tslog to crash when attempting to log an error whose constructor expects more than one argument.
+
 ## 2.0.0-beta.31
 
 ## 2.0.0-beta.30

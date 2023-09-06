@@ -1,5 +1,22 @@
 # @blitzjs/auth
 
+## 2.0.0-beta.33
+
+### Patch Changes
+
+- Updated dependencies [19898a488]
+- Updated dependencies [6811eab1a]
+- Updated dependencies [022392c12]
+  - blitz@2.0.0-beta.33
+
+## 2.0.0-beta.32
+
+### Patch Changes
+
+- 8b01175b4: Updated `useAuthenticatedBlitzContext` to now return `AuthenticatedCtx`
+- Updated dependencies [82649f341]
+  - blitz@2.0.0-beta.32
+
 ## 2.0.0-beta.31
 
 ### Patch Changes

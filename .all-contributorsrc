@@ -3975,6 +3975,16 @@
         "doc",
         "code"
       ]
+    },
+    {
+      "login": "rodobre",
+      "name": "rodobre",
+      "avatar_url": "https://avatars.githubusercontent.com/u/52138375?v=4",
+      "profile": "https://github.com/rodobre",
+      "contributions": [
+        "doc",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
