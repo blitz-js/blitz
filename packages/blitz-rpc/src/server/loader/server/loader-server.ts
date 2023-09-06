@@ -23,7 +23,7 @@ export async function loader(this: Loader, input: string): Promise<string> {
   if (isSSR) {
     this.cacheable(false)
 
-    const resolvers = await collectResolvers(root, rpcFolders, ["ts", "js"])
+    const resolvers = await collectResolvers(root, rpcFolders, ["ts", "js", "tsx", "jsx"])
     return await transformBlitzRpcServer(
       input,
       toPosixPath(id),
