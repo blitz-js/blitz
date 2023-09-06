@@ -12,14 +12,13 @@ import {codegenTasks} from "../utils/codegen-tasks"
 
 type NotUndefined<T> = T extends undefined ? never : T
 const forms: Record<NotUndefined<AppGeneratorOptions["form"]>, string> = {
-  finalform: "React Final Form (recommended)",
+  formik: "Formik (recommended)",
+  finalform: "React Final Form",
   hookform: "React Hook Form",
-  formik: "Formik",
 }
 
 const language = {
   typescript: "TypeScript",
-  javascript: "JavaScript",
 }
 
 type TLanguage = keyof typeof language

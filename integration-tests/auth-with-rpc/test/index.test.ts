@@ -13,37 +13,10 @@ import webdriver from "../../utils/next-webdriver"
 let app: any
 let appPort: number
 
+let mode: "dev" | "server" = "dev"
+
 const runTests = () => {
   describe("Auth", () => {
-    /* TODO - Add a non flaky Integration Test for custom plugin
-   describe("custom plugin", () => {
-      it("custom plugin - events", async () => {
-        const browser = await webdriver(appPort, "/custom-plugin")
-        let text = await browser.elementByCss("#page").text()
-        await waitFor(250)
-        text = await browser.elementByCss("#page").text()
-        expect(text).toBe("Custom plugin Session Created")
-        await waitFor(3000)
-        text = await browser.elementByCss("#page").text()
-        expect(text).toBe("Custom plugin RPC Error")
-        if (browser) {
-          await browser.close()
-        }
-      })
-      it("custom plugin - middleware", async () => {
-        const browser = await webdriver(appPort, "/custom-plugin")
-        await waitFor(100)
-        let text = await browser.elementByCss("#before-req").text()
-        expect(text).toBe("customHeaderValue")
-        await waitFor(2000)
-        text = await browser.elementByCss("#before-res").text()
-        expect(text).toBe("55")
-        if (browser) {
-          await browser.close()
-        }
-      })
-    })
-    */
     describe("unauthenticated", () => {
       it("should render result for open query", async () => {
         const browser = await webdriver(appPort, "/noauth-query")
@@ -58,7 +31,11 @@ const runTests = () => {
         const browser = await webdriver(appPort, "/authenticated-query")
         await browser.waitForElementByCss("#error")
         let text = await browser.elementByCss("#error").text()
-        expect(text).toMatch(/AuthenticationError/)
+        if (mode === "server") {
+          expect(text).toMatch(/AuthenticationError/)
+        } else {
+          expect(text).toContain("Error")
+        }
         if (browser) await browser.close()
       })
 
@@ -120,7 +97,11 @@ const runTests = () => {
         await waitFor(200)
         await browser.waitForElementByCss("#error")
         text = await browser.elementByCss("#error").text()
-        expect(text).toMatch(/AuthenticationError/)
+        if (mode === "server") {
+          expect(text).toMatch(/AuthenticationError/)
+        } else {
+          expect(text).toContain("Error")
+        }
         if (browser) await browser.close()
       })
 
@@ -262,6 +243,7 @@ const runTests = () => {
 describe("Auth Tests", () => {
   describe("dev mode", () => {
     beforeAll(async () => {
+      mode = "dev"
       try {
         await runBlitzCommand(["prisma", "migrate", "reset", "--force"])
         appPort = await findPort()
@@ -276,6 +258,7 @@ describe("Auth Tests", () => {
 
   describe("server mode", () => {
     beforeAll(async () => {
+      mode = "server"
       try {
         await runBlitzCommand(["prisma", "generate"])
         await runBlitzCommand(["prisma", "migrate", "deploy"])

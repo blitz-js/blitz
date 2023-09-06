@@ -41,7 +41,7 @@
     "blitz": "2.0.0-beta.32",
     "next": "*",
     "react": "*",
-    "tslog": "*"
+    "tslog": "4.9.0"
   },
   "devDependencies": {
     "@blitzjs/config": "2.0.0-beta.32",
