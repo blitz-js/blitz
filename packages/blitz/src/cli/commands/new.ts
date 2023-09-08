@@ -224,7 +224,7 @@ const newApp: CliCommand = async () => {
       template: projectTemplate,
       destinationRoot: projectPath,
       appName: projectName,
-      useTs: projectLanguage === "typescript",
+      useTs: projectLanguage === "TypeScript",
       yarn: projectPkgManger === "yarn",
       pnpm: projectPkgManger === "pnpm",
       dryRun: args["--dry-run"] ? args["--dry-run"] : false,
