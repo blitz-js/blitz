@@ -16,7 +16,6 @@ export const codegenTasks = async () => {
     */
     const nextDir = await resolveCwd("next")
     const nextClientIndex = join(nextDir, "../..", "client", "index.js")
-    console.log(nextClientIndex)
     const readFile = await fs.readFile(nextClientIndex)
     const packageJson = await getPackageJson()
     const version = packageJson.dependencies.next
