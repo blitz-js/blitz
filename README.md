@@ -126,9 +126,11 @@ Your financial contributions help ensure Blitz continues to be developed and mai
 
 <table>
   <tr>
+    <td>
     <a aria-label="Flightcontrol" href="https://www.flightcontrol.dev?ref=blitzjs">
     <img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/main/assets/flightcontrol.png" width="400px">
     </a>
+    </td>
   </tr>
 </table>
 
