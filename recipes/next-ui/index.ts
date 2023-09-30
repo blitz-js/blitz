@@ -86,12 +86,17 @@ export default RecipeBuilder()
   .addAddDependenciesStep({
     stepId: "install",
     stepName: "Install Next UI",
-    explanation: `Import the Next UI provider into _app, so it is accessible in the whole app`,
+    explanation: `Install Next UI and its dependencies`,
     packages: [
       {
         name: "@nextui-org/react",
         version: "latest",
         isDevDep: true,
+      },
+      {
+        name: "framer-motion",
+        version: "latest",
+        isDevDep: false,
       },
     ],
   })
