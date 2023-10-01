@@ -1,9 +1,14 @@
-const { withNextAuthAdapter } = require("@blitzjs/auth/next-auth")
+const { withNextAuthAdapter } = require("@blitzjs/auth")
 const { withBlitz } = require("@blitzjs/next")
 
 /**
- * @type {import('@blitzjs/next').BlitzConfig}
+ * @type {import('next').NextConfig}
  **/
-const config = {}
+const config = {
+  reactStrictMode: true,
+  blitz: {
+    resolversDynamicImport: true,
+  },
+}
 
 module.exports = withBlitz(withNextAuthAdapter(config))

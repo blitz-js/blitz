@@ -1,6 +1,6 @@
 {
   "name": "@blitzjs/auth",
-  "version": "2.0.0-beta.27",
+  "version": "2.0.0-beta.33",
   "homepage": "https://blitzjs.com/",
   "repository": {
     "type": "git",
@@ -37,6 +37,7 @@
     "cookie": "0.4.1",
     "cookie-session": "2.0.0",
     "debug": "4.3.3",
+    "find-up": "4.1.0",
     "http": "0.0.1-security",
     "jsonwebtoken": "9.0.0",
     "nanoid": "3.2.0",
@@ -44,11 +45,12 @@
     "openid-client": "5.2.1",
     "passport": "0.6.0",
     "path": "0.12.7",
+    "resolve-from": "5.0.0",
     "supports-color": "8.1.1",
     "url": "0.11.0"
   },
   "peerDependencies": {
-    "blitz": "2.0.0-beta.27",
+    "blitz": "2.0.0-beta.33",
     "next": "*",
     "next-auth": "*",
     "secure-password": "4.0.0"
@@ -65,7 +67,7 @@
     }
   },
   "devDependencies": {
-    "@blitzjs/config": "workspace:2.0.0-beta.27",
+    "@blitzjs/config": "2.0.0-beta.33",
     "@testing-library/react": "13.4.0",
     "@testing-library/react-hooks": "8.0.1",
     "@types/cookie": "0.4.1",
@@ -73,7 +75,7 @@
     "@types/jsonwebtoken": "8.5.8",
     "@types/react": "18.0.25",
     "@types/react-dom": "17.0.14",
-    "blitz": "2.0.0-beta.27",
+    "blitz": "2.0.0-beta.33",
     "next": "13.3.0",
     "next-auth": "4.18.7",
     "react": "18.2.0",

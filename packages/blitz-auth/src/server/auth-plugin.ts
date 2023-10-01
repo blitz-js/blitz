@@ -31,7 +31,7 @@ interface PrismaClientWithSession {
     }): Promise<SessionModel>
     update(args: {
       data: Partial<SessionModel>
-      where: {handle?: SessionModel["handle"]}
+      where: {handle: SessionModel["handle"]}
     }): Promise<SessionModel>
     delete(args: {where: {handle?: SessionModel["handle"]}}): Promise<SessionModel>
   }

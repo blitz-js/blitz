@@ -23,7 +23,7 @@ export async function loader(this: Loader, input: string): Promise<string> {
   if (isSSR) {
     this.cacheable(false)
 
-    const resolvers = await collectResolvers(root, rpcFolders, ["ts", "js"])
+    const resolvers = await collectResolvers(root, rpcFolders, ["ts", "js", "tsx", "jsx"])
     return await transformBlitzRpcServer(
       input,
       toPosixPath(id),
@@ -64,12 +64,14 @@ export async function transformBlitzRpcServer(
       extraRpcBasePaths: options?.includeRPCFolders,
     })
 
-    code += `__internal_addBlitzRpcResolver('${routePath}',() => import('${slash(
+    const importStrategy = options?.resolversDynamicImport ? "import" : "require"
+
+    code += `__internal_addBlitzRpcResolver('${routePath}',() => ${importStrategy}('${slash(
       resolverFilePath,
     )}'));`
     code += "\n"
   }
-  // console.log("NEW CODE", code)
+
   return code
 }
 

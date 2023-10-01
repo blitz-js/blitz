@@ -1,6 +1,6 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-# pnpm manypkg check
+pnpm manypkg check
 # pnpm lint
-# pnpm pretty-quick --staged
+pnpm pretty-quick --staged

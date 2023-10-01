@@ -230,6 +230,7 @@ export const setupBlitzServer = <TPlugins extends readonly BlitzServerPlugin<obj
 export interface BlitzConfig extends NextConfig {
   blitz?: {
     resolverPath?: ResolverPathOptions
+    resolversDynamicImport?: boolean
     includeRPCFolders?: string[]
     customServer?: {
       hotReload?: boolean
@@ -261,6 +262,8 @@ export function withBlitz(nextConfig: BlitzConfig = {}): NextConfig {
         webpackConfig: config,
         webpackRuleOptions: {
           resolverPath: nextConfig.blitz?.resolverPath,
+          resolversDynamicImport:
+            nextConfig.blitz?.resolversDynamicImport ?? Boolean(process.env.VERCEL),
           includeRPCFolders: nextConfig.blitz?.includeRPCFolders,
         },
       })

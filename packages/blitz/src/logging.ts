@@ -1,18 +1,18 @@
-import {ISettingsParam, Logger, TLogLevelName} from "tslog"
+import {ILogObj, ISettingsParam, Logger} from "tslog"
 import c from "chalk"
 import {Table} from "console-table-printer"
 import ora from "ora"
 import readline from "readline"
 
-export type BlitzLoggerSettings = ISettingsParam
-export type BlitzLogLevel = TLogLevelName
+export type BlitzLoggerSettings = ISettingsParam<ILogObj>
+export type BlitzLogLevel = "trace" | "debug" | "info" | "warn" | "error" | "fatal"
 
 declare namespace globalThis {
-  let _blitz_baseLogger: Logger
+  let _blitz_baseLogger: Logger<ILogObj>
   let _blitz_logLevel: BlitzLogLevel
 }
 
-export const baseLogger = (options: BlitzLoggerSettings = {}): Logger => {
+export const baseLogger = (options: BlitzLoggerSettings = {}): Logger<ILogObj> => {
   if (globalThis._blitz_baseLogger) return globalThis._blitz_baseLogger
 
   globalThis._blitz_baseLogger = BlitzLogger(options)
@@ -22,34 +22,18 @@ export const baseLogger = (options: BlitzLoggerSettings = {}): Logger => {
 
 export const BlitzLogger = (settings: BlitzLoggerSettings = {}) => {
   const baseLogger = new Logger({
-    minLevel: "info",
-    type: "pretty",
-    dateTimePattern:
-      process.env.NODE_ENV === "production"
-        ? "year-month-day hour:minute:second.millisecond"
-        : "hour:minute:second.millisecond",
-    displayFunctionName: false,
-    displayFilePath: "hidden",
-    displayRequestId: false,
-    dateTimeTimezone:
-      process.env.NODE_ENV === "production"
-        ? "utc"
-        : Intl.DateTimeFormat().resolvedOptions().timeZone,
-    prettyInspectHighlightStyles: {
-      name: "yellow",
-      number: "blue",
-      bigint: "blue",
-      boolean: "blue",
-    },
+    prettyLogTimeZone: process.env.NODE_ENV === "production" ? "UTC" : "local",
     maskValuesOfKeys: ["password", "passwordConfirmation", "currentPassword"],
-    exposeErrorCodeFrame: process.env.NODE_ENV !== "production",
+    type: process.env.NODE_ENV === "production" ? "json" : "pretty",
+    prettyLogTemplate:
+      "{{yyyy}}.{{mm}}.{{dd}} {{hh}}:{{MM}}:{{ss}}:{{ms}}\t{{logLevelName}}\t[{{name}}]\t",
     ...settings,
   })
 
   return baseLogger
 }
 
-export const initializeLogger = (logger: Logger) => {
+export const initializeLogger = (logger: Logger<ILogObj>) => {
   globalThis._blitz_baseLogger = logger
 }
 

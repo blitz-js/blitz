@@ -13,7 +13,7 @@
     "prepare": "husky install",
     "build": "turbo run build",
     "build:apps": "turbo run buildapp --concurrency=1",
-    "dev": "turbo run dev --no-cache --parallel",
+    "dev": "turbo run dev --filter='./packages/*'",
     "lint": "turbo run lint",
     "test": "turbo run test",
     "clean": "turbo run clean && rm -rf node_modules",
@@ -34,12 +34,12 @@
     "prettier": "^2.7.1",
     "prettier-plugin-prisma": "4.4.0",
     "pretty-quick": "3.1.3",
-    "turbo": "1.4.2",
+    "turbo": "1.10.7",
     "vitest": "0.25.3",
     "wait-on": "6.0.1"
   },
   "npmClient": "pnpm",
-  "packageManager": "pnpm@7.11.0",
+  "packageManager": "pnpm@8.6.6",
   "manypkg": {
     "ignoredRules": [
       "EXTERNAL_MISMATCH"

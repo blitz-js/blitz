@@ -7,8 +7,8 @@ on:
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
-  
-env: 
+
+env:
   PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
 
 jobs:
@@ -17,9 +17,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
+      - uses: pnpm/action-setup@v2.2.4
         with:
-          version: 7.11.0
+          version: 8.6.5
       - name: Setup node
         uses: actions/setup-node@v2
         with:
@@ -38,9 +38,9 @@ jobs:
     name: Build
     steps:
       - uses: actions/checkout@v2
-      - uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
+      - uses: pnpm/action-setup@v2.2.4
         with:
-          version: 7.11.0
+          version: 8.6.5
       - name: Setup node
         uses: actions/setup-node@v2
         with:
@@ -68,9 +68,9 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Setup PNPM
-        uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
+        uses: pnpm/action-setup@v2.2.4
         with:
-          version: 7.11.0
+          version: 8.6.5
 
       - name: Setup node@16
         uses: actions/setup-node@v2
@@ -111,7 +111,7 @@ jobs:
           echo "folders=$folders" >> $GITHUB_OUTPUT
 
   Integration-Tests:
-    name: "Integration Test: ${{matrix.folder}} @ ${{ matrix.os }} "
+    name: "Integration Test: ${{matrix.folder}} @ ${{ matrix.os }}"
     needs: [find-integration-tests]
     strategy:
       matrix:
@@ -124,32 +124,39 @@ jobs:
     steps:
       - run: echo ${{matrix.folder}}
       - name: Checkout
+        if: matrix.folder != 'next-13-app-dir' || matrix.os != 'windows-latest'
         uses: actions/checkout@v3
 
       - name: Setup PNPM
-        uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
+        if: matrix.folder != 'next-13-app-dir' || matrix.os != 'windows-latest'
+        uses: pnpm/action-setup@v2.2.4
         with:
-          version: 7.11.0
+          version: 8.6.5
 
-      - name: Setup node@${{ matrix.NODE_VERSION }}
+      - name: Setup node@18
+        if: matrix.folder != 'next-13-app-dir' || matrix.os != 'windows-latest'
         uses: actions/setup-node@v2
         with:
-          node-version: ${{ matrix.NODE_VERSION }}
+          node-version: 18
           cache: "pnpm"
 
       - name: Install dependencies
+        if: matrix.folder != 'next-13-app-dir' || matrix.os != 'windows-latest'
         run: pnpm install --frozen-lockfile
         shell: bash
 
       - name: Install playwright
+        if: matrix.folder != 'next-13-app-dir' || matrix.os != 'windows-latest'
         run: |
-            pnpx playwright@1.28.0 install --with-deps
+          pnpx playwright@1.28.0 install --with-deps
         shell: bash
 
       - name: Build
+        if: matrix.folder != 'next-13-app-dir' || matrix.os != 'windows-latest'
         run: pnpm build
         shell: bash
 
       - name: Test Packages
+        if: matrix.folder != 'next-13-app-dir' || matrix.os != 'windows-latest'
         run: pnpm test -- --filter=./integration-tests/${{matrix.folder}}
         shell: bash

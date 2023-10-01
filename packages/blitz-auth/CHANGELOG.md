@@ -1,5 +1,64 @@
 # @blitzjs/auth
 
+## 2.0.0-beta.33
+
+### Patch Changes
+
+- Updated dependencies [19898a488]
+- Updated dependencies [6811eab1a]
+- Updated dependencies [022392c12]
+  - blitz@2.0.0-beta.33
+
+## 2.0.0-beta.32
+
+### Patch Changes
+
+- 8b01175b4: Updated `useAuthenticatedBlitzContext` to now return `AuthenticatedCtx`
+- Updated dependencies [82649f341]
+  - blitz@2.0.0-beta.32
+
+## 2.0.0-beta.31
+
+### Patch Changes
+
+- 90f1741da: blitz-auth: Support for Prisma v5
+
+  Internal: Make `handle` a required paramter while updating the `session` modal.
+
+- Updated dependencies [90f1741da]
+- Updated dependencies [df3265b85]
+  - blitz@2.0.0-beta.31
+
+## 2.0.0-beta.30
+
+### Patch Changes
+
+- c5572bec6: blitz-auth: Fix webpack from following next-auth
+- Updated dependencies [c5572bec6]
+- Updated dependencies [727734955]
+  - blitz@2.0.0-beta.30
+
+## 2.0.0-beta.29
+
+### Patch Changes
+
+- b6b9a1c5a: Fix Next-Auth integration: `Unable to use next-auth with provider: Error [ERR_PACKAGE_PATH_NOT_EXPORTED]`
+- Updated dependencies [b6b9a1c5a]
+- Updated dependencies [61888d1a3]
+  - blitz@2.0.0-beta.29
+
+## 2.0.0-beta.28
+
+### Minor Changes
+
+- 1bb3a6556: Stop exporting `useAuthenticatedBlitzContext` from `@blitzjs/auth` this must be imported from `app/blitz-server.ts` file in order to work correctly
+
+### Patch Changes
+
+- 5166e5e03: (feat) upgrade tslog to v4.8.2
+- Updated dependencies [5166e5e03]
+  - blitz@2.0.0-beta.28
+
 ## 2.0.0-beta.27
 
 ### Patch Changes
