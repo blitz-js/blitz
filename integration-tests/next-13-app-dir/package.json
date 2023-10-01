@@ -11,6 +11,7 @@
     "test": "vitest run",
     "test-watch": "vitest",
     "start": "blitz start",
+    "lint": "next lint",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf .next",
     "prisma:start": "blitz prisma migrate deploy",
     "prisma:studio": "prisma studio"
