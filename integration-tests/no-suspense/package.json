@@ -10,7 +10,6 @@
     "test": "vitest run",
     "test-watch": "vitest",
     "start": "next start",
-    "lint": "next lint",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf .next",
     "prisma:start": "prisma generate && prisma migrate deploy",
     "prisma:studio": "prisma studio"
