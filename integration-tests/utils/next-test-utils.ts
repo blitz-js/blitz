@@ -436,9 +436,9 @@ export function runNextCommandDev(argv, stdOut, opts: RunNextCommandDevOptions =
         opts.onStdout(message)
       }
 
-      // if (opts.stdout !== false) {
-      process.stdout.write(message)
-      // }
+      if (opts.stdout !== false) {
+      	process.stdout.write(message)
+      }
     }
 
     function handleStderr(data) {
