@@ -78,7 +78,7 @@ let projectName: string = ""
 let projectPath: string = ""
 let projectLanguage: string | TLanguage = language.typescript
 let projectFormLib: AppGeneratorOptions["form"] = "formik"
-let projectTemplate: AppGeneratorOptions["template"] = templates.full
+let projectTemplate: AppGeneratorOptions["template"] = templates.app
 let projectPkgManger: TPkgManager = PREFERABLE_PKG_MANAGER
 let shouldInstallDeps: boolean = true
 

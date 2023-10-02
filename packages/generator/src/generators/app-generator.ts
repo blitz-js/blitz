@@ -75,6 +75,13 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
       )
     }
 
+    if (this.options.template.path === "app") {
+      const authDirectory = `app/auth`
+      if (this.fs.exists(authDirectory)) {
+        this.fs.move(this.destinationPath(authDirectory), this.destinationPath(`app/(auth)`))
+      }
+    }
+
     if (!this.options.template.skipForms) {
       this.updateForms()
     }
