@@ -3,7 +3,7 @@
   "version": "0.1.1-beta.9",
   "private": true,
   "prisma": {
-    "schema": "db/schema.prisma"
+    "schema": "./db/schema.prisma"
   },
   "scripts": {
     "blitz:dev": "next dev",

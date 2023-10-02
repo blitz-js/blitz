@@ -1,9 +1,8 @@
 "use client"
-
 import styles from "@/app/styles/Home.module.css"
 import logout from "@/app/(auth)/mutations/logout"
 import {useRouter} from "next/navigation"
-import { useMutation } from "@blitzjs/rpc"
+import {useMutation} from "@blitzjs/rpc"
 
 export default function LogoutButton() {
   const router = useRouter()
@@ -13,7 +12,6 @@ export default function LogoutButton() {
       <button
         className={styles.button}
         onClick={async () => {
-          //@ts-ignore
           await logoutMutation().then(() => {
             router.refresh()
           })
