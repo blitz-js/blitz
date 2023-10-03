@@ -22,7 +22,7 @@
     "@prisma/client": "4.6.1",
     "blitz": "2.0.0-beta.33",
     "lowdb": "3.0.0",
-    "next": "13.3.0",
+    "next": "13.5.2",
     "prisma": "4.6.1",
     "react": "18.2.0",
     "react-dom": "18.2.0"

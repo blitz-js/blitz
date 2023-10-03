@@ -4,7 +4,7 @@ import {useQuery, useInfiniteQuery, BlitzRpcPlugin, QueryClientProvider} from "@
 import React from "react"
 import delay from "delay"
 import {buildMutationRpc, buildQueryRpc, mockRouter, render} from "../../utils/blitz-test-utils"
-import {RouterContext} from "next/dist/shared/lib/router-context"
+import {RouterContext} from "@blitzjs/next"
 
 beforeAll(() => {
   globalThis.__BLITZ_SESSION_COOKIE_PREFIX = "qm-test-cookie-prefix"
