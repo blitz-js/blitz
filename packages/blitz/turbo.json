@@ -1,0 +1,11 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "extends": ["//"],
+  "pipeline": {
+    "dev": {
+      "dependsOn": ["@blitzjs/generator#build"],
+      "persistent": true,
+      "cache": false
+    }
+  }
+}

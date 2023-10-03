@@ -1,4 +1,4 @@
-import {ILogObj, ISettingsParam, Logger, IMeta} from "tslog"
+import {ILogObj, ISettingsParam, Logger} from "tslog"
 import c from "chalk"
 import {Table} from "console-table-printer"
 import ora from "ora"

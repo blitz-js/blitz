@@ -1,5 +1,65 @@
 # @blitzjs/next
 
+## 2.0.0-beta.34
+
+### Major Changes
+
+- 3ddb57072: ⚠️ Breaking Change:
+  Next.js version 13.5 or above is now required to use `@blitzjs/next`
+
+  Fix `Error: Cannot find module 'next/dist/shared/lib/router/utils/resolve-href'` by updating the location of next.js internal function.
+
+### Patch Changes
+
+- Updated dependencies [30fd61316]
+- Updated dependencies [3ddb57072]
+- Updated dependencies [fe8c937d2]
+  - blitz@2.0.0-beta.34
+  - @blitzjs/rpc@2.0.0-beta.34
+
+## 2.0.0-beta.33
+
+### Patch Changes
+
+- 022392c12: - Updates `ts-log` peer dependency to `4.9.0`
+  - Removes `javascript` from `blitz new` menu
+  - Hot Fix the `Update Schema` when using blitz generator
+- Updated dependencies [19898a488]
+- Updated dependencies [6811eab1a]
+- Updated dependencies [022392c12]
+  - @blitzjs/rpc@2.0.0-beta.33
+  - blitz@2.0.0-beta.33
+
+## 2.0.0-beta.32
+
+### Patch Changes
+
+- 82649f341: Upgrade tslog to `4.9.0`.
+
+  This due a [tslog issue](https://github.com/fullstack-build/tslog/issues/227) that causes tslog to crash when attempting to log an error whose constructor expects more than one argument.
+
+- Updated dependencies [82649f341]
+  - blitz@2.0.0-beta.32
+  - @blitzjs/rpc@2.0.0-beta.32
+
+## 2.0.0-beta.31
+
+### Patch Changes
+
+- Updated dependencies [90f1741da]
+- Updated dependencies [df3265b85]
+  - blitz@2.0.0-beta.31
+  - @blitzjs/rpc@2.0.0-beta.31
+
+## 2.0.0-beta.30
+
+### Patch Changes
+
+- Updated dependencies [c5572bec6]
+- Updated dependencies [727734955]
+  - blitz@2.0.0-beta.30
+  - @blitzjs/rpc@2.0.0-beta.30
+
 ## 2.0.0-beta.29
 
 ### Patch Changes

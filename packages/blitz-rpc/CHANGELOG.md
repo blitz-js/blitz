@@ -1,5 +1,119 @@
 # @blitzjs/rpc
 
+## 2.0.0-beta.34
+
+### Patch Changes
+
+- 3ddb57072: ⚠️ Breaking Change:
+  Next.js version 13.5 or above is now required to use `@blitzjs/next`
+
+  Fix `Error: Cannot find module 'next/dist/shared/lib/router/utils/resolve-href'` by updating the location of next.js internal function.
+
+- Updated dependencies [30fd61316]
+- Updated dependencies [3ddb57072]
+- Updated dependencies [fe8c937d2]
+  - blitz@2.0.0-beta.34
+
+## 2.0.0-beta.33
+
+### Patch Changes
+
+- 19898a488: Fix for tslog error `TypeError: Cannot read properties of undefined (reading 'map')` while using custom errors.
+- 6811eab1a: Allow `.tsx` & `.jsx` file extensions to be used for resolvers
+- Updated dependencies [19898a488]
+- Updated dependencies [6811eab1a]
+- Updated dependencies [022392c12]
+  - blitz@2.0.0-beta.33
+
+## 2.0.0-beta.32
+
+### Patch Changes
+
+- Updated dependencies [82649f341]
+  - blitz@2.0.0-beta.32
+
+## 2.0.0-beta.31
+
+### Patch Changes
+
+- Updated dependencies [90f1741da]
+- Updated dependencies [df3265b85]
+  - blitz@2.0.0-beta.31
+
+## 2.0.0-beta.30
+
+### Patch Changes
+
+- 727734955: ### Now we can configure Blitz RPC in the following way,
+
+  In your `[[...blitz]].ts` api file you can see the following settings
+
+  ```ts
+  logging?: {
+    /**
+     * allowList Represents the list of routes for which logging should be enabled
+     * If whiteList is defined then only those routes will be logged
+     */
+    allowList?: string[]
+    /**
+     * blockList Represents the list of routes for which logging should be disabled
+     * If blockList is defined then all routes except those will be logged
+     */
+    blockList?: string[]
+    /**
+     * verbose Represents the flag to enable/disable logging
+     * If verbose is true then Blitz RPC will log the input and output of each resolver
+     */
+    verbose?: boolean
+    /**
+     * disablelevel Represents the flag to enable/disable logging for a particular level
+     */
+    disablelevel?: "debug" | "info"
+  }
+  ```
+
+  ```ts
+  import { rpcHandler } from "@blitzjs/rpc"
+  import { api } from "src/blitz-server"
+
+  export default api(
+    rpcHandler({
+      onError: console.log,
+      formatError: (error) => {
+        error.message = `FormatError handler: ${error.message}`
+        return error
+      },
+     logging: {
+  ...
+  }
+    })
+  )
+  ```
+
+  Example:
+
+  ```ts
+  export default api(
+    rpcHandler({
+      onError: console.log,
+      formatError: (error) => {
+        error.message = `FormatError handler: ${error.message}`
+        return error
+      },
+      logging: {
+        verbose: true,
+        blockList: ["getCurrentUser", ...], //just write the resolver name [which is the resolver file name]
+      },
+    })
+  )
+  ```
+
+  This is enable verbose blitz rpc logging for all resolvers except the resolvers `getCurrentUser` and others mentioned in the `blockList`
+
+- Updated dependencies [c5572bec6]
+- Updated dependencies [727734955]
+  - blitz@2.0.0-beta.30
+
 ## 2.0.0-beta.29
 
 ### Patch Changes

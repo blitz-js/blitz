@@ -3,7 +3,7 @@ import {vi} from "vitest"
 import {QueryClient} from "@tanstack/react-query"
 import {BlitzRpcPlugin, QueryClientProvider} from "@blitzjs/rpc"
 import {NextRouter} from "next/router"
-import {RouterContext} from "next/dist/shared/lib/router-context"
+import {RouterContext} from "@blitzjs/next"
 import {render as defaultRender} from "@testing-library/react"
 
 export const mockRouter: NextRouter = {
@@ -27,6 +27,7 @@ export const mockRouter: NextRouter = {
     emit: vi.fn(),
   },
   isFallback: false,
+  forward: vi.fn(),
 }
 
 type DefaultParams = Parameters<typeof defaultRender>
@@ -74,7 +75,10 @@ const BlitzWrapper = ({plugins, children}) => {
   )
 }
 
-export function render(ui: RenderUI, {wrapper, router, ...options}: RenderOptions = {}) {
+export function render(
+  ui: RenderUI,
+  {wrapper, router, ...options}: RenderOptions = {},
+): ReturnType<typeof defaultRender> {
   if (!wrapper) {
     wrapper = ({children}) => {
       return <BlitzWrapper plugins={[BlitzRpcPlugin({})]}>{children}</BlitzWrapper>

@@ -1,5 +1,57 @@
 # @blitzjs/auth
 
+## 2.0.0-beta.34
+
+### Patch Changes
+
+- 3ddb57072: ⚠️ Breaking Change:
+  Next.js version 13.5 or above is now required to use `@blitzjs/next`
+
+  Fix `Error: Cannot find module 'next/dist/shared/lib/router/utils/resolve-href'` by updating the location of next.js internal function.
+
+- Updated dependencies [30fd61316]
+- Updated dependencies [3ddb57072]
+- Updated dependencies [fe8c937d2]
+  - blitz@2.0.0-beta.34
+
+## 2.0.0-beta.33
+
+### Patch Changes
+
+- Updated dependencies [19898a488]
+- Updated dependencies [6811eab1a]
+- Updated dependencies [022392c12]
+  - blitz@2.0.0-beta.33
+
+## 2.0.0-beta.32
+
+### Patch Changes
+
+- 8b01175b4: Updated `useAuthenticatedBlitzContext` to now return `AuthenticatedCtx`
+- Updated dependencies [82649f341]
+  - blitz@2.0.0-beta.32
+
+## 2.0.0-beta.31
+
+### Patch Changes
+
+- 90f1741da: blitz-auth: Support for Prisma v5
+
+  Internal: Make `handle` a required paramter while updating the `session` modal.
+
+- Updated dependencies [90f1741da]
+- Updated dependencies [df3265b85]
+  - blitz@2.0.0-beta.31
+
+## 2.0.0-beta.30
+
+### Patch Changes
+
+- c5572bec6: blitz-auth: Fix webpack from following next-auth
+- Updated dependencies [c5572bec6]
+- Updated dependencies [727734955]
+  - blitz@2.0.0-beta.30
+
 ## 2.0.0-beta.29
 
 ### Patch Changes

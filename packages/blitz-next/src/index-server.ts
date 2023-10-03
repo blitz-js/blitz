@@ -37,7 +37,7 @@ import {IncomingMessage, ServerResponse} from "http"
 import {withSuperJsonProps} from "./superjson"
 import {ParsedUrlQuery} from "querystring"
 import {PreviewData} from "next/types"
-import {resolveHref} from "next/dist/shared/lib/router/utils/resolve-href"
+import {resolveHref} from "next/dist/client/resolve-href"
 
 export * from "./index-browser"
 
