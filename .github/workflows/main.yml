@@ -23,7 +23,7 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v2
         with:
-          node-version: 16
+          node-version: 18
           cache: "pnpm"
       - name: Install dependencies
         run: pnpm install  --frozen-lockfile
@@ -44,7 +44,7 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v2
         with:
-          node-version: 16
+          node-version: 18
           cache: "pnpm"
       - run: pnpm install --frozen-lockfile
       - name: Build
@@ -62,7 +62,7 @@ jobs:
           - windows-latest
       fail-fast: false
     env:
-      NODE_VERSION: 16
+      NODE_VERSION: 18
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -75,7 +75,7 @@ jobs:
       - name: Setup node@16
         uses: actions/setup-node@v2
         with:
-          node-version: 16
+          node-version: 18
           cache: "pnpm"
 
       - name: Install dependencies

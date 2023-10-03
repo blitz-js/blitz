@@ -26,8 +26,8 @@ importers:
         specifier: 13.0.3
         version: 13.0.3
       next:
-        specifier: 13.3.0
-        version: 13.3.0(@babel/core@7.18.2)(react-dom@18.2.0)(react@18.2.0)
+        specifier: 13.5.2
+        version: 13.5.2(@babel/core@7.18.2)(react-dom@18.2.0)(react@18.2.0)
       only-allow:
         specifier: 1.1.0
         version: 1.1.0
@@ -53,16 +53,16 @@ importers:
   apps/next13:
     dependencies:
       "@blitzjs/auth":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz-auth
       "@blitzjs/config":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/config
       "@blitzjs/next":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz-rpc
       "@hookform/error-message":
         specifier: 2.0.0
@@ -77,14 +77,14 @@ importers:
         specifier: 4.0.10
         version: 4.0.10(react-dom@18.2.0)(react@18.2.0)
       blitz:
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz
       flatted:
         specifier: 3.2.7
         version: 3.2.7
       next:
-        specifier: 13.3.0
-        version: 13.3.0(@babel/core@7.18.2)(react-dom@18.2.0)(react@18.2.0)
+        specifier: 13.5.2
+        version: 13.5.2(@babel/core@7.18.2)(react-dom@18.2.0)(react@18.2.0)
       prisma:
         specifier: ^4.5.0
         version: 4.6.1
@@ -123,134 +123,19 @@ importers:
         specifier: 4.8.4
         version: 4.8.4
 
-  apps/test:
-    dependencies:
-      "@blitzjs/auth":
-        specifier: 2.0.0-beta.32
-        version: link:../../packages/blitz-auth
-      "@blitzjs/next":
-        specifier: 2.0.0-beta.32
-        version: link:../../packages/blitz-next
-      "@blitzjs/rpc":
-        specifier: 2.0.0-beta.32
-        version: link:../../packages/blitz-rpc
-      "@hookform/error-message":
-        specifier: 2.0.1
-        version: 2.0.1(react-dom@18.2.0)(react-hook-form@7.46.0)(react@18.2.0)
-      "@hookform/resolvers":
-        specifier: 2.9.11
-        version: 2.9.11(react-hook-form@7.46.0)
-      "@prisma/client":
-        specifier: 4.6.1
-        version: 4.6.1(prisma@4.6.1)
-      blitz:
-        specifier: 2.0.0-beta.32
-        version: link:../../packages/blitz
-      next:
-        specifier: 13.4.5
-        version: 13.4.5(@babel/core@7.20.2)(react-dom@18.2.0)(react@18.2.0)
-      prisma:
-        specifier: 4.6.1
-        version: 4.6.1
-      react:
-        specifier: 18.2.0
-        version: 18.2.0
-      react-dom:
-        specifier: 18.2.0
-        version: 18.2.0(react@18.2.0)
-      react-hook-form:
-        specifier: 7.46.0
-        version: 7.46.0(react@18.2.0)
-      secure-password:
-        specifier: 4.0.0
-        version: 4.0.0
-      zod:
-        specifier: 3.20.2
-        version: 3.20.2
-    devDependencies:
-      "@next/bundle-analyzer":
-        specifier: 12.0.8
-        version: 12.0.8
-      "@next/env":
-        specifier: 13.4.19
-        version: 13.4.19
-      "@testing-library/jest-dom":
-        specifier: 5.16.5
-        version: 5.16.5
-      "@testing-library/react":
-        specifier: 13.4.0
-        version: 13.4.0(react-dom@18.2.0)(react@18.2.0)
-      "@testing-library/react-hooks":
-        specifier: 8.0.1
-        version: 8.0.1(@types/react@18.0.25)(react-dom@18.2.0)(react@18.2.0)
-      "@types/node":
-        specifier: 18.11.9
-        version: 18.11.9
-      "@types/preview-email":
-        specifier: 2.0.1
-        version: 2.0.1
-      "@types/react":
-        specifier: 18.0.25
-        version: 18.0.25
-      "@typescript-eslint/eslint-plugin":
-        specifier: 5.42.1
-        version: 5.42.1(@typescript-eslint/parser@5.9.1)(eslint@8.27.0)(supports-color@8.1.1)(typescript@4.8.4)
-      "@vitejs/plugin-react":
-        specifier: 2.2.0
-        version: 2.2.0(vite@3.2.4)
-      eslint:
-        specifier: 8.27.0
-        version: 8.27.0(supports-color@8.1.1)
-      eslint-config-next:
-        specifier: 12.3.1
-        version: 12.3.1(eslint@8.27.0)(typescript@4.8.4)
-      eslint-config-prettier:
-        specifier: 8.5.0
-        version: 8.5.0(eslint@8.27.0)
-      husky:
-        specifier: 8.0.2
-        version: 8.0.2
-      jsdom:
-        specifier: 20.0.3
-        version: 20.0.3
-      lint-staged:
-        specifier: 13.0.3
-        version: 13.0.3
-      prettier:
-        specifier: ^2.7.1
-        version: 2.7.1
-      prettier-plugin-prisma:
-        specifier: 4.4.0
-        version: 4.4.0(prettier@2.7.1)
-      pretty-quick:
-        specifier: 3.1.3
-        version: 3.1.3(prettier@2.7.1)
-      preview-email:
-        specifier: 3.0.7
-        version: 3.0.7
-      typescript:
-        specifier: ^4.8.4
-        version: 4.8.4
-      vite-tsconfig-paths:
-        specifier: 3.6.0
-        version: 3.6.0(vite@3.2.4)
-      vitest:
-        specifier: 0.25.3
-        version: 0.25.3(jsdom@20.0.3)
-
   apps/toolkit-app:
     dependencies:
       "@blitzjs/auth":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz-auth
       "@blitzjs/config":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/config
       "@blitzjs/next":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz-rpc
       "@hookform/error-message":
         specifier: 2.0.0
@@ -262,14 +147,14 @@ importers:
         specifier: 4.6.1
         version: 4.6.1(prisma@4.6.1)
       blitz:
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz
       next:
-        specifier: 13.3.0
-        version: 13.3.0(@babel/core@7.20.2)(react-dom@18.2.0)(react@18.2.0)
+        specifier: 13.5.2
+        version: 13.5.2(@babel/core@7.20.2)(react-dom@18.2.0)(react@18.2.0)
       next-auth:
         specifier: 4.18.7
-        version: 4.18.7(next@13.3.0)(react-dom@18.2.0)(react@18.2.0)
+        version: 4.18.7(next@13.5.2)(react-dom@18.2.0)(react@18.2.0)
       prisma:
         specifier: 4.6.1
         version: 4.6.1
@@ -359,16 +244,16 @@ importers:
   apps/toolkit-app-passportjs:
     dependencies:
       "@blitzjs/auth":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz-auth
       "@blitzjs/config":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/config
       "@blitzjs/next":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz-rpc
       "@hookform/error-message":
         specifier: 2.0.0
@@ -380,11 +265,11 @@ importers:
         specifier: 4.6.1
         version: 4.6.1(prisma@4.6.1)
       blitz:
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz
       next:
-        specifier: 13.3.0
-        version: 13.3.0(@babel/core@7.12.10)(react-dom@18.2.0)(react@18.2.0)
+        specifier: 13.5.2
+        version: 13.5.2(@babel/core@7.12.10)(react-dom@18.2.0)(react@18.2.0)
       openid-client:
         specifier: 5.2.1
         version: 5.2.1
@@ -471,16 +356,16 @@ importers:
   apps/web:
     dependencies:
       "@blitzjs/auth":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz-auth
       "@blitzjs/config":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/config
       "@blitzjs/next":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz-rpc
       "@prisma/client":
         specifier: 4.6.1
@@ -492,7 +377,7 @@ importers:
         specifier: 1.0.37
         version: 1.0.37
       blitz:
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz
       jest:
         specifier: 29.3.0
@@ -501,8 +386,8 @@ importers:
         specifier: 29.3.0
         version: 29.3.0
       next:
-        specifier: 13.3.0
-        version: 13.3.0(@babel/core@7.12.10)(react-dom@18.2.0)(react@18.2.0)
+        specifier: 13.5.2
+        version: 13.5.2(@babel/core@7.12.10)(react-dom@18.2.0)(react@18.2.0)
       passport-mock-strategy:
         specifier: 2.0.0
         version: 2.0.0
@@ -538,26 +423,26 @@ importers:
   integration-tests/auth:
     dependencies:
       "@blitzjs/auth":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz-auth
       "@blitzjs/config":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/config
       "@blitzjs/next":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz-next
       "@prisma/client":
         specifier: 4.6.1
         version: 4.6.1(prisma@4.6.1)
       blitz:
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz
       lowdb:
         specifier: 3.0.0
         version: 3.0.0
       next:
-        specifier: 13.3.0
-        version: 13.3.0(@babel/core@7.18.2)(react-dom@18.2.0)(react@18.2.0)
+        specifier: 13.5.2
+        version: 13.5.2(@babel/core@7.18.2)(react-dom@18.2.0)(react@18.2.0)
       prisma:
         specifier: 4.6.1
         version: 4.6.1
@@ -620,16 +505,16 @@ importers:
   integration-tests/auth-with-rpc:
     dependencies:
       "@blitzjs/auth":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz-auth
       "@blitzjs/config":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/config
       "@blitzjs/next":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz-rpc
       "@hookform/error-message":
         specifier: 2.0.0
@@ -641,14 +526,14 @@ importers:
         specifier: 4.6.1
         version: 4.6.1(prisma@4.6.1)
       blitz:
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz
       delay:
         specifier: 5.0.0
         version: 5.0.0
       next:
-        specifier: 13.3.0
-        version: 13.3.0(@babel/core@7.20.2)(react-dom@18.2.0)(react@18.2.0)
+        specifier: 13.5.2
+        version: 13.5.2(@babel/core@7.20.2)(react-dom@18.2.0)(react@18.2.0)
       prisma:
         specifier: 4.6.1
         version: 4.6.1
@@ -741,26 +626,26 @@ importers:
   integration-tests/get-initial-props:
     dependencies:
       "@blitzjs/auth":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz-auth
       "@blitzjs/next":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz-rpc
       "@prisma/client":
         specifier: 4.6.1
         version: 4.6.1(prisma@4.6.1)
       blitz:
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz
       lowdb:
         specifier: 3.0.0
         version: 3.0.0
       next:
-        specifier: 13.3.0
-        version: 13.3.0(@babel/core@7.18.2)(react-dom@18.2.0)(react@18.2.0)
+        specifier: 13.5.2
+        version: 13.5.2(@babel/core@7.18.2)(react-dom@18.2.0)(react@18.2.0)
       prisma:
         specifier: 4.6.1
         version: 4.6.1
@@ -772,7 +657,7 @@ importers:
         version: 18.2.0(react@18.2.0)
     devDependencies:
       "@blitzjs/config":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/config
       "@next/bundle-analyzer":
         specifier: 12.0.8
@@ -811,20 +696,20 @@ importers:
   integration-tests/middleware:
     dependencies:
       "@blitzjs/config":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/config
       "@blitzjs/next":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz-rpc
       blitz:
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz
       next:
-        specifier: 13.3.0
-        version: 13.3.0(@babel/core@7.18.2)(react-dom@18.2.0)(react@18.2.0)
+        specifier: 13.5.2
+        version: 13.5.2(@babel/core@7.18.2)(react-dom@18.2.0)(react@18.2.0)
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -866,29 +751,29 @@ importers:
   integration-tests/next-13-app-dir:
     dependencies:
       "@blitzjs/auth":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz-auth
       "@blitzjs/config":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/config
       "@blitzjs/next":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz-rpc
       "@prisma/client":
         specifier: 4.6.1
         version: 4.6.1(prisma@4.6.1)
       blitz:
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz
       lowdb:
         specifier: 3.0.0
         version: 3.0.0
       next:
-        specifier: 13.3.0
-        version: 13.3.0(@babel/core@7.18.2)(react-dom@18.2.0)(react@18.2.0)
+        specifier: 13.5.2
+        version: 13.5.2(@babel/core@7.18.2)(react-dom@18.2.0)(react@18.2.0)
       prisma:
         specifier: 4.6.1
         version: 4.6.1
@@ -951,26 +836,26 @@ importers:
   integration-tests/no-suspense:
     dependencies:
       "@blitzjs/auth":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz-auth
       "@blitzjs/next":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz-rpc
       "@prisma/client":
         specifier: 4.6.1
         version: 4.6.1(prisma@4.6.1)
       blitz:
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz
       lowdb:
         specifier: 3.0.0
         version: 3.0.0
       next:
-        specifier: 13.3.0
-        version: 13.3.0(@babel/core@7.18.2)(react-dom@18.2.0)(react@18.2.0)
+        specifier: 13.5.2
+        version: 13.5.2(@babel/core@7.18.2)(react-dom@18.2.0)(react@18.2.0)
       prisma:
         specifier: 4.6.1
         version: 4.6.1
@@ -982,7 +867,7 @@ importers:
         version: 18.2.0(react@18.2.0)
     devDependencies:
       "@blitzjs/config":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/config
       "@next/bundle-analyzer":
         specifier: 12.0.8
@@ -1021,16 +906,16 @@ importers:
   integration-tests/qm:
     dependencies:
       "@blitzjs/auth":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz-auth
       "@blitzjs/config":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/config
       "@blitzjs/next":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz-rpc
       "@prisma/client":
         specifier: 4.6.1
@@ -1039,11 +924,11 @@ importers:
         specifier: 4.0.10
         version: 4.0.10(react-dom@18.2.0)(react@18.2.0)
       blitz:
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz
       next:
-        specifier: 13.3.0
-        version: 13.3.0(@babel/core@7.18.2)(react-dom@18.2.0)(react@18.2.0)
+        specifier: 13.5.2
+        version: 13.5.2(@babel/core@7.18.2)(react-dom@18.2.0)(react@18.2.0)
       prisma:
         specifier: 4.6.1
         version: 4.6.1
@@ -1085,23 +970,23 @@ importers:
   integration-tests/react-query-utils:
     dependencies:
       "@blitzjs/next":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz-rpc
       "@prisma/client":
         specifier: 4.6.1
         version: 4.6.1(prisma@4.6.1)
       blitz:
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz
       lowdb:
         specifier: 3.0.0
         version: 3.0.0
       next:
-        specifier: 13.3.0
-        version: 13.3.0(@babel/core@7.18.2)(react-dom@18.2.0)(react@18.2.0)
+        specifier: 13.5.2
+        version: 13.5.2(@babel/core@7.18.2)(react-dom@18.2.0)(react@18.2.0)
       prisma:
         specifier: 4.6.1
         version: 4.6.1
@@ -1113,7 +998,7 @@ importers:
         version: 18.2.0(react@18.2.0)
     devDependencies:
       "@blitzjs/config":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/config
       "@next/bundle-analyzer":
         specifier: 12.0.8
@@ -1152,20 +1037,20 @@ importers:
   integration-tests/rpc:
     dependencies:
       "@blitzjs/config":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/config
       "@blitzjs/next":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz-rpc
       blitz:
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz
       next:
-        specifier: 13.3.0
-        version: 13.3.0(@babel/core@7.18.2)(react-dom@18.2.0)(react@18.2.0)
+        specifier: 13.5.2
+        version: 13.5.2(@babel/core@7.18.2)(react-dom@18.2.0)(react@18.2.0)
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -1201,20 +1086,20 @@ importers:
   integration-tests/rpc-path-root:
     dependencies:
       "@blitzjs/config":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/config
       "@blitzjs/next":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz-rpc
       blitz:
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz
       next:
-        specifier: 13.3.0
-        version: 13.3.0(@babel/core@7.18.2)(react-dom@18.2.0)(react@18.2.0)
+        specifier: 13.5.2
+        version: 13.5.2(@babel/core@7.18.2)(react-dom@18.2.0)(react@18.2.0)
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -1250,26 +1135,26 @@ importers:
   integration-tests/trailing-slash:
     dependencies:
       "@blitzjs/auth":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz-auth
       "@blitzjs/next":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz-rpc
       "@prisma/client":
         specifier: 4.6.1
         version: 4.6.1(prisma@4.6.1)
       blitz:
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz
       lowdb:
         specifier: 3.0.0
         version: 3.0.0
       next:
-        specifier: 13.3.0
-        version: 13.3.0(@babel/core@7.18.2)(react-dom@18.2.0)(react@18.2.0)
+        specifier: 13.5.2
+        version: 13.5.2(@babel/core@7.18.2)(react-dom@18.2.0)(react@18.2.0)
       prisma:
         specifier: 4.6.1
         version: 4.6.1
@@ -1281,7 +1166,7 @@ importers:
         version: 18.2.0(react@18.2.0)
     devDependencies:
       "@blitzjs/config":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/config
       "@next/bundle-analyzer":
         specifier: 12.0.8
@@ -1322,6 +1207,9 @@ importers:
       "@blitzjs/config":
         specifier: "workspace: *"
         version: link:../../packages/config
+      "@blitzjs/next":
+        specifier: workspace:2.0.0-beta.33
+        version: link:../../packages/blitz-next
       "@blitzjs/rpc":
         specifier: "workspace: *"
         version: link:../../packages/blitz-rpc
@@ -1404,7 +1292,7 @@ importers:
   packages/blitz:
     dependencies:
       "@blitzjs/generator":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../generator
       "@mrleebo/prisma-ast":
         specifier: 0.2.6
@@ -1549,7 +1437,7 @@ importers:
         version: 2.1.1
     devDependencies:
       "@blitzjs/config":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../config
       "@types/cookie":
         specifier: 0.4.1
@@ -1694,7 +1582,7 @@ importers:
         version: 0.11.0
     devDependencies:
       "@blitzjs/config":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../config
       "@testing-library/react":
         specifier: 13.4.0
@@ -1718,14 +1606,14 @@ importers:
         specifier: 17.0.14
         version: 17.0.14
       blitz:
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../blitz
       next:
-        specifier: 13.3.0
-        version: 13.3.0(@babel/core@7.20.2)(react-dom@18.2.0)(react@18.2.0)
+        specifier: 13.5.2
+        version: 13.5.2(@babel/core@7.20.2)(react-dom@18.2.0)(react@18.2.0)
       next-auth:
         specifier: 4.18.7
-        version: 4.18.7(next@13.3.0)(react-dom@18.2.0)(react@18.2.0)
+        version: 4.18.7(next@13.5.2)(react-dom@18.2.0)(react@18.2.0)
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -1748,7 +1636,7 @@ importers:
   packages/blitz-next:
     dependencies:
       "@blitzjs/rpc":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../blitz-rpc
       "@types/hoist-non-react-statics":
         specifier: 3.3.1
@@ -1770,7 +1658,7 @@ importers:
         version: 8.1.1
     devDependencies:
       "@blitzjs/config":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../config
       "@testing-library/dom":
         specifier: 8.13.0
@@ -1803,7 +1691,7 @@ importers:
         specifier: 4.0.0
         version: 4.0.0(@types/react@18.0.25)(react-dom@18.2.0)(react@18.2.0)
       blitz:
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../blitz
       cross-spawn:
         specifier: 7.0.3
@@ -1812,11 +1700,11 @@ importers:
         specifier: 4.1.0
         version: 4.1.0
       next:
-        specifier: 13.3.0
-        version: 13.3.0(@babel/core@7.12.10)(react-dom@18.2.0)(react@18.2.0)
+        specifier: 13.5.2
+        version: 13.5.2(@babel/core@7.12.10)(react-dom@18.2.0)(react@18.2.0)
       next-router-mock:
         specifier: 0.9.1
-        version: 0.9.1(next@13.3.0)(react@18.2.0)
+        version: 0.9.1(next@13.5.2)(react@18.2.0)
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -1870,10 +1758,10 @@ importers:
         version: 8.1.1
     devDependencies:
       "@blitzjs/auth":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../blitz-auth
       "@blitzjs/config":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../config
       "@tanstack/query-core":
         specifier: 4.24.4
@@ -1888,11 +1776,11 @@ importers:
         specifier: 17.0.14
         version: 17.0.14
       blitz:
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../blitz
       next:
-        specifier: 13.3.0
-        version: 13.3.0(@babel/core@7.20.2)(react-dom@18.2.0)(react@18.2.0)
+        specifier: 13.5.2
+        version: 13.5.2(@babel/core@7.20.2)(react-dom@18.2.0)(react@18.2.0)
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -1927,13 +1815,13 @@ importers:
         specifier: 7.17.12
         version: 7.17.12(@babel/core@7.12.10)
       "@blitzjs/generator":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../generator
       arg:
         specifier: 5.0.1
         version: 5.0.1
       blitz:
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../blitz
       chalk:
         specifier: ^4.1.0
@@ -1961,7 +1849,7 @@ importers:
         specifier: 7.12.10
         version: 7.12.10(@babel/core@7.12.10)(supports-color@8.1.1)
       "@blitzjs/config":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../config
       "@types/jscodeshift":
         specifier: 0.11.2
@@ -2083,7 +1971,7 @@ importers:
         version: 3.20.2
     devDependencies:
       "@blitzjs/config":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../config
       "@juanm04/cpx":
         specifier: 2.0.1
@@ -2159,7 +2047,7 @@ importers:
         version: 5.9.1(eslint@8.27.0)(supports-color@8.1.1)(typescript@4.8.4)
     devDependencies:
       "@blitzjs/config":
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../config
       "@types/react":
         specifier: 18.0.25
@@ -2183,7 +2071,7 @@ importers:
   recipes/base-web:
     dependencies:
       blitz:
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2196,7 +2084,7 @@ importers:
   recipes/bulma:
     dependencies:
       blitz:
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2209,7 +2097,7 @@ importers:
   recipes/bumbag-ui:
     dependencies:
       blitz:
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2225,7 +2113,7 @@ importers:
   recipes/chakra-ui:
     dependencies:
       blitz:
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2241,7 +2129,7 @@ importers:
   recipes/emotion:
     dependencies:
       blitz:
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2254,19 +2142,19 @@ importers:
   recipes/gh-action-yarn-mariadb:
     dependencies:
       blitz:
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz
 
   recipes/gh-action-yarn-postgres:
     dependencies:
       blitz:
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz
 
   recipes/ghost:
     dependencies:
       blitz:
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2279,7 +2167,7 @@ importers:
   recipes/graphql-apollo-server:
     dependencies:
       blitz:
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2295,7 +2183,7 @@ importers:
   recipes/logrocket:
     dependencies:
       blitz:
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2308,7 +2196,7 @@ importers:
   recipes/material-ui:
     dependencies:
       blitz:
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2321,7 +2209,7 @@ importers:
   recipes/next-ui:
     dependencies:
       blitz:
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2337,19 +2225,19 @@ importers:
   recipes/passenger:
     dependencies:
       blitz:
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz
 
   recipes/quirrel:
     dependencies:
       blitz:
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz
 
   recipes/reflexjs:
     dependencies:
       blitz:
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2365,13 +2253,13 @@ importers:
   recipes/render:
     dependencies:
       blitz:
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz
 
   recipes/secureheaders:
     dependencies:
       blitz:
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2387,7 +2275,7 @@ importers:
   recipes/stitches:
     dependencies:
       blitz:
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2400,7 +2288,7 @@ importers:
   recipes/styled-components:
     dependencies:
       blitz:
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2416,7 +2304,7 @@ importers:
   recipes/tailwind:
     dependencies:
       blitz:
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2429,7 +2317,7 @@ importers:
   recipes/theme-ui:
     dependencies:
       blitz:
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2445,7 +2333,7 @@ importers:
   recipes/vanilla-extract:
     dependencies:
       blitz:
-        specifier: 2.0.0-beta.32
+        specifier: 2.0.0-beta.33
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -4821,21 +4709,6 @@ packages:
       react-hook-form: 7.39.1(react@18.2.0)
     dev: false
 
-  /@hookform/error-message@2.0.1(react-dom@18.2.0)(react-hook-form@7.46.0)(react@18.2.0):
-    resolution:
-      {
-        integrity: sha512-U410sAr92xgxT1idlu9WWOVjndxLdgPUHEB8Schr27C9eh7/xUnITWpCMF93s+lGiG++D4JnbSnrb5A21AdSNg==,
-      }
-    peerDependencies:
-      react: ">=16.8.0"
-      react-dom: ">=16.8.0"
-      react-hook-form: ^7.0.0
-    dependencies:
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
-      react-hook-form: 7.46.0(react@18.2.0)
-    dev: false
-
   /@hookform/resolvers@2.9.10(react-hook-form@7.39.1):
     resolution:
       {
@@ -4845,17 +4718,6 @@ packages:
       react-hook-form: ^7.0.0
     dependencies:
       react-hook-form: 7.39.1(react@18.2.0)
-    dev: false
-
-  /@hookform/resolvers@2.9.11(react-hook-form@7.46.0):
-    resolution:
-      {
-        integrity: sha512-bA3aZ79UgcHj7tFV7RlgThzwSSHZgvfbt2wprldRkYBcMopdMvHyO17Wwp/twcJasNFischFfS7oz8Katz8DdQ==,
-      }
-    peerDependencies:
-      react-hook-form: ^7.0.0
-    dependencies:
-      react-hook-form: 7.46.0(react@18.2.0)
     dev: false
 
   /@humanwhocodes/config-array@0.11.7(supports-color@8.1.1):
@@ -5532,25 +5394,11 @@ packages:
       - utf-8-validate
     dev: true
 
-  /@next/env@13.3.0:
+  /@next/env@13.5.2:
     resolution:
       {
-        integrity: sha512-AjppRV4uG3No7L1plinoTQETH+j2F10TEnrMfzbTUYwze5sBUPveeeBAPZPm8OkJZ1epq9OyYKhZrvbD6/9HCQ==,
+        integrity: sha512-dUseBIQVax+XtdJPzhwww4GetTjlkRSsXeQnisIJWBaHsnxYcN2RGzsPHi58D6qnkATjnhuAtQTJmR1hKYQQPg==,
       }
-
-  /@next/env@13.4.19:
-    resolution:
-      {
-        integrity: sha512-FsAT5x0jF2kkhNkKkukhsyYOrRqtSxrEhfliniIq0bwWbuXLgyt3Gv0Ml+b91XwjwArmuP7NxCiGd++GGKdNMQ==,
-      }
-    dev: true
-
-  /@next/env@13.4.5:
-    resolution:
-      {
-        integrity: sha512-SG/gKH6eij4vwQy87b/3mbpQ1X3x2vUdnpwq6/qL2IQWjtq58EY/UuNAp9CoEZoC9sI4L9AD1r+73Z9r4d3uug==,
-      }
-    dev: false
 
   /@next/eslint-plugin-next@12.3.1:
     resolution:
@@ -5578,10 +5426,10 @@ packages:
       glob: 7.1.7
     dev: true
 
-  /@next/swc-darwin-arm64@13.3.0:
+  /@next/swc-darwin-arm64@13.5.2:
     resolution:
       {
-        integrity: sha512-DmIQCNq6JtccLPPBzf0dgh2vzMWt5wjxbP71pCi5EWpWYE3MsP6FcRXi4MlAmFNDQOfcFXR2r7kBeG1LpZUh1w==,
+        integrity: sha512-7eAyunAWq6yFwdSQliWMmGhObPpHTesiKxMw4DWVxhm5yLotBj8FCR4PXGkpRP2tf8QhaWuVba+/fyAYggqfQg==,
       }
     engines: {node: ">= 10"}
     cpu: [arm64]
@@ -5589,22 +5437,10 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@next/swc-darwin-arm64@13.4.5:
+  /@next/swc-darwin-x64@13.5.2:
     resolution:
       {
-        integrity: sha512-XvTzi2ASUN5bECFIAAcBiSoDb0xsq+KLj4F0bof4d4rdc+FgOqLvseGQaOXwVi1TIh5bHa7o4b6droSJMO5+2g==,
-      }
-    engines: {node: ">= 10"}
-    cpu: [arm64]
-    os: [darwin]
-    requiresBuild: true
-    dev: false
-    optional: true
-
-  /@next/swc-darwin-x64@13.3.0:
-    resolution:
-      {
-        integrity: sha512-oQoqFa88OGgwnYlnAGHVct618FRI/749se0N3S8t9Bzdv5CRbscnO0RcX901+YnNK4Q6yeiizfgO3b7kogtsZg==,
+        integrity: sha512-WxXYWE7zF1ch8rrNh5xbIWzhMVas6Vbw+9BCSyZvu7gZC5EEiyZNJsafsC89qlaSA7BnmsDXVWQmc+s1feSYbQ==,
       }
     engines: {node: ">= 10"}
     cpu: [x64]
@@ -5612,22 +5448,10 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@next/swc-darwin-x64@13.4.5:
+  /@next/swc-linux-arm64-gnu@13.5.2:
     resolution:
       {
-        integrity: sha512-NQdqal/VKAqlJTuzhjZmNtdo8QSqwmfO7b2xJSAengTEVxQvsH76oGEzQeIv8Ci4NP6DysAFtFrJq++TmIxcUA==,
-      }
-    engines: {node: ">= 10"}
-    cpu: [x64]
-    os: [darwin]
-    requiresBuild: true
-    dev: false
-    optional: true
-
-  /@next/swc-linux-arm64-gnu@13.3.0:
-    resolution:
-      {
-        integrity: sha512-Wzz2p/WqAJUqTVoLo6H18WMeAXo3i+9DkPDae4oQG8LMloJ3if4NEZTnOnTUlro6cq+S/W4pTGa97nWTrOjbGw==,
+        integrity: sha512-URSwhRYrbj/4MSBjLlefPTK3/tvg95TTm6mRaiZWBB6Za3hpHKi8vSdnCMw5D2aP6k0sQQIEG6Pzcfwm+C5vrg==,
       }
     engines: {node: ">= 10"}
     cpu: [arm64]
@@ -5635,22 +5459,10 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@next/swc-linux-arm64-gnu@13.4.5:
+  /@next/swc-linux-arm64-musl@13.5.2:
     resolution:
       {
-        integrity: sha512-nB8TjtpJCXtzIFjYOMbnQu68ajkA8QK58TreHjTGojSQjsF0StDqo5zFHglVVVHrd8d3N/+EjC18yFNSWnd/ZA==,
-      }
-    engines: {node: ">= 10"}
-    cpu: [arm64]
-    os: [linux]
-    requiresBuild: true
-    dev: false
-    optional: true
-
-  /@next/swc-linux-arm64-musl@13.3.0:
-    resolution:
-      {
-        integrity: sha512-xPVrIQOQo9WXJYgmoTlMnAD/HlR/1e1ZIWGbwIzEirXBVBqMARUulBEIKdC19zuvoJ477qZJgBDCKtKEykCpyQ==,
+        integrity: sha512-HefiwAdIygFyNmyVsQeiJp+j8vPKpIRYDlmTlF9/tLdcd3qEL/UEBswa1M7cvO8nHcr27ZTKXz5m7dkd56/Esg==,
       }
     engines: {node: ">= 10"}
     cpu: [arm64]
@@ -5658,22 +5470,10 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@next/swc-linux-arm64-musl@13.4.5:
+  /@next/swc-linux-x64-gnu@13.5.2:
     resolution:
       {
-        integrity: sha512-W126XUW599OV3giSH9Co40VpT8VAOT47xONVHXZaYEpeca0qEevjj6WUr5IJu/8u+XGWm5xI1S0DYWjR6W+olw==,
-      }
-    engines: {node: ">= 10"}
-    cpu: [arm64]
-    os: [linux]
-    requiresBuild: true
-    dev: false
-    optional: true
-
-  /@next/swc-linux-x64-gnu@13.3.0:
-    resolution:
-      {
-        integrity: sha512-jOFlpGuPD7W2tuXVJP4wt9a3cpNxWAPcloq5EfMJRiXsBBOjLVFZA7boXYxEBzSVgUiVVr1V9T0HFM7pULJ1qA==,
+        integrity: sha512-htGVVroW0tdHgMYwKWkxWvVoG2RlAdDXRO1RQxYDvOBQsaV0nZsgKkw0EJJJ3urTYnwKskn/MXm305cOgRxD2w==,
       }
     engines: {node: ">= 10"}
     cpu: [x64]
@@ -5681,22 +5481,10 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@next/swc-linux-x64-gnu@13.4.5:
+  /@next/swc-linux-x64-musl@13.5.2:
     resolution:
       {
-        integrity: sha512-ZbPLO/oztQdtjGmWvGhRmtkZ6j9kQqg65kiO7F7Ijj7ojTtu3hh/vY+XRsHa/4Cse6HgyJ8XGZJMGoLb8ecQfQ==,
-      }
-    engines: {node: ">= 10"}
-    cpu: [x64]
-    os: [linux]
-    requiresBuild: true
-    dev: false
-    optional: true
-
-  /@next/swc-linux-x64-musl@13.3.0:
-    resolution:
-      {
-        integrity: sha512-2OwKlzaBgmuet9XYHc3KwsEilzb04F540rlRXkAcjMHL7eCxB7uZIGtsVvKOnQLvC/elrUegwSw1+5f7WmfyOw==,
+        integrity: sha512-UBD333GxbHVGi7VDJPPDD1bKnx30gn2clifNJbla7vo5nmBV+x5adyARg05RiT9amIpda6yzAEEUu+s774ldkw==,
       }
     engines: {node: ">= 10"}
     cpu: [x64]
@@ -5704,22 +5492,10 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@next/swc-linux-x64-musl@13.4.5:
+  /@next/swc-win32-arm64-msvc@13.5.2:
     resolution:
       {
-        integrity: sha512-f+/h8KMNixVUoRB+2vza8I+jsthJ4KcvopGUsDIUHe7Q4t+m8nKwGFBeyNu9qNIenYK5g5QYEsSwYFEqZylrTQ==,
-      }
-    engines: {node: ">= 10"}
-    cpu: [x64]
-    os: [linux]
-    requiresBuild: true
-    dev: false
-    optional: true
-
-  /@next/swc-win32-arm64-msvc@13.3.0:
-    resolution:
-      {
-        integrity: sha512-OeHiA6YEvndxT46g+rzFK/MQTfftKxJmzslERMu9LDdC6Kez0bdrgEYed5eXFK2Z1viKZJCGRlhd06rBusyztA==,
+        integrity: sha512-Em9ApaSFIQnWXRT3K6iFnr9uBXymixLc65Xw4eNt7glgH0eiXpg+QhjmgI2BFyc7k4ZIjglfukt9saNpEyolWA==,
       }
     engines: {node: ">= 10"}
     cpu: [arm64]
@@ -5727,22 +5503,10 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@next/swc-win32-arm64-msvc@13.4.5:
+  /@next/swc-win32-ia32-msvc@13.5.2:
     resolution:
       {
-        integrity: sha512-dvtPQZ5+J+zUE1uq7gP853Oj63e+n0T1ydZ/yRdVh7d8zW9ZFuC9fFrg3MqP1cv1NPPur8rrTqDKN2mRBkSSBw==,
-      }
-    engines: {node: ">= 10"}
-    cpu: [arm64]
-    os: [win32]
-    requiresBuild: true
-    dev: false
-    optional: true
-
-  /@next/swc-win32-ia32-msvc@13.3.0:
-    resolution:
-      {
-        integrity: sha512-4aB7K9mcVK1lYEzpOpqWrXHEZympU3oK65fnNcY1Qc4HLJFLJj8AViuqQd4jjjPNuV4sl8jAwTz3gN5VNGWB7w==,
+        integrity: sha512-TBACBvvNYU+87X0yklSuAseqdpua8m/P79P0SG1fWUvWDDA14jASIg7kr86AuY5qix47nZLEJ5WWS0L20jAUNw==,
       }
     engines: {node: ">= 10"}
     cpu: [ia32]
@@ -5750,39 +5514,15 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@next/swc-win32-ia32-msvc@13.4.5:
+  /@next/swc-win32-x64-msvc@13.5.2:
     resolution:
       {
-        integrity: sha512-gK9zwGe25x31S4AjPy3Bf2niQvHIAbmwgkzmqWG3OmD4K2Z/Dh2ju4vuyzPzIt0pwQe4B520meP9NizTBmVWSg==,
-      }
-    engines: {node: ">= 10"}
-    cpu: [ia32]
-    os: [win32]
-    requiresBuild: true
-    dev: false
-    optional: true
-
-  /@next/swc-win32-x64-msvc@13.3.0:
-    resolution:
-      {
-        integrity: sha512-Reer6rkLLcoOvB0dd66+Y7WrWVFH7sEEkF/4bJCIfsSKnTStTYaHtwIJAwbqnt9I392Tqvku0KkoqZOryWV9LQ==,
+        integrity: sha512-LfTHt+hTL8w7F9hnB3H4nRasCzLD/fP+h4/GUVBTxrkMJOnh/7OZ0XbYDKO/uuWwryJS9kZjhxcruBiYwc5UDw==,
       }
     engines: {node: ">= 10"}
     cpu: [x64]
     os: [win32]
     requiresBuild: true
-    optional: true
-
-  /@next/swc-win32-x64-msvc@13.4.5:
-    resolution:
-      {
-        integrity: sha512-iyNQVc7eGehrik9RJt9xGcnO6b/pi8C7GCfg8RGenx1IlalEKbYRgBJloF7DQzwlrV47E9bQl8swT+JawaNcKA==,
-      }
-    engines: {node: ">= 10"}
-    cpu: [x64]
-    os: [win32]
-    requiresBuild: true
-    dev: false
     optional: true
 
   /@nodelib/fs.scandir@2.1.5:
@@ -6296,22 +6036,13 @@ packages:
       "@swc/core-win32-x64-msvc": 1.3.7
     dev: false
 
-  /@swc/helpers@0.4.14:
+  /@swc/helpers@0.5.2:
     resolution:
       {
-        integrity: sha512-4C7nX/dvpzB7za4Ql9K81xK3HPxCpHMgwTZVyf+9JQ6VUbn9jjZVN7/Nkdz/Ugzs2CSjqnL/UPXroiVBVHUWUw==,
+        integrity: sha512-E4KcWTpoLHqwPHLxidpOqQbcrZVgi0rsmmZXUle1jXmJfuIf/UWpczUJ7MZZ5tlxytgJXyp0w4PGkkeLiuIdZw==,
       }
     dependencies:
       tslib: 2.4.0
-
-  /@swc/helpers@0.5.1:
-    resolution:
-      {
-        integrity: sha512-sJ902EfIzn1Fa+qYmjdQqh8tPsoxyBz+8yBKC2HKUxyezKJFwPGOn7pv4WY6QuQW//ySQi5lJjA/ZT9sNWWNTg==,
-      }
-    dependencies:
-      tslib: 2.4.0
-    dev: false
 
   /@swc/wasm@1.2.122:
     resolution:
@@ -12957,7 +12688,6 @@ packages:
       {
         integrity: sha512-lkX1HJXwyMcprw/5YUZc2s7DrpAiHB21/V+E1rHUrVNokkvB6bqMzT0VfV6/86ZNabt1k14YOIaT7nDvOX3Iiw==,
       }
-    dev: false
 
   /glob2base@0.0.12:
     resolution: {integrity: sha1-nUGbPijxLoOjYhZKJ3BVkiycDVY=}
@@ -16765,7 +16495,7 @@ packages:
       }
     dev: false
 
-  /next-auth@4.18.7(next@13.3.0)(react-dom@18.2.0)(react@18.2.0):
+  /next-auth@4.18.7(next@13.5.2)(react-dom@18.2.0)(react@18.2.0):
     resolution:
       {
         integrity: sha512-kR3s1JVPMaDuSAlFxcGyv7Ec3fdE6za71r1F77IOII5zJmW2wfkIA2xj223fM0D20ip2pzFpHfk/qN4L6l5XMA==,
@@ -16784,7 +16514,7 @@ packages:
       "@panva/hkdf": 1.0.2
       cookie: 0.5.0
       jose: 4.11.2
-      next: 13.3.0(@babel/core@7.20.2)(react-dom@18.2.0)(react@18.2.0)
+      next: 13.5.2(@babel/core@7.20.2)(react-dom@18.2.0)(react@18.2.0)
       oauth: 0.9.15
       openid-client: 5.2.1
       preact: 10.11.3
@@ -16793,7 +16523,7 @@ packages:
       react-dom: 18.2.0(react@18.2.0)
       uuid: 8.3.2
 
-  /next-router-mock@0.9.1(next@13.3.0)(react@18.2.0):
+  /next-router-mock@0.9.1(next@13.5.2)(react@18.2.0):
     resolution:
       {
         integrity: sha512-GTrns944dnFNgycpinyRszOiwwk99LUJsvvX0FWRgUFHv6hOuzCns1rmTlzO+DRimYB9/XMA+87X2/dQLzjiUQ==,
@@ -16802,172 +16532,115 @@ packages:
       next: ">=10.0.0"
       react: ">=17.0.0"
     dependencies:
-      next: 13.3.0(@babel/core@7.12.10)(react-dom@18.2.0)(react@18.2.0)
+      next: 13.5.2(@babel/core@7.12.10)(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
     dev: true
 
-  /next@13.3.0(@babel/core@7.12.10)(react-dom@18.2.0)(react@18.2.0):
+  /next@13.5.2(@babel/core@7.12.10)(react-dom@18.2.0)(react@18.2.0):
     resolution:
       {
-        integrity: sha512-OVTw8MpIPa12+DCUkPqRGPS3thlJPcwae2ZL4xti3iBff27goH024xy4q2lhlsdoYiKOi8Kz6uJoLW/GXwgfOA==,
+        integrity: sha512-vog4UhUaMYAzeqfiAAmgB/QWLW7p01/sg+2vn6bqc/CxHFYizMzLv6gjxKzl31EVFkfl/F+GbxlKizlkTE9RdA==,
       }
-    engines: {node: ">=14.6.0"}
+    engines: {node: ">=16.14.0"}
     hasBin: true
     peerDependencies:
       "@opentelemetry/api": ^1.1.0
-      fibers: ">= 3.1.0"
-      node-sass: ^6.0.0 || ^7.0.0
       react: ^18.2.0
       react-dom: ^18.2.0
       sass: ^1.3.0
     peerDependenciesMeta:
       "@opentelemetry/api":
         optional: true
-      fibers:
-        optional: true
-      node-sass:
-        optional: true
       sass:
         optional: true
     dependencies:
-      "@next/env": 13.3.0
-      "@swc/helpers": 0.4.14
+      "@next/env": 13.5.2
+      "@swc/helpers": 0.5.2
       busboy: 1.6.0
       caniuse-lite: 1.0.30001434
       postcss: 8.4.14
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       styled-jsx: 5.1.1(@babel/core@7.12.10)(react@18.2.0)
+      watchpack: 2.4.0
+      zod: 3.21.4
     optionalDependencies:
-      "@next/swc-darwin-arm64": 13.3.0
-      "@next/swc-darwin-x64": 13.3.0
-      "@next/swc-linux-arm64-gnu": 13.3.0
-      "@next/swc-linux-arm64-musl": 13.3.0
-      "@next/swc-linux-x64-gnu": 13.3.0
-      "@next/swc-linux-x64-musl": 13.3.0
-      "@next/swc-win32-arm64-msvc": 13.3.0
-      "@next/swc-win32-ia32-msvc": 13.3.0
-      "@next/swc-win32-x64-msvc": 13.3.0
+      "@next/swc-darwin-arm64": 13.5.2
+      "@next/swc-darwin-x64": 13.5.2
+      "@next/swc-linux-arm64-gnu": 13.5.2
+      "@next/swc-linux-arm64-musl": 13.5.2
+      "@next/swc-linux-x64-gnu": 13.5.2
+      "@next/swc-linux-x64-musl": 13.5.2
+      "@next/swc-win32-arm64-msvc": 13.5.2
+      "@next/swc-win32-ia32-msvc": 13.5.2
+      "@next/swc-win32-x64-msvc": 13.5.2
     transitivePeerDependencies:
       - "@babel/core"
       - babel-plugin-macros
 
-  /next@13.3.0(@babel/core@7.18.2)(react-dom@18.2.0)(react@18.2.0):
+  /next@13.5.2(@babel/core@7.18.2)(react-dom@18.2.0)(react@18.2.0):
     resolution:
       {
-        integrity: sha512-OVTw8MpIPa12+DCUkPqRGPS3thlJPcwae2ZL4xti3iBff27goH024xy4q2lhlsdoYiKOi8Kz6uJoLW/GXwgfOA==,
+        integrity: sha512-vog4UhUaMYAzeqfiAAmgB/QWLW7p01/sg+2vn6bqc/CxHFYizMzLv6gjxKzl31EVFkfl/F+GbxlKizlkTE9RdA==,
       }
-    engines: {node: ">=14.6.0"}
+    engines: {node: ">=16.14.0"}
     hasBin: true
     peerDependencies:
       "@opentelemetry/api": ^1.1.0
-      fibers: ">= 3.1.0"
-      node-sass: ^6.0.0 || ^7.0.0
       react: ^18.2.0
       react-dom: ^18.2.0
       sass: ^1.3.0
     peerDependenciesMeta:
       "@opentelemetry/api":
         optional: true
-      fibers:
-        optional: true
-      node-sass:
-        optional: true
       sass:
         optional: true
     dependencies:
-      "@next/env": 13.3.0
-      "@swc/helpers": 0.4.14
+      "@next/env": 13.5.2
+      "@swc/helpers": 0.5.2
       busboy: 1.6.0
       caniuse-lite: 1.0.30001434
       postcss: 8.4.14
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       styled-jsx: 5.1.1(@babel/core@7.18.2)(react@18.2.0)
+      watchpack: 2.4.0
+      zod: 3.21.4
     optionalDependencies:
-      "@next/swc-darwin-arm64": 13.3.0
-      "@next/swc-darwin-x64": 13.3.0
-      "@next/swc-linux-arm64-gnu": 13.3.0
-      "@next/swc-linux-arm64-musl": 13.3.0
-      "@next/swc-linux-x64-gnu": 13.3.0
-      "@next/swc-linux-x64-musl": 13.3.0
-      "@next/swc-win32-arm64-msvc": 13.3.0
-      "@next/swc-win32-ia32-msvc": 13.3.0
-      "@next/swc-win32-x64-msvc": 13.3.0
+      "@next/swc-darwin-arm64": 13.5.2
+      "@next/swc-darwin-x64": 13.5.2
+      "@next/swc-linux-arm64-gnu": 13.5.2
+      "@next/swc-linux-arm64-musl": 13.5.2
+      "@next/swc-linux-x64-gnu": 13.5.2
+      "@next/swc-linux-x64-musl": 13.5.2
+      "@next/swc-win32-arm64-msvc": 13.5.2
+      "@next/swc-win32-ia32-msvc": 13.5.2
+      "@next/swc-win32-x64-msvc": 13.5.2
     transitivePeerDependencies:
       - "@babel/core"
       - babel-plugin-macros
     dev: false
 
-  /next@13.3.0(@babel/core@7.20.2)(react-dom@18.2.0)(react@18.2.0):
+  /next@13.5.2(@babel/core@7.20.2)(react-dom@18.2.0)(react@18.2.0):
     resolution:
       {
-        integrity: sha512-OVTw8MpIPa12+DCUkPqRGPS3thlJPcwae2ZL4xti3iBff27goH024xy4q2lhlsdoYiKOi8Kz6uJoLW/GXwgfOA==,
+        integrity: sha512-vog4UhUaMYAzeqfiAAmgB/QWLW7p01/sg+2vn6bqc/CxHFYizMzLv6gjxKzl31EVFkfl/F+GbxlKizlkTE9RdA==,
       }
-    engines: {node: ">=14.6.0"}
+    engines: {node: ">=16.14.0"}
     hasBin: true
     peerDependencies:
       "@opentelemetry/api": ^1.1.0
-      fibers: ">= 3.1.0"
-      node-sass: ^6.0.0 || ^7.0.0
       react: ^18.2.0
       react-dom: ^18.2.0
       sass: ^1.3.0
     peerDependenciesMeta:
       "@opentelemetry/api":
         optional: true
-      fibers:
-        optional: true
-      node-sass:
-        optional: true
       sass:
         optional: true
     dependencies:
-      "@next/env": 13.3.0
-      "@swc/helpers": 0.4.14
-      busboy: 1.6.0
-      caniuse-lite: 1.0.30001434
-      postcss: 8.4.14
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
-      styled-jsx: 5.1.1(@babel/core@7.20.2)(react@18.2.0)
-    optionalDependencies:
-      "@next/swc-darwin-arm64": 13.3.0
-      "@next/swc-darwin-x64": 13.3.0
-      "@next/swc-linux-arm64-gnu": 13.3.0
-      "@next/swc-linux-arm64-musl": 13.3.0
-      "@next/swc-linux-x64-gnu": 13.3.0
-      "@next/swc-linux-x64-musl": 13.3.0
-      "@next/swc-win32-arm64-msvc": 13.3.0
-      "@next/swc-win32-ia32-msvc": 13.3.0
-      "@next/swc-win32-x64-msvc": 13.3.0
-    transitivePeerDependencies:
-      - "@babel/core"
-      - babel-plugin-macros
-
-  /next@13.4.5(@babel/core@7.20.2)(react-dom@18.2.0)(react@18.2.0):
-    resolution:
-      {
-        integrity: sha512-pfNsRLVM9e5Y1/z02VakJRfD6hMQkr24FaN2xc9GbcZDBxoOgiNAViSg5cXwlWCoMhtm4U315D7XYhgOr96Q3Q==,
-      }
-    engines: {node: ">=16.8.0"}
-    hasBin: true
-    peerDependencies:
-      "@opentelemetry/api": ^1.1.0
-      fibers: ">= 3.1.0"
-      react: ^18.2.0
-      react-dom: ^18.2.0
-      sass: ^1.3.0
-    peerDependenciesMeta:
-      "@opentelemetry/api":
-        optional: true
-      fibers:
-        optional: true
-      sass:
-        optional: true
-    dependencies:
-      "@next/env": 13.4.5
-      "@swc/helpers": 0.5.1
+      "@next/env": 13.5.2
+      "@swc/helpers": 0.5.2
       busboy: 1.6.0
       caniuse-lite: 1.0.30001434
       postcss: 8.4.14
@@ -16977,19 +16650,18 @@ packages:
       watchpack: 2.4.0
       zod: 3.21.4
     optionalDependencies:
-      "@next/swc-darwin-arm64": 13.4.5
-      "@next/swc-darwin-x64": 13.4.5
-      "@next/swc-linux-arm64-gnu": 13.4.5
-      "@next/swc-linux-arm64-musl": 13.4.5
-      "@next/swc-linux-x64-gnu": 13.4.5
-      "@next/swc-linux-x64-musl": 13.4.5
-      "@next/swc-win32-arm64-msvc": 13.4.5
-      "@next/swc-win32-ia32-msvc": 13.4.5
-      "@next/swc-win32-x64-msvc": 13.4.5
+      "@next/swc-darwin-arm64": 13.5.2
+      "@next/swc-darwin-x64": 13.5.2
+      "@next/swc-linux-arm64-gnu": 13.5.2
+      "@next/swc-linux-arm64-musl": 13.5.2
+      "@next/swc-linux-x64-gnu": 13.5.2
+      "@next/swc-linux-x64-musl": 13.5.2
+      "@next/swc-win32-arm64-msvc": 13.5.2
+      "@next/swc-win32-ia32-msvc": 13.5.2
+      "@next/swc-win32-x64-msvc": 13.5.2
     transitivePeerDependencies:
       - "@babel/core"
       - babel-plugin-macros
-    dev: false
 
   /nice-try@1.0.5:
     resolution:
@@ -18632,18 +18304,6 @@ packages:
     resolution:
       {
         integrity: sha512-MiF9PCILN5KulhSGbnjohMiTOrB47GerDTichMNP0y2cPUu1GTRFqbunOxCE9N1499YTLMV/ne4gFzqCp1rxrQ==,
-      }
-    engines: {node: ">=12.22.0"}
-    peerDependencies:
-      react: ^16.8.0 || ^17 || ^18
-    dependencies:
-      react: 18.2.0
-    dev: false
-
-  /react-hook-form@7.46.0(react@18.2.0):
-    resolution:
-      {
-        integrity: sha512-sc22pXwuKgbWBR5/EYWOVoFw4i/w893tDRUgQY2/Xb7wlpajJBrqAMFhb4z1CDhZ0TSFFfX62+iKx3gCXnCHHw==,
       }
     engines: {node: ">=12.22.0"}
     peerDependencies:
@@ -21636,7 +21296,6 @@ packages:
     dependencies:
       glob-to-regexp: 0.4.1
       graceful-fs: 4.2.10
-    dev: false
 
   /wcwidth@1.0.1:
     resolution:
@@ -22183,4 +21842,3 @@ packages:
       {
         integrity: sha512-m46AKbrzKVzOzs/DZgVnG5H55N1sv1M8qZU3A8RIKbs3mrACDNeIOeilDymVb2HdmP8uwshOCF4uJ8uM9rCqJw==,
       }
-    dev: false

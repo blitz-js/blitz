@@ -1,5 +1,19 @@
 # blitz
 
+## 2.0.0-beta.34
+
+### Patch Changes
+
+- 30fd61316: - Removes language selection step from `blitz new` menu
+  - Make `formik` the default/recommended form library
+- 3ddb57072: ⚠️ Breaking Change:
+  Next.js version 13.5 or above is now required to use `@blitzjs/next`
+
+  Fix `Error: Cannot find module 'next/dist/shared/lib/router/utils/resolve-href'` by updating the location of next.js internal function.
+
+- fe8c937d2: Remove rouge `console.log` during start
+  - @blitzjs/generator@2.0.0-beta.34
+
 ## 2.0.0-beta.33
 
 ### Patch Changes

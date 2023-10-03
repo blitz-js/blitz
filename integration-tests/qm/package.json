@@ -8,14 +8,14 @@
     "clean": "rm -rf .turbo && rm -rf node_modules"
   },
   "dependencies": {
-    "@blitzjs/auth": "2.0.0-beta.33",
-    "@blitzjs/config": "2.0.0-beta.33",
-    "@blitzjs/next": "2.0.0-beta.33",
-    "@blitzjs/rpc": "2.0.0-beta.33",
+    "@blitzjs/auth": "2.0.0-beta.34",
+    "@blitzjs/config": "2.0.0-beta.34",
+    "@blitzjs/next": "2.0.0-beta.34",
+    "@blitzjs/rpc": "2.0.0-beta.34",
     "@prisma/client": "4.6.1",
     "@tanstack/react-query": "4.0.10",
-    "blitz": "2.0.0-beta.33",
-    "next": "13.3.0",
+    "blitz": "2.0.0-beta.34",
+    "next": "13.5.2",
     "prisma": "4.6.1",
     "react": "18.2.0",
     "react-dom": "18.2.0"
