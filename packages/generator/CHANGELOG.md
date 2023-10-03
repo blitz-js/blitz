@@ -1,5 +1,7 @@
 # @blitzjs/generator
 
+## 2.0.0-beta.34
+
 ## 2.0.0-beta.33
 
 ### Patch Changes
