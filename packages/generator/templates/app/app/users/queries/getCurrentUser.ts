@@ -1,8 +1,7 @@
 import {Ctx} from "blitz"
-import db from "../../../db"
-import { Role } from "@/types"
+import db from "db"
 
-export default async function getCurrentUser(input: null, ctx: Ctx) {
+export default async function getCurrentUser(_: null, ctx: Ctx) {
   if (!ctx.session.userId) return null
   const user = await db.user.findFirst({
     where: {id: ctx.session.userId},
@@ -10,8 +9,4 @@ export default async function getCurrentUser(input: null, ctx: Ctx) {
   })
 
   return user
-}
-
-export const config = {
-  httpMethod: "GET",
 }

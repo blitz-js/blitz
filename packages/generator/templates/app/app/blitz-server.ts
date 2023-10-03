@@ -1,6 +1,6 @@
 import {setupBlitzServer} from "@blitzjs/next"
 import {AuthServerPlugin, PrismaStorage,simpleRolesIsAuthorized} from "@blitzjs/auth"
-import db from "../db"
+import db from "db"
 import {BlitzLogger} from "blitz"
 import {RpcServerPlugin} from "@blitzjs/rpc"
 

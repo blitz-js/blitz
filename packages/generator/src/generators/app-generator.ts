@@ -7,6 +7,7 @@ import {Generator, GeneratorOptions, SourceRootType} from "../generator"
 import {baseLogger, log} from "../utils/log"
 import {fetchLatestVersionsFor} from "../utils/fetch-latest-version-for"
 import {getBlitzDependencyVersion} from "../utils/get-blitz-dependency-version"
+import fs from "fs-extra"
 
 function assert(condition: any, message: string): asserts condition {
   if (!condition) throw new Error(message)
@@ -73,10 +74,6 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
         this.destinationPath(rpcEndpointPath),
         this.destinationPath(`src/pages/api/rpc/[[...blitz]].${this.options.useTs ? "ts" : "js"}`),
       )
-    }
-
-    if (this.options.template.path === "app") {
-      this.destinationPath("app/auth"), this.destinationPath("app/(auth)")
     }
 
     if (!this.options.template.skipForms) {

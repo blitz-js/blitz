@@ -1,4 +1,4 @@
-import "@/app/styles/globals.css"
+import "app/styles/globals.css"
 import {BlitzProvider} from "./blitz-client"
 import {Inter} from "next/font/google"
 
