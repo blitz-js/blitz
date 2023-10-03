@@ -47,6 +47,14 @@ const runTests = () => {
         if (browser) await browser.close()
       })
 
+      it("Page.authenticate = {role} should work ", async () => {
+        const browser = await webdriver(appPort, "/page-dot-authenticate-role")
+        await browser.waitForElementByCss("#error")
+        let text = await browser.elementByCss("#error").text()
+        expect(text).toMatch(/AuthenticationError/)
+        if (browser) await browser.close()
+      })
+
       it("should render error for protected layout", async () => {
         const browser = await webdriver(appPort, "/layout-authenticate")
         await browser.waitForElementByCss("#error")
@@ -102,6 +110,30 @@ const runTests = () => {
         } else {
           expect(text).toContain("Error")
         }
+        if (browser) await browser.close()
+      })
+
+      it("Page.authenticate = {role} should work ", async () => {
+        let browser = await webdriver(appPort, "/login")
+        await waitFor(200)
+        await browser.elementByCss("#login").click()
+        await waitFor(200)
+        await browser.eval(`window.location = "/page-dot-authenticate-role"`)
+        await browser.waitForElementByCss("#error")
+        let text = await browser.elementByCss("#error").text()
+        expect(text).toMatch(/AuthenticationError/)
+        if (browser) await browser.close()
+      })
+
+      it("Page.authenticate = {role} should work ", async () => {
+        let browser = await webdriver(appPort, "/login")
+        await waitFor(200)
+        await browser.elementByCss("#login").click()
+        await waitFor(200)
+        await browser.eval(`window.location = "/page-dot-authenticate-role-working"`)
+        await browser.waitForElementByCss("#content")
+        let text = await browser.elementByCss("#content").text()
+        expect(text).toMatch(/authenticated-basic-result/)
         if (browser) await browser.close()
       })
 
