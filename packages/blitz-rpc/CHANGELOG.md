@@ -1,5 +1,19 @@
 # @blitzjs/rpc
 
+## 2.0.0-beta.34
+
+### Patch Changes
+
+- 3ddb57072: ⚠️ Breaking Change:
+  Next.js version 13.5 or above is now required to use `@blitzjs/next`
+
+  Fix `Error: Cannot find module 'next/dist/shared/lib/router/utils/resolve-href'` by updating the location of next.js internal function.
+
+- Updated dependencies [30fd61316]
+- Updated dependencies [3ddb57072]
+- Updated dependencies [fe8c937d2]
+  - blitz@2.0.0-beta.34
+
 ## 2.0.0-beta.33
 
 ### Patch Changes
