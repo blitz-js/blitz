@@ -79,16 +79,21 @@ export default RecipeBuilder()
   .setName("Next UI")
   .setDescription(`This will install all necessary dependencies and configure Next UI for use.`)
   .setOwner("moyurusuto.mochi@gmail.com")
-  .setRepoLink("https://github.com/blitz-js/legacy-framework")
+  .setRepoLink("https://github.com/blitz-js/blitz/")
   .addAddDependenciesStep({
     stepId: "install",
     stepName: "Install Next UI",
-    explanation: `Import the Next UI provider into _app, so it is accessible in the whole app`,
+    explanation: `Install Next UI and its dependencies`,
     packages: [
       {
         name: "@nextui-org/react",
         version: "latest",
         isDevDep: true,
+      },
+      {
+        name: "framer-motion",
+        version: "latest",
+        isDevDep: false,
       },
     ],
   })

@@ -8,7 +8,7 @@ export default RecipeBuilder()
     "Configure your Blitz app's styling with Material-UI. This recipe will install all necessary dependencies and configure a base Material-UI setup for usage.",
   )
   .setOwner("s.pathak5995@gmail.com")
-  .setRepoLink("https://github.com/blitz-js/legacy-framework")
+  .setRepoLink("https://github.com/blitz-js/blitz/")
   .addAddDependenciesStep({
     stepId: "addDeps",
     stepName: "Add npm dependencies",

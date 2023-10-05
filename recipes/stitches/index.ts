@@ -5,7 +5,7 @@ export default RecipeBuilder()
   .setName("Stitches")
   .setDescription(`This will install all necessary dependencies and configure Stitches for use.`)
   .setOwner("xa300600@hotmail.com")
-  .setRepoLink("https://github.com/blitz-js/legacy-framework")
+  .setRepoLink("https://github.com/blitz-js/blitz/")
   .addAddDependenciesStep({
     stepId: "addDeps",
     stepName: "npm dependencies",
