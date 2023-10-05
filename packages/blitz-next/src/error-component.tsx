@@ -1,6 +1,10 @@
 import React from "react"
-import Head from "next/head"
 import {NextPageContext} from "next"
+import dynamic from "next/dynamic"
+const Head = dynamic(() => import("next/head").then((mod) => mod.default), {
+  ssr: false,
+  loading: () => null,
+})
 
 const statusCodes: {[code: number]: string} = {
   400: "Bad Request",
@@ -31,7 +35,6 @@ export class ErrorComponent<P = {}> extends React.Component<P & ErrorProps> {
   render() {
     const {statusCode} = this.props
     const title = this.props.title || statusCodes[statusCode] || "An unexpected error has occurred"
-
     return (
       <div style={styles.error}>
         <Head>
