@@ -1,9 +1,10 @@
-import {assert, baseLogger, Ctx, newLine, prettyMs, ResolverConfig} from "blitz"
+import {assert, ResolverConfig} from "blitz"
 import {NextApiRequest, NextApiResponse} from "next"
 import {deserialize, parse, serialize as superjsonSerialize} from "superjson"
 import {resolve} from "path"
-import chalk from "chalk"
 import {LoaderOptions} from "./server/loader/utils/loader-utils"
+import {RpcLogger} from "./rpc-logger"
+import {LoggerOptions} from "./server/plugin"
 
 // TODO - optimize end user server bundles by not exporting all client stuff here
 export * from "./index-browser"
@@ -146,63 +147,11 @@ async function getResolverMap(): Promise<ResolverFiles | null | undefined> {
 interface RpcConfig {
   onError?: (error: Error) => void
   formatError?: (error: Error) => Error
-  logging?: {
-    /**
-     * allowList Represents the list of routes for which logging should be enabled
-     * If allowList is defined then only those routes will be logged
-     */
-    allowList?: string[]
-    /**
-     * blockList Represents the list of routes for which logging should be disabled
-     * If blockList is defined then all routes except those will be logged
-     */
-    blockList?: string[]
-    /**
-     * verbose Represents the flag to enable/disable logging
-     * If verbose is true then Blitz RPC will log the input and output of each resolver
-     */
-    verbose?: boolean
-    /**
-     * disablelevel Represents the flag to enable/disable logging for a particular level
-     */
-    disablelevel?: "debug" | "info"
-  }
-}
-
-function isBlitzRPCVerbose(resolverName: string, config: RpcConfig, level: string) {
-  // blitz rpc is by default verbose - to keep current behaviour
-  if (!config.logging) {
-    return true
-  }
-  //if logging exists and verbose is not defined then default to true
-  if (config.logging && !("verbose" in config.logging)) {
-    return true
-  }
-  const isLevelDisabled = config.logging?.disablelevel === level
-  if (config.logging?.verbose) {
-    // If allowList array is defined then allow only those routes in allowList
-    if (config.logging?.allowList) {
-      if (config.logging?.allowList?.includes(resolverName) && !isLevelDisabled) {
-        return true
-      }
-    }
-    // If blockList array is defined then allow all routes except those in blockList
-    if (config.logging?.blockList) {
-      if (!config.logging?.blockList?.includes(resolverName) && !isLevelDisabled) {
-        return true
-      }
-    }
-    // if both allowList and blockList are not defined, then allow all routes
-    if (!config.logging?.allowList && !config.logging?.blockList && !isLevelDisabled) {
-      return true
-    }
-    return false
-  }
-  return false
+  logging?: LoggerOptions
 }
 
 export function rpcHandler(config: RpcConfig) {
-  return async function handleRpcRequest(req: NextApiRequest, res: NextApiResponse, ctx: Ctx) {
+  return async function handleRpcRequest(req: NextApiRequest, res: NextApiResponse) {
     const resolverMap = await getResolverMap()
     assert(resolverMap, "No query or mutation resolvers found")
     assert(
@@ -214,13 +163,7 @@ export function rpcHandler(config: RpcConfig) {
     const routePath = "/" + relativeRoutePath
     const resolverName = routePath.replace(/(\/api\/rpc)?\//, "")
 
-    const log = baseLogger().getSubLogger({
-      name: "blitz-rpc",
-      prefix: [resolverName + "()"],
-    })
-    const customChalk = new chalk.Instance({
-      level: log.settings.type === "json" ? 0 : chalk.level,
-    })
+    const rpcLogger = new RpcLogger(resolverName, config.logging)
 
     const loadableResolver = resolverMap?.[routePath]
     if (!loadableResolver) {
@@ -245,7 +188,7 @@ export function rpcHandler(config: RpcConfig) {
     ) {
       if (req.method === "POST" && typeof req.body.params === "undefined") {
         const error = {message: "Request body is missing the `params` key"}
-        log.error(error.message)
+        rpcLogger.error(error.message)
         res.status(400).json({
           result: null,
           error,
@@ -267,21 +210,17 @@ export function rpcHandler(config: RpcConfig) {
               ? parse(`${req.query.meta}`)
               : undefined,
         })
-        if (isBlitzRPCVerbose(resolverName, config, "info")) {
-          log.info(customChalk.dim("Starting with input:"), data ? data : JSON.stringify(data))
-        }
-        const startTime = Date.now()
+        rpcLogger.timer.initResolver()
+        rpcLogger.preResolver(data)
+
         const result = await resolver(data, (res as any).blitzCtx)
-        const resolverDuration = Date.now() - startTime
+        rpcLogger.timer.resolverDuration()
+        rpcLogger.postResolver(result)
 
-        if (isBlitzRPCVerbose(resolverName, config, "debug")) {
-          log.debug(customChalk.dim("Result:"), result ? result : JSON.stringify(result))
-        }
-
-        const serializerStartTime = Date.now()
+        rpcLogger.timer.initSerialization()
         const serializedResult = superjsonSerialize(result)
 
-        const nextSerializerStartTime = Date.now()
+        rpcLogger.timer.initNextJsSerialization()
         ;(res as any).blitzResult = result
         res.json({
           result: serializedResult.json,
@@ -290,27 +229,12 @@ export function rpcHandler(config: RpcConfig) {
             result: serializedResult.meta,
           },
         })
+        rpcLogger.timer.nextJsSerializationDuration()
+        rpcLogger.nextJsSerialization()
 
-        if (isBlitzRPCVerbose(resolverName, config, "debug")) {
-          log.debug(
-            customChalk.dim(
-              `Next.js serialization:${prettyMs(Date.now() - nextSerializerStartTime)}`,
-            ),
-          )
-        }
-
-        const serializerDuration = Date.now() - serializerStartTime
-        const duration = Date.now() - startTime
-        if (isBlitzRPCVerbose(resolverName, config, "info")) {
-          log.info(
-            customChalk.dim(
-              `Finished: resolver:${prettyMs(resolverDuration)} serializer:${prettyMs(
-                serializerDuration,
-              )} total:${prettyMs(duration)}`,
-            ),
-          )
-        }
-        newLine()
+        rpcLogger.timer.serializerDuration()
+        rpcLogger.timer.totalDuration()
+        rpcLogger.postResponse()
 
         return
       } catch (error: any) {
@@ -319,9 +243,7 @@ export function rpcHandler(config: RpcConfig) {
         }
 
         config.onError?.(error)
-
-        log.error(new Error(error))
-        newLine()
+        rpcLogger.error(error)
 
         if (!error.statusCode) {
           error.statusCode = 500
@@ -341,7 +263,7 @@ export function rpcHandler(config: RpcConfig) {
       }
     } else {
       // Everything else is error
-      log.warn(`${req.method} method not supported`)
+      rpcLogger.warn(`${req.method} method not supported`)
       res.status(404).end()
       return
     }

@@ -13,7 +13,11 @@ const {api, getBlitzContext, useAuthenticatedBlitzContext, invoke} = setupBlitzS
       storage: PrismaStorage(db),
       isAuthorized: simpleRolesIsAuthorized,
     }),
-    RpcServerPlugin({}),
+    RpcServerPlugin({
+      logging: {
+        disablelevel: "debug",
+      },
+    }),
   ],
   logger: BlitzLogger({}),
 })
