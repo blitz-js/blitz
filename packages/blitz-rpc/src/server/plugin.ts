@@ -30,7 +30,7 @@ export type RpcLoggerOptions = {
 
 type RpcPluginOptions = {
   logging?: RpcLoggerOptions
-  onInvokeError?: (error: any) => void
+  onInvokeError?: (error: unknown) => void
 }
 
 export const RpcServerPlugin = createServerPlugin((options: RpcPluginOptions) => {

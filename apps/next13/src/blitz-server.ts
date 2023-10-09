@@ -17,6 +17,9 @@ const {api, getBlitzContext, useAuthenticatedBlitzContext, invoke} = setupBlitzS
       logging: {
         disablelevel: "debug",
       },
+      onInvokeError(error) {
+        console.log("onInvokeError", error)
+      },
     }),
   ],
   logger: BlitzLogger({}),
