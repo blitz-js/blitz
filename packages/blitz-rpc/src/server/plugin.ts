@@ -30,6 +30,7 @@ export type LoggerOptions = {
 
 type RpcPluginOptions = {
   logging?: LoggerOptions
+  onInvokeError?: (error: any) => void
 }
 
 export const RpcServerPlugin = createServerPlugin((options: RpcPluginOptions) => {
@@ -41,7 +42,14 @@ export const RpcServerPlugin = createServerPlugin((options: RpcPluginOptions) =>
     params: TInput,
   ): Promise<PromiseReturnType<T>> {
     const ctx = await globalThis.__BLITZ_GET_RSC_CONTEXT()
-    return invoke(queryFn, params, ctx, options.logging)
+    try {
+      return await invoke(queryFn, params, ctx, options.logging)
+    } catch (error) {
+      if (options.onInvokeError) {
+        options.onInvokeError(error)
+      }
+      throw error
+    }
   }
   return {
     requestMiddlewares: [] as RequestMiddleware<any, any, void | Promise<void>>[],
