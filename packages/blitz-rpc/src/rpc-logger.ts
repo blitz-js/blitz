@@ -1,6 +1,6 @@
 import {baseLogger, newLine, prettyMs} from "blitz"
 import chalk, {type Chalk} from "chalk"
-import type {LoggerOptions} from "./server/plugin"
+import type {RpcLoggerOptions} from "./server/plugin"
 
 type Logger = ReturnType<typeof baseLogger>
 type RpcLoggerState = {
@@ -19,12 +19,12 @@ type RpcLoggerState = {
 export function isBlitzRPCVerbose(
   resolverName: string,
   level: string,
-  loggingOptions?: LoggerOptions,
+  loggingOptions?: RpcLoggerOptions,
 ) {
   // blitz rpc is by default verbose - to keep current behavior
   if (!loggingOptions) {
-    if (globalThis.blitzRpcLoggerOptions) {
-      loggingOptions = globalThis.blitzRpcLoggerOptions
+    if (globalThis.blitzRpcRpcLoggerOptions) {
+      loggingOptions = globalThis.blitzRpcRpcLoggerOptions
     } else {
       return true
     }
@@ -60,7 +60,7 @@ export class RpcLogger {
   private logger: Logger
   private customChalk: Chalk
   private state: RpcLoggerState
-  constructor(resolverName: string, loggingOptions?: LoggerOptions) {
+  constructor(resolverName: string, loggingOptions?: RpcLoggerOptions) {
     const logger = baseLogger().getSubLogger({
       name: "blitz-rpc",
       prefix: [resolverName + "()"],

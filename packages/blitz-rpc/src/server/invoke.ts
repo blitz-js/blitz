@@ -1,12 +1,12 @@
 import type {Ctx, FirstParam, PromiseReturnType} from "blitz"
 import {RpcLogger} from "../rpc-logger"
-import {LoggerOptions} from "./plugin"
+import {RpcLoggerOptions} from "./plugin"
 
 export async function invoke<T extends (...args: any) => any, TInput = FirstParam<T>>(
   queryFn: T,
   params: TInput,
   ctx?: Ctx,
-  loggingOptions?: LoggerOptions,
+  loggingOptions?: RpcLoggerOptions,
 ): Promise<PromiseReturnType<T>> {
   if (typeof queryFn === "undefined") {
     throw new Error(

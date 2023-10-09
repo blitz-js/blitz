@@ -6,7 +6,7 @@ import {
 } from "blitz"
 import {invoke} from "./invoke"
 
-export type LoggerOptions = {
+export type RpcLoggerOptions = {
   /**
    * allowList Represents the list of routes for which logging should be enabled
    * If allowList is defined then only those routes will be logged
@@ -29,13 +29,13 @@ export type LoggerOptions = {
 }
 
 type RpcPluginOptions = {
-  logging?: LoggerOptions
+  logging?: RpcLoggerOptions
   onInvokeError?: (error: any) => void
 }
 
 export const RpcServerPlugin = createServerPlugin((options: RpcPluginOptions) => {
   if (options.logging) {
-    globalThis.blitzRpcLoggerOptions = options.logging
+    globalThis.blitzRpcRpcLoggerOptions = options.logging
   }
   async function invokeWithCtx<T extends (...args: any) => any, TInput = FirstParam<T>>(
     queryFn: T,

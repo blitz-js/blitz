@@ -4,7 +4,7 @@ import {deserialize, parse, serialize as superjsonSerialize} from "superjson"
 import {resolve} from "path"
 import {LoaderOptions} from "./server/loader/utils/loader-utils"
 import {RpcLogger} from "./rpc-logger"
-import {LoggerOptions} from "./server/plugin"
+import {RpcLoggerOptions} from "./server/plugin"
 
 // TODO - optimize end user server bundles by not exporting all client stuff here
 export * from "./index-browser"
@@ -147,7 +147,7 @@ async function getResolverMap(): Promise<ResolverFiles | null | undefined> {
 interface RpcConfig {
   onError?: (error: Error) => void
   formatError?: (error: Error) => Error
-  logging?: LoggerOptions
+  logging?: RpcLoggerOptions
 }
 
 export function rpcHandler(config: RpcConfig) {
