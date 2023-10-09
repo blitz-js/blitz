@@ -162,7 +162,6 @@ export function rpcHandler(config: RpcConfig) {
     const relativeRoutePath = (req.query.blitz as string[])?.join("/")
     const routePath = "/" + relativeRoutePath
     const resolverName = routePath.replace(/(\/api\/rpc)?\//, "")
-
     const rpcLogger = new RpcLogger(resolverName, config.logging)
 
     const loadableResolver = resolverMap?.[routePath]
