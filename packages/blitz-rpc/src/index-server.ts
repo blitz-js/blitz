@@ -232,8 +232,7 @@ export function rpcHandler(config: RpcConfig) {
         rpcLogger.timer.nextJsSerializationDuration()
         rpcLogger.nextJsSerialization()
 
-        rpcLogger.timer.serializerDuration()
-        rpcLogger.timer.totalDuration()
+        rpcLogger.timer.serializerDuration().totalDuration()
         rpcLogger.postResponse()
 
         return

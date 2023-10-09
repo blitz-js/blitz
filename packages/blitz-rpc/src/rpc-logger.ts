@@ -87,39 +87,47 @@ export class RpcLogger {
   public timer = {
     reset: () => {
       this.state.startTime = {}
+      return this.timer
     },
     initResolver: () => {
       this.state.startTime["resolver"] = Date.now()
+      return this.timer
     },
     resolverDuration: () => {
       if (!this.state.startTime["resolver"]) {
         throw new Error("resolverDuration called before initResolver")
       }
       this.state.duration.resolver = Date.now() - this.state.startTime["resolver"]
+      return this.timer
     },
     initSerialization: () => {
       this.state.startTime["serializer"] = Date.now()
+      return this.timer
     },
     initNextJsSerialization: () => {
       this.state.startTime["nextJsSerialization"] = Date.now()
+      return this.timer
     },
     nextJsSerializationDuration: () => {
       if (!this.state.startTime["nextJsSerialization"]) {
         throw new Error("nextJsSerializationDuration called before initNextJsSerialization")
       }
       this.state.duration.serializer = Date.now() - this.state.startTime["nextJsSerialization"]
+      return this.timer
     },
     serializerDuration: () => {
       if (!this.state.startTime["serializer"]) {
         throw new Error("serializerDuration called before initSerializer")
       }
       this.state.duration.serializer = Date.now() - this.state.startTime["serializer"]
+      return this.timer
     },
     totalDuration: () => {
       if (!this.state.startTime["total"]) {
         throw new Error("totalDuration called before initResolver")
       }
       this.state.duration.total = Date.now() - this.state.startTime["total"]
+      return this.timer
     },
   }
   public preResolver(data: any) {

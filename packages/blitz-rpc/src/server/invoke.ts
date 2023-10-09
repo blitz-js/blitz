@@ -20,8 +20,7 @@ export async function invoke<T extends (...args: any) => any, TInput = FirstPara
   const result = await queryFn(params, ctx)
   rpcLogger.postResolver(result)
 
-  rpcLogger.timer.resolverDuration()
-  rpcLogger.timer.totalDuration()
+  rpcLogger.timer.resolverDuration().totalDuration()
   rpcLogger.postResponse()
   return result
 }
