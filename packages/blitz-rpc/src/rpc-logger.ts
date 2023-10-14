@@ -57,21 +57,21 @@ export function isBlitzRPCVerbose(
 }
 
 export class RpcLogger {
-  private logger: Logger
-  private customChalk: Chalk
-  private state: RpcLoggerState
+  #logger: Logger
+  #customChalk: Chalk
+  #state: RpcLoggerState
   constructor(resolverName: string, loggingOptions?: RpcLoggerOptions) {
     const logger = baseLogger().getSubLogger({
       name: "blitz-rpc",
       prefix: [resolverName + "()"],
     })
-    this.logger = logger
-    this.customChalk = new chalk.Instance({
+    this.#logger = logger
+    this.#customChalk = new chalk.Instance({
       level: logger.settings.type === "json" ? 0 : chalk.level,
     })
     const verbosityInfo = isBlitzRPCVerbose(resolverName, "info", loggingOptions)
     const verbosityDebug = isBlitzRPCVerbose(resolverName, "debug", loggingOptions)
-    this.state = {
+    this.#state = {
       startTime: {
         total: Date.now(),
       },
@@ -86,77 +86,77 @@ export class RpcLogger {
   }
   public timer = {
     reset: () => {
-      this.state.startTime = {}
+      this.#state.startTime = {}
       return this.timer
     },
     initResolver: () => {
-      this.state.startTime["resolver"] = Date.now()
+      this.#state.startTime["resolver"] = Date.now()
       return this.timer
     },
     resolverDuration: () => {
-      if (!this.state.startTime["resolver"]) {
+      if (!this.#state.startTime["resolver"]) {
         throw new Error("resolverDuration called before initResolver")
       }
-      this.state.duration.resolver = Date.now() - this.state.startTime["resolver"]
+      this.#state.duration.resolver = Date.now() - this.#state.startTime["resolver"]
       return this.timer
     },
     initSerialization: () => {
-      this.state.startTime["serializer"] = Date.now()
+      this.#state.startTime["serializer"] = Date.now()
       return this.timer
     },
     initNextJsSerialization: () => {
-      this.state.startTime["nextJsSerialization"] = Date.now()
+      this.#state.startTime["nextJsSerialization"] = Date.now()
       return this.timer
     },
     nextJsSerializationDuration: () => {
-      if (!this.state.startTime["nextJsSerialization"]) {
+      if (!this.#state.startTime["nextJsSerialization"]) {
         throw new Error("nextJsSerializationDuration called before initNextJsSerialization")
       }
-      this.state.duration.serializer = Date.now() - this.state.startTime["nextJsSerialization"]
+      this.#state.duration.serializer = Date.now() - this.#state.startTime["nextJsSerialization"]
       return this.timer
     },
     serializerDuration: () => {
-      if (!this.state.startTime["serializer"]) {
+      if (!this.#state.startTime["serializer"]) {
         throw new Error("serializerDuration called before initSerializer")
       }
-      this.state.duration.serializer = Date.now() - this.state.startTime["serializer"]
+      this.#state.duration.serializer = Date.now() - this.#state.startTime["serializer"]
       return this.timer
     },
     totalDuration: () => {
-      if (!this.state.startTime["total"]) {
+      if (!this.#state.startTime["total"]) {
         throw new Error("totalDuration called before initResolver")
       }
-      this.state.duration.total = Date.now() - this.state.startTime["total"]
+      this.#state.duration.total = Date.now() - this.#state.startTime["total"]
       return this.timer
     },
   }
   public preResolver(data: any) {
-    if (this.state.verbosityInfo) {
-      this.logger.info(
-        this.customChalk.dim("Starting with input:"),
+    if (this.#state.verbosityInfo) {
+      this.#logger.info(
+        this.#customChalk.dim("Starting with input:"),
         data ? data : JSON.stringify(data),
       )
     }
   }
   public postResolver(result: any) {
-    if (this.state.verbosityDebug) {
-      this.logger.debug(this.customChalk.dim("Result:"), result ? result : JSON.stringify(result))
+    if (this.#state.verbosityDebug) {
+      this.#logger.debug(this.#customChalk.dim("Result:"), result ? result : JSON.stringify(result))
     }
   }
   public nextJsSerialization() {
-    if (this.state.verbosityDebug) {
-      this.logger.debug(
-        this.customChalk.dim(`Next.js serialization:${prettyMs(this.state.duration.serializer)}`),
+    if (this.#state.verbosityDebug) {
+      this.#logger.debug(
+        this.#customChalk.dim(`Next.js serialization:${prettyMs(this.#state.duration.serializer)}`),
       )
     }
   }
   public postResponse() {
-    if (this.state.verbosityInfo) {
-      this.logger.info(
-        this.customChalk.dim(
-          `Finished: resolver:${prettyMs(this.state.duration.resolver)} serializer:${prettyMs(
-            this.state.duration.serializer,
-          )} total:${prettyMs(this.state.duration.total)}`,
+    if (this.#state.verbosityInfo) {
+      this.#logger.info(
+        this.#customChalk.dim(
+          `Finished: resolver:${prettyMs(this.#state.duration.resolver)} serializer:${prettyMs(
+            this.#state.duration.serializer,
+          )} total:${prettyMs(this.#state.duration.total)}`,
         ),
       )
     }
@@ -164,13 +164,13 @@ export class RpcLogger {
   }
   public error(e: any) {
     if (typeof e === "string") {
-      this.logger.error(e)
+      this.#logger.error(e)
     }
-    this.logger.error(new Error(e))
+    this.#logger.error(new Error(e))
     newLine()
   }
   public warn(e: string) {
-    this.logger.warn(e)
+    this.#logger.warn(e)
     newLine()
   }
 }
