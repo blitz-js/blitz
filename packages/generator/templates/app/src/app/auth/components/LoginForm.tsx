@@ -1,9 +1,9 @@
 import { AuthenticationError, PromiseReturnType } from "blitz"
 import Link from "next/link"
-import { LabeledTextField } from "app/core/components/LabeledTextField"
-import { Form, FORM_ERROR } from "app/core/components/Form"
-import login from "app/auth/mutations/login"
-import { Login } from "app/auth/validations"
+import { LabeledTextField } from "src/core/components/LabeledTextField"
+import { Form, FORM_ERROR } from "src/core/components/Form"
+import login from "../mutations/login"
+import { Login } from "../validations"
 import { useMutation } from "@blitzjs/rpc"
 import { Routes } from "@blitzjs/next"
 

@@ -76,6 +76,11 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
       )
     }
 
+    if (this.options.template.path === "app") {
+      this.fs.move(this.destinationPath(`src/app/auth`), this.destinationPath(`src/app/(auth)`))
+      this.fs.delete(this.destinationPath(`src/app`))
+    }
+
     if (!this.options.template.skipForms) {
       this.updateForms()
     }
@@ -298,25 +303,14 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
         pkg.dependencies["formik"] = "2.x"
         break
     }
-    if (this.options.template.path === "pages") {
-      this.fs.move(
-        this.destinationPath(`_forms/${type}/Form.${ext}`),
-        this.destinationPath(`src/core/components/Form.${ext}`),
-      )
-      this.fs.move(
-        this.destinationPath(`_forms/${type}/LabeledTextField.${ext}`),
-        this.destinationPath(`src/core/components/LabeledTextField.${ext}`),
-      )
-    } else {
-      this.fs.move(
-        this.destinationPath(`_forms/${type}/Form.${ext}`),
-        this.destinationPath(`app/core/components/Form.${ext}`),
-      )
-      this.fs.move(
-        this.destinationPath(`_forms/${type}/LabeledTextField.${ext}`),
-        this.destinationPath(`app/core/components/LabeledTextField.${ext}`),
-      )
-    }
+    this.fs.move(
+      this.destinationPath(`_forms/${type}/Form.${ext}`),
+      this.destinationPath(`src/core/components/Form.${ext}`),
+    )
+    this.fs.move(
+      this.destinationPath(`_forms/${type}/LabeledTextField.${ext}`),
+      this.destinationPath(`src/core/components/LabeledTextField.${ext}`),
+    )
 
     this.fs.writeJSON(this.destinationPath("package.json"), pkg)
     this.fs.delete(this.destinationPath("_forms"))
