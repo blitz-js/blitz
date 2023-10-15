@@ -3,11 +3,12 @@ import {AuthServerPlugin, PrismaStorage,simpleRolesIsAuthorized} from "@blitzjs/
 import db from "db"
 import {BlitzLogger} from "blitz"
 import {RpcServerPlugin} from "@blitzjs/rpc"
+import { authConfig } from "./blitz-client"
 
 const {api, getBlitzContext, useAuthenticatedBlitzContext, invoke} = setupBlitzServer({
   plugins: [
     AuthServerPlugin({
-      cookiePrefix: "web-cookie-prefix",
+      ...authConfig,
       storage: PrismaStorage(db),
       isAuthorized: simpleRolesIsAuthorized,
     }),
