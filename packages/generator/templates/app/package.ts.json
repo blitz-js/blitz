@@ -12,11 +12,11 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@blitzjs/auth": "latest",
-    "@blitzjs/next": "latest",
-    "@blitzjs/rpc": "latest",
+    "@blitzjs/auth": "2.0.0-beta.34",
+    "@blitzjs/next": "2.0.0-beta.34",
+    "@blitzjs/rpc": "2.0.0-beta.34",
     "@prisma/client": "^4.14.0",
-    "blitz": "latest",
+    "blitz": "2.0.0-beta.34",
     "flatted": "3.2.7",
     "next": "13.4.1",
     "prisma": "^4.14.0",
@@ -24,7 +24,8 @@
     "react-dom": "18.2.0",
     "react-hook-form": "7.39.1",
     "superjson": "1.11.0",
-    "zod": "3.20.2"
+    "zod": "3.20.2",
+    "formik": "2.4.5"
   },
   "devDependencies": {
     "@types/node": "18.11.7",

@@ -1,11 +1,10 @@
-import { AuthenticationError, PromiseReturnType } from "blitz"
+import {AuthenticationError, PromiseReturnType} from "blitz"
 import Link from "next/link"
-import { LabeledTextField } from "src/core/components/LabeledTextField"
-import { Form, FORM_ERROR } from "src/core/components/Form"
+import {LabeledTextField} from "src/core/components/LabeledTextField"
+import {Form, FORM_ERROR} from "src/core/components/Form"
 import login from "../mutations/login"
-import { Login } from "../validations"
-import { useMutation } from "@blitzjs/rpc"
-import { Routes } from "@blitzjs/next"
+import {Login} from "../validations"
+import {useMutation} from "@blitzjs/rpc"
 
 type LoginFormProps = {
   onSuccess?: (user: PromiseReturnType<typeof login>) => void
@@ -20,14 +19,14 @@ export const LoginForm = (props: LoginFormProps) => {
       <Form
         submitText="Login"
         schema={Login}
-        initialValues={{ email: "", password: "" }}
+        initialValues={{email: "", password: ""}}
         onSubmit={async (values) => {
           try {
             const user = await loginMutation(values)
             props.onSuccess?.(user)
           } catch (error: any) {
             if (error instanceof AuthenticationError) {
-              return { [FORM_ERROR]: "Sorry, those credentials are invalid" }
+              return {[FORM_ERROR]: "Sorry, those credentials are invalid"}
             } else {
               return {
                 [FORM_ERROR]:
@@ -40,17 +39,12 @@ export const LoginForm = (props: LoginFormProps) => {
         <LabeledTextField name="email" label="Email" placeholder="Email" />
         <LabeledTextField name="password" label="Password" placeholder="Password" type="password" />
         <div>
-          <Link href={Routes.ForgotPasswordPage()}>
-            Forgot your password?
-          </Link>
+          <Link href={"/forgot-password"}>Forgot your password?</Link>
         </div>
       </Form>
 
-      <div style={{ marginTop: "1rem" }}>
-        Or{" "}
-        <Link href={Routes.SignupPage()}>
-          Sign Up
-        </Link>
+      <div style={{marginTop: "1rem"}}>
+        Or <Link href="/signup">Sign Up</Link>
       </div>
     </div>
   )

@@ -221,7 +221,7 @@ export async function useAuthenticatedBlitzContext({
   redirectAuthenticatedTo?: string | RouteUrlObject | ((ctx: Ctx) => string | RouteUrlObject)
   role?: string | string[]
 }): Promise<AuthenticatedCtx> {
-  const log = baseLogger().getSubLogger({name: "useAuthenticatedBlitzContext"})
+  const log = baseLogger().getSubLogger({name: "blitz-auth"})
   const customChalk = new chalk.Instance({
     level: log.settings.type === "json" ? 0 : chalk.level,
   })
