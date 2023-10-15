@@ -5,7 +5,7 @@ export default RecipeBuilder()
   .setName("Render.com")
   .setDescription("")
   .setOwner("b@bayer.ws")
-  .setRepoLink("https://github.com/blitz-js/legacy-framework")
+  .setRepoLink("https://github.com/blitz-js/blitz/")
   .addNewFilesStep({
     stepId: "addRenderConfig",
     stepName: "Add render.yaml",

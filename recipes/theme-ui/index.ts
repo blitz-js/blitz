@@ -98,7 +98,7 @@ export default RecipeBuilder()
   .setName("Theme UI")
   .setDescription(`This will install all necessary dependencies and configure Theme UI for use.`)
   .setOwner("tundera <stackshuffle@gmail.com>")
-  .setRepoLink("https://github.com/blitz-js/legacy-framework")
+  .setRepoLink("https://github.com/blitz-js/blitz/")
   .addAddDependenciesStep({
     stepId: "addDeps",
     stepName: "npm dependencies",
