@@ -6,7 +6,7 @@ export default RecipeBuilder()
   .setName("Bulma CSS")
   .setDescription(`This will install all necessary dependencies and configure Bulma for use.`)
   .setOwner("vivek7405@hey.com")
-  .setRepoLink("https://github.com/blitz-js/legacy-framework")
+  .setRepoLink("https://github.com/blitz-js/blitz/")
   .addAddDependenciesStep({
     stepId: "addDeps",
     stepName: "npm dependencies",

@@ -31,7 +31,7 @@ export default RecipeBuilder()
   .setName("Emotion")
   .setDescription(`This will install all necessary dependencies and configure Emotion for use.`)
   .setOwner("justin.r.hall+blitz@gmail.com")
-  .setRepoLink("https://github.com/blitz-js/legacy-framework")
+  .setRepoLink("https://github.com/blitz-js/blitz/")
   .addAddDependenciesStep({
     stepId: "addDeps",
     stepName: "npm dependencies",
