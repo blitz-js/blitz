@@ -4,16 +4,11 @@ const config: BuildConfig = {
   entries: [
     "./src/index-browser",
     "./src/index-server",
+    "./src/server/secure-password",
     {
       builder: "mkdist",
       input: "./src/server/adapters/next-auth",
       outDir: "./dist/next-auth",
-    },
-    {
-      builder: "mkdist",
-
-      input: "./src/server/adapters/secure-password/",
-      outDir: "./dist/secure-password",
     },
   ],
   externals: ["index-browser.cjs", "index-browser.mjs", "react"],
