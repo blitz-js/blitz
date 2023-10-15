@@ -2,14 +2,25 @@
   "name": "blitz-app-starter",
   "version": "0.1.1-beta.3",
   "private": true,
-  "prisma": {
-    "schema": "db/schema.prisma"
-  },
   "scripts": {
     "dev": "blitz dev",
     "build": "blitz build",
     "start": "blitz start",
-    "lint": "next lint"
+    "studio": "blitz prisma studio",
+    "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
+    "test": "vitest run --passWithNoTests",
+    "test:watch": "vitest",
+    "prepare": "husky install"
+  },
+  "prisma": {
+    "schema": "db/schema.prisma"
+  },
+  "prettier": {
+    "semi": false,
+    "printWidth": 100
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx}": ["eslint --fix"]
   },
   "dependencies": {
     "@blitzjs/auth": "2.0.0-beta.34",
