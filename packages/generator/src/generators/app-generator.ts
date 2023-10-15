@@ -91,6 +91,8 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
         "src/app/auth/mutations/changePassword.ts",
         "src/app/auth/login/page.tsx",
         "src/app/auth/signup/page.tsx",
+        "src/app/auth/forgot-password/page.tsx",
+        "src/app/auth/reset-password/page.tsx",
         "src/app/auth/layout.tsx",
         "src/app/auth/validations.ts",
       ]
