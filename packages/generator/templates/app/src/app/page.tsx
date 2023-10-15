@@ -43,10 +43,10 @@ export default async function Home() {
                   </>
                 ) : (
                   <>
-                    <Link href="/auth/signup" className={styles.button}>
+                    <Link href="/signup" className={styles.button}>
                       <strong>Sign Up</strong>
                     </Link>
-                    <Link href="/auth/login" className={styles.loginButton}>
+                    <Link href="/login" className={styles.loginButton}>
                       <strong>Login</strong>
                     </Link>
                   </>

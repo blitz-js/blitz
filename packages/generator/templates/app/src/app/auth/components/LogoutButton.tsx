@@ -13,7 +13,7 @@ export function LogoutButton() {
         className={styles.button}
         onClick={async () => {
           await logoutMutation()
-          router.refresh()
+          router.push("/")
         }}
       >
         Logout
