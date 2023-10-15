@@ -29,14 +29,15 @@
     "@prisma/client": "^4.14.0",
     "blitz": "2.0.0-beta.34",
     "flatted": "3.2.7",
-    "next": "13.4.1",
+    "next": "13.5.2",
     "prisma": "^4.14.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "7.39.1",
     "superjson": "1.11.0",
     "zod": "3.20.2",
-    "formik": "2.4.5"
+    "formik": "2.4.5",
+    "husky": "8.0.2"
   },
   "devDependencies": {
     "@types/node": "18.11.7",
