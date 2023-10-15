@@ -8,7 +8,7 @@ export default RecipeBuilder()
     `Improve the security of your blitz app at the push of a button. You will probably have to manually adjust your content security policies to suit your needs.`,
   )
   .setOwner("jeremy@jeremyliberman.com")
-  .setRepoLink("https://github.com/blitz-js/legacy-framework")
+  .setRepoLink("https://github.com/blitz-js/blitz/")
   .addNewFilesStep({
     stepId: "addSecureHeadersUtils",
     stepName: "Add SecureHeaders util files",

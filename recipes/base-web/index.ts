@@ -6,7 +6,7 @@ export default RecipeBuilder()
   .setName("Base Web")
   .setDescription(`This will install all necessary dependencies and configure Base Web for use.`)
   .setOwner("Konrad Kalemba <konrad@kale.mba>")
-  .setRepoLink("https://github.com/blitz-js/legacy-framework")
+  .setRepoLink("https://github.com/blitz-js/blitz/")
   .addAddDependenciesStep({
     stepId: "addDeps",
     stepName: "Add dependencies",

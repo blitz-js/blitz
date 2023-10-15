@@ -5,7 +5,7 @@ export default RecipeBuilder()
   .setName("Github Action Workflow For Yarn & Postgres")
   .setDescription("This Github Action config will build and test your blitz app on each push")
   .setOwner("b@bayer.ws")
-  .setRepoLink("https://github.com/blitz-js/legacy-framework")
+  .setRepoLink("https://github.com/blitz-js/blitz/")
   .addNewFilesStep({
     stepId: "addWorkflow",
     stepName: "Add .github/workflows/main.yml",

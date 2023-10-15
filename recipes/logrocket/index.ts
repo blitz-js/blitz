@@ -6,7 +6,7 @@ export default RecipeBuilder()
   .setName("LogRocket")
   .setDescription(`This will install all necessary dependencies and configure LogRocket for use.`)
   .setOwner("Kevin Langley Jr. <me@kevinlangleyjr.com>")
-  .setRepoLink("https://github.com/blitz-js/legacy-framework")
+  .setRepoLink("https://github.com/blitz-js/blitz/")
   .addAddDependenciesStep({
     stepId: "addDeps",
     stepName: "Add dependencies",

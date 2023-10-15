@@ -108,7 +108,7 @@ export default RecipeBuilder()
   .setName("Chakra UI")
   .setDescription(`This will install all necessary dependencies and configure Chakra UI for use.`)
   .setOwner("zekan.fran369@gmail.com")
-  .setRepoLink("https://github.com/blitz-js/legacy-framework")
+  .setRepoLink("https://github.com/blitz-js/blitz/")
   .addAddDependenciesStep({
     stepId: "addDeps",
     stepName: "npm dependencies",
