@@ -13,6 +13,8 @@ import {
 } from "blitz"
 import {isLocalhost, SessionContext} from "../../../index-server"
 
+export {withNextAuthAdapter} from "./webpack"
+
 // next-auth internals
 import {toInternalRequest, toResponse} from "./internals/utils/web"
 import {getBody, getURL, setHeaders} from "./internals/utils/node"
