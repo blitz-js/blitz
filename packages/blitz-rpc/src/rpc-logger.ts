@@ -60,9 +60,9 @@ export class RpcLogger {
   #logger: Logger
   #customChalk: Chalk
   #state: RpcLoggerState
-  constructor(resolverName: string, loggingOptions?: RpcLoggerOptions) {
+  constructor(resolverName: string, loggingOptions?: RpcLoggerOptions, loggerName?: string) {
     const logger = baseLogger().getSubLogger({
-      name: "blitz-rpc",
+      name: loggerName ? loggerName : "blitz-rpc",
       prefix: [resolverName + "()"],
     })
     this.#logger = logger
