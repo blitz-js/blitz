@@ -25,14 +25,14 @@
     "@blitzjs/auth": "latest",
     "@blitzjs/next": "latest",
     "@blitzjs/rpc": "latest",
-    "@prisma/client": "4.6.1",
+    "@prisma/client": "5.4.2",
     "blitz": "latest",
-    "next": "13.4.5",
-    "prisma": "4.6.1",
+    "next": "13.5.4",
+    "prisma": "5.4.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "secure-password": "4.0.0",
-    "zod": "3.20.2"
+    "zod": "3.22.4"
   },
   "devDependencies": {
     "@next/bundle-analyzer": "12.0.8",
