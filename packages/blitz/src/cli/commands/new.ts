@@ -129,9 +129,9 @@ const determineTemplate = async () => {
     (args["--template"] && !Object.keys(templates).includes(args["--template"].toLowerCase()))
   ) {
     const choices: Array<{value: keyof typeof templates; title: string}> = [
-      {value: "app", title: "App Router: Full Includes DB and auth (Recommended)"},
-      {value: "pages", title: "Pages Router: Full - includes DB and auth"},
-      {value: "minimal", title: "Minimal — no DB, no auth"},
+      {value: "app", title: "App Router – Full Setup: includes DB and auth (Recommended)"},
+      {value: "pages", title: "Pages Router – Full Setup: includes DB and auth"},
+      {value: "minimal", title: "Pages Router – Minimal setup: no DB, no auth"},
     ]
 
     const res = await prompts({
