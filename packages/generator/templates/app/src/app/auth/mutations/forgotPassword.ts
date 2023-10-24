@@ -1,45 +1,42 @@
-/* TODO - You need to add a mailer integration in `integrations/` and import here.
- *
- * The integration file can be very simple. Instantiate the email client
- * and then export it. That way you can import here and anywhere else
- * and use it straight away.
- */
+import { generateToken, hash256 } from "@blitzjs/auth"
+import { resolver } from "@blitzjs/rpc"
+import db from "db"
+import { forgotPasswordMailer } from "mailers/forgotPasswordMailer"
+import { ForgotPassword } from "../validations"
 
-type ResetPasswordMailer = {
-  to: string
-  token: string
-}
+const RESET_PASSWORD_TOKEN_EXPIRATION_IN_HOURS = 4
 
-export function forgotPasswordMailer({ to, token }: ResetPasswordMailer) {
-  // In production, set APP_ORIGIN to your production server origin
-  const origin = process.env.APP_ORIGIN || process.env.BLITZ_DEV_SERVER_ORIGIN
-  const resetUrl = `${origin}/reset-password?token=${token}`
+export default resolver.pipe(resolver.zod(ForgotPassword), async ({ email }) => {
+  // 1. Get the user
+  const user = await db.user.findFirst({ where: { email: email.toLowerCase() } })
 
-  const msg = {
-    from: "TODO@example.com",
-    to,
-    subject: "Your Password Reset Instructions",
-    html: `
-      <h1>Reset Your Password</h1>
-      <h3>NOTE: You must set up a production email integration in mailers/forgotPasswordMailer.ts</h3>
+  // 2. Generate the token and expiration date.
+  const token = generateToken()
+  const hashedToken = hash256(token)
+  const expiresAt = new Date()
+  expiresAt.setHours(expiresAt.getHours() + RESET_PASSWORD_TOKEN_EXPIRATION_IN_HOURS)
 
-      <a href="${resetUrl}">
-        Click here to set a new password
-      </a>
-    `,
+  // 3. If user with this email was found
+  if (user) {
+    // 4. Delete any existing password reset tokens
+    await db.token.deleteMany({ where: { type: "RESET_PASSWORD", userId: user.id } })
+    // 5. Save this new token in the database.
+    await db.token.create({
+      data: {
+        user: { connect: { id: user.id } },
+        type: "RESET_PASSWORD",
+        expiresAt,
+        hashedToken,
+        sentTo: user.email,
+      },
+    })
+    // 6. Send the email
+    await forgotPasswordMailer({ to: user.email, token }).send()
+  } else {
+    // 7. If no user found wait the same time so attackers can't tell the difference
+    await new Promise((resolve) => setTimeout(resolve, 750))
   }
 
-  return {
-    async send() {
-      if (process.env.NODE_ENV === "production") {
-        // TODO - send the production email, like this:
-        // await postmark.sendEmail(msg)
-        throw new Error("No production email implementation in mailers/forgotPasswordMailer")
-      } else {
-        // Preview email in the browser
-        const previewEmail = (await import("preview-email")).default
-        await previewEmail(msg)
-      }
-    },
-  }
-}
+  // 8. Return the same result whether a password reset email was sent or not
+  return
+})
