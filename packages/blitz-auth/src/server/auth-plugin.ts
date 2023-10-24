@@ -1,4 +1,4 @@
-import {BlitzServerPlugin, RequestMiddleware, Ctx, createServerPlugin} from "blitz"
+import {RequestMiddleware, Ctx, createServerPlugin} from "blitz"
 import {assert} from "blitz"
 import {IncomingMessage, ServerResponse} from "http"
 import {PublicData, SessionModel, SessionConfigMethods} from "../shared/types"
@@ -125,6 +125,7 @@ export const AuthServerPlugin = createServerPlugin((options: AuthPluginOptions) 
     }
     return blitzSessionMiddleware
   }
+  globalThis.__BLITZ_GET_RSC_CONTEXT = getBlitzContext
   return {
     requestMiddlewares: [authPluginSessionMiddleware()],
     exports: () => ({

@@ -9,7 +9,6 @@ export default async function Home() {
     redirectTo: "/auth/login",
   })
   const user = await invoke(getCurrentUser, null)
-  console.log("user", user)
   return (
     <div
       style={{
