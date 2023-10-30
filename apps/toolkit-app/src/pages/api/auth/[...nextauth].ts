@@ -1,6 +1,6 @@
 import { api } from "src/blitz-server"
 import GithubProvider from "next-auth/providers/github"
-import { NextAuthAdapter, BlitzNextAuthOptions } from "@blitzjs/auth/next-auth"
+import { NextAuthAdapter } from "@blitzjs/auth/next-auth"
 import db, { User } from "db"
 import { Role } from "types"
 
