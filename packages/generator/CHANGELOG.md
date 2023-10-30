@@ -1,5 +1,11 @@
 # @blitzjs/generator
 
+## 2.0.0-beta.35
+
+### Patch Changes
+
+- c89cb943b: Upgrade next, prisma and zod to latest versions in a newly created app
+
 ## 2.0.0-beta.34
 
 ## 2.0.0-beta.33
