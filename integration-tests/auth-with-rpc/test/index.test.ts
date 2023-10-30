@@ -113,7 +113,7 @@ const runTests = () => {
         if (browser) await browser.close()
       })
 
-      it("Page.authenticate = {role} should work ", async () => {
+      it("Page.authenticate = {role} should throw authentication error ", async () => {
         let browser = await webdriver(appPort, "/login")
         await waitFor(200)
         await browser.elementByCss("#login").click()
@@ -125,12 +125,8 @@ const runTests = () => {
         if (browser) await browser.close()
       })
 
-      it("Page.authenticate = {role} should work ", async () => {
-        let browser = await webdriver(appPort, "/login")
-        await waitFor(200)
-        await browser.elementByCss("#login").click()
-        await waitFor(200)
-        await browser.eval(`window.location = "/page-dot-authenticate-role-working"`)
+      it("Page.authenticate = {role: 'custom'} should work ", async () => {
+        let browser = await webdriver(appPort, "/page-dot-authenticate-role-working")
         await browser.waitForElementByCss("#content")
         let text = await browser.elementByCss("#content").text()
         expect(text).toMatch(/authenticated-basic-result/)
@@ -138,13 +134,7 @@ const runTests = () => {
       })
 
       it("Page.authenticate = {redirect} should work ", async () => {
-        // Login
-        let browser = await webdriver(appPort, "/login")
-        await waitFor(200)
-        await browser.elementByCss("#login").click()
-        await waitFor(200)
-
-        await browser.eval(`window.location = "/page-dot-authenticate-redirect"`)
+        let browser = await webdriver(appPort, "/page-dot-authenticate-redirect")
         await browser.waitForElementByCss("#content")
         let text = await browser.elementByCss("#content").text()
         expect(text).toMatch(/authenticated-basic-result/)
@@ -155,14 +145,26 @@ const runTests = () => {
         if (browser) await browser.close()
       })
 
-      it("Layout.authenticate = {redirect} should work ", async () => {
-        // Login
+      it("Page.authenticate = {role: 'custom', redirect: 'url'} should work ", async () => {
         let browser = await webdriver(appPort, "/login")
         await waitFor(200)
         await browser.elementByCss("#login").click()
         await waitFor(200)
+        await browser.eval(`window.location = "/page-dot-authenticate-role-redirect"`)
+        await browser.waitForElementByCss("#content")
+        expect(await browser.url()).toMatch(/\/noauth-query/)
+        if (browser) await browser.close()
+      })
 
-        await browser.eval(`window.location = "/layout-authenticate-redirect"`)
+      it("Page.authenticate = {role: 'custom', redirect: 'url'} should stay ", async () => {
+        let browser = await webdriver(appPort, "/page-dot-authenticate-role-redirect-stay")
+        await browser.waitForElementByCss("#content")
+        expect(await browser.url()).toMatch(/\/page-dot-authenticate-role-redirect-stay/)
+        if (browser) await browser.close()
+      })
+
+      it("Layout.authenticate = {redirect} should work ", async () => {
+        let browser = await webdriver(appPort, "/layout-authenticate-redirect")
         await browser.waitForElementByCss("#content")
         let text = await browser.elementByCss("#content").text()
         expect(text).toMatch(/authenticated-basic-result/)

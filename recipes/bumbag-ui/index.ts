@@ -73,7 +73,7 @@ export default RecipeBuilder()
     `This will install all necessary dependencies and configure BumbagProvider in your _app and _document`,
   )
   .setOwner("me@agusti.me")
-  .setRepoLink("https://github.com/blitz-js/legacy-framework")
+  .setRepoLink("https://github.com/blitz-js/blitz/")
   .addAddDependenciesStep({
     stepId: "addDeps",
     stepName: "npm dependencies",

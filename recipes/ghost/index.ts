@@ -6,7 +6,7 @@ export default RecipeBuilder()
   .setName("Ghost")
   .setDescription("Access your Ghost CMS directly in blitz via the Ghost SDK.")
   .setOwner("Mark Hughes <m@rkhugh.es>")
-  .setRepoLink("https://github.com/blitz-js/legacy-framework")
+  .setRepoLink("https://github.com/blitz-js/blitz/")
   .addAddDependenciesStep({
     stepId: "addDeps",
     stepName: "Add npm dependencies",

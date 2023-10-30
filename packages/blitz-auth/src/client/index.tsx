@@ -310,12 +310,12 @@ function withBlitzAuthPlugin<TProps = any>(Page: ComponentType<TProps> | BlitzPa
     }, [])
 
     let {authenticate, redirectAuthenticatedTo} = getAuthValues(Page, props)
-
     useAuthorizeIf(
-      !!authenticate,
+      !!authenticate &&
+        ((typeof authenticate === "object" && authenticate.redirectTo === undefined) ||
+          authenticate === true),
       !authenticate ? undefined : typeof authenticate === "object" ? authenticate.role : undefined,
     )
-
     if (typeof window !== "undefined") {
       const publicData = getPublicDataStore().getData()
 

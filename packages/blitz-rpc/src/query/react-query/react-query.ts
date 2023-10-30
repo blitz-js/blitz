@@ -44,7 +44,7 @@ class NextError extends Error {
 // -------------------------
 // useQuery
 // -------------------------
-type RestQueryResult<TResult, TError> = Omit<UseQueryResult<TResult, TError>, "data"> &
+export type RestQueryResult<TResult, TError> = Omit<UseQueryResult<TResult, TError>, "data"> &
   QueryCacheFunctions<TResult>
 
 export function useQuery<
@@ -131,7 +131,7 @@ export function useQuery<
 // -------------------------
 // usePaginatedQuery
 // -------------------------
-type RestPaginatedResult<TResult, TError> = Omit<UseQueryResult<TResult, TError>, "data"> &
+export type RestPaginatedResult<TResult, TError> = Omit<UseQueryResult<TResult, TError>, "data"> &
   QueryCacheFunctions<TResult>
 
 export function usePaginatedQuery<
@@ -219,7 +219,7 @@ export function usePaginatedQuery<
 // -------------------------
 // useInfiniteQuery
 // -------------------------
-interface RestInfiniteResult<TResult, TError>
+export interface RestInfiniteResult<TResult, TError>
   extends Omit<UseInfiniteQueryResult<TResult, TError>, "data">,
     QueryCacheFunctions<TResult> {
   pageParams: any
