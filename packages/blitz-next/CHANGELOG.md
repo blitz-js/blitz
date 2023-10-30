@@ -1,5 +1,17 @@
 # @blitzjs/next
 
+## 2.0.0-beta.35
+
+### Patch Changes
+
+- aec1bb076: blitz-next: Fix `next/head` used in app directory warning
+- Updated dependencies [cee2dec17]
+- Updated dependencies [aec1bb076]
+- Updated dependencies [b97366c42]
+- Updated dependencies [3bcbad1a9]
+  - blitz@2.0.0-beta.35
+  - @blitzjs/rpc@2.0.0-beta.35
+
 ## 2.0.0-beta.34
 
 ### Major Changes

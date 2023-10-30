@@ -1,5 +1,29 @@
 # blitz
 
+## 2.0.0-beta.35
+
+### Patch Changes
+
+- cee2dec17: Fix bug that did not allow `Page.authenicate = {role: "" }` to correctly work
+- aec1bb076: blitz-next: Fix `next/head` used in app directory warning
+- b97366c42: Remove unintended dependency on next-auth by removing it from the core build of @blitzjs/auth
+
+  ⚠️ Breaking Change for current users of `withNextAuthAdapter`
+
+  Update your import in `next.config.js` in the following way
+
+  ```diff
+  -const { withNextAuthAdapter } = require("@blitzjs/auth")
+  +const { withNextAuthAdapter } = require("@blitzjs/auth/next-auth")
+  ```
+
+- 3bcbad1a9: - Introduce Blitz RPC's logging system to the `invoke` function which is the recommended way to call resolvers in nextjs `app` directory's react server components.
+
+  - This refactor also removes the re-introduced dependency between `blitz-auth` and `blitz-rpc`, allowing independent usage of `blitz-rpc`
+
+- Updated dependencies [c89cb943b]
+  - @blitzjs/generator@2.0.0-beta.35
+
 ## 2.0.0-beta.34
 
 ### Patch Changes
