@@ -81,6 +81,8 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
         "src/app/auth/components/LoginForm.tsx",
         "src/app/auth/components/LogoutButton.tsx",
         "src/app/auth/components/SignupForm.tsx",
+        "src/app/auth/components/ForgotPasswordForm.tsx",
+        "src/app/auth/components/ResetPasswordForm.tsx",
         "src/app/auth/mutations/login.ts",
         "src/app/auth/mutations/logout.ts",
         "src/app/auth/mutations/signup.ts",
