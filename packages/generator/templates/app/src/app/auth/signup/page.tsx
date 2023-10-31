@@ -1,18 +1,5 @@
-"use client"
+import {SignupForm} from "../components/SignupForm"
 
-import { useRouter } from "next/navigation"
-import SignupForm from "../components/SignupForm"
-
-const SignUp = () => {
-  const router = useRouter()
-  return (
-    <SignupForm
-      onSuccess={() => {
-        router.refresh()
-        router.push("/")
-      }}
-    />
-  )
+export default function SignUpPage() {
+  return <SignupForm />
 }
-
-export default SignUp

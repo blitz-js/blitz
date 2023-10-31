@@ -1,3 +1,4 @@
+"use client"
 import {AuthenticationError, PromiseReturnType} from "blitz"
 import Link from "next/link"
 import {LabeledTextField} from "src/app/components/LabeledTextField"
@@ -5,6 +6,9 @@ import {Form, FORM_ERROR} from "src/app/components/Form"
 import login from "../mutations/login"
 import {Login} from "../validations"
 import {useMutation} from "@blitzjs/rpc"
+import {useSearchParams} from "next/navigation"
+import {useRouter} from "next/navigation"
+import type {Route} from "next"
 
 type LoginFormProps = {
   onSuccess?: (user: PromiseReturnType<typeof login>) => void
@@ -12,6 +16,8 @@ type LoginFormProps = {
 
 export const LoginForm = (props: LoginFormProps) => {
   const [loginMutation] = useMutation(login)
+  const router = useRouter()
+  const next = useSearchParams()?.get("next")
   return (
     <>
       <h1>Login</h1>
@@ -22,8 +28,13 @@ export const LoginForm = (props: LoginFormProps) => {
         initialValues={{email: "", password: ""}}
         onSubmit={async (values) => {
           try {
-            const user = await loginMutation(values)
-            props.onSuccess?.(user)
+            await loginMutation(values)
+            router.refresh()
+            if (next) {
+              router.push(next as Route)
+            } else {
+              router.push("/")
+            }
           } catch (error: any) {
             if (error instanceof AuthenticationError) {
               return {[FORM_ERROR]: "Sorry, those credentials are invalid"}
@@ -49,5 +60,3 @@ export const LoginForm = (props: LoginFormProps) => {
     </>
   )
 }
-
-export default LoginForm
