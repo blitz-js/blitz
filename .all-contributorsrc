@@ -3995,6 +3995,15 @@
         "doc",
         "code"
       ]
+    },
+    {
+      "login": "potikhanovsergey",
+      "name": "Sergey",
+      "avatar_url": "https://avatars.githubusercontent.com/u/71494201?v=4",
+      "profile": "https://github.com/potikhanovsergey",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,

@@ -1,6 +1,6 @@
 {
   "name": "next-blitz-auth",
-  "version": "0.1.1-beta.10",
+  "version": "0.1.1-beta.11",
   "private": true,
   "scripts": {
     "blitz:dev": "next dev",
@@ -9,15 +9,15 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@blitzjs/auth": "2.0.0-beta.34",
-    "@blitzjs/config": "2.0.0-beta.34",
-    "@blitzjs/next": "2.0.0-beta.34",
-    "@blitzjs/rpc": "2.0.0-beta.34",
+    "@blitzjs/auth": "2.0.0-beta.35",
+    "@blitzjs/config": "2.0.0-beta.35",
+    "@blitzjs/next": "2.0.0-beta.35",
+    "@blitzjs/rpc": "2.0.0-beta.35",
     "@hookform/error-message": "2.0.0",
     "@hookform/resolvers": "2.9.10",
     "@prisma/client": "^4.5.0",
     "@tanstack/react-query": "4.0.10",
-    "blitz": "2.0.0-beta.34",
+    "blitz": "2.0.0-beta.35",
     "flatted": "3.2.7",
     "next": "13.5.2",
     "prisma": "^4.5.0",
