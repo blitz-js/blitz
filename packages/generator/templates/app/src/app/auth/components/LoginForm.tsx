@@ -13,7 +13,7 @@ type LoginFormProps = {
 export const LoginForm = (props: LoginFormProps) => {
   const [loginMutation] = useMutation(login)
   return (
-    <div>
+    <>
       <h1>Login</h1>
 
       <Form
@@ -46,7 +46,7 @@ export const LoginForm = (props: LoginFormProps) => {
       <div style={{marginTop: "1rem"}}>
         Or <Link href="/signup">Sign Up</Link>
       </div>
-    </div>
+    </>
   )
 }
 
