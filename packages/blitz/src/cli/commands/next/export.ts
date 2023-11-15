@@ -19,10 +19,13 @@ const nextExport: CliCommand = async () => {
     },
   )
 
+  const extraArgs = nextArgs["_"].filter((arg) => arg !== "export")
+
   const config: ServerConfig = {
     rootFolder: process.cwd(),
     ...(nextArgs["--outdir"] && {outdir: resolve(nextArgs["--outdir"])}),
     env: process.env.NODE_ENV === "production" ? "prod" : "dev",
+    extraArgs,
   }
 
   const getHelp = async () => {

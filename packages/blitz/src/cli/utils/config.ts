@@ -37,6 +37,8 @@ export type ServerConfig = {
   // –
   env: ServerEnvironment
   // -
+  extraArgs: string[]
+  // -
   outdir?: string
 }
 

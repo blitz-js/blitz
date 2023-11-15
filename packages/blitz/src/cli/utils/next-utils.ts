@@ -152,7 +152,7 @@ function getSpawnEnv(config: ServerConfig) {
 }
 
 async function createCommandAndPort(config: ServerConfig, command: string) {
-  let spawnCommand: string[] = [command]
+  let spawnCommand: string[] = [command, ...config.extraArgs]
   let availablePort: number
 
   availablePort = await detect({port: config.port ? config.port : 3000})
