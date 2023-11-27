@@ -274,7 +274,7 @@ const newApp: CliCommand = async () => {
       )
     }
 
-    postInstallSteps.push("blitz dev")
+    postInstallSteps.push(`${projectPkgManger} blitz dev`)
 
     console.log("\n Your new Blitz app is ready! Next steps:")
     postInstallSteps.forEach((step, index) => {
