@@ -29,7 +29,6 @@
     "@blitzjs/next": "latest",
     "@blitzjs/rpc": "latest",
     "@prisma/client": "5.4.2",
-    "@types/preview-email": "3.0.4",
     "blitz": "latest",
     "formik": "2.4.5",
     "next": "13.5.4",
@@ -41,6 +40,7 @@
   },
   "devDependencies": {
     "@types/node": "18.11.7",
+    "@types/preview-email": "3.0.4",
     "@types/react": "18.0.23",
     "@types/react-dom": "18.0.7",
     "eslint": "8.26.0",
