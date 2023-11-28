@@ -1,6 +1,6 @@
 {
-  "name": "blitz-app-starter",
-  "version": "0.1.1-beta.3",
+  "name": "__name__",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "blitz dev",
@@ -20,14 +20,18 @@
     "printWidth": 100
   },
   "lint-staged": {
-    "*.{js,ts,tsx}": ["eslint --fix"]
+    "*.{js,ts,tsx}": [
+      "eslint --fix"
+    ]
   },
   "dependencies": {
-    "@blitzjs/auth": "latest",
-    "@blitzjs/next": "latest",
-    "@blitzjs/rpc": "latest",
+    "@blitzjs/auth": "2.0.0-beta.36",
+    "@blitzjs/next": "2.0.0-beta.36",
+    "@blitzjs/rpc": "2.0.0-beta.36",
     "@prisma/client": "5.4.2",
-    "blitz": "latest",
+    "@types/preview-email": "3.0.4",
+    "blitz": "2.0.0-beta.36",
+    "formik": "2.4.5",
     "next": "13.5.4",
     "prisma": "5.4.2",
     "react": "18.2.0",
