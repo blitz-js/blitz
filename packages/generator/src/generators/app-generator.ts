@@ -328,14 +328,25 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
         pkg.dependencies["formik"] = "2.x"
         break
     }
-    this.fs.move(
-      this.destinationPath(`_forms/${type}/Form.${ext}`),
-      this.destinationPath(`src/core/components/Form.${ext}`),
-    )
-    this.fs.move(
-      this.destinationPath(`_forms/${type}/LabeledTextField.${ext}`),
-      this.destinationPath(`src/core/components/LabeledTextField.${ext}`),
-    )
+    if (this.options.template.path === "app") {
+      this.fs.move(
+        this.destinationPath(`_forms/${type}/Form.${ext}`),
+        this.destinationPath(`src/app/components/Form.${ext}`),
+      )
+      this.fs.move(
+        this.destinationPath(`_forms/${type}/LabeledTextField.${ext}`),
+        this.destinationPath(`src/app/components/LabeledTextField.${ext}`),
+      )
+    } else {
+      this.fs.move(
+        this.destinationPath(`_forms/${type}/Form.${ext}`),
+        this.destinationPath(`src/core/components/Form.${ext}`),
+      )
+      this.fs.move(
+        this.destinationPath(`_forms/${type}/LabeledTextField.${ext}`),
+        this.destinationPath(`src/core/components/LabeledTextField.${ext}`),
+      )
+    }
 
     this.fs.writeJSON(this.destinationPath("package.json"), pkg)
     this.fs.delete(this.destinationPath("_forms"))
