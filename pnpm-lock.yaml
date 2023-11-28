@@ -58,16 +58,16 @@ importers:
   apps/next13:
     dependencies:
       "@blitzjs/auth":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz-auth
       "@blitzjs/config":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/config
       "@blitzjs/next":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz-rpc
       "@hookform/error-message":
         specifier: 2.0.0
@@ -82,7 +82,7 @@ importers:
         specifier: 4.0.10
         version: 4.0.10(react-dom@18.2.0)(react@18.2.0)
       blitz:
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz
       flatted:
         specifier: 3.2.7
@@ -131,16 +131,16 @@ importers:
   apps/toolkit-app:
     dependencies:
       "@blitzjs/auth":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz-auth
       "@blitzjs/config":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/config
       "@blitzjs/next":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz-rpc
       "@hookform/error-message":
         specifier: 2.0.0
@@ -152,7 +152,7 @@ importers:
         specifier: 4.6.1
         version: 4.6.1(prisma@4.6.1)
       blitz:
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz
       next:
         specifier: 13.5.2
@@ -249,16 +249,16 @@ importers:
   apps/toolkit-app-passportjs:
     dependencies:
       "@blitzjs/auth":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz-auth
       "@blitzjs/config":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/config
       "@blitzjs/next":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz-rpc
       "@hookform/error-message":
         specifier: 2.0.0
@@ -270,7 +270,7 @@ importers:
         specifier: 4.6.1
         version: 4.6.1(prisma@4.6.1)
       blitz:
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz
       next:
         specifier: 13.5.2
@@ -361,16 +361,16 @@ importers:
   apps/web:
     dependencies:
       "@blitzjs/auth":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz-auth
       "@blitzjs/config":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/config
       "@blitzjs/next":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz-rpc
       "@prisma/client":
         specifier: 4.6.1
@@ -382,7 +382,7 @@ importers:
         specifier: 1.0.37
         version: 1.0.37
       blitz:
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz
       jest:
         specifier: 29.3.0
@@ -428,19 +428,19 @@ importers:
   integration-tests/auth:
     dependencies:
       "@blitzjs/auth":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz-auth
       "@blitzjs/config":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/config
       "@blitzjs/next":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz-next
       "@prisma/client":
         specifier: 4.6.1
         version: 4.6.1(prisma@4.6.1)
       blitz:
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz
       lowdb:
         specifier: 3.0.0
@@ -510,16 +510,16 @@ importers:
   integration-tests/auth-with-rpc:
     dependencies:
       "@blitzjs/auth":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz-auth
       "@blitzjs/config":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/config
       "@blitzjs/next":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz-rpc
       "@hookform/error-message":
         specifier: 2.0.0
@@ -531,7 +531,7 @@ importers:
         specifier: 4.6.1
         version: 4.6.1(prisma@4.6.1)
       blitz:
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz
       delay:
         specifier: 5.0.0
@@ -631,19 +631,19 @@ importers:
   integration-tests/get-initial-props:
     dependencies:
       "@blitzjs/auth":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz-auth
       "@blitzjs/next":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz-rpc
       "@prisma/client":
         specifier: 4.6.1
         version: 4.6.1(prisma@4.6.1)
       blitz:
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz
       lowdb:
         specifier: 3.0.0
@@ -662,7 +662,7 @@ importers:
         version: 18.2.0(react@18.2.0)
     devDependencies:
       "@blitzjs/config":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/config
       "@next/bundle-analyzer":
         specifier: 12.0.8
@@ -701,16 +701,16 @@ importers:
   integration-tests/middleware:
     dependencies:
       "@blitzjs/config":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/config
       "@blitzjs/next":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz-rpc
       blitz:
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz
       next:
         specifier: 13.5.2
@@ -756,22 +756,22 @@ importers:
   integration-tests/next-13-app-dir:
     dependencies:
       "@blitzjs/auth":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz-auth
       "@blitzjs/config":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/config
       "@blitzjs/next":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz-rpc
       "@prisma/client":
         specifier: 4.6.1
         version: 4.6.1(prisma@4.6.1)
       blitz:
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz
       lowdb:
         specifier: 3.0.0
@@ -841,19 +841,19 @@ importers:
   integration-tests/no-suspense:
     dependencies:
       "@blitzjs/auth":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz-auth
       "@blitzjs/next":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz-rpc
       "@prisma/client":
         specifier: 4.6.1
         version: 4.6.1(prisma@4.6.1)
       blitz:
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz
       lowdb:
         specifier: 3.0.0
@@ -872,7 +872,7 @@ importers:
         version: 18.2.0(react@18.2.0)
     devDependencies:
       "@blitzjs/config":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/config
       "@next/bundle-analyzer":
         specifier: 12.0.8
@@ -911,16 +911,16 @@ importers:
   integration-tests/qm:
     dependencies:
       "@blitzjs/auth":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz-auth
       "@blitzjs/config":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/config
       "@blitzjs/next":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz-rpc
       "@prisma/client":
         specifier: 4.6.1
@@ -929,7 +929,7 @@ importers:
         specifier: 4.0.10
         version: 4.0.10(react-dom@18.2.0)(react@18.2.0)
       blitz:
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz
       next:
         specifier: 13.5.2
@@ -975,16 +975,16 @@ importers:
   integration-tests/react-query-utils:
     dependencies:
       "@blitzjs/next":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz-rpc
       "@prisma/client":
         specifier: 4.6.1
         version: 4.6.1(prisma@4.6.1)
       blitz:
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz
       lowdb:
         specifier: 3.0.0
@@ -1003,7 +1003,7 @@ importers:
         version: 18.2.0(react@18.2.0)
     devDependencies:
       "@blitzjs/config":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/config
       "@next/bundle-analyzer":
         specifier: 12.0.8
@@ -1042,16 +1042,16 @@ importers:
   integration-tests/rpc:
     dependencies:
       "@blitzjs/config":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/config
       "@blitzjs/next":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz-rpc
       blitz:
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz
       next:
         specifier: 13.5.2
@@ -1091,16 +1091,16 @@ importers:
   integration-tests/rpc-path-root:
     dependencies:
       "@blitzjs/config":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/config
       "@blitzjs/next":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz-rpc
       blitz:
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz
       next:
         specifier: 13.5.2
@@ -1140,19 +1140,19 @@ importers:
   integration-tests/trailing-slash:
     dependencies:
       "@blitzjs/auth":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz-auth
       "@blitzjs/next":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz-rpc
       "@prisma/client":
         specifier: 4.6.1
         version: 4.6.1(prisma@4.6.1)
       blitz:
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz
       lowdb:
         specifier: 3.0.0
@@ -1171,7 +1171,7 @@ importers:
         version: 18.2.0(react@18.2.0)
     devDependencies:
       "@blitzjs/config":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/config
       "@next/bundle-analyzer":
         specifier: 12.0.8
@@ -1210,13 +1210,13 @@ importers:
   integration-tests/utils:
     devDependencies:
       "@blitzjs/config":
-        specifier: workspace:2.0.0-beta.34
+        specifier: workspace:2.0.0-beta.35
         version: link:../../packages/config
       "@blitzjs/next":
-        specifier: workspace:2.0.0-beta.34
+        specifier: workspace:2.0.0-beta.35
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: workspace:2.0.0-beta.34
+        specifier: workspace:2.0.0-beta.35
         version: link:../../packages/blitz-rpc
       "@tanstack/react-query":
         specifier: 4.13.0
@@ -1297,7 +1297,7 @@ importers:
   packages/blitz:
     dependencies:
       "@blitzjs/generator":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../generator
       "@mrleebo/prisma-ast":
         specifier: 0.2.6
@@ -1442,7 +1442,7 @@ importers:
         version: 2.1.1
     devDependencies:
       "@blitzjs/config":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../config
       "@types/cookie":
         specifier: 0.4.1
@@ -1587,7 +1587,7 @@ importers:
         version: 0.11.0
     devDependencies:
       "@blitzjs/config":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../config
       "@testing-library/react":
         specifier: 13.4.0
@@ -1611,7 +1611,7 @@ importers:
         specifier: 17.0.14
         version: 17.0.14
       blitz:
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../blitz
       next:
         specifier: 13.5.2
@@ -1641,7 +1641,7 @@ importers:
   packages/blitz-next:
     dependencies:
       "@blitzjs/rpc":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../blitz-rpc
       "@types/hoist-non-react-statics":
         specifier: 3.3.1
@@ -1663,7 +1663,7 @@ importers:
         version: 8.1.1
     devDependencies:
       "@blitzjs/config":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../config
       "@testing-library/dom":
         specifier: 8.13.0
@@ -1696,7 +1696,7 @@ importers:
         specifier: 4.0.0
         version: 4.0.0(@types/react@18.0.25)(react-dom@18.2.0)(react@18.2.0)
       blitz:
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../blitz
       cross-spawn:
         specifier: 7.0.3
@@ -1763,10 +1763,10 @@ importers:
         version: 8.1.1
     devDependencies:
       "@blitzjs/auth":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../blitz-auth
       "@blitzjs/config":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../config
       "@tanstack/query-core":
         specifier: 4.24.4
@@ -1781,7 +1781,7 @@ importers:
         specifier: 17.0.14
         version: 17.0.14
       blitz:
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../blitz
       next:
         specifier: 13.5.2
@@ -1820,13 +1820,13 @@ importers:
         specifier: 7.17.12
         version: 7.17.12(@babel/core@7.12.10)
       "@blitzjs/generator":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../generator
       arg:
         specifier: 5.0.1
         version: 5.0.1
       blitz:
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../blitz
       chalk:
         specifier: ^4.1.0
@@ -1854,7 +1854,7 @@ importers:
         specifier: 7.12.10
         version: 7.12.10(@babel/core@7.12.10)(supports-color@8.1.1)
       "@blitzjs/config":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../config
       "@types/jscodeshift":
         specifier: 0.11.2
@@ -1976,7 +1976,7 @@ importers:
         version: 3.20.2
     devDependencies:
       "@blitzjs/config":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../config
       "@juanm04/cpx":
         specifier: 2.0.1
@@ -2052,7 +2052,7 @@ importers:
         version: 5.9.1(eslint@8.27.0)(supports-color@8.1.1)(typescript@4.8.4)
     devDependencies:
       "@blitzjs/config":
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../config
       "@types/react":
         specifier: 18.0.25
@@ -2076,7 +2076,7 @@ importers:
   recipes/base-web:
     dependencies:
       blitz:
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2089,7 +2089,7 @@ importers:
   recipes/bulma:
     dependencies:
       blitz:
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2102,7 +2102,7 @@ importers:
   recipes/bumbag-ui:
     dependencies:
       blitz:
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2118,7 +2118,7 @@ importers:
   recipes/chakra-ui:
     dependencies:
       blitz:
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2134,7 +2134,7 @@ importers:
   recipes/emotion:
     dependencies:
       blitz:
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2147,19 +2147,19 @@ importers:
   recipes/gh-action-yarn-mariadb:
     dependencies:
       blitz:
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz
 
   recipes/gh-action-yarn-postgres:
     dependencies:
       blitz:
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz
 
   recipes/ghost:
     dependencies:
       blitz:
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2172,7 +2172,7 @@ importers:
   recipes/graphql-apollo-server:
     dependencies:
       blitz:
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2188,7 +2188,7 @@ importers:
   recipes/logrocket:
     dependencies:
       blitz:
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2201,7 +2201,7 @@ importers:
   recipes/material-ui:
     dependencies:
       blitz:
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2214,7 +2214,7 @@ importers:
   recipes/next-ui:
     dependencies:
       blitz:
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2230,19 +2230,19 @@ importers:
   recipes/passenger:
     dependencies:
       blitz:
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz
 
   recipes/quirrel:
     dependencies:
       blitz:
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz
 
   recipes/reflexjs:
     dependencies:
       blitz:
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2258,13 +2258,13 @@ importers:
   recipes/render:
     dependencies:
       blitz:
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz
 
   recipes/secureheaders:
     dependencies:
       blitz:
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2280,7 +2280,7 @@ importers:
   recipes/stitches:
     dependencies:
       blitz:
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2293,7 +2293,7 @@ importers:
   recipes/styled-components:
     dependencies:
       blitz:
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2309,7 +2309,7 @@ importers:
   recipes/tailwind:
     dependencies:
       blitz:
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2322,7 +2322,7 @@ importers:
   recipes/theme-ui:
     dependencies:
       blitz:
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2338,7 +2338,7 @@ importers:
   recipes/vanilla-extract:
     dependencies:
       blitz:
-        specifier: 2.0.0-beta.34
+        specifier: 2.0.0-beta.35
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -5669,7 +5669,7 @@ packages:
       glob: 7.2.0
       is-reference: 1.2.1
       magic-string: 0.25.9
-      resolve: 1.22.1
+      resolve: 1.22.8
       rollup: 2.77.2
     dev: true
 
@@ -5688,7 +5688,7 @@ packages:
       glob: 7.2.0
       is-reference: 1.2.1
       magic-string: 0.25.9
-      resolve: 1.22.1
+      resolve: 1.22.8
       rollup: 2.77.2
     dev: true
 
@@ -5718,7 +5718,7 @@ packages:
       deepmerge: 4.2.2
       is-builtin-module: 3.1.0
       is-module: 1.0.0
-      resolve: 1.22.1
+      resolve: 1.22.8
       rollup: 2.77.2
     dev: true
 
@@ -7890,7 +7890,6 @@ packages:
     dependencies:
       call-bind: 1.0.5
       is-array-buffer: 3.0.2
-    dev: true
 
   /array-differ@3.0.0:
     resolution:
@@ -7923,7 +7922,7 @@ packages:
       }
     engines: {node: ">= 0.4"}
     dependencies:
-      call-bind: 1.0.2
+      call-bind: 1.0.5
       define-properties: 1.2.1
       es-abstract: 1.22.3
       get-intrinsic: 1.2.2
@@ -7970,7 +7969,7 @@ packages:
       }
     engines: {node: ">= 0.4"}
     dependencies:
-      call-bind: 1.0.2
+      call-bind: 1.0.5
       define-properties: 1.2.1
       es-abstract: 1.22.3
       es-shim-unscopables: 1.0.0
@@ -7996,7 +7995,7 @@ packages:
       }
     engines: {node: ">= 0.4"}
     dependencies:
-      call-bind: 1.0.2
+      call-bind: 1.0.5
       define-properties: 1.2.1
       es-abstract: 1.22.3
       es-shim-unscopables: 1.0.0
@@ -8021,7 +8020,7 @@ packages:
       }
     engines: {node: ">= 0.4"}
     dependencies:
-      call-bind: 1.0.2
+      call-bind: 1.0.5
       define-properties: 1.2.1
       es-abstract: 1.22.3
       es-shim-unscopables: 1.0.0
@@ -8033,7 +8032,7 @@ packages:
         integrity: sha512-HuQCHOlk1Weat5jzStICBCd83NxiIMwqDg/dHEsoefabn/hJRj5pVdWcPUSpRrwhwxZOsQassMpgN/xRYFBMIg==,
       }
     dependencies:
-      call-bind: 1.0.2
+      call-bind: 1.0.5
       define-properties: 1.2.1
       es-abstract: 1.22.3
       es-shim-unscopables: 1.0.0
@@ -8054,7 +8053,6 @@ packages:
       get-intrinsic: 1.2.2
       is-array-buffer: 3.0.2
       is-shared-array-buffer: 1.0.2
-    dev: true
 
   /arrify@1.0.1:
     resolution:
@@ -8180,7 +8178,6 @@ packages:
         integrity: sha512-DMD0KiN46eipeziST1LPP/STfDU0sufISXmjSgvVsoU2tqxctQeASejWcfNtxYKqETM1UxQ8sp2OrSBWpHY6sw==,
       }
     engines: {node: ">= 0.4"}
-    dev: true
 
   /axe-core@4.4.2:
     resolution:
@@ -8777,8 +8774,8 @@ packages:
         integrity: sha512-7O+FbCihrB5WGbFYesctwmTKae6rOiIzmz1icreWJ+0aA7LJfuqhEso2T9ncpcFtzMQtzXf2QGGueWJGTYsqrA==,
       }
     dependencies:
-      function-bind: 1.1.1
-      get-intrinsic: 1.1.1
+      function-bind: 1.1.2
+      get-intrinsic: 1.2.2
 
   /call-bind@1.0.5:
     resolution:
@@ -8789,7 +8786,6 @@ packages:
       function-bind: 1.1.2
       get-intrinsic: 1.2.2
       set-function-length: 1.1.1
-    dev: true
 
   /call-me-maybe@1.0.1:
     resolution:
@@ -9876,7 +9872,6 @@ packages:
       get-intrinsic: 1.2.2
       gopd: 1.0.1
       has-property-descriptors: 1.0.0
-    dev: true
 
   /define-lazy-prop@2.0.0:
     resolution:
@@ -9906,7 +9901,6 @@ packages:
       define-data-property: 1.1.1
       has-property-descriptors: 1.0.0
       object-keys: 1.1.1
-    dev: true
 
   /define-property@0.2.5:
     resolution:
@@ -10179,6 +10173,7 @@ packages:
         integrity: sha512-yxJ2mFy/sibVQlu5qHjOkf9J3K6zgmCxgJ94u2EdvDOV09H+32LtRswEcUsmUWN72pVLOEnTSRaIVVzVQgS0dg==,
       }
     engines: {node: ">=8"}
+    deprecated: Use your platform's native DOMException instead
     dependencies:
       webidl-conversions: 5.0.0
     dev: true
@@ -10395,11 +10390,11 @@ packages:
       }
     engines: {node: ">= 0.4"}
     dependencies:
-      call-bind: 1.0.2
+      call-bind: 1.0.5
       es-to-primitive: 1.2.1
-      function-bind: 1.1.1
+      function-bind: 1.1.2
       function.prototype.name: 1.1.5
-      get-intrinsic: 1.1.1
+      get-intrinsic: 1.2.2
       get-symbol-description: 1.0.0
       has: 1.0.3
       has-property-descriptors: 1.0.0
@@ -10465,7 +10460,6 @@ packages:
       typed-array-length: 1.0.4
       unbox-primitive: 1.0.2
       which-typed-array: 1.1.13
-    dev: true
 
   /es-iterator-helpers@1.0.15:
     resolution:
@@ -10474,11 +10468,11 @@ packages:
       }
     dependencies:
       asynciterator.prototype: 1.0.0
-      call-bind: 1.0.2
+      call-bind: 1.0.5
       define-properties: 1.2.1
       es-abstract: 1.22.3
       es-set-tostringtag: 2.0.2
-      function-bind: 1.1.1
+      function-bind: 1.1.2
       get-intrinsic: 1.2.2
       globalthis: 1.0.3
       has-property-descriptors: 1.0.0
@@ -10506,7 +10500,6 @@ packages:
       get-intrinsic: 1.2.2
       has-tostringtag: 1.0.0
       hasown: 2.0.0
-    dev: true
 
   /es-shim-unscopables@1.0.0:
     resolution:
@@ -10523,7 +10516,7 @@ packages:
       }
     engines: {node: ">= 0.4"}
     dependencies:
-      is-callable: 1.2.4
+      is-callable: 1.2.7
       is-date-object: 1.0.5
       is-symbol: 1.0.4
 
@@ -11475,7 +11468,7 @@ packages:
       "@rushstack/eslint-patch": 1.5.1
       "@typescript-eslint/parser": 5.9.1(eslint@8.27.0)(supports-color@8.1.1)(typescript@4.8.4)
       eslint: 8.27.0(supports-color@8.1.1)
-      eslint-import-resolver-node: 0.3.6
+      eslint-import-resolver-node: 0.3.9
       eslint-import-resolver-typescript: 3.5.2(eslint-plugin-import@2.29.0)(eslint@8.27.0)
       eslint-plugin-import: 2.29.0(@typescript-eslint/parser@5.9.1)(eslint-import-resolver-typescript@3.5.2)(eslint@8.27.0)
       eslint-plugin-jsx-a11y: 6.7.1(eslint@8.27.0)
@@ -11579,7 +11572,7 @@ packages:
       eslint-plugin-import: 2.29.0(@typescript-eslint/parser@5.9.1)(eslint-import-resolver-typescript@3.5.2)(eslint@8.27.0)
       get-tsconfig: 4.2.0
       globby: 13.1.2
-      is-core-module: 2.11.0
+      is-core-module: 2.13.1
       is-glob: 4.0.3
       synckit: 0.8.4
     transitivePeerDependencies:
@@ -11854,7 +11847,7 @@ packages:
       minimatch: 3.1.2
       object.entries: 1.1.7
       object.fromentries: 2.0.7
-      semver: 6.3.0
+      semver: 6.3.1
     dev: true
 
   /eslint-plugin-react-hooks@4.5.0(eslint@8.26.0):
@@ -11959,7 +11952,7 @@ packages:
       es-iterator-helpers: 1.0.15
       eslint: 8.27.0(supports-color@8.1.1)
       estraverse: 5.3.0
-      jsx-ast-utils: 3.3.0
+      jsx-ast-utils: 3.3.5
       minimatch: 3.1.2
       object.entries: 1.1.7
       object.fromentries: 2.0.7
@@ -12785,7 +12778,6 @@ packages:
       }
     dependencies:
       is-callable: 1.2.7
-    dev: true
 
   /for-in@1.0.2:
     resolution:
@@ -12935,7 +12927,6 @@ packages:
       {
         integrity: sha512-7XHNxH7qX9xG5mIwxkhumTox/MIRNcOgDrxWsMt2pAr23WHp6MrRlN7FBSFpCpr+oVO0F744iUgR82nJMfG2SA==,
       }
-    dev: true
 
   /function.prototype.name@1.1.5:
     resolution:
@@ -12944,9 +12935,9 @@ packages:
       }
     engines: {node: ">= 0.4"}
     dependencies:
-      call-bind: 1.0.2
-      define-properties: 1.1.4
-      es-abstract: 1.20.1
+      call-bind: 1.0.5
+      define-properties: 1.2.1
+      es-abstract: 1.22.3
       functions-have-names: 1.2.3
 
   /function.prototype.name@1.1.6:
@@ -12960,7 +12951,6 @@ packages:
       define-properties: 1.2.1
       es-abstract: 1.22.3
       functions-have-names: 1.2.3
-    dev: true
 
   /functions-have-names@1.2.3:
     resolution:
@@ -12994,7 +12984,7 @@ packages:
         integrity: sha512-kWZrnVM42QCiEA2Ig1bG8zjoIMOgxWwYCEeNdwY6Tv/cOSeGpcoX4pXHfKUxNKVoArnrEr2e9srnAxxGIraS9Q==,
       }
     dependencies:
-      function-bind: 1.1.1
+      function-bind: 1.1.2
       has: 1.0.3
       has-symbols: 1.0.3
 
@@ -13008,7 +12998,6 @@ packages:
       has-proto: 1.0.1
       has-symbols: 1.0.3
       hasown: 2.0.0
-    dev: true
 
   /get-package-type@0.1.0:
     resolution:
@@ -13074,8 +13063,8 @@ packages:
       }
     engines: {node: ">= 0.4"}
     dependencies:
-      call-bind: 1.0.2
-      get-intrinsic: 1.1.1
+      call-bind: 1.0.5
+      get-intrinsic: 1.2.2
 
   /get-tsconfig@4.2.0:
     resolution:
@@ -13334,7 +13323,6 @@ packages:
       }
     dependencies:
       get-intrinsic: 1.2.2
-    dev: true
 
   /got@11.8.1:
     resolution:
@@ -13434,7 +13422,7 @@ packages:
         integrity: sha512-62DVLZGoiEBDHQyqG4w9xCuZ7eJEwNmJRWw2VY84Oedb7WFcA27fiEVe8oUQx9hAUJ4ekurquucTGwsyO1XGdQ==,
       }
     dependencies:
-      get-intrinsic: 1.1.1
+      get-intrinsic: 1.2.2
 
   /has-proto@1.0.1:
     resolution:
@@ -13442,7 +13430,6 @@ packages:
         integrity: sha512-7qE+iP+O+bgF9clE5+UoBFzE65mlBiVj3tKCrlNQ0Ogwm0BjpT/gK4SlLYDMybDh5I3TCTKnPPa0oMG7JDYrhg==,
       }
     engines: {node: ">= 0.4"}
-    dev: true
 
   /has-symbols@1.0.3:
     resolution:
@@ -13527,7 +13514,6 @@ packages:
     engines: {node: ">= 0.4"}
     dependencies:
       function-bind: 1.1.2
-    dev: true
 
   /he@1.2.0:
     resolution:
@@ -13913,7 +13899,7 @@ packages:
       }
     engines: {node: ">= 0.4"}
     dependencies:
-      get-intrinsic: 1.1.1
+      get-intrinsic: 1.2.2
       has: 1.0.3
       side-channel: 1.0.4
 
@@ -13927,7 +13913,6 @@ packages:
       get-intrinsic: 1.2.2
       hasown: 2.0.0
       side-channel: 1.0.4
-    dev: true
 
   /ip-regex@4.3.0:
     resolution:
@@ -13974,7 +13959,6 @@ packages:
       call-bind: 1.0.5
       get-intrinsic: 1.2.2
       is-typed-array: 1.1.12
-    dev: true
 
   /is-arrayish@0.2.1:
     resolution:
@@ -14016,7 +14000,7 @@ packages:
       }
     engines: {node: ">= 0.4"}
     dependencies:
-      call-bind: 1.0.2
+      call-bind: 1.0.5
       has-tostringtag: 1.0.0
 
   /is-buffer@1.1.6:
@@ -14049,7 +14033,6 @@ packages:
         integrity: sha512-1BC0BVFhS/p0qtw6enp8e+8OD0UrK0oFLztSjNzhcKA3WDuJxxAPXzPuPtKkjEY9UUoEWlX/8fgKeu2S8i9JTA==,
       }
     engines: {node: ">= 0.4"}
-    dev: true
 
   /is-ci@2.0.0:
     resolution:
@@ -14086,7 +14069,6 @@ packages:
       }
     dependencies:
       hasown: 2.0.0
-    dev: true
 
   /is-data-descriptor@0.1.4:
     resolution:
@@ -14191,7 +14173,7 @@ packages:
         integrity: sha512-0by5vtUJs8iFQb5TYUHHPudOR+qXYIMKtiUzvLIZITZUjknFmziyBJuLhVRc+Ds0dREFlskDNJKYIdIzu/9pfw==,
       }
     dependencies:
-      call-bind: 1.0.2
+      call-bind: 1.0.5
     dev: true
 
   /is-fullwidth-code-point@3.0.0:
@@ -14361,7 +14343,7 @@ packages:
       }
     engines: {node: ">= 0.4"}
     dependencies:
-      call-bind: 1.0.2
+      call-bind: 1.0.5
       has-tostringtag: 1.0.0
 
   /is-set@2.0.2:
@@ -14377,7 +14359,7 @@ packages:
         integrity: sha512-sqN2UDu1/0y6uvXyStCOzyhAjCSlHceFoMKJW8W9EU9cvic/QdsZ0kEU93HEy3IUEFZIiH/3w+AH/UQbPHNdhA==,
       }
     dependencies:
-      call-bind: 1.0.2
+      call-bind: 1.0.5
 
   /is-stream@1.1.0:
     resolution:
@@ -14436,7 +14418,6 @@ packages:
     engines: {node: ">= 0.4"}
     dependencies:
       which-typed-array: 1.1.13
-    dev: true
 
   /is-typedarray@1.0.0:
     resolution:
@@ -14480,7 +14461,7 @@ packages:
         integrity: sha512-qctsuLZmIQ0+vSSMfoVvyFe2+GSEvnmZ2ezTup1SBse9+twCCeial6EEi3Nc2KFcf6+qz2FBPnjXsk8xhKSaPQ==,
       }
     dependencies:
-      call-bind: 1.0.2
+      call-bind: 1.0.5
 
   /is-weakset@2.0.2:
     resolution:
@@ -14488,7 +14469,7 @@ packages:
         integrity: sha512-t2yVvttHkQktwnNNmBQ98AhENLdPUTDTE21uPqAQ0ARwQfGeQKRVS0NNurH7bTf7RrvcVn1OOge45CnBeHCSmg==,
       }
     dependencies:
-      call-bind: 1.0.2
+      call-bind: 1.0.5
       get-intrinsic: 1.2.2
     dev: true
 
@@ -14541,7 +14522,6 @@ packages:
       {
         integrity: sha512-xHjhDr3cNBK0BzdUJSPXZntQUx/mwMS5Rw4A7lPJ90XGAO6ISP/ePDNuo0vhqOZU+UD5JoodwCAAoZQd3FeAKw==,
       }
-    dev: true
 
   /isbinaryfile@4.0.10:
     resolution:
@@ -14593,7 +14573,7 @@ packages:
       "@babel/parser": 7.20.3
       "@istanbuljs/schema": 0.1.3
       istanbul-lib-coverage: 3.2.0
-      semver: 6.3.0
+      semver: 6.3.1
     transitivePeerDependencies:
       - supports-color
 
@@ -15307,7 +15287,7 @@ packages:
       jest-pnp-resolver: 1.2.2(jest-resolve@27.5.1)
       jest-util: 27.5.1
       jest-validate: 27.5.1
-      resolve: 1.22.1
+      resolve: 1.22.8
       resolve.exports: 1.1.0
       slash: 3.0.0
     dev: true
@@ -15325,7 +15305,7 @@ packages:
       jest-pnp-resolver: 1.2.2(jest-resolve@29.3.0)
       jest-util: 29.2.1
       jest-validate: 29.2.2
-      resolve: 1.22.1
+      resolve: 1.22.8
       resolve.exports: 1.1.0
       slash: 3.0.0
 
@@ -16593,7 +16573,7 @@ packages:
       }
     engines: {node: ">=8"}
     dependencies:
-      semver: 6.3.0
+      semver: 6.3.1
 
   /make-error@1.3.6:
     resolution:
@@ -17394,7 +17374,7 @@ packages:
       }
     dependencies:
       hosted-git-info: 2.8.9
-      resolve: 1.22.1
+      resolve: 1.22.8
       semver: 5.7.1
       validate-npm-package-license: 3.0.4
     dev: false
@@ -17535,7 +17515,6 @@ packages:
       {
         integrity: sha512-5qoj1RUiKOMsCCNLV1CBiPYE10sziTsnmNxkAI/rZhiD63CF7IqdFGC/XzjWjpSgLf0LxXX3bDFIh0E18f6UhQ==,
       }
-    dev: true
 
   /object-keys@1.1.1:
     resolution:
@@ -17561,8 +17540,8 @@ packages:
       }
     engines: {node: ">= 0.4"}
     dependencies:
-      call-bind: 1.0.2
-      define-properties: 1.1.4
+      call-bind: 1.0.5
+      define-properties: 1.2.1
       has-symbols: 1.0.3
       object-keys: 1.1.1
 
@@ -17577,7 +17556,6 @@ packages:
       define-properties: 1.2.1
       has-symbols: 1.0.3
       object-keys: 1.1.1
-    dev: true
 
   /object.entries@1.1.5:
     resolution:
@@ -17597,7 +17575,7 @@ packages:
       }
     engines: {node: ">= 0.4"}
     dependencies:
-      call-bind: 1.0.2
+      call-bind: 1.0.5
       define-properties: 1.2.1
       es-abstract: 1.22.3
     dev: true
@@ -17620,7 +17598,7 @@ packages:
       }
     engines: {node: ">= 0.4"}
     dependencies:
-      call-bind: 1.0.2
+      call-bind: 1.0.5
       define-properties: 1.2.1
       es-abstract: 1.22.3
     dev: true
@@ -17631,7 +17609,7 @@ packages:
         integrity: sha512-HqaQtqLnp/8Bn4GL16cj+CUYbnpe1bh0TtEaWvybszDG4tgxCJuRpV8VGuvNaI1fAnI4lUJzDG55MXcOH4JZcQ==,
       }
     dependencies:
-      call-bind: 1.0.2
+      call-bind: 1.0.5
       define-properties: 1.2.1
       es-abstract: 1.22.3
       get-intrinsic: 1.2.2
@@ -17684,7 +17662,7 @@ packages:
       }
     engines: {node: ">= 0.4"}
     dependencies:
-      call-bind: 1.0.2
+      call-bind: 1.0.5
       define-properties: 1.2.1
       es-abstract: 1.22.3
     dev: true
@@ -18787,7 +18765,7 @@ packages:
       jstransformer: 1.0.0
       pug-error: 2.0.0
       pug-walk: 2.0.0
-      resolve: 1.22.1
+      resolve: 1.22.8
     dev: true
 
   /pug-lexer@5.0.1:
@@ -19214,7 +19192,7 @@ packages:
       }
     engines: {node: ">= 0.4"}
     dependencies:
-      call-bind: 1.0.2
+      call-bind: 1.0.5
       define-properties: 1.2.1
       es-abstract: 1.22.3
       get-intrinsic: 1.2.2
@@ -19283,8 +19261,8 @@ packages:
       }
     engines: {node: ">= 0.4"}
     dependencies:
-      call-bind: 1.0.2
-      define-properties: 1.1.4
+      call-bind: 1.0.5
+      define-properties: 1.2.1
       functions-have-names: 1.2.3
 
   /regexp.prototype.flags@1.5.1:
@@ -19294,10 +19272,9 @@ packages:
       }
     engines: {node: ">= 0.4"}
     dependencies:
-      call-bind: 1.0.2
+      call-bind: 1.0.5
       define-properties: 1.2.1
       set-function-name: 2.0.1
-    dev: true
 
   /regexpp@3.2.0:
     resolution:
@@ -19495,7 +19472,6 @@ packages:
       is-core-module: 2.13.1
       path-parse: 1.0.7
       supports-preserve-symlinks-flag: 1.0.0
-    dev: true
 
   /resolve@2.0.0-next.3:
     resolution:
@@ -19503,7 +19479,7 @@ packages:
         integrity: sha512-W8LucSynKUIDu9ylraa7ueVZ7hc0uAgJBxVsQSKOXOyle8a93qXhcz+XAXZ8bIq2d6i4Ehddn6Evt+0/UwKk6Q==,
       }
     dependencies:
-      is-core-module: 2.11.0
+      is-core-module: 2.13.1
       path-parse: 1.0.7
 
   /resolve@2.0.0-next.5:
@@ -19692,11 +19668,10 @@ packages:
       }
     engines: {node: ">=0.4"}
     dependencies:
-      call-bind: 1.0.2
+      call-bind: 1.0.5
       get-intrinsic: 1.2.2
       has-symbols: 1.0.3
       isarray: 2.0.5
-    dev: true
 
   /safe-buffer@5.1.2:
     resolution:
@@ -19719,7 +19694,6 @@ packages:
       call-bind: 1.0.5
       get-intrinsic: 1.2.2
       is-regex: 1.1.4
-    dev: true
 
   /safe-regex@1.1.0:
     resolution:
@@ -19849,7 +19823,6 @@ packages:
         integrity: sha512-BR7VvDCVHO+q2xBEWskxS6DJE1qRnb7DxzUrogb71CWoSficBxYsiAGd+Kl0mmq/MprG9yArRkyrQxTO6XjMzA==,
       }
     hasBin: true
-    dev: true
 
   /semver@7.0.0:
     resolution:
@@ -19945,7 +19918,6 @@ packages:
       get-intrinsic: 1.2.2
       gopd: 1.0.1
       has-property-descriptors: 1.0.0
-    dev: true
 
   /set-function-name@2.0.1:
     resolution:
@@ -19957,7 +19929,6 @@ packages:
       define-data-property: 1.1.1
       functions-have-names: 1.2.3
       has-property-descriptors: 1.0.0
-    dev: true
 
   /set-value@2.0.1:
     resolution:
@@ -20040,8 +20011,8 @@ packages:
         integrity: sha512-q5XPytqFEIKHkGdiMIrY10mvLRvnQh42/+GoBlFW3b2LXLE2xxJpZFdm94we0BaoV3RwJyGqg5wS7epxTv0Zvw==,
       }
     dependencies:
-      call-bind: 1.0.2
-      get-intrinsic: 1.1.1
+      call-bind: 1.0.5
+      get-intrinsic: 1.2.2
       object-inspect: 1.12.2
 
   /signal-exit@3.0.7:
@@ -20446,7 +20417,7 @@ packages:
         integrity: sha512-rGXbGmOEosIQi6Qva94HUjgPs9vKW+dkG7Y8Q5O2OYkWL6wFaTRZO8zM4mhP94uX55wgyrXzfS2aGtGzUL7EJQ==,
       }
     dependencies:
-      call-bind: 1.0.2
+      call-bind: 1.0.5
       define-properties: 1.2.1
       es-abstract: 1.22.3
       get-intrinsic: 1.2.2
@@ -20482,7 +20453,6 @@ packages:
       call-bind: 1.0.5
       define-properties: 1.2.1
       es-abstract: 1.22.3
-    dev: true
 
   /string.prototype.trimend@1.0.5:
     resolution:
@@ -20490,9 +20460,9 @@ packages:
         integrity: sha512-I7RGvmjV4pJ7O3kdf+LXFpVfdNOxtCW/2C8f6jNiW4+PQchwxkCDzlk1/7p+Wl4bqFIZeF47qAHXLuHHWKAxog==,
       }
     dependencies:
-      call-bind: 1.0.2
-      define-properties: 1.1.4
-      es-abstract: 1.20.1
+      call-bind: 1.0.5
+      define-properties: 1.2.1
+      es-abstract: 1.22.3
 
   /string.prototype.trimend@1.0.7:
     resolution:
@@ -20503,7 +20473,6 @@ packages:
       call-bind: 1.0.5
       define-properties: 1.2.1
       es-abstract: 1.22.3
-    dev: true
 
   /string.prototype.trimstart@1.0.5:
     resolution:
@@ -20511,9 +20480,9 @@ packages:
         integrity: sha512-THx16TJCGlsN0o6dl2o6ncWUsdgnLRSA23rRE5pyGBw/mLr3Ej/R2LaqCtgP8VNMGZsvMWnf9ooZPyY2bHvUFg==,
       }
     dependencies:
-      call-bind: 1.0.2
-      define-properties: 1.1.4
-      es-abstract: 1.20.1
+      call-bind: 1.0.5
+      define-properties: 1.2.1
+      es-abstract: 1.22.3
 
   /string.prototype.trimstart@1.0.7:
     resolution:
@@ -20524,7 +20493,6 @@ packages:
       call-bind: 1.0.5
       define-properties: 1.2.1
       es-abstract: 1.22.3
-    dev: true
 
   /string_decoder@1.1.1:
     resolution:
@@ -21537,7 +21505,6 @@ packages:
       call-bind: 1.0.5
       get-intrinsic: 1.2.2
       is-typed-array: 1.1.12
-    dev: true
 
   /typed-array-byte-length@1.0.0:
     resolution:
@@ -21550,7 +21517,6 @@ packages:
       for-each: 0.3.3
       has-proto: 1.0.1
       is-typed-array: 1.1.12
-    dev: true
 
   /typed-array-byte-offset@1.0.0:
     resolution:
@@ -21564,7 +21530,6 @@ packages:
       for-each: 0.3.3
       has-proto: 1.0.1
       is-typed-array: 1.1.12
-    dev: true
 
   /typed-array-length@1.0.4:
     resolution:
@@ -21575,7 +21540,6 @@ packages:
       call-bind: 1.0.5
       for-each: 0.3.3
       is-typed-array: 1.1.12
-    dev: true
 
   /typedarray-to-buffer@3.1.5:
     resolution:
@@ -21607,7 +21571,7 @@ packages:
         integrity: sha512-61pPlCD9h51VoreyJ0BReideM3MDKMKnh6+V9L08331ipq6Q8OFXZYiqP6n/tbHx4s5I9uRhcye6BrbkizkBDw==,
       }
     dependencies:
-      call-bind: 1.0.2
+      call-bind: 1.0.5
       has-bigints: 1.0.2
       has-symbols: 1.0.3
       which-boxed-primitive: 1.0.2
@@ -22400,7 +22364,7 @@ packages:
       }
     engines: {node: ">= 0.4"}
     dependencies:
-      function.prototype.name: 1.1.5
+      function.prototype.name: 1.1.6
       has-tostringtag: 1.0.0
       is-async-function: 2.0.0
       is-date-object: 1.0.5
@@ -22464,7 +22428,6 @@ packages:
       for-each: 0.3.3
       gopd: 1.0.1
       has-tostringtag: 1.0.0
-    dev: true
 
   /which@1.3.1:
     resolution:
