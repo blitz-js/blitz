@@ -125,7 +125,9 @@ export const AuthServerPlugin = createServerPlugin((options: AuthPluginOptions) 
     }
     return blitzSessionMiddleware
   }
-  globalThis.__BLITZ_GET_RSC_CONTEXT = getBlitzContext
+  if (!globalThis.__BLITZ_GET_RSC_CONTEXT) {
+    globalThis.__BLITZ_GET_RSC_CONTEXT = getBlitzContext
+  }
   return {
     requestMiddlewares: [authPluginSessionMiddleware()],
     exports: () => ({
