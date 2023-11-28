@@ -1,5 +1,12 @@
 # blitz
 
+## 2.0.0-beta.36
+
+### Patch Changes
+
+- 09e0c68db: Automatically authorize role with usage of `redirectAuthenticatedTo` in `useAuthenticatedBlitzContext` utility
+  - @blitzjs/generator@2.0.0-beta.36
+
 ## 2.0.0-beta.35
 
 ### Patch Changes
