@@ -243,8 +243,17 @@ export async function useAuthenticatedBlitzContext({
           ? redirectAuthenticatedTo
           : formatWithValidation(redirectAuthenticatedTo)
       debug("[useAuthenticatedBlitzContext] Redirecting to", redirectUrl)
-      log.info("Authentication Redirect: " + customChalk.dim("(Authenticated)"), redirectUrl)
-      redirect(redirectUrl)
+      if (role) {
+        try {
+          ctx.session.$authorize(role)
+        } catch (e) {
+          log.info("Authentication Redirect: " + customChalk.dim(`Role ${role}`), redirectTo)
+          redirect(redirectUrl)
+        }
+      } else {
+        log.info("Authentication Redirect: " + customChalk.dim("(Authenticated)"), redirectUrl)
+        redirect(redirectUrl)
+      }
     }
     if (redirectTo && role) {
       debug("[useAuthenticatedBlitzContext] redirectTo and role are both defined.")
