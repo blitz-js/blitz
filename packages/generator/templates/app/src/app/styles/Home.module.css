@@ -47,7 +47,7 @@
   width: 100%;
   flex-direction: row;
   align-self: center;
-  max-width: var(--screen-width);
+  max-width: min(800px, var(--screen-width));
 }
 
 .instructions {
