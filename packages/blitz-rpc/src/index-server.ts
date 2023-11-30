@@ -1,9 +1,9 @@
-import {assert, ResolverConfig} from "blitz"
+import {assert, Ctx, ResolverConfig} from "blitz"
 import {NextApiRequest, NextApiResponse} from "next"
-import {deserialize, parse, serialize as superjsonSerialize} from "superjson"
 import {resolve} from "path"
-import {LoaderOptions} from "./server/loader/utils/loader-utils"
+import {deserialize, parse, serialize as superjsonSerialize} from "superjson"
 import {RpcLogger} from "./rpc-logger"
+import {LoaderOptions} from "./server/loader/utils/loader-utils"
 import {RpcLoggerOptions} from "./server/plugin"
 
 // TODO - optimize end user server bundles by not exporting all client stuff here
@@ -145,13 +145,13 @@ async function getResolverMap(): Promise<ResolverFiles | null | undefined> {
 }
 
 interface RpcConfig {
-  onError?: (error: Error) => void
-  formatError?: (error: Error) => Error
+  onError?: (error: Error, ctx: Ctx) => void
+  formatError?: (error: Error, ctx: Ctx) => Error
   logging?: RpcLoggerOptions
 }
 
 export function rpcHandler(config: RpcConfig) {
-  return async function handleRpcRequest(req: NextApiRequest, res: NextApiResponse) {
+  return async function handleRpcRequest(req: NextApiRequest, res: NextApiResponse, ctx: Ctx) {
     const resolverMap = await getResolverMap()
     assert(resolverMap, "No query or mutation resolvers found")
     assert(
@@ -240,14 +240,14 @@ export function rpcHandler(config: RpcConfig) {
           delete error.stack
         }
 
-        config.onError?.(error)
+        config.onError?.(error, ctx)
         rpcLogger.error(error)
 
         if (!error.statusCode) {
           error.statusCode = 500
         }
 
-        const formattedError = config.formatError?.(error) ?? error
+        const formattedError = config.formatError?.(error, ctx) ?? error
         const serializedError = superjsonSerialize(formattedError)
 
         res.json({
