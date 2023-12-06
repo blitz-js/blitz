@@ -25,6 +25,6 @@ export class RouteGenerator extends Generator<RouteGeneratorOptions> {
 
   getTargetDirectory() {
     const kebabCaseModelName = camelCaseToKebabCase(this.options.modelNames)
-    return `src/app/${parent}${kebabCaseModelName}`
+    return `src/app/${kebabCaseModelName}`
   }
 }

@@ -6,7 +6,7 @@ import get__ModelName__ from "../queries/get__ModelName__"
 import { __ModelName__ } from "../components/__ModelName__"
 
 export async function generateMetadata({ params }: __ModelName__PageProps): Promise<Metadata> {
-  const __ModelName__ = await invoke(get__ModelName__, { id: Number(params.__ModelName__Id) })
+  const __ModelName__ = await invoke(get__ModelName__, { id: Number(params.__modelId__) })
   return {
     title: `__ModelName__ ${__ModelName__.id} - ${__ModelName__.name}`,
   }

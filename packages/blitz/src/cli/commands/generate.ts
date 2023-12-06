@@ -3,16 +3,13 @@ import {CliCommand} from "../index"
 import prompts from "prompts"
 import {
   capitalize,
-  pluralCamel,
-  pluralPascal,
-  singleCamel,
-  singlePascal,
   uncapitalize,
   PageGenerator,
   FormGenerator,
   QueriesGenerator,
   MutationGenerator,
   MutationsGenerator,
+  RouteGenerator,
   ModelGenerator,
   QueryGenerator,
   ValidationsGenerator,
@@ -23,6 +20,7 @@ import {
   customTemplatesBlitzConfig,
 } from "@blitzjs/generator"
 import {log} from "../../logging"
+import fs from "fs-extra"
 
 const getIsTypeScript = async () =>
   require("fs").existsSync(require("path").join(process.cwd(), "tsconfig.json"))
@@ -72,18 +70,25 @@ const createCustomTemplates = async () => {
   process.exit(0)
 }
 
+const nextAppDirectory = fs.existsSync(require("path").join(process.cwd(), "src/app/layout.tsx"))
+  ? "app"
+  : "pages"
+
 const generatorMap = {
   [ResourceType.All]: [
-    PageGenerator,
     FormGenerator,
     QueriesGenerator,
     MutationsGenerator,
     ValidationsGenerator,
     ModelGenerator,
+    nextAppDirectory === "app" ? RouteGenerator : PageGenerator,
   ],
   [ResourceType.Crud]: [MutationsGenerator, QueriesGenerator, ValidationsGenerator],
   [ResourceType.Model]: [ModelGenerator],
-  [ResourceType.Pages]: [PageGenerator, FormGenerator],
+  [ResourceType.Pages]: [
+    FormGenerator,
+    nextAppDirectory === "app" ? RouteGenerator : PageGenerator,
+  ],
   [ResourceType.Queries]: [QueriesGenerator],
   [ResourceType.Query]: [QueryGenerator],
   [ResourceType.Mutations]: [MutationsGenerator, ValidationsGenerator],
