@@ -1,6 +1,7 @@
 import {Generator, GeneratorOptions, SourceRootType} from "../generator"
 import {getTemplateRoot} from "../utils/get-template-root"
 import {camelCaseToKebabCase} from "../utils/inflector"
+import fs from "fs-extra"
 
 export interface QueryGeneratorOptions extends GeneratorOptions {
   name: string
@@ -9,9 +10,11 @@ export interface QueryGeneratorOptions extends GeneratorOptions {
 
 export class QueryGenerator extends Generator<QueryGeneratorOptions> {
   sourceRoot: SourceRootType
+  isAppDir = false
   constructor(options: QueryGeneratorOptions) {
     super(options)
     this.sourceRoot = getTemplateRoot(options.templateDir, {type: "template", path: "query"})
+    this.isAppDir = fs.existsSync(require("path").join(process.cwd(), "src/app/layout.tsx"))
   }
   static subdirectory = "query"
 
@@ -25,6 +28,9 @@ export class QueryGenerator extends Generator<QueryGeneratorOptions> {
 
   getTargetDirectory() {
     const context = this.options.context ? `${camelCaseToKebabCase(this.options.context)}` : ""
+    if (this.isAppDir) {
+      return `src/app/${context}/queries`
+    }
     return `src/${context}/queries`
   }
 }

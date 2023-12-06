@@ -9,14 +9,17 @@ import {
 } from ".."
 import {customTsParser, Generator, SourceRootType} from "../generator"
 import {replaceImportDbWithPrismaFolder} from "../../src/utils/codemod-utils"
+import fs from "fs-extra"
 
 export interface ValidationsGeneratorOptions extends ResourceGeneratorOptions {}
 
 export class ValidationsGenerator extends Generator<ValidationsGeneratorOptions> {
   sourceRoot: SourceRootType
+  isAppDir = false
   constructor(options: ValidationsGeneratorOptions) {
     super(options)
     this.sourceRoot = getTemplateRoot(options.templateDir, {type: "template", path: "validations"})
+    this.isAppDir = fs.existsSync(require("path").join(process.cwd(), "src/app/layout.tsx"))
   }
   static subdirectory = "validations"
 
@@ -49,6 +52,9 @@ export class ValidationsGenerator extends Generator<ValidationsGeneratorOptions>
   getTargetDirectory() {
     const context = this.options.context ? `${camelCaseToKebabCase(this.options.context)}/` : ""
     const kebabCaseModelName = camelCaseToKebabCase(this.options.modelNames)
+    if (this.isAppDir) {
+      return `src/app/${context}${kebabCaseModelName}`
+    }
     return `src/${context}${kebabCaseModelName}`
   }
 }
