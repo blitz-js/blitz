@@ -13,7 +13,7 @@ export async function invoke<T extends (...args: any) => any, TInput = FirstPara
       "invoke is missing the first argument - it must be a query or mutation function",
     )
   }
-  const rpcLogger = new RpcLogger((queryFn as any)._resolverName, loggingOptions)
+  const rpcLogger = new RpcLogger((queryFn as any)._resolverName, loggingOptions, "blitz-invoke")
   rpcLogger.timer.initResolver()
   rpcLogger.preResolver(params)
 
