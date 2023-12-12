@@ -1,9 +1,9 @@
 import React, {Suspense} from "react"
-import {Form, FormProps} from "src/core/components/Form"
-import {LabeledTextField} from "src/core/components/LabeledTextField"
+import {Form, FormProps} from "__coreComponentsImportPath__/Form"
+import {LabeledTextField} from "__coreComponentsImportPath__/LabeledTextField"
 
 import {z} from "zod"
-export {FORM_ERROR} from "src/core/components/Form"
+export {FORM_ERROR} from "__coreComponentsImportPath__/Form"
 
 export function __ModelName__Form<S extends z.ZodType<any, any>>(props: FormProps<S>) {
   return (

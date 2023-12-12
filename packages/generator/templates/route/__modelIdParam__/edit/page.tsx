@@ -1,8 +1,8 @@
 import { Metadata } from "next"
 import { Suspense } from "react"
 import { invoke } from "app/src/blitz-server"
-import get__ModelName__ from "../../queries/get__ModelName__.ts"
-import { Edit__ModelName__ } from "../../components/Edit__ModelName__.tsx"
+import get__ModelName__ from "../../queries/get__ModelName__"
+import { Edit__ModelName__ } from "../../components/Edit__ModelName__"
 
 type Edit__ModelName__PageProps = {
   params: { __modelId__: string }

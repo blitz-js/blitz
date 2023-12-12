@@ -45,6 +45,10 @@ export class FormGenerator extends Generator<FormGeneratorOptions> {
         templateValues.fieldTemplateValues = [newFieldTemplateValues]
       }
     }
+    templateValues = {
+      ...templateValues,
+      coreComponentsImportPath: this.isAppDir ? "src/app/components" : "src/core/components",
+    }
     return templateValues
   }
 

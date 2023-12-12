@@ -5,7 +5,7 @@ import { useMutation } from "@blitzjs/rpc"
 import create__ModelName__ from "../mutations/create__ModelName__"
 import { useRouter } from "next/navigation"
 
-export function New__ModelName__Form() {
+export function New__ModelName() {
   const [create__ModelName__Mutation] = useMutation(create__ModelName__)
   const router = useRouter()
   return (
