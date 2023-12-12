@@ -1,7 +1,7 @@
 import { Metadata } from "next"
 import Link from "next/link"
 import { Suspense } from "react"
-import { invoke } from "app/src/blitz-server"
+import { invoke } from "src/app/blitz-server"
 import get__ModelName__ from "../queries/get__ModelName__"
 import { __ModelName__ } from "../components/__ModelName__"
 
