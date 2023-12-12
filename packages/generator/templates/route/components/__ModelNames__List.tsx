@@ -2,7 +2,7 @@
 import { usePaginatedQuery } from "@blitzjs/rpc"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import get__modelNames__ from "../queries/get__modelNames__"
+import get__ModelNames__ from "../queries/get__ModelNames__"
 import { useSearchParams } from "next/navigation"
 import { usePathname } from "next/navigation"
 import { Route } from "next"
@@ -12,7 +12,7 @@ const ITEMS_PER_PAGE = 100
 export const __ModelNames__List = () => {
   const searchparams = useSearchParams()!
   const page = Number(searchparams.get("page")) || 0
-  const [{ __modelNames__, hasMore }] = usePaginatedQuery(get__modelNames__, {
+  const [{ __modelNames__, hasMore }] = usePaginatedQuery(get__ModelNames__, {
     orderBy: { id: "asc" },
     skip: ITEMS_PER_PAGE * page,
     take: ITEMS_PER_PAGE,
