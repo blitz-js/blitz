@@ -32,7 +32,13 @@ function getGlobalObject<T extends Record<string, unknown>>(key: string, default
 }
 
 type Resolver = (...args: unknown[]) => Promise<unknown>
-type ResolverFiles = Record<string, () => Promise<{default?: Resolver; config?: ResolverConfig}>>
+type ResolverFiles = Record<
+  string,
+  {
+    absoluteResolverPath: string
+    resolver: () => Promise<{default?: Resolver; config?: ResolverConfig}>
+  }
+>
 export type ResolverPathOptions = "queries|mutations" | "root" | ((path: string) => string)
 
 // We define `global.__internal_blitzRpcResolverFiles` to ensure we use the same global object.
@@ -50,10 +56,47 @@ export function loadBlitzRpcResolverFilesWithInternalMechanism() {
 
 export function __internal_addBlitzRpcResolver(
   routePath: string,
+  absoluteResolverPath: string,
   resolver: () => Promise<{default?: Resolver; config?: ResolverConfig}>,
 ) {
   g.blitzRpcResolverFilesLoaded = g.blitzRpcResolverFilesLoaded || {}
-  g.blitzRpcResolverFilesLoaded[routePath] = resolver
+  const existingResolver = g.blitzRpcResolverFilesLoaded[routePath]
+  if (existingResolver && existingResolver.absoluteResolverPath !== absoluteResolverPath) {
+    console.log("existingResolver", existingResolver)
+    const logger = new RpcLogger(routePath)
+    const errorMessage = `\nThe following resolver files resolve to the same path: ${routePath}\n\n1.  ${absoluteResolverPath}\n2.  ${
+      existingResolver.absoluteResolverPath
+    }\n\nPossible Solutions:\n\n1. Remove or rename one of the resolver files. \n2. Set the following in your in next.config.js to load all resolvers using their absolute paths: 
+    \n\n//next.config.js\nblitz:{\n  resolverPath: "root",\n},\n
+    \n${
+      process.env.NODE_ENV === "production"
+        ? `Resolver in ${absoluteResolverPath} is currently being shadowed by ${existingResolver.absoluteResolverPath}`
+        : ""
+    }
+    `
+    logger.error(errorMessage)
+    if (process.env.NODE_ENV !== "production") {
+      g.blitzRpcResolverFilesLoaded[routePath] = {
+        absoluteResolverPath,
+        resolver: async () => {
+          return {
+            ...(await resolver()),
+            default: async () => {
+              const error = new Error(errorMessage)
+              error.name = "BlitzRPCResolverCollisionError"
+              error.stack = ""
+              throw error
+            },
+          }
+        },
+      }
+    }
+  } else {
+    g.blitzRpcResolverFilesLoaded[routePath] = {
+      absoluteResolverPath,
+      resolver,
+    }
+  }
   return resolver
 }
 
@@ -164,7 +207,7 @@ export function rpcHandler(config: RpcConfig) {
     const resolverName = routePath.replace(/(\/api\/rpc)?\//, "")
     const rpcLogger = new RpcLogger(resolverName, config.logging)
 
-    const loadableResolver = resolverMap?.[routePath]
+    const loadableResolver = resolverMap?.[routePath]?.resolver
     if (!loadableResolver) {
       throw new Error("No resolver for path: " + routePath)
     }
@@ -237,7 +280,7 @@ export function rpcHandler(config: RpcConfig) {
         return
       } catch (error: any) {
         if (error._clearStack) {
-          delete error.stack
+          error.stack = ""
         }
 
         config.onError?.(error)
