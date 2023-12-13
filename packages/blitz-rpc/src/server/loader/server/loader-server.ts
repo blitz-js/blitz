@@ -66,7 +66,7 @@ export async function transformBlitzRpcServer(
 
     const importStrategy = options?.resolversDynamicImport ? "import" : "require"
 
-    code += `__internal_addBlitzRpcResolver('${routePath}',() => ${importStrategy}('${slash(
+    code += `__internal_addBlitzRpcResolver('${routePath}','${resolverFilePath}',() => ${importStrategy}('${slash(
       resolverFilePath,
     )}'));`
     code += "\n"

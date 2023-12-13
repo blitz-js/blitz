@@ -163,10 +163,11 @@ export class RpcLogger {
     newLine()
   }
   public error(e: any) {
-    if (typeof e === "string") {
+    if (typeof e === "string" || e instanceof Error) {
       this.#logger.error(e)
+    } else {
+      this.#logger.error(new Error(e))
     }
-    this.#logger.error(new Error(e))
     newLine()
   }
   public warn(e: string) {
