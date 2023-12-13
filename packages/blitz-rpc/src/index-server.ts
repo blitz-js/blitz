@@ -62,7 +62,6 @@ export function __internal_addBlitzRpcResolver(
   g.blitzRpcResolverFilesLoaded = g.blitzRpcResolverFilesLoaded || {}
   const existingResolver = g.blitzRpcResolverFilesLoaded[routePath]
   if (existingResolver && existingResolver.absoluteResolverPath !== absoluteResolverPath) {
-    console.log("existingResolver", existingResolver)
     const logger = new RpcLogger(routePath)
     const errorMessage = `\nThe following resolver files resolve to the same path: ${routePath}\n\n1.  ${absoluteResolverPath}\n2.  ${
       existingResolver.absoluteResolverPath
