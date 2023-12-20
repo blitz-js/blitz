@@ -1,8 +1,8 @@
 import Link from "next/link"
 import styles from "src/styles/Home.module.css"
 import Test from "./react-query"
-import {invoke, useAuthenticatedBlitzContext} from "../src/blitz-server"
-import getCurrentUser from "../src/users/queries/getCurrentUser"
+import {invoke, useAuthenticatedBlitzContext} from "../blitz-server"
+import getCurrentUser from "../users/queries/getCurrentUser"
 
 export default async function Home() {
   await useAuthenticatedBlitzContext({

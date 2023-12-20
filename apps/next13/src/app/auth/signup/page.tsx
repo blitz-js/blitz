@@ -1,7 +1,7 @@
 "use client"
 
 import {useRouter} from "next/navigation"
-import SignupForm from "../../../src/auth/components/SignupForm"
+import SignupForm from "../../../auth/components/SignupForm"
 
 const SignUp = () => {
   const router = useRouter()

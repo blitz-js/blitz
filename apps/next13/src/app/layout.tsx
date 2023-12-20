@@ -1,5 +1,5 @@
 import "src/styles/globals.css"
-import {BlitzProvider} from "../src/blitz-client"
+import {BlitzProvider} from "../blitz-client"
 import styles from "src/styles/Home.module.css"
 
 export default function RootLayout({children}: {children: React.ReactNode}) {

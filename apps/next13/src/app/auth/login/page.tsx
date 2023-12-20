@@ -1,6 +1,6 @@
 "use client"
 
-import {LoginForm} from "../../../src/auth/components/LoginForm"
+import {LoginForm} from "../../../auth/components/LoginForm"
 import {useRouter} from "next/navigation"
 import {useSearchParams} from "next/navigation"
 

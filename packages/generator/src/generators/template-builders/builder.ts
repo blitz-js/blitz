@@ -24,6 +24,7 @@ export async function createFieldTemplateValues(
   valueName: string | undefined,
   typeName: string | undefined,
   parent = false,
+  isOptional = false,
 ): Promise<{[x: string]: any}> {
   {
     let values: {[x: string]: any} = {
@@ -39,6 +40,9 @@ export async function createFieldTemplateValues(
     const fieldConfig =
       codegen.fieldTypeMap?.[typeName as keyof typeof codegen.fieldTypeMap] || defaultFieldConfig
     values = {...values, ...fieldConfig}
+    if (isOptional) {
+      values.zodType = `${values.zodType}().optional`
+    }
     if (parent) {
       values.inputType = singleCamel(valueName).replace("Id", "s")
       values.component = "LabeledSelectField"
@@ -128,10 +132,11 @@ export abstract class Builder<T, U> implements IBuilder<T, U> {
   public async getFieldTemplateValues(args: string[]) {
     const argsPromises = args.map(async (arg: string) => {
       let [valueName, typeName] = arg.split(":")
+      const isOptional = typeName?.includes("?")
       if (typeName?.includes("?")) {
         typeName = typeName.replace("?", "")
       }
-      const values = await createFieldTemplateValues(valueName, typeName)
+      const values = await createFieldTemplateValues(valueName, typeName, false, isOptional)
       return values
     })
     return Promise.all(argsPromises)
