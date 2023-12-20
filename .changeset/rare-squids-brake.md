@@ -2,4 +2,4 @@
 "@blitzjs/rpc": minor
 ---
 
-provide ctx to rpcHandler error callbacks
+expose `ctx` to `rpcHandler` error callbacks in [[...blitz]].ts files
