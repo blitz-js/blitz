@@ -530,9 +530,6 @@ importers:
       "@prisma/client":
         specifier: 4.6.1
         version: 4.6.1(prisma@4.6.1)
-      "@tanstack/react-query":
-        specifier: 4.24.4
-        version: 4.24.4(react-dom@18.2.0)(react@18.2.0)
       blitz:
         specifier: 2.0.0-beta.36
         version: link:../../packages/blitz
@@ -1668,9 +1665,6 @@ importers:
       "@blitzjs/config":
         specifier: 2.0.0-beta.36
         version: link:../config
-      "@tanstack/react-query":
-        specifier: 4.24.4
-        version: 4.24.4(react-dom@18.2.0)(react@18.2.0)
       "@testing-library/dom":
         specifier: 8.13.0
         version: 8.13.0
@@ -7025,6 +7019,7 @@ packages:
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       use-sync-external-store: 1.2.0(react@18.2.0)
+    dev: false
 
   /@testim/chrome-version@1.1.2:
     resolution:

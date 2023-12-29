@@ -1,4 +1,4 @@
-import {QueryClientProvider, Hydrate} from "@tanstack/react-query"
+import {QueryClientProvider, Hydrate} from "@blitzjs/rpc"
 import type {QueryClient, HydrateOptions} from "@blitzjs/rpc"
 import React from "react"
 

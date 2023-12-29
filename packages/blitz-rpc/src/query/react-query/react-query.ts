@@ -1,6 +1,14 @@
+import {useQueryErrorResetBoundary, QueryClientProvider, Hydrate} from "@tanstack/react-query"
+
 import {useInfiniteQuery as useInfiniteReactQuery} from "@tanstack/react-query"
 import {useQuery as useReactQuery} from "@tanstack/react-query"
 import {useMutation as useReactQueryMutation} from "@tanstack/react-query"
+
+export const reactQueryClientReExports = {
+  useQueryErrorResetBoundary,
+  QueryClientProvider,
+  Hydrate,
+}
 
 import type {
   UseInfiniteQueryOptions,
