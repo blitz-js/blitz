@@ -1,6 +1,5 @@
 import {fromBase64} from "b64-lite"
 import _BadBehavior from "bad-behavior"
-import {useEffect, useState} from "react"
 import {UrlObject} from "url"
 import React, {ComponentPropsWithoutRef} from "react"
 import {
@@ -171,9 +170,9 @@ export const useSession = (options: UseSessionOptions = {}): ClientSession => {
     initialState = {...emptyPublicData, isLoading: true}
   }
 
-  const [session, setSession] = useState(initialState)
+  const [session, setSession] = React.useState(initialState)
 
-  useEffect(() => {
+  React.useEffect(() => {
     // Initialize on mount
     setSession({...getPublicDataStore().getData(), isLoading: false})
     const subscription = getPublicDataStore().observable.subscribe((data) =>
@@ -186,8 +185,8 @@ export const useSession = (options: UseSessionOptions = {}): ClientSession => {
 }
 
 export const useAuthorizeIf = (condition?: boolean, role?: string | Array<string>) => {
-  const [mounted, setMounted] = useState(false)
-  useEffect(() => {
+  const [mounted, setMounted] = React.useState(false)
+  React.useEffect(() => {
     setMounted(true)
   }, [])
 
@@ -233,9 +232,9 @@ export const useAuthenticatedSession = (
 }
 
 export const useRedirectAuthenticated = (to: UrlObject | string) => {
-  const [mounted, setMounted] = useState(false)
+  const [mounted, setMounted] = React.useState(false)
 
-  useEffect(() => {
+  React.useEffect(() => {
     setMounted(true)
   }, [])
 
@@ -303,9 +302,9 @@ export function getAuthValues<TProps = any>(
 function withBlitzAuthPlugin<TProps = any>(Page: ComponentType<TProps> | BlitzPage<TProps>) {
   const AuthRoot = (props: ComponentProps<any>) => {
     useSession({suspense: false})
-    const [mounted, setMounted] = useState(false)
+    const [mounted, setMounted] = React.useState(false)
 
-    useEffect(() => {
+    React.useEffect(() => {
       setMounted(true)
     }, [])
 
