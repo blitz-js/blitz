@@ -111,7 +111,7 @@ export const ErrorBoundary = withRouter(
     async componentDidCatch(error: Error, info: React.ErrorInfo) {
       if (error instanceof RedirectError) {
         debug("Redirecting from ErrorBoundary to", error.url)
-        this.props.router.push(error.url)
+        void this.props.router.push(error.url)
         return
       }
       this.props.onError?.(error, info)
