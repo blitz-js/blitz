@@ -44,18 +44,18 @@ const mockRouter: NextRouter = {
     emit: vi.fn(),
   },
   isFallback: false,
+  forward: vi.fn(),
 }
 
 export function renderHook(
   hook: RenderHook,
-  {wrapper, router, dehydratedState, ...options}: RenderHookOptions = {},
+  {router, dehydratedState, ...options}: RenderHookOptions = {},
 ) {
-  if (!wrapper) {
-    wrapper = ({children}) => (
+  const wrapper = ({children}: {children: React.ReactNode}) =>
+    (
       <RouterContext.Provider value={{...mockRouter, ...router}}>{children}</RouterContext.Provider>
-    )
-    wrapper.displayName = "wrapper"
-  }
+    ) as React.ReactElement
+  wrapper.displayName = "wrapper"
 
   return defaultRenderHook(hook, {wrapper, ...options})
 }
@@ -97,14 +97,14 @@ describe("useParams", () => {
   })
 
   it("works without parameter", () => {
-    vi.mock("next/router", () => {
+    vi.mock("next/compat/router", () => {
       return {
         useRouter: vi.fn(() => ({...mockRouter, query})),
       }
     })
 
     it("works with string", () => {
-      vi.mock("next/router", () => {
+      vi.mock("next/compat/router", () => {
         return {
           useRouter: vi.fn(() => ({...mockRouter, query})),
         }
@@ -121,7 +121,7 @@ describe("useParams", () => {
     })
 
     it("works with string", () => {
-      vi.mock("next/router", () => {
+      vi.mock("next/compat/router", () => {
         return {
           useRouter: vi.fn(() => ({...mockRouter, query})),
         }
@@ -138,7 +138,7 @@ describe("useParams", () => {
     })
 
     it("works with number", () => {
-      vi.mock("next/router", () => {
+      vi.mock("next/compat/router", () => {
         return {
           useRouter: vi.fn(() => ({...mockRouter, query})),
         }
@@ -155,7 +155,7 @@ describe("useParams", () => {
     })
 
     it("works with array", () => {
-      vi.mock("next/router", () => {
+      vi.mock("next/compat/router", () => {
         return {
           useRouter: vi.fn(() => ({...mockRouter, query})),
         }
@@ -180,7 +180,7 @@ describe("useParam", () => {
   })
 
   it("works without parameter", () => {
-    vi.mock("next/router", () => {
+    vi.mock("next/compat/router", () => {
       return {
         useRouter: vi.fn(() => ({...mockRouter, query})),
       }
@@ -201,7 +201,7 @@ describe("useParam", () => {
   })
 
   it("works with string", () => {
-    vi.mock("next/router", () => {
+    vi.mock("next/compat/router", () => {
       return {
         useRouter: vi.fn(() => ({...mockRouter, query})),
       }
