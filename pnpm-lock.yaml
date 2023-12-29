@@ -32,7 +32,7 @@ importers:
         version: 13.0.3
       next:
         specifier: 14.0.4
-        version: 14.0.4(@babel/core@7.18.2)(react-dom@18.2.0)(react@18.2.0)
+        version: 14.0.4(@babel/core@7.12.10)(react-dom@18.2.0)(react@18.2.0)
       only-allow:
         specifier: 1.1.0
         version: 1.1.0
@@ -89,7 +89,7 @@ importers:
         version: 3.2.7
       next:
         specifier: 14.0.4
-        version: 14.0.4(@babel/core@7.18.2)(react-dom@18.2.0)(react@18.2.0)
+        version: 14.0.4(@babel/core@7.12.10)(react-dom@18.2.0)(react@18.2.0)
       prisma:
         specifier: ^4.5.0
         version: 4.6.1
@@ -447,7 +447,7 @@ importers:
         version: 3.0.0
       next:
         specifier: 14.0.4
-        version: 14.0.4(@babel/core@7.18.2)(react-dom@18.2.0)(react@18.2.0)
+        version: 14.0.4(@babel/core@7.12.10)(react-dom@18.2.0)(react@18.2.0)
       prisma:
         specifier: 4.6.1
         version: 4.6.1
@@ -653,7 +653,7 @@ importers:
         version: 3.0.0
       next:
         specifier: 14.0.4
-        version: 14.0.4(@babel/core@7.18.2)(react-dom@18.2.0)(react@18.2.0)
+        version: 14.0.4(@babel/core@7.12.10)(react-dom@18.2.0)(react@18.2.0)
       prisma:
         specifier: 4.6.1
         version: 4.6.1
@@ -717,7 +717,7 @@ importers:
         version: link:../../packages/blitz
       next:
         specifier: 14.0.4
-        version: 14.0.4(@babel/core@7.18.2)(react-dom@18.2.0)(react@18.2.0)
+        version: 14.0.4(@babel/core@7.12.10)(react-dom@18.2.0)(react@18.2.0)
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -781,7 +781,7 @@ importers:
         version: 3.0.0
       next:
         specifier: 14.0.4
-        version: 14.0.4(@babel/core@7.18.2)(react-dom@18.2.0)(react@18.2.0)
+        version: 14.0.4(@babel/core@7.12.10)(react-dom@18.2.0)(react@18.2.0)
       prisma:
         specifier: 4.6.1
         version: 4.6.1
@@ -863,7 +863,7 @@ importers:
         version: 3.0.0
       next:
         specifier: 14.0.4
-        version: 14.0.4(@babel/core@7.18.2)(react-dom@18.2.0)(react@18.2.0)
+        version: 14.0.4(@babel/core@7.12.10)(react-dom@18.2.0)(react@18.2.0)
       prisma:
         specifier: 4.6.1
         version: 4.6.1
@@ -994,7 +994,7 @@ importers:
         version: 3.0.0
       next:
         specifier: 14.0.4
-        version: 14.0.4(@babel/core@7.18.2)(react-dom@18.2.0)(react@18.2.0)
+        version: 14.0.4(@babel/core@7.12.10)(react-dom@18.2.0)(react@18.2.0)
       prisma:
         specifier: 4.6.1
         version: 4.6.1
@@ -1058,7 +1058,7 @@ importers:
         version: link:../../packages/blitz
       next:
         specifier: 14.0.4
-        version: 14.0.4(@babel/core@7.18.2)(react-dom@18.2.0)(react@18.2.0)
+        version: 14.0.4(@babel/core@7.12.10)(react-dom@18.2.0)(react@18.2.0)
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -1107,7 +1107,7 @@ importers:
         version: link:../../packages/blitz
       next:
         specifier: 14.0.4
-        version: 14.0.4(@babel/core@7.18.2)(react-dom@18.2.0)(react@18.2.0)
+        version: 14.0.4(@babel/core@7.12.10)(react-dom@18.2.0)(react@18.2.0)
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -1162,7 +1162,7 @@ importers:
         version: 3.0.0
       next:
         specifier: 14.0.4
-        version: 14.0.4(@babel/core@7.18.2)(react-dom@18.2.0)(react@18.2.0)
+        version: 14.0.4(@babel/core@7.12.10)(react-dom@18.2.0)(react@18.2.0)
       prisma:
         specifier: 4.6.1
         version: 4.6.1
@@ -1668,9 +1668,6 @@ importers:
       "@blitzjs/config":
         specifier: 2.0.0-beta.36
         version: link:../config
-      "@tanstack/query-core":
-        specifier: 4.24.4
-        version: 4.24.4
       "@tanstack/react-query":
         specifier: 4.24.4
         version: 4.24.4(react-dom@18.2.0)(react@18.2.0)
@@ -12441,10 +12438,10 @@ packages:
       eslint-import-resolver-webpack:
         optional: true
     dependencies:
-      "@typescript-eslint/parser": 5.43.0(eslint@8.27.0)(typescript@4.8.4)
+      "@typescript-eslint/parser": 5.43.0(eslint@8.26.0)(typescript@4.8.4)
       debug: 3.2.7(supports-color@8.1.1)
       eslint-import-resolver-node: 0.3.6
-      eslint-import-resolver-typescript: 2.7.1(eslint-plugin-import@2.26.0)(eslint@8.27.0)
+      eslint-import-resolver-typescript: 2.7.1(eslint-plugin-import@2.26.0)(eslint@8.26.0)
       find-up: 2.1.0
     transitivePeerDependencies:
       - supports-color
