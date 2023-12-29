@@ -3,8 +3,8 @@ import { api } from "src/blitz-server"
 
 export default api(
   rpcHandler({
-    onError: console.log,
-    formatError: (error) => {
+    onError: (error, ctx) => console.log(error),
+    formatError: (error, ctx) => {
       error.message = `FormatError handler: ${error.message}`
       return error
     },

@@ -4004,6 +4004,16 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "papsavas",
+      "name": "Savvas Papageorgiadis",
+      "avatar_url": "https://avatars.githubusercontent.com/u/50584606?v=4",
+      "profile": "https://github.com/papsavas",
+      "contributions": [
+        "doc",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
