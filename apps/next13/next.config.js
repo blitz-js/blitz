@@ -1,10 +1,6 @@
 const {withBlitz} = require("@blitzjs/next")
 
 /** @type {import('next').NextConfig} */
-const nextConfig = {
-  experimental: {
-    serverComponentsExternalPackages: ["@prisma/client", "prisma"],
-  },
-}
+const nextConfig = {}
 
 module.exports = withBlitz(nextConfig)
