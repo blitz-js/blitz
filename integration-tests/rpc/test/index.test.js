@@ -162,13 +162,6 @@ function runTests(dev = false) {
       5000 * 60 * 2,
     )
   })
-
-  if (!dev) {
-    it("should show warning with next export", async () => {
-      const {stderr} = await nextExport(appDir, {outdir: join(appDir, "out")}, {stderr: true})
-      expect(stderr).toContain("https://nextjs.org/docs/messages/api-routes-static-export")
-    })
-  }
 }
 
 describe("RPC", () => {
