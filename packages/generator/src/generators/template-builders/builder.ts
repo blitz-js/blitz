@@ -41,7 +41,7 @@ export async function createFieldTemplateValues(
       codegen.fieldTypeMap?.[typeName as keyof typeof codegen.fieldTypeMap] || defaultFieldConfig
     values = {...values, ...fieldConfig}
     if (isOptional) {
-      values.zodType = `${values.zodType}().optional`
+      values.zodType = `${values.zodType}().nullable`
     }
     if (parent) {
       values.inputType = singleCamel(valueName).replace("Id", "s")
