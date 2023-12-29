@@ -24,15 +24,13 @@ import {
   stopWatcher,
 } from "blitz"
 import {
-  DefaultOptions,
-  dehydrate,
   getInfiniteQueryKey,
   getQueryKey,
   installWebpackConfig,
   InstallWebpackConfigOptions,
-  QueryClient,
   ResolverPathOptions,
 } from "@blitzjs/rpc"
+import {DefaultOptions, dehydrate, QueryClient} from "@tanstack/query-core"
 import {IncomingMessage, ServerResponse} from "http"
 import {withSuperJsonProps} from "./superjson"
 import {ParsedUrlQuery} from "querystring"

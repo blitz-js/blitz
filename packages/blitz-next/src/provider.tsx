@@ -1,5 +1,4 @@
-import {QueryClientProvider, Hydrate} from "@blitzjs/rpc"
-import type {HydrateOptions, QueryClient} from "@blitzjs/rpc"
+import {QueryClientProvider, Hydrate, QueryClient, HydrateOptions} from "@tanstack/react-query"
 import React from "react"
 
 export type BlitzProviderProps = {
@@ -12,17 +11,13 @@ export type BlitzProviderProps = {
 
 export const BlitzProvider = ({
   client = globalThis.queryClient,
-  contextSharing = false,
   dehydratedState,
   hydrateOptions,
   children,
 }: BlitzProviderProps) => {
   if (client) {
     return (
-      <QueryClientProvider
-        client={client || globalThis.queryClient}
-        contextSharing={contextSharing}
-      >
+      <QueryClientProvider client={client || globalThis.queryClient}>
         <Hydrate state={dehydratedState} options={hydrateOptions}>
           {children}
         </Hydrate>

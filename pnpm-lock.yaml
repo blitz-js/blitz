@@ -1665,6 +1665,12 @@ importers:
       "@blitzjs/config":
         specifier: 2.0.0-beta.36
         version: link:../config
+      "@tanstack/query-core":
+        specifier: 4.24.4
+        version: 4.24.4
+      "@tanstack/react-query":
+        specifier: 4.24.4
+        version: 4.24.4(react-dom@18.2.0)(react@18.2.0)
       "@testing-library/dom":
         specifier: 8.13.0
         version: 8.13.0
@@ -5671,7 +5677,7 @@ packages:
       chalk: 4.1.2
       emittery: 0.8.1
       exit: 0.1.2
-      graceful-fs: 4.2.10
+      graceful-fs: 4.2.11
       jest-changed-files: 27.5.1
       jest-config: 27.5.1(supports-color@8.1.1)
       jest-haste-map: 27.5.1
@@ -5864,7 +5870,7 @@ packages:
       collect-v8-coverage: 1.0.1
       exit: 0.1.2
       glob: 7.2.0
-      graceful-fs: 4.2.10
+      graceful-fs: 4.2.11
       istanbul-lib-coverage: 3.2.0
       istanbul-lib-instrument: 5.2.0(supports-color@8.1.1)
       istanbul-lib-report: 3.0.0
@@ -5939,7 +5945,7 @@ packages:
     engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
     dependencies:
       callsites: 3.1.0
-      graceful-fs: 4.2.10
+      graceful-fs: 4.2.11
       source-map: 0.6.1
     dev: true
 
@@ -5952,7 +5958,7 @@ packages:
     dependencies:
       "@jridgewell/trace-mapping": 0.3.17
       callsites: 3.1.0
-      graceful-fs: 4.2.10
+      graceful-fs: 4.2.11
 
   /@jest/test-result@27.5.1:
     resolution:
@@ -5987,7 +5993,7 @@ packages:
     engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
     dependencies:
       "@jest/test-result": 27.5.1
-      graceful-fs: 4.2.10
+      graceful-fs: 4.2.11
       jest-haste-map: 27.5.1
       jest-runtime: 27.5.1(supports-color@8.1.1)
     transitivePeerDependencies:
@@ -6002,7 +6008,7 @@ packages:
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     dependencies:
       "@jest/test-result": 29.2.1
-      graceful-fs: 4.2.10
+      graceful-fs: 4.2.11
       jest-haste-map: 29.3.0
       slash: 3.0.0
 
@@ -6019,7 +6025,7 @@ packages:
       chalk: 4.1.2
       convert-source-map: 1.8.0
       fast-json-stable-stringify: 2.1.0
-      graceful-fs: 4.2.10
+      graceful-fs: 4.2.11
       jest-haste-map: 27.5.1
       jest-regex-util: 27.5.1
       jest-util: 27.5.1
@@ -7019,7 +7025,6 @@ packages:
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       use-sync-external-store: 1.2.0(react@18.2.0)
-    dev: false
 
   /@testim/chrome-version@1.1.2:
     resolution:
@@ -9105,7 +9110,7 @@ packages:
       babel-plugin-istanbul: 6.1.1(supports-color@8.1.1)
       babel-preset-jest: 27.5.1(@babel/core@7.12.10)
       chalk: 4.1.2
-      graceful-fs: 4.2.10
+      graceful-fs: 4.2.11
       slash: 3.0.0
     transitivePeerDependencies:
       - supports-color
@@ -9126,7 +9131,7 @@ packages:
       babel-plugin-istanbul: 6.1.1(supports-color@8.1.1)
       babel-preset-jest: 29.2.0(@babel/core@7.12.10)
       chalk: 4.1.2
-      graceful-fs: 4.2.10
+      graceful-fs: 4.2.11
       slash: 3.0.0
     transitivePeerDependencies:
       - supports-color
@@ -15576,7 +15581,7 @@ packages:
       "@jest/types": 27.5.1
       chalk: 4.1.2
       exit: 0.1.2
-      graceful-fs: 4.2.10
+      graceful-fs: 4.2.11
       import-local: 3.1.0
       jest-config: 27.5.1(supports-color@8.1.1)
       jest-util: 27.5.1
@@ -15641,7 +15646,7 @@ packages:
       ci-info: 3.5.0
       deepmerge: 4.2.2
       glob: 7.2.0
-      graceful-fs: 4.2.10
+      graceful-fs: 4.2.11
       jest-circus: 27.5.1(supports-color@8.1.1)
       jest-environment-jsdom: 27.5.1(supports-color@8.1.1)
       jest-environment-node: 27.5.1
@@ -15879,7 +15884,7 @@ packages:
       "@types/node": 18.11.9
       anymatch: 3.1.2
       fb-watchman: 2.0.1
-      graceful-fs: 4.2.10
+      graceful-fs: 4.2.11
       jest-regex-util: 27.5.1
       jest-serializer: 27.5.1
       jest-util: 27.5.1
@@ -15996,7 +16001,7 @@ packages:
       "@jest/types": 27.5.1
       "@types/stack-utils": 2.0.1
       chalk: 4.1.2
-      graceful-fs: 4.2.10
+      graceful-fs: 4.2.11
       micromatch: 4.0.5
       pretty-format: 27.5.1
       slash: 3.0.0
@@ -16121,7 +16126,7 @@ packages:
     dependencies:
       "@jest/types": 27.5.1
       chalk: 4.1.2
-      graceful-fs: 4.2.10
+      graceful-fs: 4.2.11
       jest-haste-map: 27.5.1
       jest-pnp-resolver: 1.2.2(jest-resolve@27.5.1)
       jest-util: 27.5.1
@@ -16163,7 +16168,7 @@ packages:
       "@types/node": 18.11.9
       chalk: 4.1.2
       emittery: 0.8.1
-      graceful-fs: 4.2.10
+      graceful-fs: 4.2.11
       jest-docblock: 27.5.1
       jest-environment-jsdom: 27.5.1(supports-color@8.1.1)
       jest-environment-node: 27.5.1
@@ -16233,7 +16238,7 @@ packages:
       collect-v8-coverage: 1.0.1
       execa: 5.1.1
       glob: 7.2.0
-      graceful-fs: 4.2.10
+      graceful-fs: 4.2.11
       jest-haste-map: 27.5.1
       jest-message-util: 27.5.1
       jest-mock: 27.5.1
@@ -16287,7 +16292,7 @@ packages:
     engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
     dependencies:
       "@types/node": 18.11.9
-      graceful-fs: 4.2.10
+      graceful-fs: 4.2.11
     dev: true
 
   /jest-snapshot@27.5.1(supports-color@8.1.1):
@@ -16309,7 +16314,7 @@ packages:
       babel-preset-current-node-syntax: 1.0.1(@babel/core@7.12.10)
       chalk: 4.1.2
       expect: 27.5.1
-      graceful-fs: 4.2.10
+      graceful-fs: 4.2.11
       jest-diff: 27.5.1
       jest-get-type: 27.5.1
       jest-haste-map: 27.5.1
@@ -16882,7 +16887,7 @@ packages:
         integrity: sha512-m6F1R3z8jjlf2imQHS2Qez5sjKWQzbuuhuJ/FKYFRZvPE3PuHcSMVZzfsLhGVOkfd20obL5SWEBew5ShlquNxg==,
       }
     optionalDependencies:
-      graceful-fs: 4.2.10
+      graceful-fs: 4.2.11
     dev: false
 
   /jsonfile@6.1.0:
@@ -16893,7 +16898,7 @@ packages:
     dependencies:
       universalify: 2.0.0
     optionalDependencies:
-      graceful-fs: 4.2.10
+      graceful-fs: 4.2.11
 
   /jsonwebtoken@9.0.0:
     resolution:
@@ -17191,7 +17196,7 @@ packages:
       }
     engines: {node: ">=6"}
     dependencies:
-      graceful-fs: 4.2.10
+      graceful-fs: 4.2.11
       js-yaml: 3.14.1
       pify: 4.0.1
       strip-bom: 3.0.0
