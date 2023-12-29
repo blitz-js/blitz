@@ -1,7 +1,5 @@
 import {useInfiniteQuery as useInfiniteReactQuery} from "@tanstack/react-query"
-
 import {useQuery as useReactQuery} from "@tanstack/react-query"
-
 import {useMutation as useReactQueryMutation} from "@tanstack/react-query"
 
 import type {
@@ -80,10 +78,10 @@ export function useQuery<
   const suspenseEnabled = Boolean(globalThis.__BLITZ_SUSPENSE_ENABLED)
   let enabled = isServer && suspenseEnabled ? false : options?.enabled ?? options?.enabled !== null
   let routerIsReady = false
-  try {
-    const router = useRouter()
+  const router = useRouter()
+  if (router) {
     routerIsReady = router?.isReady || (isServer && suspenseEnabled)
-  } catch (e) {
+  } else {
     routerIsReady = true
   }
   const enhancedResolverRpcClient = sanitizeQuery(queryFn)
@@ -167,10 +165,10 @@ export function usePaginatedQuery<
   const suspenseEnabled = Boolean(globalThis.__BLITZ_SUSPENSE_ENABLED)
   let enabled = isServer && suspenseEnabled ? false : options?.enabled ?? options?.enabled !== null
   let routerIsReady = false
-  try {
-    const router = useRouter()
+  const router = useRouter()
+  if (router) {
     routerIsReady = router?.isReady || (isServer && suspenseEnabled)
-  } catch (e) {
+  } else {
     routerIsReady = true
   }
   const enhancedResolverRpcClient = sanitizeQuery(queryFn)
@@ -264,10 +262,10 @@ export function useInfiniteQuery<
   const suspenseEnabled = Boolean(globalThis.__BLITZ_SUSPENSE_ENABLED)
   let enabled = isServer && suspenseEnabled ? false : options?.enabled ?? options?.enabled !== null
   let routerIsReady = false
-  try {
-    const router = useRouter()
+  const router = useRouter()
+  if (router) {
     routerIsReady = router?.isReady || (isServer && suspenseEnabled)
-  } catch (e) {
+  } else {
     routerIsReady = true
   }
   const enhancedResolverRpcClient = sanitizeQuery(queryFn)
