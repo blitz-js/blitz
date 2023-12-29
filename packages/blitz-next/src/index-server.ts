@@ -29,8 +29,10 @@ import {
   installWebpackConfig,
   InstallWebpackConfigOptions,
   ResolverPathOptions,
+  DefaultOptions,
+  dehydrate,
+  QueryClient,
 } from "@blitzjs/rpc"
-import {DefaultOptions, dehydrate, QueryClient} from "@tanstack/query-core"
 import {IncomingMessage, ServerResponse} from "http"
 import {withSuperJsonProps} from "./superjson"
 import {ParsedUrlQuery} from "querystring"
