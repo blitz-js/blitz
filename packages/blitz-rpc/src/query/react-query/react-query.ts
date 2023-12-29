@@ -28,7 +28,7 @@ import {
   sanitizeMutation,
   getInfiniteQueryKey,
 } from "../utils"
-import {useRouter} from "next/router"
+import {useRouter} from "next/compat/router"
 
 type QueryLazyOptions = {suspense: unknown} | {enabled: unknown}
 type QueryNonLazyOptions =
@@ -86,7 +86,7 @@ export function useQuery<
   let routerIsReady = false
   try {
     const router = useRouter()
-    routerIsReady = router.isReady || (isServer && suspenseEnabled)
+    routerIsReady = router?.isReady || (isServer && suspenseEnabled)
   } catch (e) {
     routerIsReady = true
   }
@@ -173,7 +173,7 @@ export function usePaginatedQuery<
   let routerIsReady = false
   try {
     const router = useRouter()
-    routerIsReady = router.isReady || (isServer && suspenseEnabled)
+    routerIsReady = router?.isReady || (isServer && suspenseEnabled)
   } catch (e) {
     routerIsReady = true
   }
@@ -270,7 +270,7 @@ export function useInfiniteQuery<
   let routerIsReady = false
   try {
     const router = useRouter()
-    routerIsReady = router.isReady || (isServer && suspenseEnabled)
+    routerIsReady = router?.isReady || (isServer && suspenseEnabled)
   } catch (e) {
     routerIsReady = true
   }
