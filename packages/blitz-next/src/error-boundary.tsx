@@ -4,6 +4,7 @@ import type {NextRouter} from "next/router"
 import * as React from "react"
 import {RouterContext} from "./router-context"
 import _debug from "debug"
+import type {ExcludeRouterProps, WithRouterProps} from "next/dist/client/with-router"
 
 const debug = _debug("blitz:errorboundary")
 
@@ -73,110 +74,121 @@ type ErrorBoundaryState = {error: Error | null}
 
 const initialState: ErrorBoundaryState = {error: null}
 
-export class ErrorBoundary extends React.Component<
-  React.PropsWithRef<React.PropsWithChildren<ErrorBoundaryProps>>,
-  ErrorBoundaryState
-> {
-  static contextType = RouterContext
-  router = useRouter()
-
-  static getDerivedStateFromError(error: Error) {
-    return {error}
+export default function withRouter<P extends WithRouterProps>(
+  ComposedComponent: any,
+): React.ComponentType<ExcludeRouterProps<P>> {
+  function WithRouterWrapper(props: any): JSX.Element {
+    return <ComposedComponent router={useRouter()} {...props} />
   }
 
-  state = initialState
-  updatedWithError = false
+  return WithRouterWrapper
+}
 
-  resetErrorBoundary = (...args: Array<unknown>) => {
-    this.props.onReset?.(...args)
-    this.reset()
-  }
+export const ErrorBoundary = withRouter(
+  class ErrorBoundary extends React.Component<
+    React.PropsWithRef<React.PropsWithChildren<ErrorBoundaryProps>>,
+    ErrorBoundaryState
+  > {
+    static contextType = RouterContext
 
-  reset() {
-    this.updatedWithError = false
-    this.setState(initialState)
-  }
-
-  async componentDidCatch(error: Error, info: React.ErrorInfo) {
-    if (error instanceof RedirectError) {
-      debug("Redirecting from ErrorBoundary to", error.url)
-      this.props.router.push(error.url)
-      return
-    }
-    this.props.onError?.(error, info)
-  }
-
-  componentDidMount() {
-    const {error} = this.state
-
-    if (error !== null) {
-      this.updatedWithError = true
+    static getDerivedStateFromError(error: Error) {
+      return {error}
     }
 
-    // Automatically reset on route change
-    this.props.router?.events?.on("routeChangeComplete", this.handleRouteChange)
-  }
+    state = initialState
+    updatedWithError = false
 
-  handleRouteChange = () => {
-    debug("Resetting error boundary on route change")
-    this.props.onReset?.()
-    this.reset()
-  }
-
-  componentWillUnmount() {
-    this.props.router?.events?.off("routeChangeComplete", this.handleRouteChange)
-  }
-
-  componentDidUpdate(prevProps: ErrorBoundaryProps) {
-    const {error} = this.state
-    const {resetKeys} = this.props
-
-    // There's an edge case where if the thing that triggered the error
-    // happens to *also* be in the resetKeys array, we'd end up resetting
-    // the error boundary immediately. This would likely trigger a second
-    // error to be thrown.
-    // So we make sure that we don't check the resetKeys on the first call
-    // of cDU after the error is set
-    if (error !== null && !this.updatedWithError) {
-      this.updatedWithError = true
-      return
-    }
-
-    if (error !== null && changedArray(prevProps.resetKeys, resetKeys)) {
-      this.props.onResetKeysChange?.(prevProps.resetKeys, resetKeys)
+    resetErrorBoundary = (...args: Array<unknown>) => {
+      this.props.onReset?.(...args)
       this.reset()
     }
-  }
 
-  render() {
-    const {error} = this.state
+    reset() {
+      this.updatedWithError = false
+      this.setState(initialState)
+    }
 
-    const {fallbackRender, FallbackComponent, fallback} = this.props
-
-    if (error !== null) {
-      const props = {
-        error,
-        resetErrorBoundary: this.resetErrorBoundary,
-      }
+    async componentDidCatch(error: Error, info: React.ErrorInfo) {
       if (error instanceof RedirectError) {
-        // Don't render children because redirect is imminent
-        return null
-      } else if (React.isValidElement(fallback)) {
-        return fallback
-      } else if (typeof fallbackRender === "function") {
-        return fallbackRender(props)
-      } else if (FallbackComponent) {
-        return <FallbackComponent {...props} />
-      } else {
-        throw new Error(
-          "<ErrorBoundary> requires either a fallback, fallbackRender, or FallbackComponent prop",
-        )
+        debug("Redirecting from ErrorBoundary to", error.url)
+        this.props.router.push(error.url)
+        return
+      }
+      this.props.onError?.(error, info)
+    }
+
+    componentDidMount() {
+      const {error} = this.state
+
+      if (error !== null) {
+        this.updatedWithError = true
+      }
+
+      // Automatically reset on route change
+      this.props.router?.events?.on("routeChangeComplete", this.handleRouteChange)
+    }
+
+    handleRouteChange = () => {
+      debug("Resetting error boundary on route change")
+      this.props.onReset?.()
+      this.reset()
+    }
+
+    componentWillUnmount() {
+      this.props.router?.events?.off("routeChangeComplete", this.handleRouteChange)
+    }
+
+    componentDidUpdate(prevProps: ErrorBoundaryProps) {
+      const {error} = this.state
+      const {resetKeys} = this.props
+
+      // There's an edge case where if the thing that triggered the error
+      // happens to *also* be in the resetKeys array, we'd end up resetting
+      // the error boundary immediately. This would likely trigger a second
+      // error to be thrown.
+      // So we make sure that we don't check the resetKeys on the first call
+      // of cDU after the error is set
+      if (error !== null && !this.updatedWithError) {
+        this.updatedWithError = true
+        return
+      }
+
+      if (error !== null && changedArray(prevProps.resetKeys, resetKeys)) {
+        this.props.onResetKeysChange?.(prevProps.resetKeys, resetKeys)
+        this.reset()
       }
     }
 
-    return this.props.children
-  }
-}
+    render() {
+      const {error} = this.state
+
+      const {fallbackRender, FallbackComponent, fallback} = this.props
+
+      if (error !== null) {
+        const props = {
+          error,
+          resetErrorBoundary: this.resetErrorBoundary,
+        }
+        if (error instanceof RedirectError) {
+          // Don't render children because redirect is imminent
+          return null
+        } else if (React.isValidElement(fallback)) {
+          return fallback
+        } else if (typeof fallbackRender === "function") {
+          return fallbackRender(props)
+        } else if (FallbackComponent) {
+          return <FallbackComponent {...props} />
+        } else {
+          throw new Error(
+            "<ErrorBoundary> requires either a fallback, fallbackRender, or FallbackComponent prop",
+          )
+        }
+      }
+
+      return this.props.children
+    }
+  },
+)
 
 function withErrorBoundary<P extends JSX.IntrinsicAttributes>(
   Component: React.ComponentType<P>,
