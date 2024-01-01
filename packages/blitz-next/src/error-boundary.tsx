@@ -5,7 +5,6 @@ import * as React from "react"
 import {RouterContext} from "./router-context"
 import _debug from "debug"
 import type {ExcludeRouterProps, WithRouterProps} from "next/dist/client/with-router"
-import type {BaseContext, NextComponentType, NextPageContext} from "next/dist/shared/lib/utils"
 
 const debug = _debug("blitz:errorboundary")
 
@@ -75,8 +74,8 @@ type ErrorBoundaryState = {error: Error | null}
 
 const initialState: ErrorBoundaryState = {error: null}
 
-function withRouter<P extends WithRouterProps, C extends BaseContext = NextPageContext>(
-  ComposedComponent: NextComponentType<C, any, P>,
+function withRouter<P extends WithRouterProps>(
+  ComposedComponent: React.ComponentType<P>,
 ): React.ComponentType<ExcludeRouterProps<P>> {
   function WithRouterWrapper(props: any): JSX.Element {
     return <ComposedComponent router={useRouter()} {...props} />
