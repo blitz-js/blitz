@@ -75,10 +75,9 @@ type ErrorBoundaryState = {error: Error | null}
 
 const initialState: ErrorBoundaryState = {error: null}
 
-export default function withRouter<
-  P extends WithRouterProps,
-  C extends BaseContext = NextPageContext,
->(ComposedComponent: NextComponentType<C, any, P>): React.ComponentType<ExcludeRouterProps<P>> {
+function withRouter<P extends WithRouterProps, C extends BaseContext = NextPageContext>(
+  ComposedComponent: NextComponentType<C, any, P>,
+): React.ComponentType<ExcludeRouterProps<P>> {
   function WithRouterWrapper(props: any): JSX.Element {
     return <ComposedComponent router={useRouter()} {...props} />
   }
