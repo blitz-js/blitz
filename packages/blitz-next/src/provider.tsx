@@ -12,13 +12,17 @@ export type BlitzProviderProps = {
 
 export const BlitzProvider = ({
   client = globalThis.queryClient,
+  contextSharing = false,
   dehydratedState,
   hydrateOptions,
   children,
 }: BlitzProviderProps) => {
   if (client) {
     return (
-      <QueryClientProvider client={client || globalThis.queryClient}>
+      <QueryClientProvider
+        client={client || globalThis.queryClient}
+        contextSharing={contextSharing}
+      >
         <Hydrate state={dehydratedState} options={hydrateOptions}>
           {children}
         </Hydrate>
