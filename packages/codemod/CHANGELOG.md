@@ -1,5 +1,275 @@
 # @blitzjs/codemod
 
+## 2.0.0
+
+### Minor Changes
+
+- 9529dbd6f: ## ⚠️ Breaking Changes for Blitz Auth
+
+  Automatically upgrade using codemod
+  (Make sure to git commit before running this command to avoid losing changes)
+
+  ```bash
+  npx @blitz/codemod secure-password
+  ```
+
+  Introduce a new import path for the Blitz wrapper `SecurePassword` to fully decouple the library from `@blitzjs/auth`
+
+  ```diff
+  - import {SecurePassword} from "@blitzjs/auth"
+  + import {SecurePassword} from "@blitzjs/auth/secure-password"
+  ```
+
+### Patch Changes
+
+- db7233db6: Bump react, react-dom, @types/react and next versions
+
+  This fixes a console warning: `Warning: Received`true`for a non-boolean attribute`global`.` when using `styled-jsx`. Versions bump also fixes React Hydration error that happens on and off when using `redirectAuthenticatedTo`.
+
+- 06427f67f: Throw error if cookiePrefix is undefined when running codemod
+- dcdcd0405: These are various changes to will make the codemod more dynamic and work with a larger variety of codebases. These fixes are implemented to make the codemod work with flightdeck.
+- f120f6723: Add DocumentProps & DocumentContext to the codemod import map
+- 86af6dec5: Wrap middlewares with BlitzServerMiddleware function with codemod
+- d3403cf86: Show file path on error when running the upgrade legacy codemod.
+- 74a4ce8e8: Add `AuthenticatedSessionContext` to the `upgrade-legacy` codemod import map
+- e3750b049: codemod fixes
+- 43e65cfec: Remove TypeScript type annotations from `next.config.js` (a JavaScript file) in the `upgrade-legacy` codemod.
+- a3b5fdd03: Change ES6 import for `withBlitz` during the codemod to the require syntax.
+- bbac7906e: fix codemod for wrapping \_app arrow function & fix codemod for nested pages directory
+- 4cad9cca2: Update queryClient import in codemod
+- 1476a577b: Fix release
+- da914c929: Convert import statements to require when creating the next.config.js file in the codemod
+- f88702c1c: Remove trailing comma when removing BlitzConfig from next.config.js & Fix codemod so if route (eg. `app/auth/pages`) convert to (eg. `pages/`) instead of (eg. `pages/auth`)
+- aafdc5b4c: Move middlewares from blitz config to blitz server with codemod
+- 93851d90c: Handle duplicate imports with Blitz upgrade-legacy codemod
+- b3b4c2150: Unwrap `invokeWithMiddleware` so the query or mutation is called directly when running the codemod
+- e6fb09d49: Fix templates source in RPC codemod step
+- ce4536833: Add codemod to upgrade from legacy framework to the Blitz Toolkit
+- 2313fa61b: Fix upgrade-legacy codemod replacing identifiers with an invalid value. Previously new values were hardcoded to `NextApiRequest`. Now we're using correct values provided as `replaceIdentifiers` function argument.
+- 72a332e01: Wrap `blitz.config.ts` with the `withBlitz` function during the codemod step instead of creating a blank `next.config.js` file.
+- 0f4926fd1: Set current Blitz tag to latest
+- 70f9ae492: Handle next/dynamic default import in codemod
+- 7e538ba45: Import ErrorComponent as DefaultErrorComponent
+- 8aee25c58: getQueryClient function & queryClient codemod updates & shared plugin config
+- 8e00605a8: Updates the error messages based on if it's a babel parse error or an unexpected error
+- 2d1482fc8: Allow codemod to finish if `cookiePrefix` is undefined. Then show error at the end of running the codemod.
+- eb970f7bb: Fix detecting `blitz.config.(ts|js)` config file when running the codemod.
+- 1bf185d61: Add a new codemod step to update the .eslintrc.js file
+- 8dfaad088: Set correct packages versions in package.json with upgrade-legacy codemod
+- ce4536833: init codemod generator
+- 9e05d6e15: allow extension catch in getAllFiles codemod util
+- cb55ed266: Fix codemod to accept a self closing `DocumentHead` in the `_document` page
+- ebfb562bf: Add `Script` as a default import from next.js during the codemod.
+- 46d9f81ad: Update templates directory for codemod
+- 2cc888eff: Beta release
+- Updated dependencies [db7233db6]
+- Updated dependencies [1569bd53e]
+- Updated dependencies [cee2dec17]
+- Updated dependencies [cb63a0ea5]
+- Updated dependencies [c5c727cb6]
+- Updated dependencies [5166e5e03]
+- Updated dependencies [047302055]
+- Updated dependencies [9db6c8855]
+- Updated dependencies [1e1bb73b2]
+- Updated dependencies [83b355900]
+- Updated dependencies [4656e6ecd]
+- Updated dependencies [c1e004063]
+- Updated dependencies [365e67094]
+- Updated dependencies [fd31e56bc]
+- Updated dependencies [74a14b704]
+- Updated dependencies [91aa53563]
+- Updated dependencies [e228ba5de]
+- Updated dependencies [aec1bb076]
+- Updated dependencies [1e0ec7a97]
+- Updated dependencies [77b7da0f3]
+- Updated dependencies [47c6b62dc]
+- Updated dependencies [547613937]
+- Updated dependencies [82649f341]
+- Updated dependencies [f397cc203]
+- Updated dependencies [cadefb88e]
+- Updated dependencies [271c58ac6]
+- Updated dependencies [8f166a5db]
+- Updated dependencies [8c247e26e]
+- Updated dependencies [c5572bec6]
+- Updated dependencies [86e8eb7c8]
+- Updated dependencies [99205f52d]
+- Updated dependencies [6ece09613]
+- Updated dependencies [e3750b049]
+- Updated dependencies [824a9b5e2]
+- Updated dependencies [4603a2b7b]
+- Updated dependencies [d6717b9d3]
+- Updated dependencies [928e840b5]
+- Updated dependencies [6ac2d3412]
+- Updated dependencies [6f18cbdc9]
+- Updated dependencies [7498aef4f]
+- Updated dependencies [2a81af7b7]
+- Updated dependencies [ea7561b8e]
+- Updated dependencies [1436e7618]
+- Updated dependencies [176c7b8b5]
+- Updated dependencies [696f48c4e]
+- Updated dependencies [d98e4bac4]
+- Updated dependencies [90f1741da]
+- Updated dependencies [4a9aa9f7f]
+- Updated dependencies [d692b4c1d]
+- Updated dependencies [638f2319b]
+- Updated dependencies [c213d521c]
+- Updated dependencies [5ea068b28]
+- Updated dependencies [1d863f352]
+- Updated dependencies [8b4bf999c]
+- Updated dependencies [1476a577b]
+- Updated dependencies [a6e81f156]
+- Updated dependencies [b80c3d92c]
+- Updated dependencies [b72d1215c]
+- Updated dependencies [cacb65d63]
+- Updated dependencies [eb9715688]
+- Updated dependencies [630c71812]
+- Updated dependencies [bf1b2c824]
+- Updated dependencies [240f3f347]
+- Updated dependencies [4cad9cca2]
+- Updated dependencies [55b1cb204]
+- Updated dependencies [c89cb943b]
+- Updated dependencies [54db8a46d]
+- Updated dependencies [bf4aaf1de]
+- Updated dependencies [962eb58af]
+- Updated dependencies [54a66a95d]
+- Updated dependencies [9fe0cc546]
+- Updated dependencies [b43c1a81c]
+- Updated dependencies [0b94a4503]
+- Updated dependencies [af58e2b23]
+- Updated dependencies [78fd5c489]
+- Updated dependencies [62bf12b5c]
+- Updated dependencies [6ff9ec0d7]
+- Updated dependencies [09e0c68db]
+- Updated dependencies [abb1ad5d1]
+- Updated dependencies [3a602b613]
+- Updated dependencies [ceb7db274]
+- Updated dependencies [2ade7268e]
+- Updated dependencies [0edeaa37a]
+- Updated dependencies [f0ca738d5]
+- Updated dependencies [7aef610d8]
+- Updated dependencies [0936cb38a]
+- Updated dependencies [c11f0401c]
+- Updated dependencies [60de05747]
+- Updated dependencies [ab4d9de70]
+- Updated dependencies [989691ec8]
+- Updated dependencies [4d7d126d9]
+- Updated dependencies [8e5903c0f]
+- Updated dependencies [30fd61316]
+- Updated dependencies [6f4349896]
+- Updated dependencies [6baab1907]
+- Updated dependencies [942536d9a]
+- Updated dependencies [8ada2c26f]
+- Updated dependencies [666a3ae3e]
+- Updated dependencies [a80d2a8f7]
+- Updated dependencies [3ddb57072]
+- Updated dependencies [4e26ae21b]
+- Updated dependencies [430f0b52d]
+- Updated dependencies [abe2afccd]
+- Updated dependencies [b84c5bedb]
+- Updated dependencies [a6f32d1d0]
+- Updated dependencies [b97366c42]
+- Updated dependencies [e339e2fd0]
+- Updated dependencies [348fd6f5e]
+- Updated dependencies [3bcbad1a9]
+- Updated dependencies [0a8b0cb35]
+- Updated dependencies [8490b0724]
+- Updated dependencies [22344d058]
+- Updated dependencies [19898a488]
+- Updated dependencies [93851d90c]
+- Updated dependencies [6811eab1a]
+- Updated dependencies [81b4b41a9]
+- Updated dependencies [d814c2d2d]
+- Updated dependencies [20fc9f80f]
+- Updated dependencies [8dedca1a2]
+- Updated dependencies [3511d5b69]
+- Updated dependencies [46a34c7b3]
+- Updated dependencies [e82a79be5]
+- Updated dependencies [890b0c0c9]
+- Updated dependencies [430f6ec78]
+- Updated dependencies [a961aff88]
+- Updated dependencies [83281a846]
+- Updated dependencies [6ec020c6d]
+- Updated dependencies [adabb11a0]
+- Updated dependencies [38d945a3f]
+- Updated dependencies [c3c789740]
+- Updated dependencies [240f378b5]
+- Updated dependencies [6d5f9efe1]
+- Updated dependencies [df3265b85]
+- Updated dependencies [b1ef45bf2]
+- Updated dependencies [89bf993a1]
+- Updated dependencies [0f4926fd1]
+- Updated dependencies [3f9fe8f04]
+- Updated dependencies [bcef81fad]
+- Updated dependencies [8aee25c58]
+- Updated dependencies [fe8c937d2]
+- Updated dependencies [0ac6e1712]
+- Updated dependencies [35a070ad7]
+- Updated dependencies [8fa9a56f6]
+- Updated dependencies [807a2b564]
+- Updated dependencies [1d9804a61]
+- Updated dependencies [41608c4c3]
+- Updated dependencies [a0596279b]
+- Updated dependencies [88caa18e6]
+- Updated dependencies [022392c12]
+- Updated dependencies [ebd74b4e9]
+- Updated dependencies [63605961b]
+- Updated dependencies [c53978d58]
+- Updated dependencies [17ce29e5e]
+- Updated dependencies [c126b8191]
+- Updated dependencies [c9cf7adc3]
+- Updated dependencies [1b798d9a0]
+- Updated dependencies [ea7561b8e]
+- Updated dependencies [a84b8de4e]
+- Updated dependencies [727734955]
+- Updated dependencies [70b334a2f]
+- Updated dependencies [80e1ead7c]
+- Updated dependencies [f39ba1ff1]
+- Updated dependencies [161270e3b]
+- Updated dependencies [b6b9a1c5a]
+- Updated dependencies [b405c1e87]
+- Updated dependencies [37623a4f4]
+- Updated dependencies [dd299ae89]
+- Updated dependencies [8bcb471a5]
+- Updated dependencies [a3e6c49c4]
+- Updated dependencies [15d22af24]
+- Updated dependencies [454591293]
+- Updated dependencies [b86b569d5]
+- Updated dependencies [bd09db753]
+- Updated dependencies [2073714f8]
+- Updated dependencies [d316d0db7]
+- Updated dependencies [8aa22a0b2]
+- Updated dependencies [12cb7a727]
+- Updated dependencies [37aeaa7fa]
+- Updated dependencies [b918055bf]
+- Updated dependencies [aa34661fa]
+- Updated dependencies [61888d1a3]
+- Updated dependencies [dd5f51744]
+- Updated dependencies [ce4536833]
+- Updated dependencies [79c5e86d7]
+- Updated dependencies [fb32903bf]
+- Updated dependencies [b33db0828]
+- Updated dependencies [f15a51901]
+- Updated dependencies [10f98c681]
+- Updated dependencies [9674efc0b]
+- Updated dependencies [8e0c9d76b]
+- Updated dependencies [d5b8faa86]
+- Updated dependencies [a3bbe6ce3]
+- Updated dependencies [7abfb9086]
+- Updated dependencies [e2c18895d]
+- Updated dependencies [00bd849ee]
+- Updated dependencies [ffa7b5ccc]
+- Updated dependencies [065db256d]
+- Updated dependencies [1f6b0b54c]
+- Updated dependencies [527e48ac3]
+- Updated dependencies [078fe4741]
+- Updated dependencies [01f3a03ea]
+- Updated dependencies [36e26193b]
+- Updated dependencies [2cc888eff]
+- Updated dependencies [8107138e2]
+- Updated dependencies [f202aac18]
+  - blitz@2.0.0
+  - @blitzjs/generator@2.0.0
+
 ## 2.0.0-beta.37
 
 ### Patch Changes

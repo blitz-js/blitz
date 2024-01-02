@@ -1,5 +1,19 @@
 # @blitzjs/config
 
+## 2.0.0
+
+### Patch Changes
+
+- db7233db6: Bump react, react-dom, @types/react and next versions
+
+  This fixes a console warning: `Warning: Received`true`for a non-boolean attribute`global`.` when using `styled-jsx`. Versions bump also fixes React Hydration error that happens on and off when using `redirectAuthenticatedTo`.
+
+- 1476a577b: Fix release
+- 4e26ae21b: Upgrade eslint-config-next in new app templates to fix linting issues on blitz build
+- 0f4926fd1: Set current Blitz tag to latest
+- 00bd849ee: new app template
+- 2cc888eff: Beta release
+
 ## 2.0.0-beta.37
 
 ## 2.0.0-beta.36

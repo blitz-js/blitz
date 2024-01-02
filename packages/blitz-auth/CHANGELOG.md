@@ -1,5 +1,313 @@
 # @blitzjs/auth
 
+## 2.0.0
+
+### Major Changes
+
+- 9529dbd6f: ## ⚠️ Breaking Changes for Blitz Auth
+
+  Automatically upgrade using codemod
+  (Make sure to git commit before running this command to avoid losing changes)
+
+  ```bash
+  npx @blitz/codemod secure-password
+  ```
+
+  Introduce a new import path for the Blitz wrapper `SecurePassword` to fully decouple the library from `@blitzjs/auth`
+
+  ```diff
+  - import {SecurePassword} from "@blitzjs/auth"
+  + import {SecurePassword} from "@blitzjs/auth/secure-password"
+  ```
+
+- 42a2cf951: BREAKING CHANGE: secure-password is now an `optional peerDependency`, if you are using `SecurePassword` api, you need to now install `secure-password` in your application.
+
+  This helps users who do not use SecurePassword from having native package build issues.
+
+### Minor Changes
+
+- c1e004063: transpile packages to es2015 to support older browsers
+- cadefb88e: - New Blitz Auth Function `getAppSession`, This function will use the cookies and headers provided by the server component and returns the current session.
+  - New Blitz Auth Hook `useAuthenticatedAppSession`, This hook is implemented as the replacement of the BlitzPage seurity auth utilities provided for the pages directory to work with React Server Components in the Nextjs 13 app directory
+  - New Blitz React Server Component Wrapper, `BlitzProvider` is to be imported from setupBlitzClient in src/blitz-client.ts and to used to ideally wrap the entire application in the `RootLayout` in the root layout.ts file of next app directory.
+  - Fix failing tests due to the error `NextRouter is not mounted` in next 13 blitz apps
+- 6ece09613: Decoupled Blitz RPC from Blitz Auth to allow independent use.
+- 6f18cbdc9: feature: Next Auth Adapter
+- 55a43ce1f: maybe fix anon session CSRF issue + add ability to customize anon session expiry time
+- 03bad3175: fix Cannot read properties of null (reading 'isReady') for pnpm/yarn v3
+- 1bb3a6556: Stop exporting `useAuthenticatedBlitzContext` from `@blitzjs/auth` this must be imported from `app/blitz-server.ts` file in order to work correctly
+- 145d5a02b: fix failed localStorage access to not crash the application
+
+### Patch Changes
+
+- db7233db6: Bump react, react-dom, @types/react and next versions
+
+  This fixes a console warning: `Warning: Received`true`for a non-boolean attribute`global`.` when using `styled-jsx`. Versions bump also fixes React Hydration error that happens on and off when using `redirectAuthenticatedTo`.
+
+- cee2dec17: Fix bug that did not allow `Page.authenicate = {role: "" }` to correctly work
+- 5166e5e03: (feat) upgrade tslog to v4.8.2
+- 83b355900: Truncate errors from `api/auth/<strategy>/callback` request to 100 characters before passing them to the `?authError=` query parameter
+- c5572bec6: blitz-auth: Fix webpack from following next-auth
+- 3f20a4740: Update `deleteSession` return type — allow undefined values
+- 82e8b64f5: Fixes adding authError query param in Passport adapter.
+- 90f1741da: blitz-auth: Support for Prisma v5
+
+  Internal: Make `handle` a required paramter while updating the `session` modal.
+
+- 7817fe3a8: Add missing RouteUrlObject on Page.authenticate.redirectTo
+- 8b01175b4: Updated `useAuthenticatedBlitzContext` to now return `AuthenticatedCtx`
+- 8b4bf999c: Update dependencies
+- 1476a577b: Fix release
+- bf1b2c824: fix route manifest codegen
+- 9fe0cc546: Fix auth related React hydration errors by not redirecting until after component mount.
+- 09e0c68db: Automatically authorize role with usage of `redirectAuthenticatedTo` in `useAuthenticatedBlitzContext` utility
+- a80d2a8f7: rename middleware type for blitz server plugin
+- 3ddb57072: ⚠️ Breaking Change:
+  Next.js version 13.5 or above is now required to use `@blitzjs/next`
+
+  Fix `Error: Cannot find module 'next/dist/shared/lib/router/utils/resolve-href'` by updating the location of next.js internal function.
+
+- abe2afccd: Fix a long-standing issue with occasional blitz auth flakiness
+
+  This bug would sometimes cause users to be logged out or to experience an CSRFTokenMismatchError. This bug, when encountered, usually by lots of setPublicData or session.create calls, would not set the cookie headers correctly resulting in cookies being set to a previous state or in a possibly undefined state.
+
+  There are no security concerns as far as I can tell.
+
+- b84c5bedb: Next 14 Compatibility
+- b97366c42: Remove unintended dependency on next-auth by removing it from the core build of @blitzjs/auth
+
+  ⚠️ Breaking Change for current users of `withNextAuthAdapter`
+
+  Update your import in `next.config.js` in the following way
+
+  ```diff
+  -const { withNextAuthAdapter } = require("@blitzjs/auth")
+  +const { withNextAuthAdapter } = require("@blitzjs/auth/next-auth")
+  ```
+
+- 3bcbad1a9: - Introduce Blitz RPC's logging system to the `invoke` function which is the recommended way to call resolvers in nextjs `app` directory's react server components.
+
+  - This refactor also removes the re-introduced dependency between `blitz-auth` and `blitz-rpc`, allowing independent usage of `blitz-rpc`
+
+- 46a34c7b3: initial publish
+- e82a79be5: Update the version of next in the new template from 13.2 to 13.3.0
+- 0f4926fd1: Set current Blitz tag to latest
+- 97469a126: Added option `role` to `authenticate` property of `BlitzPage` to authenticate page with respect to the role of the user. `String` value or `Array` of strings can be passed to authorize users.
+- 1d9804a61: Remove references to the logging package
+- b6b9a1c5a: Fix Next-Auth integration: `Unable to use next-auth with provider: Error [ERR_PACKAGE_PATH_NOT_EXPORTED]`
+- 1436e7618: Add passport adapter to @blitzjs/auth
+- 1c809094f: Fix `Page.authenticate` not working for layout components
+- 8bcb471a5: Fix auth issue where session token and publicData cookie were updated unnecessarily, leading to potential user logout
+
+  - Previously, we were updating the session token each time public data changed. This is not needed, and it would cause race condition bugs where a user could be unexpectedly logged out because a request already in flight would not match the new session token.
+  - Previously, we were updating the publicData cookie even when it hadn't changed. This may reduce unnecessary re-renders on the client.
+
+- a3e6c49c4: Fixes the supports-color warning for pnpm
+- 6e88a847f: Fixed security vulnerabilities in passport-adapter by upgrading `passport` and `jsonwebtoken`
+- 2073714f8: testing set dist-tag
+- 37aeaa7fa: feature: Nextjs 13 App Directory Utility Methods
+
+  ### 🔧 New Blitz Auth Hook `useAuthenticatedBlitzContext`
+
+  This hook is implemented as the replacement of the [`BlitzPage` seurity auth utilities](https://blitzjs.com/docs/authorization#secure-your-pages) provided for the pages directory to work with React Server Components in the Nextjs 13 app directory
+  It can be used in any asynchronous server component be it in `page.ts` or in the layouts in `layout.ts`
+  It uses the new [`redirect` function](https://beta.nextjs.org/docs/api-reference/redirect) to provide the required authorization in server side
+
+  #### API
+
+  ```ts
+  useAuthenticatedBlitzContext({
+    redirectTo,
+    redirectAuthenticatedTo,
+    role,
+  }: {
+    redirectTo?: string | RouteUrlObject
+    redirectAuthenticatedTo?: string | RouteUrlObject | ((ctx: Ctx) => string | RouteUrlObject)
+    role?: string | string[]
+  }): Promise<void>
+  ```
+
+  #### Usage
+
+  **Example Usage in React Server Component in `app` directory in Next 13**
+
+  ```ts
+  import {getAppSession, useAuthenticatedBlitzContext} from "src/blitz-server"
+  ...
+  await useAuthenticatedBlitzContext({
+      redirectTo: "/auth/login",
+      role: ["admin"],
+      redirectAuthenticatedTo: "/dashboard",
+  })
+  ```
+
+  ### 🔧 New Blitz RPC Hook `invokeResolver`
+
+  #### API
+
+  ```ts
+  invokeResolver<T extends (...args: any) => any, TInput = FirstParam<T>>(
+    queryFn: T,
+    params: TInput,
+  ): Promise<PromiseReturnType<T>>
+  ```
+
+  #### Example Usage
+
+  ```ts
+  ...
+  import {invokeResolver, useAuthenticatedBlitzContext} from "../src/blitz-server"
+  import getCurrentUser from "../src/users/queries/getCurrentUser"
+
+  export default async function Home() {
+    await useAuthenticatedBlitzContext({
+      redirectTo: "/auth/login",
+    })
+    const user = await invokeResolver(getCurrentUser, null)
+  ...
+  ```
+
+- 00bd849ee: new app template
+- 2cc888eff: Beta release
+- 29c2b029a: Fix: Add missing entry to expose next-auth adapter in Blitz Auth
+- 713aead93: Allow specifying custom strategy name in Blitz's passport adapter
+- Updated dependencies [db7233db6]
+- Updated dependencies [1569bd53e]
+- Updated dependencies [cee2dec17]
+- Updated dependencies [5166e5e03]
+- Updated dependencies [9db6c8855]
+- Updated dependencies [1e1bb73b2]
+- Updated dependencies [83b355900]
+- Updated dependencies [c1e004063]
+- Updated dependencies [365e67094]
+- Updated dependencies [fd31e56bc]
+- Updated dependencies [74a14b704]
+- Updated dependencies [aec1bb076]
+- Updated dependencies [82649f341]
+- Updated dependencies [f397cc203]
+- Updated dependencies [cadefb88e]
+- Updated dependencies [271c58ac6]
+- Updated dependencies [8f166a5db]
+- Updated dependencies [c5572bec6]
+- Updated dependencies [86e8eb7c8]
+- Updated dependencies [99205f52d]
+- Updated dependencies [6ece09613]
+- Updated dependencies [928e840b5]
+- Updated dependencies [6f18cbdc9]
+- Updated dependencies [ea7561b8e]
+- Updated dependencies [1436e7618]
+- Updated dependencies [696f48c4e]
+- Updated dependencies [d98e4bac4]
+- Updated dependencies [90f1741da]
+- Updated dependencies [4a9aa9f7f]
+- Updated dependencies [d692b4c1d]
+- Updated dependencies [638f2319b]
+- Updated dependencies [c213d521c]
+- Updated dependencies [5ea068b28]
+- Updated dependencies [1d863f352]
+- Updated dependencies [8b4bf999c]
+- Updated dependencies [1476a577b]
+- Updated dependencies [a6e81f156]
+- Updated dependencies [cacb65d63]
+- Updated dependencies [630c71812]
+- Updated dependencies [bf1b2c824]
+- Updated dependencies [240f3f347]
+- Updated dependencies [55b1cb204]
+- Updated dependencies [54db8a46d]
+- Updated dependencies [962eb58af]
+- Updated dependencies [54a66a95d]
+- Updated dependencies [9fe0cc546]
+- Updated dependencies [0b94a4503]
+- Updated dependencies [af58e2b23]
+- Updated dependencies [78fd5c489]
+- Updated dependencies [62bf12b5c]
+- Updated dependencies [09e0c68db]
+- Updated dependencies [abb1ad5d1]
+- Updated dependencies [3a602b613]
+- Updated dependencies [ceb7db274]
+- Updated dependencies [2ade7268e]
+- Updated dependencies [0edeaa37a]
+- Updated dependencies [f0ca738d5]
+- Updated dependencies [0936cb38a]
+- Updated dependencies [989691ec8]
+- Updated dependencies [4d7d126d9]
+- Updated dependencies [8e5903c0f]
+- Updated dependencies [30fd61316]
+- Updated dependencies [6f4349896]
+- Updated dependencies [942536d9a]
+- Updated dependencies [666a3ae3e]
+- Updated dependencies [a80d2a8f7]
+- Updated dependencies [3ddb57072]
+- Updated dependencies [abe2afccd]
+- Updated dependencies [b84c5bedb]
+- Updated dependencies [a6f32d1d0]
+- Updated dependencies [b97366c42]
+- Updated dependencies [348fd6f5e]
+- Updated dependencies [3bcbad1a9]
+- Updated dependencies [0a8b0cb35]
+- Updated dependencies [8490b0724]
+- Updated dependencies [19898a488]
+- Updated dependencies [93851d90c]
+- Updated dependencies [6811eab1a]
+- Updated dependencies [20fc9f80f]
+- Updated dependencies [8dedca1a2]
+- Updated dependencies [3511d5b69]
+- Updated dependencies [46a34c7b3]
+- Updated dependencies [e82a79be5]
+- Updated dependencies [890b0c0c9]
+- Updated dependencies [430f6ec78]
+- Updated dependencies [adabb11a0]
+- Updated dependencies [38d945a3f]
+- Updated dependencies [c3c789740]
+- Updated dependencies [240f378b5]
+- Updated dependencies [df3265b85]
+- Updated dependencies [89bf993a1]
+- Updated dependencies [3f9fe8f04]
+- Updated dependencies [fe8c937d2]
+- Updated dependencies [0ac6e1712]
+- Updated dependencies [807a2b564]
+- Updated dependencies [1d9804a61]
+- Updated dependencies [41608c4c3]
+- Updated dependencies [a0596279b]
+- Updated dependencies [88caa18e6]
+- Updated dependencies [022392c12]
+- Updated dependencies [c126b8191]
+- Updated dependencies [c9cf7adc3]
+- Updated dependencies [1b798d9a0]
+- Updated dependencies [ea7561b8e]
+- Updated dependencies [727734955]
+- Updated dependencies [f39ba1ff1]
+- Updated dependencies [161270e3b]
+- Updated dependencies [b6b9a1c5a]
+- Updated dependencies [8bcb471a5]
+- Updated dependencies [a3e6c49c4]
+- Updated dependencies [15d22af24]
+- Updated dependencies [454591293]
+- Updated dependencies [2073714f8]
+- Updated dependencies [8aa22a0b2]
+- Updated dependencies [37aeaa7fa]
+- Updated dependencies [b918055bf]
+- Updated dependencies [aa34661fa]
+- Updated dependencies [61888d1a3]
+- Updated dependencies [dd5f51744]
+- Updated dependencies [ce4536833]
+- Updated dependencies [fb32903bf]
+- Updated dependencies [b33db0828]
+- Updated dependencies [f15a51901]
+- Updated dependencies [10f98c681]
+- Updated dependencies [9674efc0b]
+- Updated dependencies [8e0c9d76b]
+- Updated dependencies [d5b8faa86]
+- Updated dependencies [a3bbe6ce3]
+- Updated dependencies [e2c18895d]
+- Updated dependencies [00bd849ee]
+- Updated dependencies [ffa7b5ccc]
+- Updated dependencies [1f6b0b54c]
+- Updated dependencies [527e48ac3]
+- Updated dependencies [01f3a03ea]
+- Updated dependencies [2cc888eff]
+  - blitz@2.0.0
+
 ## 2.0.0-beta.37
 
 ### Patch Changes
