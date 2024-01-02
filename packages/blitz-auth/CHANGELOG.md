@@ -1,5 +1,14 @@
 # @blitzjs/auth
 
+## 2.0.0-beta.37
+
+### Patch Changes
+
+- b84c5bedb: Next 14 Compatibility
+- Updated dependencies [86e8eb7c8]
+- Updated dependencies [b84c5bedb]
+  - blitz@2.0.0-beta.37
+
 ## 2.0.0-beta.36
 
 ### Patch Changes

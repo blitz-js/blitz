@@ -1,5 +1,19 @@
 # @blitzjs/rpc
 
+## 2.0.0-beta.37
+
+### Minor Changes
+
+- e5cd2c862: expose `ctx` to `rpcHandler` error callbacks in [[...blitz]].ts files
+
+### Patch Changes
+
+- 86e8eb7c8: Add helpful error message when RPC resolvers have the same path
+- b84c5bedb: Next 14 Compatibility
+- Updated dependencies [86e8eb7c8]
+- Updated dependencies [b84c5bedb]
+  - blitz@2.0.0-beta.37
+
 ## 2.0.0-beta.36
 
 ### Patch Changes

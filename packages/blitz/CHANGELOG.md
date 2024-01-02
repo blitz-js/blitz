@@ -1,5 +1,14 @@
 # blitz
 
+## 2.0.0-beta.37
+
+### Patch Changes
+
+- 86e8eb7c8: Add helpful error message when RPC resolvers have the same path
+- b84c5bedb: Next 14 Compatibility
+- Updated dependencies [6d5f9efe1]
+  - @blitzjs/generator@2.0.0-beta.37
+
 ## 2.0.0-beta.36
 
 ### Patch Changes
