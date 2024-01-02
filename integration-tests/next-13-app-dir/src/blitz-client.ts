@@ -6,7 +6,7 @@ import {BlitzRpcPlugin} from "@blitzjs/rpc"
 export const {withBlitz, useSession, queryClient, BlitzProvider} = setupBlitzClient({
   plugins: [
     AuthClientPlugin({
-      cookiePrefix: "web-cookie-prefix",
+      cookiePrefix: "auth-tests-cookie-prefix",
     }),
     BlitzRpcPlugin({}),
   ],

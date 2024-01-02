@@ -1,12 +1,14 @@
 import {useQueryErrorResetBoundary, QueryClientProvider, Hydrate} from "@tanstack/react-query"
 
-export {useQueryErrorResetBoundary, QueryClientProvider, Hydrate}
-
 import {useInfiniteQuery as useInfiniteReactQuery} from "@tanstack/react-query"
-
 import {useQuery as useReactQuery} from "@tanstack/react-query"
-
 import {useMutation as useReactQueryMutation} from "@tanstack/react-query"
+
+export const reactQueryClientReExports = {
+  useQueryErrorResetBoundary,
+  QueryClientProvider,
+  Hydrate,
+}
 
 import type {
   UseInfiniteQueryOptions,
@@ -28,7 +30,7 @@ import {
   sanitizeMutation,
   getInfiniteQueryKey,
 } from "../utils"
-import {useRouter} from "next/router"
+import {useRouter} from "next/compat/router"
 
 type QueryLazyOptions = {suspense: unknown} | {enabled: unknown}
 type QueryNonLazyOptions =
@@ -84,10 +86,10 @@ export function useQuery<
   const suspenseEnabled = Boolean(globalThis.__BLITZ_SUSPENSE_ENABLED)
   let enabled = isServer && suspenseEnabled ? false : options?.enabled ?? options?.enabled !== null
   let routerIsReady = false
-  try {
-    const router = useRouter()
-    routerIsReady = router.isReady || (isServer && suspenseEnabled)
-  } catch (e) {
+  const router = useRouter()
+  if (router) {
+    routerIsReady = router?.isReady || (isServer && suspenseEnabled)
+  } else {
     routerIsReady = true
   }
   const enhancedResolverRpcClient = sanitizeQuery(queryFn)
@@ -171,10 +173,10 @@ export function usePaginatedQuery<
   const suspenseEnabled = Boolean(globalThis.__BLITZ_SUSPENSE_ENABLED)
   let enabled = isServer && suspenseEnabled ? false : options?.enabled ?? options?.enabled !== null
   let routerIsReady = false
-  try {
-    const router = useRouter()
-    routerIsReady = router.isReady || (isServer && suspenseEnabled)
-  } catch (e) {
+  const router = useRouter()
+  if (router) {
+    routerIsReady = router?.isReady || (isServer && suspenseEnabled)
+  } else {
     routerIsReady = true
   }
   const enhancedResolverRpcClient = sanitizeQuery(queryFn)
@@ -268,10 +270,10 @@ export function useInfiniteQuery<
   const suspenseEnabled = Boolean(globalThis.__BLITZ_SUSPENSE_ENABLED)
   let enabled = isServer && suspenseEnabled ? false : options?.enabled ?? options?.enabled !== null
   let routerIsReady = false
-  try {
-    const router = useRouter()
-    routerIsReady = router.isReady || (isServer && suspenseEnabled)
-  } catch (e) {
+  const router = useRouter()
+  if (router) {
+    routerIsReady = router?.isReady || (isServer && suspenseEnabled)
+  } else {
     routerIsReady = true
   }
   const enhancedResolverRpcClient = sanitizeQuery(queryFn)

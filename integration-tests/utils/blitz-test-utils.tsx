@@ -1,7 +1,7 @@
 import React from "react"
 import {vi} from "vitest"
 import {QueryClient} from "@tanstack/react-query"
-import {BlitzRpcPlugin, QueryClientProvider} from "@blitzjs/rpc"
+import {BlitzRpcPlugin, BlitzProvider} from "@blitzjs/rpc"
 import {NextRouter} from "next/router"
 import {RouterContext} from "@blitzjs/next"
 import {render as defaultRender} from "@testing-library/react"
@@ -38,22 +38,6 @@ type RenderOptions = DefaultParams[1] & {
 export type BlitzProviderProps = {
   client?: QueryClient
   contextSharing?: boolean
-}
-
-const BlitzProvider = ({
-  client,
-  contextSharing = false,
-  children,
-}: BlitzProviderProps & {children: JSX.Element}) => {
-  if (globalThis.queryClient) {
-    return (
-      <QueryClientProvider client={globalThis.queryClient} contextSharing={contextSharing}>
-        {children}
-      </QueryClientProvider>
-    )
-  }
-
-  return children
 }
 
 const compose =

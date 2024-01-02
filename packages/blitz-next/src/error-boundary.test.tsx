@@ -212,7 +212,7 @@ test("withErrorBoundary HOC", () => {
     {
       "componentStack": "
         at __vite_ssr_import_4__.withErrorBoundary.FallbackComponent 
-        at ErrorBoundaryRoot 
+        at ErrorBoundary2 
         at WithRouterWrapper 
         at withErrorBoundary",
     }

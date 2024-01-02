@@ -1,4 +1,4 @@
-import {useRouter} from "next/router"
+import {useRouter} from "next/compat/router"
 import {ParsedUrlQuery} from "querystring"
 import React from "react"
 
@@ -32,14 +32,14 @@ function decode(str: string) {
   return out
 }
 
-export function extractQueryFromAsPath(asPath: string) {
-  return decode(asPath.split("?", 2)[1] as string)
+export function extractQueryFromAsPath(asPath?: string) {
+  return decode(asPath?.split("?", 2)[1] as string)
 }
 
 export function useRouterQuery() {
   const router = useRouter()
 
-  const query = React.useMemo(() => extractQueryFromAsPath(router.asPath), [router.asPath])
+  const query = React.useMemo(() => extractQueryFromAsPath(router?.asPath), [router?.asPath])
 
   return query
 }
@@ -68,9 +68,12 @@ function areQueryValuesEqual(value1: ParsedUrlQueryValue, value2: ParsedUrlQuery
   return value1 === value2
 }
 
-export function extractRouterParams(routerQuery: ParsedUrlQuery, asPathQuery: ParsedUrlQuery) {
+export function extractRouterParams(
+  routerQuery: ParsedUrlQuery | undefined,
+  asPathQuery: ParsedUrlQuery,
+) {
   return Object.fromEntries(
-    Object.entries(routerQuery).filter(
+    Object.entries(routerQuery || {}).filter(
       ([key, value]) =>
         typeof asPathQuery[key] === "undefined" || !areQueryValuesEqual(value, asPathQuery[key]),
     ),
@@ -87,7 +90,7 @@ export function useParams(returnType?: ReturnTypes | undefined) {
   const query = useRouterQuery()
 
   const params = React.useMemo(() => {
-    const rawParams = extractRouterParams(router.query, query)
+    const rawParams = extractRouterParams(router?.query, query)
 
     if (returnType === "string") {
       const parsedParams: Dict<string> = {}
@@ -124,7 +127,7 @@ export function useParams(returnType?: ReturnTypes | undefined) {
     }
 
     return rawParams
-  }, [router.query, query, returnType])
+  }, [router?.query, query, returnType])
 
   return params
 }

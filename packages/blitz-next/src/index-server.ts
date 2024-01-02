@@ -24,14 +24,14 @@ import {
   stopWatcher,
 } from "blitz"
 import {
-  DefaultOptions,
-  dehydrate,
   getInfiniteQueryKey,
   getQueryKey,
   installWebpackConfig,
   InstallWebpackConfigOptions,
-  QueryClient,
   ResolverPathOptions,
+  DefaultOptions,
+  dehydrate,
+  QueryClient,
 } from "@blitzjs/rpc"
 import {IncomingMessage, ServerResponse} from "http"
 import {withSuperJsonProps} from "./superjson"

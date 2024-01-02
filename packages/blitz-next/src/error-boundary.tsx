@@ -1,9 +1,10 @@
 import {RedirectError} from "blitz"
-import {NextRouter, withRouter} from "next/router"
+import {useRouter} from "next/compat/router"
+import type {NextRouter} from "next/router"
 import * as React from "react"
 import {RouterContext} from "./router-context"
 import _debug from "debug"
-import {ExcludeRouterProps} from "next/dist/client/with-router"
+import type {ExcludeRouterProps, WithRouterProps} from "next/dist/client/with-router"
 
 const debug = _debug("blitz:errorboundary")
 
@@ -73,10 +74,18 @@ type ErrorBoundaryState = {error: Error | null}
 
 const initialState: ErrorBoundaryState = {error: null}
 
-const ErrorBoundary: React.ComponentType<
-  ExcludeRouterProps<React.PropsWithChildren<ErrorBoundaryProps>>
-> = withRouter(
-  class ErrorBoundaryRoot extends React.Component<
+function withRouter<P extends WithRouterProps>(
+  ComposedComponent: React.ComponentType<P>,
+): React.ComponentType<ExcludeRouterProps<P>> {
+  function WithRouterWrapper(props: any): JSX.Element {
+    return <ComposedComponent router={useRouter()} {...props} />
+  }
+
+  return WithRouterWrapper
+}
+
+export const ErrorBoundary = withRouter(
+  class ErrorBoundary extends React.Component<
     React.PropsWithRef<React.PropsWithChildren<ErrorBoundaryProps>>,
     ErrorBoundaryState
   > {
@@ -207,7 +216,7 @@ function useErrorHandler(givenError?: unknown): (error: unknown) => void {
   return setError
 }
 
-export {ErrorBoundary, withErrorBoundary, useErrorHandler}
+export {withErrorBoundary, useErrorHandler}
 export type {
   ErrorFallbackProps,
   ErrorBoundaryPropsWithComponent,
