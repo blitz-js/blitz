@@ -1,5 +1,16 @@
 # @blitzjs/next
 
+## 2.0.0-beta.37
+
+### Patch Changes
+
+- b84c5bedb: Next 14 Compatibility
+- Updated dependencies [86e8eb7c8]
+- Updated dependencies [b84c5bedb]
+- Updated dependencies [e5cd2c862]
+  - @blitzjs/rpc@2.0.0-beta.37
+  - blitz@2.0.0-beta.37
+
 ## 2.0.0-beta.36
 
 ### Patch Changes

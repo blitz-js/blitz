@@ -1,5 +1,11 @@
 # @blitzjs/generator
 
+## 2.0.0-beta.37
+
+### Patch Changes
+
+- 6d5f9efe1: new blitz app starter
+
 ## 2.0.0-beta.36
 
 ## 2.0.0-beta.35
