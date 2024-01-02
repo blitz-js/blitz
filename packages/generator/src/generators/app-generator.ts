@@ -7,6 +7,7 @@ import {Generator, GeneratorOptions, SourceRootType} from "../generator"
 import {baseLogger, log} from "../utils/log"
 import {fetchLatestVersionsFor} from "../utils/fetch-latest-version-for"
 import {getBlitzDependencyVersion} from "../utils/get-blitz-dependency-version"
+import fs from "fs-extra"
 
 function assert(condition: any, message: string): asserts condition {
   if (!condition) throw new Error(message)
@@ -73,6 +74,36 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
         this.destinationPath(rpcEndpointPath),
         this.destinationPath(`src/pages/api/rpc/[[...blitz]].${this.options.useTs ? "ts" : "js"}`),
       )
+    }
+
+    if (this.options.template.path === "app") {
+      const pathsToMove = [
+        "src/app/auth/components/LoginForm.tsx",
+        "src/app/auth/components/LogoutButton.tsx",
+        "src/app/auth/components/SignupForm.tsx",
+        "src/app/auth/components/ForgotPasswordForm.tsx",
+        "src/app/auth/components/ResetPasswordForm.tsx",
+        "src/app/auth/mutations/login.ts",
+        "src/app/auth/mutations/logout.ts",
+        "src/app/auth/mutations/signup.ts",
+        "src/app/auth/mutations/forgotPassword.ts",
+        "src/app/auth/mutations/resetPassword.ts",
+        "src/app/auth/mutations/forgotPassword.test.ts",
+        "src/app/auth/mutations/resetPassword.test.ts",
+        "src/app/auth/mutations/changePassword.ts",
+        "src/app/auth/login/page.tsx",
+        "src/app/auth/signup/page.tsx",
+        "src/app/auth/forgot-password/page.tsx",
+        "src/app/auth/reset-password/page.tsx",
+        "src/app/auth/layout.tsx",
+        "src/app/auth/validations.ts",
+      ]
+      for (const path of pathsToMove) {
+        this.fs.move(
+          this.destinationPath(path),
+          this.destinationPath(path.replace("auth/", "(auth)/")),
+        )
+      }
     }
 
     if (!this.options.template.skipForms) {
@@ -297,14 +328,25 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
         pkg.dependencies["formik"] = "2.x"
         break
     }
-    this.fs.move(
-      this.destinationPath(`_forms/${type}/Form.${ext}`),
-      this.destinationPath(`src/core/components/Form.${ext}`),
-    )
-    this.fs.move(
-      this.destinationPath(`_forms/${type}/LabeledTextField.${ext}`),
-      this.destinationPath(`src/core/components/LabeledTextField.${ext}`),
-    )
+    if (this.options.template.path === "app") {
+      this.fs.move(
+        this.destinationPath(`_forms/${type}/Form.${ext}`),
+        this.destinationPath(`src/app/components/Form.${ext}`),
+      )
+      this.fs.move(
+        this.destinationPath(`_forms/${type}/LabeledTextField.${ext}`),
+        this.destinationPath(`src/app/components/LabeledTextField.${ext}`),
+      )
+    } else {
+      this.fs.move(
+        this.destinationPath(`_forms/${type}/Form.${ext}`),
+        this.destinationPath(`src/core/components/Form.${ext}`),
+      )
+      this.fs.move(
+        this.destinationPath(`_forms/${type}/LabeledTextField.${ext}`),
+        this.destinationPath(`src/core/components/LabeledTextField.${ext}`),
+      )
+    }
 
     this.fs.writeJSON(this.destinationPath("package.json"), pkg)
     this.fs.delete(this.destinationPath("_forms"))

@@ -30,10 +30,13 @@ const installCommandMap: Record<TPkgManager, string> = {
   npm: "npm install",
 }
 
-type TTemplate = "full" | "minimal"
+type TTemplate = "app" | "pages" | "minimal"
 const templates: {[key in TTemplate]: AppGeneratorOptions["template"]} = {
-  full: {
+  app: {
     path: "app",
+  },
+  pages: {
+    path: "pages",
   },
   minimal: {
     path: "minimalapp",
@@ -75,7 +78,7 @@ let projectName: string = ""
 let projectPath: string = ""
 let projectLanguage: string | TLanguage = language.typescript
 let projectFormLib: AppGeneratorOptions["form"] = "formik"
-let projectTemplate: AppGeneratorOptions["template"] = templates.full
+let projectTemplate: AppGeneratorOptions["template"] = templates.app
 let projectPkgManger: TPkgManager = PREFERABLE_PKG_MANAGER
 let shouldInstallDeps: boolean = true
 
@@ -126,8 +129,9 @@ const determineTemplate = async () => {
     (args["--template"] && !Object.keys(templates).includes(args["--template"].toLowerCase()))
   ) {
     const choices: Array<{value: keyof typeof templates; title: string}> = [
-      {value: "full", title: "Full - includes DB and auth (Recommended)"},
-      {value: "minimal", title: "Minimal — no DB, no auth"},
+      {value: "app", title: "App Router – Full Setup: includes DB and auth (Recommended)"},
+      {value: "pages", title: "Pages Router – Full Setup: includes DB and auth"},
+      {value: "minimal", title: "Pages Router – Minimal setup: no DB, no auth"},
     ]
 
     const res = await prompts({
@@ -270,7 +274,7 @@ const newApp: CliCommand = async () => {
       )
     }
 
-    postInstallSteps.push("blitz dev")
+    postInstallSteps.push(`${projectPkgManger} blitz dev`)
 
     console.log("\n Your new Blitz app is ready! Next steps:")
     postInstallSteps.forEach((step, index) => {

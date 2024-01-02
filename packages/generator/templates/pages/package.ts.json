@@ -1,0 +1,63 @@
+{
+  "name": "__name__",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "blitz dev",
+    "build": "blitz build",
+    "start": "blitz start",
+    "studio": "blitz prisma studio",
+    "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
+    "test": "vitest run --passWithNoTests",
+    "test:watch": "vitest",
+    "prepare": "husky install"
+  },
+  "prisma": {
+    "schema": "db/schema.prisma"
+  },
+  "prettier": {
+    "semi": false,
+    "printWidth": 100
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx}": ["eslint --fix"]
+  },
+  "dependencies": {
+    "@blitzjs/auth": "latest",
+    "@blitzjs/next": "latest",
+    "@blitzjs/rpc": "latest",
+    "@prisma/client": "4.6.1",
+    "blitz": "latest",
+    "next": "13.4.5",
+    "prisma": "4.6.1",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "secure-password": "4.0.0",
+    "zod": "3.20.2"
+  },
+  "devDependencies": {
+    "@next/bundle-analyzer": "12.0.8",
+    "@next/env": "13.4.19",
+    "@testing-library/jest-dom": "5.16.5",
+    "@testing-library/react": "13.4.0",
+    "@testing-library/react-hooks": "8.0.1",
+    "@types/node": "18.11.9",
+    "@types/preview-email": "2.0.1",
+    "@types/react": "18.0.25",
+    "@typescript-eslint/eslint-plugin": "5.42.1",
+    "@vitejs/plugin-react": "2.2.0",
+    "eslint": "8.27.0",
+    "eslint-config-next": "12.3.1",
+    "eslint-config-prettier": "8.5.0",
+    "husky": "8.0.2",
+    "jsdom": "20.0.3",
+    "lint-staged": "13.0.3",
+    "prettier": "^2.7.1",
+    "prettier-plugin-prisma": "4.4.0",
+    "pretty-quick": "3.1.3",
+    "preview-email": "3.0.7",
+    "typescript": "^4.8.4",
+    "vite-tsconfig-paths": "3.6.0",
+    "vitest": "0.25.3"
+  },
+  "private": true
+}

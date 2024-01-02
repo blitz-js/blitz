@@ -65,4 +65,6 @@ export const LabeledSelectField = forwardRef<
   );
 });
 
+LabeledSelectField.displayName = "LabeledSelectField";
+
 export default LabeledSelectField;

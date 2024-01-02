@@ -153,7 +153,6 @@ export const getCodegen = async () => {
     const combined = {
       fieldTypeMap: _config,
     }
-    console.log("_config", combined)
 
     if (cliConfig.codegen !== undefined) {
       const result = CodegenSchema.safeParse(combined)

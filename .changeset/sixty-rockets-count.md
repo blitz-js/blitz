@@ -6,6 +6,7 @@
 ### Now we can configure Blitz RPC in the following way,
 
 In your `[[...blitz]].ts` api file you can see the following settings
+
 ```ts
 logging?: {
   /**
@@ -29,6 +30,7 @@ logging?: {
   disablelevel?: "debug" | "info"
 }
 ```
+
 ```ts
 import { rpcHandler } from "@blitzjs/rpc"
 import { api } from "src/blitz-server"
@@ -48,6 +50,7 @@ export default api(
 ```
 
 Example:
+
 ```ts
 export default api(
   rpcHandler({
@@ -65,4 +68,3 @@ export default api(
 ```
 
 This is enable verbose blitz rpc logging for all resolvers except the resolvers `getCurrentUser` and others mentioned in the `blockList`
-

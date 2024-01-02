@@ -112,6 +112,7 @@ export class FieldValuesBuilder extends Builder<ResourceGeneratorOptions, Common
       }
       if (nonSpecialArgs.length > 0) {
         const ftv = await this.getFieldTemplateValues(nonSpecialArgs)
+
         return {...values, fieldTemplateValues: ftv}
       }
     }

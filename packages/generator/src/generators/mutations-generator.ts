@@ -9,14 +9,17 @@ import {
 } from ".."
 import {customTsParser, Generator, SourceRootType} from "../generator"
 import {replaceImportDbWithPrismaFolder} from "../../src/utils/codemod-utils"
+import fs from "fs-extra"
 
 export interface MutationsGeneratorOptions extends ResourceGeneratorOptions {}
 
 export class MutationsGenerator extends Generator<MutationsGeneratorOptions> {
   sourceRoot: SourceRootType
+  isAppDir = false
   constructor(options: MutationsGeneratorOptions) {
     super(options)
     this.sourceRoot = getTemplateRoot(options.templateDir, {type: "template", path: "mutations"})
+    this.isAppDir = fs.existsSync(require("path").join(process.cwd(), "src/app/layout.tsx"))
   }
   static subdirectory = "mutations"
 
@@ -50,6 +53,9 @@ export class MutationsGenerator extends Generator<MutationsGeneratorOptions> {
   getTargetDirectory() {
     const context = this.options.context ? `${camelCaseToKebabCase(this.options.context)}/` : ""
     const kebabCaseModelName = camelCaseToKebabCase(this.options.modelNames)
+    if (this.isAppDir) {
+      return `src/app/${context}${kebabCaseModelName}/mutations`
+    }
     return `src/${context}${kebabCaseModelName}/mutations`
   }
 }

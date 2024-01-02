@@ -38,10 +38,10 @@ const UserInfo = () => {
   } else {
     return (
       <>
-        <Link href={"/signup"} className={styles.button}>
+        <Link href={"/auth/signup"} className={styles.button}>
           <strong>Sign Up</strong>
         </Link>
-        <Link href={"/login"} className={styles.loginButton}>
+        <Link href={"/auth/login"} className={styles.loginButton}>
           <strong>Login</strong>
         </Link>
         <Link href="/api/auth/github/login" passHref legacyBehavior>

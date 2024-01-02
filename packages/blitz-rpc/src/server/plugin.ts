@@ -5,6 +5,7 @@ import {
   createServerPlugin,
 } from "blitz"
 import {invoke} from "./invoke"
+import {RpcLogger} from "../rpc-logger"
 
 export type RpcLoggerOptions = {
   /**
@@ -47,6 +48,9 @@ export const RpcServerPlugin = createServerPlugin((options: RpcPluginOptions) =>
     } catch (error) {
       if (options.onInvokeError) {
         options.onInvokeError(error)
+      } else {
+        const rpcLogger = new RpcLogger((queryFn as any)._resolverName, options.logging)
+        rpcLogger.error(error)
       }
       throw error
     }
