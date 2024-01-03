@@ -1,5 +1,11 @@
 # @blitzjs/generator
 
+## 2.0.1
+
+### Patch Changes
+
+- 8782aae64: Fix outdated code in npm caused in during exit to stable release
+
 ## 2.0.0
 
 ### Minor Changes
