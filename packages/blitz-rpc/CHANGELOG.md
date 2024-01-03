@@ -1,5 +1,13 @@
 # @blitzjs/rpc
 
+## 2.0.1
+
+### Patch Changes
+
+- 8782aae64: Fix outdated code in npm caused in during exit to stable release
+- Updated dependencies [8782aae64]
+  - blitz@2.0.1
+
 ## 2.0.0
 
 ### Minor Changes
