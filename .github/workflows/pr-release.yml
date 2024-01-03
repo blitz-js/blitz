@@ -69,7 +69,6 @@ jobs:
       - name: Bump Package Versions
         id: changesets
         run: |
-          pnpm changeset pre exit
           pnpm changeset version --snapshot ${{ steps.getSnapshotName.outputs.result }} > changesets.output.txt 2>&1
           echo ::set-output name=result::`cat changesets.output.txt`
         env:
