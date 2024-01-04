@@ -1,5 +1,13 @@
 # @blitzjs/rpc
 
+## 2.0.2
+
+### Patch Changes
+
+- e8fd12e4f: Fix: windows slash correction for rpc resolvers
+- Updated dependencies [e8fd12e4f]
+  - blitz@2.0.2
+
 ## 2.0.1
 
 ### Patch Changes
