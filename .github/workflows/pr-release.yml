@@ -27,7 +27,7 @@ jobs:
         uses: eficode/resolve-pr-refs@main
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          
+
       - uses: actions/checkout@v3
         with:
           ref: ${{ steps.refs.outputs.head_ref }}
@@ -39,18 +39,18 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
-          registry-url: 'https://registry.npmjs.org'
-          cache: 'pnpm'
-      
+          registry-url: "https://registry.npmjs.org"
+          cache: "pnpm"
+
       - name: Short SHA
         id: vars
         run: echo "sha_short=$(git rev-parse --short "$GITHUB_SHA")" >> $GITHUB_OUTPUT
-          
+
       - name: Extract the snapshot name from comment body
         id: getSnapshotName
         uses: actions/github-script@v6
         with:
-          script:  |
+          script: |
             const splitComment = context.payload.comment.body.split(' ');
             if(splitComment.length !== 2) {
               return "${{ steps.vars.outputs.sha_short }}";
@@ -60,7 +60,7 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install
-        env: 
+        env:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
 
       - name: Build Packages
@@ -96,5 +96,5 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: '```\n' + process.env.MESSAGE + '\n```',
+              body: 'Snapshot Release: ' + process.env.MESSAGE
             })
