@@ -96,5 +96,5 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: 'Snapshot Release: ' + process.env.MESSAGE
+              body: `Snapshot Release ${{steps.getSnapshotName.outputs.result}}`
             })
