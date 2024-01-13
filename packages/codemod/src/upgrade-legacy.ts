@@ -684,7 +684,9 @@ const upgradeLegacy = async () => {
         isInternalBlitzMonorepoDevelopment ? "templates" : "dist/templates",
       )
       const rpcRoute = fs
-        .readFileSync(path.join(templatePath, "app", "pages", "api", "rpc", "blitzrpcroute.ts"))
+        .readFileSync(
+          path.join(templatePath, "app", "src", "pages", "api", "rpc", "blitzrpcroute.ts"),
+        )
         .toString()
 
       if (!fs.existsSync(pagesDir)) {
