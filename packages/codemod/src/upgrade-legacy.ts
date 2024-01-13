@@ -584,7 +584,9 @@ const upgradeLegacy = async () => {
             j.Identifier,
             (node) => node.name === "cookiePrefix",
           )
-          cookieIdentifierBlitzClient.get().parentPath.value.value.value = cookiePrefix
+          if (cookieIdentifierBlitzClient.length) {
+            cookieIdentifierBlitzClient.get().parentPath.value.value.value = cookiePrefix
+          }
 
           fs.writeFileSync(
             `${appDir}/blitz-client.${isTypescript ? "ts" : "js"}`,
