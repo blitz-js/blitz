@@ -536,10 +536,10 @@ const upgradeLegacy = async () => {
           isInternalBlitzMonorepoDevelopment ? "templates" : "dist/templates",
         )
         const blitzServer = fs
-          .readFileSync(path.join(templatePath, "app", "app", "blitz-server.ts"))
+          .readFileSync(path.join(templatePath, "app", "src", "app", "blitz-server.ts"))
           .toString()
         const blitzClient = fs
-          .readFileSync(path.join(templatePath, "app", "app", "blitz-client.ts"))
+          .readFileSync(path.join(templatePath, "app", "src", "app", "blitz-client.ts"))
           .toString()
 
         const replaceTemplateValues = (input: string) => {
