@@ -54,7 +54,7 @@ export const parsePublicDataToken = (token: string) => {
   }
 }
 
-const emptyPublicData: EmptyPublicData = {userId: null, role: null}
+const emptyPublicData: EmptyPublicData = {userId: null, roles: ["user"]}
 
 class PublicDataStore {
   private eventKey = `${LOCALSTORAGE_PREFIX}publicDataUpdated`
@@ -122,6 +122,7 @@ class PublicDataStore {
     }
   }
 }
+
 export const getPublicDataStore = (): PublicDataStore => {
   if (!(window as any).__publicDataStore) {
     ;(window as any).__publicDataStore = new PublicDataStore()
@@ -184,7 +185,7 @@ export const useSession = (options: UseSessionOptions = {}): ClientSession => {
   return session
 }
 
-export const useAuthorizeIf = (condition?: boolean, role?: string | Array<string>) => {
+export const useAuthorizeIf = (condition?: boolean, roles?: string | Array<string>) => {
   const [mounted, setMounted] = React.useState(false)
   React.useEffect(() => {
     setMounted(true)
@@ -196,25 +197,21 @@ export const useAuthorizeIf = (condition?: boolean, role?: string | Array<string
     throw error
   }
 
-  if (isClient && condition && role && getPublicDataStore().getData().userId && mounted) {
+  if (isClient && condition && roles && getPublicDataStore().getData().userId && mounted) {
     const error = new AuthenticationError()
     error.stack = null!
-    if (!authorizeRole(role, getPublicDataStore().getData().role as string)) {
+    if (!authorizeRole(roles, getPublicDataStore().getData().roles as string[])) {
       throw error
     }
   }
 }
 
-const authorizeRole = (role?: string | Array<string>, currentRole?: string) => {
-  if (role && currentRole) {
-    if (Array.isArray(role)) {
-      if (role.includes(currentRole)) {
-        return true
-      }
+const authorizeRole = (roles?: string | Array<string>, currentRoles?: string[]) => {
+  if (roles && currentRoles) {
+    if (Array.isArray(roles)) {
+      return roles.some((role) => currentRoles.includes(role))
     } else {
-      if (currentRole === role) {
-        return true
-      }
+      return currentRoles.includes(roles)
     }
   }
   return false
@@ -245,10 +242,6 @@ export const useRedirectAuthenticated = (to: UrlObject | string) => {
   }
 }
 
-// export interface RouteUrlObject extends Pick<UrlObject, "pathname" | "query"> {
-//   pathname: string
-// }
-
 export type RedirectAuthenticatedTo = string | RouteUrlObject | false
 export type RedirectAuthenticatedToFnCtx = {
   session: Ctx["session"]["$publicData"]
@@ -259,7 +252,7 @@ export type RedirectAuthenticatedToFn = (
 
 export type BlitzPage<P = {}> = React.ComponentType<P> & {
   getLayout?: (component: JSX.Element) => JSX.Element
-  authenticate?: boolean | {redirectTo?: string | RouteUrlObject; role?: string | Array<string>}
+  authenticate?: boolean | {redirectTo?: string | RouteUrlObject; roles?: string | Array<string>}
   suppressFirstRenderFlicker?: boolean
   redirectAuthenticatedTo?: RedirectAuthenticatedTo | RedirectAuthenticatedToFn
 }
@@ -313,7 +306,7 @@ function withBlitzAuthPlugin<TProps = any>(Page: ComponentType<TProps> | BlitzPa
       !!authenticate &&
         ((typeof authenticate === "object" && authenticate.redirectTo === undefined) ||
           authenticate === true),
-      !authenticate ? undefined : typeof authenticate === "object" ? authenticate.role : undefined,
+      !authenticate ? undefined : typeof authenticate === "object" ? authenticate.roles : undefined,
     )
     if (typeof window !== "undefined") {
       const publicData = getPublicDataStore().getData()
@@ -347,8 +340,12 @@ function withBlitzAuthPlugin<TProps = any>(Page: ComponentType<TProps> | BlitzPa
           authenticate &&
           typeof authenticate === "object" &&
           authenticate.redirectTo &&
-          authenticate.role &&
-          !authorizeRole(authenticate.role, publicData.role as string)
+          authenticate.roles &&
+          (!Array.isArray(authenticate.roles)
+            ? authorizeRole(authenticate.roles, publicData.roles as string[])
+            : authenticate.roles.some((role: string) =>
+                authorizeRole(role, publicData.roles as string[]),
+              ))
         ) {
           let {redirectTo} = authenticate
           if (typeof redirectTo !== "string") {

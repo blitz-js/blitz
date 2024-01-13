@@ -3,11 +3,12 @@
  */
 
 import {expect, test, afterEach, beforeEach, vi, MockedFunction} from "vitest"
+import type {ErrorBoundaryProps} from "./error-boundary"
 import {render, screen, cleanup} from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
-import React, {forwardRef} from "react"
-import type {ErrorFallbackProps} from "./error-boundary"
+import React from "react"
 import {ErrorBoundary, withErrorBoundary} from "./error-boundary"
+import type {ErrorFallbackProps} from "./error-boundary"
 
 vi.mock("next/router", () => require("next-router-mock"))
 
@@ -426,7 +427,7 @@ test("supports reset via resetKeys right after error is triggered on component m
 test("should support not only function as FallbackComponent", () => {
   const consoleError = console.error as MockedFunction<(args: unknown[]) => void>
 
-  const FancyFallback = forwardRef(({error}: ErrorFallbackProps) => (
+  const FancyFallback = React.forwardRef(({error}: ErrorFallbackProps) => (
     <div>
       <p>Everything is broken. Try again</p>
       <pre>{error.message}</pre>

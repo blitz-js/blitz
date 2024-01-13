@@ -426,11 +426,11 @@
   useAuthenticatedBlitzContext({
     redirectTo,
     redirectAuthenticatedTo,
-    role,
+    roles,
   }: {
     redirectTo?: string | RouteUrlObject
     redirectAuthenticatedTo?: string | RouteUrlObject | ((ctx: Ctx) => string | RouteUrlObject)
-    role?: string | string[]
+    roles?: string | string[]
   }): Promise<void>
   ```
 
@@ -443,7 +443,7 @@
   ...
   await useAuthenticatedBlitzContext({
       redirectTo: "/auth/login",
-      role: ["admin"],
+      roles: ["admin"],
       redirectAuthenticatedTo: "/dashboard",
   })
   ```

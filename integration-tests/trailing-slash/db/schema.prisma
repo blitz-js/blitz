@@ -14,11 +14,26 @@ model User {
   name           String?
   email          String   @unique
   hashedPassword String?
-  role           String   @default("user")
-
-  sessions Session[]
-  tokens   Token[]
+  sessions       Session[]
+  tokens         Token[]
+  roles          UserRole[]
 }
+
+model Role {
+  id   Int    @id @default(autoincrement())
+  name String @default("user")
+  users UserRole[]
+}
+
+model UserRole {
+  userId Int
+  roleId Int
+  user   User @relation(fields: [userId], references: [id])
+  role   Role @relation(fields: [roleId], references: [id])
+
+  @@id([userId, roleId])
+}
+
 
 model Session {
   id                 Int       @id @default(autoincrement())

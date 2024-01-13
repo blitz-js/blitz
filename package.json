@@ -49,5 +49,8 @@
     "patchedDependencies": {
       "next-auth@4.18.7": "patches/next-auth@4.18.7.patch"
     }
+  },
+  "devDependencies": {
+    "jest": "29.3.0"
   }
 }

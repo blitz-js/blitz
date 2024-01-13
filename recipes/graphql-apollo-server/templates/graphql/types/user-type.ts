@@ -6,6 +6,6 @@ export const UserType = objectType({
   definition(t) {
     t.field(User.id.name, User.id)
     t.field(User.email.name, User.email)
-    t.field(User.role.name, User.role)
+    t.field(User.roles.name, User.role)
   },
 })

@@ -32,6 +32,6 @@ const Authenticate: BlitzPage = () => {
   )
 }
 
-Authenticate.authenticate = {role: "ADMIN"}
+Authenticate.authenticate = {roles: ["ADMIN"]}
 
 export default Authenticate
