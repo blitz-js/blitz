@@ -340,12 +340,11 @@ function withBlitzAuthPlugin<TProps = any>(Page: ComponentType<TProps> | BlitzPa
           authenticate &&
           typeof authenticate === "object" &&
           authenticate.redirectTo &&
-          authenticate.roles &&
-          (!Array.isArray(authenticate.roles)
-            ? authorizeRole(authenticate.roles, publicData.roles as string[])
-            : authenticate.roles.some((role: string) =>
-                authorizeRole(role, publicData.roles as string[]),
-              ))
+          authenticate.role &&
+          !authorizeRole(authenticate.role, [
+          publicData.role,
+          ...(Array.isArray(publicData.roles) ? publicData.roles : []),
+        ] as string[])
         ) {
           let {redirectTo} = authenticate
           if (typeof redirectTo !== "string") {
