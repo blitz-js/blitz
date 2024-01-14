@@ -54,7 +54,7 @@ export const parsePublicDataToken = (token: string) => {
   }
 }
 
-const emptyPublicData: EmptyPublicData = {userId: null, roles: ["user"]}
+const emptyPublicData: EmptyPublicData = {userId: null, role: null, roles: null}
 
 class PublicDataStore {
   private eventKey = `${LOCALSTORAGE_PREFIX}publicDataUpdated`
