@@ -54,7 +54,7 @@ export const parsePublicDataToken = (token: string) => {
   }
 }
 
-const emptyPublicData: EmptyPublicData = {userId: null, roles: ["user"]}
+const emptyPublicData: EmptyPublicData = {userId: null, role: null, roles: null}
 
 class PublicDataStore {
   private eventKey = `${LOCALSTORAGE_PREFIX}publicDataUpdated`
@@ -254,7 +254,7 @@ export type RedirectAuthenticatedToFn = (
 
 export type BlitzPage<P = {}> = React.ComponentType<P> & {
   getLayout?: (component: JSX.Element) => JSX.Element
-  authenticate?: boolean | {redirectTo?: string | RouteUrlObject; roles?: string | Array<string>}
+  authenticate?: boolean | {redirectTo?: string | RouteUrlObject; role?: string | Array<string>}
   suppressFirstRenderFlicker?: boolean
   redirectAuthenticatedTo?: RedirectAuthenticatedTo | RedirectAuthenticatedToFn
 }
@@ -342,12 +342,11 @@ function withBlitzAuthPlugin<TProps = any>(Page: ComponentType<TProps> | BlitzPa
           authenticate &&
           typeof authenticate === "object" &&
           authenticate.redirectTo &&
-          authenticate.roles &&
-          (!Array.isArray(authenticate.roles)
-            ? authorizeRole(authenticate.roles, publicData.roles as string[])
-            : authenticate.roles.some((role: string) =>
-                authorizeRole(role, publicData.roles as string[]),
-              ))
+          authenticate.role &&
+          !authorizeRole(authenticate.role, [
+            publicData.role,
+            ...(Array.isArray(publicData.roles) ? publicData.roles : []),
+          ] as string[])
         ) {
           let {redirectTo} = authenticate
           if (typeof redirectTo !== "string") {
