@@ -5,7 +5,7 @@ import {Suspense} from "react"
 
 export const getServerSideProps: GetServerSideProps = gSSP(async ({req, res}) => {
   const session = await getSession(req, res)
-  await session.$setPublicData({roles: ["USER"]})
+  await session.$setPublicData({role: "USER"})
 
   return {
     props: {},

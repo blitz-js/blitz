@@ -25,7 +25,7 @@ export default resolver.pipe(resolver.zod(Login), async ({email, password}, ctx)
   // const user = await authenticateUser(email, password)
   const user = await db.user.findFirst({where: {email}})
   //@ts-ignore
-  await ctx.session.$create({userId: user.id, roles: user.roles})
+  await ctx.session.$create({userId: user.id, role: user.role})
   console.log("user", user)
   return user
 })

@@ -3,7 +3,7 @@ import GithubProvider from "next-auth/providers/github"
 import EmailProvider from "next-auth/providers/email"
 import { NextAuthAdapter, BlitzNextAuthOptions } from "@blitzjs/auth/next-auth"
 import db, { User } from "db"
-import { Roles } from "types"
+import { Role } from "types"
 
 // Has to be defined separately for `profile` to be correctly typed below
 const providers = [
@@ -38,7 +38,7 @@ export default api(
       }
       const publicData = {
         userId: newUser.id,
-        roles: newUser.roles as Roles,
+        role: newUser.roles as Role,
         source: "github",
       }
       await session.$create(publicData)

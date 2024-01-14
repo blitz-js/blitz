@@ -107,7 +107,7 @@ describe("publicDataStore", () => {
       it("returns empty data if cookie is falsy", () => {
         const ret = getPublicDataStore().getData()
 
-        expect(ret).toEqual({userId: null, roles: ["user"]})
+        expect(ret).toEqual({userId: null, role: null})
       })
     })
   })
@@ -118,7 +118,7 @@ describe("useSession", () => {
     const {result} = renderHook(() => useSession())
 
     expect(result.current).toEqual({
-      roles: ["user"],
+      role: null,
       isLoading: false,
       userId: null,
     })

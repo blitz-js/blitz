@@ -7,9 +7,7 @@ const seed = async () => {
     data: {
       email: "test@test.com",
       hashedPassword,
-      roles: {
-        create: [{name: "user"}],
-      },
+      role: "user",
     },
   })
   process.exit(0)

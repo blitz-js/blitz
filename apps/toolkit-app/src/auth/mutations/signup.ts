@@ -1,5 +1,5 @@
 import db from "db"
-import { Roles } from "types"
+import { Role } from "types"
 
 export default async function signup(input, ctx) {
   const blitzContext = ctx
@@ -8,13 +8,13 @@ export default async function signup(input, ctx) {
   const hashedPassword = (input.password as string) || "test-password"
   const email = (input.email as string) || "test" + Math.random() + "@test.com"
   const user = await db.user.create({
-    data: { email, hashedPassword, roles: ["user"] },
-    select: { id: true, name: true, email: true, roles: true },
+    data: { email, hashedPassword, role: "user" },
+    select: { id: true, name: true, email: true, role: true },
   })
 
   await blitzContext.session.$create({
     userId: user.id,
-    roles: user.roles as Roles,
+    roles: user.role as Role,
   })
 
   return { userId: blitzContext.session.userId, ...user, email: input.email }

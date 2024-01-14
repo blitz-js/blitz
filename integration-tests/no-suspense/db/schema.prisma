@@ -16,22 +16,7 @@ model User {
   hashedPassword String?
   sessions       Session[]
   tokens         Token[]
-  roles          UserRole[]
-}
-
-model Role {
-  id   Int    @id @default(autoincrement())
-  name String @default("user")
-  users UserRole[]
-}
-
-model UserRole {
-  userId Int
-  roleId Int
-  user   User @relation(fields: [userId], references: [id])
-  role   Role @relation(fields: [roleId], references: [id])
-
-  @@id([userId, roleId])
+  role          String @default("user")
 }
 
 

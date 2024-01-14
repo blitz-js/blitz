@@ -19,7 +19,7 @@ function PageWithPrefetchInfiniteQuery(props) {
         usersPage?.users.map((u) => (
           <div key={u.createdAt.toDateString()}>
             <p>name: {u.name}</p>
-            <p>roles: {u.roles}</p>
+            <p>role: {u.role}</p>
             <p>email: {u.email}</p>
             <hr />
           </div>

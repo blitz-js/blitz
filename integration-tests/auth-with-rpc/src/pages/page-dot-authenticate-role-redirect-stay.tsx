@@ -32,6 +32,6 @@ const Authenticate: BlitzPage = () => {
   )
 }
 
-Authenticate.authenticate = {roles: ["USER"], redirectTo: "/noauth-query"}
+Authenticate.authenticate = {role: "USER", redirectTo: "/noauth-query"}
 
 export default Authenticate

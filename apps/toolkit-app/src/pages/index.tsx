@@ -31,7 +31,7 @@ const UserInfo = () => {
         <div>
           User id: <code>{currentUser.id}</code>
           <br />
-          User roles: <code>{currentUser.roles.join(", ")}</code>
+          User role: <code>{currentUser.role}</code>
         </div>
       </>
     )
