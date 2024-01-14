@@ -38,6 +38,9 @@ import {withSuperJsonProps} from "./superjson"
 import {ParsedUrlQuery} from "querystring"
 import {PreviewData} from "next/types"
 import {resolveHref} from "next/dist/client/resolve-href"
+import fs from "fs"
+import path from "path"
+import CopyPlugin from "copy-webpack-plugin"
 
 export * from "./index-browser"
 
@@ -267,6 +270,27 @@ export function withBlitz(nextConfig: BlitzConfig = {}): NextConfig {
           includeRPCFolders: nextConfig.blitz?.includeRPCFolders,
         },
       })
+
+      try {
+        const sodiumNativePath = fs.realpathSync(path.join(require.resolve("sodium-native"), ".."))
+        const dotNextDirectory = `${process.cwd()}/.next`
+        config.plugins.push(
+          new CopyPlugin({
+            patterns: [
+              {
+                //dev
+                from: `${sodiumNativePath}/prebuilds/`,
+                to: `${dotNextDirectory}/server/vendor-chunks/prebuilds/`,
+              },
+              {
+                //prod
+                from: `${sodiumNativePath}/prebuilds/`,
+                to: `${dotNextDirectory}/server/chunks/prebuilds/`,
+              },
+            ],
+          }),
+        )
+      } catch {}
 
       if (typeof nextConfig.webpack === "function") {
         return nextConfig.webpack(config, options)
