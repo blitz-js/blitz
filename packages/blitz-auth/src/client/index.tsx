@@ -185,7 +185,7 @@ export const useSession = (options: UseSessionOptions = {}): ClientSession => {
   return session
 }
 
-export const useAuthorizeIf = (condition?: boolean, roles?: string | Array<string>) => {
+export const useAuthorizeIf = (condition?: boolean, role?: string | Array<string>) => {
   const [mounted, setMounted] = React.useState(false)
   React.useEffect(() => {
     setMounted(true)
@@ -206,12 +206,14 @@ export const useAuthorizeIf = (condition?: boolean, roles?: string | Array<strin
   }
 }
 
-const authorizeRole = (roles?: string | Array<string>, currentRoles?: string[]) => {
-  if (roles && currentRoles) {
-    if (Array.isArray(roles)) {
-      return roles.some((role) => currentRoles.includes(role))
+const authorizeRole = (role?: string | Array<string>, currentRole?: string | Array<string>) => {
+  if (role && currentRole) {
+    if (Array.isArray(role) && role.some((r) => currentRole.includes(r))) {
+      return true
     } else {
-      return currentRoles.includes(roles)
+      if (currentRole === role) {
+        return true
+      }
     }
   }
   return false

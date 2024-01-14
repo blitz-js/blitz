@@ -24,6 +24,9 @@ importers:
       husky:
         specifier: 8.0.2
         version: 8.0.2
+      jest:
+        specifier: 29.3.0
+        version: 29.3.0(@types/node@18.11.9)(ts-node@10.9.1)
       jsdom:
         specifier: ^19.0.0
         version: 19.0.0
@@ -55,9 +58,9 @@ importers:
         specifier: 6.0.1
         version: 6.0.1
     devDependencies:
-      jest:
-        specifier: 29.3.0
-        version: 29.3.0(@types/node@18.11.9)(ts-node@10.9.1)
+      prisma-client:
+        specifier: 0.0.0
+        version: 0.0.0
 
   apps/next13:
     dependencies:
@@ -19510,6 +19513,13 @@ packages:
       p-wait-for: 3.2.0
       pug: 3.0.2
       uuid: 8.3.2
+    dev: true
+
+  /prisma-client@0.0.0:
+    resolution:
+      {
+        integrity: sha512-tbK0ZaUt4E9IkQalS+2V5dv45lTcwxWNSXenRNEgSuzTJWW3T6SUgBfuk0gUS5wC07eQNEOU6/SVomVL/hsaHw==,
+      }
     dev: true
 
   /prisma@4.6.1:

@@ -98,7 +98,7 @@ describe("publicDataStore", () => {
         ret = data
       })
       getPublicDataStore().clear()
-      expect(ret).toEqual({userId: null, roles: ["user"]})
+      expect(ret).toEqual({userId: null, role: null})
     })
   })
 
