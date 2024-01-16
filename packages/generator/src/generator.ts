@@ -35,7 +35,7 @@ export const customTemplatesBlitzConfig = async (
   codemod = false,
 ) => {
   const {globby} = await import("globby")
-  const blitzServer = await globby(["{app,src}/**/blitz-server.{ts,js}"], {
+  const blitzServer = await globby(["{app,src}/**/**/blitz-server.{ts,js}"], {
     cwd: getProjectRootSync(),
   })
   if (blitzServer.length === 0) {
