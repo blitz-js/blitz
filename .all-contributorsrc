@@ -4014,6 +4014,16 @@
         "doc",
         "code"
       ]
+    },
+    {
+      "login": "LeonMueller-OneAndOnly",
+      "name": "Leonidas",
+      "avatar_url": "https://avatars.githubusercontent.com/u/77194479?v=4",
+      "profile": "https://flow-office.eu/",
+      "contributions": [
+        "doc",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
