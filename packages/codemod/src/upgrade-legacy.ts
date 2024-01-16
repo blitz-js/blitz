@@ -536,10 +536,10 @@ const upgradeLegacy = async () => {
           isInternalBlitzMonorepoDevelopment ? "templates" : "dist/templates",
         )
         const blitzServer = fs
-          .readFileSync(path.join(templatePath, "app", "app", "blitz-server.ts"))
+          .readFileSync(path.join(templatePath, "app", "src", "app", "blitz-server.ts"))
           .toString()
         const blitzClient = fs
-          .readFileSync(path.join(templatePath, "app", "app", "blitz-client.ts"))
+          .readFileSync(path.join(templatePath, "app", "src", "app", "blitz-client.ts"))
           .toString()
 
         const replaceTemplateValues = (input: string) => {
@@ -584,7 +584,9 @@ const upgradeLegacy = async () => {
             j.Identifier,
             (node) => node.name === "cookiePrefix",
           )
-          cookieIdentifierBlitzClient.get().parentPath.value.value.value = cookiePrefix
+          if (cookieIdentifierBlitzClient.length) {
+            cookieIdentifierBlitzClient.get().parentPath.value.value.value = cookiePrefix
+          }
 
           fs.writeFileSync(
             `${appDir}/blitz-client.${isTypescript ? "ts" : "js"}`,
@@ -684,7 +686,9 @@ const upgradeLegacy = async () => {
         isInternalBlitzMonorepoDevelopment ? "templates" : "dist/templates",
       )
       const rpcRoute = fs
-        .readFileSync(path.join(templatePath, "app", "pages", "api", "rpc", "blitzrpcroute.ts"))
+        .readFileSync(
+          path.join(templatePath, "app", "src", "pages", "api", "rpc", "blitzrpcroute.ts"),
+        )
         .toString()
 
       if (!fs.existsSync(pagesDir)) {
