@@ -1,5 +1,14 @@
 # blitz
 
+## 2.0.3
+
+### Patch Changes
+
+- 2f5c8a3a0: Address missing sodium native prebuilds required to use secure-password during server rendering
+- Updated dependencies [47722e045]
+- Updated dependencies [595f400e9]
+  - @blitzjs/generator@2.0.3
+
 ## 2.0.2
 
 ### Patch Changes

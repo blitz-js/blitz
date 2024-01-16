@@ -1,5 +1,12 @@
 # @blitzjs/generator
 
+## 2.0.3
+
+### Patch Changes
+
+- 47722e045: Fix: search inside any subdirectory to inside `src|app` directories to find `blitz-server.ts` to use the `BlitzCliConfig` configurations.
+- 595f400e9: fix: add missing `prettier`, `pretty-quick` and other missing dev dependencies in the new app template
+
 ## 2.0.2
 
 ## 2.0.1

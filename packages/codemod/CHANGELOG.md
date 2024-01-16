@@ -1,5 +1,16 @@
 # @blitzjs/codemod
 
+## 2.0.3
+
+### Patch Changes
+
+- 956a739e8: codemod: provide correct path to new template paths
+- Updated dependencies [47722e045]
+- Updated dependencies [2f5c8a3a0]
+- Updated dependencies [595f400e9]
+  - @blitzjs/generator@2.0.3
+  - blitz@2.0.3
+
 ## 2.0.2
 
 ### Patch Changes

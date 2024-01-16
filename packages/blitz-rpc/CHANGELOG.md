@@ -1,5 +1,13 @@
 # @blitzjs/rpc
 
+## 2.0.3
+
+### Patch Changes
+
+- 2f5c8a3a0: Address missing sodium native prebuilds required to use secure-password during server rendering
+- Updated dependencies [2f5c8a3a0]
+  - blitz@2.0.3
+
 ## 2.0.2
 
 ### Patch Changes
