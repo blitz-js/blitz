@@ -119,6 +119,7 @@ export interface InstallWebpackConfigOptions {
         [key: string]: boolean | string
       }
     }
+    plugins: any[]
     module: {
       rules: WebpackRule[]
     }
