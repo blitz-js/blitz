@@ -19,13 +19,30 @@ function getBlitzPath(type: string) {
 }
 
 function getAppSourceDir() {
-  const srcPath = "src/pages"
+  const appSrcPath = "src/app"
+  const appSrcDir = fs.existsSync(path.resolve(appSrcPath))
+  const srcPath = "src"
   const srcDir = fs.existsSync(path.resolve(srcPath))
 
-  if (srcDir) {
+  if (appSrcDir) {
     return "src"
+  } else if (srcDir) {
+    return "src/app"
   } else {
     return "app"
+  }
+}
+
+function isUsingAppRouter() {
+  // Check if using the NextJS app router
+  // The root layout file is always present in the app directory
+  const appRouterLayoutFile = `${getAppSourceDir()}/layout${ext(true)}`
+  const appRouterLayoutFileExists = fs.existsSync(path.resolve(appRouterLayoutFile))
+
+  if (appRouterLayoutFileExists) {
+    return true
+  } else {
+    return false
   }
 }
 
@@ -48,7 +65,9 @@ export const paths = {
     return `${findPageDir()}/_document${ext(true)}`
   },
   app() {
-    return `${findPageDir()}/_app${ext(true)}`
+    return isUsingAppRouter()
+      ? `${getAppSourceDir()}/layout${ext(true)}`
+      : `${findPageDir()}/_app${ext(true)}`
   },
   appSrcDirectory() {
     return getAppSourceDir()
