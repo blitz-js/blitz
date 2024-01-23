@@ -55,10 +55,7 @@ export const PrismaStorage = <Client extends PrismaClientWithSession>(
       })
     },
     updateSession: async (handle, session) => {
-      console.log("updateSession", handle, session)
-      console.time("updateSession")
       try {
-        console.timeEnd("updateSession")
         return await db.session.update({where: {handle}, data: session})
       } catch (error: any) {
         // Session doesn't exist in DB for some reason, so create it
