@@ -34,8 +34,8 @@ class ExpectedError extends Error {
 
 const findPagesDirectory = () => {
   const srcPagesDir = path.join("src", "pages")
-  const pagesDir = path.join("pages")
-  return fs.existsSync(srcPagesDir) ? srcPagesDir : pagesDir
+  const pagesDir = path.resolve("pages")
+  return fs.existsSync(srcPagesDir) ? path.resolve(srcPagesDir) : pagesDir
 }
 
 const isInternalBlitzMonorepoDevelopment = fs.existsSync(
@@ -684,7 +684,7 @@ const upgradeLegacy = async () => {
   steps.push({
     name: "create pages/api/rpc directory and add [[...blitz]].ts wildecard API route",
     action: async () => {
-      const pagesDir = path.resolve(`${findPagesDirectory}/api/rpc`)
+      const pagesDir = path.resolve(`${findPagesDirectory()}/api/rpc`)
       const templatePath = path.join(
         require.resolve("@blitzjs/generator"),
         "..",
