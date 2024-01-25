@@ -52,7 +52,22 @@ const upgradeLegacy = async () => {
   if (blitzConfigFile === "") {
     throw new ExpectedError("Could not identify Legacy Blitz Config file")
   }
-  const appDir = path.resolve("app")
+  // Check if app directory exists in either app/ or src/app
+  const appDir = fs.existsSync(path.resolve("app"))
+    ? path.resolve("app")
+    : fs.existsSync(path.resolve("src"))
+    ? path.resolve(path.join("src", "app"))
+    : ""
+  try {
+    // Throw Error if appDir empty
+    if (appDir === "") {
+      throw new ExpectedError(
+        "Could not identify Legacy Blitz App directory in project (no app/ or src/ directory found)",
+      )
+    }
+  } catch (e) {
+    console.error(e)
+  }
   let failedAt =
     fs.existsSync(path.resolve(".migration.json")) && fs.readJSONSync("./.migration.json").failedAt
   let collectedErrors: {message: string; step: number}[] = []
@@ -1320,7 +1335,9 @@ const upgradeLegacy = async () => {
   steps.push({
     name: "check for usages of invokeWithMiddleware",
     action: async () => {
-      getAllFiles(path.resolve("pages"), [], [], [".ts", ".tsx", ".js", ".jsx"]).forEach((file) => {
+      const srcPagesDir = path.resolve(path.join("src/pages"))
+      const pagesDir = fs.existsSync(srcPagesDir) ? srcPagesDir : path.resolve("pages")
+      getAllFiles(pagesDir, [], [], [".ts", ".tsx", ".js", ".jsx"]).forEach((file) => {
         const program = getCollectionFromSource(file)
         try {
           const invokeWithMiddlewarePath = findCallExpression(program, "invokeWithMiddleware")
