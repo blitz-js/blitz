@@ -22,6 +22,7 @@ import {
   RouteUrlObject,
   startWatcher,
   stopWatcher,
+  RequestMiddleware,
 } from "blitz"
 import {
   getInfiniteQueryKey,
@@ -347,3 +348,15 @@ declare module "blitz" {
     prefetchInfiniteQuery: PrefetchQueryFn
   }
 }
+
+export const BlitzServerMiddleware = <
+  TMiddleware extends RequestMiddleware<NextApiRequest, BlitzNextApiResponse> = RequestMiddleware<
+    NextApiRequest,
+    BlitzNextApiResponse
+  >,
+>(
+  middleware: TMiddleware,
+): BlitzServerPlugin<{}> => ({
+  requestMiddlewares: [middleware],
+  exports: () => ({}),
+})
