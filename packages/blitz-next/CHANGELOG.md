@@ -1,5 +1,15 @@
 # @blitzjs/next
 
+## 2.0.4
+
+### Patch Changes
+
+- 28a79040e: feat: export `BlitzServerMiddleware` from blitz-next with stronger types
+- Updated dependencies [dd604c767]
+- Updated dependencies [28a79040e]
+  - blitz@2.0.4
+  - @blitzjs/rpc@2.0.4
+
 ## 2.0.3
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @blitzjs/generator
 
+## 2.0.4
+
+### Patch Changes
+
+- 71b995003: fix: ajv dependency was not installed with blitz new
+
 ## 2.0.3
 
 ### Patch Changes
