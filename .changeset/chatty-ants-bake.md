@@ -3,4 +3,4 @@
 "blitz": patch
 ---
 
-(internal) perf: add filter to select only non expired sessions
+perf: add filter to select only non expired sessions
