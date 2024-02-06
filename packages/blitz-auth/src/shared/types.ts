@@ -8,12 +8,11 @@ export interface Session {
 
 export type PublicData = Session extends {PublicData: unknown}
   ? Session["PublicData"]
-  : {userId: unknown; role?: unknown; expiresAt?: unknown}
+  : {userId: unknown; role?: unknown}
 
 export interface EmptyPublicData extends Partial<Omit<PublicData, "userId">> {
   userId: PublicData["userId"] | null
   role?: PublicData["role"] | null
-  expiresAt?: PublicData["expiresAt"] | null
 }
 
 export interface ClientSession extends EmptyPublicData {
