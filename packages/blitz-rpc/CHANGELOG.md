@@ -1,5 +1,13 @@
 # @blitzjs/rpc
 
+## 2.0.4
+
+### Patch Changes
+
+- Updated dependencies [dd604c767]
+- Updated dependencies [28a79040e]
+  - blitz@2.0.4
+
 ## 2.0.3
 
 ### Patch Changes

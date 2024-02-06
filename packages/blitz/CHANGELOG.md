@@ -1,5 +1,14 @@
 # blitz
 
+## 2.0.4
+
+### Patch Changes
+
+- dd604c767: perf: add filter to select only non expired sessions
+- 28a79040e: feat: export `BlitzServerMiddleware` from blitz-next with stronger types
+- Updated dependencies [71b995003]
+  - @blitzjs/generator@2.0.4
+
 ## 2.0.3
 
 ### Patch Changes

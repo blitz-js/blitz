@@ -1,5 +1,16 @@
 # @blitzjs/codemod
 
+## 2.0.4
+
+### Patch Changes
+
+- f25aac08c: Added support to codemod upgrade-legacy for projects that have their pages folder nested in a src/ folder
+- Updated dependencies [dd604c767]
+- Updated dependencies [71b995003]
+- Updated dependencies [28a79040e]
+  - blitz@2.0.4
+  - @blitzjs/generator@2.0.4
+
 ## 2.0.3
 
 ### Patch Changes
