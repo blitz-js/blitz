@@ -4024,6 +4024,16 @@
         "doc",
         "code"
       ]
+    },
+    {
+      "login": "Doc0x1",
+      "name": "Doc0x1",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19937034?v=4",
+      "profile": "https://hacknex.us",
+      "contributions": [
+        "doc",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
