@@ -22,7 +22,9 @@ interface IsAuthorized {
 interface PrismaClientWithSession {
   session: {
     findFirst(args?: {where?: {handle?: SessionModel["handle"]}}): Promise<SessionModel | null>
-    findMany(args?: {where?: {userId?: PublicData["userId"]}}): Promise<SessionModel[]>
+    findMany(args?: {
+      where?: {userId?: PublicData["userId"]; expiresAt?: {gt?: Date}}
+    }): Promise<SessionModel[]>
     create(args: {
       data: SessionModel & {
         userId?: any
@@ -42,7 +44,7 @@ export const PrismaStorage = <Client extends PrismaClientWithSession>(
 ): SessionConfigMethods => {
   return {
     getSession: (handle) => db.session.findFirst({where: {handle}}),
-    getSessions: (userId) => db.session.findMany({where: {userId}}),
+    getSessions: (userId) => db.session.findMany({where: {userId, expiresAt: {gt: new Date()}}}),
     createSession: (session) => {
       let user
       if (session.userId) {
