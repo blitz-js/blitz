@@ -3,4 +3,4 @@
 "blitz": patch
 ---
 
-fix: remove custom errors thrown by blitz for next imports
+fix: getBlitzContext() can only be used in React Server Components in Nextjs 13 or higher
