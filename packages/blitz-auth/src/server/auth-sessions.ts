@@ -233,8 +233,8 @@ export async function useAuthenticatedBlitzContext({
   })
   const ctx: Ctx = await getBlitzContext()
   const userId = ctx.session.userId
-  // const {redirect} = await import("next/navigation")
   try {
+    // const {redirect} = await import("next/navigation")
     const {redirect} = eval("require('next/navigation')")
     if (userId) {
       debug("[useAuthenticatedBlitzContext] User is authenticated")
