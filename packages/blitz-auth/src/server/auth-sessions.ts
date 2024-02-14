@@ -182,11 +182,7 @@ export async function getSession(
 }
 
 export async function getBlitzContext(): Promise<Ctx> {
-  const {headers, cookies} = await import("next/headers").catch(() => {
-    throw new Error(
-      "getBlitzContext() can only be used in React Server Components in Nextjs 13 or higher",
-    )
-  })
+  const {headers, cookies} = await import("next/headers")
   const req = new IncomingMessage(new Socket()) as IncomingMessage & {
     cookies: {[key: string]: string}
   }
@@ -227,11 +223,7 @@ export async function useAuthenticatedBlitzContext({
   })
   const ctx: Ctx = await getBlitzContext()
   const userId = ctx.session.userId
-  const {redirect} = await import("next/navigation").catch(() => {
-    throw new Error(
-      "useAuthenticatedBlitzContext() can only be used in React Server Components in Nextjs 13 or higher",
-    )
-  })
+  const {redirect} = await import("next/navigation")
   if (userId) {
     debug("[useAuthenticatedBlitzContext] User is authenticated")
     if (redirectAuthenticatedTo) {
