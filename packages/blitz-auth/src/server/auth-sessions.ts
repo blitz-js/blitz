@@ -182,26 +182,36 @@ export async function getSession(
 }
 
 export async function getBlitzContext(): Promise<Ctx> {
-  const {headers, cookies} = await import("next/headers")
-  const req = new IncomingMessage(new Socket()) as IncomingMessage & {
-    cookies: {[key: string]: string}
+  try {
+    //using eval to avoid webpack from bundling next/headers
+    const {headers, cookies} = eval("require('next/headers')")
+    const req = new IncomingMessage(new Socket()) as IncomingMessage & {
+      cookies: {[key: string]: string}
+    }
+    req.headers = Object.fromEntries(headers())
+    const csrfToken = cookies().get(COOKIE_CSRF_TOKEN())
+    if (csrfToken) {
+      req.headers[HEADER_CSRF] = csrfToken.value
+    }
+    req.cookies = Object.fromEntries(
+      cookies()
+        .getAll()
+        .map((c: {name: string; value: string}) => [c.name, c.value]),
+    )
+    const res = new ServerResponse(req)
+    const session = await getSession(req, res, true)
+    const ctx: Ctx = {
+      session,
+    }
+    return ctx
+  } catch (e) {
+    if ((e as any)?.code === "MODULE_NOT_FOUND") {
+      throw new Error(
+        "Usage of `useAuthenticatedBlitzContext` is supported only in next.js 13.0.0 and above. Please upgrade your next.js version.",
+      )
+    }
+    throw e
   }
-  req.headers = Object.fromEntries(headers())
-  const csrfToken = cookies().get(COOKIE_CSRF_TOKEN())
-  if (csrfToken) {
-    req.headers[HEADER_CSRF] = csrfToken.value
-  }
-  req.cookies = Object.fromEntries(
-    cookies()
-      .getAll()
-      .map((c: {name: string; value: string}) => [c.name, c.value]),
-  )
-  const res = new ServerResponse(req)
-  const session = await getSession(req, res, true)
-  const ctx: Ctx = {
-    session,
-  }
-  return ctx
 }
 
 interface RouteUrlObject extends Pick<UrlObject, "pathname" | "query" | "href"> {
@@ -223,54 +233,64 @@ export async function useAuthenticatedBlitzContext({
   })
   const ctx: Ctx = await getBlitzContext()
   const userId = ctx.session.userId
-  const {redirect} = await import("next/navigation")
-  if (userId) {
-    debug("[useAuthenticatedBlitzContext] User is authenticated")
-    if (redirectAuthenticatedTo) {
-      if (typeof redirectAuthenticatedTo === "function") {
-        redirectAuthenticatedTo = redirectAuthenticatedTo(ctx)
+  // const {redirect} = await import("next/navigation")
+  try {
+    const {redirect} = eval("require('next/navigation')")
+    if (userId) {
+      debug("[useAuthenticatedBlitzContext] User is authenticated")
+      if (redirectAuthenticatedTo) {
+        if (typeof redirectAuthenticatedTo === "function") {
+          redirectAuthenticatedTo = redirectAuthenticatedTo(ctx)
+        }
+        const redirectUrl =
+          typeof redirectAuthenticatedTo === "string"
+            ? redirectAuthenticatedTo
+            : formatWithValidation(redirectAuthenticatedTo)
+        debug("[useAuthenticatedBlitzContext] Redirecting to", redirectUrl)
+        if (role) {
+          try {
+            ctx.session.$authorize(role)
+          } catch (e) {
+            log.info("Authentication Redirect: " + customChalk.dim(`Role ${role}`), redirectTo)
+            redirect(redirectUrl)
+          }
+        } else {
+          log.info("Authentication Redirect: " + customChalk.dim("(Authenticated)"), redirectUrl)
+          redirect(redirectUrl)
+        }
       }
-      const redirectUrl =
-        typeof redirectAuthenticatedTo === "string"
-          ? redirectAuthenticatedTo
-          : formatWithValidation(redirectAuthenticatedTo)
-      debug("[useAuthenticatedBlitzContext] Redirecting to", redirectUrl)
-      if (role) {
+      if (redirectTo && role) {
+        debug("[useAuthenticatedBlitzContext] redirectTo and role are both defined.")
         try {
           ctx.session.$authorize(role)
         } catch (e) {
-          log.info("Authentication Redirect: " + customChalk.dim(`Role ${role}`), redirectTo)
-          redirect(redirectUrl)
+          log.error("Authorization Error: " + (e as Error).message)
+          if (typeof redirectTo !== "string") {
+            redirectTo = formatWithValidation(redirectTo)
+          }
+          log.info("Authorization Redirect: " + customChalk.dim(`Role ${role}`), redirectTo)
+          redirect(redirectTo)
         }
-      } else {
-        log.info("Authentication Redirect: " + customChalk.dim("(Authenticated)"), redirectUrl)
-        redirect(redirectUrl)
       }
-    }
-    if (redirectTo && role) {
-      debug("[useAuthenticatedBlitzContext] redirectTo and role are both defined.")
-      try {
-        ctx.session.$authorize(role)
-      } catch (e) {
-        log.error("Authorization Error: " + (e as Error).message)
+    } else {
+      debug("[useAuthenticatedBlitzContext] User is not authenticated")
+      if (redirectTo) {
         if (typeof redirectTo !== "string") {
           redirectTo = formatWithValidation(redirectTo)
         }
-        log.info("Authorization Redirect: " + customChalk.dim(`Role ${role}`), redirectTo)
+        log.info("Authentication Redirect: " + customChalk.dim("(Not authenticated)"), redirectTo)
         redirect(redirectTo)
       }
     }
-  } else {
-    debug("[useAuthenticatedBlitzContext] User is not authenticated")
-    if (redirectTo) {
-      if (typeof redirectTo !== "string") {
-        redirectTo = formatWithValidation(redirectTo)
-      }
-      log.info("Authentication Redirect: " + customChalk.dim("(Not authenticated)"), redirectTo)
-      redirect(redirectTo)
+    return ctx as AuthenticatedCtx
+  } catch (e) {
+    if ((e as any)?.code === "MODULE_NOT_FOUND") {
+      throw new Error(
+        "Usage of `useAuthenticatedBlitzContext` is supported only in next.js 13.0.0 and above. Please upgrade your next.js version.",
+      )
     }
+    throw e
   }
-  return ctx as AuthenticatedCtx
 }
 
 const makeProxyToPublicData = <T extends SessionContextClass>(ctxClass: T): T => {
