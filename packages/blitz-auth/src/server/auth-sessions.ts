@@ -234,7 +234,7 @@ export async function useAuthenticatedBlitzContext({
   const ctx: Ctx = await getBlitzContext()
   const userId = ctx.session.userId
   try {
-    // const {redirect} = await import("next/navigation")
+    //using eval to avoid webpack from bundling next/headers
     const {redirect} = eval("require('next/navigation')")
     if (userId) {
       debug("[useAuthenticatedBlitzContext] User is authenticated")
