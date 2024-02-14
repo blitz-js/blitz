@@ -205,7 +205,7 @@ export async function getBlitzContext(): Promise<Ctx> {
     }
     return ctx
   } catch (e) {
-    if ((e as any)?.code === "MODULE_NOT_FOUND") {
+    if ((e as NodeJS.ErrnoException).code === "MODULE_NOT_FOUND") {
       throw new Error(
         "Usage of `useAuthenticatedBlitzContext` is supported only in next.js 13.0.0 and above. Please upgrade your next.js version.",
       )
@@ -284,7 +284,7 @@ export async function useAuthenticatedBlitzContext({
     }
     return ctx as AuthenticatedCtx
   } catch (e) {
-    if ((e as any)?.code === "MODULE_NOT_FOUND") {
+    if ((e as NodeJS.ErrnoException).code === "MODULE_NOT_FOUND") {
       throw new Error(
         "Usage of `useAuthenticatedBlitzContext` is supported only in next.js 13.0.0 and above. Please upgrade your next.js version.",
       )
