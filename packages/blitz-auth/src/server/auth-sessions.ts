@@ -183,7 +183,7 @@ export async function getSession(
 
 export async function getBlitzContext(): Promise<Ctx> {
   try {
-    //using eval to avoid webpack from bundling next/headers
+    //using eval to avoid bundling next/headers
     const {headers, cookies} = eval("require('next/headers')")
     const req = new IncomingMessage(new Socket()) as IncomingMessage & {
       cookies: {[key: string]: string}
@@ -234,7 +234,7 @@ export async function useAuthenticatedBlitzContext({
   const ctx: Ctx = await getBlitzContext()
   const userId = ctx.session.userId
   try {
-    //using eval to avoid webpack from bundling next/headers
+    //using eval to avoid bundling next/navigation
     const {redirect} = eval("require('next/navigation')")
     if (userId) {
       debug("[useAuthenticatedBlitzContext] User is authenticated")
