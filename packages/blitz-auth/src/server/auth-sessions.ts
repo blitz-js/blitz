@@ -43,7 +43,7 @@ import {Socket} from "net"
 import {UrlObject} from "url"
 import {formatWithValidation} from "../shared/url-utils"
 
-export function isLocalhost(req: any): boolean {
+export function isLocalhost(req: IncomingMessage): boolean {
   let {host} = req.headers
   let localhost = false
   if (host) {
@@ -575,18 +575,13 @@ const setHeader = (res: ServerResponse, name: string, value: string) => {
   }
 }
 
-const setSessionCookie = (
-  req: IncomingMessage,
-  res: ServerResponse,
-  sessionToken: string,
-  expiresAt: Date,
-) => {
+const setSessionCookie = (res: ServerResponse, sessionToken: string, expiresAt: Date) => {
   setCookie(
     res,
     cookie.serialize(COOKIE_SESSION_TOKEN(), sessionToken, {
       path: "/",
       httpOnly: true,
-      secure: global.sessionConfig.secureCookies && !isLocalhost(req),
+      secure: global.sessionConfig.secureCookies,
       sameSite: global.sessionConfig.sameSite,
       domain: global.sessionConfig.domain,
       expires: expiresAt,
@@ -594,18 +589,13 @@ const setSessionCookie = (
   )
 }
 
-const setAnonymousSessionCookie = (
-  req: IncomingMessage,
-  res: ServerResponse,
-  token: string,
-  expiresAt: Date,
-) => {
+const setAnonymousSessionCookie = (res: ServerResponse, token: string, expiresAt: Date) => {
   setCookie(
     res,
     cookie.serialize(COOKIE_ANONYMOUS_SESSION_TOKEN(), token, {
       path: "/",
       httpOnly: true,
-      secure: global.sessionConfig.secureCookies && !isLocalhost(req),
+      secure: global.sessionConfig.secureCookies,
       sameSite: global.sessionConfig.sameSite,
       domain: global.sessionConfig.domain,
       expires: expiresAt,
@@ -847,11 +837,11 @@ async function createNewSession(
       new Date(),
       global.sessionConfig.anonSessionExpiryMinutes as number,
     )
-    setAnonymousSessionCookie(req, res, anonymousSessionToken, expiresAt)
+    setAnonymousSessionCookie(res, anonymousSessionToken, expiresAt)
     setCSRFCookie(req, res, antiCSRFToken, expiresAt)
     setPublicDataCookie(req, res, publicDataToken, expiresAt)
     // Clear the essential session cookie in case it was previously set
-    setSessionCookie(req, res, "", new Date(0))
+    setSessionCookie(res, "", new Date(0))
     setHeader(res, HEADER_SESSION_CREATED, "true")
 
     return {
@@ -903,11 +893,11 @@ async function createNewSession(
       privateData: JSON.stringify(newPrivateData),
     })
 
-    setSessionCookie(req, res, sessionToken, expiresAt)
+    setSessionCookie(res, sessionToken, expiresAt)
     setCSRFCookie(req, res, antiCSRFToken, expiresAt)
     setPublicDataCookie(req, res, publicDataToken, expiresAt)
     // Clear the anonymous session cookie in case it was previously set
-    setAnonymousSessionCookie(req, res, "", new Date(0))
+    setAnonymousSessionCookie(res, "", new Date(0))
     setHeader(res, HEADER_SESSION_CREATED, "true")
 
     return {
@@ -955,7 +945,7 @@ async function refreshSession(
     const publicDataToken = createPublicDataToken(sessionKernel.publicData)
 
     const expiresAt = addYears(new Date(), 30)
-    setAnonymousSessionCookie(req, res, anonymousSessionToken, expiresAt)
+    setAnonymousSessionCookie(res, anonymousSessionToken, expiresAt)
     setPublicDataCookie(req, res, publicDataToken, expiresAt)
   } else if (global.sessionConfig.method === "essential" && "sessionToken" in sessionKernel) {
     const expiresAt = addMinutes(new Date(), global.sessionConfig.sessionExpiryMinutes as number)
