@@ -1,5 +1,14 @@
 # @blitzjs/auth
 
+## 2.0.5
+
+### Patch Changes
+
+- 6f54841b7: fix: getBlitzContext() can only be used in React Server Components in Nextjs 13 or higher
+- 8a417533f: fix: remove restriction to use `secure` cookies in localhost / during development following spec in [developer.mozilla.org/en-US/docs/Web/HTTP/Cookies#restrict_access_to_cookies](https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies#restrict_access_to_cookies)
+- Updated dependencies [6f54841b7]
+  - blitz@2.0.5
+
 ## 2.0.4
 
 ### Patch Changes

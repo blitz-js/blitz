@@ -58,16 +58,16 @@ importers:
   apps/next13:
     dependencies:
       "@blitzjs/auth":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz-auth
       "@blitzjs/config":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/config
       "@blitzjs/next":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz-rpc
       "@hookform/error-message":
         specifier: 2.0.0
@@ -82,7 +82,7 @@ importers:
         specifier: 4.0.10
         version: 4.0.10(react-dom@18.2.0)(react@18.2.0)
       blitz:
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz
       flatted:
         specifier: 3.2.7
@@ -131,16 +131,16 @@ importers:
   apps/toolkit-app:
     dependencies:
       "@blitzjs/auth":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz-auth
       "@blitzjs/config":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/config
       "@blitzjs/next":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz-rpc
       "@hookform/error-message":
         specifier: 2.0.0
@@ -152,7 +152,7 @@ importers:
         specifier: 4.6.1
         version: 4.6.1(prisma@4.6.1)
       blitz:
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz
       next:
         specifier: 14.0.4
@@ -249,16 +249,16 @@ importers:
   apps/toolkit-app-passportjs:
     dependencies:
       "@blitzjs/auth":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz-auth
       "@blitzjs/config":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/config
       "@blitzjs/next":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz-rpc
       "@hookform/error-message":
         specifier: 2.0.0
@@ -270,7 +270,7 @@ importers:
         specifier: 4.6.1
         version: 4.6.1(prisma@4.6.1)
       blitz:
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz
       next:
         specifier: 14.0.4
@@ -361,16 +361,16 @@ importers:
   apps/web:
     dependencies:
       "@blitzjs/auth":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz-auth
       "@blitzjs/config":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/config
       "@blitzjs/next":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz-rpc
       "@prisma/client":
         specifier: 4.6.1
@@ -382,7 +382,7 @@ importers:
         specifier: 1.0.37
         version: 1.0.37
       blitz:
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz
       jest:
         specifier: 29.3.0
@@ -428,19 +428,19 @@ importers:
   integration-tests/auth:
     dependencies:
       "@blitzjs/auth":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz-auth
       "@blitzjs/config":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/config
       "@blitzjs/next":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz-next
       "@prisma/client":
         specifier: 4.6.1
         version: 4.6.1(prisma@4.6.1)
       blitz:
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz
       lowdb:
         specifier: 3.0.0
@@ -510,16 +510,16 @@ importers:
   integration-tests/auth-with-rpc:
     dependencies:
       "@blitzjs/auth":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz-auth
       "@blitzjs/config":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/config
       "@blitzjs/next":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz-rpc
       "@hookform/error-message":
         specifier: 2.0.0
@@ -531,7 +531,7 @@ importers:
         specifier: 4.6.1
         version: 4.6.1(prisma@4.6.1)
       blitz:
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz
       delay:
         specifier: 5.0.0
@@ -631,19 +631,19 @@ importers:
   integration-tests/get-initial-props:
     dependencies:
       "@blitzjs/auth":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz-auth
       "@blitzjs/next":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz-rpc
       "@prisma/client":
         specifier: 4.6.1
         version: 4.6.1(prisma@4.6.1)
       blitz:
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz
       lowdb:
         specifier: 3.0.0
@@ -662,7 +662,7 @@ importers:
         version: 18.2.0(react@18.2.0)
     devDependencies:
       "@blitzjs/config":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/config
       "@next/bundle-analyzer":
         specifier: 12.0.8
@@ -701,16 +701,16 @@ importers:
   integration-tests/middleware:
     dependencies:
       "@blitzjs/config":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/config
       "@blitzjs/next":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz-rpc
       blitz:
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz
       next:
         specifier: 14.0.4
@@ -756,22 +756,22 @@ importers:
   integration-tests/next-13-app-dir:
     dependencies:
       "@blitzjs/auth":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz-auth
       "@blitzjs/config":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/config
       "@blitzjs/next":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz-rpc
       "@prisma/client":
         specifier: 4.6.1
         version: 4.6.1(prisma@4.6.1)
       blitz:
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz
       lowdb:
         specifier: 3.0.0
@@ -841,19 +841,19 @@ importers:
   integration-tests/no-suspense:
     dependencies:
       "@blitzjs/auth":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz-auth
       "@blitzjs/next":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz-rpc
       "@prisma/client":
         specifier: 4.6.1
         version: 4.6.1(prisma@4.6.1)
       blitz:
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz
       lowdb:
         specifier: 3.0.0
@@ -872,7 +872,7 @@ importers:
         version: 18.2.0(react@18.2.0)
     devDependencies:
       "@blitzjs/config":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/config
       "@next/bundle-analyzer":
         specifier: 12.0.8
@@ -911,16 +911,16 @@ importers:
   integration-tests/qm:
     dependencies:
       "@blitzjs/auth":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz-auth
       "@blitzjs/config":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/config
       "@blitzjs/next":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz-rpc
       "@prisma/client":
         specifier: 4.6.1
@@ -929,7 +929,7 @@ importers:
         specifier: 4.0.10
         version: 4.0.10(react-dom@18.2.0)(react@18.2.0)
       blitz:
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz
       next:
         specifier: 14.0.4
@@ -975,16 +975,16 @@ importers:
   integration-tests/react-query-utils:
     dependencies:
       "@blitzjs/next":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz-rpc
       "@prisma/client":
         specifier: 4.6.1
         version: 4.6.1(prisma@4.6.1)
       blitz:
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz
       lowdb:
         specifier: 3.0.0
@@ -1003,7 +1003,7 @@ importers:
         version: 18.2.0(react@18.2.0)
     devDependencies:
       "@blitzjs/config":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/config
       "@next/bundle-analyzer":
         specifier: 12.0.8
@@ -1042,16 +1042,16 @@ importers:
   integration-tests/rpc:
     dependencies:
       "@blitzjs/config":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/config
       "@blitzjs/next":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz-rpc
       blitz:
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz
       next:
         specifier: 14.0.4
@@ -1091,16 +1091,16 @@ importers:
   integration-tests/rpc-path-root:
     dependencies:
       "@blitzjs/config":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/config
       "@blitzjs/next":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz-rpc
       blitz:
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz
       next:
         specifier: 14.0.4
@@ -1140,19 +1140,19 @@ importers:
   integration-tests/trailing-slash:
     dependencies:
       "@blitzjs/auth":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz-auth
       "@blitzjs/next":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz-rpc
       "@prisma/client":
         specifier: 4.6.1
         version: 4.6.1(prisma@4.6.1)
       blitz:
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz
       lowdb:
         specifier: 3.0.0
@@ -1171,7 +1171,7 @@ importers:
         version: 18.2.0(react@18.2.0)
     devDependencies:
       "@blitzjs/config":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/config
       "@next/bundle-analyzer":
         specifier: 12.0.8
@@ -1210,13 +1210,13 @@ importers:
   integration-tests/utils:
     devDependencies:
       "@blitzjs/config":
-        specifier: workspace:2.0.4
+        specifier: workspace:2.0.5
         version: link:../../packages/config
       "@blitzjs/next":
-        specifier: workspace:2.0.4
+        specifier: workspace:2.0.5
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: workspace:2.0.4
+        specifier: workspace:2.0.5
         version: link:../../packages/blitz-rpc
       "@tanstack/react-query":
         specifier: 4.13.0
@@ -1297,7 +1297,7 @@ importers:
   packages/blitz:
     dependencies:
       "@blitzjs/generator":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../generator
       "@mrleebo/prisma-ast":
         specifier: 0.2.6
@@ -1442,7 +1442,7 @@ importers:
         version: 2.1.1
     devDependencies:
       "@blitzjs/config":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../config
       "@types/cookie":
         specifier: 0.4.1
@@ -1587,7 +1587,7 @@ importers:
         version: 0.11.0
     devDependencies:
       "@blitzjs/config":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../config
       "@testing-library/react":
         specifier: 13.4.0
@@ -1611,7 +1611,7 @@ importers:
         specifier: 17.0.14
         version: 17.0.14
       blitz:
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../blitz
       next:
         specifier: 14.0.4
@@ -1641,7 +1641,7 @@ importers:
   packages/blitz-next:
     dependencies:
       "@blitzjs/rpc":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../blitz-rpc
       "@types/hoist-non-react-statics":
         specifier: 3.3.1
@@ -1666,7 +1666,7 @@ importers:
         version: 8.1.1
     devDependencies:
       "@blitzjs/config":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../config
       "@testing-library/dom":
         specifier: 8.13.0
@@ -1699,7 +1699,7 @@ importers:
         specifier: 4.0.0
         version: 4.0.0(@types/react@18.0.25)(react-dom@18.2.0)(react@18.2.0)
       blitz:
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../blitz
       cross-spawn:
         specifier: 7.0.3
@@ -1766,10 +1766,10 @@ importers:
         version: 8.1.1
     devDependencies:
       "@blitzjs/auth":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../blitz-auth
       "@blitzjs/config":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../config
       "@tanstack/query-core":
         specifier: 4.24.4
@@ -1784,7 +1784,7 @@ importers:
         specifier: 17.0.14
         version: 17.0.14
       blitz:
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../blitz
       next:
         specifier: 14.0.4
@@ -1823,13 +1823,13 @@ importers:
         specifier: 7.17.12
         version: 7.17.12(@babel/core@7.12.10)
       "@blitzjs/generator":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../generator
       arg:
         specifier: 5.0.1
         version: 5.0.1
       blitz:
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../blitz
       chalk:
         specifier: ^4.1.0
@@ -1857,7 +1857,7 @@ importers:
         specifier: 7.12.10
         version: 7.12.10(@babel/core@7.12.10)(supports-color@8.1.1)
       "@blitzjs/config":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../config
       "@types/jscodeshift":
         specifier: 0.11.2
@@ -1979,7 +1979,7 @@ importers:
         version: 3.20.2
     devDependencies:
       "@blitzjs/config":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../config
       "@juanm04/cpx":
         specifier: 2.0.1
@@ -2055,7 +2055,7 @@ importers:
         version: 5.9.1(eslint@8.27.0)(supports-color@8.1.1)(typescript@4.8.4)
     devDependencies:
       "@blitzjs/config":
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../config
       "@types/react":
         specifier: 18.0.25
@@ -2079,7 +2079,7 @@ importers:
   recipes/base-web:
     dependencies:
       blitz:
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2092,7 +2092,7 @@ importers:
   recipes/bulma:
     dependencies:
       blitz:
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2105,7 +2105,7 @@ importers:
   recipes/bumbag-ui:
     dependencies:
       blitz:
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2121,7 +2121,7 @@ importers:
   recipes/chakra-ui:
     dependencies:
       blitz:
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2137,7 +2137,7 @@ importers:
   recipes/emotion:
     dependencies:
       blitz:
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2150,19 +2150,19 @@ importers:
   recipes/gh-action-yarn-mariadb:
     dependencies:
       blitz:
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz
 
   recipes/gh-action-yarn-postgres:
     dependencies:
       blitz:
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz
 
   recipes/ghost:
     dependencies:
       blitz:
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2175,7 +2175,7 @@ importers:
   recipes/graphql-apollo-server:
     dependencies:
       blitz:
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2191,7 +2191,7 @@ importers:
   recipes/logrocket:
     dependencies:
       blitz:
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2204,7 +2204,7 @@ importers:
   recipes/material-ui:
     dependencies:
       blitz:
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2217,7 +2217,7 @@ importers:
   recipes/next-ui:
     dependencies:
       blitz:
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2233,19 +2233,19 @@ importers:
   recipes/passenger:
     dependencies:
       blitz:
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz
 
   recipes/quirrel:
     dependencies:
       blitz:
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz
 
   recipes/reflexjs:
     dependencies:
       blitz:
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2261,13 +2261,13 @@ importers:
   recipes/render:
     dependencies:
       blitz:
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz
 
   recipes/secureheaders:
     dependencies:
       blitz:
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2283,7 +2283,7 @@ importers:
   recipes/stitches:
     dependencies:
       blitz:
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2296,7 +2296,7 @@ importers:
   recipes/styled-components:
     dependencies:
       blitz:
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2312,7 +2312,7 @@ importers:
   recipes/tailwind:
     dependencies:
       blitz:
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2325,7 +2325,7 @@ importers:
   recipes/theme-ui:
     dependencies:
       blitz:
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2341,7 +2341,7 @@ importers:
   recipes/vanilla-extract:
     dependencies:
       blitz:
-        specifier: 2.0.4
+        specifier: 2.0.5
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0

@@ -1,5 +1,12 @@
 # blitz
 
+## 2.0.5
+
+### Patch Changes
+
+- 6f54841b7: fix: getBlitzContext() can only be used in React Server Components in Nextjs 13 or higher
+  - @blitzjs/generator@2.0.5
+
 ## 2.0.4
 
 ### Patch Changes
