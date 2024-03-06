@@ -104,23 +104,6 @@ export function useQuery<
     enabled,
   })
 
-  if (
-    queryRest.fetchStatus === "idle" &&
-    isServer &&
-    suspenseEnabled !== false &&
-    !data &&
-    (!options || !("suspense" in options) || options.suspense) &&
-    (!options || !("enabled" in options) || options.enabled)
-  ) {
-    const e = new NextError()
-    e.name = "Rendering Suspense fallback..."
-    e.digest = "DYNAMIC_SERVER_USAGE"
-    // Backwards compatibility for nextjs 13.0.7
-    e.message = "DYNAMIC_SERVER_USAGE"
-    delete e.stack
-    throw e
-  }
-
   const rest = {
     ...queryRest,
     ...getQueryCacheFunctions<FirstParam<T>, TResult, T>(queryFn, params),
@@ -191,23 +174,6 @@ export function usePaginatedQuery<
     keepPreviousData: true,
     enabled,
   })
-
-  if (
-    queryRest.fetchStatus === "idle" &&
-    isServer &&
-    suspenseEnabled !== false &&
-    !data &&
-    (!options || !("suspense" in options) || options.suspense) &&
-    (!options || !("enabled" in options) || options.enabled)
-  ) {
-    const e = new NextError()
-    e.name = "Rendering Suspense fallback..."
-    e.digest = "DYNAMIC_SERVER_USAGE"
-    // Backwards compatibility for nextjs 13.0.7
-    e.message = "DYNAMIC_SERVER_USAGE"
-    delete e.stack
-    throw e
-  }
 
   const rest = {
     ...queryRest,
@@ -291,23 +257,6 @@ export function useInfiniteQuery<
     ...options,
     enabled,
   })
-
-  if (
-    queryRest.fetchStatus === "idle" &&
-    isServer &&
-    suspenseEnabled !== false &&
-    !data &&
-    (!options || !("suspense" in options) || options.suspense) &&
-    (!options || !("enabled" in options) || options.enabled)
-  ) {
-    const e = new NextError()
-    e.name = "Rendering Suspense fallback..."
-    e.digest = "DYNAMIC_SERVER_USAGE"
-    // Backwards compatibility for nextjs 13.0.7
-    e.message = "DYNAMIC_SERVER_USAGE"
-    delete e.stack
-    throw e
-  }
 
   const rest = {
     ...queryRest,
