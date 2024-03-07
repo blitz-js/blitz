@@ -2,4 +2,4 @@
 "blitz": patch
 ---
 
-Use process.kill("SIGINT") instead of process.kill("SIGABRT") on startCustomServer() for better compatibility with operative systems
+Use `SIGINT` signal instead of `SIGABRT` to stop the process, when using custom server for better compatibility with operative systems
