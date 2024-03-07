@@ -1,5 +1,6 @@
 import {ChildProcess} from "child_process"
 import {spawn} from "cross-spawn"
+import os from "os"
 import detect from "detect-port"
 import path from "path"
 import {existsSync, readJSONSync} from "fs-extra"
@@ -127,7 +128,13 @@ export function startCustomServer(
               console.log("\n")
               //@ts-ignore -- incorrect TS type from node
               process.exitCode = RESTART_CODE
-              process.kill("SIGABRT")
+              // Check if the system is Windows
+              if (os.platform() === "win32") {
+                // Windows doesn't support SIGABRT, use SIGINT instead
+                process.kill("SIGINT")
+              } else {
+                process.kill("SIGABRT")
+              }
             }
           },
         }
