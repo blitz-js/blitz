@@ -14,12 +14,11 @@ import {
 // Subset of `import type { LoaderDefinitionFunction } from 'webpack'`
 
 export async function loader(this: Loader, input: string): Promise<string> {
-  const compiler = this._compiler!
   const id = this.resource
-  const root = this._compiler!.context
+  const root = this.rootContext
   const rpcFolders = this.query.includeRPCFolders ? this.query.includeRPCFolders : []
 
-  const isSSR = compiler.name === "server"
+  const isSSR = this._compiler.name === "server"
   if (isSSR) {
     this.cacheable(false)
 

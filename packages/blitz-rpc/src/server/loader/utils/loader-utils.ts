@@ -11,8 +11,8 @@ export interface LoaderOptions {
 export interface Loader {
   _compiler?: {
     name: string
-    context: string
   }
+  rootContext: string
   resource: string
   cacheable: (enabled: boolean) => void
   query: LoaderOptions

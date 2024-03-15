@@ -14,11 +14,10 @@ import {getResolverConfig} from "../../parsers/parse-rpc-config"
 // Subset of `import type { LoaderDefinitionFunction } from 'webpack'`
 
 export async function loader(this: Loader, input: string): Promise<string> {
-  const compiler = this._compiler!
   const id = this.resource
-  const root = this._compiler!.context
+  const root = this.rootContext
 
-  const isSSR = compiler.name === "server"
+  const isSSR = this._compiler.name === "server"
   if (!isSSR) {
     return await transformBlitzRpcResolverClient(
       input,
