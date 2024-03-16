@@ -17,8 +17,21 @@ export async function loader(this: Loader, input: string): Promise<string> {
   const id = this.resource
   const root = this.rootContext
 
-  const isSSR = this._compiler.name === "server"
-  if (!isSSR) {
+  // Webpack has `_compiler` property. Turbopack does not.
+  const webpackCompilerName = this._compiler?.name
+  if (webpackCompilerName) {
+    const isSSR = webpackCompilerName === "server"
+    if (!isSSR) {
+      return await transformBlitzRpcResolverClient(
+        input,
+        toPosixPath(id),
+        toPosixPath(root),
+        this.query,
+      )
+    }
+    // Handle Turbopack / other bundlers case.
+    // The decision of which environment to run the loader in is decided by the loader configuration instead.
+  } else {
     return await transformBlitzRpcResolverClient(
       input,
       toPosixPath(id),

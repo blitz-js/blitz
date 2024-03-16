@@ -1,4 +1,4 @@
-import {join} from "path"
+import {join, relative} from "path"
 import {promises} from "fs"
 import {
   assertPosixPath,
@@ -18,12 +18,33 @@ export async function loader(this: Loader, input: string): Promise<string> {
   const root = this.rootContext
   const rpcFolders = this.query.includeRPCFolders ? this.query.includeRPCFolders : []
 
-  const isSSR = this._compiler.name === "server"
-  if (isSSR) {
+  // Webpack has `_compiler` property. Turbopack does not.
+  const webpackCompilerName = this._compiler?.name
+  if (webpackCompilerName) {
+    const isSSR = webpackCompilerName === "server"
+    if (isSSR) {
+      this.cacheable(false)
+
+      const resolvers = await collectResolvers(root, rpcFolders, ["ts", "js", "tsx", "jsx"])
+
+      return await transformBlitzRpcServer(
+        this.context,
+        input,
+        toPosixPath(id),
+        toPosixPath(root),
+        resolvers,
+        this.query,
+      )
+    }
+    // Handle Turbopack / other bundlers case.
+    // The decision of which environment to run the loader in is decided by the loader configuration instead.
+  } else {
     this.cacheable(false)
 
     const resolvers = await collectResolvers(root, rpcFolders, ["ts", "js", "tsx", "jsx"])
+
     return await transformBlitzRpcServer(
+      this.context,
       input,
       toPosixPath(id),
       toPosixPath(root),
@@ -42,6 +63,7 @@ function slash(str: string) {
 }
 
 export async function transformBlitzRpcServer(
+  context: string,
   src: string,
   id: string,
   root: string,
@@ -67,7 +89,7 @@ export async function transformBlitzRpcServer(
 
     code += `__internal_addBlitzRpcResolver('${routePath}','${slash(
       resolverFilePath,
-    )}',() => ${importStrategy}('${slash(resolverFilePath)}'));`
+    )}',() => ${importStrategy}('${slash(relative(context, resolverFilePath))}'));`
     code += "\n"
   }
 
