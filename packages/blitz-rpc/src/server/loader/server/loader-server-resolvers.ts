@@ -13,12 +13,24 @@ import {posix} from "path"
 // Subset of `import type { LoaderDefinitionFunction } from 'webpack'`
 
 export async function loader(this: Loader, input: string): Promise<string> {
-  const compiler = this._compiler!
   const id = this.resource
-  const root = this._compiler!.context
+  const root = this.rootContext
 
-  const isSSR = compiler.name === "server"
-  if (isSSR) {
+  // Webpack has `_compiler` property. Turbopack does not.
+  const webpackCompilerName = this._compiler?.name
+  if (webpackCompilerName) {
+    const isSSR = webpackCompilerName === "server"
+    if (isSSR) {
+      return await transformBlitzRpcResolverServer(
+        input,
+        toPosixPath(id),
+        toPosixPath(root),
+        this.query,
+      )
+    }
+    // Handle Turbopack / other bundlers case.
+    // The decision of which environment to run the loader in is decided by the loader configuration instead.
+  } else {
     return await transformBlitzRpcResolverServer(
       input,
       toPosixPath(id),
