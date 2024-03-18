@@ -89,7 +89,9 @@ export async function transformBlitzRpcServer(
 
     code += `__internal_addBlitzRpcResolver('${routePath}','${slash(
       resolverFilePath,
-    )}',() => ${importStrategy}('${slash(relative(context, resolverFilePath).replace(/\\/g, "/")}'));`
+    )}',() => ${importStrategy}('${slash(
+      relative(context, resolverFilePath).replace(/\\/g, "/"),
+    )}'))`
     code += "\n"
   }
 
