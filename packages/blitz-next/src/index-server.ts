@@ -28,6 +28,7 @@ import {
   getInfiniteQueryKey,
   getQueryKey,
   installWebpackConfig,
+  installTurboConfig,
   InstallWebpackConfigOptions,
   ResolverPathOptions,
   DefaultOptions,
@@ -239,6 +240,7 @@ export interface BlitzConfig extends NextConfig {
     customServer?: {
       hotReload?: boolean
     }
+    turbo: boolean
   }
 }
 
@@ -299,6 +301,12 @@ export function withBlitz(nextConfig: BlitzConfig = {}): NextConfig {
       return config
     },
   })
+
+  if (nextConfig.blitz?.turbo) {
+    ;(config as any).experimental = {
+      turbo: installTurboConfig(),
+    }
+  }
 
   const {blitz, ...rest} = config
   return rest

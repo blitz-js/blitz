@@ -157,6 +157,44 @@ export function installWebpackConfig({
   })
 }
 
+export function installTurboConfig() {
+  return {
+    resolveAlias: {
+      "cross-spawn": {browser: "./turbopack/empty.js"},
+      "npm-which": {browser: "./turbopack/empty.js"},
+      fs: {browser: "./turbopack/empty.js"},
+    },
+    rules: {
+      "**/*...blitz*.{jsx,tsx,js,ts}": {
+        default: {
+          loaders: [{loader: loaderServer, options: {}}],
+          as: "*.ts",
+        },
+      },
+      "**/{queries,mutations}/**": {
+        browser: {
+          loaders: [
+            {
+              loader: loaderClient,
+              options: {},
+            },
+          ],
+          as: "*.ts",
+        },
+        default: {
+          loaders: [
+            {
+              loader: loaderServerResolvers,
+              options: {},
+            },
+          ],
+          as: "*.ts",
+        },
+      },
+    },
+  }
+}
+
 // ----------
 // END LOADER
 // ----------

@@ -437,7 +437,7 @@ export function runNextCommandDev(argv, stdOut, opts: RunNextCommandDevOptions =
       }
 
       if (opts.stdout !== false) {
-      	process.stdout.write(message)
+        process.stdout.write(message)
       }
     }
 
@@ -923,4 +923,5 @@ interface RunNextCommandDevOptions {
   nodeArgs?: []
   bootupMarker?: any
   nextStart?: boolean
+  turbo?: boolean
 }

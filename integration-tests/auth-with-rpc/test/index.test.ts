@@ -275,13 +275,28 @@ const runTests = () => {
 }
 
 describe("Auth Tests", () => {
-  describe("dev mode", () => {
+  describe("dev mode - webpack", () => {
     beforeAll(async () => {
       mode = "dev"
       try {
         await runBlitzCommand(["prisma", "migrate", "reset", "--force"])
         appPort = await findPort()
         app = await blitzLaunchApp(appPort, {cwd: process.cwd()})
+      } catch (error) {
+        console.log(error)
+      }
+    }, 5000 * 60 * 2)
+    afterAll(async () => await killApp(app))
+    runTests()
+  })
+
+  describe("dev mode - turbo", () => {
+    beforeAll(async () => {
+      mode = "dev"
+      try {
+        await runBlitzCommand(["prisma", "migrate", "reset", "--force"])
+        appPort = await findPort()
+        app = await blitzLaunchApp(appPort, {cwd: process.cwd(), turbo: true})
       } catch (error) {
         console.log(error)
       }
