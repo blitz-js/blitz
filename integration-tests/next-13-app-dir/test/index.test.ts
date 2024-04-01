@@ -174,7 +174,7 @@ describe("Auth Tests", () => {
       try {
         await runBlitzCommand(["prisma", "migrate", "reset", "--force"])
         appPort = await findPort()
-        app = await blitzLaunchApp(appPort, {cwd: process.cwd(), turbo: true})
+        app = await blitzLaunchApp(appPort, {cwd: process.cwd()}, true)
       } catch (error) {
         console.log(error)
       }
