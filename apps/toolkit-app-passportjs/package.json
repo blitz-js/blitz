@@ -31,7 +31,7 @@
     "@hookform/resolvers": "2.9.10",
     "@prisma/client": "4.6.1",
     "blitz": "2.0.5",
-    "next": "14.0.4",
+    "next": "14.1.4",
     "openid-client": "5.2.1",
     "prisma": "4.6.1",
     "react": "18.2.0",
