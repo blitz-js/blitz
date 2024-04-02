@@ -22,7 +22,7 @@ function Content() {
   )
 }
 
-function PageWithGetQueryData() {
+function PageWithMonorepoGetQueryData() {
   return (
     <div id="page">
       <Suspense fallback={"Loading..."}>
@@ -32,4 +32,4 @@ function PageWithGetQueryData() {
   )
 }
 
-export default PageWithGetQueryData
+export default PageWithMonorepoGetQueryData

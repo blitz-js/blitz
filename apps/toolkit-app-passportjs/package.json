@@ -30,7 +30,7 @@
     "@hookform/error-message": "2.0.0",
     "@hookform/resolvers": "2.9.10",
     "@prisma/client": "4.6.1",
-    "blitz": "2.0.5",
+    "blitz": "2.0.6",
     "next": "canary",
     "openid-client": "5.2.1",
     "prisma": "4.6.1",

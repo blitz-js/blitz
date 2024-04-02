@@ -86,8 +86,10 @@ export function useQuery<
   const suspenseEnabled = Boolean(globalThis.__BLITZ_SUSPENSE_ENABLED)
   let enabled = isServer && suspenseEnabled ? false : options?.enabled ?? options?.enabled !== null
   let routerIsReady = false
+  let isPagesRouter = false
   const router = useRouter()
   if (router) {
+    isPagesRouter = true
     routerIsReady = router?.isReady || (isServer && suspenseEnabled)
   } else {
     routerIsReady = true
@@ -110,7 +112,8 @@ export function useQuery<
     suspenseEnabled !== false &&
     !data &&
     (!options || !("suspense" in options) || options.suspense) &&
-    (!options || !("enabled" in options) || options.enabled)
+    (!options || !("enabled" in options) || options.enabled) &&
+    isPagesRouter
   ) {
     const e = new NextError()
     e.name = "Rendering Suspense fallback..."
@@ -174,8 +177,10 @@ export function usePaginatedQuery<
   let enabled = isServer && suspenseEnabled ? false : options?.enabled ?? options?.enabled !== null
   let routerIsReady = false
   const router = useRouter()
+  let isPagesRouter = false
   if (router) {
     routerIsReady = router?.isReady || (isServer && suspenseEnabled)
+    isPagesRouter = true
   } else {
     routerIsReady = true
   }
@@ -198,7 +203,8 @@ export function usePaginatedQuery<
     suspenseEnabled !== false &&
     !data &&
     (!options || !("suspense" in options) || options.suspense) &&
-    (!options || !("enabled" in options) || options.enabled)
+    (!options || !("enabled" in options) || options.enabled) &&
+    isPagesRouter
   ) {
     const e = new NextError()
     e.name = "Rendering Suspense fallback..."
@@ -270,9 +276,11 @@ export function useInfiniteQuery<
   const suspenseEnabled = Boolean(globalThis.__BLITZ_SUSPENSE_ENABLED)
   let enabled = isServer && suspenseEnabled ? false : options?.enabled ?? options?.enabled !== null
   let routerIsReady = false
+  let isPagesRouter = false
   const router = useRouter()
   if (router) {
     routerIsReady = router?.isReady || (isServer && suspenseEnabled)
+    isPagesRouter = true
   } else {
     routerIsReady = true
   }
@@ -298,7 +306,8 @@ export function useInfiniteQuery<
     suspenseEnabled !== false &&
     !data &&
     (!options || !("suspense" in options) || options.suspense) &&
-    (!options || !("enabled" in options) || options.enabled)
+    (!options || !("enabled" in options) || options.enabled) &&
+    isPagesRouter
   ) {
     const e = new NextError()
     e.name = "Rendering Suspense fallback..."
