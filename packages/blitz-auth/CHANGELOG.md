@@ -1,5 +1,13 @@
 # @blitzjs/auth
 
+## 2.0.6
+
+### Patch Changes
+
+- 5a587a6c3: Fix bundling issue that occurs in vercel due to the way imports were handled internally
+- Updated dependencies [76a2544f9]
+  - blitz@2.0.6
+
 ## 2.0.5
 
 ### Patch Changes

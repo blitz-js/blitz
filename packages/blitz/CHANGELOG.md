@@ -1,5 +1,12 @@
 # blitz
 
+## 2.0.6
+
+### Patch Changes
+
+- 76a2544f9: Use `SIGINT` signal instead of `SIGABRT` to stop the process, when using custom server for better compatibility with operative systems
+  - @blitzjs/generator@2.0.6
+
 ## 2.0.5
 
 ### Patch Changes
