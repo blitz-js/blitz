@@ -277,20 +277,20 @@ const runTests = () => {
 }
 
 describe("Auth Tests", () => {
-  // describe("dev mode - webpack", () => {
-  //   beforeAll(async () => {
-  //     mode = "dev"
-  //     try {
-  //       await runBlitzCommand(["prisma", "migrate", "reset", "--force"])
-  //       appPort = await findPort()
-  //       app = await blitzLaunchApp(appPort, {cwd: process.cwd()})
-  //     } catch (error) {
-  //       console.log(error)
-  //     }
-  //   }, 5000 * 60 * 2)
-  //   afterAll(async () => await killApp(app))
-  //   runTests()
-  // })
+  describe("dev mode - webpack", () => {
+    beforeAll(async () => {
+      mode = "dev"
+      try {
+        await runBlitzCommand(["prisma", "migrate", "reset", "--force"])
+        appPort = await findPort()
+        app = await blitzLaunchApp(appPort, {cwd: process.cwd()})
+      } catch (error) {
+        console.log(error)
+      }
+    }, 5000 * 60 * 2)
+    afterAll(async () => await killApp(app))
+    runTests()
+  })
 
   describe("dev mode - turbo", () => {
     beforeAll(async () => {
@@ -307,21 +307,21 @@ describe("Auth Tests", () => {
     runTests()
   })
 
-  // describe("server mode", () => {
-  //   beforeAll(async () => {
-  //     mode = "server"
-  //     try {
-  //       await runBlitzCommand(["prisma", "generate"])
-  //       await runBlitzCommand(["prisma", "migrate", "deploy"])
-  //       await blitzBuild()
-  //       appPort = await findPort()
-  //       app = await blitzStart(appPort, {cwd: process.cwd()})
-  //     } catch (err) {
-  //       console.log(err)
-  //     }
-  //   }, 5000 * 60 * 2)
-  //   afterAll(async () => await killApp(app))
+  describe("server mode", () => {
+    beforeAll(async () => {
+      mode = "server"
+      try {
+        await runBlitzCommand(["prisma", "generate"])
+        await runBlitzCommand(["prisma", "migrate", "deploy"])
+        await blitzBuild()
+        appPort = await findPort()
+        app = await blitzStart(appPort, {cwd: process.cwd()})
+      } catch (err) {
+        console.log(err)
+      }
+    }, 5000 * 60 * 2)
+    afterAll(async () => await killApp(app))
 
-  //   runTests()
-  // })
+    runTests()
+  })
 })
