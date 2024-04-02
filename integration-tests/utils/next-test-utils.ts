@@ -296,7 +296,7 @@ export function runBlitzCommandDev(argv, stdOut, opts: RunNextCommandDevOptions 
 
 // Blitz Utils
 export function blitzLaunchApp(port, opts: RunNextCommandDevOptions, turbo = false) {
-  return runBlitzCommandDev(["next", "dev", "-p", port, turbo ? "--turbo" : ""], undefined, opts)
+  return runBlitzCommandDev(["dev", "-p", port, turbo ? "--turbo" : ""], undefined, opts)
 }
 
 export function blitzBuild(args = [], opts = {}): any {

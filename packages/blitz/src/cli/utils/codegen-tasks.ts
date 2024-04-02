@@ -61,7 +61,7 @@ export const codegenTasks = async () => {
         `    if (err.toString().includes("DYNAMIC_SERVER_USAGE") || err.toString().includes("could not finish this Suspense boundary") || err.toString().includes("Minified React error #419")) {
           return;
       } else {
-          defaultOnRecoverableError(err);
+          defaultOnRecoverableError(err)
       }`,
       )
       await fs.writeFile(nextClientOnRecoverableErrorIndex, updatedFile)

@@ -2,7 +2,7 @@ import {ChildProcess} from "child_process"
 import {spawn} from "cross-spawn"
 import detect from "detect-port"
 import path from "path"
-import {existsSync, readJSONSync} from "fs-extra"
+import {copySync, existsSync, readJSONSync} from "fs-extra"
 import * as esbuild from "esbuild"
 import pkgDir from "pkg-dir"
 import type {ServerConfig} from "./config"
@@ -151,21 +151,11 @@ function getSpawnEnv(config: ServerConfig) {
   return spawnEnv
 }
 
-async function createCommandAndPort(config: ServerConfig, command: string) {
-  let spawnCommand: string[] = [command]
-  let availablePort: number
-
-  availablePort = await detect({port: config.port ? config.port : 3000})
-  spawnCommand = spawnCommand.concat(["-p", `${availablePort}`])
-
-  if (config.hostname) {
-    spawnCommand = spawnCommand.concat(["-H", `${config.hostname}`])
-  }
-
-  const spawnEnv = getSpawnEnv(config)
-
-  return {spawnCommand, spawnEnv, availablePort}
+async function detectAvailablePort(config: ServerConfig) {
+  return await detect({port: config.port ? config.port : 3000})
 }
+
+const frameworkCommands = ["blitz", "next"]
 
 export async function nextStartDev(
   nextBin: string,
@@ -174,12 +164,11 @@ export async function nextStartDev(
   _buildFolder: string,
   config: ServerConfig,
 ) {
-  const {spawnCommand, spawnEnv, availablePort} = await createCommandAndPort(config, "dev")
-
+  const spawnEnv = getSpawnEnv(config)
+  const availablePort = await detectAvailablePort(config)
   process.env.BLITZ_DEV_SERVER_ORIGIN = `http://localhost:${availablePort}`
 
-  debug("cwd ", cwd)
-  debug("spawn ", nextBin, spawnCommand)
+  const spawnCommand = process.argv.slice(2).filter((arg) => !frameworkCommands.includes(arg))
 
   return new Promise<void>((res, rej) => {
     spawn(nextBin, spawnCommand, {
@@ -248,7 +237,8 @@ export function nextExport(nextBin: string, config: ServerConfig) {
 }
 
 export async function nextStart(nextBin: string, _buildFolder: string, config: ServerConfig) {
-  const {spawnCommand, spawnEnv} = await createCommandAndPort(config, "start")
+  const spawnEnv = getSpawnEnv(config)
+  const spawnCommand = process.argv.slice(2).filter((arg) => !frameworkCommands.includes(arg))
 
   return new Promise<void>((res, rej) => {
     spawn(nextBin, spawnCommand, {
