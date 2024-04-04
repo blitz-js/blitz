@@ -39,6 +39,8 @@ jobs:
         with:
           version: 8.9.0
       - run: pnpm install
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
       - run: pnpm build
 
       - name: Create Release Pull Request
