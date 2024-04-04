@@ -187,7 +187,8 @@ export function setQueryData<TInput, TResult, T extends AsyncFunc>(
 
   return new Promise((res) => {
     getQueryClient().setQueryData(queryKey, newData)
-    let result: void | ReturnType<ReturnType<typeof getQueryClient>["invalidateQueries"]>
+    let result: void | ReturnType<ReturnType<typeof getQueryClient>["invalidateQueries"]> =
+      undefined
     if (opts.refetch) {
       result = invalidateQuery(resolver, params)
     }

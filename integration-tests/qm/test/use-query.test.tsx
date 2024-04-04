@@ -1,10 +1,10 @@
 import {describe, it, expect, beforeAll, vi} from "vitest"
-import {act, screen, waitForElementToBeRemoved, waitFor} from "@testing-library/react"
-import {useQuery, useInfiniteQuery, BlitzRpcPlugin, QueryClientProvider} from "@blitzjs/rpc"
+import {act, screen, waitForElementToBeRemoved} from "@testing-library/react"
+import {useQuery, useInfiniteQuery, BlitzRpcPlugin, BlitzProvider} from "@blitzjs/rpc"
 import React from "react"
 import delay from "delay"
 import {buildMutationRpc, buildQueryRpc, mockRouter, render} from "../../utils/blitz-test-utils"
-import {RouterContext} from "next/dist/shared/lib/router-context"
+import {RouterContext} from "@blitzjs/next"
 
 beforeAll(() => {
   globalThis.__BLITZ_SESSION_COOKIE_PREFIX = "qm-test-cookie-prefix"
@@ -44,9 +44,9 @@ describe("useQuery", () => {
 
     const {rerender} = render(ui(), {
       wrapper: ({children}) => (
-        <QueryClientProvider client={globalThis.queryClient}>
+        <BlitzProvider>
           <RouterContext.Provider value={mockRouter}>{children}</RouterContext.Provider>
-        </QueryClientProvider>
+        </BlitzProvider>
       ),
     })
     return [res, () => rerender(ui())]
@@ -117,9 +117,9 @@ describe("useQuery", () => {
 
       const {rerender} = render(ui(), {
         wrapper: ({children}) => (
-          <QueryClientProvider client={globalThis.queryClient}>
+          <BlitzProvider>
             <RouterContext.Provider value={mockRouter}>{children}</RouterContext.Provider>
-          </QueryClientProvider>
+          </BlitzProvider>
         ),
       })
     })
@@ -163,9 +163,9 @@ describe("useInfiniteQuery", () => {
 
     const {rerender} = render(ui(), {
       wrapper: ({children}) => (
-        <QueryClientProvider client={globalThis.queryClient}>
+        <BlitzProvider>
           <RouterContext.Provider value={mockRouter}>{children}</RouterContext.Provider>
-        </QueryClientProvider>
+        </BlitzProvider>
       ),
     })
     return [res, () => rerender(ui())]

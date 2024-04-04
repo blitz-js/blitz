@@ -4,14 +4,17 @@ import {getTemplateRoot} from "../utils/get-template-root"
 import {camelCaseToKebabCase} from "../utils/inflector"
 import j from "jscodeshift"
 import {replaceImportDbWithPrismaFolder} from "../../src/utils/codemod-utils"
+import fs from "fs-extra"
 
 export interface QueriesGeneratorOptions extends ResourceGeneratorOptions {}
 
 export class QueriesGenerator extends Generator<QueriesGeneratorOptions> {
   sourceRoot: SourceRootType
+  isAppDir = false
   constructor(options: QueriesGeneratorOptions) {
     super(options)
     this.sourceRoot = getTemplateRoot(options.templateDir, {type: "template", path: "queries"})
+    this.isAppDir = fs.existsSync(require("path").join(process.cwd(), "src/app/layout.tsx"))
   }
   static subdirectory = "queries"
 
@@ -33,6 +36,9 @@ export class QueriesGenerator extends Generator<QueriesGeneratorOptions> {
   getTargetDirectory() {
     const context = this.options.context ? `${camelCaseToKebabCase(this.options.context)}/` : ""
     const kebabCaseModelName = camelCaseToKebabCase(this.options.modelNames)
+    if (this.isAppDir) {
+      return `src/app/${context}${kebabCaseModelName}/queries`
+    }
     return `src/${context}${kebabCaseModelName}/queries`
   }
 }

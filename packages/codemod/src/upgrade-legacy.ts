@@ -32,6 +32,12 @@ class ExpectedError extends Error {
   }
 }
 
+const findPagesDirectory = () => {
+  const srcPagesDir = path.join("src", "pages")
+  const pagesDir = path.resolve("pages")
+  return fs.existsSync(srcPagesDir) ? path.resolve(srcPagesDir) : pagesDir
+}
+
 const isInternalBlitzMonorepoDevelopment = fs.existsSync(
   path.join(__dirname, "../../../blitz-next"),
 )
@@ -46,7 +52,22 @@ const upgradeLegacy = async () => {
   if (blitzConfigFile === "") {
     throw new ExpectedError("Could not identify Legacy Blitz Config file")
   }
-  const appDir = path.resolve("app")
+  // Check if app directory exists in either app/ or src/app
+  const appDir = fs.existsSync(path.resolve("app"))
+    ? path.resolve("app")
+    : fs.existsSync(path.resolve("src"))
+    ? path.resolve(path.join("src", "app"))
+    : ""
+  try {
+    // Throw Error if appDir empty
+    if (appDir === "") {
+      throw new ExpectedError(
+        "Could not identify Legacy Blitz App directory in project (no app/ or src/ directory found)",
+      )
+    }
+  } catch (e) {
+    console.error(e)
+  }
   let failedAt =
     fs.existsSync(path.resolve(".migration.json")) && fs.readJSONSync("./.migration.json").failedAt
   let collectedErrors: {message: string; step: number}[] = []
@@ -536,10 +557,10 @@ const upgradeLegacy = async () => {
           isInternalBlitzMonorepoDevelopment ? "templates" : "dist/templates",
         )
         const blitzServer = fs
-          .readFileSync(path.join(templatePath, "app", "app", "blitz-server.ts"))
+          .readFileSync(path.join(templatePath, "app", "src", "app", "blitz-server.ts"))
           .toString()
         const blitzClient = fs
-          .readFileSync(path.join(templatePath, "app", "app", "blitz-client.ts"))
+          .readFileSync(path.join(templatePath, "app", "src", "app", "blitz-client.ts"))
           .toString()
 
         const replaceTemplateValues = (input: string) => {
@@ -584,7 +605,9 @@ const upgradeLegacy = async () => {
             j.Identifier,
             (node) => node.name === "cookiePrefix",
           )
-          cookieIdentifierBlitzClient.get().parentPath.value.value.value = cookiePrefix
+          if (cookieIdentifierBlitzClient.length) {
+            cookieIdentifierBlitzClient.get().parentPath.value.value.value = cookiePrefix
+          }
 
           fs.writeFileSync(
             `${appDir}/blitz-client.${isTypescript ? "ts" : "js"}`,
@@ -676,7 +699,7 @@ const upgradeLegacy = async () => {
   steps.push({
     name: "create pages/api/rpc directory and add [[...blitz]].ts wildecard API route",
     action: async () => {
-      const pagesDir = path.resolve("pages/api/rpc")
+      const pagesDir = path.resolve(`${findPagesDirectory()}/api/rpc`)
       const templatePath = path.join(
         require.resolve("@blitzjs/generator"),
         "..",
@@ -684,7 +707,9 @@ const upgradeLegacy = async () => {
         isInternalBlitzMonorepoDevelopment ? "templates" : "dist/templates",
       )
       const rpcRoute = fs
-        .readFileSync(path.join(templatePath, "app", "pages", "api", "rpc", "blitzrpcroute.ts"))
+        .readFileSync(
+          path.join(templatePath, "app", "src", "pages", "api", "rpc", "blitzrpcroute.ts"),
+        )
         .toString()
 
       if (!fs.existsSync(pagesDir)) {
@@ -925,7 +950,7 @@ const upgradeLegacy = async () => {
     name: "convert useRouterQuery to useRouter",
     action: async () => {
       //First check ./pages
-      const pagesDir = path.resolve("pages")
+      const pagesDir = findPagesDirectory()
       getAllFiles(pagesDir, [], [], [".ts", ".tsx", ".js", ".jsx"]).forEach((file) => {
         try {
           const filepath = path.resolve(pagesDir, file)
@@ -1057,7 +1082,7 @@ const upgradeLegacy = async () => {
   steps.push({
     name: "wrap App component with withBlitz HOC",
     action: async () => {
-      const pagesDir = path.resolve("pages")
+      const pagesDir = findPagesDirectory()
 
       const program = getCollectionFromSource(
         path.join(pagesDir, `_app.${isTypescript ? "tsx" : "jsx"}`),
@@ -1107,7 +1132,7 @@ const upgradeLegacy = async () => {
   steps.push({
     name: "update imports in the _document file",
     action: async () => {
-      const pagesDir = path.resolve("pages")
+      const pagesDir = findPagesDirectory()
 
       if (fs.existsSync(path.join(pagesDir, `_document.${isTypescript ? "tsx" : "jsx"}`))) {
         const program = getCollectionFromSource(
@@ -1187,7 +1212,7 @@ const upgradeLegacy = async () => {
   steps.push({
     name: "wrap getServerSideProps, getStaticProps and API handlers with gSSP, gSP, and api",
     action: async () => {
-      const pagesDir = path.resolve("pages")
+      const pagesDir = findPagesDirectory()
       getAllFiles(pagesDir, [], ["api"], [".ts", ".tsx", ".js", ".jsx"]).forEach((file) => {
         try {
           const program = getCollectionFromSource(file)
@@ -1310,7 +1335,9 @@ const upgradeLegacy = async () => {
   steps.push({
     name: "check for usages of invokeWithMiddleware",
     action: async () => {
-      getAllFiles(path.resolve("pages"), [], [], [".ts", ".tsx", ".js", ".jsx"]).forEach((file) => {
+      const srcPagesDir = path.resolve(path.join("src/pages"))
+      const pagesDir = fs.existsSync(srcPagesDir) ? srcPagesDir : path.resolve("pages")
+      getAllFiles(pagesDir, [], [], [".ts", ".tsx", ".js", ".jsx"]).forEach((file) => {
         const program = getCollectionFromSource(file)
         try {
           const invokeWithMiddlewarePath = findCallExpression(program, "invokeWithMiddleware")

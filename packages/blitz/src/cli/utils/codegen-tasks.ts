@@ -16,8 +16,14 @@ export const codegenTasks = async () => {
     */
     const nextDir = await resolveCwd("next")
     const nextClientIndex = join(nextDir, "../..", "client", "index.js")
-    console.log(nextClientIndex)
+    const nextClientOnRecoverableErrorIndex = join(
+      nextDir,
+      "../..",
+      "client",
+      "on-recoverable-error.js",
+    )
     const readFile = await fs.readFile(nextClientIndex)
+    const readOnRecoverableErrorFile = await fs.readFile(nextClientOnRecoverableErrorIndex)
     const packageJson = await getPackageJson()
     const version = packageJson.dependencies.next
     const nextVersion = semver.clean(version, {loose: true}) || semver.valid(semver.coerce(version))
@@ -49,14 +55,16 @@ export const codegenTasks = async () => {
         )
       await fs.writeFile(nextClientIndex, updatedFile)
       log.success("Next.js was successfully patched with a React Suspense fix")
-    } else if (nextVersion && semver.satisfies(nextVersion, ">=13.3.1")) {
-      const updatedFile = readFile
-        .toString()
-        .replace(
-          /_onrecoverableerror\.default$/gm,
-          `(err) => (err.toString().includes("DYNAMIC_SERVER_USAGE") || err.toString().includes("could not finish this Suspense boundary") || err.toString().includes("Minified React error #419")) ? null : _onrecoverableerror.default(err)`,
-        )
-      await fs.writeFile(nextClientIndex, updatedFile)
+    } else {
+      const updatedFile = readOnRecoverableErrorFile.toString().replace(
+        /defaultOnRecoverableError\(err\);/gm,
+        `    if (err.toString().includes("DYNAMIC_SERVER_USAGE") || err.toString().includes("could not finish this Suspense boundary") || err.toString().includes("Minified React error #419")) {
+          return;
+      } else {
+          defaultOnRecoverableError(err);
+      }`,
+      )
+      await fs.writeFile(nextClientOnRecoverableErrorIndex, updatedFile)
       log.success("Next.js was successfully patched with a React Suspense fix")
     }
   } catch (err) {

@@ -242,8 +242,8 @@ export function runBlitzCommandDev(argv, stdOut, opts: RunNextCommandDevOptions 
     function handleStdout(data) {
       const message = data.toString()
       const bootupMarkers = {
-        dev: /compiled .*successfully/i,
-        start: /started server/i,
+        dev: /Ready/i,
+        start: /Ready/i,
       }
       if (
         (opts.bootupMarker && opts.bootupMarker.test(message)) ||
@@ -417,9 +417,10 @@ export function runNextCommandDev(argv, stdOut, opts: RunNextCommandDevOptions =
 
     function handleStdout(data) {
       const message = data.toString()
+      console.log(message)
       const bootupMarkers = {
-        dev: /compiled .*successfully/i,
-        start: /started server/i,
+        dev: /Next.js/i,
+        start: /Next.js/i,
       }
       if (
         (opts.bootupMarker && opts.bootupMarker.test(message)) ||

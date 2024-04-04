@@ -1,9 +1,10 @@
-import {assert, baseLogger, Ctx, newLine, prettyMs, ResolverConfig} from "blitz"
+import {assert, Ctx, ResolverConfig} from "blitz"
 import {NextApiRequest, NextApiResponse} from "next"
-import {deserialize, parse, serialize as superjsonSerialize} from "superjson"
 import {resolve} from "path"
-import chalk from "chalk"
+import {deserialize, parse, serialize as superjsonSerialize} from "superjson"
+import {RpcLogger} from "./rpc-logger"
 import {LoaderOptions} from "./server/loader/utils/loader-utils"
+import {RpcLoggerOptions} from "./server/plugin"
 
 // TODO - optimize end user server bundles by not exporting all client stuff here
 export * from "./index-browser"
@@ -31,7 +32,13 @@ function getGlobalObject<T extends Record<string, unknown>>(key: string, default
 }
 
 type Resolver = (...args: unknown[]) => Promise<unknown>
-type ResolverFiles = Record<string, () => Promise<{default?: Resolver; config?: ResolverConfig}>>
+type ResolverFiles = Record<
+  string,
+  {
+    absoluteResolverPath: string
+    resolver: () => Promise<{default?: Resolver; config?: ResolverConfig}>
+  }
+>
 export type ResolverPathOptions = "queries|mutations" | "root" | ((path: string) => string)
 
 // We define `global.__internal_blitzRpcResolverFiles` to ensure we use the same global object.
@@ -49,10 +56,46 @@ export function loadBlitzRpcResolverFilesWithInternalMechanism() {
 
 export function __internal_addBlitzRpcResolver(
   routePath: string,
+  absoluteResolverPath: string,
   resolver: () => Promise<{default?: Resolver; config?: ResolverConfig}>,
 ) {
   g.blitzRpcResolverFilesLoaded = g.blitzRpcResolverFilesLoaded || {}
-  g.blitzRpcResolverFilesLoaded[routePath] = resolver
+  const existingResolver = g.blitzRpcResolverFilesLoaded[routePath]
+  if (existingResolver && existingResolver.absoluteResolverPath !== absoluteResolverPath) {
+    const logger = new RpcLogger(routePath)
+    const errorMessage = `\nThe following resolver files resolve to the same path: ${routePath}\n\n1.  ${absoluteResolverPath}\n2.  ${
+      existingResolver.absoluteResolverPath
+    }\n\nPossible Solutions:\n\n1. Remove or rename one of the resolver files. \n2. Set the following in your in next.config.js to load all resolvers using their absolute paths: 
+    \n\n//next.config.js\nblitz:{\n  resolverPath: "root",\n},\n
+    \n${
+      process.env.NODE_ENV === "production"
+        ? `Resolver in ${absoluteResolverPath} is currently being shadowed by ${existingResolver.absoluteResolverPath}`
+        : ""
+    }
+    `
+    logger.error(errorMessage)
+    if (process.env.NODE_ENV !== "production") {
+      g.blitzRpcResolverFilesLoaded[routePath] = {
+        absoluteResolverPath,
+        resolver: async () => {
+          return {
+            ...(await resolver()),
+            default: async () => {
+              const error = new Error(errorMessage)
+              error.name = "BlitzRPCResolverCollisionError"
+              error.stack = ""
+              throw error
+            },
+          }
+        },
+      }
+    }
+  } else {
+    g.blitzRpcResolverFilesLoaded[routePath] = {
+      absoluteResolverPath,
+      resolver,
+    }
+  }
   return resolver
 }
 
@@ -76,6 +119,7 @@ export interface InstallWebpackConfigOptions {
         [key: string]: boolean | string
       }
     }
+    plugins: any[]
     module: {
       rules: WebpackRule[]
     }
@@ -144,61 +188,9 @@ async function getResolverMap(): Promise<ResolverFiles | null | undefined> {
 }
 
 interface RpcConfig {
-  onError?: (error: Error) => void
-  formatError?: (error: Error) => Error
-  logging?: {
-    /**
-     * allowList Represents the list of routes for which logging should be enabled
-     * If allowList is defined then only those routes will be logged
-     */
-    allowList?: string[]
-    /**
-     * blockList Represents the list of routes for which logging should be disabled
-     * If blockList is defined then all routes except those will be logged
-     */
-    blockList?: string[]
-    /**
-     * verbose Represents the flag to enable/disable logging
-     * If verbose is true then Blitz RPC will log the input and output of each resolver
-     */
-    verbose?: boolean
-    /**
-     * disablelevel Represents the flag to enable/disable logging for a particular level
-     */
-    disablelevel?: "debug" | "info"
-  }
-}
-
-function isBlitzRPCVerbose(resolverName: string, config: RpcConfig, level: string) {
-  // blitz rpc is by default verbose - to keep current behaviour
-  if (!config.logging) {
-    return true
-  }
-  //if logging exists and verbose is not defined then default to true
-  if (config.logging && !("verbose" in config.logging)) {
-    return true
-  }
-  const isLevelDisabled = config.logging?.disablelevel === level
-  if (config.logging?.verbose) {
-    // If allowList array is defined then allow only those routes in allowList
-    if (config.logging?.allowList) {
-      if (config.logging?.allowList?.includes(resolverName) && !isLevelDisabled) {
-        return true
-      }
-    }
-    // If blockList array is defined then allow all routes except those in blockList
-    if (config.logging?.blockList) {
-      if (!config.logging?.blockList?.includes(resolverName) && !isLevelDisabled) {
-        return true
-      }
-    }
-    // if both allowList and blockList are not defined, then allow all routes
-    if (!config.logging?.allowList && !config.logging?.blockList && !isLevelDisabled) {
-      return true
-    }
-    return false
-  }
-  return false
+  onError?: (error: Error, ctx: Ctx) => void
+  formatError?: (error: Error, ctx: Ctx) => Error
+  logging?: RpcLoggerOptions
 }
 
 export function rpcHandler(config: RpcConfig) {

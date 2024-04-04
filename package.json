@@ -29,12 +29,12 @@
     "husky": "8.0.2",
     "jsdom": "^19.0.0",
     "lint-staged": "13.0.3",
-    "next": "13.3.0",
+    "next": "14.0.4",
     "only-allow": "1.1.0",
     "prettier": "^2.7.1",
     "prettier-plugin-prisma": "4.4.0",
     "pretty-quick": "3.1.3",
-    "turbo": "1.10.7",
+    "turbo": "1.10.9",
     "vitest": "0.25.3",
     "wait-on": "6.0.1"
   },
@@ -44,5 +44,13 @@
     "ignoredRules": [
       "EXTERNAL_MISMATCH"
     ]
+  },
+  "pnpm": {
+    "patchedDependencies": {
+      "next-auth@4.18.7": "patches/next-auth@4.18.7.patch"
+    },
+    "overrides": {
+      "@types/mime": "3.0.4"
+    }
   }
 }

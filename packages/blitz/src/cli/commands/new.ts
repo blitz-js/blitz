@@ -12,14 +12,13 @@ import {codegenTasks} from "../utils/codegen-tasks"
 
 type NotUndefined<T> = T extends undefined ? never : T
 const forms: Record<NotUndefined<AppGeneratorOptions["form"]>, string> = {
-  finalform: "React Final Form (recommended)",
+  formik: "Formik (Recommended)",
+  finalform: "React Final Form",
   hookform: "React Hook Form",
-  formik: "Formik",
 }
 
 const language = {
   typescript: "TypeScript",
-  javascript: "JavaScript",
 }
 
 type TLanguage = keyof typeof language
@@ -31,10 +30,13 @@ const installCommandMap: Record<TPkgManager, string> = {
   npm: "npm install",
 }
 
-type TTemplate = "full" | "minimal"
+type TTemplate = "app" | "pages" | "minimal"
 const templates: {[key in TTemplate]: AppGeneratorOptions["template"]} = {
-  full: {
+  app: {
     path: "app",
+  },
+  pages: {
+    path: "pages",
   },
   minimal: {
     path: "minimalapp",
@@ -74,9 +76,9 @@ const args = arg(
 
 let projectName: string = ""
 let projectPath: string = ""
-let projectLanguage: string | TLanguage = ""
-let projectFormLib: AppGeneratorOptions["form"] = "finalform"
-let projectTemplate: AppGeneratorOptions["template"] = templates.full
+let projectLanguage: string | TLanguage = language.typescript
+let projectFormLib: AppGeneratorOptions["form"] = "formik"
+let projectTemplate: AppGeneratorOptions["template"] = templates.app
 let projectPkgManger: TPkgManager = PREFERABLE_PKG_MANAGER
 let shouldInstallDeps: boolean = true
 
@@ -98,28 +100,6 @@ const determineProjectName = async () => {
     }
 
     projectPath = path.resolve(projectName)
-  }
-}
-
-const determineLanguage = async () => {
-  // Check if language from flag is valid
-  if (
-    !args["--language"] ||
-    (args["--language"] && !Object.keys(language).includes(args["--language"].toLowerCase()))
-  ) {
-    const res = await prompts({
-      type: "select",
-      name: "language",
-      message: "Pick a new project's language",
-      initial: 0,
-      choices: Object.entries(language).map((c) => {
-        return {title: c[1], value: c[1]}
-      }),
-    })
-
-    projectLanguage = res.language
-  } else {
-    projectLanguage = args["--language"]
   }
 }
 
@@ -149,8 +129,9 @@ const determineTemplate = async () => {
     (args["--template"] && !Object.keys(templates).includes(args["--template"].toLowerCase()))
   ) {
     const choices: Array<{value: keyof typeof templates; title: string}> = [
-      {value: "full", title: "Full - includes DB and auth (Recommended)"},
-      {value: "minimal", title: "Minimal — no DB, no auth"},
+      {value: "app", title: "App Router – Full Setup: includes DB and auth (Recommended)"},
+      {value: "pages", title: "Pages Router – Full Setup: includes DB and auth"},
+      {value: "minimal", title: "Pages Router – Minimal setup: no DB, no auth"},
     ]
 
     const res = await prompts({
@@ -225,14 +206,13 @@ const determinePkgManagerToInstallDeps = async () => {
   }
 }
 
-const newApp: CliCommand = async (argv) => {
+const newApp: CliCommand = async () => {
   const shouldUpgrade = !args["--skip-upgrade"]
   if (shouldUpgrade) {
     await checkLatestVersion()
   }
 
   await determineProjectName()
-  await determineLanguage()
   await determineTemplate()
   await determinePkgManagerToInstallDeps()
   if (!projectTemplate.skipForms) {
@@ -284,7 +264,7 @@ const newApp: CliCommand = async (argv) => {
     }
 
     const generator = new AppGenerator(generatorOpts)
-    console.log(`Hang tight while we set up your new Blitz app!`)
+    console.log("Hang tight while we set up your new Blitz app!")
     await generator.run()
 
     if (requireManualInstall) {
@@ -294,7 +274,7 @@ const newApp: CliCommand = async (argv) => {
       )
     }
 
-    postInstallSteps.push("blitz dev")
+    postInstallSteps.push(`${projectPkgManger} blitz dev`)
 
     console.log("\n Your new Blitz app is ready! Next steps:")
     postInstallSteps.forEach((step, index) => {

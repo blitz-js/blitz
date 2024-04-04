@@ -1,12 +1,14 @@
 import {useQueryErrorResetBoundary, QueryClientProvider, Hydrate} from "@tanstack/react-query"
 
-export {useQueryErrorResetBoundary, QueryClientProvider, Hydrate}
-
 import {useInfiniteQuery as useInfiniteReactQuery} from "@tanstack/react-query"
-
 import {useQuery as useReactQuery} from "@tanstack/react-query"
-
 import {useMutation as useReactQueryMutation} from "@tanstack/react-query"
+
+export const reactQueryClientReExports = {
+  useQueryErrorResetBoundary,
+  QueryClientProvider,
+  Hydrate,
+}
 
 import type {
   UseInfiniteQueryOptions,
@@ -28,7 +30,7 @@ import {
   sanitizeMutation,
   getInfiniteQueryKey,
 } from "../utils"
-import {useRouter} from "next/router"
+import {useRouter} from "next/compat/router"
 
 type QueryLazyOptions = {suspense: unknown} | {enabled: unknown}
 type QueryNonLazyOptions =
@@ -44,7 +46,7 @@ class NextError extends Error {
 // -------------------------
 // useQuery
 // -------------------------
-type RestQueryResult<TResult, TError> = Omit<UseQueryResult<TResult, TError>, "data"> &
+export type RestQueryResult<TResult, TError> = Omit<UseQueryResult<TResult, TError>, "data"> &
   QueryCacheFunctions<TResult>
 
 export function useQuery<
@@ -84,10 +86,10 @@ export function useQuery<
   const suspenseEnabled = Boolean(globalThis.__BLITZ_SUSPENSE_ENABLED)
   let enabled = isServer && suspenseEnabled ? false : options?.enabled ?? options?.enabled !== null
   let routerIsReady = false
-  try {
-    const router = useRouter()
-    routerIsReady = router.isReady || (isServer && suspenseEnabled)
-  } catch (e) {
+  const router = useRouter()
+  if (router) {
+    routerIsReady = router?.isReady || (isServer && suspenseEnabled)
+  } else {
     routerIsReady = true
   }
   const enhancedResolverRpcClient = sanitizeQuery(queryFn)
@@ -131,7 +133,7 @@ export function useQuery<
 // -------------------------
 // usePaginatedQuery
 // -------------------------
-type RestPaginatedResult<TResult, TError> = Omit<UseQueryResult<TResult, TError>, "data"> &
+export type RestPaginatedResult<TResult, TError> = Omit<UseQueryResult<TResult, TError>, "data"> &
   QueryCacheFunctions<TResult>
 
 export function usePaginatedQuery<
@@ -171,10 +173,10 @@ export function usePaginatedQuery<
   const suspenseEnabled = Boolean(globalThis.__BLITZ_SUSPENSE_ENABLED)
   let enabled = isServer && suspenseEnabled ? false : options?.enabled ?? options?.enabled !== null
   let routerIsReady = false
-  try {
-    const router = useRouter()
-    routerIsReady = router.isReady || (isServer && suspenseEnabled)
-  } catch (e) {
+  const router = useRouter()
+  if (router) {
+    routerIsReady = router?.isReady || (isServer && suspenseEnabled)
+  } else {
     routerIsReady = true
   }
   const enhancedResolverRpcClient = sanitizeQuery(queryFn)
@@ -219,7 +221,7 @@ export function usePaginatedQuery<
 // -------------------------
 // useInfiniteQuery
 // -------------------------
-interface RestInfiniteResult<TResult, TError>
+export interface RestInfiniteResult<TResult, TError>
   extends Omit<UseInfiniteQueryResult<TResult, TError>, "data">,
     QueryCacheFunctions<TResult> {
   pageParams: any
@@ -268,10 +270,10 @@ export function useInfiniteQuery<
   const suspenseEnabled = Boolean(globalThis.__BLITZ_SUSPENSE_ENABLED)
   let enabled = isServer && suspenseEnabled ? false : options?.enabled ?? options?.enabled !== null
   let routerIsReady = false
-  try {
-    const router = useRouter()
-    routerIsReady = router.isReady || (isServer && suspenseEnabled)
-  } catch (e) {
+  const router = useRouter()
+  if (router) {
+    routerIsReady = router?.isReady || (isServer && suspenseEnabled)
+  } else {
     routerIsReady = true
   }
   const enhancedResolverRpcClient = sanitizeQuery(queryFn)

@@ -1,6 +1,7 @@
 {
   "name": "__name__",
   "version": "1.0.0",
+  "private": true,
   "scripts": {
     "dev": "blitz dev",
     "build": "blitz build",
@@ -19,23 +20,26 @@
     "printWidth": 100
   },
   "lint-staged": {
-    "*.{js,ts,tsx}": ["eslint --fix"]
+    "*.{js,ts,tsx}": [
+      "eslint --fix"
+    ]
   },
   "dependencies": {
     "@blitzjs/auth": "latest",
     "@blitzjs/next": "latest",
     "@blitzjs/rpc": "latest",
-    "@prisma/client": "4.6.1",
+    "@prisma/client": "5.4.2",
     "blitz": "latest",
-    "next": "13.4.5",
-    "prisma": "4.6.1",
+    "formik": "2.4.5",
+    "next": "13.5.4",
+    "prisma": "5.4.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "secure-password": "4.0.0",
-    "zod": "3.20.2"
+    "zod": "3.22.4"
   },
   "devDependencies": {
-    "@next/bundle-analyzer": "12.0.8",
+    "@next/env": "13.4.19",
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/react": "13.4.0",
     "@testing-library/react-hooks": "8.0.1",
@@ -44,6 +48,7 @@
     "@types/react": "18.0.25",
     "@typescript-eslint/eslint-plugin": "5.42.1",
     "@vitejs/plugin-react": "2.2.0",
+    "ajv": "^7.0.0",
     "eslint": "8.27.0",
     "eslint-config-next": "12.3.1",
     "eslint-config-prettier": "8.5.0",
@@ -57,6 +62,5 @@
     "typescript": "^4.8.4",
     "vite-tsconfig-paths": "3.6.0",
     "vitest": "0.25.3"
-  },
-  "private": true
+  }
 }

@@ -57,4 +57,6 @@ export const LabeledSelectField = forwardRef<HTMLSelectElement, LabeledSelectFie
   }
 )
 
+LabeledSelectField.displayName = "LabeledSelectField"
+
 export default LabeledSelectField

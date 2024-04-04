@@ -1,9 +1,10 @@
-// @ts-check
 const {withBlitz} = require("@blitzjs/next")
 
-/**
- * @type {import('@blitzjs/next').BlitzConfig}
- **/
-const config = {}
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  experimental: {
+    typedRoutes: true,
+  },
+}
 
-module.exports = withBlitz(config)
+module.exports = withBlitz(nextConfig)

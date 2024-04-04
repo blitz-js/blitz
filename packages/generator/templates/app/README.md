@@ -65,64 +65,68 @@ Here is the starting structure of your app.
 
 ```
 __name__
-├── src/
-│   ├── api/
-│   ├── auth/
-│   │   ├── components/
-│   │   │   ├── LoginForm.tsx
-│   │   │   └── SignupForm.tsx
-│   │   ├── mutations/
-│   │   │   ├── changePassword.ts
-│   │   │   ├── forgotPassword.test.ts
-│   │   │   ├── forgotPassword.ts
-│   │   │   ├── login.ts
-│   │   │   ├── logout.ts
-│   │   │   ├── resetPassword.test.ts
-│   │   │   ├── resetPassword.ts
-│   │   │   └── signup.ts
-│   │   ├── pages/
-│   │   │   ├── forgot-password.tsx
-│   │   │   ├── login.tsx
-│   │   │   ├── reset-password.tsx
-│   │   │   └── signup.tsx
-│   │   └── validations.ts
-│   ├── core/
-│   │   ├── components/
+├── README.md
+├── db
+│   ├── index.ts
+│   └── schema.prisma
+├── integrations
+├── mailers
+│   └── forgotPasswordMailer.ts
+├── next-env.d.ts
+├── next.config.js
+├── package.json
+├── public
+│   └── favicon.ico
+├── src
+│   ├── app
+│   │   ├── (auth)
+│   │   │   ├── components
+│   │   │   │   ├── ForgotPasswordForm.tsx
+│   │   │   │   ├── LoginForm.tsx
+│   │   │   │   ├── LogoutButton.tsx
+│   │   │   │   ├── ResetPasswordForm.tsx
+│   │   │   │   └── SignupForm.tsx
+│   │   │   ├── forgot-password
+│   │   │   │   └── page.tsx
+│   │   │   ├── layout.tsx
+│   │   │   ├── login
+│   │   │   │   └── page.tsx
+│   │   │   ├── mutations
+│   │   │   │   ├── changePassword.ts
+│   │   │   │   ├── forgotPassword.test.ts
+│   │   │   │   ├── forgotPassword.ts
+│   │   │   │   ├── login.ts
+│   │   │   │   ├── logout.ts
+│   │   │   │   ├── resetPassword.test.ts
+│   │   │   │   ├── resetPassword.ts
+│   │   │   │   └── signup.ts
+│   │   │   ├── reset-password
+│   │   │   │   └── page.tsx
+│   │   │   ├── signup
+│   │   │   │   └── page.tsx
+│   │   │   └── validations.ts
+│   │   ├── blitz-auth-config.ts
+│   │   ├── blitz-client.ts
+│   │   ├── blitz-server.ts
+│   │   ├── components
 │   │   │   ├── Form.tsx
 │   │   │   └── LabeledTextField.tsx
-│   │   └── layouts/
-│   │       └── Layout.tsx
-│   ├── pages/
-│   │   ├── _app.tsx
-│   │   ├── _document.tsx
-│   │   ├── 404.tsx
-│   │   ├── index.test.tsx
-│   │   └── index.tsx
-│   └── users/
-│       ├── hooks/
-│       │   └── useCurrentUser.ts
-│       └── queries/
-│           └── getCurrentUser.ts
-├── db/
-│   ├── migrations/
-│   ├── index.ts
-│   ├── schema.prisma
-│   └── seeds.ts
-├── integrations/
-├── mailers/
-│   └── forgotPasswordMailer.ts
-├── public/
-│   ├── favicon.ico
-│   └── logo.png
-├── test/
-│   ├── setup.ts
-│   └── utils.tsx
-├── .eslintrc.js
-├── babel.config.js
-├── blitz.config.ts
-├── vitest.config.ts
-├── package.json
-├── README.md
+│   │   ├── error.tsx
+│   │   ├── layout.tsx
+│   │   ├── loading.tsx
+│   │   ├── page.tsx
+│   │   ├── styles
+│   │   │   ├── Home.module.css
+│   │   │   └── globals.css
+│   │   └── users
+│   │       ├── hooks
+│   │       │   └── useCurrentUser.ts
+│   │       └── queries
+│   │           └── getCurrentUser.ts
+│   └── pages
+│       └── api
+│           └── rpc
+│               └── [[...blitz]].ts
 ├── tsconfig.json
 └── types.ts
 ```

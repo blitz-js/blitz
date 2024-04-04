@@ -22,22 +22,26 @@ import {
   RouteUrlObject,
   startWatcher,
   stopWatcher,
+  RequestMiddleware,
 } from "blitz"
 import {
-  DefaultOptions,
-  dehydrate,
   getInfiniteQueryKey,
   getQueryKey,
   installWebpackConfig,
   InstallWebpackConfigOptions,
-  QueryClient,
   ResolverPathOptions,
+  DefaultOptions,
+  dehydrate,
+  QueryClient,
 } from "@blitzjs/rpc"
 import {IncomingMessage, ServerResponse} from "http"
 import {withSuperJsonProps} from "./superjson"
 import {ParsedUrlQuery} from "querystring"
 import {PreviewData} from "next/types"
-import {resolveHref} from "next/dist/shared/lib/router/utils/resolve-href"
+import {resolveHref} from "next/dist/client/resolve-href"
+import fs from "fs"
+import path from "path"
+import CopyPlugin from "copy-webpack-plugin"
 
 export * from "./index-browser"
 
@@ -268,6 +272,27 @@ export function withBlitz(nextConfig: BlitzConfig = {}): NextConfig {
         },
       })
 
+      try {
+        const sodiumNativePath = fs.realpathSync(path.join(require.resolve("sodium-native"), ".."))
+        const dotNextDirectory = `${process.cwd()}/.next`
+        config.plugins.push(
+          new CopyPlugin({
+            patterns: [
+              {
+                //dev
+                from: `${sodiumNativePath}/prebuilds/`,
+                to: `${dotNextDirectory}/server/vendor-chunks/prebuilds/`,
+              },
+              {
+                //prod
+                from: `${sodiumNativePath}/prebuilds/`,
+                to: `${dotNextDirectory}/server/chunks/prebuilds/`,
+              },
+            ],
+          }),
+        )
+      } catch {}
+
       if (typeof nextConfig.webpack === "function") {
         return nextConfig.webpack(config, options)
       }
@@ -323,3 +348,15 @@ declare module "blitz" {
     prefetchInfiniteQuery: PrefetchQueryFn
   }
 }
+
+export const BlitzServerMiddleware = <
+  TMiddleware extends RequestMiddleware<NextApiRequest, BlitzNextApiResponse> = RequestMiddleware<
+    NextApiRequest,
+    BlitzNextApiResponse
+  >,
+>(
+  middleware: TMiddleware,
+): BlitzServerPlugin<{}> => ({
+  requestMiddlewares: [middleware],
+  exports: () => ({}),
+})

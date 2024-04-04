@@ -7,11 +7,11 @@
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf .next"
   },
   "dependencies": {
-    "@blitzjs/config": "2.0.0-beta.32",
-    "@blitzjs/next": "2.0.0-beta.32",
-    "@blitzjs/rpc": "2.0.0-beta.32",
-    "blitz": "2.0.0-beta.32",
-    "next": "13.3.0",
+    "@blitzjs/config": "2.0.6",
+    "@blitzjs/next": "2.0.6",
+    "@blitzjs/rpc": "2.0.6",
+    "blitz": "2.0.6",
+    "next": "14.0.4",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },

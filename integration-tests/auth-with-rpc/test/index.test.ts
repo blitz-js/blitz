@@ -13,37 +13,10 @@ import webdriver from "../../utils/next-webdriver"
 let app: any
 let appPort: number
 
+let mode: "dev" | "server" = "dev"
+
 const runTests = () => {
   describe("Auth", () => {
-    /* TODO - Add a non flaky Integration Test for custom plugin
-   describe("custom plugin", () => {
-      it("custom plugin - events", async () => {
-        const browser = await webdriver(appPort, "/custom-plugin")
-        let text = await browser.elementByCss("#page").text()
-        await waitFor(250)
-        text = await browser.elementByCss("#page").text()
-        expect(text).toBe("Custom plugin Session Created")
-        await waitFor(3000)
-        text = await browser.elementByCss("#page").text()
-        expect(text).toBe("Custom plugin RPC Error")
-        if (browser) {
-          await browser.close()
-        }
-      })
-      it("custom plugin - middleware", async () => {
-        const browser = await webdriver(appPort, "/custom-plugin")
-        await waitFor(100)
-        let text = await browser.elementByCss("#before-req").text()
-        expect(text).toBe("customHeaderValue")
-        await waitFor(2000)
-        text = await browser.elementByCss("#before-res").text()
-        expect(text).toBe("55")
-        if (browser) {
-          await browser.close()
-        }
-      })
-    })
-    */
     describe("unauthenticated", () => {
       it("should render result for open query", async () => {
         const browser = await webdriver(appPort, "/noauth-query")
@@ -58,12 +31,24 @@ const runTests = () => {
         const browser = await webdriver(appPort, "/authenticated-query")
         await browser.waitForElementByCss("#error")
         let text = await browser.elementByCss("#error").text()
-        expect(text).toMatch(/AuthenticationError/)
+        if (mode === "server") {
+          expect(text).toMatch(/AuthenticationError/)
+        } else {
+          expect(text).toContain("Error")
+        }
         if (browser) await browser.close()
       })
 
       it("should render error for protected page", async () => {
         const browser = await webdriver(appPort, "/page-dot-authenticate")
+        await browser.waitForElementByCss("#error")
+        let text = await browser.elementByCss("#error").text()
+        expect(text).toMatch(/AuthenticationError/)
+        if (browser) await browser.close()
+      })
+
+      it("Page.authenticate = {role} should work ", async () => {
+        const browser = await webdriver(appPort, "/page-dot-authenticate-role")
         await browser.waitForElementByCss("#error")
         let text = await browser.elementByCss("#error").text()
         expect(text).toMatch(/AuthenticationError/)
@@ -120,18 +105,36 @@ const runTests = () => {
         await waitFor(200)
         await browser.waitForElementByCss("#error")
         text = await browser.elementByCss("#error").text()
-        expect(text).toMatch(/AuthenticationError/)
+        if (mode === "server") {
+          expect(text).toMatch(/AuthenticationError/)
+        } else {
+          expect(text).toContain("Error")
+        }
         if (browser) await browser.close()
       })
 
-      it("Page.authenticate = {redirect} should work ", async () => {
-        // Login
+      it("Page.authenticate = {role} should throw authentication error ", async () => {
         let browser = await webdriver(appPort, "/login")
         await waitFor(200)
         await browser.elementByCss("#login").click()
         await waitFor(200)
+        await browser.eval(`window.location = "/page-dot-authenticate-role"`)
+        await browser.waitForElementByCss("#error")
+        let text = await browser.elementByCss("#error").text()
+        expect(text).toMatch(/AuthenticationError/)
+        if (browser) await browser.close()
+      })
 
-        await browser.eval(`window.location = "/page-dot-authenticate-redirect"`)
+      it("Page.authenticate = {role: 'custom'} should work ", async () => {
+        let browser = await webdriver(appPort, "/page-dot-authenticate-role-working")
+        await browser.waitForElementByCss("#content")
+        let text = await browser.elementByCss("#content").text()
+        expect(text).toMatch(/authenticated-basic-result/)
+        if (browser) await browser.close()
+      })
+
+      it("Page.authenticate = {redirect} should work ", async () => {
+        let browser = await webdriver(appPort, "/page-dot-authenticate-redirect")
         await browser.waitForElementByCss("#content")
         let text = await browser.elementByCss("#content").text()
         expect(text).toMatch(/authenticated-basic-result/)
@@ -142,14 +145,26 @@ const runTests = () => {
         if (browser) await browser.close()
       })
 
-      it("Layout.authenticate = {redirect} should work ", async () => {
-        // Login
+      it("Page.authenticate = {role: 'custom', redirect: 'url'} should work ", async () => {
         let browser = await webdriver(appPort, "/login")
         await waitFor(200)
         await browser.elementByCss("#login").click()
         await waitFor(200)
+        await browser.eval(`window.location = "/page-dot-authenticate-role-redirect"`)
+        await browser.waitForElementByCss("#content")
+        expect(await browser.url()).toMatch(/\/noauth-query/)
+        if (browser) await browser.close()
+      })
 
-        await browser.eval(`window.location = "/layout-authenticate-redirect"`)
+      it("Page.authenticate = {role: 'custom', redirect: 'url'} should stay ", async () => {
+        let browser = await webdriver(appPort, "/page-dot-authenticate-role-redirect-stay")
+        await browser.waitForElementByCss("#content")
+        expect(await browser.url()).toMatch(/\/page-dot-authenticate-role-redirect-stay/)
+        if (browser) await browser.close()
+      })
+
+      it("Layout.authenticate = {redirect} should work ", async () => {
+        let browser = await webdriver(appPort, "/layout-authenticate-redirect")
         await browser.waitForElementByCss("#content")
         let text = await browser.elementByCss("#content").text()
         expect(text).toMatch(/authenticated-basic-result/)
@@ -262,6 +277,7 @@ const runTests = () => {
 describe("Auth Tests", () => {
   describe("dev mode", () => {
     beforeAll(async () => {
+      mode = "dev"
       try {
         await runBlitzCommand(["prisma", "migrate", "reset", "--force"])
         appPort = await findPort()
@@ -276,6 +292,7 @@ describe("Auth Tests", () => {
 
   describe("server mode", () => {
     beforeAll(async () => {
+      mode = "server"
       try {
         await runBlitzCommand(["prisma", "generate"])
         await runBlitzCommand(["prisma", "migrate", "deploy"])

@@ -1,5 +1,485 @@
 # @blitzjs/rpc
 
+## 2.0.6
+
+### Patch Changes
+
+- Updated dependencies [76a2544f9]
+  - blitz@2.0.6
+
+## 2.0.5
+
+### Patch Changes
+
+- Updated dependencies [6f54841b7]
+  - blitz@2.0.5
+
+## 2.0.4
+
+### Patch Changes
+
+- Updated dependencies [dd604c767]
+- Updated dependencies [28a79040e]
+  - blitz@2.0.4
+
+## 2.0.3
+
+### Patch Changes
+
+- 2f5c8a3a0: Address missing sodium native prebuilds required to use secure-password during server rendering
+- Updated dependencies [2f5c8a3a0]
+  - blitz@2.0.3
+
+## 2.0.2
+
+### Patch Changes
+
+- e8fd12e4f: Fix: windows slash correction for rpc resolvers
+- Updated dependencies [e8fd12e4f]
+  - blitz@2.0.2
+
+## 2.0.1
+
+### Patch Changes
+
+- 8782aae64: Fix outdated code in npm caused in during exit to stable release
+- Updated dependencies [8782aae64]
+  - blitz@2.0.1
+
+## 2.0.0
+
+### Minor Changes
+
+- 72a4e594a: internal: remove unneeed useSession from useQuery hooks
+- c1e004063: transpile packages to es2015 to support older browsers
+- eda14fa8a: Add ability to format the error on the server before returning it to the client.
+- 270361886: change rpc route basepath to be one folder higher when using includeRPC in monorepos
+- cadefb88e: - New Blitz Auth Function `getAppSession`, This function will use the cookies and headers provided by the server component and returns the current session.
+  - New Blitz Auth Hook `useAuthenticatedAppSession`, This hook is implemented as the replacement of the BlitzPage seurity auth utilities provided for the pages directory to work with React Server Components in the Nextjs 13 app directory
+  - New Blitz React Server Component Wrapper, `BlitzProvider` is to be imported from setupBlitzClient in src/blitz-client.ts and to used to ideally wrap the entire application in the `RootLayout` in the root layout.ts file of next app directory.
+  - Fix failing tests due to the error `NextRouter is not mounted` in next 13 blitz apps
+- 6ece09613: Decoupled Blitz RPC from Blitz Auth to allow independent use.
+- 55a43ce1f: maybe fix anon session CSRF issue + add ability to customize anon session expiry time
+- 03bad3175: fix Cannot read properties of null (reading 'isReady') for pnpm/yarn v3
+- c0a3b1ee3: Fix mutability bug in RPC configuration
+- e5cd2c862: expose `ctx` to `rpcHandler` error callbacks in [[...blitz]].ts files
+- b493c93f8: fix resolverPath:root and make it work with monorepo resolvers
+
+### Patch Changes
+
+- db7233db6: Bump react, react-dom, @types/react and next versions
+
+  This fixes a console warning: `Warning: Received`true`for a non-boolean attribute`global`.` when using `styled-jsx`. Versions bump also fixes React Hydration error that happens on and off when using `redirectAuthenticatedTo`.
+
+- 5166e5e03: (feat) upgrade tslog to v4.8.2
+- 4cad9cca2: Add queryClient to RPC Plugin exports
+- c721c104d: Pass `signal` from useQuery to Blitz internal rpc client to be able to cancel queries on unmount
+- 072929109: Add invokeWithCtx function
+- 8c247e26e: Switch from jest to vitest in new app templates
+- 86e8eb7c8: Add helpful error message when RPC resolvers have the same path
+- 2533caf48: Fix return type of `requestMiddlewares` in `RpcServerPlugin`
+- d692b4c1d: Fix suspense error codegen patch for nextjs versions 13-13.0.6
+- c213d521c: Fix issue with the route name that's generated for nested routes in @blitzjs/rpc. This was causing issues for windows users.
+- 8b4bf999c: Update dependencies
+- 1476a577b: Fix release
+- c7ac86b85: Fixes enormous memory consumption of the dev server by changing the default import strategy to "require" instead of "import" which in webpack causes multiple chunks to be created for each import.
+
+  ## Blitz Configuration
+
+  To configure this behaviour, you can add the following to your next.config.js:
+
+  ```js
+  /**
+   * @type {import('@blitzjs/next').BlitzConfig}
+   **/
+  const config = {
+    blitz: {
+      resolversDynamicImport: true,
+    },
+  }
+  ```
+
+  When `resolversDynamicImport` is set to `true`, the import strategy will be "import" instead of "require".
+
+  ### On Vercel
+
+  If you are using Vercel, `resolversDynamicImport` will be set to `true` by default, since it is better for the separate chunks to be create for serverless lambdas.
+
+- 630c71812: Use internal branded blitz logger for @blitzjs/rpc
+- bf1b2c824: fix route manifest codegen
+- 0b94a4503: Upgrade superjson to the latest version
+- ceb7db274: Add an opt-in GET request support to RPC specification by exporting a `config` object that has the `httpMethod` property.
+  from `query` files.
+- 0edeaa37a: Allow for custom page extensions for the wildcard blitz route. For example [...blitz].api.ts. For more information vist https://nextjs.org/docs/api-reference/next.config.js/custom-page-extensions
+- 7b63f0f1f: Allow the updater function in setQueryData to return undefined to match react-query typings
+- bee19a259: Support RPC error middleware
+- c11f0401c: Update Next.js version and addBasePath location
+- f6dac093d: Improve RPC logging: print `resolverName()` insetad of `/resolverName()`
+- 3ddb57072: ⚠️ Breaking Change:
+  Next.js version 13.5 or above is now required to use `@blitzjs/next`
+
+  Fix `Error: Cannot find module 'next/dist/shared/lib/router/utils/resolve-href'` by updating the location of next.js internal function.
+
+- b84c5bedb: Next 14 Compatibility
+- 3bcbad1a9: - Introduce Blitz RPC's logging system to the `invoke` function which is the recommended way to call resolvers in nextjs `app` directory's react server components.
+
+  - This refactor also removes the re-introduced dependency between `blitz-auth` and `blitz-rpc`, allowing independent usage of `blitz-rpc`
+
+- 19898a488: Fix for tslog error `TypeError: Cannot read properties of undefined (reading 'map')` while using custom errors.
+- f84d77a42: Fix return type of the `invoke` method from returning type function to return the type of resolved data
+- 6811eab1a: Allow `.tsx` & `.jsx` file extensions to be used for resolvers
+- 20fc9f80f: Fix SSP / SP not prefetching queries correctly
+- 46a34c7b3: initial publish
+- e82a79be5: Update the version of next in the new template from 13.2 to 13.3.0
+- ed2b0e22c: Add ability to put your query and mutation resolvers in a separate monorepo folder, allowing you to use them in multiple apps.
+- df7cee84a: Fix pipe resolver return type
+- c3c789740: Updates internal functions and tests to support blitz apps that run tests with vitest
+- 0f4926fd1: Set current Blitz tag to latest
+- 8aee25c58: getQueryClient function & queryClient codemod updates & shared plugin config
+- 807a2b564: Fixes peer dependency warnings
+- 650a157e1: fix: allow `GET` requests without `params` and `meta` keys
+- 1d9804a61: Remove references to the logging package
+- 17ce29e5e: Update RPC plugin setup in templates
+- f52ca398e: Upgrade react-query to v4
+- 727734955: ### Now we can configure Blitz RPC in the following way,
+
+  In your `[[...blitz]].ts` api file you can see the following settings
+
+  ```ts
+  logging?: {
+    /**
+     * allowList Represents the list of routes for which logging should be enabled
+     * If whiteList is defined then only those routes will be logged
+     */
+    allowList?: string[]
+    /**
+     * blockList Represents the list of routes for which logging should be disabled
+     * If blockList is defined then all routes except those will be logged
+     */
+    blockList?: string[]
+    /**
+     * verbose Represents the flag to enable/disable logging
+     * If verbose is true then Blitz RPC will log the input and output of each resolver
+     */
+    verbose?: boolean
+    /**
+     * disablelevel Represents the flag to enable/disable logging for a particular level
+     */
+    disablelevel?: "debug" | "info"
+  }
+  ```
+
+  ```ts
+  import { rpcHandler } from "@blitzjs/rpc"
+  import { api } from "src/blitz-server"
+
+  export default api(
+    rpcHandler({
+      onError: console.log,
+      formatError: (error) => {
+        error.message = `FormatError handler: ${error.message}`
+        return error
+      },
+     logging: {
+  ...
+  }
+    })
+  )
+  ```
+
+  Example:
+
+  ```ts
+  export default api(
+    rpcHandler({
+      onError: console.log,
+      formatError: (error) => {
+        error.message = `FormatError handler: ${error.message}`
+        return error
+      },
+      logging: {
+        verbose: true,
+        blockList: ["getCurrentUser", ...], //just write the resolver name [which is the resolver file name]
+      },
+    })
+  )
+  ```
+
+  This is enable verbose blitz rpc logging for all resolvers except the resolvers `getCurrentUser` and others mentioned in the `blockList`
+
+- bec9512e3: Allow resolverPath to be a function which is ran for every file path that is converted to RPC Route
+- a3e6c49c4: Fixes the supports-color warning for pnpm
+- 490280240: Add `getQueryData` utility to get an existing query's cached data
+- 0025856b9: Support full api of tanstack invalidateQueries
+- 2073714f8: testing set dist-tag
+- 716e188d1: Fix queries/mutations lookup on Windows
+- 37aeaa7fa: feature: Nextjs 13 App Directory Utility Methods
+
+  ### 🔧 New Blitz Auth Hook `useAuthenticatedBlitzContext`
+
+  This hook is implemented as the replacement of the [`BlitzPage` seurity auth utilities](https://blitzjs.com/docs/authorization#secure-your-pages) provided for the pages directory to work with React Server Components in the Nextjs 13 app directory
+  It can be used in any asynchronous server component be it in `page.ts` or in the layouts in `layout.ts`
+  It uses the new [`redirect` function](https://beta.nextjs.org/docs/api-reference/redirect) to provide the required authorization in server side
+
+  #### API
+
+  ```ts
+  useAuthenticatedBlitzContext({
+    redirectTo,
+    redirectAuthenticatedTo,
+    role,
+  }: {
+    redirectTo?: string | RouteUrlObject
+    redirectAuthenticatedTo?: string | RouteUrlObject | ((ctx: Ctx) => string | RouteUrlObject)
+    role?: string | string[]
+  }): Promise<void>
+  ```
+
+  #### Usage
+
+  **Example Usage in React Server Component in `app` directory in Next 13**
+
+  ```ts
+  import {getAppSession, useAuthenticatedBlitzContext} from "src/blitz-server"
+  ...
+  await useAuthenticatedBlitzContext({
+      redirectTo: "/auth/login",
+      role: ["admin"],
+      redirectAuthenticatedTo: "/dashboard",
+  })
+  ```
+
+  ### 🔧 New Blitz RPC Hook `invokeResolver`
+
+  #### API
+
+  ```ts
+  invokeResolver<T extends (...args: any) => any, TInput = FirstParam<T>>(
+    queryFn: T,
+    params: TInput,
+  ): Promise<PromiseReturnType<T>>
+  ```
+
+  #### Example Usage
+
+  ```ts
+  ...
+  import {invokeResolver, useAuthenticatedBlitzContext} from "../src/blitz-server"
+  import getCurrentUser from "../src/users/queries/getCurrentUser"
+
+  export default async function Home() {
+    await useAuthenticatedBlitzContext({
+      redirectTo: "/auth/login",
+    })
+    const user = await invokeResolver(getCurrentUser, null)
+  ...
+  ```
+
+- aa34661fa: Fix invalidateQuery generating wrong param when no param argument is passed
+- b33db0828: Fix ambigious class warning log & upgrade superjson from 1.9.1 to 1.11.0
+- 8e0c9d76b: Migrate over recipe functionality from legacy framework & expose recipe builder helper functions that find and modify next.config.js, blitz-server & blitz-client.
+- 9620ef6b1: moves zod to devDependencies
+- 3b213a35b: Remove debug console.log
+- 00bd849ee: new app template
+- dfd2408e9: Add resolverBasePath to Blitz config to change the way rpc routes are generated
+- 2cc888eff: Beta release
+- Updated dependencies [db7233db6]
+- Updated dependencies [1569bd53e]
+- Updated dependencies [cee2dec17]
+- Updated dependencies [5166e5e03]
+- Updated dependencies [9db6c8855]
+- Updated dependencies [1e1bb73b2]
+- Updated dependencies [83b355900]
+- Updated dependencies [c1e004063]
+- Updated dependencies [365e67094]
+- Updated dependencies [fd31e56bc]
+- Updated dependencies [74a14b704]
+- Updated dependencies [aec1bb076]
+- Updated dependencies [82649f341]
+- Updated dependencies [f397cc203]
+- Updated dependencies [cadefb88e]
+- Updated dependencies [271c58ac6]
+- Updated dependencies [8f166a5db]
+- Updated dependencies [c5572bec6]
+- Updated dependencies [86e8eb7c8]
+- Updated dependencies [99205f52d]
+- Updated dependencies [6ece09613]
+- Updated dependencies [928e840b5]
+- Updated dependencies [6f18cbdc9]
+- Updated dependencies [ea7561b8e]
+- Updated dependencies [1436e7618]
+- Updated dependencies [696f48c4e]
+- Updated dependencies [d98e4bac4]
+- Updated dependencies [90f1741da]
+- Updated dependencies [4a9aa9f7f]
+- Updated dependencies [d692b4c1d]
+- Updated dependencies [638f2319b]
+- Updated dependencies [c213d521c]
+- Updated dependencies [5ea068b28]
+- Updated dependencies [1d863f352]
+- Updated dependencies [8b4bf999c]
+- Updated dependencies [1476a577b]
+- Updated dependencies [a6e81f156]
+- Updated dependencies [cacb65d63]
+- Updated dependencies [630c71812]
+- Updated dependencies [bf1b2c824]
+- Updated dependencies [240f3f347]
+- Updated dependencies [55b1cb204]
+- Updated dependencies [54db8a46d]
+- Updated dependencies [962eb58af]
+- Updated dependencies [54a66a95d]
+- Updated dependencies [9fe0cc546]
+- Updated dependencies [0b94a4503]
+- Updated dependencies [af58e2b23]
+- Updated dependencies [78fd5c489]
+- Updated dependencies [62bf12b5c]
+- Updated dependencies [09e0c68db]
+- Updated dependencies [abb1ad5d1]
+- Updated dependencies [3a602b613]
+- Updated dependencies [ceb7db274]
+- Updated dependencies [2ade7268e]
+- Updated dependencies [0edeaa37a]
+- Updated dependencies [f0ca738d5]
+- Updated dependencies [0936cb38a]
+- Updated dependencies [989691ec8]
+- Updated dependencies [4d7d126d9]
+- Updated dependencies [8e5903c0f]
+- Updated dependencies [30fd61316]
+- Updated dependencies [6f4349896]
+- Updated dependencies [942536d9a]
+- Updated dependencies [666a3ae3e]
+- Updated dependencies [a80d2a8f7]
+- Updated dependencies [3ddb57072]
+- Updated dependencies [abe2afccd]
+- Updated dependencies [b84c5bedb]
+- Updated dependencies [a6f32d1d0]
+- Updated dependencies [b97366c42]
+- Updated dependencies [348fd6f5e]
+- Updated dependencies [3bcbad1a9]
+- Updated dependencies [0a8b0cb35]
+- Updated dependencies [8490b0724]
+- Updated dependencies [19898a488]
+- Updated dependencies [93851d90c]
+- Updated dependencies [6811eab1a]
+- Updated dependencies [20fc9f80f]
+- Updated dependencies [8dedca1a2]
+- Updated dependencies [3511d5b69]
+- Updated dependencies [46a34c7b3]
+- Updated dependencies [e82a79be5]
+- Updated dependencies [890b0c0c9]
+- Updated dependencies [430f6ec78]
+- Updated dependencies [adabb11a0]
+- Updated dependencies [38d945a3f]
+- Updated dependencies [c3c789740]
+- Updated dependencies [240f378b5]
+- Updated dependencies [df3265b85]
+- Updated dependencies [89bf993a1]
+- Updated dependencies [3f9fe8f04]
+- Updated dependencies [fe8c937d2]
+- Updated dependencies [0ac6e1712]
+- Updated dependencies [807a2b564]
+- Updated dependencies [1d9804a61]
+- Updated dependencies [41608c4c3]
+- Updated dependencies [a0596279b]
+- Updated dependencies [88caa18e6]
+- Updated dependencies [022392c12]
+- Updated dependencies [c126b8191]
+- Updated dependencies [c9cf7adc3]
+- Updated dependencies [1b798d9a0]
+- Updated dependencies [ea7561b8e]
+- Updated dependencies [727734955]
+- Updated dependencies [f39ba1ff1]
+- Updated dependencies [161270e3b]
+- Updated dependencies [b6b9a1c5a]
+- Updated dependencies [8bcb471a5]
+- Updated dependencies [a3e6c49c4]
+- Updated dependencies [15d22af24]
+- Updated dependencies [454591293]
+- Updated dependencies [2073714f8]
+- Updated dependencies [8aa22a0b2]
+- Updated dependencies [37aeaa7fa]
+- Updated dependencies [b918055bf]
+- Updated dependencies [aa34661fa]
+- Updated dependencies [61888d1a3]
+- Updated dependencies [dd5f51744]
+- Updated dependencies [ce4536833]
+- Updated dependencies [fb32903bf]
+- Updated dependencies [b33db0828]
+- Updated dependencies [f15a51901]
+- Updated dependencies [10f98c681]
+- Updated dependencies [9674efc0b]
+- Updated dependencies [8e0c9d76b]
+- Updated dependencies [d5b8faa86]
+- Updated dependencies [a3bbe6ce3]
+- Updated dependencies [e2c18895d]
+- Updated dependencies [00bd849ee]
+- Updated dependencies [ffa7b5ccc]
+- Updated dependencies [1f6b0b54c]
+- Updated dependencies [527e48ac3]
+- Updated dependencies [01f3a03ea]
+- Updated dependencies [2cc888eff]
+  - blitz@2.0.0
+
+## 2.0.0-beta.37
+
+### Minor Changes
+
+- e5cd2c862: expose `ctx` to `rpcHandler` error callbacks in [[...blitz]].ts files
+
+### Patch Changes
+
+- 86e8eb7c8: Add helpful error message when RPC resolvers have the same path
+- b84c5bedb: Next 14 Compatibility
+- Updated dependencies [86e8eb7c8]
+- Updated dependencies [b84c5bedb]
+  - blitz@2.0.0-beta.37
+
+## 2.0.0-beta.36
+
+### Patch Changes
+
+- Updated dependencies [09e0c68db]
+  - blitz@2.0.0-beta.36
+
+## 2.0.0-beta.35
+
+### Patch Changes
+
+- 3bcbad1a9: - Introduce Blitz RPC's logging system to the `invoke` function which is the recommended way to call resolvers in nextjs `app` directory's react server components.
+
+  - This refactor also removes the re-introduced dependency between `blitz-auth` and `blitz-rpc`, allowing independent usage of `blitz-rpc`
+
+- Updated dependencies [cee2dec17]
+- Updated dependencies [aec1bb076]
+- Updated dependencies [b97366c42]
+- Updated dependencies [3bcbad1a9]
+  - blitz@2.0.0-beta.35
+
+## 2.0.0-beta.34
+
+### Patch Changes
+
+- 3ddb57072: ⚠️ Breaking Change:
+  Next.js version 13.5 or above is now required to use `@blitzjs/next`
+
+  Fix `Error: Cannot find module 'next/dist/shared/lib/router/utils/resolve-href'` by updating the location of next.js internal function.
+
+- Updated dependencies [30fd61316]
+- Updated dependencies [3ddb57072]
+- Updated dependencies [fe8c937d2]
+  - blitz@2.0.0-beta.34
+
+## 2.0.0-beta.33
+
+### Patch Changes
+
+- 19898a488: Fix for tslog error `TypeError: Cannot read properties of undefined (reading 'map')` while using custom errors.
+- 6811eab1a: Allow `.tsx` & `.jsx` file extensions to be used for resolvers
+- Updated dependencies [19898a488]
+- Updated dependencies [6811eab1a]
+- Updated dependencies [022392c12]
+  - blitz@2.0.0-beta.33
+
 ## 2.0.0-beta.32
 
 ### Patch Changes

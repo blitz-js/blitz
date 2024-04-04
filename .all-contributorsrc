@@ -3975,6 +3975,85 @@
         "doc",
         "code"
       ]
+    },
+    {
+      "login": "rodobre",
+      "name": "rodobre",
+      "avatar_url": "https://avatars.githubusercontent.com/u/52138375?v=4",
+      "profile": "https://github.com/rodobre",
+      "contributions": [
+        "doc",
+        "code"
+      ]
+    },
+    {
+      "login": "Zamfi99",
+      "name": "Zamfira Costin-Andrei",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19189337?v=4",
+      "profile": "https://github.com/Zamfi99",
+      "contributions": [
+        "doc",
+        "code"
+      ]
+    },
+    {
+      "login": "potikhanovsergey",
+      "name": "Sergey",
+      "avatar_url": "https://avatars.githubusercontent.com/u/71494201?v=4",
+      "profile": "https://github.com/potikhanovsergey",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "papsavas",
+      "name": "Savvas Papageorgiadis",
+      "avatar_url": "https://avatars.githubusercontent.com/u/50584606?v=4",
+      "profile": "https://github.com/papsavas",
+      "contributions": [
+        "doc",
+        "code"
+      ]
+    },
+    {
+      "login": "LeonMueller-OneAndOnly",
+      "name": "Leonidas",
+      "avatar_url": "https://avatars.githubusercontent.com/u/77194479?v=4",
+      "profile": "https://flow-office.eu/",
+      "contributions": [
+        "doc",
+        "code"
+      ]
+    },
+    {
+      "login": "Doc0x1",
+      "name": "Doc0x1",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19937034?v=4",
+      "profile": "https://hacknex.us",
+      "contributions": [
+        "doc",
+        "code"
+      ]
+    },
+    {
+      "login": "lmisea",
+      "name": "Luis Isea",
+      "avatar_url": "https://avatars.githubusercontent.com/u/106825636?v=4",
+      "profile": "https://github.com/lmisea",
+      "contributions": [
+        "doc",
+        "code"
+      ]
+    },
+    {
+      "login": "gengjiawen",
+      "name": "Jiawen Geng",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3759816?v=4",
+      "profile": "https://www.gengjiawen.com",
+      "contributions": [
+        "doc",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,

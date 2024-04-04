@@ -1,26 +1,15 @@
-import {FirstParam, PromiseReturnType, isClient, Ctx} from "blitz"
+import {type FirstParam, type PromiseReturnType, type Ctx, isClient} from "blitz"
 import {RpcClient} from "./rpc"
 
 export async function invoke<T extends (...args: any) => any, TInput = FirstParam<T>>(
   queryFn: T,
   params: TInput,
-): Promise<PromiseReturnType<T>>
-export async function invoke<T extends (...args: any) => any, TInput = FirstParam<T>>(
-  queryFn: T,
-  params: TInput,
-  isServer: boolean,
-): Promise<PromiseReturnType<T>>
-export async function invoke<T extends (...args: any) => any, TInput = FirstParam<T>>(
-  queryFn: T,
-  params: TInput,
-  isServer = typeof window === "undefined" ? true : false,
 ): Promise<PromiseReturnType<T>> {
   if (typeof queryFn === "undefined") {
     throw new Error(
       "invoke is missing the first argument - it must be a query or mutation function",
     )
   }
-
   if (isClient) {
     const fn = queryFn as unknown as RpcClient
     return fn(params, {fromInvoke: true}) as PromiseReturnType<T>

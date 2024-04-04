@@ -1,5 +1,6 @@
 import { api } from "src/blitz-server"
 import GithubProvider from "next-auth/providers/github"
+import EmailProvider from "next-auth/providers/email"
 import { NextAuthAdapter, BlitzNextAuthOptions } from "@blitzjs/auth/next-auth"
 import db, { User } from "db"
 import { Role } from "types"
@@ -9,6 +10,10 @@ const providers = [
   GithubProvider({
     clientId: process.env.GITHUB_CLIENT_ID as string,
     clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
+  }),
+  EmailProvider({
+    from: process.env.GITHUB_CLIENT_ID as string,
+    server: process.env.GITHUB_CLIENT_SECRET as string,
   }),
 ]
 

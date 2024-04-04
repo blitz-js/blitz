@@ -27,30 +27,33 @@ jobs:
         uses: eficode/resolve-pr-refs@main
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          
-      - uses: actions/checkout@v3
+
+      - uses: actions/checkout@v4
         with:
-          ref: ${{ steps.refs.outputs.head_ref }}
+          ref: ${{ github.event.pull_request.head.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
 
       - name: Setup PNPM
-        uses: pnpm/action-setup@v2.2.1
+        uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
+        with:
+          version: 8.9.0
 
       - name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: 16
-          registry-url: 'https://registry.npmjs.org'
-          cache: 'pnpm'
-      
+          node-version: 20
+          registry-url: "https://registry.npmjs.org"
+          cache: "pnpm"
+
       - name: Short SHA
         id: vars
         run: echo "sha_short=$(git rev-parse --short "$GITHUB_SHA")" >> $GITHUB_OUTPUT
-          
+
       - name: Extract the snapshot name from comment body
         id: getSnapshotName
         uses: actions/github-script@v6
         with:
-          script:  |
+          script: |
             const splitComment = context.payload.comment.body.split(' ');
             if(splitComment.length !== 2) {
               return "${{ steps.vars.outputs.sha_short }}";
@@ -60,7 +63,7 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install
-        env: 
+        env:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
 
       - name: Build Packages
@@ -69,7 +72,6 @@ jobs:
       - name: Bump Package Versions
         id: changesets
         run: |
-          pnpm changeset pre exit
           pnpm changeset version --snapshot ${{ steps.getSnapshotName.outputs.result }} > changesets.output.txt 2>&1
           echo ::set-output name=result::`cat changesets.output.txt`
         env:
@@ -97,5 +99,5 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: '```\n' + process.env.MESSAGE + '\n```',
+              body: `Snapshot Release ${{steps.getSnapshotName.outputs.result}}`
             })

@@ -3,13 +3,15 @@ const fs = require("fs")
 const filesToModify = [
   "dist/chunks/utils.cjs",
   "dist/chunks/utils.mjs",
+  "dist/index-browser.cjs",
+  "dist/index-browser.mjs",
   "dist/index.cjs",
   "dist/index.mjs",
 ]
 
 const addDirectives = (filePath) => {
   const fileContent = fs.readFileSync(filePath, "utf8")
-  const newFileContent = "'use client';\n" + fileContent
+  const newFileContent = '"use client";\n' + fileContent
   fs.writeFileSync(filePath, newFileContent)
 }
 

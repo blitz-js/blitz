@@ -5,11 +5,13 @@ const filesToModify = [
   "dist/index-browser.mjs",
   "dist/chunks/index-browser.cjs",
   "dist/chunks/index-browser.mjs",
+  "dist/provider.mjs",
+  "dist/provider.cjs",
 ]
 
 const addDirectives = (filePath) => {
   const fileContent = fs.readFileSync(filePath, "utf8")
-  const newFileContent = "'use client';\n" + fileContent
+  const newFileContent = '"use client";\n' + fileContent
   fs.writeFileSync(filePath, newFileContent)
 }
 

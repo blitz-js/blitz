@@ -128,7 +128,7 @@ export function startCustomServer(
               console.log("\n")
               //@ts-ignore -- incorrect TS type from node
               process.exitCode = RESTART_CODE
-              process.kill("SIGABRT")
+              process.kill("SIGINT")
             }
           },
         }
