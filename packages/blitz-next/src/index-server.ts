@@ -306,7 +306,7 @@ export function withBlitz(nextConfig: BlitzConfig = {}): NextConfig {
     },
   })
 
-  if (nextConfig.blitz?.turbo) {
+  if (nextConfig.blitz?.turbo && process.env.TURBOPACK) {
     ;(config as any).experimental = {
       turbo: installTurboConfig(),
     }
