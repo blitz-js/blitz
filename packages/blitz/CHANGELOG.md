@@ -1,5 +1,24 @@
 # blitz
 
+## 2.1.0
+
+### Minor Changes
+
+- ee7bf87ec: Turbopack support for Blitz
+
+  This PR includes the changes required to make the Blitz loaders work with Turbopack.
+
+  Usage:
+
+  ```bash
+  pnpm blitz dev --turbo
+  ```
+
+### Patch Changes
+
+- 178c152b2: fix: patch next.js to hide intentional throws of `DYNAMIC_SERVER_USAGE`
+  - @blitzjs/generator@3.0.0
+
 ## 2.0.6
 
 ### Patch Changes
