@@ -9,10 +9,6 @@ console.log("loaderServer", loaderServer)
 console.log("loaderServerResolvers", loaderServerResolvers)
 
 /** @type {import('next').NextConfig} */
-const nextConfig = {
-  blitz: {
-    turbo: true,
-  },
-}
+const nextConfig = {}
 
 module.exports = withBlitz(nextConfig)

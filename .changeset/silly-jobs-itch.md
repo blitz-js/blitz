@@ -10,13 +10,6 @@ This PR includes the changes required to make the Blitz loaders work with Turbop
 
 Usage:
 
-```ts
-//next.config.js
-const nextConfig = {
-  blitz: {
-    turbo: true,
-  },
-}
-
-module.exports = withBlitz(nextConfig)
+```bash
+pnpm blitz dev --turbo
 ```

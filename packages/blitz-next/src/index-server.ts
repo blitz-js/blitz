@@ -240,7 +240,6 @@ export interface BlitzConfig extends NextConfig {
     customServer?: {
       hotReload?: boolean
     }
-    turbo: boolean
   }
 }
 
@@ -306,7 +305,7 @@ export function withBlitz(nextConfig: BlitzConfig = {}): NextConfig {
     },
   })
 
-  if (nextConfig.blitz?.turbo && process.env.TURBOPACK) {
+  if (process.env.TURBOPACK) {
     ;(config as any).experimental = {
       turbo: installTurboConfig(),
     }
