@@ -1,7 +1,7 @@
 ---
-"blitz": minor
-"@blitzjs/next": minor
-"@blitzjs/rpc": minor
+"blitz": patch
+"@blitzjs/next": patch
+"@blitzjs/rpc": patch
 ---
 
 Turbopack support for Blitz
