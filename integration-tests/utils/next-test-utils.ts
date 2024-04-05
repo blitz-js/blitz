@@ -233,6 +233,7 @@ export function runBlitzCommandDev(argv, stdOut, opts: RunNextCommandDevOptions 
   }
 
   return new Promise<void>((resolve, reject) => {
+    console.log(`Running command "blitz ${argv.join(" ")}"`)
     const instance = spawn("node", [blitzBin, ...argv], {
       cwd,
       env,
@@ -294,8 +295,8 @@ export function runBlitzCommandDev(argv, stdOut, opts: RunNextCommandDevOptions 
 }
 
 // Blitz Utils
-export function blitzLaunchApp(port, opts: RunNextCommandDevOptions) {
-  return runBlitzCommandDev(["dev", "-p", port], undefined, opts)
+export function blitzLaunchApp(port, opts: RunNextCommandDevOptions, turbo = false) {
+  return runBlitzCommandDev(["dev", "-p", port, turbo ? "--turbo" : ""], undefined, opts)
 }
 
 export function blitzBuild(args = [], opts = {}): any {
@@ -437,7 +438,7 @@ export function runNextCommandDev(argv, stdOut, opts: RunNextCommandDevOptions =
       }
 
       if (opts.stdout !== false) {
-      	process.stdout.write(message)
+        process.stdout.write(message)
       }
     }
 
@@ -923,4 +924,5 @@ interface RunNextCommandDevOptions {
   nodeArgs?: []
   bootupMarker?: any
   nextStart?: boolean
+  turbo?: boolean
 }

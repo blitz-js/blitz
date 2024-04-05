@@ -28,6 +28,7 @@ import {
   getInfiniteQueryKey,
   getQueryKey,
   installWebpackConfig,
+  installTurboConfig,
   InstallWebpackConfigOptions,
   ResolverPathOptions,
   DefaultOptions,
@@ -272,26 +273,30 @@ export function withBlitz(nextConfig: BlitzConfig = {}): NextConfig {
         },
       })
 
-      try {
-        const sodiumNativePath = fs.realpathSync(path.join(require.resolve("sodium-native"), ".."))
-        const dotNextDirectory = `${process.cwd()}/.next`
-        config.plugins.push(
-          new CopyPlugin({
-            patterns: [
-              {
-                //dev
-                from: `${sodiumNativePath}/prebuilds/`,
-                to: `${dotNextDirectory}/server/vendor-chunks/prebuilds/`,
-              },
-              {
-                //prod
-                from: `${sodiumNativePath}/prebuilds/`,
-                to: `${dotNextDirectory}/server/chunks/prebuilds/`,
-              },
-            ],
-          }),
-        )
-      } catch {}
+      if (!process.env.TURBOPACK) {
+        try {
+          const sodiumNativePath = fs.realpathSync(
+            path.join(require.resolve("sodium-native"), ".."),
+          )
+          const dotNextDirectory = `${process.cwd()}/.next`
+          config.plugins.push(
+            new CopyPlugin({
+              patterns: [
+                {
+                  //dev
+                  from: `${sodiumNativePath}/prebuilds/`,
+                  to: `${dotNextDirectory}/server/vendor-chunks/prebuilds/`,
+                },
+                {
+                  //prod
+                  from: `${sodiumNativePath}/prebuilds/`,
+                  to: `${dotNextDirectory}/server/chunks/prebuilds/`,
+                },
+              ],
+            }),
+          )
+        } catch {}
+      }
 
       if (typeof nextConfig.webpack === "function") {
         return nextConfig.webpack(config, options)
@@ -299,6 +304,12 @@ export function withBlitz(nextConfig: BlitzConfig = {}): NextConfig {
       return config
     },
   })
+
+  if (process.env.TURBOPACK) {
+    ;(config as any).experimental = {
+      turbo: installTurboConfig(),
+    }
+  }
 
   const {blitz, ...rest} = config
   return rest

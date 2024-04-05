@@ -79,11 +79,13 @@ const runTests = () => {
         let text = await browser.elementByCss("#content").text()
         expect(text).toMatch(/logged-out/)
         await browser.elementByCss("#login").click()
-        await waitFor(200)
+        await waitFor(7500)
         text = await browser.elementByCss("#content").text()
+
         expect(text).toMatch(/logged-in/)
+
         await browser.elementByCss("#logout").click()
-        await waitFor(250)
+        await waitFor(5000)
         text = await browser.elementByCss("#content").text()
         expect(text).toMatch(/logged-out/)
 
@@ -93,16 +95,16 @@ const runTests = () => {
       it("should logout without infinite loop #2233", async () => {
         // Login
         let browser = await webdriver(appPort, "/login")
-        await waitFor(200)
+        await waitFor(5000)
         await browser.elementByCss("#login").click()
-        await waitFor(200)
+        await waitFor(5000)
 
         await browser.eval(`window.location = "/authenticated-query"`)
         await browser.waitForElementByCss("#content")
         let text = await browser.elementByCss("#content").text()
         expect(text).toMatch(/authenticated-basic-result/)
         await browser.elementByCss("#logout").click()
-        await waitFor(200)
+        await waitFor(5000)
         await browser.waitForElementByCss("#error")
         text = await browser.elementByCss("#error").text()
         if (mode === "server") {
@@ -115,9 +117,9 @@ const runTests = () => {
 
       it("Page.authenticate = {role} should throw authentication error ", async () => {
         let browser = await webdriver(appPort, "/login")
-        await waitFor(200)
+        await waitFor(5000)
         await browser.elementByCss("#login").click()
-        await waitFor(200)
+        await waitFor(5000)
         await browser.eval(`window.location = "/page-dot-authenticate-role"`)
         await browser.waitForElementByCss("#error")
         let text = await browser.elementByCss("#error").text()
@@ -169,7 +171,7 @@ const runTests = () => {
         let text = await browser.elementByCss("#content").text()
         expect(text).toMatch(/authenticated-basic-result/)
         await browser.elementByCss("#logout").click()
-        await waitFor(500)
+        await waitFor(5000)
 
         expect(await browser.url()).toMatch(/\/login/)
         if (browser) await browser.close()
@@ -275,13 +277,28 @@ const runTests = () => {
 }
 
 describe("Auth Tests", () => {
-  describe("dev mode", () => {
+  describe("dev mode - webpack", () => {
     beforeAll(async () => {
       mode = "dev"
       try {
         await runBlitzCommand(["prisma", "migrate", "reset", "--force"])
         appPort = await findPort()
         app = await blitzLaunchApp(appPort, {cwd: process.cwd()})
+      } catch (error) {
+        console.log(error)
+      }
+    }, 5000 * 60 * 2)
+    afterAll(async () => await killApp(app))
+    runTests()
+  })
+
+  describe("dev mode - turbo", () => {
+    beforeAll(async () => {
+      mode = "dev"
+      try {
+        await runBlitzCommand(["prisma", "migrate", "reset", "--force"])
+        appPort = await findPort()
+        app = await blitzLaunchApp(appPort, {cwd: process.cwd()}, true)
       } catch (error) {
         console.log(error)
       }
