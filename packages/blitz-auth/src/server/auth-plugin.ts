@@ -135,6 +135,9 @@ export const AuthServerPlugin = createServerPlugin((options: AuthPluginOptions) 
   }
   return {
     requestMiddlewares: [authPluginSessionMiddleware()],
-    exports: () => ({}),
+    exports: () => ({
+      getBlitzContext,
+      useAuthenticatedBlitzContext,
+    }),
   }
 })
