@@ -161,6 +161,8 @@ export const useSession = (options: UseSessionOptions = {}): ClientSession => {
     if (isServer) {
       const e = new Error()
       e.name = "Rendering Suspense fallback..."
+      ;(e as any).digest = "DYNAMIC_SERVER_USAGE"
+      e.message = "DYNAMIC_SERVER_USAGE"
       delete e.stack
       throw e
     } else {

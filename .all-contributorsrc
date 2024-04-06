@@ -4054,6 +4054,17 @@
         "doc",
         "code"
       ]
+    },
+    {
+      "login": "timneutkens",
+      "name": "Tim Neutkens",
+      "avatar_url": "https://avatars.githubusercontent.com/u/6324199?v=4",
+      "profile": "https://timn.tech",
+      "contributions": [
+        "doc",
+        "code",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7,
