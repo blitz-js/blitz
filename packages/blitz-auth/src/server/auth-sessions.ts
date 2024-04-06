@@ -1,6 +1,6 @@
 import {fromBase64, toBase64} from "b64-lite"
 import cookie, {parse} from "cookie"
-import type {IncomingMessage, ServerResponse} from "http"
+import {IncomingMessage, ServerResponse} from "http"
 import jsonwebtoken from "jsonwebtoken"
 import {
   assert,
@@ -13,6 +13,9 @@ import {
   AuthorizationError,
   CSRFTokenMismatchError,
   log,
+  AuthenticatedCtx,
+  baseLogger,
+  chalk,
 } from "blitz"
 import {
   EmptyPublicData,
@@ -159,6 +162,10 @@ type GetSession =
   | {
       req: Request
     }
+  | {
+      headers: Headers
+      method: string
+    }
 
 function convertRequestToHeader(req: IncomingMessage | Request): Headers {
   const headersFromRequest = req.headers
@@ -205,8 +212,16 @@ export async function getSession(
       }
     }
   }
-  const headers = convertRequestToHeader(props.req)
-  let sessionKernel = await getSessionKernel({headers, method: props.req.method})
+  let headers: Headers
+  let method: string | undefined
+  if ("req" in props) {
+    headers = convertRequestToHeader(props.req)
+    method = props.req.method
+  } else {
+    headers = props.headers
+    method = props.method
+  }
+  let sessionKernel = await getSessionKernel({headers, method})
 
   if (sessionKernel) {
     debug("Got existing session", sessionKernel)
@@ -247,6 +262,103 @@ const makeProxyToPublicData = <T extends SessionContextClass>(ctxClass: T): T =>
       }
     },
   })
+}
+
+export async function getBlitzContext(): Promise<Ctx> {
+  try {
+    const {headers, cookies} = require("next/headers")
+    const reqHeader = Object.fromEntries(headers())
+    const csrfToken = cookies().get(COOKIE_CSRF_TOKEN())
+    if (csrfToken) {
+      reqHeader[HEADER_CSRF] = csrfToken.value
+    }
+    const {sessionContext} = await getSession({headers: new Headers(reqHeader), method: "POST"})
+    const ctx: Ctx = {
+      session: sessionContext,
+    }
+    return ctx
+  } catch (e) {
+    if ((e as NodeJS.ErrnoException).code === "MODULE_NOT_FOUND") {
+      throw new Error(
+        "Usage of `useAuthenticatedBlitzContext` is supported only in next.js 13.0.0 and above. Please upgrade your next.js version.",
+      )
+    }
+    throw e
+  }
+}
+
+export async function useAuthenticatedBlitzContext({
+  redirectTo,
+  redirectAuthenticatedTo,
+  role,
+}: {
+  redirectTo?: string | RouteUrlObject
+  redirectAuthenticatedTo?: string | RouteUrlObject | ((ctx: Ctx) => string | RouteUrlObject)
+  role?: string | string[]
+}): Promise<AuthenticatedCtx> {
+  const log = baseLogger().getSubLogger({name: "useAuthenticatedBlitzContext"})
+  const customChalk = new chalk.Instance({
+    level: log.settings.type === "json" ? 0 : chalk.level,
+  })
+  const ctx: Ctx = await getBlitzContext()
+  const userId = ctx.session.userId
+  try {
+    const {redirect} = require("next/navigation")
+    if (userId) {
+      debug("[useAuthenticatedBlitzContext] User is authenticated")
+      if (redirectAuthenticatedTo) {
+        if (typeof redirectAuthenticatedTo === "function") {
+          redirectAuthenticatedTo = redirectAuthenticatedTo(ctx)
+        }
+        const redirectUrl =
+          typeof redirectAuthenticatedTo === "string"
+            ? redirectAuthenticatedTo
+            : formatWithValidation(redirectAuthenticatedTo)
+        debug("[useAuthenticatedBlitzContext] Redirecting to", redirectUrl)
+        if (role) {
+          try {
+            ctx.session.$authorize(role)
+          } catch (e) {
+            log.info("Authentication Redirect: " + customChalk.dim(`Role ${role}`), redirectTo)
+            redirect(redirectUrl)
+          }
+        } else {
+          log.info("Authentication Redirect: " + customChalk.dim("(Authenticated)"), redirectUrl)
+          redirect(redirectUrl)
+        }
+      }
+      if (redirectTo && role) {
+        debug("[useAuthenticatedBlitzContext] redirectTo and role are both defined.")
+        try {
+          ctx.session.$authorize(role)
+        } catch (e) {
+          log.error("Authorization Error: " + (e as Error).message)
+          if (typeof redirectTo !== "string") {
+            redirectTo = formatWithValidation(redirectTo)
+          }
+          log.info("Authorization Redirect: " + customChalk.dim(`Role ${role}`), redirectTo)
+          redirect(redirectTo)
+        }
+      }
+    } else {
+      debug("[useAuthenticatedBlitzContext] User is not authenticated")
+      if (redirectTo) {
+        if (typeof redirectTo !== "string") {
+          redirectTo = formatWithValidation(redirectTo)
+        }
+        log.info("Authentication Redirect: " + customChalk.dim("(Not authenticated)"), redirectTo)
+        redirect(redirectTo)
+      }
+    }
+    return ctx as AuthenticatedCtx
+  } catch (e) {
+    if ((e as NodeJS.ErrnoException).code === "MODULE_NOT_FOUND") {
+      throw new Error(
+        "Usage of `useAuthenticatedBlitzContext` is supported only in next.js 13.0.0 and above. Please upgrade your next.js version.",
+      )
+    }
+    throw e
+  }
 }
 
 const NotSupportedMessage = async (method: string) => {

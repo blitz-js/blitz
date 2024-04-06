@@ -1,4 +1,4 @@
-import {assert, Ctx, ResolverConfig} from "blitz"
+import {assert, baseLogger, chalk, Ctx, newLine, ResolverConfig} from "blitz"
 import {NextApiRequest, NextApiResponse} from "next"
 import {resolve} from "path"
 import {deserialize, parse, serialize as superjsonSerialize} from "superjson"
@@ -262,7 +262,12 @@ export function rpcHandler(config: RpcConfig) {
         res.setHeader("Set-Cookie", cookies)
         res.status(200).end(JSON.stringify(jsonResult))
       } catch (error: any) {
-        const serializedError = handleRpcError({error, config, log: logger.log})
+        const serializedError = handleRpcError({
+          error,
+          config,
+          log: logger.log,
+          ctx: (res as any).blitzCtx,
+        })
         res.status(200).send({
           result: null,
           error: serializedError.json,
@@ -294,7 +299,7 @@ export function rpcRequestHandler(config: RpcConfig) {
   return async function handleRpcRequest(
     request: Request,
     rpcQuery: RpcQuery,
-    ctx?: Ctx,
+    ctx: Ctx,
   ): Promise<Response> {
     const body = await request.json()
     const resolverMap = await getResolverMap()
@@ -359,7 +364,7 @@ export function rpcRequestHandler(config: RpcConfig) {
           }),
         )
       } catch (error: any) {
-        const serializedError = handleRpcError({error, config, log: logger.log})
+        const serializedError = handleRpcError({error, config, log: logger.log, ctx})
         return new Response(
           JSON.stringify({
             result: null,
@@ -395,7 +400,7 @@ async function loadResolver(resolverMap: ResolverFiles | null | undefined, route
   if (!loadableResolver) {
     throw new Error("No resolver for path: " + routePath)
   }
-  const {default: resolver, config} = await loadableResolver()
+  const {default: resolver, config} = await loadableResolver.resolver()
   if (!resolver) {
     throw new Error("No default export for resolver path: " + routePath)
   }
@@ -420,35 +425,8 @@ async function executeBlitzResolver({
   resolver: Resolver
   ctx?: Ctx
 }) {
-  if (isBlitzRPCVerbose(resolverName, config, "info")) {
-    log.info(customChalk.dim("Starting with input:"), data ? data : JSON.stringify(data))
-  }
-  const startTime = Date.now()
   const result = await resolver(data, ctx)
-  const resolverDuration = Date.now() - startTime
-  if (isBlitzRPCVerbose(resolverName, config, "debug")) {
-    log.debug(customChalk.dim("Result:"), result ? result : JSON.stringify(result))
-  }
-  const serializerStartTime = Date.now()
   const serializedResult = superjsonSerialize(result)
-  const nextSerializerStartTime = Date.now()
-  if (isBlitzRPCVerbose(resolverName, config, "debug")) {
-    log.debug(
-      customChalk.dim(`Next.js serialization:${prettyMs(Date.now() - nextSerializerStartTime)}`),
-    )
-  }
-  const serializerDuration = Date.now() - serializerStartTime
-  const duration = Date.now() - startTime
-  if (isBlitzRPCVerbose(resolverName, config, "info")) {
-    log.info(
-      customChalk.dim(
-        `Finished: resolver:${prettyMs(resolverDuration)} serializer:${prettyMs(
-          serializerDuration,
-        )} total:${prettyMs(duration)}`,
-      ),
-    )
-  }
-  newLine()
   return {result, serializedResult}
 }
 
@@ -456,21 +434,23 @@ function handleRpcError({
   error,
   config,
   log,
+  ctx,
 }: {
   error: any
   config: RpcConfig
   log: ReturnType<typeof initRpcLogger>["log"]
+  ctx: Ctx
 }) {
   if (error._clearStack) {
     delete error.stack
   }
-  config.onError?.(error)
+  config.onError?.(error, ctx)
   log.error(error)
   newLine()
   if (!error.statusCode) {
     error.statusCode = 500
   }
-  const formattedError = config.formatError?.(error) ?? error
+  const formattedError = config.formatError?.(error, ctx) ?? error
   const serializedError = superjsonSerialize(formattedError)
   return serializedError
 }

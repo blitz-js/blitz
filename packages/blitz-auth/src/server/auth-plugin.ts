@@ -2,7 +2,7 @@ import {RequestMiddleware, Ctx, createServerPlugin} from "blitz"
 import {assert} from "blitz"
 import type {IncomingMessage, ServerResponse} from "http"
 import {PublicData, SessionModel, SessionConfigMethods} from "../shared/types"
-import {getSession} from "./auth-sessions"
+import {getBlitzContext, getSession} from "./auth-sessions"
 
 interface SessionConfigOptions {
   cookiePrefix?: string
