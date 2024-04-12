@@ -317,7 +317,6 @@ export function withBlitz(nextConfig: BlitzConfig = {}): NextConfig {
           ...config.experimental?.turbo?.resolveAlias,
           ...blitzTurboConfig.resolveAlias,
         },
-        //@ts-expect-error to be fixed upstream
         rules: {
           ...config.experimental?.turbo?.rules,
           ...blitzTurboConfig.rules,
