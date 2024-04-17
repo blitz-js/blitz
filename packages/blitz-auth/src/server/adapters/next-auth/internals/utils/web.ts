@@ -47,7 +47,12 @@ async function readJSONBody(
 // prettier-ignore
 const actions = [ "providers", "session", "csrf", "login", "signout", "callback", "verify-request", "error", "_log"]
 
-export async function toInternalRequest(req: Request): Promise<RequestInternal | Error> {
+export async function toInternalRequest(req: Request): Promise<
+  | (RequestInternal & {
+      url: URL
+    })
+  | Error
+> {
   try {
     // TODO: url.toString() should not include action and providerId
     // see init.ts
@@ -70,7 +75,6 @@ export async function toInternalRequest(req: Request): Promise<RequestInternal |
     }
 
     return {
-      //@ts-ignore
       url,
       action,
       providerId,
