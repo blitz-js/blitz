@@ -19,6 +19,7 @@ export {
   RedirectError,
   OAuthError,
 }
+export * from "./utils/enhance-prisma"
 
 export type BlitzProviderComponentType = <TProps = any>(
   component: ComponentType<TProps>,
