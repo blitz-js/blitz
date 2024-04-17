@@ -1,5 +1,13 @@
 # blitz
 
+## 2.0.8
+
+### Patch Changes
+
+- 5e61a1681: bug: merge existing and custom blitz turbo configs
+- 77555468f: fix: add missing host while initialising the next-auth adapter
+  - @blitzjs/generator@2.0.8
+
 ## 2.0.7
 
 ### Patch Changes
