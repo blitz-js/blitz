@@ -3,4 +3,4 @@
 "blitz": patch
 ---
 
-fix: add missing host in next-auth adapter
+fix: add missing host while initialising the next-auth adapter
