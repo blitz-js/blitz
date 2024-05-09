@@ -160,9 +160,10 @@ export function installWebpackConfig({
 export function installTurboConfig() {
   return {
     resolveAlias: {
-      "cross-spawn": {browser: "./turbopack/empty.js"},
-      "npm-which": {browser: "./turbopack/empty.js"},
-      fs: {browser: "./turbopack/empty.js"},
+      "cross-spawn": {browser: ".blitz/empty.js"},
+      "npm-which": {browser: ".blitz/empty.js"},
+      fs: {browser: ".blitz/empty.js"},
+      child_process: {browser: ".blitz/empty.js"},
     },
     rules: {
       "**/*...blitz*.{jsx,tsx,js,ts}": {
