@@ -170,6 +170,7 @@ function codegen() {
       const defaultIndexJsPath = path.join(dotBlitzDir, "index.js")
       const defaultIndexBrowserJSPath = path.join(dotBlitzDir, "index-browser.js")
       const defaultIndexDTSPath = path.join(dotBlitzDir, "index.d.ts")
+      const emptyJSPath = path.join(dotBlitzDir, "turbopack-empty.js")
 
       if (!fs.existsSync(defaultIndexJsPath)) {
         await copyFile(path.join(__dirname, "default-index.js"), defaultIndexJsPath)
@@ -180,6 +181,10 @@ function codegen() {
 
       if (!fs.existsSync(defaultIndexDTSPath)) {
         await copyFile(path.join(__dirname, "default-index.d.ts"), defaultIndexDTSPath)
+      }
+
+      if (!fs.existsSync(emptyJSPath)) {
+        await copyFile(path.join(__dirname, "turbopack-empty.js"), emptyJSPath)
       }
     } catch (e) {
       console.error(e)
