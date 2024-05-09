@@ -1,5 +1,12 @@
 # blitz
 
+## 2.0.9
+
+### Patch Changes
+
+- 5a14306f7: fix export `enhancePrisma` in client
+  - @blitzjs/generator@2.0.9
+
 ## 2.0.8
 
 ### Patch Changes
