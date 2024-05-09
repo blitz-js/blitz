@@ -14,8 +14,6 @@ export {findNodeModulesRoot, findNodeModulesRootSync} from "./cli/utils/find-nod
 
 export {startWatcher, stopWatcher} from "./cli/utils/routes-manifest"
 
-export * from "./utils/enhance-prisma"
-
 export interface MiddlewareResponse<C extends Ctx = Ctx> extends ServerResponse {
   blitzCtx: C
   blitzResult: unknown
