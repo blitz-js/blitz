@@ -1,9 +1,4 @@
-import j, {
-  Expression,
-  ImportDeclaration,
-  ImportDefaultSpecifier,
-  ImportSpecifier,
-} from "jscodeshift"
+import j, {ImportDeclaration, ImportDefaultSpecifier, ImportSpecifier} from "jscodeshift"
 import * as fs from "fs-extra"
 import path from "path"
 import {
@@ -41,17 +36,20 @@ const findPagesDirectory = () => {
 const isInternalBlitzMonorepoDevelopment = fs.existsSync(
   path.join(__dirname, "../../../blitz-next"),
 )
+
 type Step = {name: string; action: (stepIndex: number) => Promise<void>}
+
 const upgradeLegacy = async () => {
-  let isTypescript = fs.existsSync(path.resolve("tsconfig.json"))
-  let existingBlitzConfigFiles = ["ts", "js"]
+  const isTypescript = fs.existsSync(path.resolve("tsconfig.json"))
+  const existingBlitzConfigFiles = ["ts", "js"]
     .map((e) => `blitz.config.${e}`)
     .map((e) => path.resolve(e))
     .filter(fs.existsSync)
-  let blitzConfigFile = existingBlitzConfigFiles.reduce((_prev, current) => current, "")
+  const blitzConfigFile = existingBlitzConfigFiles.reduce((_prev, current) => current, "")
   if (blitzConfigFile === "") {
-    throw new ExpectedError("Could not identify Legacy Blitz Config file")
+    throw new ExpectedError("Could not identify Legacy Blitz Config file.")
   }
+
   // Check if app directory exists in either app/ or src/app
   const appDir = fs.existsSync(path.resolve("app"))
     ? path.resolve("app")
@@ -59,7 +57,6 @@ const upgradeLegacy = async () => {
     ? path.resolve(path.join("src", "app"))
     : ""
   try {
-    // Throw Error if appDir empty
     if (appDir === "") {
       throw new ExpectedError(
         "Could not identify Legacy Blitz App directory in project (no app/ or src/ directory found)",
