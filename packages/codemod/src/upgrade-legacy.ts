@@ -1336,18 +1336,29 @@ const upgradeLegacy = async () => {
       const pagesDir = fs.existsSync(srcPagesDir) ? srcPagesDir : path.resolve("pages")
       getAllFiles(pagesDir, [], [], [".ts", ".tsx", ".js", ".jsx"]).forEach((file) => {
         const program = getCollectionFromSource(file)
+        const identifiers = new Set()
+
+        // Collect all identifiers in the scope
+        program.find(j.Identifier).forEach((path) => {
+          identifiers.add(path.value.name)
+        })
+
         try {
-          const invokeWithMiddlewarePath = findCallExpression(program, "invokeWithMiddleware")
-          if (invokeWithMiddlewarePath?.length) {
-            invokeWithMiddlewarePath.forEach((path) => {
+          const invokeWithMiddlewarePaths = findCallExpression(program, "invokeWithMiddleware")
+          if (invokeWithMiddlewarePaths?.length) {
+            invokeWithMiddlewarePaths.forEach((path) => {
               const resolverName = path.value.arguments.at(0)
               if (resolverName?.type === "Identifier") {
-                const resolverExpression = j.callExpression(
-                  j.identifier(resolverName.name),
-                  path.value.arguments.slice(1),
-                )
-                const resolverStatement = j.expressionStatement(resolverExpression)
-                j(path).replaceWith(resolverStatement)
+                if (!identifiers.has(resolverName.name)) {
+                  // Check if identifier exists
+                  // We skip insertion if the identifier already exists
+                  const resolverExpression = j.callExpression(
+                    j.identifier(resolverName.name),
+                    path.value.arguments.slice(1),
+                  )
+                  const resolverStatement = j.expressionStatement(resolverExpression)
+                  j(path).replaceWith(resolverStatement)
+                }
               } else {
                 throw new Error(
                   `invokeWithMiddleware can only be used with a resolver as the first argument \nError at Line ${path?.value?.loc?.start.line}`,
@@ -1365,6 +1376,7 @@ const upgradeLegacy = async () => {
       })
     },
   })
+
   // Loop through steps and run the action
   if ((failedAt && failedAt < steps.length) || failedAt !== "SUCCESS") {
     for (let [index, step] of steps.entries()) {
