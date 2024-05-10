@@ -42,7 +42,7 @@ type Step = {name: string; action: (stepIndex: number) => Promise<void>}
 const upgradeLegacy = async () => {
   const isTypescript = fs.existsSync(path.resolve("tsconfig.json"))
   const existingBlitzConfigFiles = ["ts", "js"]
-    .map((e) => `blitz.config.${e}`)
+    .map((e) => `blitz.config.${e}` || `next.config.js`)
     .map((e) => path.resolve(e))
     .filter(fs.existsSync)
   const blitzConfigFile = existingBlitzConfigFiles.reduce((_prev, current) => current, "")
