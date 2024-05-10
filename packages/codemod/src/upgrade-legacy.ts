@@ -582,7 +582,7 @@ const upgradeLegacy = async () => {
           replaceTemplateValues(blitzClient),
         )
       } else {
-        throw new ExpectedError("App directory doesn't exit")
+        throw new ExpectedError("App directory doesn't exist")
       }
     },
   })
