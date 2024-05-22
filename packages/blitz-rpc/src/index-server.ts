@@ -1,4 +1,4 @@
-import {assert, baseLogger, chalk, Ctx, newLine, ResolverConfig} from "blitz"
+import {assert, baseLogger, chalk, compose, Ctx, merge, newLine, ResolverConfig} from "blitz"
 import {NextApiRequest, NextApiResponse} from "next"
 import {resolve} from "path"
 import {deserialize, parse, serialize as superjsonSerialize} from "superjson"
@@ -232,7 +232,7 @@ interface RpcConfig {
 }
 
 export function rpcHandler(config: RpcConfig) {
-  return async function handleRpcRequest(req: NextApiRequest, res: NextApiResponse) {
+  return async function handleRpcRequest(req: NextApiRequest, res: NextApiResponse, ctx: Ctx) {
     const resolverMap = await getResolverMap()
     assert(resolverMap, "No query or mutation resolvers found")
     assert(
@@ -260,15 +260,13 @@ export function rpcHandler(config: RpcConfig) {
 
     if (req.method === "HEAD") {
       // We used to initiate database connection here
-      return new Response(null, {status: 200})
-    }
-
-    if (
+      res.status(200).end()
+      return
+    } else if (
       req.method === "POST" ||
       (req.method === "GET" && resolverConfigWithDefaults.httpMethod === "GET")
     ) {
-      const body = await req.json()
-      if (req.method === "POST" && typeof body.params === "undefined") {
+      if (req.method === "POST" && typeof req.body.params === "undefined") {
         const error = {message: "Request body is missing the `params` key"}
         rpcLogger.error(error.message)
         res.status(400).json({
@@ -281,15 +279,15 @@ export function rpcHandler(config: RpcConfig) {
         const data = deserialize({
           json:
             req.method === "POST"
-              ? body.params
-              : context.params.params
-              ? parse(`${context.params.params}`)
+              ? req.body.params
+              : req.query.params
+              ? parse(`${req.query.params}`)
               : undefined,
           meta:
             req.method === "POST"
-              ? body.meta?.params
-              : context.params.meta
-              ? parse(`${context.params.meta}`)
+              ? req.body.meta?.params
+              : req.query.meta
+              ? parse(`${req.query.meta}`)
               : undefined,
         })
         rpcLogger.timer.initResolver()
@@ -333,6 +331,12 @@ export function rpcHandler(config: RpcConfig) {
         const formattedError = config.formatError?.(error, ctx) ?? error
         const serializedError = superjsonSerialize(formattedError)
 
+        const cookies = (ctx as any).session.$headers() as Headers
+        const cookieHeaders = cookies.get("Set-Cookie")
+        if (cookieHeaders) {
+          res.setHeader("Set-Cookie", cookieHeaders)
+        }
+
         res.json({
           result: null,
           error: serializedError.json,
@@ -353,7 +357,12 @@ export function rpcHandler(config: RpcConfig) {
 
 type Params = Record<string, unknown>
 
-export function rpcAppHandler(config: RpcConfig, authContext: Promise<Ctx>) {
+type Middleware = {
+  auth: (req: Request) => Promise<{ctx: Ctx}>
+  [key: string]: (req: Request, result: unknown) => void
+}
+
+export function rpcAppHandler(config: RpcConfig, middleware: Middleware) {
   async function handleRpcRequest(req: Request, context: {params: Params}) {
     const resolverMap = await getResolverMap()
     assert(resolverMap, "No query or mutation resolvers found")
@@ -396,6 +405,7 @@ export function rpcAppHandler(config: RpcConfig, authContext: Promise<Ctx>) {
         rpcLogger.error(error.message)
         return new Response(JSON.stringify({result: null, error}), {status: 400})
       }
+      const ctx = (await middleware.auth(req)).ctx
       try {
         const data = deserialize({
           json:
@@ -414,7 +424,13 @@ export function rpcAppHandler(config: RpcConfig, authContext: Promise<Ctx>) {
         rpcLogger.timer.initResolver()
         rpcLogger.preResolver(data)
 
-        const result = await resolver(data, await authContext)
+        const result = await resolver(data, ctx)
+        const middlewareKeys = Object.keys(middleware)
+        for (const key of middlewareKeys) {
+          if (key !== "auth") {
+            middleware[key]?.(req, result)
+          }
+        }
         rpcLogger.timer.resolverDuration()
         rpcLogger.postResolver(result)
 
@@ -422,7 +438,7 @@ export function rpcAppHandler(config: RpcConfig, authContext: Promise<Ctx>) {
         const serializedResult = superjsonSerialize(result)
 
         rpcLogger.timer.initNextJsSerialization()
-        return new Response(
+        const response = new Response(
           JSON.stringify({
             result: serializedResult.json,
             error: null,
@@ -431,19 +447,25 @@ export function rpcAppHandler(config: RpcConfig, authContext: Promise<Ctx>) {
             },
           }),
         )
+        const sessionHeaders = (ctx as any).session.$headers() as Headers
+        const cookieHeaders = sessionHeaders.get("Set-Cookie")
+        if (cookieHeaders) {
+          response.headers.set("Set-Cookie", cookieHeaders)
+        }
+        return response
       } catch (error: any) {
         if (error._clearStack) {
           error.stack = ""
         }
 
-        config.onError?.(error, await authContext)
+        config.onError?.(error, ctx)
         rpcLogger.error(error)
 
         if (!error.statusCode) {
           error.statusCode = 500
         }
 
-        const formattedError = config.formatError?.(error, await authContext) ?? error
+        const formattedError = config.formatError?.(error, ctx) ?? error
         const serializedError = superjsonSerialize(formattedError)
 
         return new Response(
@@ -466,5 +488,6 @@ export function rpcAppHandler(config: RpcConfig, authContext: Promise<Ctx>) {
   return {
     GET: handleRpcRequest,
     POST: handleRpcRequest,
+    HEAD: handleRpcRequest,
   }
 }
