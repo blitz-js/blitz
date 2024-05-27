@@ -113,11 +113,11 @@ export function NextAuthAdapter<P extends Provider[]>(
     const {options, cookies} = await init({
       // @ts-ignore
       url: new URL(
-        // @ts-ignore
-        internalRequest.url!,
+        internalRequest.url,
         process.env.APP_ORIGIN || process.env.BLITZ_DEV_SERVER_ORIGIN,
       ),
       authOptions: config as unknown as AuthOptions,
+      host: internalRequest.url.host,
       action,
       providerId,
       callbackUrl: req.body?.callbackUrl ?? (req.query?.callbackUrl as string),

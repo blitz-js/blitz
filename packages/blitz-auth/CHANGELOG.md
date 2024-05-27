@@ -1,5 +1,21 @@
 # @blitzjs/auth
 
+## 2.0.9
+
+### Patch Changes
+
+- Updated dependencies [5a14306f7]
+  - blitz@2.0.9
+
+## 2.0.8
+
+### Patch Changes
+
+- 77555468f: fix: add missing host while initialising the next-auth adapter
+- Updated dependencies [5e61a1681]
+- Updated dependencies [77555468f]
+  - blitz@2.0.8
+
 ## 2.0.7
 
 ### Patch Changes

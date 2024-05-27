@@ -1,5 +1,24 @@
 # @blitzjs/next
 
+## 2.0.9
+
+### Patch Changes
+
+- 5a14306f7: fix export `enhancePrisma` in client
+- Updated dependencies [5a14306f7]
+  - @blitzjs/rpc@2.0.9
+  - blitz@2.0.9
+
+## 2.0.8
+
+### Patch Changes
+
+- 5e61a1681: bug: merge existing and custom blitz turbo configs
+- Updated dependencies [5e61a1681]
+- Updated dependencies [77555468f]
+  - blitz@2.0.8
+  - @blitzjs/rpc@2.0.8
+
 ## 2.0.7
 
 ### Patch Changes

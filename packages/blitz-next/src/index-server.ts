@@ -306,8 +306,22 @@ export function withBlitz(nextConfig: BlitzConfig = {}): NextConfig {
   })
 
   if (process.env.TURBOPACK) {
-    ;(config as any).experimental = {
-      turbo: installTurboConfig(),
+    const blitzTurboConfig = installTurboConfig()
+    config.experimental = {
+      ...config.experimental,
+      turbo: {
+        loaders: {
+          ...config.experimental?.turbo?.loaders,
+        },
+        resolveAlias: {
+          ...config.experimental?.turbo?.resolveAlias,
+          ...blitzTurboConfig.resolveAlias,
+        },
+        rules: {
+          ...config.experimental?.turbo?.rules,
+          ...blitzTurboConfig.rules,
+        },
+      },
     }
   }
 
