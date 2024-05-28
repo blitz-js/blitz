@@ -4,7 +4,7 @@ import db from "../db"
 import {simpleRolesIsAuthorized} from "@blitzjs/auth"
 import {BlitzLogger} from "blitz"
 
-const {api, getBlitzContext} = setupBlitzServer({
+const {api, getBlitzContext, blitzAuthAppContext} = setupBlitzServer({
   plugins: [
     AuthServerPlugin({
       cookiePrefix: "auth-tests-cookie-prefix",
@@ -15,4 +15,4 @@ const {api, getBlitzContext} = setupBlitzServer({
   logger: BlitzLogger({}),
 })
 
-export {api, getBlitzContext}
+export {api, getBlitzContext, blitzAuthAppContext}
