@@ -120,7 +120,7 @@ export const AuthServerPlugin = createServerPlugin((options: AuthPluginOptions) 
           req,
           res,
         })
-        ;(ctx.session as any).setSession(res)
+        ;(ctx as any)?.session.setSession(res)
       }
       return next()
     }
