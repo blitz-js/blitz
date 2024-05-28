@@ -4,8 +4,11 @@ import {GetServerSideProps} from "next"
 import {Suspense} from "react"
 
 export const getServerSideProps: GetServerSideProps = gSSP(async ({req, res}) => {
-  const session = await getSession(req, res)
-  await session.$setPublicData({role: "USER"})
+  const ctx = await getSession({
+    req,
+    res,
+  })
+  await ctx.session.$setPublicData({role: "USER"})
 
   return {
     props: {},
