@@ -23,7 +23,7 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v2
         with:
-          node-version: 18
+          node-version: 20
           cache: "pnpm"
       - name: Install dependencies
         run: pnpm install  --frozen-lockfile
@@ -44,7 +44,7 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v2
         with:
-          node-version: 18
+          node-version: 20
           cache: "pnpm"
       - run: pnpm install --frozen-lockfile
       - name: Build
@@ -75,7 +75,7 @@ jobs:
       - name: Setup node@16
         uses: actions/setup-node@v2
         with:
-          node-version: 18
+          node-version: 20
           cache: "pnpm"
 
       - name: Install dependencies
@@ -137,7 +137,7 @@ jobs:
         if: matrix.folder != 'next-13-app-dir' || matrix.os != 'windows-latest'
         uses: actions/setup-node@v2
         with:
-          node-version: 18
+          node-version: 20
           cache: "pnpm"
 
       - name: Install dependencies

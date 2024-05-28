@@ -195,9 +195,7 @@ function getCookiesFromHeader(headers: Headers) {
   }
 }
 
-export async function getSession(
-  props: GetSession,
-): Promise<{sessionContext: SessionContext; headers: Headers}> {
+export async function getSession(props: GetSession): Promise<{session: SessionContext}> {
   if ("res" in props) {
     const {res} = props
     ensureMiddlewareResponse(res)
@@ -207,8 +205,7 @@ export async function getSession(
     if (res.blitzCtx.session) {
       debug("Returning existing session")
       return {
-        sessionContext: res.blitzCtx.session,
-        headers: convertRequestToHeader(props.req),
+        session: res.blitzCtx.session,
       }
     }
   }
@@ -234,7 +231,7 @@ export async function getSession(
   const appDir = "appDir" in props ? Boolean(props.appDir) : false
 
   const sessionContext = makeProxyToPublicData(
-    new SessionContextClass(headers, sessionKernel, appDir),
+    new SessionContextClass(headers, sessionKernel, appDir, "res" in props ? props.res : undefined),
   )
   debug("New session context")
   if ("res" in props) {
@@ -243,8 +240,7 @@ export async function getSession(
     }
   }
   return {
-    sessionContext,
-    headers,
+    session: sessionContext,
   }
 }
 
@@ -272,9 +268,9 @@ export async function getBlitzContext(): Promise<Ctx> {
     if (csrfToken) {
       reqHeader[HEADER_CSRF] = csrfToken.value
     }
-    const {sessionContext} = await getSession({headers: new Headers(reqHeader), method: "POST"})
+    const {session} = await getSession({headers: new Headers(reqHeader), method: "POST"})
     const ctx: Ctx = {
-      session: sessionContext,
+      session,
     }
     return ctx
   } catch (e) {
@@ -371,11 +367,20 @@ export class SessionContextClass implements SessionContext {
   private _headers: Headers
   private _kernel: SessionKernel
   private _appDir: boolean
+  private _response?: ServerResponse
 
-  constructor(headers: Headers, kernel: SessionKernel, appDir: boolean) {
+  private static headersToIncludeInResponse = [
+    HEADER_CSRF,
+    HEADER_CSRF_ERROR,
+    HEADER_PUBLIC_DATA_TOKEN,
+    HEADER_SESSION_CREATED,
+  ]
+
+  constructor(headers: Headers, kernel: SessionKernel, appDir: boolean, response?: ServerResponse) {
     this._headers = headers
     this._kernel = kernel
     this._appDir = appDir
+    this._response = response
   }
 
   $headers() {
@@ -423,6 +428,32 @@ export class SessionContextClass implements SessionContext {
     return this.$isAuthorized(...args)
   }
 
+  setSession(response: Response | ServerResponse) {
+    if (this._appDir) {
+      void NotSupportedMessage("setBrowserSession")
+      return
+    }
+    if (response instanceof ServerResponse) {
+      //@ts-ignore - we need to use the private method here
+      const cookieHeaders = this._headers.getSetCookie()
+      response.setHeader("Set-Cookie", cookieHeaders)
+    } else {
+      const cookieHeaders = this._headers.get("Set-Cookie")
+      response.headers.set("Set-Cookie", cookieHeaders!)
+    }
+
+    const headers = this._headers.entries()
+    for (const [key, value] of headers) {
+      if (SessionContextClass.headersToIncludeInResponse.includes(key)) {
+        if (response instanceof ServerResponse) {
+          response.setHeader(key, value)
+        } else {
+          response.headers.set(key, value)
+        }
+      }
+    }
+  }
+
   async $create(publicData: PublicData, privateData?: Record<any, any>) {
     if (this._appDir) {
       void NotSupportedMessage("$create")
@@ -435,6 +466,9 @@ export class SessionContextClass implements SessionContext {
       jwtPayload: this._kernel.jwtPayload,
       anonymous: false,
     })
+    if (this._response) {
+      this.setSession(this._response)
+    }
   }
 
   async $revoke() {
@@ -443,6 +477,9 @@ export class SessionContextClass implements SessionContext {
       return
     }
     this._kernel = await revokeSession(this._headers, this.$handle)
+    if (this._response) {
+      this.setSession(this._response)
+    }
   }
 
   async $revokeAll() {
@@ -454,6 +491,9 @@ export class SessionContextClass implements SessionContext {
     await this.$revoke()
     // revoke other sessions for which there is no req/res object
     await revokeAllSessionsForUser(this.$publicData.userId)
+    if (this._response) {
+      this.setSession(this._response)
+    }
     return
   }
 
@@ -466,17 +506,24 @@ export class SessionContextClass implements SessionContext {
       await syncPubicDataFieldsForUserIfNeeded(this.userId, data)
     }
     this._kernel.publicData = await setPublicData(this._headers, this._kernel, data)
+    if (this._response) {
+      this.setSession(this._response)
+    }
   }
 
   async $getPrivateData() {
     return (await getPrivateData(this.$handle)) || {}
   }
-  $setPrivateData(data: Record<any, any>) {
+
+  async $setPrivateData(data: Record<any, any>) {
     if (this._appDir) {
       void NotSupportedMessage("$setPrivateData")
       return Promise.resolve()
     }
-    return setPrivateData(this._kernel, data)
+    await setPrivateData(this._kernel, data)
+    if (this._response) {
+      this.setSession(this._response)
+    }
   }
 }
 
@@ -1132,4 +1179,34 @@ export async function setPublicDataForUser(userId: PublicData["userId"], data: R
 
     await global.sessionConfig.updateSession(session.handle, {publicData})
   }
+}
+
+/**
+ * Append additional header `field` with value `val`.
+ *
+ * Example:
+ *
+ *    append(res, 'Set-Cookie', 'foo=bar; Path=/; HttpOnly');
+ *
+ * @param {ServerResponse} res
+ * @param {string} field
+ * @param {string| string[]} val
+ */
+function append(res: ServerResponse, field: string, val: string | string[]) {
+  let prev: string | string[] | undefined = res.getHeader(field) as string | string[] | undefined
+  let value = val
+
+  if (prev !== undefined) {
+    // concat the new and prev vals
+    value = Array.isArray(prev)
+      ? prev.concat(val)
+      : Array.isArray(val)
+      ? [prev].concat(val)
+      : [prev, val]
+  }
+
+  value = Array.isArray(value) ? value.map(String) : String(value)
+
+  res.setHeader(field, value)
+  return res
 }

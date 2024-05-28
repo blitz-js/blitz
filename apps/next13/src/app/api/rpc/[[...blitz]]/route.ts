@@ -1,17 +1,4 @@
-import {getSession} from "@blitzjs/auth"
 import {rpcAppHandler} from "@blitzjs/rpc"
+import {blitzAuthAppContext} from "src/blitz-server"
 
-export const {GET, POST} = rpcAppHandler(
-  {},
-  {
-    async auth(req) {
-      return {
-        ctx: {
-          session: (await getSession(req)).sessionContext,
-          prefetchInfiniteQuery: async () => {},
-          prefetchQuery: async () => {},
-        },
-      }
-    },
-  },
-)
+export const {GET, POST, HEAD} = rpcAppHandler({}, blitzAuthAppContext)

@@ -6,26 +6,27 @@ import {simpleRolesIsAuthorized} from "@blitzjs/auth"
 import {BlitzLogger} from "blitz"
 import {RpcServerPlugin} from "@blitzjs/rpc"
 
-const {api, getBlitzContext, useAuthenticatedBlitzContext, invoke} = setupBlitzServer({
-  plugins: [
-    AuthServerPlugin({
-      cookiePrefix: "web-cookie-prefix",
-      storage: PrismaStorage(db),
-      isAuthorized: simpleRolesIsAuthorized,
-    }),
-    RpcServerPlugin({
-      logging: {
-        disablelevel: "debug",
-      },
-      onInvokeError(error) {
-        console.log("onInvokeError", error)
-      },
-    }),
-  ],
-  logger: BlitzLogger({}),
-})
+const {api, getBlitzContext, useAuthenticatedBlitzContext, invoke, blitzAuthAppContext} =
+  setupBlitzServer({
+    plugins: [
+      AuthServerPlugin({
+        cookiePrefix: "web-cookie-prefix",
+        storage: PrismaStorage(db),
+        isAuthorized: simpleRolesIsAuthorized,
+      }),
+      RpcServerPlugin({
+        logging: {
+          disablelevel: "debug",
+        },
+        onInvokeError(error) {
+          console.log("onInvokeError", error)
+        },
+      }),
+    ],
+    logger: BlitzLogger({}),
+  })
 
-export {api, getBlitzContext, useAuthenticatedBlitzContext, invoke}
+export {api, getBlitzContext, useAuthenticatedBlitzContext, invoke, blitzAuthAppContext}
 
 export const cliConfig: BlitzCliConfig = {
   customTemplates: "src/templates",
