@@ -409,7 +409,7 @@ export function rpcAppHandler(config: RpcConfig, options?: Options) {
         rpcLogger.error(error.message)
         return new Response(JSON.stringify({result: null, error}), {status: 400})
       }
-      const session = await options?.authMiddleware(req)
+      const session = await options?.authMiddleware?.(req)
       try {
         const data = deserialize({
           json:
