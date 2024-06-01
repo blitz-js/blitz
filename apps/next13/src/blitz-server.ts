@@ -6,7 +6,7 @@ import {simpleRolesIsAuthorized} from "@blitzjs/auth"
 import {BlitzLogger} from "blitz"
 import {RpcServerPlugin} from "@blitzjs/rpc"
 
-const {api, getBlitzContext, useAuthenticatedBlitzContext, invoke, blitzAuthAppContext} =
+const {api, getBlitzContext, useAuthenticatedBlitzContext, invoke, blitzAuthRpcMiddleware} =
   setupBlitzServer({
     plugins: [
       AuthServerPlugin({
@@ -26,7 +26,7 @@ const {api, getBlitzContext, useAuthenticatedBlitzContext, invoke, blitzAuthAppC
     logger: BlitzLogger({}),
   })
 
-export {api, getBlitzContext, useAuthenticatedBlitzContext, invoke, blitzAuthAppContext}
+export {api, getBlitzContext, useAuthenticatedBlitzContext, invoke, blitzAuthRpcMiddleware}
 
 export const cliConfig: BlitzCliConfig = {
   customTemplates: "src/templates",

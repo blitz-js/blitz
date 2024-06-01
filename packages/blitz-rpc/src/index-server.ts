@@ -361,9 +361,12 @@ export function rpcHandler(config: RpcConfig) {
 
 type Params = Record<string, unknown>
 
-type SessionContext = (request: Request) => Promise<Ctx["session"]>
+type AuthMiddleware = (request: Request) => Promise<Ctx["session"]>
+type Options = {
+  authMiddleware: AuthMiddleware
+}
 
-export function rpcAppHandler(config: RpcConfig, sessionContext?: SessionContext) {
+export function rpcAppHandler(config: RpcConfig, options?: Options) {
   async function handleRpcRequest(req: Request, context: {params: Params}) {
     const resolverMap = await getResolverMap()
     assert(resolverMap, "No query or mutation resolvers found")
@@ -406,7 +409,7 @@ export function rpcAppHandler(config: RpcConfig, sessionContext?: SessionContext
         rpcLogger.error(error.message)
         return new Response(JSON.stringify({result: null, error}), {status: 400})
       }
-      const session = await sessionContext?.(req)
+      const session = await options?.authMiddleware(req)
       try {
         const data = deserialize({
           json:
