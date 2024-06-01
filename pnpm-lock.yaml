@@ -62,16 +62,16 @@ importers:
   apps/next13:
     dependencies:
       "@blitzjs/auth":
-        specifier: workspace:*
+        specifier: 2.0.9
         version: link:../../packages/blitz-auth
       "@blitzjs/config":
-        specifier: workspace:*
+        specifier: 2.0.9
         version: link:../../packages/config
       "@blitzjs/next":
-        specifier: workspace:*
+        specifier: 2.0.9
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: workspace:*
+        specifier: 2.0.9
         version: link:../../packages/blitz-rpc
       "@hookform/error-message":
         specifier: 2.0.0
@@ -80,13 +80,13 @@ importers:
         specifier: 2.9.10
         version: 2.9.10(react-hook-form@7.39.1)
       "@prisma/client":
-        specifier: ^4.16.2
-        version: 4.16.2(prisma@4.16.2)
+        specifier: ^4.5.0
+        version: 4.6.1(prisma@4.6.1)
       "@tanstack/react-query":
         specifier: 4.0.10
         version: 4.0.10(react-dom@18.2.0)(react@18.2.0)
       blitz:
-        specifier: workspace:*
+        specifier: 2.0.9
         version: link:../../packages/blitz
       flatted:
         specifier: 3.2.7
@@ -95,8 +95,8 @@ importers:
         specifier: 14.3.0-canary.28
         version: 14.3.0-canary.28(@babel/core@7.12.10)(react-dom@18.2.0)(react@18.2.0)
       prisma:
-        specifier: ^4.16.2
-        version: 4.16.2
+        specifier: ^4.5.0
+        version: 4.6.1
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -5718,23 +5718,6 @@ packages:
       }
     dev: true
 
-  /@prisma/client@4.16.2(prisma@4.16.2):
-    resolution:
-      {
-        integrity: sha512-qCoEyxv1ZrQ4bKy39GnylE8Zq31IRmm8bNhNbZx7bF2cU5aiCCnSa93J2imF88MBjn7J9eUQneNxUQVJdl/rPQ==,
-      }
-    engines: {node: ">=14.17"}
-    requiresBuild: true
-    peerDependencies:
-      prisma: "*"
-    peerDependenciesMeta:
-      prisma:
-        optional: true
-    dependencies:
-      "@prisma/engines-version": 4.16.1-1.4bc8b6e1b66cb932731fb1bdbbc550d1e010de81
-      prisma: 4.16.2
-    dev: false
-
   /@prisma/client@4.6.1(prisma@4.6.1):
     resolution:
       {
@@ -5752,26 +5735,11 @@ packages:
       prisma: 4.6.1
     dev: false
 
-  /@prisma/engines-version@4.16.1-1.4bc8b6e1b66cb932731fb1bdbbc550d1e010de81:
-    resolution:
-      {
-        integrity: sha512-q617EUWfRIDTriWADZ4YiWRZXCa/WuhNgLTVd+HqWLffjMSPzyM5uOWoauX91wvQClSKZU4pzI4JJLQ9Kl62Qg==,
-      }
-    dev: false
-
   /@prisma/engines-version@4.6.1-3.694eea289a8462c80264df36757e4fdc129b1b32:
     resolution:
       {
         integrity: sha512-HUCmkXAU2jqp2O1RvNtbE+seLGLyJGEABZS/R38rZjSAafAy0WzBuHq+tbZMnD+b5OSCsTVtIPVcuvx1ySxcWQ==,
       }
-    dev: false
-
-  /@prisma/engines@4.16.2:
-    resolution:
-      {
-        integrity: sha512-vx1nxVvN4QeT/cepQce68deh/Turxy5Mr+4L4zClFuK1GlxN3+ivxfuv+ej/gvidWn1cE1uAhW7ALLNlYbRUAw==,
-      }
-    requiresBuild: true
     dev: false
 
   /@prisma/engines@4.6.1:
@@ -19195,18 +19163,6 @@ packages:
       pug: 3.0.3
       uuid: 8.3.2
     dev: true
-
-  /prisma@4.16.2:
-    resolution:
-      {
-        integrity: sha512-SYCsBvDf0/7XSJyf2cHTLjLeTLVXYfqp7pG5eEVafFLeT0u/hLFz/9W196nDRGUOo1JfPatAEb+uEnTQImQC1g==,
-      }
-    engines: {node: ">=14.17"}
-    hasBin: true
-    requiresBuild: true
-    dependencies:
-      "@prisma/engines": 4.16.2
-    dev: false
 
   /prisma@4.6.1:
     resolution:
