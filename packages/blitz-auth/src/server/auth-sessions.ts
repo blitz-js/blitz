@@ -974,7 +974,7 @@ async function createNewSession(
       anonymousSessionToken,
     }
   } else if (global.sessionConfig.method === "essential") {
-    console.log("Creating new session")
+    debug("Creating new session")
     const newPublicData: PublicData = {
       // This carries over any public data from the anonymous session
       ...(args.jwtPayload?.publicData || {}),
