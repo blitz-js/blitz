@@ -115,14 +115,13 @@ export const AuthServerPlugin = createServerPlugin((options: AuthPluginOptions) 
       IncomingMessage,
       ServerResponse & {blitzCtx: Ctx}
     > = async (req, res, next) => {
-      if (!res.blitzCtx?.session) {
-        const ctx = await getSession({
-          req,
-          res,
-        })
-        ;(ctx as any)?.session.setSession(res)
+      let session: Ctx["session"] = res.blitzCtx?.session
+      if (!session) {
+        session = await getSession(req, res)
       }
-      return next()
+      await next()
+      //@ts-ignore
+      session.setSession(res)
     }
 
     blitzSessionMiddleware.config = {
@@ -136,10 +135,17 @@ export const AuthServerPlugin = createServerPlugin((options: AuthPluginOptions) 
   }
 
   const blitzAuthAppContext = async (request: Request) => {
-    const ctx = await getSession({
-      req: request,
-    })
-    return ctx
+    const session = await getSession(request)
+    return session
+  }
+
+  const withBlitzAuth = (fn: (request: Request, params: any, ctx: Ctx) => Promise<Response> | Response) => {
+    return async (request: Request, context: Ctx) => {
+      const session = await getSession(request)
+      const response = await fn(request, context, {session})
+      ;(session as any).setSession(response)
+      return response
+    }
   }
 
   return {
@@ -148,6 +154,7 @@ export const AuthServerPlugin = createServerPlugin((options: AuthPluginOptions) 
       getBlitzContext,
       useAuthenticatedBlitzContext,
       blitzAuthAppContext,
+      withBlitzAuth,
     }),
   }
 })

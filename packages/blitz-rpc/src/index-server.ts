@@ -355,9 +355,7 @@ export function rpcHandler(config: RpcConfig) {
 
 type Params = Record<string, unknown>
 
-type SessionContext = (request: Request) => Promise<{
-  session: Ctx["session"]
-}>
+type SessionContext = (request: Request) => Promise< Ctx["session"]>
 
 export function rpcAppHandler(config: RpcConfig, sessionContext?: SessionContext) {
   async function handleRpcRequest(req: Request, context: {params: Params}) {
@@ -402,7 +400,7 @@ export function rpcAppHandler(config: RpcConfig, sessionContext?: SessionContext
         rpcLogger.error(error.message)
         return new Response(JSON.stringify({result: null, error}), {status: 400})
       }
-      const ctx = await sessionContext?.(req)
+      const session = await sessionContext?.(req)
       try {
         const data = deserialize({
           json:
@@ -421,7 +419,7 @@ export function rpcAppHandler(config: RpcConfig, sessionContext?: SessionContext
         rpcLogger.timer.initResolver()
         rpcLogger.preResolver(data)
 
-        const result = await resolver(data, ctx)
+        const result = await resolver(data, {session})
         rpcLogger.timer.resolverDuration()
         rpcLogger.postResolver(result)
 
@@ -438,24 +436,24 @@ export function rpcAppHandler(config: RpcConfig, sessionContext?: SessionContext
             },
           }),
         )
-        ;(ctx as any)?.session.setSession(response)
+        ;(session as any)?.setSession(response)
         return response
       } catch (error: any) {
         if (error._clearStack) {
           error.stack = ""
         }
 
-        config.onError?.(error, ctx)
+        config.onError?.(error, {session} as Ctx)
         rpcLogger.error(error)
 
         if (!error.statusCode) {
           error.statusCode = 500
         }
 
-        const formattedError = config.formatError?.(error, ctx) ?? error
+        const formattedError = config.formatError?.(error, {session} as Ctx) ?? error
         const serializedError = superjsonSerialize(formattedError)
 
-        return new Response(
+        const response =  new Response(
           JSON.stringify({
             result: null,
             error: serializedError.json,
@@ -464,6 +462,8 @@ export function rpcAppHandler(config: RpcConfig, sessionContext?: SessionContext
             },
           }),
         )
+        ;(session as any)?.setSession(response)
+        return response
       }
     } else {
       // Everything else is error

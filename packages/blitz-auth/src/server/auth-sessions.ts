@@ -43,6 +43,57 @@ import {Socket} from "net"
 import {UrlObject} from "url"
 import {formatWithValidation} from "../shared/url-utils"
 
+function splitCookiesString(cookiesString: string) {
+  if (!cookiesString) return []
+  var cookiesStrings = []
+  var pos = 0
+  var start
+  var ch
+  var lastComma
+  var nextStart
+  var cookiesSeparatorFound
+  function skipWhitespace() {
+    while (pos < cookiesString.length && /\s/.test(cookiesString.charAt(pos))) {
+      pos += 1
+    }
+    return pos < cookiesString.length
+  }
+  function notSpecialChar() {
+    ch = cookiesString.charAt(pos)
+    return ch !== "=" && ch !== ";" && ch !== ","
+  }
+  while (pos < cookiesString.length) {
+    start = pos
+    cookiesSeparatorFound = false
+    while (skipWhitespace()) {
+      ch = cookiesString.charAt(pos)
+      if (ch === ",") {
+        lastComma = pos
+        pos += 1
+        skipWhitespace()
+        nextStart = pos
+        while (pos < cookiesString.length && notSpecialChar()) {
+          pos += 1
+        }
+        if (pos < cookiesString.length && cookiesString.charAt(pos) === "=") {
+          cookiesSeparatorFound = true
+          pos = nextStart
+          cookiesStrings.push(cookiesString.substring(start, lastComma))
+          start = pos
+        } else {
+          pos = lastComma + 1
+        }
+      } else {
+        pos += 1
+      }
+    }
+    if (!cookiesSeparatorFound || pos >= cookiesString.length) {
+      cookiesStrings.push(cookiesString.substring(start, cookiesString.length))
+    }
+  }
+  return cookiesStrings
+}
+
 export function isLocalhost(
   props:
     | {
@@ -153,20 +204,6 @@ function ensureMiddlewareResponse(
   }
 }
 
-type GetSession =
-  | {
-      req: IncomingMessage
-      res: ServerResponse & {blitzCtx?: Ctx}
-      appDir?: boolean
-    }
-  | {
-      req: Request
-    }
-  | {
-      headers: Headers
-      method: string
-    }
-
 function convertRequestToHeader(req: IncomingMessage | Request): Headers {
   const headersFromRequest = req.headers
   if (headersFromRequest instanceof Headers) {
@@ -195,29 +232,21 @@ function getCookiesFromHeader(headers: Headers) {
   }
 }
 
-export async function getSession(props: GetSession): Promise<{session: SessionContext}> {
-  if ("res" in props) {
-    const {res} = props
+export async function getSession(
+  req: IncomingMessage | Request,
+  res?: ServerResponse,
+  appDir?: boolean,
+): Promise<SessionContext> {
+  const headers = convertRequestToHeader(req)
+  if (res && req instanceof IncomingMessage) {
     ensureMiddlewareResponse(res)
-
     debug("cookiePrefix", globalThis.__BLITZ_SESSION_COOKIE_PREFIX)
-
     if (res.blitzCtx.session) {
       debug("Returning existing session")
-      return {
-        session: res.blitzCtx.session,
-      }
+      return res.blitzCtx.session
     }
   }
-  let headers: Headers
-  let method: string | undefined
-  if ("req" in props) {
-    headers = convertRequestToHeader(props.req)
-    method = props.req.method
-  } else {
-    headers = props.headers
-    method = props.method
-  }
+  const method = req.method
   let sessionKernel = await getSessionKernel({headers, method})
 
   if (sessionKernel) {
@@ -228,20 +257,17 @@ export async function getSession(props: GetSession): Promise<{session: SessionCo
     sessionKernel = await createAnonymousSession({headers})
   }
 
-  const appDir = "appDir" in props ? Boolean(props.appDir) : false
-
   const sessionContext = makeProxyToPublicData(
-    new SessionContextClass(headers, sessionKernel, appDir, "res" in props ? props.res : undefined),
+    new SessionContextClass(headers, sessionKernel, !!appDir, res),
   )
   debug("New session context")
-  if ("res" in props) {
-    props.res.blitzCtx = {
+  if (res) {
+    ;(res as any).blitzCtx = {
       session: sessionContext,
     }
+    sessionContext.setSession(res)
   }
-  return {
-    session: sessionContext,
-  }
+  return sessionContext
 }
 
 interface RouteUrlObject extends Pick<UrlObject, "pathname" | "query" | "href"> {
@@ -268,7 +294,10 @@ export async function getBlitzContext(): Promise<Ctx> {
     if (csrfToken) {
       reqHeader[HEADER_CSRF] = csrfToken.value
     }
-    const {session} = await getSession({headers: new Headers(reqHeader), method: "POST"})
+    const session = await getSession({
+      headers: new Headers(reqHeader),
+      method: "POST",
+    } as Request)
     const ctx: Ctx = {
       session,
     }
@@ -433,12 +462,10 @@ export class SessionContextClass implements SessionContext {
       void NotSupportedMessage("setBrowserSession")
       return
     }
+    const cookieHeaders = this._headers.get("set-cookie")
     if (response instanceof ServerResponse) {
-      //@ts-ignore - we need to use the private method here
-      const cookieHeaders = this._headers.getSetCookie()
-      response.setHeader("Set-Cookie", cookieHeaders)
+      response.setHeader("Set-Cookie", splitCookiesString(cookieHeaders!))
     } else {
-      const cookieHeaders = this._headers.get("Set-Cookie")
       response.headers.set("Set-Cookie", cookieHeaders!)
     }
 
@@ -466,9 +493,8 @@ export class SessionContextClass implements SessionContext {
       jwtPayload: this._kernel.jwtPayload,
       anonymous: false,
     })
-    if (this._response) {
-      this.setSession(this._response)
-    }
+
+    if (this._response) this.setSession(this._response)
   }
 
   async $revoke() {
@@ -477,9 +503,7 @@ export class SessionContextClass implements SessionContext {
       return
     }
     this._kernel = await revokeSession(this._headers, this.$handle)
-    if (this._response) {
-      this.setSession(this._response)
-    }
+    if (this._response) this.setSession(this._response)
   }
 
   async $revokeAll() {
@@ -491,9 +515,6 @@ export class SessionContextClass implements SessionContext {
     await this.$revoke()
     // revoke other sessions for which there is no req/res object
     await revokeAllSessionsForUser(this.$publicData.userId)
-    if (this._response) {
-      this.setSession(this._response)
-    }
     return
   }
 
@@ -506,9 +527,7 @@ export class SessionContextClass implements SessionContext {
       await syncPubicDataFieldsForUserIfNeeded(this.userId, data)
     }
     this._kernel.publicData = await setPublicData(this._headers, this._kernel, data)
-    if (this._response) {
-      this.setSession(this._response)
-    }
+    if (this._response) this.setSession(this._response)
   }
 
   async $getPrivateData() {
@@ -521,9 +540,7 @@ export class SessionContextClass implements SessionContext {
       return Promise.resolve()
     }
     await setPrivateData(this._kernel, data)
-    if (this._response) {
-      this.setSession(this._response)
-    }
+    if (this._response) this.setSession(this._response)
   }
 }
 
@@ -661,46 +678,83 @@ const cookieOptions = (headers: Headers, expires: Date, httpOnly: boolean) => {
   }
 }
 
+function replaceOrAppendValueInSetCookieHeader(
+  headers: Headers,
+  cookieName: string,
+  newValue: string,
+): string {
+  const cookies = headers.get("set-cookie")
+  if (!cookies) return newValue
+  const cookiesAsArray = splitCookiesString(cookies!)
+  for (let i = 0; i < cookiesAsArray.length; i++) {
+    const cookie = cookiesAsArray[i]
+    if (cookie?.startsWith(cookieName)) {
+      cookiesAsArray[i] = newValue
+      return cookiesAsArray.join(", ")
+    } else {
+      if (i === cookiesAsArray.length - 1) {
+        cookiesAsArray.push(newValue)
+        return cookiesAsArray.join(", ")
+      }
+    }
+  }
+  return cookiesAsArray.filter(Boolean).join(", ")
+}
+
 const setSessionCookie = (headers: Headers, sessionToken: string, expiresAt: Date) => {
-  headers.append(
-    "Set-Cookie",
-    cookie.serialize(COOKIE_SESSION_TOKEN(), sessionToken, cookieOptions(headers, expiresAt, true)),
+  const sessionCookie = cookie.serialize(
+    COOKIE_SESSION_TOKEN(),
+    sessionToken,
+    cookieOptions(headers, expiresAt, true),
   )
+  const newCookies = replaceOrAppendValueInSetCookieHeader(
+    headers,
+    COOKIE_SESSION_TOKEN(),
+    sessionCookie,
+  )
+  headers.set("Set-Cookie", newCookies)
 }
 
 const setAnonymousSessionCookie = (headers: Headers, token: string, expiresAt: Date) => {
-  headers.delete(COOKIE_ANONYMOUS_SESSION_TOKEN())
-  headers.append(
-    "Set-Cookie",
-    cookie.serialize(
-      COOKIE_ANONYMOUS_SESSION_TOKEN(),
-      token,
-      cookieOptions(headers, expiresAt, true),
-    ),
+  const anonCookie = cookie.serialize(
+    COOKIE_ANONYMOUS_SESSION_TOKEN(),
+    token,
+    cookieOptions(headers, expiresAt, true),
   )
+  const newCookies = replaceOrAppendValueInSetCookieHeader(
+    headers,
+    COOKIE_ANONYMOUS_SESSION_TOKEN(),
+    anonCookie,
+  )
+  headers.set("Set-Cookie", newCookies)
 }
 
 const setCSRFCookie = (headers: Headers, antiCSRFToken: string, expiresAt: Date) => {
   debug("setCSRFCookie", antiCSRFToken)
   assert(antiCSRFToken !== undefined, "Internal error: antiCSRFToken is being set to undefined")
-  headers.delete(COOKIE_CSRF_TOKEN())
-  headers.append(
-    "Set-Cookie",
-    cookie.serialize(COOKIE_CSRF_TOKEN(), antiCSRFToken, cookieOptions(headers, expiresAt, false)),
+  const csrfCookie = cookie.serialize(
+    COOKIE_CSRF_TOKEN(),
+    antiCSRFToken,
+    cookieOptions(headers, expiresAt, false),
   )
+
+  const newCookies = replaceOrAppendValueInSetCookieHeader(headers, COOKIE_CSRF_TOKEN(), csrfCookie)
+  headers.set("Set-Cookie", newCookies)
 }
 
 const setPublicDataCookie = (headers: Headers, publicDataToken: string, expiresAt: Date) => {
   headers.set(HEADER_PUBLIC_DATA_TOKEN, "updated")
-  headers.delete(COOKIE_PUBLIC_DATA_TOKEN())
-  headers.append(
-    "Set-Cookie",
-    cookie.serialize(
-      COOKIE_PUBLIC_DATA_TOKEN(),
-      publicDataToken,
-      cookieOptions(headers, expiresAt, false),
-    ),
+  const publicDataCookie = cookie.serialize(
+    COOKIE_PUBLIC_DATA_TOKEN(),
+    publicDataToken,
+    cookieOptions(headers, expiresAt, false),
   )
+  const newCookies = replaceOrAppendValueInSetCookieHeader(
+    headers,
+    COOKIE_PUBLIC_DATA_TOKEN(),
+    publicDataCookie,
+  )
+  headers.set("Set-Cookie", newCookies)
 }
 
 // --------------------------------
@@ -962,6 +1016,7 @@ async function createNewSession(
     })
 
     setSessionCookie(args.headers, sessionToken, expiresAt)
+    debug("Session created", {handle, publicData: newPublicData, expiresAt})
     setCSRFCookie(args.headers, antiCSRFToken, expiresAt)
     setPublicDataCookie(args.headers, publicDataToken, expiresAt)
     // Clear the anonymous session cookie in case it was previously set
