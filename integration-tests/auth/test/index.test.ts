@@ -97,7 +97,6 @@ const runTests = (mode?: string) => {
         expect(res.headers.get(HEADER_CSRF)).not.toBe(undefined)
 
         const cookieHeader = res.headers.get("Set-Cookie")
-        console.log("cookieHeader", cookieHeader)
         const cookie = (name) => readCookie(cookieHeader, name)
         expect(cookieHeader).not.toBe(undefined)
 

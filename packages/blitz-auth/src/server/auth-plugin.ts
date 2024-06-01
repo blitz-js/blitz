@@ -115,12 +115,10 @@ export const AuthServerPlugin = createServerPlugin((options: AuthPluginOptions) 
       IncomingMessage,
       ServerResponse & {blitzCtx: Ctx}
     > = async (req, res, next) => {
-      let session: Ctx["session"] = res.blitzCtx?.session
-      if (!session) {
-        session = await getSession(req, res)
+      if (!res.blitzCtx?.session) {
+        await getSession(req, res)
       }
-      await next()
-      ;(session as any).setSession(res)
+      return next()
     }
 
     blitzSessionMiddleware.config = {
