@@ -1,34 +1,22 @@
-import {api} from "../../../src/blitz-server"
+import {withBlitzAuth} from "../../../src/blitz-server"
 import prisma from "../../../db/index"
-import {SecurePassword} from "@blitzjs/auth/secure-password"
 import {Role} from "../../../types"
-import {getSession} from "@blitzjs/auth"
 
 export const authenticateUser = async (email: string, password: string) => {
   const user = await prisma.user.findFirst({where: {email}})
 
   if (!user) throw new Error("Authentication Error")
-
-  const result = await SecurePassword.verify(user.hashedPassword, password)
-
-  if (result === SecurePassword.VALID_NEEDS_REHASH) {
-    // Upgrade hashed password with a more secure hash
-    const improvedHash = await SecurePassword.hash(password)
-    await prisma.user.update({where: {id: user.id}, data: {hashedPassword: improvedHash}})
-  }
+  await prisma.user.update({where: {id: user.id}, data: {hashedPassword: password}})
 
   const {hashedPassword, ...rest} = user
   return rest
 }
 
-export const GET = async (request: Request, context) => {
-  const ctx = await getSession({
-    req: request,
-  })
-
+export const POST = withBlitzAuth(async (request: Request, context, ctx) => {
+  const {searchParams} = new URL(request.url)
   const user = await authenticateUser(
-    context.params.email as string,
-    context.params.password as string,
+    searchParams.get("email") as string,
+    searchParams.get("password") as string,
   )
 
   await ctx.session.$create({
@@ -36,8 +24,8 @@ export const GET = async (request: Request, context) => {
     role: user.role as Role,
   })
 
-  const response = new Response(
-    JSON.stringify({email: context.params.email, userId: ctx.session.userId}),
+  return new Response(
+    JSON.stringify({email: searchParams.get("email"), userId: ctx.session.userId}),
     {
       status: 200,
       headers: {
@@ -45,8 +33,4 @@ export const GET = async (request: Request, context) => {
       },
     },
   )
-
-  ;(ctx.session as any).setSession(response)
-
-  return response
-}
+})

@@ -1,19 +1,13 @@
-import {getSession} from "@blitzjs/auth"
+import {withBlitzAuth} from "../../../src/blitz-server"
 
-export const GET = async (request: Request) => {
-  const ctx = await getSession({
-    req: request,
-  })
-  ctx.session.$revoke()
+export const POST = withBlitzAuth(async (_request, _params, ctx) => {
+  const session = ctx.session
+  await session.$revoke()
 
-  const response = new Response(
+  return new Response(
     JSON.stringify({
-      userId: ctx.session.userId,
+      userId: session.userId,
     }),
     {status: 200},
   )
-
-  ;(ctx.session as any).setSession(response)
-
-  return response
-}
+})

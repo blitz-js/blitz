@@ -40,7 +40,7 @@ import {withSuperJsonProps} from "./superjson"
 import {ParsedUrlQuery} from "querystring"
 import {PreviewData} from "next/types"
 import {resolveHref} from "next/dist/client/resolve-href"
-import fs from "fs"
+import fs from "fs-extra"
 import path from "path"
 import CopyPlugin from "copy-webpack-plugin"
 
@@ -242,6 +242,8 @@ export interface BlitzConfig extends NextConfig {
     }
   }
 }
+
+const pwd = __dirname.split(path.sep)
 
 export function withBlitz(nextConfig: BlitzConfig = {}): NextConfig {
   if (

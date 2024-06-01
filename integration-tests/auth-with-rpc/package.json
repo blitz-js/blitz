@@ -26,7 +26,7 @@
     "@prisma/client": "4.6.1",
     "blitz": "2.0.9",
     "delay": "5.0.0",
-    "next": "canary",
+    "next": "14.3.0-canary.28",
     "prisma": "4.6.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",

@@ -99,8 +99,8 @@ const branded = (msg: string) => {
  * @param {string} msg
  */
 const clearLine = (msg?: string) => {
-  readline.clearLine(process.stdout, 0)
-  readline.cursorTo(process.stdout, 0)
+  readline.clearLine(process.stdout as any, 0)
+  readline.cursorTo(process.stdout as any, 0)
   msg && process.stdout.write(msg)
 }
 

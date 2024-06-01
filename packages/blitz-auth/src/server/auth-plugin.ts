@@ -120,8 +120,7 @@ export const AuthServerPlugin = createServerPlugin((options: AuthPluginOptions) 
         session = await getSession(req, res)
       }
       await next()
-      //@ts-ignore
-      session.setSession(res)
+      ;(session as any).setSession(res)
     }
 
     blitzSessionMiddleware.config = {
@@ -139,7 +138,9 @@ export const AuthServerPlugin = createServerPlugin((options: AuthPluginOptions) 
     return session
   }
 
-  const withBlitzAuth = (fn: (request: Request, params: any, ctx: Ctx) => Promise<Response> | Response) => {
+  const withBlitzAuth = (
+    fn: (request: Request, params: any, ctx: Ctx) => Promise<Response> | Response,
+  ) => {
     return async (request: Request, context: Ctx) => {
       const session = await getSession(request)
       const response = await fn(request, context, {session})

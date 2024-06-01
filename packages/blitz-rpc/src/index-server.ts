@@ -172,6 +172,12 @@ export function installTurboConfig() {
           as: "*.ts",
         },
       },
+      "**/*...blitz*/route.{jsx,tsx,js,ts}": {
+        default: {
+          loaders: [{loader: loaderServer, options: {}}],
+          as: "*.ts",
+        },
+      },
       "**/{queries,mutations}/**": {
         browser: {
           loaders: [
@@ -303,7 +309,7 @@ export function rpcHandler(config: RpcConfig) {
 
         rpcLogger.timer.initNextJsSerialization()
         ;(res as any).blitzResult = result
-        ;(ctx as any)?.session.setSession(res)
+        ;(ctx as any)?.session?.setSession(res)
         res.json({
           result: serializedResult.json,
           error: null,
@@ -333,7 +339,7 @@ export function rpcHandler(config: RpcConfig) {
         const formattedError = config.formatError?.(error, ctx) ?? error
         const serializedError = superjsonSerialize(formattedError)
 
-        ;(ctx as any)?.session.setSession(res)
+        ;(ctx as any)?.session?.setSession(res)
 
         res.json({
           result: null,
@@ -355,7 +361,7 @@ export function rpcHandler(config: RpcConfig) {
 
 type Params = Record<string, unknown>
 
-type SessionContext = (request: Request) => Promise< Ctx["session"]>
+type SessionContext = (request: Request) => Promise<Ctx["session"]>
 
 export function rpcAppHandler(config: RpcConfig, sessionContext?: SessionContext) {
   async function handleRpcRequest(req: Request, context: {params: Params}) {
@@ -453,7 +459,7 @@ export function rpcAppHandler(config: RpcConfig, sessionContext?: SessionContext
         const formattedError = config.formatError?.(error, {session} as Ctx) ?? error
         const serializedError = superjsonSerialize(formattedError)
 
-        const response =  new Response(
+        const response = new Response(
           JSON.stringify({
             result: null,
             error: serializedError.json,
