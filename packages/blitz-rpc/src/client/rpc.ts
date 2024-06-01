@@ -81,74 +81,76 @@ export function __internal_buildRpcClient({
 
     const {beforeHttpRequest, beforeHttpResponse} = globalThis.__BLITZ_MIDDLEWARE_HOOKS
 
-    const promise = fetch(
-      routePathURL,
-      beforeHttpRequest({
-        method: httpMethod,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        redirect: "follow",
-        body:
-          httpMethod === "POST"
-            ? JSON.stringify({
-                params: serialized.json,
-                meta: {
-                  params: serialized.meta,
-                },
-              })
-            : undefined,
-        signal,
-      }),
-    ).then(async (response) => {
-      debug("Received request for", routePath)
-      response = beforeHttpResponse(response)
-      if (!response.ok) {
-        const error = new Error(response.statusText)
-        ;(error as any).statusCode = response.status
-        ;(error as any).path = routePath
-        error.stack = null!
-        throw error
-      } else {
-        let payload
-        try {
-          payload = await response.json()
-        } catch (error) {
-          const err = new Error(`Failed to parse json from ${routePath}`)
-          err.stack = null!
-          throw err
-        }
-        if (payload.error) {
-          let error = deserialize({
-            json: payload.error,
-            meta: payload.meta?.error,
-          }) as any
-          const rpcEvent = new CustomEvent("blitz:rpc-error", {
-            detail: error,
-          })
-          document.dispatchEvent(rpcEvent)
-          const prismaError = error.message.match(/invalid.*prisma.*invocation/i)
-          if (prismaError && !("code" in error)) {
-            error = new Error(prismaError[0])
-            error.statusCode = 500
-          }
-          error.stack = null
+    const promise = window
+      .fetch(
+        routePathURL,
+        beforeHttpRequest({
+          method: httpMethod,
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          redirect: "follow",
+          body:
+            httpMethod === "POST"
+              ? JSON.stringify({
+                  params: serialized.json,
+                  meta: {
+                    params: serialized.meta,
+                  },
+                })
+              : undefined,
+          signal,
+        }),
+      )
+      .then(async (response) => {
+        debug("Received request for", routePath)
+        response = beforeHttpResponse(response)
+        if (!response.ok) {
+          const error = new Error(response.statusText)
+          ;(error as any).statusCode = response.status
+          ;(error as any).path = routePath
+          error.stack = null!
           throw error
         } else {
-          const data = deserialize({
-            json: payload.result,
-            meta: payload.meta?.result,
-          })
-          if (!opts.fromQueryHook) {
-            const {getQueryKeyFromUrlAndParams} = await import("../query/utils")
-            const queryKey = getQueryKeyFromUrlAndParams(routePath, params)
-            globalThis.queryClient.setQueryData(queryKey, data)
+          let payload
+          try {
+            payload = await response.json()
+          } catch (error) {
+            const err = new Error(`Failed to parse json from ${routePath}`)
+            err.stack = null!
+            throw err
           }
-          return data
+          if (payload.error) {
+            let error = deserialize({
+              json: payload.error,
+              meta: payload.meta?.error,
+            }) as any
+            const rpcEvent = new CustomEvent("blitz:rpc-error", {
+              detail: error,
+            })
+            document.dispatchEvent(rpcEvent)
+            const prismaError = error.message.match(/invalid.*prisma.*invocation/i)
+            if (prismaError && !("code" in error)) {
+              error = new Error(prismaError[0])
+              error.statusCode = 500
+            }
+            error.stack = null
+            throw error
+          } else {
+            const data = deserialize({
+              json: payload.result,
+              meta: payload.meta?.result,
+            })
+            if (!opts.fromQueryHook) {
+              const {getQueryKeyFromUrlAndParams} = await import("../query/utils")
+              const queryKey = getQueryKeyFromUrlAndParams(routePath, params)
+              globalThis.queryClient.setQueryData(queryKey, data)
+            }
+            return data
+          }
         }
-      }
-    })
+      })
 
     return promise
   }
