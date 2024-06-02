@@ -1,5 +1,4 @@
 ---
-"toolkit-app": patch
 "@blitzjs/auth": patch
 "blitz": patch
 ---
