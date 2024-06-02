@@ -8,9 +8,9 @@ overrides:
   "@types/mime": 3.0.4
 
 patchedDependencies:
-  next-auth@4.18.7:
-    hash: ygacwffmvwfom5hjylvkeei4s4
-    path: patches/next-auth@4.18.7.patch
+  next-auth@4.24.7:
+    hash: xxwv3g3ul7bnzqsfasefw3kyq4
+    path: patches/next-auth@4.24.7.patch
 
 importers:
   .:
@@ -161,8 +161,8 @@ importers:
         specifier: canary
         version: 14.2.0-canary.51(@babel/core@7.20.2)(react-dom@18.2.0)(react@18.2.0)
       next-auth:
-        specifier: 4.18.7
-        version: 4.18.7(patch_hash=ygacwffmvwfom5hjylvkeei4s4)(next@14.2.0-canary.51)(react-dom@18.2.0)(react@18.2.0)
+        specifier: 4.24.7
+        version: 4.24.7(patch_hash=xxwv3g3ul7bnzqsfasefw3kyq4)(next@14.2.0-canary.51)(react-dom@18.2.0)(react@18.2.0)
       prisma:
         specifier: 4.6.1
         version: 4.6.1
@@ -1620,8 +1620,8 @@ importers:
         specifier: canary
         version: 14.2.0-canary.51(@babel/core@7.20.2)(react-dom@18.2.0)(react@18.2.0)
       next-auth:
-        specifier: 4.18.7
-        version: 4.18.7(patch_hash=ygacwffmvwfom5hjylvkeei4s4)(next@14.2.0-canary.51)(react-dom@18.2.0)(react@18.2.0)
+        specifier: 4.24.7
+        version: 4.24.7(patch_hash=xxwv3g3ul7bnzqsfasefw3kyq4)(next@14.2.0-canary.51)(react-dom@18.2.0)(react@18.2.0)
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -5685,7 +5685,6 @@ packages:
     engines: {node: ">=6.9.0"}
     dependencies:
       regenerator-runtime: 0.14.0
-    dev: true
 
   /@babel/standalone@7.18.9:
     resolution:
@@ -10110,7 +10109,7 @@ packages:
     peerDependencies:
       "@babel/core": ^7.0.0
     dependencies:
-      "@babel/core": 7.12.10(supports-color@8.1.1)
+      "@babel/core": 7.12.10
       "@babel/plugin-syntax-async-generators": 7.8.4(@babel/core@7.12.10)
       "@babel/plugin-syntax-bigint": 7.8.3(@babel/core@7.12.10)
       "@babel/plugin-syntax-class-properties": 7.12.13(@babel/core@7.12.10)
@@ -17513,6 +17512,13 @@ packages:
       {
         integrity: sha512-njj0VL2TsIxCtgzhO+9RRobBvws4oYyCM8TpvoUQwl/MbIM3NFJRR9+e6x0sS5xXaP1t6OCBkaBME98OV9zU5A==,
       }
+    dev: false
+
+  /jose@4.15.5:
+    resolution:
+      {
+        integrity: sha512-jc7BFxgKPKi94uOvEmzlSWFFe2+vASyXaKUpdQKatWAESU2MWjDfFf0fdfc83CDKcA5QecabZeNLyfhe3yKNkg==,
+      }
 
   /joycon@3.1.1:
     resolution:
@@ -18988,14 +18994,13 @@ packages:
       }
     dev: false
 
-  /next-auth@4.18.7(patch_hash=ygacwffmvwfom5hjylvkeei4s4)(next@14.2.0-canary.51)(react-dom@18.2.0)(react@18.2.0):
+  /next-auth@4.24.7(patch_hash=xxwv3g3ul7bnzqsfasefw3kyq4)(next@14.2.0-canary.51)(react-dom@18.2.0)(react@18.2.0):
     resolution:
       {
-        integrity: sha512-kR3s1JVPMaDuSAlFxcGyv7Ec3fdE6za71r1F77IOII5zJmW2wfkIA2xj223fM0D20ip2pzFpHfk/qN4L6l5XMA==,
+        integrity: sha512-iChjE8ov/1K/z98gdKbn2Jw+2vLgJtVV39X+rCP5SGnVQuco7QOr19FRNGMIrD8d3LYhHWV9j9sKLzq1aDWWQQ==,
       }
-    engines: {node: ^12.19.0 || ^14.15.0 || ^16.13.0 || ^18.12.0}
     peerDependencies:
-      next: ^12.2.5 || ^13
+      next: ^12.2.5 || ^13 || ^14
       nodemailer: ^6.6.5
       react: ^17.0.2 || ^18
       react-dom: ^17.0.2 || ^18
@@ -19003,13 +19008,13 @@ packages:
       nodemailer:
         optional: true
     dependencies:
-      "@babel/runtime": 7.18.3
+      "@babel/runtime": 7.23.2
       "@panva/hkdf": 1.0.2
       cookie: 0.5.0
-      jose: 4.11.2
+      jose: 4.15.5
       next: 14.2.0-canary.51(@babel/core@7.20.2)(react-dom@18.2.0)(react@18.2.0)
       oauth: 0.9.15
-      openid-client: 5.2.1
+      openid-client: 5.6.5
       preact: 10.11.3
       preact-render-to-string: 5.2.6(preact@10.11.3)
       react: 18.2.0
@@ -19545,6 +19550,14 @@ packages:
         integrity: sha512-EvoOtz6FIEBzE+9q253HsLCVRiK/0doEJ2HCvvqMQb3dHZrP3WlJKYtJ55CRTw4jmYomzH4wkPuCj/I3ZvpKxQ==,
       }
     engines: {node: ^10.13.0 || >=12.0.0}
+    dev: false
+
+  /oidc-token-hash@5.0.3:
+    resolution:
+      {
+        integrity: sha512-IF4PcGgzAr6XXSff26Sk/+P4KZFJVuHAJZj3wgO3vX2bMdNVp/QXTP3P7CEm9V1IdG8lDLY3HhiqpsE/nOwpPw==,
+      }
+    engines: {node: ^10.13.0 || >=12.0.0}
 
   /on-finished@2.3.0:
     resolution:
@@ -19642,6 +19655,18 @@ packages:
       lru-cache: 6.0.0
       object-hash: 2.2.0
       oidc-token-hash: 5.0.1
+    dev: false
+
+  /openid-client@5.6.5:
+    resolution:
+      {
+        integrity: sha512-5P4qO9nGJzB5PI0LFlhj4Dzg3m4odt0qsJTfyEtZyOlkgpILwEioOhVVJOrS1iVH494S4Ee5OCjjg6Bf5WOj3w==,
+      }
+    dependencies:
+      jose: 4.15.5
+      lru-cache: 6.0.0
+      object-hash: 2.2.0
+      oidc-token-hash: 5.0.3
 
   /optionator@0.8.3:
     resolution:
@@ -21107,7 +21132,6 @@ packages:
       {
         integrity: sha512-srw17NI0TUWHuGa5CFGGmhfNIeja30WMBfbslPNhf6JrqQlLN5gcrvig1oqPxiVaXb0oW0XRKtH6Nngs5lKCIA==,
       }
-    dev: true
 
   /regenerator-transform@0.15.0:
     resolution:
