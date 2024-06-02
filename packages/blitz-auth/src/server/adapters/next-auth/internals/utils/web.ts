@@ -76,7 +76,7 @@ export async function toInternalRequest(req: Request): Promise<
 
     const headers = Object.fromEntries(req.headers)
     const detectOrigin = (host?: string, proto?: string) => {
-      if (process.env.VERCEL ?? process.env.AUTH_TRUST_HOST)
+      if (process.env.VERCEL ?? process.env.FLIGHTCONTROL ?? process.env.AUTH_TRUST_HOST)
         return `${proto === "http" ? "http" : "https"}://${host}`
 
       return process.env.NEXTAUTH_URL
