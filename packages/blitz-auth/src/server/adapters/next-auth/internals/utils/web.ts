@@ -74,16 +74,28 @@ export async function toInternalRequest(req: Request): Promise<
       providerId = providerIdOrAction
     }
 
+    const headers = Object.fromEntries(req.headers)
+    const detectOrigin = (host?: string, proto?: string) => {
+      if (process.env.VERCEL ?? process.env.FLIGHTCONTROL ?? process.env.AUTH_TRUST_HOST)
+        return `${proto === "http" ? "http" : "https"}://${host}`
+
+      return process.env.NEXTAUTH_URL
+    }
+
     return {
       url,
       action,
       providerId,
       method: req.method ?? "GET",
-      headers: Object.fromEntries(req.headers),
+      headers,
       body: req.body ? await readJSONBody(req.body) : undefined,
       cookies: parseCookie(req.headers.get("cookie") ?? "") ?? {},
       error: url.searchParams.get("error") ?? undefined,
       query: Object.fromEntries(url.searchParams),
+      origin: detectOrigin(
+        headers["x-forwarded-host"] ?? headers.host,
+        headers["x-forwarded-proto"],
+      ),
     }
   } catch (error) {
     return error as Error
