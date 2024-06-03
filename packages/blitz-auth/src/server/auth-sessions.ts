@@ -1,6 +1,6 @@
 import {fromBase64, toBase64} from "b64-lite"
 import cookie, {parse} from "cookie"
-import {IncomingMessage, ServerResponse} from "http"
+import type {IncomingMessage, ServerResponse} from "http"
 import jsonwebtoken from "jsonwebtoken"
 import {
   assert,
@@ -96,10 +96,10 @@ function splitCookiesString(cookiesString: string) {
 
 export function isLocalhost(req: IncomingMessage | Request): boolean {
   let host: string | undefined
-  if (req instanceof IncomingMessage) {
-    host = req.headers.host || ""
-  } else {
+  if (req instanceof Request) {
     host = req.headers.get("host") || ""
+  } else {
+    host = req.headers.host || ""
   }
   let localhost = false
   if (host) {
@@ -237,7 +237,7 @@ export async function getSession(
   appDir?: boolean,
 ): Promise<SessionContext> {
   const headers = convertRequestToHeader(req)
-  if (res && req instanceof IncomingMessage) {
+  if (res) {
     ensureMiddlewareResponse(res)
     debug("cookiePrefix", globalThis.__BLITZ_SESSION_COOKIE_PREFIX)
     if (res.blitzCtx.session) {
@@ -462,19 +462,19 @@ export class SessionContextClass implements SessionContext {
       return
     }
     const cookieHeaders = this._headers.get("set-cookie")
-    if (response instanceof ServerResponse) {
-      response.setHeader("Set-Cookie", splitCookiesString(cookieHeaders!))
-    } else {
+    if (response instanceof Response) {
       response.headers.set("Set-Cookie", cookieHeaders!)
+    } else {
+      response.setHeader("Set-Cookie", splitCookiesString(cookieHeaders!))
     }
 
     const headers = this._headers.entries()
     for (const [key, value] of headers) {
       if (SessionContextClass.headersToIncludeInResponse.includes(key)) {
-        if (response instanceof ServerResponse) {
-          response.setHeader(key, value)
-        } else {
+        if (response instanceof Response) {
           response.headers.set(key, value)
+        } else {
+          response.setHeader(key, value)
         }
       }
     }
