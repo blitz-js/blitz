@@ -225,6 +225,7 @@ function getCookiesFromHeader(headers: Headers) {
 }
 
 export async function getSession(req: Request): Promise<SessionContext>
+export async function getSession(req: IncomingMessage, res: ServerResponse): Promise<SessionContext>
 export async function getSession(
   req: IncomingMessage,
   res: ServerResponse,
