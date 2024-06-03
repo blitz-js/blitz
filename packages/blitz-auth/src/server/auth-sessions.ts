@@ -94,20 +94,12 @@ function splitCookiesString(cookiesString: string) {
   return cookiesStrings
 }
 
-export function isLocalhost(
-  props:
-    | {
-        req: IncomingMessage
-      }
-    | {
-        headers: Headers
-      },
-): boolean {
+export function isLocalhost(req: IncomingMessage | Request): boolean {
   let host: string | undefined
-  if ("req" in props) {
-    host = props.req.headers.host || ""
+  if (req instanceof IncomingMessage) {
+    host = req.headers.host || ""
   } else {
-    host = props.headers.get("host") || ""
+    host = req.headers.get("host") || ""
   }
   let localhost = false
   if (host) {
@@ -232,6 +224,12 @@ function getCookiesFromHeader(headers: Headers) {
   }
 }
 
+export async function getSession(req: Request): Promise<SessionContext>
+export async function getSession(
+  req: IncomingMessage,
+  res: ServerResponse,
+  appDir: boolean,
+): Promise<SessionContext>
 export async function getSession(
   req: IncomingMessage | Request,
   res?: ServerResponse,
@@ -670,7 +668,7 @@ const cookieOptions = (headers: Headers, expires: Date, httpOnly: boolean) => {
       global.sessionConfig.secureCookies &&
       !isLocalhost({
         headers,
-      }),
+      } as Request),
     sameSite: global.sessionConfig.sameSite,
     domain: global.sessionConfig.domain,
     expires: new Date(expires),

@@ -66,11 +66,7 @@ export function NextAuthAdapter<P extends Provider[]>(
 
     const cookieSessionMiddleware = cookieSession({
       secret: process.env.SESSION_SECRET_KEY || "default-dev-secret",
-      secure:
-        process.env.NODE_ENV === "production" &&
-        !isLocalhost({
-          req,
-        }),
+      secure: process.env.NODE_ENV === "production" && !isLocalhost(req),
     })
 
     const middleware: RequestMiddleware<ApiHandlerIncomingMessage, MiddlewareResponse<Ctx>>[] = [
