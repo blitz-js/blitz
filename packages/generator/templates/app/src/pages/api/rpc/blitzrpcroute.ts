@@ -3,4 +3,19 @@
 import { rpcHandler } from "@blitzjs/rpc"
 import { api } from "src/app/blitz-server"
 
-export default api(rpcHandler({ onError: (error, ctx) => console.log(error) }))
+const getBlitzLogLevel = (): "info" | "debug" | undefined => {
+  const requestedLevel = process.env.BLITZ_LOG_DISABLE_LEVEL
+  if (requestedLevel === "info" || requestedLevel === "debug") {
+    return requestedLevel
+  }
+  return undefined
+}
+
+export default api(
+  rpcHandler({
+    onError: (error, ctx) => console.log(error),
+    logging: {
+      disablelevel: getBlitzLogLevel(),
+    },
+  })
+)
