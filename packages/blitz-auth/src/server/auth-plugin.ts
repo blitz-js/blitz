@@ -136,10 +136,10 @@ export const AuthServerPlugin = createServerPlugin((options: AuthPluginOptions) 
   function withBlitzAuth(fn: Handler): Response | Promise<Response>
   function withBlitzAuth<T extends {[method: string]: Handler}>(fn: T): T
   function withBlitzAuth<T extends {[method: string]: Handler}>(fn: Handler | T): unknown {
-    return async (request: Request, context: Ctx) => {
+    return async (request: Request, params: unknown) => {
       const session = await getSession(request)
       if (typeof fn === "function") {
-        const response = await fn(request, context, {session})
+        const response = await fn(request, params, {session})
         ;(session as any).setSession(response)
         return response
       }
