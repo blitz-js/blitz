@@ -5,7 +5,7 @@ import {BlitzLogger} from "blitz"
 import {RpcServerPlugin} from "@blitzjs/rpc"
 import {authConfig} from "./blitz-auth-config"
 
-const {api, getBlitzContext, useAuthenticatedBlitzContext, invoke} = setupBlitzServer({
+export const {api, getBlitzContext, useAuthenticatedBlitzContext, invoke, withBlitzAuth} = setupBlitzServer({
   plugins: [
     AuthServerPlugin({
       ...authConfig,
@@ -16,5 +16,3 @@ const {api, getBlitzContext, useAuthenticatedBlitzContext, invoke} = setupBlitzS
   ],
   logger: BlitzLogger({}),
 })
-
-export {api, getBlitzContext, useAuthenticatedBlitzContext, invoke}

@@ -5,7 +5,7 @@ import {simpleRolesIsAuthorized} from "@blitzjs/auth"
 import {BlitzLogger} from "blitz"
 import {RpcServerPlugin} from "@blitzjs/rpc"
 
-export const {api, getBlitzContext, blitzAuthRpcMiddleware, withBlitzAuth} = setupBlitzServer({
+export const {api, getBlitzContext, withBlitzAuth} = setupBlitzServer({
   plugins: [
     AuthServerPlugin({
       cookiePrefix: "auth-tests-cookie-prefix",
