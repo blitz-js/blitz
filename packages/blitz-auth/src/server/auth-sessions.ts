@@ -411,10 +411,6 @@ export class SessionContextClass implements SessionContext {
     this._response = response
   }
 
-  $headers() {
-    return this._headers
-  }
-
   $antiCSRFToken() {
     return this._kernel.antiCSRFToken
   }
@@ -456,7 +452,10 @@ export class SessionContextClass implements SessionContext {
     return this.$isAuthorized(...args)
   }
 
-  setSession(response: Response | ServerResponse) {
+  /**
+   * @internal
+   */
+  setSession(response: Response | ServerResponse): void {
     if (this._appDir) {
       void NotSupportedMessage("setBrowserSession")
       return

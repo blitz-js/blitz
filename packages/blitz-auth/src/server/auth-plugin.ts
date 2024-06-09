@@ -131,24 +131,28 @@ export const AuthServerPlugin = createServerPlugin((options: AuthPluginOptions) 
     globalThis.__BLITZ_GET_RSC_CONTEXT = getBlitzContext
   }
 
-  type Handler = (request: Request, params: unknown, ctx: Ctx) => Promise<Response> | Response
+  type Handler = <T extends {params: Record<string, unknown>}>(
+    request: Request,
+    input: T,
+    ctx: Ctx,
+  ) => Promise<Response> | Response
 
   function withBlitzAuth(fn: Handler): Response | Promise<Response>
   function withBlitzAuth<T extends {[method: string]: Handler}>(fn: T): T
   function withBlitzAuth<T extends {[method: string]: Handler}>(fn: Handler | T): unknown {
-    return async (request: Request, params: unknown) => {
+    return async (request: Request, input: {params: Record<string, unknown>}) => {
       const session = await getSession(request)
       if (typeof fn === "function") {
-        const response = await fn(request, params, {session})
-        ;(session as any).setSession(response)
+        const response = await fn(request, input, {session})
+        session.setSession(response)
         return response
       }
       const wrappedFn = Object.fromEntries(
         Object.entries(fn).map(([method, handler]) => [
           method,
           async (request: Request, params: unknown) => {
-            const response = await handler(request, params, {session})
-            ;(session as any).setSession(response)
+            const response = await handler(request, input, {session})
+            session.setSession(response)
             return response
           },
         ]),
