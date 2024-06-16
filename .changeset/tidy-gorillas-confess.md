@@ -28,20 +28,16 @@ feat: New Blitz RPC handler meant to with the next.js app router `route.ts` file
 
 Usage using the new `rpcAppHandler` function
 
-``ts
-
+```ts
 // app/api/rpc/[[...blitz]]/route.ts
 import {rpcAppHandler} from "@blitzjs/rpc"
 import {withBlitzAuth} from "app/blitz-server"
 
 // Usage with blitz auth
-export const {GET, POST, HEAD} = withBlitzAuth(rpcAppHandler(
-{},
-))
+export const {GET, POST, HEAD} = withBlitzAuth(rpcAppHandler({}))
 
 // Standalone usage
-export const {GET, POST, HEAD} = rpcAppHandler(
-{},
-)
+export const {GET, POST, HEAD} = rpcAppHandler({})
+```
 
 chore: Update the app directory starter to these latest changes
