@@ -40,4 +40,4 @@ export const {GET, POST, HEAD} = withBlitzAuth(rpcAppHandler({}))
 export const {GET, POST, HEAD} = rpcAppHandler({})
 ```
 
-chore: Update the app directory starter to these latest changes
+chore: Update the app directory starter 
