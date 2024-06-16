@@ -131,11 +131,6 @@ export const AuthServerPlugin = createServerPlugin((options: AuthPluginOptions) 
     globalThis.__BLITZ_GET_RSC_CONTEXT = getBlitzContext
   }
 
-  const blitzAuthRpcMiddleware = async (request: Request) => {
-    const session = await getSession(request)
-    return session
-  }
-
   type Handler = (request: Request, params: any, ctx: Ctx) => Promise<Response> | Response
 
   function withBlitzAuth(fn: Handler): Response | Promise<Response>
@@ -168,7 +163,6 @@ export const AuthServerPlugin = createServerPlugin((options: AuthPluginOptions) 
     exports: () => ({
       getBlitzContext,
       useAuthenticatedBlitzContext,
-      blitzAuthRpcMiddleware,
       withBlitzAuth,
     }),
   }
