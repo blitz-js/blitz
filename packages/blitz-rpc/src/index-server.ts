@@ -309,7 +309,7 @@ export function rpcHandler(config: RpcConfig) {
 
         rpcLogger.timer.initNextJsSerialization()
         ;(res as any).blitzResult = result
-        ctx?.session?.setSession(res)
+        ;(ctx as any)?.session?.setSession(res)
         res.json({
           result: serializedResult.json,
           error: null,
@@ -339,7 +339,7 @@ export function rpcHandler(config: RpcConfig) {
         const formattedError = config.formatError?.(error, ctx) ?? error
         const serializedError = superjsonSerialize(formattedError)
 
-        ctx?.session?.setSession(res)
+        ;(ctx as any)?.session?.setSession(res)
 
         res.json({
           result: null,
@@ -440,7 +440,7 @@ export function rpcAppHandler(config: RpcConfig) {
             },
           }),
         )
-        session?.setSession(response)
+        ;(session as any)?.setSession(response)
         return response
       } catch (error: any) {
         if (error._clearStack) {
@@ -466,7 +466,7 @@ export function rpcAppHandler(config: RpcConfig) {
             },
           }),
         )
-        session?.setSession(response)
+        ;(session as any)?.setSession(response)
         return response
       }
     } else {

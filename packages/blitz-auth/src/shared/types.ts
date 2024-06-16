@@ -1,6 +1,5 @@
 //@ts-nocheck
-import type {Ctx} from "blitz"
-import type {ServerResponse} from "http"
+import {Ctx} from "blitz"
 
 export interface Session {
   // isAuthorize can be injected here
@@ -57,10 +56,6 @@ export interface SessionContextBase {
   $handle: string | null
   $publicData: unknown
   $authorize(...args: IsAuthorizedArgs): asserts this is AuthenticatedSessionContext
-  /**
-   * @internal
-   */
-  setSession(response: Response | ServerResponse): void
   // $isAuthorized cannot have assertion return type because it breaks advanced use cases
   // with multiple isAuthorized calls
   $isAuthorized: (...args: IsAuthorizedArgs) => boolean
