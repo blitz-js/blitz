@@ -22,16 +22,23 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: resolve pr refs
-        id: refs
-        uses: eficode/resolve-pr-refs@main
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Fetch PR information
+        id: pr_info
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COMMENT_AT: ${{ github.event.comment.created_at }}
+        run: |
+          pr="$(gh api repos/${{ github.repository }}/pulls/${{ github.event.issue.number }})"
+          head_sha="$(echo "$pr" | jq -r .head.sha)"
+          updated_at="$(echo "$pr" | jq -r .updated_at)"
+
+          if [[ $(date -d $updated_at) > $(date -d $COMMENT_AT) ]]; exit 1; fi
+          
+          echo "head_sha=$head_sha" >> $GITHUB_OUTPUT
 
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.ref }}
-          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ steps.pr_info.outputs.head_sha }}
 
       - name: Setup PNPM
         uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
