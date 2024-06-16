@@ -1,9 +1,4 @@
 import {rpcAppHandler} from "@blitzjs/rpc"
-import {blitzAuthRpcMiddleware} from "../../../../src/blitz-server"
+import {withBlitzAuth} from "../../../../src/blitz-server"
 
-export const {GET, POST, HEAD} = rpcAppHandler(
-  {},
-  {
-    authMiddleware: blitzAuthRpcMiddleware,
-  },
-)
+export const {GET, POST, HEAD} = withBlitzAuth(rpcAppHandler({}))

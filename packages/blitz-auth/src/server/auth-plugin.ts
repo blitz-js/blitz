@@ -136,15 +136,31 @@ export const AuthServerPlugin = createServerPlugin((options: AuthPluginOptions) 
     return session
   }
 
-  const withBlitzAuth = (
-    fn: (request: Request, params: any, ctx: Ctx) => Promise<Response> | Response,
-  ) => {
-    return async (request: Request, context: Ctx) => {
-      const session = await getSession(request)
-      const response = await fn(request, context, {session})
-      ;(session as any).setSession(response)
-      return response
+  type Handler = (request: Request, params: any, ctx: Ctx) => Promise<Response> | Response
+
+  function withBlitzAuth(fn: Handler): Response | Promise<Response>
+  function withBlitzAuth<T extends {[method: string]: Handler}>(fn: T): T
+  function withBlitzAuth<T extends {[method: string]: Handler}>(fn: Handler | T): unknown {
+    if (typeof fn === "function") {
+      return async (request: Request, params: unknown) => {
+        const session = await getSession(request)
+        const response = await fn(request, params, {session})
+        ;(session as any).setSession(response)
+        return response
+      }
     }
+    const wrappedFn = Object.fromEntries(
+      Object.entries(fn).map(([method, handler]) => [
+        method,
+        async (request: Request, params: unknown) => {
+          const session = await getSession(request)
+          const response = await handler(request, params, {session})
+          ;(session as any).setSession(response)
+          return response
+        },
+      ]),
+    )
+    return wrappedFn
   }
 
   return {
