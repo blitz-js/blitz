@@ -225,16 +225,17 @@ function getCookiesFromHeader(headers: Headers) {
 }
 
 export async function getSession(req: Request): Promise<SessionContext>
+export async function getSession(req: Request, res: never, isRsc: boolean): Promise<SessionContext>
 export async function getSession(req: IncomingMessage, res: ServerResponse): Promise<SessionContext>
 export async function getSession(
   req: IncomingMessage,
   res: ServerResponse,
-  appDir: boolean,
+  isRsc: boolean,
 ): Promise<SessionContext>
 export async function getSession(
   req: IncomingMessage | Request,
   res?: ServerResponse,
-  appDir?: boolean,
+  isRsc?: boolean,
 ): Promise<SessionContext> {
   const headers = convertRequestToHeader(req)
   if (res) {
@@ -257,7 +258,7 @@ export async function getSession(
   }
 
   const sessionContext = makeProxyToPublicData(
-    new SessionContextClass(headers, sessionKernel, !!appDir, res),
+    new SessionContextClass(headers, sessionKernel, !!isRsc, res),
   )
   debug("New session context")
   if (res) {
@@ -293,10 +294,14 @@ export async function getBlitzContext(): Promise<Ctx> {
     if (csrfToken) {
       reqHeader[HEADER_CSRF] = csrfToken.value
     }
-    const session = await getSession({
-      headers: new Headers(reqHeader),
-      method: "POST",
-    } as Request)
+    const session = await getSession(
+      {
+        headers: new Headers(reqHeader),
+        method: "POST",
+      } as Request,
+      null as never,
+      true,
+    )
     const ctx: Ctx = {
       session,
     }
@@ -394,7 +399,7 @@ const NotSupportedMessage = async (method: string) => {
 export class SessionContextClass implements SessionContext {
   private _headers: Headers
   private _kernel: SessionKernel
-  private _appDir: boolean
+  private _isRsc: boolean
   private _response?: ServerResponse
 
   private static headersToIncludeInResponse = [
@@ -404,15 +409,11 @@ export class SessionContextClass implements SessionContext {
     HEADER_SESSION_CREATED,
   ]
 
-  constructor(headers: Headers, kernel: SessionKernel, appDir: boolean, response?: ServerResponse) {
+  constructor(headers: Headers, kernel: SessionKernel, isRsc: boolean, response?: ServerResponse) {
     this._headers = headers
     this._kernel = kernel
-    this._appDir = appDir
+    this._isRsc = isRsc
     this._response = response
-  }
-
-  $headers() {
-    return this._headers
   }
 
   $antiCSRFToken() {
@@ -457,8 +458,8 @@ export class SessionContextClass implements SessionContext {
   }
 
   setSession(response: Response | ServerResponse) {
-    if (this._appDir) {
-      void NotSupportedMessage("setBrowserSession")
+    if (this._isRsc) {
+      void NotSupportedMessage("setSession")
       return
     }
     const cookieHeaders = this._headers.get("set-cookie")
@@ -481,7 +482,7 @@ export class SessionContextClass implements SessionContext {
   }
 
   async $create(publicData: PublicData, privateData?: Record<any, any>) {
-    if (this._appDir) {
+    if (this._isRsc) {
       void NotSupportedMessage("$create")
       return
     }
@@ -497,7 +498,7 @@ export class SessionContextClass implements SessionContext {
   }
 
   async $revoke() {
-    if (this._appDir) {
+    if (this._isRsc) {
       void NotSupportedMessage("$revoke")
       return
     }
@@ -506,7 +507,7 @@ export class SessionContextClass implements SessionContext {
   }
 
   async $revokeAll() {
-    if (this._appDir) {
+    if (this._isRsc) {
       void NotSupportedMessage("$revokeAll")
       return
     }
@@ -518,7 +519,7 @@ export class SessionContextClass implements SessionContext {
   }
 
   async $setPublicData(data: Record<any, any>) {
-    if (this._appDir) {
+    if (this._isRsc) {
       void NotSupportedMessage("$setPublicData")
       return
     }
@@ -534,7 +535,7 @@ export class SessionContextClass implements SessionContext {
   }
 
   async $setPrivateData(data: Record<any, any>) {
-    if (this._appDir) {
+    if (this._isRsc) {
       void NotSupportedMessage("$setPrivateData")
       return Promise.resolve()
     }
