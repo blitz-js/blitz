@@ -45,13 +45,13 @@ import {formatWithValidation} from "../shared/url-utils"
 
 function splitCookiesString(cookiesString: string) {
   if (!cookiesString) return []
-  var cookiesStrings = []
-  var pos = 0
-  var start
-  var ch
-  var lastComma
-  var nextStart
-  var cookiesSeparatorFound
+  let cookiesStrings = []
+  let pos = 0
+  let start
+  let ch
+  let lastComma
+  let nextStart
+  let cookiesSeparatorFound
   function skipWhitespace() {
     while (pos < cookiesString.length && /\s/.test(cookiesString.charAt(pos))) {
       pos += 1
