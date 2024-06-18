@@ -6,9 +6,9 @@
 "@blitzjs/generator": minor
 ---
 
-feat: Refactor blitz auth to support the Web `Request` API standard
+feat: add blitz auth support for the Web `Request` API standard
 
-Usage using the new `withBlitzAuth` adapter:
+Usage using the new `withBlitzAuth` adapter in the App Router:
 
 ```ts
 import {withBlitzAuth} from "app/blitz-server"
