@@ -13,14 +13,18 @@ Usage using the new `withBlitzAuth` adapter in the App Router:
 ```ts
 import {withBlitzAuth} from "app/blitz-server"
 
-export const handler = withBlitzAuth(async (_request, _params, {session}) => {
-  await session.$revoke()
-  return new Response(
-    JSON.stringify({
-      userId: session.userId,
-    }),
-    {status: 200},
-  )
+export const {POST} = withBlitzAuth({
+  POST: async (_request, _params, ctx) => {
+    const session = ctx.session
+    await session.$revoke()
+
+    return new Response(
+      JSON.stringify({
+        userId: session.userId,
+      }),
+      {status: 200},
+    )
+  },
 })
 ```
 
