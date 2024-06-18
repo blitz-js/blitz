@@ -131,8 +131,7 @@ export const AuthServerPlugin = createServerPlugin((options: AuthPluginOptions) 
     globalThis.__BLITZ_GET_RSC_CONTEXT = getBlitzContext
   }
 
-  type Handler = (request: Request, params: any, ctx: Ctx) => Promise<Response> | Response
-
+  type Handler = (request: Request, params: unknown, ctx: Ctx) => Promise<Response> | Response
   function withBlitzAuth(fn: Handler): Response | Promise<Response>
   function withBlitzAuth<T extends {[method: string]: Handler}>(fn: T): T
   function withBlitzAuth<T extends {[method: string]: Handler}>(fn: Handler | T): unknown {
@@ -140,7 +139,7 @@ export const AuthServerPlugin = createServerPlugin((options: AuthPluginOptions) 
       return async (request: Request, params: unknown) => {
         const session = await getSession(request)
         const response = await fn(request, params, {session})
-        ;(session as any).setSession(response)
+        session.setSession(response)
         return response
       }
     }
@@ -150,7 +149,7 @@ export const AuthServerPlugin = createServerPlugin((options: AuthPluginOptions) 
         async (request: Request, params: unknown) => {
           const session = await getSession(request)
           const response = await handler(request, params, {session})
-          ;(session as any).setSession(response)
+          session.setSession(response)
           return response
         },
       ]),
