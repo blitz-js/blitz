@@ -238,7 +238,7 @@ interface RpcConfig {
   logging?: RpcLoggerOptions
 }
 
-export function rpcHandler(config: RpcConfig) {
+export function rpcHandler(config?: RpcConfig) {
   return async function handleRpcRequest(req: NextApiRequest, res: NextApiResponse, ctx: Ctx) {
     const resolverMap = await getResolverMap()
     assert(resolverMap, "No query or mutation resolvers found")
@@ -250,7 +250,7 @@ export function rpcHandler(config: RpcConfig) {
     const relativeRoutePath = (req.query.blitz as string[])?.join("/")
     const routePath = "/" + relativeRoutePath
     const resolverName = routePath.replace(/(\/api\/rpc)?\//, "")
-    const rpcLogger = new RpcLogger(resolverName, config.logging)
+    const rpcLogger = new RpcLogger(resolverName, config?.logging)
 
     const loadableResolver = resolverMap?.[routePath]?.resolver
     if (!loadableResolver) {
@@ -329,14 +329,14 @@ export function rpcHandler(config: RpcConfig) {
           error.stack = ""
         }
 
-        config.onError?.(error, ctx)
+        config?.onError?.(error, ctx)
         rpcLogger.error(error)
 
         if (!error.statusCode) {
           error.statusCode = 500
         }
 
-        const formattedError = config.formatError?.(error, ctx) ?? error
+        const formattedError = config?.formatError?.(error, ctx) ?? error
         const serializedError = superjsonSerialize(formattedError)
 
         ctx?.session?.setSession(res)
@@ -361,7 +361,7 @@ export function rpcHandler(config: RpcConfig) {
 
 type Params = Record<string, unknown>
 
-export function rpcAppHandler(config: RpcConfig) {
+export function rpcAppHandler(config?: RpcConfig) {
   async function handleRpcRequest(req: Request, context: {params: Params}, ctx?: Ctx) {
     const session = ctx?.session
     const resolverMap = await getResolverMap()
@@ -375,7 +375,7 @@ export function rpcAppHandler(config: RpcConfig) {
     const relativeRoutePath = (context.params.blitz as string[])?.join("/")
     const routePath = "/" + relativeRoutePath
     const resolverName = routePath.replace(/(\/api\/rpc)?\//, "")
-    const rpcLogger = new RpcLogger(resolverName, config.logging)
+    const rpcLogger = new RpcLogger(resolverName, config?.logging)
 
     const loadableResolver = resolverMap?.[routePath]?.resolver
     if (!loadableResolver) {
@@ -448,14 +448,14 @@ export function rpcAppHandler(config: RpcConfig) {
           error.stack = ""
         }
 
-        config.onError?.(error, {session} as Ctx)
+        config?.onError?.(error, {session} as Ctx)
         rpcLogger.error(error)
 
         if (!error.statusCode) {
           error.statusCode = 500
         }
 
-        const formattedError = config.formatError?.(error, {session} as Ctx) ?? error
+        const formattedError = config?.formatError?.(error, {session} as Ctx) ?? error
         const serializedError = superjsonSerialize(formattedError)
 
         const response = new Response(

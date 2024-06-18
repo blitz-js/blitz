@@ -1,9 +1,11 @@
+import {H} from "@blitzjs/auth/dist/index-0ecbee46"
 import {withBlitzAuth} from "../../../src/blitz-server"
 
-export const POST = withBlitzAuth(async (request: Request) => {
+const emptyResponse = async () => {
   return new Response(null, {status: 200})
-})
+}
 
-export const HEAD = withBlitzAuth(async (request: Request) => {
-  return new Response(null, {status: 200})
+export const {POST, HEAD} = withBlitzAuth({
+  POST: emptyResponse,
+  HEAD: emptyResponse,
 })
