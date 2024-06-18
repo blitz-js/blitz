@@ -1,6 +1,5 @@
 import {fromBase64, toBase64} from "b64-lite"
 import cookie, {parse} from "cookie"
-import type {IncomingMessage, ServerResponse} from "http"
 import jsonwebtoken from "jsonwebtoken"
 import {
   assert,
@@ -39,9 +38,10 @@ import {
   AuthenticatedSessionContext,
 } from "../shared"
 import {generateToken, hash256} from "./auth-utils"
-import {Socket} from "net"
-import {UrlObject} from "url"
 import {formatWithValidation} from "../shared/url-utils"
+
+import type {UrlObject} from "url"
+import type {IncomingMessage, ServerResponse} from "http"
 
 function splitCookiesString(cookiesString: string) {
   if (!cookiesString) return []
