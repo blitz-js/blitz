@@ -12,7 +12,7 @@ export const authenticateUser = async (email: string, password: string) => {
   return rest
 }
 
-export const POST = withBlitzAuth({
+export const {POST} = withBlitzAuth({
   POST: async (request: Request, context, ctx) => {
     const {searchParams} = new URL(request.url)
     const user = await authenticateUser(
