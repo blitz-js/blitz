@@ -12,25 +12,27 @@ export const authenticateUser = async (email: string, password: string) => {
   return rest
 }
 
-export const POST = withBlitzAuth(async (request: Request, context, ctx) => {
-  const {searchParams} = new URL(request.url)
-  const user = await authenticateUser(
-    searchParams.get("email") as string,
-    searchParams.get("password") as string,
-  )
+export const POST = withBlitzAuth({
+  POST: async (request: Request, context, ctx) => {
+    const {searchParams} = new URL(request.url)
+    const user = await authenticateUser(
+      searchParams.get("email") as string,
+      searchParams.get("password") as string,
+    )
 
-  await ctx.session.$create({
-    userId: user.id,
-    role: user.role as Role,
-  })
+    await ctx.session.$create({
+      userId: user.id,
+      role: user.role as Role,
+    })
 
-  return new Response(
-    JSON.stringify({email: searchParams.get("email"), userId: ctx.session.userId}),
-    {
-      status: 200,
-      headers: {
-        "Content-Type": "application/json",
+    return new Response(
+      JSON.stringify({email: searchParams.get("email"), userId: ctx.session.userId}),
+      {
+        status: 200,
+        headers: {
+          "Content-Type": "application/json",
+        },
       },
-    },
-  )
+    )
+  },
 })
