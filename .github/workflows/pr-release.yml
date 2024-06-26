@@ -26,15 +26,9 @@ jobs:
         id: pr_info
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          COMMENT_AT: ${{ github.event.comment.created_at }}
         run: |
           pr="$(gh api repos/${{ github.repository }}/pulls/${{ github.event.issue.number }})"
           head_sha="$(echo "$pr" | jq -r .head.sha)"
-          updated_at="$(echo "$pr" | jq -r .updated_at)"
-
-          if [[ $(date -d "$updated_at" +%s) -gt $(date -d "$COMMENT_AT" +%s) ]]; then
-              exit 1
-          fi
           
           echo "head_sha=$head_sha" >> $GITHUB_OUTPUT
 
