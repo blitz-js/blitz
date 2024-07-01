@@ -1,6 +1,6 @@
 {
   "name": "blitz",
-  "version": "2.0.10",
+  "version": "2.1.0",
   "homepage": "https://blitzjs.com/",
   "repository": {
     "type": "git",
@@ -30,7 +30,7 @@
     "blitz": "bin/blitz"
   },
   "dependencies": {
-    "@blitzjs/generator": "2.0.10",
+    "@blitzjs/generator": "3.0.0",
     "@mrleebo/prisma-ast": "0.2.6",
     "@types/global-agent": "2.1.1",
     "arg": "5.0.1",
@@ -80,7 +80,7 @@
     "watchpack": "2.1.1"
   },
   "devDependencies": {
-    "@blitzjs/config": "2.0.10",
+    "@blitzjs/config": "3.0.0",
     "@types/cookie": "0.4.1",
     "@types/cross-spawn": "6.0.2",
     "@types/debug": "4.1.7",
