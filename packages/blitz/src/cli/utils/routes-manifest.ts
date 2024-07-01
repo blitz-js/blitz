@@ -5,7 +5,8 @@ import {outputFile, readdir, readFile} from "fs-extra"
 import Watchpack from "watchpack"
 import {findNodeModulesRoot} from "./find-node-modules"
 
-const debug = require("debug")("blitz")
+import Debug from "debug"
+const debug = Debug("blitz")
 export const CONFIG_FILE = ".blitz.config.compiled.js"
 export const NEXT_CONFIG_FILE = "next.config.js"
 export const PHASE_PRODUCTION_SERVER = "phase-production-server"

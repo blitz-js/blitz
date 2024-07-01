@@ -4,7 +4,8 @@ import {readJSON} from "fs-extra"
 import path from "path"
 import pkgDir from "pkg-dir"
 import resolveCwd from "resolve-cwd"
-const debug = require("debug")("blitz:utils")
+import Debug from "debug"
+const debug = Debug("blitz:utils")
 
 export async function resolveBinAsync(pkg: string, executable = pkg) {
   const packageDir = await pkgDir(resolveCwd(pkg))

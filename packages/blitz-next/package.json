@@ -59,7 +59,7 @@
     "blitz": "2.0.10",
     "cross-spawn": "7.0.3",
     "find-up": "4.1.0",
-    "next": "canary",
+    "next": "14.3.0-canary.28",
     "next-router-mock": "0.9.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",

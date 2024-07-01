@@ -7,7 +7,8 @@ import * as esbuild from "esbuild"
 import pkgDir from "pkg-dir"
 import type {ServerConfig} from "./config"
 
-const debug = require("debug")("blitz:utils")
+import Debug from "debug"
+const debug = Debug("blitz:utils")
 
 export function getProjectRootSync() {
   return process.cwd()

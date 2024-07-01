@@ -5,7 +5,8 @@ import path from "path"
 import * as REPL from "repl"
 import {REPLCommand, REPLServer} from "repl"
 // eslint-disable-next-line @next/next/no-assign-module-variable
-const debug = require("debug")("blitz:repl")
+import Debug from "debug"
+const debug = Debug("blitz:repl")
 import ProgressBar from "progress"
 import {log} from "../../logging"
 

@@ -3,7 +3,8 @@ import {CliCommand} from "../index"
 import prompts from "prompts"
 import {bootstrap} from "global-agent"
 import {baseLogger, log} from "../../logging"
-const debug = require("debug")("blitz:cli")
+import Debug from "debug"
+const debug = Debug("blitz:cli")
 import {join, resolve, dirname} from "path"
 import {Stream} from "stream"
 import {promisify} from "util"

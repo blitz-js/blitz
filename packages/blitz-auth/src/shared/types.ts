@@ -1,5 +1,6 @@
 //@ts-nocheck
-import {Ctx} from "blitz"
+import type {Ctx} from "blitz"
+import type {ServerResponse} from "http"
 
 export interface Session {
   // isAuthorize can be injected here
@@ -66,6 +67,12 @@ export interface SessionContextBase {
   $getPrivateData: () => Promise<Record<any, any>>
   $setPrivateData: (data: Record<any, any>) => Promise<void>
   $setPublicData: (data: Partial<Omit<PublicData, "userId">>) => Promise<void>
+  /**
+   * This function is only for manual session handling
+   *
+   * Instead use {@link https://blitzjs.com/docs/auth-server#with-blitz-auth-api withBlitzAuth} to handle session creation and update
+   */
+  setSession: (res: Response | ServerResponse) => void
 }
 
 // Could be anonymous

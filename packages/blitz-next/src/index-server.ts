@@ -243,6 +243,7 @@ export interface BlitzConfig extends NextConfig {
   }
 }
 
+
 export function withBlitz(nextConfig: BlitzConfig = {}): NextConfig {
   if (
     process.env.NODE_ENV !== "production" &&

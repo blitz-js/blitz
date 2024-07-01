@@ -1,6 +1,6 @@
 import {RequestMiddleware, Ctx, createServerPlugin} from "blitz"
 import {assert} from "blitz"
-import {IncomingMessage, ServerResponse} from "http"
+import type {IncomingMessage, ServerResponse} from "http"
 import {PublicData, SessionModel, SessionConfigMethods} from "../shared/types"
 import {getBlitzContext, getSession, useAuthenticatedBlitzContext} from "./auth-sessions"
 
@@ -130,11 +130,28 @@ export const AuthServerPlugin = createServerPlugin((options: AuthPluginOptions) 
   if (!globalThis.__BLITZ_GET_RSC_CONTEXT) {
     globalThis.__BLITZ_GET_RSC_CONTEXT = getBlitzContext
   }
+
+  type Handler = (request: Request, context: any, ctx: Ctx) => Promise<Response> | Response
+  function withBlitzAuth<T extends {[method: string]: Handler}>(handlers: T): T {
+    return Object.fromEntries(
+      Object.entries(handlers).map(([method, handler]) => [
+        method,
+        async (request: Request, params: unknown) => {
+          const session = await getSession(request)
+          const response = await handler(request, params, {session})
+          session.setSession(response)
+          return response
+        },
+      ]),
+    ) as unknown as T
+  }
+
   return {
     requestMiddlewares: [authPluginSessionMiddleware()],
     exports: () => ({
       getBlitzContext,
       useAuthenticatedBlitzContext,
+      withBlitzAuth,
     }),
   }
 })

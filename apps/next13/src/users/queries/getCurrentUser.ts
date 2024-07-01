@@ -12,5 +12,5 @@ export default async function getCurrentUser(input: null, ctx: Ctx) {
 }
 
 export const config = {
-  httpMethod: "GET",
+  httpMethod: "POST",
 }

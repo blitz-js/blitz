@@ -57,7 +57,7 @@ const runTests = (mode?: string) => {
         "should render result for open query",
         async () => {
           const res = await fetch(`http://localhost:${appPort}/api/noauth`, {
-            method: "GET",
+            method: "POST",
             headers: {"Content-Type": "application/json; charset=utf-8"},
           })
           expect(res.status).toBe(200)
@@ -67,7 +67,7 @@ const runTests = (mode?: string) => {
 
       it("sets correct cookie", async () => {
         const res = await fetch(`http://localhost:${appPort}/api/noauth`, {
-          method: "GET",
+          method: "POST",
           headers: {"Content-Type": "application/json; charset=utf-8"},
         })
         const cookieHeader = res.headers.get("Set-Cookie")
@@ -93,6 +93,8 @@ const runTests = (mode?: string) => {
         "should work",
         async () => {
           const browser = await webdriver(appPort, "/react-query")
+
+          await browser.refresh()
 
           browser.waitForElementByCss("#button", 0)
           await browser.elementByCss("#button").click()
@@ -133,7 +135,7 @@ const runTests = (mode?: string) => {
 
       it("does not require CSRF header on HEAD requests", async () => {
         const res = await fetch(`http://localhost:${appPort}/api/noauth`, {
-          method: "GET",
+          method: "POST",
           headers: {"Content-Type": "application/json; charset=utf-8"},
         })
         const cookieHeader = res.headers.get("Set-Cookie")

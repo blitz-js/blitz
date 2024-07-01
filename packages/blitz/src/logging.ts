@@ -99,8 +99,8 @@ const branded = (msg: string) => {
  * @param {string} msg
  */
 const clearLine = (msg?: string) => {
-  readline.clearLine(process.stdout, 0)
-  readline.cursorTo(process.stdout, 0)
+  readline.clearLine(process.stdout as any, 0)
+  readline.cursorTo(process.stdout as any, 0)
   msg && process.stdout.write(msg)
 }
 
@@ -173,7 +173,8 @@ const box = async (mes: string, title: string) => {
  * If the DEBUG env var is set this will write to the console
  * @param str msg
  */
-const debug = require("debug")("blitz")
+import Debug from "debug"
+const debug = Debug("blitz")
 
 export const log = {
   withBrand,
