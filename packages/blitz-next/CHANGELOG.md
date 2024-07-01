@@ -1,5 +1,55 @@
 # @blitzjs/next
 
+## 3.0.0
+
+### Minor Changes
+
+- 3b10b13e6: feat: add blitz auth support for the Web `Request` API standard
+
+  Usage using the new `withBlitzAuth` adapter in the App Router:
+
+  ```ts
+  import {withBlitzAuth} from "app/blitz-server"
+
+  export const {POST} = withBlitzAuth({
+    POST: async (_request, _params, ctx) => {
+      const session = ctx.session
+      await session.$revoke()
+
+      return new Response(
+        JSON.stringify({
+          userId: session.userId,
+        }),
+        {status: 200},
+      )
+    },
+  })
+  ```
+
+  feat: New Blitz RPC handler meant to with the next.js app router `route.ts` files
+
+  Usage using the new `rpcAppHandler` function
+
+  ```ts
+  // app/api/rpc/[[...blitz]]/route.ts
+  import {rpcAppHandler} from "@blitzjs/rpc"
+  import {withBlitzAuth} from "app/blitz-server"
+
+  // Usage with blitz auth
+  export const {GET, POST, HEAD} = withBlitzAuth(rpcAppHandler())
+
+  // Standalone usage
+  export const {GET, POST, HEAD} = rpcAppHandler()
+  ```
+
+  chore: Update the app directory starter
+
+### Patch Changes
+
+- Updated dependencies [3b10b13e6]
+  - blitz@2.1.0
+  - @blitzjs/rpc@3.0.0
+
 ## 2.0.10
 
 ### Patch Changes
