@@ -89,45 +89,46 @@ export class PaginationArgumentError extends Error {
   }
 }
 
+let _blitzErrorClassRegistered = false
+
 export function registerBlitzErrorClasses() {
-  if (isNotInUserTestEnvironment() && !globalThis._BLITZ_ERROR_CLASS_REGISTERED) {
-    SuperJson.registerClass(AuthenticationError, {
-      identifier: "BlitzAuthenticationError",
-      allowProps: errorProps,
-    })
+  if (_blitzErrorClassRegistered || isNotInUserTestEnvironment()) return
+  SuperJson.registerClass(AuthenticationError, {
+    identifier: "BlitzAuthenticationError",
+    allowProps: errorProps,
+  })
 
-    SuperJson.registerClass(CSRFTokenMismatchError, {
-      identifier: "BlitzCSRFTokenMismatchError",
-      allowProps: errorProps,
-    })
+  SuperJson.registerClass(CSRFTokenMismatchError, {
+    identifier: "BlitzCSRFTokenMismatchError",
+    allowProps: errorProps,
+  })
 
-    SuperJson.registerClass(AuthorizationError, {
-      identifier: "BlitzAuthorizationError",
-      allowProps: errorProps,
-    })
+  SuperJson.registerClass(AuthorizationError, {
+    identifier: "BlitzAuthorizationError",
+    allowProps: errorProps,
+  })
 
-    SuperJson.registerClass(NotFoundError, {
-      identifier: "BlitzNotFoundError",
-      allowProps: errorProps,
-    })
+  SuperJson.registerClass(NotFoundError, {
+    identifier: "BlitzNotFoundError",
+    allowProps: errorProps,
+  })
 
-    SuperJson.registerClass(RedirectError, {
-      identifier: "BlitzRedirectError",
-      allowProps: errorProps,
-    })
+  SuperJson.registerClass(RedirectError, {
+    identifier: "BlitzRedirectError",
+    allowProps: errorProps,
+  })
 
-    SuperJson.registerClass(PaginationArgumentError, {
-      identifier: "BlitzPaginationArgumentError",
-      allowProps: errorProps,
-    })
+  SuperJson.registerClass(PaginationArgumentError, {
+    identifier: "BlitzPaginationArgumentError",
+    allowProps: errorProps,
+  })
 
-    SuperJson.registerClass(OAuthError, {
-      identifier: "OAuthError",
-      allowProps: errorProps,
-    })
+  SuperJson.registerClass(OAuthError, {
+    identifier: "OAuthError",
+    allowProps: errorProps,
+  })
 
-    globalThis._BLITZ_ERROR_CLASS_REGISTERED = true
-  }
+  _blitzErrorClassRegistered = true
 }
 
 registerBlitzErrorClasses()
