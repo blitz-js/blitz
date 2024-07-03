@@ -129,3 +129,5 @@ export function registerBlitzErrorClasses() {
     globalThis._BLITZ_ERROR_CLASS_REGISTERED = true
   }
 }
+
+registerBlitzErrorClasses()
