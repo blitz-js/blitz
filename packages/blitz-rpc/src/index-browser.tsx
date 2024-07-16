@@ -15,6 +15,8 @@ export {
   useMutation,
   usePaginatedQuery,
   useQuery,
+  useSuspenseInfiniteQuery,
+  useSuspenseQuery,
 } from "./query/react-query"
 export type {
   DefaultOptions,

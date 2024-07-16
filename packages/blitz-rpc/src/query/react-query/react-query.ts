@@ -68,7 +68,7 @@ export function useQuery<
   queryFn: T,
   params: FirstParam<T>,
   options?: Omit<UseQueryOptions<TResult, TError, TSelectedData>, "queryKey"> & QueryNonLazyOptions,
-): [TSelectedData, RestQueryResult<TSelectedData, TError>]
+): [TSelectedData | undefined, RestQueryResult<TSelectedData | undefined, TError>]
 export function useQuery<
   T extends AsyncFunc,
   TResult = PromiseReturnType<T>,
@@ -78,7 +78,7 @@ export function useQuery<
   queryFn: T,
   params: FirstParam<T>,
   options: Omit<UseQueryOptions<TResult, TError, TSelectedData>, "queryKey"> & QueryLazyOptions,
-): [TSelectedData | undefined, RestQueryResult<TSelectedData, TError>]
+): [TSelectedData | undefined, RestQueryResult<TSelectedData | undefined, TError>]
 export function useQuery<
   T extends AsyncFunc,
   TResult = PromiseReturnType<T>,
@@ -134,7 +134,6 @@ export function useQuery<
     ...getQueryCacheFunctions<FirstParam<T>, TResult, T>(queryFn, params),
   }
 
-  // return [data, rest as RestQueryResult<TResult>]
   return [data, rest]
 }
 
@@ -219,7 +218,7 @@ export function usePaginatedQuery<
   queryFn: T,
   params: FirstParam<T>,
   options?: Omit<UseQueryOptions<TResult, TError, TSelectedData>, "queryKey"> & QueryNonLazyOptions,
-): [TSelectedData, RestPaginatedResult<TSelectedData, TError>]
+): [TSelectedData | undefined, RestPaginatedResult<TSelectedData, TError>]
 export function usePaginatedQuery<
   T extends AsyncFunc,
   TResult = PromiseReturnType<T>,
@@ -315,7 +314,7 @@ export function useInfiniteQuery<
   getQueryParams: (pageParam: any) => FirstParam<T>,
   options: Omit<InfiniteQueryConfig<TResult, TError, TSelectedData>, "queryKey"> &
     QueryNonLazyOptions,
-): [TSelectedData[], RestInfiniteResult<TSelectedData, TError>]
+): [TSelectedData[] | undefined, RestInfiniteResult<TSelectedData, TError>]
 export function useInfiniteQuery<
   T extends AsyncFunc,
   TResult = PromiseReturnType<T>,
