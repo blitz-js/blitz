@@ -1,13 +1,21 @@
-import {useQueryErrorResetBoundary, QueryClientProvider, Hydrate} from "@tanstack/react-query"
+import {
+  useQueryErrorResetBoundary,
+  QueryClientProvider,
+  HydrationBoundary,
+  keepPreviousData,
+} from "@tanstack/react-query"
+import type {DefaultError, InfiniteData} from "@tanstack/query-core"
 
 import {useInfiniteQuery as useInfiniteReactQuery} from "@tanstack/react-query"
+import {useSuspenseInfiniteQuery as useSuspenseInfiniteReactQuery} from "@tanstack/react-query"
 import {useQuery as useReactQuery} from "@tanstack/react-query"
+import {useSuspenseQuery as useSuspenseReactQuery} from "@tanstack/react-query"
 import {useMutation as useReactQueryMutation} from "@tanstack/react-query"
 
 export const reactQueryClientReExports = {
   useQueryErrorResetBoundary,
   QueryClientProvider,
-  Hydrate,
+  HydrationBoundary,
 }
 
 import type {
@@ -18,6 +26,8 @@ import type {
   UseMutationOptions,
   UseMutationResult,
   MutateOptions,
+  UseSuspenseQueryOptions,
+  UseSuspenseInfiniteQueryOptions,
 } from "@tanstack/react-query"
 
 import {isServer, FirstParam, PromiseReturnType, AsyncFunc} from "blitz"
@@ -52,43 +62,42 @@ export type RestQueryResult<TResult, TError> = Omit<UseQueryResult<TResult, TErr
 export function useQuery<
   T extends AsyncFunc,
   TResult = PromiseReturnType<T>,
-  TError = unknown,
+  TError = DefaultError,
   TSelectedData = TResult,
 >(
   queryFn: T,
   params: FirstParam<T>,
-  options?: UseQueryOptions<TResult, TError, TSelectedData> & QueryNonLazyOptions,
+  options?: Omit<UseQueryOptions<TResult, TError, TSelectedData>, "queryKey"> & QueryNonLazyOptions,
 ): [TSelectedData, RestQueryResult<TSelectedData, TError>]
 export function useQuery<
   T extends AsyncFunc,
   TResult = PromiseReturnType<T>,
-  TError = unknown,
+  TError = DefaultError,
   TSelectedData = TResult,
 >(
   queryFn: T,
   params: FirstParam<T>,
-  options: UseQueryOptions<TResult, TError, TSelectedData> & QueryLazyOptions,
+  options: Omit<UseQueryOptions<TResult, TError, TSelectedData>, "queryKey"> & QueryLazyOptions,
 ): [TSelectedData | undefined, RestQueryResult<TSelectedData, TError>]
 export function useQuery<
   T extends AsyncFunc,
   TResult = PromiseReturnType<T>,
-  TError = unknown,
+  TError = DefaultError,
   TSelectedData = TResult,
 >(
   queryFn: T,
   params: FirstParam<T>,
-  options: UseQueryOptions<TResult, TError, TSelectedData> = {},
+  options: Omit<UseQueryOptions<TResult, TError, TSelectedData>, "queryKey"> = {},
 ) {
   if (typeof queryFn === "undefined") {
     throw new Error("useQuery is missing the first argument - it must be a query function")
   }
 
-  const suspenseEnabled = Boolean(globalThis.__BLITZ_SUSPENSE_ENABLED)
-  let enabled = isServer && suspenseEnabled ? false : options?.enabled ?? options?.enabled !== null
+  let enabled = isServer ? false : options?.enabled ?? options?.enabled !== null
   let routerIsReady = false
   const router = useRouter()
   if (router) {
-    routerIsReady = router?.isReady || (isServer && suspenseEnabled)
+    routerIsReady = router?.isReady || isServer
   } else {
     routerIsReady = true
   }
@@ -99,7 +108,7 @@ export function useQuery<
     queryKey: routerIsReady ? queryKey : ["_routerNotReady_"],
     queryFn: routerIsReady
       ? ({signal}) => enhancedResolverRpcClient(params, {fromQueryHook: true}, signal)
-      : (emptyQueryFn as any),
+      : (emptyQueryFn as PromiseReturnType<T>),
     ...options,
     enabled,
   })
@@ -107,7 +116,6 @@ export function useQuery<
   if (
     queryRest.fetchStatus === "idle" &&
     isServer &&
-    suspenseEnabled !== false &&
     !data &&
     (!options || !("suspense" in options) || options.suspense) &&
     (!options || !("enabled" in options) || options.enabled)
@@ -131,6 +139,72 @@ export function useQuery<
 }
 
 // -------------------------
+// useSuspenseQuery
+// -------------------------
+
+export function useSuspenseQuery<
+  T extends AsyncFunc,
+  TResult = PromiseReturnType<T>,
+  TError = DefaultError,
+  TSelectedData = TResult,
+>(
+  queryFn: T,
+  params: FirstParam<T>,
+  options?: Omit<UseQueryOptions<TResult, TError, TSelectedData>, "queryKey"> & QueryNonLazyOptions,
+): [TSelectedData, RestQueryResult<TSelectedData, TError>]
+export function useSuspenseQuery<
+  T extends AsyncFunc,
+  TResult = PromiseReturnType<T>,
+  TError = DefaultError,
+  TSelectedData = TResult,
+>(
+  queryFn: T,
+  params: FirstParam<T>,
+  options: Omit<UseSuspenseQueryOptions<TResult, TError, TSelectedData>, "queryKey"> &
+    QueryLazyOptions,
+): [TSelectedData | undefined, RestQueryResult<TSelectedData, TError>]
+export function useSuspenseQuery<
+  T extends AsyncFunc,
+  TResult = PromiseReturnType<T>,
+  TError = DefaultError,
+  TSelectedData = TResult,
+>(
+  queryFn: T,
+  params: FirstParam<T>,
+  options: Omit<UseSuspenseQueryOptions<TResult, TError, TSelectedData>, "queryKey"> = {},
+) {
+  if (typeof queryFn === "undefined") {
+    throw new Error("useQuery is missing the first argument - it must be a query function")
+  }
+
+  const enhancedResolverRpcClient = sanitizeQuery(queryFn)
+  const queryKey = getQueryKey(queryFn, params)
+
+  const {data, ...queryRest} = useSuspenseReactQuery({
+    queryKey: queryKey,
+    queryFn: ({signal}) => enhancedResolverRpcClient(params, {fromQueryHook: true}, signal),
+    ...options,
+  })
+
+  if (queryRest.fetchStatus === "idle" && isServer && !data) {
+    const e = new NextError()
+    e.name = "Rendering Suspense fallback..."
+    e.digest = "DYNAMIC_SERVER_USAGE"
+    // Backwards compatibility for nextjs 13.0.7
+    e.message = "DYNAMIC_SERVER_USAGE"
+    delete e.stack
+    throw e
+  }
+
+  const rest = {
+    ...queryRest,
+    ...getQueryCacheFunctions<FirstParam<T>, TResult, T>(queryFn, params),
+  }
+
+  return [data, rest]
+}
+
+// -------------------------
 // usePaginatedQuery
 // -------------------------
 export type RestPaginatedResult<TResult, TError> = Omit<UseQueryResult<TResult, TError>, "data"> &
@@ -139,43 +213,42 @@ export type RestPaginatedResult<TResult, TError> = Omit<UseQueryResult<TResult, 
 export function usePaginatedQuery<
   T extends AsyncFunc,
   TResult = PromiseReturnType<T>,
-  TError = unknown,
+  TError = DefaultError,
   TSelectedData = TResult,
 >(
   queryFn: T,
   params: FirstParam<T>,
-  options?: UseQueryOptions<TResult, TError, TSelectedData> & QueryNonLazyOptions,
+  options?: Omit<UseQueryOptions<TResult, TError, TSelectedData>, "queryKey"> & QueryNonLazyOptions,
 ): [TSelectedData, RestPaginatedResult<TSelectedData, TError>]
 export function usePaginatedQuery<
   T extends AsyncFunc,
   TResult = PromiseReturnType<T>,
-  TError = unknown,
+  TError = DefaultError,
   TSelectedData = TResult,
 >(
   queryFn: T,
   params: FirstParam<T>,
-  options: UseQueryOptions<TResult, TError, TSelectedData> & QueryLazyOptions,
+  options: Omit<UseQueryOptions<TResult, TError, TSelectedData>, "queryKey"> & QueryLazyOptions,
 ): [TSelectedData | undefined, RestPaginatedResult<TSelectedData, TError>]
 export function usePaginatedQuery<
   T extends AsyncFunc,
   TResult = PromiseReturnType<T>,
-  TError = unknown,
+  TError = DefaultError,
   TSelectedData = TResult,
 >(
   queryFn: T,
   params: FirstParam<T>,
-  options: UseQueryOptions<TResult, TError, TSelectedData> = {},
+  options: Omit<UseQueryOptions<TResult, TError, TSelectedData>, "queryKey"> = {},
 ) {
   if (typeof queryFn === "undefined") {
     throw new Error("usePaginatedQuery is missing the first argument - it must be a query function")
   }
 
-  const suspenseEnabled = Boolean(globalThis.__BLITZ_SUSPENSE_ENABLED)
-  let enabled = isServer && suspenseEnabled ? false : options?.enabled ?? options?.enabled !== null
+  let enabled = isServer ? false : options?.enabled ?? options?.enabled !== null
   let routerIsReady = false
   const router = useRouter()
   if (router) {
-    routerIsReady = router?.isReady || (isServer && suspenseEnabled)
+    routerIsReady = router?.isReady || isServer
   } else {
     routerIsReady = true
   }
@@ -186,16 +259,15 @@ export function usePaginatedQuery<
     queryKey: routerIsReady ? queryKey : ["_routerNotReady_"],
     queryFn: routerIsReady
       ? ({signal}) => enhancedResolverRpcClient(params, {fromQueryHook: true}, signal)
-      : (emptyQueryFn as any),
+      : (emptyQueryFn as PromiseReturnType<T>),
     ...options,
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
     enabled,
   })
 
   if (
     queryRest.fetchStatus === "idle" &&
     isServer &&
-    suspenseEnabled !== false &&
     !data &&
     (!options || !("suspense" in options) || options.suspense) &&
     (!options || !("enabled" in options) || options.enabled)
@@ -236,43 +308,43 @@ interface InfiniteQueryConfig<TResult, TError, TSelectedData>
 export function useInfiniteQuery<
   T extends AsyncFunc,
   TResult = PromiseReturnType<T>,
-  TError = unknown,
+  TError = DefaultError,
   TSelectedData = TResult,
 >(
   queryFn: T,
   getQueryParams: (pageParam: any) => FirstParam<T>,
-  options: InfiniteQueryConfig<TResult, TError, TSelectedData> & QueryNonLazyOptions,
+  options: Omit<InfiniteQueryConfig<TResult, TError, TSelectedData>, "queryKey"> &
+    QueryNonLazyOptions,
 ): [TSelectedData[], RestInfiniteResult<TSelectedData, TError>]
 export function useInfiniteQuery<
   T extends AsyncFunc,
   TResult = PromiseReturnType<T>,
-  TError = unknown,
+  TError = DefaultError,
   TSelectedData = TResult,
 >(
   queryFn: T,
   getQueryParams: (pageParam: any) => FirstParam<T>,
-  options: InfiniteQueryConfig<TResult, TError, TSelectedData> & QueryLazyOptions,
+  options: Omit<InfiniteQueryConfig<TResult, TError, TSelectedData>, "queryKey"> & QueryLazyOptions,
 ): [TSelectedData[] | undefined, RestInfiniteResult<TSelectedData, TError>]
 export function useInfiniteQuery<
   T extends AsyncFunc,
   TResult = PromiseReturnType<T>,
-  TError = unknown,
+  TError = DefaultError,
   TSelectedData = TResult,
 >(
   queryFn: T,
   getQueryParams: (pageParam: any) => FirstParam<T>,
-  options: InfiniteQueryConfig<TResult, TError, TSelectedData>,
+  options: Omit<InfiniteQueryConfig<TResult, TError, TSelectedData>, "queryKey">,
 ) {
   if (typeof queryFn === "undefined") {
     throw new Error("useInfiniteQuery is missing the first argument - it must be a query function")
   }
 
-  const suspenseEnabled = Boolean(globalThis.__BLITZ_SUSPENSE_ENABLED)
-  let enabled = isServer && suspenseEnabled ? false : options?.enabled ?? options?.enabled !== null
+  let enabled = isServer ? false : options?.enabled ?? options?.enabled !== null
   let routerIsReady = false
   const router = useRouter()
   if (router) {
-    routerIsReady = router?.isReady || (isServer && suspenseEnabled)
+    routerIsReady = router?.isReady || isServer
   } else {
     routerIsReady = true
   }
@@ -292,11 +364,12 @@ export function useInfiniteQuery<
     enabled,
   })
 
+  const infiniteQueryData = data as InfiniteData<TResult>
+
   if (
     queryRest.fetchStatus === "idle" &&
     isServer &&
-    suspenseEnabled !== false &&
-    !data &&
+    !infiniteQueryData &&
     (!options || !("suspense" in options) || options.suspense) &&
     (!options || !("enabled" in options) || options.enabled)
   ) {
@@ -312,10 +385,104 @@ export function useInfiniteQuery<
   const rest = {
     ...queryRest,
     ...getQueryCacheFunctions<FirstParam<T>, TResult, T>(queryFn, getQueryParams),
-    pageParams: data?.pageParams,
+    pageParams: infiniteQueryData?.pageParams,
   }
 
-  return [data?.pages as any, rest]
+  return [infiniteQueryData?.pages as any, rest]
+}
+
+// -------------------------
+// useInfiniteQuery
+// -------------------------
+export interface RestInfiniteResult<TResult, TError>
+  extends Omit<UseInfiniteQueryResult<TResult, TError>, "data">,
+    QueryCacheFunctions<TResult> {
+  pageParams: any
+}
+
+interface InfiniteQueryConfig<TResult, TError, TSelectedData>
+  extends UseInfiniteQueryOptions<TResult, TError, TSelectedData, TResult> {
+  // getPreviousPageParam?: (lastPage: TResult, allPages: TResult[]) => TGetPageParamResult
+  // getNextPageParam?: (lastPage: TResult, allPages: TResult[]) => TGetPageParamResult
+}
+
+export function useSuspenseInfiniteQuery<
+  T extends AsyncFunc,
+  TResult = PromiseReturnType<T>,
+  TError = DefaultError,
+  TSelectedData = TResult,
+>(
+  queryFn: T,
+  getQueryParams: (pageParam: any) => FirstParam<T>,
+  options: Omit<UseSuspenseInfiniteQueryOptions<TResult, TError, TSelectedData>, "queryKey"> &
+    QueryNonLazyOptions,
+): [TSelectedData[], RestInfiniteResult<TSelectedData, TError>]
+export function useSuspenseInfiniteQuery<
+  T extends AsyncFunc,
+  TResult = PromiseReturnType<T>,
+  TError = DefaultError,
+  TSelectedData = TResult,
+>(
+  queryFn: T,
+  getQueryParams: (pageParam: any) => FirstParam<T>,
+  options: Omit<UseSuspenseInfiniteQueryOptions<TResult, TError, TSelectedData>, "queryKey"> &
+    QueryLazyOptions,
+): [TSelectedData[] | undefined, RestInfiniteResult<TSelectedData, TError>]
+export function useSuspenseInfiniteQuery<
+  T extends AsyncFunc,
+  TResult = PromiseReturnType<T>,
+  TError = DefaultError,
+  TSelectedData = TResult,
+>(
+  queryFn: T,
+  getQueryParams: (pageParam: any) => FirstParam<T>,
+  options: Omit<UseSuspenseInfiniteQueryOptions<TResult, TError, TSelectedData>, "queryKey">,
+) {
+  if (typeof queryFn === "undefined") {
+    throw new Error("useInfiniteQuery is missing the first argument - it must be a query function")
+  }
+
+  let routerIsReady = false
+  const router = useRouter()
+  if (router) {
+    routerIsReady = router?.isReady || isServer
+  } else {
+    routerIsReady = true
+  }
+  const enhancedResolverRpcClient = sanitizeQuery(queryFn)
+  const queryKey = getInfiniteQueryKey(queryFn, getQueryParams)
+
+  const {data, ...queryRest} = useSuspenseInfiniteReactQuery({
+    // we need an extra cache key for infinite loading so that the cache for
+    // for this query is stored separately since the hook result is an array of results.
+    // Without this cache for usePaginatedQuery and this will conflict and break.
+    queryKey: routerIsReady ? queryKey : ["_routerNotReady_"],
+    queryFn: routerIsReady
+      ? ({pageParam, signal}) =>
+          enhancedResolverRpcClient(getQueryParams(pageParam), {fromQueryHook: true}, signal)
+      : (emptyQueryFn as any),
+    ...options,
+  })
+
+  const infiniteQueryData = data as InfiniteData<TResult>
+
+  if (queryRest.fetchStatus === "idle" && isServer && !infiniteQueryData) {
+    const e = new NextError()
+    e.name = "Rendering Suspense fallback..."
+    e.digest = "DYNAMIC_SERVER_USAGE"
+    // Backwards compatibility for nextjs 13.0.7
+    e.message = "DYNAMIC_SERVER_USAGE"
+    delete e.stack
+    throw e
+  }
+
+  const rest = {
+    ...queryRest,
+    ...getQueryCacheFunctions<FirstParam<T>, TResult, T>(queryFn, getQueryParams),
+    pageParams: infiniteQueryData?.pageParams,
+  }
+
+  return [infiniteQueryData?.pages as unknown, rest]
 }
 
 // -------------------------------------------------------------------
@@ -352,7 +519,7 @@ export declare type MutationFunction<TData, TVariables = unknown> = (
 
 export function useMutation<
   TData = unknown,
-  TError = unknown,
+  TError = DefaultError,
   TVariables = void,
   TContext = unknown,
 >(
@@ -362,11 +529,11 @@ export function useMutation<
   const enhancedResolverRpcClient = sanitizeMutation(mutationResolver)
 
   const {mutate, mutateAsync, ...rest} = useReactQueryMutation<TData, TError, TVariables, TContext>(
-    (variables) => enhancedResolverRpcClient(variables, {fromQueryHook: true}),
     {
+      mutationFn: (variables) => enhancedResolverRpcClient(variables, {fromQueryHook: true}),
       throwOnError: true,
       ...config,
-    } as any,
+    },
   )
 
   return [mutateAsync, rest] as MutationResultPair<TData, TError, TVariables, TContext>

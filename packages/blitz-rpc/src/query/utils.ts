@@ -40,7 +40,6 @@ export const initializeQueryClient = () => {
     defaultOptions: {
       queries: {
         ...(isServer && {cacheTime: 0}),
-        suspense: suspenseEnabled,
         retry: (failureCount, error: any) => {
           if (process.env.NODE_ENV !== "production") return false
 
@@ -171,7 +170,9 @@ interface InvalidateQuery {
 export const invalidateQuery: InvalidateQuery = (resolver = undefined, ...params: []) => {
   const fullQueryKey =
     typeof resolver === "undefined" ? undefined : getQueryKey(resolver, ...params)
-  return getQueryClient().invalidateQueries(fullQueryKey)
+  return getQueryClient().invalidateQueries({
+    queryKey: fullQueryKey,
+  })
 }
 
 export function setQueryData<TInput, TResult, T extends AsyncFunc>(
