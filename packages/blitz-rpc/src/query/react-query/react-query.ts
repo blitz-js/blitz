@@ -113,22 +113,6 @@ export function useQuery<
     enabled,
   })
 
-  if (
-    queryRest.fetchStatus === "idle" &&
-    isServer &&
-    !data &&
-    (!options || !("suspense" in options) || options.suspense) &&
-    (!options || !("enabled" in options) || options.enabled)
-  ) {
-    const e = new NextError()
-    e.name = "Rendering Suspense fallback..."
-    e.digest = "DYNAMIC_SERVER_USAGE"
-    // Backwards compatibility for nextjs 13.0.7
-    e.message = "DYNAMIC_SERVER_USAGE"
-    delete e.stack
-    throw e
-  }
-
   const rest = {
     ...queryRest,
     ...getQueryCacheFunctions<FirstParam<T>, TResult, T>(queryFn, params),
@@ -179,13 +163,15 @@ export function useSuspenseQuery<
   const enhancedResolverRpcClient = sanitizeQuery(queryFn)
   const queryKey = getQueryKey(queryFn, params)
 
-  const {data, ...queryRest} = useSuspenseReactQuery({
-    queryKey: queryKey,
-    queryFn: ({signal}) => enhancedResolverRpcClient(params, {fromQueryHook: true}, signal),
-    ...options,
-  })
+  let routerIsReady = false
+  const router = useRouter()
+  if (router) {
+    routerIsReady = router?.isReady || isServer
+  } else {
+    routerIsReady = true
+  }
 
-  if (queryRest.fetchStatus === "idle" && isServer && !data) {
+  if (isServer) {
     const e = new NextError()
     e.name = "Rendering Suspense fallback..."
     e.digest = "DYNAMIC_SERVER_USAGE"
@@ -194,6 +180,14 @@ export function useSuspenseQuery<
     delete e.stack
     throw e
   }
+
+  const {data, ...queryRest} = useSuspenseReactQuery({
+    queryKey: routerIsReady ? queryKey : ["_routerNotReady_"],
+    queryFn: routerIsReady
+      ? ({signal}) => enhancedResolverRpcClient(params, {fromQueryHook: true}, signal)
+      : (emptyQueryFn as PromiseReturnType<T>),
+    ...options,
+  })
 
   const rest = {
     ...queryRest,
@@ -264,13 +258,7 @@ export function usePaginatedQuery<
     enabled,
   })
 
-  if (
-    queryRest.fetchStatus === "idle" &&
-    isServer &&
-    !data &&
-    (!options || !("suspense" in options) || options.suspense) &&
-    (!options || !("enabled" in options) || options.enabled)
-  ) {
+  if (queryRest.fetchStatus === "idle" && isServer && !data) {
     const e = new NextError()
     e.name = "Rendering Suspense fallback..."
     e.digest = "DYNAMIC_SERVER_USAGE"
@@ -364,22 +352,6 @@ export function useInfiniteQuery<
   })
 
   const infiniteQueryData = data as InfiniteData<TResult>
-
-  if (
-    queryRest.fetchStatus === "idle" &&
-    isServer &&
-    !infiniteQueryData &&
-    (!options || !("suspense" in options) || options.suspense) &&
-    (!options || !("enabled" in options) || options.enabled)
-  ) {
-    const e = new NextError()
-    e.name = "Rendering Suspense fallback..."
-    e.digest = "DYNAMIC_SERVER_USAGE"
-    // Backwards compatibility for nextjs 13.0.7
-    e.message = "DYNAMIC_SERVER_USAGE"
-    delete e.stack
-    throw e
-  }
 
   const rest = {
     ...queryRest,
