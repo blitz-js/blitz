@@ -28,5 +28,6 @@ export type {
 export * from "./query/utils"
 
 import {reactQueryClientReExports} from "./query/react-query"
-const {QueryClientProvider, Hydrate, useQueryErrorResetBoundary} = reactQueryClientReExports
-export {QueryClientProvider, Hydrate, useQueryErrorResetBoundary}
+const {QueryClientProvider, HydrationBoundary, useQueryErrorResetBoundary} =
+  reactQueryClientReExports
+export {QueryClientProvider, HydrationBoundary, useQueryErrorResetBoundary}
