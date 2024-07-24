@@ -2,11 +2,11 @@ import {Routes} from '@blitzjs/next'
 if (process.env.parentModel) {
   import Link from 'next/link'
   import {useParam} from '@blitzjs/next'
-  import { useRouter } from "next/router"
+  import { useRouter } from "next/navigation"
   import {useMutation} from '@blitzjs/rpc'
 } else {
   import Link from 'next/link'
-  import { useRouter } from "next/router"
+  import { useRouter } from "next/navigation"
   import {useMutation} from '@blitzjs/rpc'
 }
 import Layout from "src/core/layouts/Layout"
@@ -70,3 +70,4 @@ const New__ModelName__Page = () => {
 New__ModelName__Page.authenticate = true
 
 export default New__ModelName__Page
+
