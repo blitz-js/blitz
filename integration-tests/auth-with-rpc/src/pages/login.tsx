@@ -1,4 +1,4 @@
-import {useRouter} from "next/router"
+import {useRouter} from "next/navigation"
 import {useMutation, useQuery} from "@blitzjs/rpc"
 import login from "../mutations/login"
 import logout from "../mutations/logout"
@@ -60,3 +60,4 @@ function Login() {
 }
 
 export default Login
+
