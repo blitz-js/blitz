@@ -30,7 +30,7 @@ import {
   sanitizeMutation,
   getInfiniteQueryKey,
 } from "../utils"
-import {useRouter} from "next/compat/router"
+import {useRouter} from "next/navigation"
 
 type QueryLazyOptions = {suspense: unknown} | {enabled: unknown}
 type QueryNonLazyOptions =
