@@ -5,13 +5,13 @@ if (process.env.parentModel) {
   import Link from 'next/link'
   import {usePaginatedQuery} from '@blitzjs/rpc'
   import {useParam} from '@blitzjs/next'
-  import { useRouter } from "next/router"
+  import { useRouter } from "next/navigation"
 
 } else {
   import Head from "next/head"
   import Link from 'next/link'
   import {usePaginatedQuery} from '@blitzjs/rpc'
-  import { useRouter } from "next/router"
+  import { useRouter } from "next/navigation"
 }
 import Layout from "src/core/layouts/Layout"
 import get__ModelNames__ from "src/__modelNamesPath__/queries/get__ModelNames__"
