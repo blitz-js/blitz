@@ -2,7 +2,7 @@ import {Suspense} from "react"
 import {Routes} from '@blitzjs/next'
 import Head from "next/head"
 import Link from 'next/link'
-import { useRouter } from "next/router"
+import { useRouter } from "next/navigation"
 import {useQuery, useMutation} from '@blitzjs/rpc'
 import {useParam} from '@blitzjs/next'
 
