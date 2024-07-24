@@ -4,7 +4,7 @@ import { Form, FORM_ERROR } from "src/core/components/Form"
 import { ResetPassword } from "src/auth/validations"
 import resetPassword from "src/auth/mutations/resetPassword"
 import { BlitzPage, Routes } from "@blitzjs/next"
-import { useRouter } from "next/router"
+import { useRouter } from "next/navigation"
 import { useMutation } from "@blitzjs/rpc"
 import Link from "next/link"
 
@@ -65,3 +65,4 @@ ResetPasswordPage.redirectAuthenticatedTo = "/"
 ResetPasswordPage.getLayout = (page) => <Layout title="Reset Your Password">{page}</Layout>
 
 export default ResetPasswordPage
+
