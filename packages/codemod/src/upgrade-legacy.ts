@@ -290,8 +290,8 @@ const upgradeLegacy = async () => {
         invoke: "@blitzjs/rpc",
         Routes: "@blitzjs/next",
 
-        useRouterQuery: "next/router",
-        useRouter: "next/router",
+        useRouterQuery: "next/navigation",
+        useRouter: "next/navigation",
         Router: "next/router",
 
         Head: "next/head",
