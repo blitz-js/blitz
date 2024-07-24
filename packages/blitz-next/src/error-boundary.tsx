@@ -1,5 +1,5 @@
 import {RedirectError} from "blitz"
-import {useRouter} from "next/compat/router"
+import {useRouter} from "next/navigation"
 import type {NextRouter} from "next/router"
 import * as React from "react"
 import {RouterContext} from "./router-context"
@@ -230,3 +230,4 @@ eslint
   @typescript-eslint/no-throw-literal: "off",
   @typescript-eslint/prefer-nullish-coalescing: "off"
 */
+
