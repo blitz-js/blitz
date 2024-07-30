@@ -504,12 +504,13 @@ const pascalCase = (value: string): string => {
   return val.substr(0, 1).toUpperCase() + val.substr(1)
 }
 export function parseDefaultExportName(contents: string): string | null {
-  const result = contents.match(/export\s+default(?:\s+(?:const|let|class|var|function))?\s+(\w+)/)
+  const result = contents.match(/export\s+default(?:\s+(const|let|class|var|function))?\s+(\w+)(?:\(([a-zA-Z_$][a-zA-Z0-9_$]*\b).*\))?/)
   if (!result) {
     return null
   }
-
-  return result[1] ?? null
+  const [,declaration,compOrHOCName,comp] = result
+  if(declaration||!comp) return compOrHOCName ?? null;
+  return comp ?? null
 }
 export async function generateManifest() {
   const config = await loadConfig(process.cwd())
