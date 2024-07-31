@@ -92,7 +92,7 @@ export class PaginationArgumentError extends Error {
 let _blitzErrorClassRegistered = false
 
 export function registerBlitzErrorClasses() {
-  if (_blitzErrorClassRegistered || isNotInUserTestEnvironment()) return
+  if (_blitzErrorClassRegistered || !isNotInUserTestEnvironment()) return
   SuperJson.registerClass(AuthenticationError, {
     identifier: "BlitzAuthenticationError",
     allowProps: errorProps,
