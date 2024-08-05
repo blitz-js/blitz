@@ -13,7 +13,7 @@
     "@blitzjs/next": "2.0.10",
     "@blitzjs/rpc": "2.0.10",
     "@prisma/client": "4.6.1",
-    "@tanstack/react-query": "4.0.10",
+    "@tanstack/react-query": "5.51.1",
     "blitz": "2.0.10",
     "next": "14.3.0-canary.28",
     "prisma": "4.6.1",
