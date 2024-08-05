@@ -1,4 +1,4 @@
-import {assert, Ctx, ResolverConfig} from "blitz"
+import {assert, Ctx, ResolverConfig, registerBlitzErrorClasses} from "blitz"
 import {NextApiRequest, NextApiResponse} from "next"
 import {resolve} from "path"
 import {deserialize, parse, serialize as superjsonSerialize} from "superjson"
@@ -239,6 +239,7 @@ interface RpcConfig {
 }
 
 export function rpcHandler(config?: RpcConfig) {
+  registerBlitzErrorClasses()
   return async function handleRpcRequest(req: NextApiRequest, res: NextApiResponse, ctx: Ctx) {
     const resolverMap = await getResolverMap()
     assert(resolverMap, "No query or mutation resolvers found")
@@ -362,6 +363,7 @@ export function rpcHandler(config?: RpcConfig) {
 type Params = Record<string, unknown>
 
 export function rpcAppHandler(config?: RpcConfig) {
+  registerBlitzErrorClasses()
   async function handleRpcRequest(req: Request, context: {params: Params}, ctx?: Ctx) {
     const session = ctx?.session
     const resolverMap = await getResolverMap()
