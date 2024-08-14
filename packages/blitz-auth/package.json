@@ -1,6 +1,6 @@
 {
   "name": "@blitzjs/auth",
-  "version": "3.0.0",
+  "version": "2.1.0",
   "homepage": "https://blitzjs.com/",
   "repository": {
     "type": "git",
@@ -67,7 +67,7 @@
     }
   },
   "devDependencies": {
-    "@blitzjs/config": "3.0.0",
+    "@blitzjs/config": "2.1.0",
     "@testing-library/react": "13.4.0",
     "@testing-library/react-hooks": "8.0.1",
     "@types/cookie": "0.4.1",

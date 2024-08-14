@@ -30,7 +30,7 @@
     "blitz": "bin/blitz"
   },
   "dependencies": {
-    "@blitzjs/generator": "3.0.0",
+    "@blitzjs/generator": "2.1.0",
     "@mrleebo/prisma-ast": "0.2.6",
     "@types/global-agent": "2.1.1",
     "arg": "5.0.1",
@@ -51,7 +51,7 @@
     "find-up": "4.1.0",
     "findup-sync": "5.0.0",
     "fs-extra": "10.0.1",
-    "global-agent": "3.0.0",
+    "global-agent": "2.1.0",
     "globby": "13.1.2",
     "got": "^11.8.1",
     "hasbin": "1.2.3",
@@ -67,7 +67,7 @@
     "progress": "2.0.3",
     "prompts": "2.4.2",
     "recast": "0.20.5",
-    "resolve-cwd": "3.0.0",
+    "resolve-cwd": "2.1.0",
     "resolve-from": "5.0.0",
     "rimraf": "3.0.2",
     "semver": "7.3.8",
@@ -80,7 +80,7 @@
     "watchpack": "2.1.1"
   },
   "devDependencies": {
-    "@blitzjs/config": "3.0.0",
+    "@blitzjs/config": "2.1.0",
     "@types/cookie": "0.4.1",
     "@types/cross-spawn": "6.0.2",
     "@types/debug": "4.1.7",

@@ -1,6 +1,6 @@
 {
   "name": "@blitzjs/rpc",
-  "version": "3.0.0",
+  "version": "2.1.0",
   "homepage": "https://blitzjs.com/",
   "repository": {
     "type": "git",
@@ -42,8 +42,8 @@
     "react": "*"
   },
   "devDependencies": {
-    "@blitzjs/auth": "3.0.0",
-    "@blitzjs/config": "3.0.0",
+    "@blitzjs/auth": "2.1.0",
+    "@blitzjs/config": "2.1.0",
     "@tanstack/query-core": "4.24.4",
     "@types/debug": "4.1.7",
     "@types/react": "18.0.25",

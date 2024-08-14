@@ -7,9 +7,9 @@
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf .next"
   },
   "dependencies": {
-    "@blitzjs/config": "3.0.0",
-    "@blitzjs/next": "3.0.0",
-    "@blitzjs/rpc": "3.0.0",
+    "@blitzjs/config": "2.1.0",
+    "@blitzjs/next": "2.1.0",
+    "@blitzjs/rpc": "2.1.0",
     "blitz": "2.1.0",
     "next": "14.3.0-canary.28",
     "react": "18.2.0",
