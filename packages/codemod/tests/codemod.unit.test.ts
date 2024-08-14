@@ -10,7 +10,7 @@ describe("replaceBlitzPkgsVersions", () => {
     return {
       fetchDistTags: vi.fn((pkg: string) => {
         if (pkg === "blitz") {
-          return {alpha: "1.0.0", beta: "2.0.0", danger: "3.0.0"}
+          return {alpha: "1.0.0", beta: "2.0.0", danger: "2.1.0"}
         }
         if (pkg === "zod") {
           return {latest: "1.2.3"}
@@ -52,10 +52,10 @@ describe("replaceBlitzPkgsVersions", () => {
   it("correctly updates versions with the danger tag", async () => {
     expect(await replaceBlitzPkgsVersions(pkgJson, "danger")).toEqual({
       dependencies: {
-        blitz: "3.0.0",
-        "@blitzjs/rpc": "3.0.0",
-        "@blitzjs/auth": "3.0.0",
-        "@blitzjs/next": "3.0.0",
+        blitz: "2.1.0",
+        "@blitzjs/rpc": "2.1.0",
+        "@blitzjs/auth": "2.1.0",
+        "@blitzjs/next": "2.1.0",
         next: "12.2.0",
         zod: "1.2.3",
       },
