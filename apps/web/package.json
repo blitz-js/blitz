@@ -16,10 +16,10 @@
     "schema": "./db/schema.prisma"
   },
   "dependencies": {
-    "@blitzjs/auth": "3.0.0",
-    "@blitzjs/config": "3.0.0",
-    "@blitzjs/next": "3.0.0",
-    "@blitzjs/rpc": "3.0.0",
+    "@blitzjs/auth": "2.1.0",
+    "@blitzjs/config": "2.1.0",
+    "@blitzjs/next": "2.1.0",
+    "@blitzjs/rpc": "2.1.0",
     "@prisma/client": "4.6.1",
     "@types/jest": "29.2.2",
     "@types/passport-twitter": "1.0.37",

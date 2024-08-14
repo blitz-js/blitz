@@ -17,9 +17,9 @@
     "prisma:studio": "prisma studio"
   },
   "dependencies": {
-    "@blitzjs/auth": "3.0.0",
-    "@blitzjs/config": "3.0.0",
-    "@blitzjs/next": "3.0.0",
+    "@blitzjs/auth": "2.1.0",
+    "@blitzjs/config": "2.1.0",
+    "@blitzjs/next": "2.1.0",
     "@prisma/client": "4.6.1",
     "blitz": "2.1.0",
     "lowdb": "3.0.0",
