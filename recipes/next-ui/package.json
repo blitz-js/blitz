@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/blitz-js/blitz#readme",
   "dependencies": {
-    "blitz": "2.1.0",
+    "blitz": "2.1.1",
     "jscodeshift": "0.13.0"
   },
   "devDependencies": {

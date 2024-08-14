@@ -1,5 +1,13 @@
 # @blitzjs/rpc
 
+## 2.1.1
+
+### Patch Changes
+
+- 9a0ba87d1: fix: make sure blitz superjson custom error registers in rpc handler
+- Updated dependencies [9a0ba87d1]
+  - blitz@2.1.1
+
 ## 2.1.0
 
 ### Minor Changes
