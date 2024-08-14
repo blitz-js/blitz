@@ -7,10 +7,10 @@
 - Updated dependencies [d53da39cb]
 - Updated dependencies [3b10b13e6]
   - blitz@2.1.0
-  - @blitzjs/auth@2.1.0
-  - @blitzjs/next@2.1.0
-  - @blitzjs/rpc@2.1.0
-  - @blitzjs/config@2.1.0
+  - @blitzjs/auth@3.0.0
+  - @blitzjs/next@3.0.0
+  - @blitzjs/rpc@3.0.0
+  - @blitzjs/config@3.0.0
 
 ## 0.1.11
 

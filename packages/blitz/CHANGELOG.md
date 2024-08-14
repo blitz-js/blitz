@@ -48,7 +48,7 @@
 
 - d53da39cb: Improved parsing of default export names to handle higher-order components (HOCs) in the `parseDefaultExportName` function.
 - Updated dependencies [3b10b13e6]
-  - @blitzjs/generator@2.1.0
+  - @blitzjs/generator@3.0.0
 
 ## 2.0.10
 
