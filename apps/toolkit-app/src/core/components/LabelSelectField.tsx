@@ -1,16 +1,18 @@
-import { ComponentPropsWithoutRef, forwardRef, PropsWithoutRef } from "react"
-import { useFormContext } from "react-hook-form"
-import { ErrorMessage } from "@hookform/error-message"
+import { ComponentPropsWithoutRef, forwardRef, PropsWithoutRef } from "react";
+import { useFormContext } from "react-hook-form";
+import { ErrorMessage } from "@hookform/error-message";
+
+interface Option {
+  id: string | number;
+  label: string;
+}
 
 export interface LabeledSelectFieldProps extends PropsWithoutRef<JSX.IntrinsicElements["select"]> {
-  /** Field name. */
-  name: string
-  /** Field label. */
-  label: string
-  /** Field type. Doesn't include radio buttons and checkboxes */
-  options: any[]
-  outerProps?: PropsWithoutRef<JSX.IntrinsicElements["div"]>
-  labelProps?: ComponentPropsWithoutRef<"label">
+  name: string;
+  label: string;
+  options: Option[];
+  outerProps?: PropsWithoutRef<JSX.IntrinsicElements["div"]>;
+  labelProps?: ComponentPropsWithoutRef<"label">;
 }
 
 export const LabeledSelectField = forwardRef<HTMLSelectElement, LabeledSelectFieldProps>(
@@ -18,16 +20,18 @@ export const LabeledSelectField = forwardRef<HTMLSelectElement, LabeledSelectFie
     const {
       register,
       formState: { isSubmitting, errors },
-    } = useFormContext()
+    } = useFormContext();
+
     return (
       <div {...outerProps}>
         <label {...labelProps}>
           {label}
-          <select {...register(name)} disabled={isSubmitting} {...props}>
+          <select {...register(name)} disabled={isSubmitting} {...props} ref={ref}>
+            <option value="" disabled>Select an option</option>
             {options &&
-              options.map((value) => (
-                <option value={value.id} key={value.id}>
-                  {value[name]}
+              options.map((option) => (
+                <option value={option.id} key={option.id}>
+                  {option.label}
                 </option>
               ))}
           </select>
@@ -58,6 +62,6 @@ export const LabeledSelectField = forwardRef<HTMLSelectElement, LabeledSelectFie
           }
         `}</style>
       </div>
-    )
+    );
   }
-)
+);
