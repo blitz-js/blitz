@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "@blitzjs/auth": "2.1.1",
-    "@blitzjs/config": "2.1.1",
+    "@blitzjs/config": "workspace:2.1.1",
     "@blitzjs/next": "2.1.1",
     "@blitzjs/rpc": "2.1.1",
     "@hookform/error-message": "2.0.0",

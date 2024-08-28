@@ -42,9 +42,9 @@
     "react": "*"
   },
   "devDependencies": {
-    "@tanstack/query-core": "5.51.1",
     "@blitzjs/auth": "2.1.1",
-    "@blitzjs/config": "2.1.1",
+    "@blitzjs/config": "workspace:2.1.1",
+    "@tanstack/query-core": "5.51.1",
     "@types/debug": "4.1.7",
     "@types/react": "18.0.25",
     "@types/react-dom": "17.0.14",

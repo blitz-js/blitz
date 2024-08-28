@@ -80,7 +80,7 @@
     "watchpack": "2.1.1"
   },
   "devDependencies": {
-    "@blitzjs/config": "2.1.1",
+    "@blitzjs/config": "workspace:2.1.1",
     "@types/cookie": "0.4.1",
     "@types/cross-spawn": "6.0.2",
     "@types/debug": "4.1.7",

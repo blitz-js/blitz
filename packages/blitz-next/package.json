@@ -45,7 +45,7 @@
     "tslog": "4.9.0"
   },
   "devDependencies": {
-    "@blitzjs/config": "2.1.1",
+    "@blitzjs/config": "workspace:2.1.1",
     "@testing-library/dom": "8.13.0",
     "@testing-library/jest-dom": "5.16.3",
     "@testing-library/react": "13.4.0",

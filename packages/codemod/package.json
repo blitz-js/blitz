@@ -38,7 +38,7 @@
   },
   "devDependencies": {
     "@babel/preset-env": "7.12.10",
-    "@blitzjs/config": "2.1.1",
+    "@blitzjs/config": "workspace:2.1.1",
     "@types/jscodeshift": "0.11.2",
     "@types/node": "18.11.9",
     "ast-types": "0.14.2",
