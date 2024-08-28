@@ -62,16 +62,16 @@ importers:
   apps/next13:
     dependencies:
       "@blitzjs/auth":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz-auth
       "@blitzjs/config":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/config
       "@blitzjs/next":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz-rpc
       "@hookform/error-message":
         specifier: 2.0.0
@@ -83,10 +83,10 @@ importers:
         specifier: ^4.5.0
         version: 4.6.1(prisma@4.6.1)
       "@tanstack/react-query":
-        specifier: 5.51.1
-        version: 5.51.1(react@18.2.0)
+        specifier: 4.0.10
+        version: 4.0.10(react-dom@18.2.0)(react@18.2.0)
       blitz:
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz
       flatted:
         specifier: 3.2.7
@@ -135,16 +135,16 @@ importers:
   apps/toolkit-app:
     dependencies:
       "@blitzjs/auth":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz-auth
       "@blitzjs/config":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/config
       "@blitzjs/next":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz-rpc
       "@hookform/error-message":
         specifier: 2.0.0
@@ -156,7 +156,7 @@ importers:
         specifier: 4.6.1
         version: 4.6.1(prisma@4.6.1)
       blitz:
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz
       next:
         specifier: 14.3.0-canary.28
@@ -253,16 +253,16 @@ importers:
   apps/toolkit-app-passportjs:
     dependencies:
       "@blitzjs/auth":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz-auth
       "@blitzjs/config":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/config
       "@blitzjs/next":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz-rpc
       "@hookform/error-message":
         specifier: 2.0.0
@@ -274,7 +274,7 @@ importers:
         specifier: 4.6.1
         version: 4.6.1(prisma@4.6.1)
       blitz:
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz
       next:
         specifier: 14.3.0-canary.28
@@ -365,16 +365,16 @@ importers:
   apps/web:
     dependencies:
       "@blitzjs/auth":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz-auth
       "@blitzjs/config":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/config
       "@blitzjs/next":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz-rpc
       "@prisma/client":
         specifier: 4.6.1
@@ -386,7 +386,7 @@ importers:
         specifier: 1.0.37
         version: 1.0.37
       blitz:
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz
       jest:
         specifier: 29.3.0
@@ -432,19 +432,19 @@ importers:
   integration-tests/auth:
     dependencies:
       "@blitzjs/auth":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz-auth
       "@blitzjs/config":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/config
       "@blitzjs/next":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz-next
       "@prisma/client":
         specifier: 4.6.1
         version: 4.6.1(prisma@4.6.1)
       blitz:
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz
       lowdb:
         specifier: 3.0.0
@@ -514,16 +514,16 @@ importers:
   integration-tests/auth-with-rpc:
     dependencies:
       "@blitzjs/auth":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz-auth
       "@blitzjs/config":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/config
       "@blitzjs/next":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz-rpc
       "@hookform/error-message":
         specifier: 2.0.0
@@ -535,7 +535,7 @@ importers:
         specifier: 4.6.1
         version: 4.6.1(prisma@4.6.1)
       blitz:
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz
       delay:
         specifier: 5.0.0
@@ -635,23 +635,23 @@ importers:
   integration-tests/get-initial-props:
     dependencies:
       "@blitzjs/auth":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz-auth
       "@blitzjs/next":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz-rpc
       "@prisma/client":
         specifier: 4.6.1
         version: 4.6.1(prisma@4.6.1)
       blitz:
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz
       lowdb:
-        specifier: 3.0.0
-        version: 3.0.0
+        specifier: 2.1.0
+        version: 2.1.0
       next:
         specifier: 14.3.0-canary.28
         version: 14.3.0-canary.28(@babel/core@7.12.10)(react-dom@18.2.0)(react@18.2.0)
@@ -666,7 +666,7 @@ importers:
         version: 18.2.0(react@18.2.0)
     devDependencies:
       "@blitzjs/config":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/config
       "@next/bundle-analyzer":
         specifier: 12.0.8
@@ -705,16 +705,16 @@ importers:
   integration-tests/middleware:
     dependencies:
       "@blitzjs/config":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/config
       "@blitzjs/next":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz-rpc
       blitz:
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz
       next:
         specifier: 14.3.0-canary.28
@@ -760,26 +760,26 @@ importers:
   integration-tests/next-13-app-dir:
     dependencies:
       "@blitzjs/auth":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz-auth
       "@blitzjs/config":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/config
       "@blitzjs/next":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz-rpc
       "@prisma/client":
         specifier: 4.6.1
         version: 4.6.1(prisma@4.6.1)
       blitz:
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz
       lowdb:
-        specifier: 3.0.0
-        version: 3.0.0
+        specifier: 2.1.0
+        version: 2.1.0
       next:
         specifier: 14.3.0-canary.28
         version: 14.3.0-canary.28(@babel/core@7.12.10)(react-dom@18.2.0)(react@18.2.0)
@@ -845,19 +845,19 @@ importers:
   integration-tests/no-suspense:
     dependencies:
       "@blitzjs/auth":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz-auth
       "@blitzjs/next":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz-rpc
       "@prisma/client":
         specifier: 4.6.1
         version: 4.6.1(prisma@4.6.1)
       blitz:
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz
       lowdb:
         specifier: 3.0.0
@@ -876,7 +876,7 @@ importers:
         version: 18.2.0(react@18.2.0)
     devDependencies:
       "@blitzjs/config":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/config
       "@next/bundle-analyzer":
         specifier: 12.0.8
@@ -915,25 +915,25 @@ importers:
   integration-tests/qm:
     dependencies:
       "@blitzjs/auth":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz-auth
       "@blitzjs/config":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/config
       "@blitzjs/next":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz-rpc
       "@prisma/client":
         specifier: 4.6.1
         version: 4.6.1(prisma@4.6.1)
       "@tanstack/react-query":
-        specifier: 5.51.1
-        version: 5.51.1(react@18.2.0)
+        specifier: 4.0.10
+        version: 4.0.10(react-dom@18.2.0)(react@18.2.0)
       blitz:
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz
       next:
         specifier: 14.3.0-canary.28
@@ -965,7 +965,7 @@ importers:
         version: 8.27.0(supports-color@8.1.1)
       eslint-config-next:
         specifier: latest
-        version: 14.2.4(eslint@8.27.0)(typescript@4.8.4)
+        version: 14.2.5(eslint@8.27.0)(typescript@4.8.4)
       eslint-plugin-testing-library:
         specifier: 5.0.1
         version: 5.0.1(eslint@8.27.0)(typescript@4.8.4)
@@ -979,16 +979,16 @@ importers:
   integration-tests/react-query-utils:
     dependencies:
       "@blitzjs/next":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz-rpc
       "@prisma/client":
         specifier: 4.6.1
         version: 4.6.1(prisma@4.6.1)
       blitz:
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz
       lowdb:
         specifier: 3.0.0
@@ -1007,7 +1007,7 @@ importers:
         version: 18.2.0(react@18.2.0)
     devDependencies:
       "@blitzjs/config":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/config
       "@next/bundle-analyzer":
         specifier: 12.0.8
@@ -1046,16 +1046,16 @@ importers:
   integration-tests/rpc:
     dependencies:
       "@blitzjs/config":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/config
       "@blitzjs/next":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz-rpc
       blitz:
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz
       next:
         specifier: 14.3.0-canary.28
@@ -1095,16 +1095,16 @@ importers:
   integration-tests/rpc-path-root:
     dependencies:
       "@blitzjs/config":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/config
       "@blitzjs/next":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz-rpc
       blitz:
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz
       next:
         specifier: 14.3.0-canary.28
@@ -1144,19 +1144,19 @@ importers:
   integration-tests/trailing-slash:
     dependencies:
       "@blitzjs/auth":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz-auth
       "@blitzjs/next":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz-rpc
       "@prisma/client":
         specifier: 4.6.1
         version: 4.6.1(prisma@4.6.1)
       blitz:
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz
       lowdb:
         specifier: 3.0.0
@@ -1175,7 +1175,7 @@ importers:
         version: 18.2.0(react@18.2.0)
     devDependencies:
       "@blitzjs/config":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/config
       "@next/bundle-analyzer":
         specifier: 12.0.8
@@ -1214,17 +1214,17 @@ importers:
   integration-tests/utils:
     devDependencies:
       "@blitzjs/config":
-        specifier: workspace:2.0.10
+        specifier: workspace:2.1.1
         version: link:../../packages/config
       "@blitzjs/next":
-        specifier: workspace:2.0.10
+        specifier: workspace:2.1.1
         version: link:../../packages/blitz-next
       "@blitzjs/rpc":
-        specifier: workspace:2.0.10
+        specifier: workspace:2.1.1
         version: link:../../packages/blitz-rpc
       "@tanstack/react-query":
-        specifier: 5.51.1
-        version: 5.51.1(react@18.2.0)
+        specifier: 4.13.0
+        version: 4.13.0(react-dom@18.2.0)(react@18.2.0)
       "@testing-library/react":
         specifier: 13.4.0
         version: 13.4.0(react-dom@18.2.0)(react@18.2.0)
@@ -1301,7 +1301,7 @@ importers:
   packages/blitz:
     dependencies:
       "@blitzjs/generator":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../generator
       "@mrleebo/prisma-ast":
         specifier: 0.2.6
@@ -1446,7 +1446,7 @@ importers:
         version: 2.1.1
     devDependencies:
       "@blitzjs/config":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../config
       "@types/cookie":
         specifier: 0.4.1
@@ -1591,7 +1591,7 @@ importers:
         version: 0.11.0
     devDependencies:
       "@blitzjs/config":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../config
       "@testing-library/react":
         specifier: 13.4.0
@@ -1615,7 +1615,7 @@ importers:
         specifier: 17.0.14
         version: 17.0.14
       blitz:
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../blitz
       next:
         specifier: 14.3.0-canary.28
@@ -1645,7 +1645,7 @@ importers:
   packages/blitz-next:
     dependencies:
       "@blitzjs/rpc":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../blitz-rpc
       "@types/hoist-non-react-statics":
         specifier: 3.3.1
@@ -1670,7 +1670,7 @@ importers:
         version: 8.1.1
     devDependencies:
       "@blitzjs/config":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../config
       "@testing-library/dom":
         specifier: 8.13.0
@@ -1703,7 +1703,7 @@ importers:
         specifier: 4.0.0
         version: 4.0.0(@types/react@18.0.25)(react-dom@18.2.0)(react@18.2.0)
       blitz:
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../blitz
       cross-spawn:
         specifier: 7.0.3
@@ -1713,7 +1713,7 @@ importers:
         version: 4.1.0
       next:
         specifier: 14.3.0-canary.28
-        version: 14.3.0-canary.28(@babel/core@7.12.10)(react-dom@18.2.0)(react@18.2.0)
+        version: 14.3.0-canary.28(@babel/core@7.20.2)(react-dom@18.2.0)(react@18.2.0)
       next-router-mock:
         specifier: 0.9.1
         version: 0.9.1(next@14.3.0-canary.28)(react@18.2.0)
@@ -1728,7 +1728,7 @@ importers:
         version: 5.0.0
       ts-jest:
         specifier: 27.1.4
-        version: 27.1.4(@babel/core@7.12.10)(esbuild@0.14.51)(jest@27.5.1)(typescript@4.8.4)
+        version: 27.1.4(@babel/core@7.20.2)(esbuild@0.14.51)(jest@27.5.1)(typescript@4.8.4)
       tslog:
         specifier: 4.9.0
         version: 4.9.0
@@ -1748,8 +1748,8 @@ importers:
         specifier: 1.3.7
         version: 1.3.7
       "@tanstack/react-query":
-        specifier: 5.51.1
-        version: 5.51.1(react@18.2.0)
+        specifier: 4.24.4
+        version: 4.24.4(react-dom@18.2.0)(react@18.2.0)
       b64-lite:
         specifier: 1.4.0
         version: 1.4.0
@@ -1770,14 +1770,14 @@ importers:
         version: 8.1.1
     devDependencies:
       "@blitzjs/auth":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../blitz-auth
       "@blitzjs/config":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../config
       "@tanstack/query-core":
-        specifier: 5.51.1
-        version: 5.51.1
+        specifier: 4.24.4
+        version: 4.24.4
       "@types/debug":
         specifier: 4.1.7
         version: 4.1.7
@@ -1788,7 +1788,7 @@ importers:
         specifier: 17.0.14
         version: 17.0.14
       blitz:
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../blitz
       next:
         specifier: 14.3.0-canary.28
@@ -1827,13 +1827,13 @@ importers:
         specifier: 7.17.12
         version: 7.17.12(@babel/core@7.12.10)
       "@blitzjs/generator":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../generator
       arg:
         specifier: 5.0.1
         version: 5.0.1
       blitz:
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../blitz
       chalk:
         specifier: ^4.1.0
@@ -1861,7 +1861,7 @@ importers:
         specifier: 7.12.10
         version: 7.12.10(@babel/core@7.12.10)
       "@blitzjs/config":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../config
       "@types/jscodeshift":
         specifier: 0.11.2
@@ -1983,7 +1983,7 @@ importers:
         version: 3.20.2
     devDependencies:
       "@blitzjs/config":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../config
       "@juanm04/cpx":
         specifier: 2.0.1
@@ -2059,7 +2059,7 @@ importers:
         version: 5.9.1(eslint@8.27.0)(supports-color@8.1.1)(typescript@4.8.4)
     devDependencies:
       "@blitzjs/config":
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../config
       "@types/react":
         specifier: 18.0.25
@@ -2083,7 +2083,7 @@ importers:
   recipes/base-web:
     dependencies:
       blitz:
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2096,7 +2096,7 @@ importers:
   recipes/bulma:
     dependencies:
       blitz:
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2109,7 +2109,7 @@ importers:
   recipes/bumbag-ui:
     dependencies:
       blitz:
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2125,7 +2125,7 @@ importers:
   recipes/chakra-ui:
     dependencies:
       blitz:
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2141,7 +2141,7 @@ importers:
   recipes/emotion:
     dependencies:
       blitz:
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2154,19 +2154,19 @@ importers:
   recipes/gh-action-yarn-mariadb:
     dependencies:
       blitz:
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz
 
   recipes/gh-action-yarn-postgres:
     dependencies:
       blitz:
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz
 
   recipes/ghost:
     dependencies:
       blitz:
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2179,7 +2179,7 @@ importers:
   recipes/graphql-apollo-server:
     dependencies:
       blitz:
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2195,7 +2195,7 @@ importers:
   recipes/logrocket:
     dependencies:
       blitz:
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2208,7 +2208,7 @@ importers:
   recipes/material-ui:
     dependencies:
       blitz:
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2221,7 +2221,7 @@ importers:
   recipes/next-ui:
     dependencies:
       blitz:
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2237,19 +2237,19 @@ importers:
   recipes/passenger:
     dependencies:
       blitz:
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz
 
   recipes/quirrel:
     dependencies:
       blitz:
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz
 
   recipes/reflexjs:
     dependencies:
       blitz:
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2265,13 +2265,13 @@ importers:
   recipes/render:
     dependencies:
       blitz:
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz
 
   recipes/secureheaders:
     dependencies:
       blitz:
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2287,7 +2287,7 @@ importers:
   recipes/stitches:
     dependencies:
       blitz:
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2300,7 +2300,7 @@ importers:
   recipes/styled-components:
     dependencies:
       blitz:
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2316,7 +2316,7 @@ importers:
   recipes/tailwind:
     dependencies:
       blitz:
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2329,7 +2329,7 @@ importers:
   recipes/theme-ui:
     dependencies:
       blitz:
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2345,7 +2345,7 @@ importers:
   recipes/vanilla-extract:
     dependencies:
       blitz:
-        specifier: 2.0.10
+        specifier: 2.1.1
         version: link:../../packages/blitz
       jscodeshift:
         specifier: 0.13.0
@@ -2448,7 +2448,7 @@ packages:
       "@babel/traverse": 7.18.2(supports-color@8.1.1)
       "@babel/types": 7.18.4
       convert-source-map: 1.8.0
-      debug: 4.3.3(supports-color@8.1.1)
+      debug: 4.3.4(supports-color@8.1.1)
       gensync: 1.0.0-beta.2
       json5: 2.2.1
       lodash: 4.17.21
@@ -6115,10 +6115,10 @@ packages:
       glob: 7.1.7
     dev: true
 
-  /@next/eslint-plugin-next@14.2.4:
+  /@next/eslint-plugin-next@14.2.5:
     resolution:
       {
-        integrity: sha512-svSFxW9f3xDaZA3idQmlFw7SusOuWTpDTAeBlO3AEPDltrraV+lqs7mAc6A27YdnpQVVIA3sODqUAAHdWhVWsA==,
+        integrity: sha512-LY3btOpPh+OTIpviNojDpUdIbHW9j0JBYBjsIp8IxtDFfYFyORvw3yNq6N231FVqQA7n7lwaf7xHbVJlA1ED7g==,
       }
     dependencies:
       glob: 10.3.10
@@ -6798,22 +6798,82 @@ packages:
       defer-to-connect: 2.0.1
     dev: false
 
-  /@tanstack/query-core@5.51.1:
+  /@tanstack/query-core@4.13.0:
     resolution:
       {
-        integrity: sha512-fJBMQMpo8/KSsWW5ratJR5+IFr7YNJ3K2kfP9l5XObYHsgfVy1w3FJUWU4FT2fj7+JMaEg33zOcNDBo0LMwHnw==,
+        integrity: sha512-PzmLQcEgC4rl2OzkiPHYPC9O79DFcMGaKsOzDEP+U4PJ+tbkcEP+Z+FQDlfvX8mCwYC7UNH7hXrQ5EdkGlJjVg==,
+      }
+    dev: true
+
+  /@tanstack/query-core@4.24.4:
+    resolution:
+      {
+        integrity: sha512-9dqjv9eeB6VHN7lD3cLo16ZAjfjCsdXetSAD5+VyKqLUvcKTL0CklGQRJu+bWzdrS69R6Ea4UZo8obHYZnG6aA==,
       }
 
-  /@tanstack/react-query@5.51.1(react@18.2.0):
+  /@tanstack/react-query@4.0.10(react-dom@18.2.0)(react@18.2.0):
     resolution:
       {
-        integrity: sha512-s47HKFnQ4HOJAHoIiXcpna/roMMPZJPy6fJ6p4ZNVn8+/onlLBEDd1+xc8OnDuwgvecqkZD7Z2mnSRbcWefrKw==,
+        integrity: sha512-Wn5QhZUE5wvr6rGClV7KeQIUsdTmYR9mgmMZen7DSRWauHW2UTynFg3Kkf6pw+XlxxOLsyLWwz/Q6q1lSpM3TQ==,
       }
     peerDependencies:
-      react: ^18.0.0
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react-native: "*"
+    peerDependenciesMeta:
+      react-dom:
+        optional: true
+      react-native:
+        optional: true
     dependencies:
-      "@tanstack/query-core": 5.51.1
+      "@tanstack/query-core": 4.24.4
+      "@types/use-sync-external-store": 0.0.3
       react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      use-sync-external-store: 1.2.0(react@18.2.0)
+    dev: false
+
+  /@tanstack/react-query@4.13.0(react-dom@18.2.0)(react@18.2.0):
+    resolution:
+      {
+        integrity: sha512-dI/5hJ/pGQ74P5hxBLC9h6K0/Cap2T3k0ZjjjFLBCNnohDYgl7LNmMopzrRzBHk2mMjf2hgXHIzcKNG8GOZ5hg==,
+      }
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react-native: "*"
+    peerDependenciesMeta:
+      react-dom:
+        optional: true
+      react-native:
+        optional: true
+    dependencies:
+      "@tanstack/query-core": 4.13.0
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      use-sync-external-store: 1.2.0(react@18.2.0)
+    dev: true
+
+  /@tanstack/react-query@4.24.4(react-dom@18.2.0)(react@18.2.0):
+    resolution:
+      {
+        integrity: sha512-RpaS/3T/a3pHuZJbIAzAYRu+1nkp+/enr9hfRXDS/mojwx567UiMksoqW4wUFWlwIvWTXyhot2nbIipTKEg55Q==,
+      }
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react-native: "*"
+    peerDependenciesMeta:
+      react-dom:
+        optional: true
+      react-native:
+        optional: true
+    dependencies:
+      "@tanstack/query-core": 4.24.4
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      use-sync-external-store: 1.2.0(react@18.2.0)
+    dev: false
 
   /@testim/chrome-version@1.1.2:
     resolution:
@@ -7761,6 +7821,13 @@ packages:
       {
         integrity: sha512-Q5vtl1W5ue16D+nIaW8JWebSSraJVlK+EthKn7e7UcD4KWsaSJ8BqGPXNaPghgtcn/fhvrN17Tv8ksUsQpiplw==,
       }
+
+  /@types/use-sync-external-store@0.0.3:
+    resolution:
+      {
+        integrity: sha512-EwmlvuaxPNej9+T4v5AuBPJa2x2UOJVdjCtDHgcDqitUeOtjnJKJ+apYjVcAoBEMjKW1VVFGZLUb5+qqa09XFA==,
+      }
+    dev: false
 
   /@types/vinyl@2.0.6:
     resolution:
@@ -12390,10 +12457,10 @@ packages:
       - supports-color
     dev: true
 
-  /eslint-config-next@14.2.4(eslint@8.27.0)(typescript@4.8.4):
+  /eslint-config-next@14.2.5(eslint@8.27.0)(typescript@4.8.4):
     resolution:
       {
-        integrity: sha512-Qr0wMgG9m6m4uYy2jrYJmyuNlYZzPRQq5Kvb9IDlYwn+7yq6W6sfMNFgb+9guM1KYwuIo6TIaiFhZJ6SnQ/Efw==,
+        integrity: sha512-zogs9zlOiZ7ka+wgUnmcM0KBEDjo4Jis7kxN1jvC0N4wynQ2MIx/KBkg4mVF63J5EK4W0QMCn7xO3vNisjaAoA==,
       }
     peerDependencies:
       eslint: ^7.23.0 || ^8.0.0
@@ -12402,7 +12469,7 @@ packages:
       typescript:
         optional: true
     dependencies:
-      "@next/eslint-plugin-next": 14.2.4
+      "@next/eslint-plugin-next": 14.2.5
       "@rushstack/eslint-patch": 1.5.1
       "@typescript-eslint/parser": 5.9.1(eslint@8.27.0)(supports-color@8.1.1)(typescript@4.8.4)
       eslint: 8.27.0(supports-color@8.1.1)
@@ -13733,10 +13800,10 @@ packages:
     engines: {node: ">=0.10.0"}
     dev: false
 
-  /foreground-child@3.2.1:
+  /foreground-child@3.3.0:
     resolution:
       {
-        integrity: sha512-PXUUyLqrR2XCWICfv6ukppP96sdFwWbNEnfEMt7jNsISjMsvaLNinAHNDYyvkyU+SZG2BTSbT5NjG+vZslfGTA==,
+        integrity: sha512-Ld2g8rrAyMYFXBhEqMz8ZAHBi4J4uS1i/CxGMDnjyFWddMXLVcDp051DZfu+t7+ab7Wv6SMqpWmyFIj5UbfFvg==,
       }
     engines: {node: ">=14"}
     dependencies:
@@ -14116,7 +14183,7 @@ packages:
     engines: {node: ">=16 || 14 >=14.17"}
     hasBin: true
     dependencies:
-      foreground-child: 3.2.1
+      foreground-child: 3.3.0
       jackspeak: 2.3.6
       minimatch: 9.0.5
       minipass: 7.1.2
@@ -17506,6 +17573,16 @@ packages:
     dependencies:
       get-func-name: 2.0.0
 
+  /lowdb@2.1.0:
+    resolution:
+      {
+        integrity: sha512-F4Go8/V37gAidTR3c5poyjprOpZSDNSLJVOmI0ny4D4q9rC37OkBhlzX0bqj7LZlT3UIj4FchmZrrSw7qY+eGQ==,
+      }
+    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
+    dependencies:
+      steno: 1.0.0
+    dev: false
+
   /lowdb@3.0.0:
     resolution:
       {
@@ -18231,7 +18308,7 @@ packages:
         integrity: sha512-iChjE8ov/1K/z98gdKbn2Jw+2vLgJtVV39X+rCP5SGnVQuco7QOr19FRNGMIrD8d3LYhHWV9j9sKLzq1aDWWQQ==,
       }
     peerDependencies:
-      next: ^12.2.5 || ^13 || ^14
+      next: 14.3.0-canary.28
       nodemailer: ^6.6.5
       react: ^17.0.2 || ^18
       react-dom: ^17.0.2 || ^18
@@ -18259,10 +18336,10 @@ packages:
         integrity: sha512-GTrns944dnFNgycpinyRszOiwwk99LUJsvvX0FWRgUFHv6hOuzCns1rmTlzO+DRimYB9/XMA+87X2/dQLzjiUQ==,
       }
     peerDependencies:
-      next: ">=10.0.0"
+      next: 14.3.0-canary.28
       react: ">=17.0.0"
     dependencies:
-      next: 14.3.0-canary.28(@babel/core@7.12.10)(react-dom@18.2.0)(react@18.2.0)
+      next: 14.3.0-canary.28(@babel/core@7.20.2)(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
     dev: true
 
@@ -18310,6 +18387,7 @@ packages:
     transitivePeerDependencies:
       - "@babel/core"
       - babel-plugin-macros
+    dev: false
 
   /next@14.3.0-canary.28(@babel/core@7.18.2)(react-dom@18.2.0)(react@18.2.0):
     resolution:
@@ -21643,6 +21721,13 @@ packages:
     engines: {node: ">= 0.6"}
     dev: true
 
+  /steno@1.0.0:
+    resolution:
+      {
+        integrity: sha512-C/KgCvEa1yWnpHmaPjAXrz1yWxh6hs+HvhqqPa71euaQmNi1wr4+WFo57VQxjKKuFl2KqS7gtlrN0oxj2noQLw==,
+      }
+    dev: false
+
   /steno@2.1.0:
     resolution:
       {
@@ -21938,9 +22023,10 @@ packages:
       babel-plugin-macros:
         optional: true
     dependencies:
-      "@babel/core": 7.12.10(supports-color@8.1.1)
+      "@babel/core": 7.12.10
       client-only: 0.0.1
       react: 18.2.0
+    dev: false
 
   /styled-jsx@5.1.1(@babel/core@7.18.2)(react@18.2.0):
     resolution:
@@ -22467,7 +22553,7 @@ packages:
       }
     dev: true
 
-  /ts-jest@27.1.4(@babel/core@7.12.10)(esbuild@0.14.51)(jest@27.5.1)(typescript@4.8.4):
+  /ts-jest@27.1.4(@babel/core@7.20.2)(esbuild@0.14.51)(jest@27.5.1)(typescript@4.8.4):
     resolution:
       {
         integrity: sha512-qjkZlVPWVctAezwsOD1OPzbZ+k7zA5z3oxII4dGdZo5ggX/PL7kvwTM0pXTr10fAtbiVpJaL3bWd502zAhpgSQ==,
@@ -22491,7 +22577,7 @@ packages:
       esbuild:
         optional: true
     dependencies:
-      "@babel/core": 7.12.10(supports-color@8.1.1)
+      "@babel/core": 7.20.2(supports-color@8.1.1)
       bs-logger: 0.2.6
       esbuild: 0.14.51
       fast-json-stable-stringify: 2.1.0
@@ -23190,6 +23276,16 @@ packages:
       punycode: 1.3.2
       querystring: 0.2.0
     dev: false
+
+  /use-sync-external-store@1.2.0(react@18.2.0):
+    resolution:
+      {
+        integrity: sha512-eEgnFxGQ1Ife9bzYs6VLi8/4X6CObHMw9Qr9tPY43iKwsPw8xE8+EFsf/2cFZ5S3esXgpWgtSCtLNS41F+sKPA==,
+      }
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      react: 18.2.0
 
   /use@3.1.1:
     resolution:

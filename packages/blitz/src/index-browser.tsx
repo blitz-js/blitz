@@ -8,6 +8,7 @@ import {
   PaginationArgumentError,
   RedirectError,
   OAuthError,
+  registerBlitzErrorClasses,
 } from "./errors"
 import type {EventHooks, MiddlewareHooks} from "./types"
 export {
@@ -18,6 +19,7 @@ export {
   PaginationArgumentError,
   RedirectError,
   OAuthError,
+  registerBlitzErrorClasses,
 }
 export * from "./utils/enhance-prisma"
 
