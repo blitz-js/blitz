@@ -1,5 +1,12 @@
 # @blitzjs/next
 
+## 2.1.2
+
+### Patch Changes
+
+- blitz@2.1.2
+- @blitzjs/rpc@2.1.2
+
 ## 2.1.1
 
 ### Patch Changes
