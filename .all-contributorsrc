@@ -4084,6 +4084,15 @@
         "doc",
         "code"
       ]
+    },
+    {
+      "login": "cherniavskii",
+      "name": "Andrew Cherniavskii",
+      "avatar_url": "https://avatars.githubusercontent.com/u/13808724?v=4",
+      "profile": "cherniavskii.com",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
