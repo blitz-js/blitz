@@ -1,9 +1,9 @@
-import {useQuery} from "@blitzjs/rpc"
+import {useSuspenseQuery} from "@blitzjs/rpc"
 import getNoauthBasic from "../queries/getNoauthBasic"
 import {Suspense} from "react"
 
 function Content() {
-  const [result] = useQuery(getNoauthBasic, undefined)
+  const [result] = useSuspenseQuery(getNoauthBasic, undefined)
   return <div id="content">{result}</div>
 }
 

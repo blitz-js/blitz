@@ -2,12 +2,6 @@
   "name": "blitz-root",
   "version": "0.0.0",
   "private": true,
-  "workspaces": [
-    "apps/*",
-    "packages/*",
-    "integration-tests/*",
-    "recipes/*"
-  ],
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "prepare": "husky install",
@@ -39,7 +33,7 @@
     "wait-on": "6.0.1"
   },
   "npmClient": "pnpm",
-  "packageManager": "pnpm@8.6.6",
+  "packageManager": "pnpm@9.6.0",
   "manypkg": {
     "ignoredRules": [
       "EXTERNAL_MISMATCH"
