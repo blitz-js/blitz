@@ -4093,6 +4093,17 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "doe-base",
+      "name": "Daniel Idoko",
+      "avatar_url": "https://avatars.githubusercontent.com/u/95912955?v=4",
+      "profile": "https://danielidoko-r3zt.vercel.app/",
+      "contributions": [
+        "doc",
+        "code",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7,
