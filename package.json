@@ -2,12 +2,6 @@
   "name": "blitz-root",
   "version": "0.0.0",
   "private": true,
-  "workspaces": [
-    "apps/*",
-    "packages/*",
-    "integration-tests/*",
-    "recipes/*"
-  ],
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "prepare": "husky install",

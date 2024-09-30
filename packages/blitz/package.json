@@ -30,7 +30,7 @@
     "blitz": "bin/blitz"
   },
   "dependencies": {
-    "@blitzjs/generator": "2.1.1",
+    "@blitzjs/generator": "workspace:2.1.1",
     "@mrleebo/prisma-ast": "0.2.6",
     "@types/global-agent": "2.1.1",
     "arg": "5.0.1",

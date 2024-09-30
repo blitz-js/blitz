@@ -16,11 +16,11 @@
     "schema": "db/schema.prisma"
   },
   "dependencies": {
-    "@blitzjs/auth": "2.1.1",
-    "@blitzjs/next": "2.1.1",
-    "@blitzjs/rpc": "2.1.1",
+    "@blitzjs/auth": "workspace:2.1.1",
+    "@blitzjs/next": "workspace:2.1.1",
+    "@blitzjs/rpc": "workspace:2.1.1",
     "@prisma/client": "4.6.1",
-    "blitz": "2.1.1",
+    "blitz": "workspace:2.1.1",
     "lowdb": "2.1.0",
     "next": "14.3.0-canary.28",
     "prisma": "4.6.1",
