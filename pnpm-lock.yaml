@@ -110,8 +110,8 @@ importers:
         specifier: 1.11.0
         version: 1.11.0
       zod:
-        specifier: 3.20.2
-        version: 3.20.2
+        specifier: 3.23.8
+        version: 3.23.8
     devDependencies:
       "@types/node":
         specifier: 18.11.7
@@ -180,8 +180,8 @@ importers:
         specifier: 10.9.1
         version: 10.9.1(@types/node@18.11.9)(typescript@4.8.4)
       zod:
-        specifier: 3.20.2
-        version: 3.20.2
+        specifier: 3.23.8
+        version: 3.23.8
     devDependencies:
       "@next/bundle-analyzer":
         specifier: 12.0.8
@@ -298,8 +298,8 @@ importers:
         specifier: 10.9.1
         version: 10.9.1(@types/node@18.11.9)(typescript@4.8.4)
       zod:
-        specifier: 3.20.2
-        version: 3.20.2
+        specifier: 3.23.8
+        version: 3.23.8
     devDependencies:
       "@next/bundle-analyzer":
         specifier: 12.0.8
@@ -559,8 +559,8 @@ importers:
         specifier: 10.9.1
         version: 10.9.1(@types/node@18.11.9)(typescript@4.8.4)
       zod:
-        specifier: 3.20.2
-        version: 3.20.2
+        specifier: 3.23.8
+        version: 3.23.8
     devDependencies:
       "@next/bundle-analyzer":
         specifier: 12.0.8
@@ -1521,8 +1521,8 @@ importers:
         specifier: 1.0.2
         version: 1.0.2
       zod:
-        specifier: 3.20.2
-        version: 3.20.2
+        specifier: 3.23.8
+        version: 3.23.8
 
   packages/blitz-auth:
     dependencies:
@@ -1809,8 +1809,8 @@ importers:
         specifier: 1.0.2
         version: 1.0.2
       zod:
-        specifier: 3.20.2
-        version: 3.20.2
+        specifier: 3.23.8
+        version: 3.23.8
 
   packages/codemod:
     dependencies:
@@ -1979,8 +1979,8 @@ importers:
         specifier: 2.2.1
         version: 2.2.1
       zod:
-        specifier: 3.20.2
-        version: 3.20.2
+        specifier: 3.23.8
+        version: 3.23.8
     devDependencies:
       "@blitzjs/config":
         specifier: 2.1.2
@@ -24329,8 +24329,8 @@ packages:
       "@types/yoga-layout": 1.9.2
     dev: false
 
-  /zod@3.20.2:
+  /zod@3.23.8:
     resolution:
       {
-        integrity: sha512-1MzNQdAvO+54H+EaK5YpyEy0T+Ejo/7YLHS93G3RnYWh5gaotGHwGeN/ZO687qEDU2y4CdStQYXVHIgrUl5UVQ==,
+        integrity: sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g==,
       }
