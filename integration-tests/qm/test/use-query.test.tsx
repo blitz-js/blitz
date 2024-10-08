@@ -1,6 +1,11 @@
 import {describe, it, expect, beforeAll, vi} from "vitest"
 import {act, screen, waitForElementToBeRemoved} from "@testing-library/react"
-import {useQuery, useInfiniteQuery, BlitzRpcPlugin, BlitzProvider} from "@blitzjs/rpc"
+import {
+  useSuspenseQuery,
+  useSuspenseInfiniteQuery,
+  BlitzRpcPlugin,
+  BlitzProvider,
+} from "@blitzjs/rpc"
 import React from "react"
 import delay from "delay"
 import {buildMutationRpc, buildQueryRpc, mockRouter, render} from "../../utils/blitz-test-utils"
@@ -11,18 +16,18 @@ beforeAll(() => {
   globalThis.IS_REACT_ACT_ENVIRONMENT = true
 })
 
-describe("useQuery", () => {
+describe("useSuspenseQuery", () => {
   const setupHook = (
     ID: string,
     params: any,
     queryFn: (...args: any) => any,
-    options: Parameters<typeof useQuery>[2] = {} as any,
+    options: Parameters<typeof useSuspenseQuery>[2] = {} as any,
   ): [{data?: any; setQueryData?: any}, Function] => {
     let res = {}
     const qc = BlitzRpcPlugin({})
 
     function TestHarness() {
-      const [data, {setQueryData}] = useQuery(queryFn, params, {
+      const [data, {setQueryData}] = useSuspenseQuery(queryFn, params, {
         suspense: true,
         ...(options as any),
       } as any)
@@ -110,7 +115,7 @@ describe("useQuery", () => {
 
     it("works with options other than enabled & suspense without type error", () => {
       const Demo = () => {
-        useQuery(buildQueryRpc(upcase), undefined, {refetchInterval: 10000})
+        useSuspenseQuery(buildQueryRpc(upcase), undefined, {refetchInterval: 10000})
         return <div></div>
       }
       const ui = () => <Demo />
@@ -126,7 +131,7 @@ describe("useQuery", () => {
   })
 })
 
-describe("useInfiniteQuery", () => {
+describe("useSuspenseInfiniteQuery", () => {
   const setupHook = (
     ID: string,
     params: (arg?: any) => any,
@@ -138,7 +143,7 @@ describe("useInfiniteQuery", () => {
     function TestHarness() {
       // TODO - fix typing
       //@ts-ignore
-      const [groupedData] = useInfiniteQuery(queryFn, params, {
+      const [groupedData] = useSuspenseInfiniteQuery(queryFn, params, {
         suspense: true,
         getNextPageParam: () => {},
       })
