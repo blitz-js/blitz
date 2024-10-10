@@ -1304,8 +1304,8 @@ importers:
         specifier: 2.1.2
         version: link:../generator
       "@mrleebo/prisma-ast":
-        specifier: 0.2.6
-        version: 0.2.6
+        specifier: 0.4.1
+        version: 0.4.1
       "@types/global-agent":
         specifier: 2.1.1
         version: 2.1.1
@@ -6047,16 +6047,6 @@ packages:
       fs-extra: 8.1.0
       globby: 11.1.0
       read-yaml-file: 1.1.0
-    dev: false
-
-  /@mrleebo/prisma-ast@0.2.6:
-    resolution:
-      {
-        integrity: sha512-Df0gAGmws3sxNMmLviTarBL9znf84QVlVhlx4EPgArrnaVBy8tNQZAI9aSTJHzH0JGj9BVGa0Qz1g3hPt12Kxw==,
-      }
-    engines: {node: ">=10"}
-    dependencies:
-      chevrotain: 9.1.0
     dev: false
 
   /@mrleebo/prisma-ast@0.4.1:
