@@ -1,5 +1,12 @@
 # blitz
 
+## 2.1.3
+
+### Patch Changes
+
+- 50f17d21c: Update prisma-ast dependency to prevent Blitz generator from failing when Prisma keywords are used as model names
+  - @blitzjs/generator@2.1.3
+
 ## 2.1.2
 
 ### Patch Changes
