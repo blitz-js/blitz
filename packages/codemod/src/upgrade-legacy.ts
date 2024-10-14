@@ -1,9 +1,4 @@
-import j, {
-  Expression,
-  ImportDeclaration,
-  ImportDefaultSpecifier,
-  ImportSpecifier,
-} from "jscodeshift"
+import j, {ImportDeclaration, ImportDefaultSpecifier, ImportSpecifier} from "jscodeshift"
 import * as fs from "fs-extra"
 import path from "path"
 import {
@@ -41,17 +36,20 @@ const findPagesDirectory = () => {
 const isInternalBlitzMonorepoDevelopment = fs.existsSync(
   path.join(__dirname, "../../../blitz-next"),
 )
+
 type Step = {name: string; action: (stepIndex: number) => Promise<void>}
+
 const upgradeLegacy = async () => {
-  let isTypescript = fs.existsSync(path.resolve("tsconfig.json"))
-  let existingBlitzConfigFiles = ["ts", "js"]
-    .map((e) => `blitz.config.${e}`)
+  const isTypescript = fs.existsSync(path.resolve("tsconfig.json"))
+  const existingBlitzConfigFiles = ["ts", "js"]
+    .map((e) => `blitz.config.${e}` || `next.config.js`)
     .map((e) => path.resolve(e))
     .filter(fs.existsSync)
-  let blitzConfigFile = existingBlitzConfigFiles.reduce((_prev, current) => current, "")
+  const blitzConfigFile = existingBlitzConfigFiles.reduce((_prev, current) => current, "")
   if (blitzConfigFile === "") {
-    throw new ExpectedError("Could not identify Legacy Blitz Config file")
+    throw new ExpectedError("Could not identify Legacy Blitz Config file.")
   }
+
   // Check if app directory exists in either app/ or src/app
   const appDir = fs.existsSync(path.resolve("app"))
     ? path.resolve("app")
@@ -59,7 +57,6 @@ const upgradeLegacy = async () => {
     ? path.resolve(path.join("src", "app"))
     : ""
   try {
-    // Throw Error if appDir empty
     if (appDir === "") {
       throw new ExpectedError(
         "Could not identify Legacy Blitz App directory in project (no app/ or src/ directory found)",
@@ -582,7 +579,7 @@ const upgradeLegacy = async () => {
           replaceTemplateValues(blitzClient),
         )
       } else {
-        throw new ExpectedError("App directory doesn't exit")
+        throw new ExpectedError("App directory doesn't exist")
       }
     },
   })
@@ -1339,18 +1336,29 @@ const upgradeLegacy = async () => {
       const pagesDir = fs.existsSync(srcPagesDir) ? srcPagesDir : path.resolve("pages")
       getAllFiles(pagesDir, [], [], [".ts", ".tsx", ".js", ".jsx"]).forEach((file) => {
         const program = getCollectionFromSource(file)
+        const identifiers = new Set()
+
+        // Collect all identifiers in the scope
+        program.find(j.Identifier).forEach((path) => {
+          identifiers.add(path.value.name)
+        })
+
         try {
-          const invokeWithMiddlewarePath = findCallExpression(program, "invokeWithMiddleware")
-          if (invokeWithMiddlewarePath?.length) {
-            invokeWithMiddlewarePath.forEach((path) => {
+          const invokeWithMiddlewarePaths = findCallExpression(program, "invokeWithMiddleware")
+          if (invokeWithMiddlewarePaths?.length) {
+            invokeWithMiddlewarePaths.forEach((path) => {
               const resolverName = path.value.arguments.at(0)
               if (resolverName?.type === "Identifier") {
-                const resolverExpression = j.callExpression(
-                  j.identifier(resolverName.name),
-                  path.value.arguments.slice(1),
-                )
-                const resolverStatement = j.expressionStatement(resolverExpression)
-                j(path).replaceWith(resolverStatement)
+                if (!identifiers.has(resolverName.name)) {
+                  // Check if identifier exists
+                  // We skip insertion if the identifier already exists
+                  const resolverExpression = j.callExpression(
+                    j.identifier(resolverName.name),
+                    path.value.arguments.slice(1),
+                  )
+                  const resolverStatement = j.expressionStatement(resolverExpression)
+                  j(path).replaceWith(resolverStatement)
+                }
               } else {
                 throw new Error(
                   `invokeWithMiddleware can only be used with a resolver as the first argument \nError at Line ${path?.value?.loc?.start.line}`,
@@ -1368,6 +1376,7 @@ const upgradeLegacy = async () => {
       })
     },
   })
+
   // Loop through steps and run the action
   if ((failedAt && failedAt < steps.length) || failedAt !== "SUCCESS") {
     for (let [index, step] of steps.entries()) {
