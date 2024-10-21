@@ -1,5 +1,11 @@
 # @blitzjs/generator
 
+## 2.1.3
+
+### Patch Changes
+
+- 0b3286468: chore: bump `next.js` and `zod` versions
+
 ## 2.1.2
 
 ### Patch Changes
