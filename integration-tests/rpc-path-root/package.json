@@ -11,7 +11,7 @@
     "@blitzjs/next": "2.1.2",
     "@blitzjs/rpc": "2.1.2",
     "blitz": "2.1.2",
-    "next": "14.3.0-canary.28",
+    "next": "14.2.15",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },
