@@ -51,7 +51,9 @@
     },
     "overrides": {
       "@types/mime": "3.0.4",
-      "next": "15.0.1"
+      "next": "15.0.1",
+      "@types/react": "npm:types-react@rc",
+      "@types/react-dom": "npm:types-react-dom@rc"
     }
   }
 }

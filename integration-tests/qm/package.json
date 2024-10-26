@@ -17,12 +17,12 @@
     "blitz": "2.1.3",
     "next": "15.0.1",
     "prisma": "4.6.1",
-    "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react": "rc",
+    "react-dom": "rc"
   },
   "devDependencies": {
     "@testing-library/react": "13.4.0",
-    "@types/react": "18.0.25",
+    "@types/react": "npm:types-react@rc",
     "@vitejs/plugin-react": "1.3.0",
     "delay": "5.0.0",
     "eslint": "8.27.0",

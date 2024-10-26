@@ -7,6 +7,8 @@ settings:
 overrides:
   "@types/mime": 3.0.4
   next: 15.0.1
+  "@types/react": npm:types-react@rc
+  "@types/react-dom": npm:types-react-dom@rc
 
 patchedDependencies:
   next-auth@4.24.7:
@@ -36,7 +38,7 @@ importers:
         version: 13.0.3
       next:
         specifier: 15.0.1
-        version: 15.0.1(@babel/core@7.12.10)(react-dom@18.2.0)(react@18.2.0)
+        version: 15.0.1(react-dom@18.2.0)(react@18.2.0)
       only-allow:
         specifier: 1.1.0
         version: 1.1.0
@@ -75,7 +77,7 @@ importers:
         version: link:../../packages/blitz-rpc
       "@hookform/error-message":
         specifier: 2.0.0
-        version: 2.0.0(react-dom@18.2.0)(react-hook-form@7.39.1)(react@18.2.0)
+        version: 2.0.0(react-dom@19.0.0-rc-cae764ce-20241025)(react-hook-form@7.39.1)(react@19.0.0-rc-cae764ce-20241025)
       "@hookform/resolvers":
         specifier: 2.9.10
         version: 2.9.10(react-hook-form@7.39.1)
@@ -84,7 +86,7 @@ importers:
         version: 4.6.1(prisma@4.6.1)
       "@tanstack/react-query":
         specifier: 4.0.10
-        version: 4.0.10(react-dom@18.2.0)(react@18.2.0)
+        version: 4.0.10(react-dom@19.0.0-rc-cae764ce-20241025)(react@19.0.0-rc-cae764ce-20241025)
       blitz:
         specifier: 2.1.3
         version: link:../../packages/blitz
@@ -93,19 +95,19 @@ importers:
         version: 3.2.7
       next:
         specifier: 15.0.1
-        version: 15.0.1(@babel/core@7.12.10)(react-dom@18.2.0)(react@18.2.0)
+        version: 15.0.1(@babel/core@7.12.10)(react-dom@19.0.0-rc-cae764ce-20241025)(react@19.0.0-rc-cae764ce-20241025)
       prisma:
         specifier: ^4.5.0
         version: 4.6.1
       react:
-        specifier: 18.2.0
-        version: 18.2.0
+        specifier: rc
+        version: 19.0.0-rc-cae764ce-20241025
       react-dom:
-        specifier: 18.2.0
-        version: 18.2.0(react@18.2.0)
+        specifier: rc
+        version: 19.0.0-rc-cae764ce-20241025(react@19.0.0-rc-cae764ce-20241025)
       react-hook-form:
         specifier: 7.39.1
-        version: 7.39.1(react@18.2.0)
+        version: 7.39.1(react@19.0.0-rc-cae764ce-20241025)
       superjson:
         specifier: 1.11.0
         version: 1.11.0
@@ -117,11 +119,11 @@ importers:
         specifier: 18.11.7
         version: 18.11.7
       "@types/react":
-        specifier: 18.0.23
-        version: 18.0.23
+        specifier: npm:types-react@rc
+        version: /types-react@19.0.0-rc.1
       "@types/react-dom":
-        specifier: 18.0.7
-        version: 18.0.7
+        specifier: npm:types-react-dom@rc
+        version: /types-react-dom@19.0.0-rc.1
       eslint:
         specifier: 8.26.0
         version: 8.26.0
@@ -148,7 +150,7 @@ importers:
         version: link:../../packages/blitz-rpc
       "@hookform/error-message":
         specifier: 2.0.0
-        version: 2.0.0(react-dom@18.2.0)(react-hook-form@7.39.1)(react@18.2.0)
+        version: 2.0.0(react-dom@19.0.0-rc-cae764ce-20241025)(react-hook-form@7.39.1)(react@19.0.0-rc-cae764ce-20241025)
       "@hookform/resolvers":
         specifier: 2.9.10
         version: 2.9.10(react-hook-form@7.39.1)
@@ -160,22 +162,22 @@ importers:
         version: link:../../packages/blitz
       next:
         specifier: 15.0.1
-        version: 15.0.1(@babel/core@7.20.2)(react-dom@18.2.0)(react@18.2.0)
+        version: 15.0.1(@babel/core@7.20.2)(react-dom@19.0.0-rc-cae764ce-20241025)(react@19.0.0-rc-cae764ce-20241025)
       next-auth:
         specifier: 4.24.7
-        version: 4.24.7(patch_hash=xxwv3g3ul7bnzqsfasefw3kyq4)(next@15.0.1)(react-dom@18.2.0)(react@18.2.0)
+        version: 4.24.7(patch_hash=xxwv3g3ul7bnzqsfasefw3kyq4)(next@15.0.1)(react-dom@19.0.0-rc-cae764ce-20241025)(react@19.0.0-rc-cae764ce-20241025)
       prisma:
         specifier: 4.6.1
         version: 4.6.1
       react:
-        specifier: 18.2.0
-        version: 18.2.0
+        specifier: rc
+        version: 19.0.0-rc-cae764ce-20241025
       react-dom:
-        specifier: 18.2.0
-        version: 18.2.0(react@18.2.0)
+        specifier: rc
+        version: 19.0.0-rc-cae764ce-20241025(react@19.0.0-rc-cae764ce-20241025)
       react-hook-form:
         specifier: 7.39.1
-        version: 7.39.1(react@18.2.0)
+        version: 7.39.1(react@19.0.0-rc-cae764ce-20241025)
       ts-node:
         specifier: 10.9.1
         version: 10.9.1(@types/node@18.11.9)(typescript@4.8.4)
@@ -191,10 +193,10 @@ importers:
         version: 5.16.5
       "@testing-library/react":
         specifier: 13.4.0
-        version: 13.4.0(react-dom@18.2.0)(react@18.2.0)
+        version: 13.4.0(react-dom@19.0.0-rc-cae764ce-20241025)(react@19.0.0-rc-cae764ce-20241025)
       "@testing-library/react-hooks":
         specifier: 8.0.1
-        version: 8.0.1(@types/react@18.0.25)(react-dom@18.2.0)(react@18.2.0)
+        version: 8.0.1(react-dom@19.0.0-rc-cae764ce-20241025)(react@19.0.0-rc-cae764ce-20241025)(types-react@19.0.0-rc.1)
       "@types/node":
         specifier: 18.11.9
         version: 18.11.9
@@ -202,8 +204,8 @@ importers:
         specifier: 2.0.1
         version: 2.0.1
       "@types/react":
-        specifier: 18.0.25
-        version: 18.0.25
+        specifier: npm:types-react@rc
+        version: /types-react@19.0.0-rc.1
       "@typescript-eslint/eslint-plugin":
         specifier: 5.42.1
         version: 5.42.1(@typescript-eslint/parser@5.9.1)(eslint@8.27.0)(supports-color@8.1.1)(typescript@4.8.4)
@@ -266,7 +268,7 @@ importers:
         version: link:../../packages/blitz-rpc
       "@hookform/error-message":
         specifier: 2.0.0
-        version: 2.0.0(react-dom@18.2.0)(react-hook-form@7.39.1)(react@18.2.0)
+        version: 2.0.0(react-dom@19.0.0-rc-cae764ce-20241025)(react-hook-form@7.39.1)(react@19.0.0-rc-cae764ce-20241025)
       "@hookform/resolvers":
         specifier: 2.9.10
         version: 2.9.10(react-hook-form@7.39.1)
@@ -278,7 +280,7 @@ importers:
         version: link:../../packages/blitz
       next:
         specifier: 15.0.1
-        version: 15.0.1(@babel/core@7.12.10)(react-dom@18.2.0)(react@18.2.0)
+        version: 15.0.1(@babel/core@7.12.10)(react-dom@19.0.0-rc-cae764ce-20241025)(react@19.0.0-rc-cae764ce-20241025)
       openid-client:
         specifier: 5.2.1
         version: 5.2.1
@@ -286,14 +288,14 @@ importers:
         specifier: 4.6.1
         version: 4.6.1
       react:
-        specifier: 18.2.0
-        version: 18.2.0
+        specifier: rc
+        version: 19.0.0-rc-cae764ce-20241025
       react-dom:
-        specifier: 18.2.0
-        version: 18.2.0(react@18.2.0)
+        specifier: rc
+        version: 19.0.0-rc-cae764ce-20241025(react@19.0.0-rc-cae764ce-20241025)
       react-hook-form:
         specifier: 7.39.1
-        version: 7.39.1(react@18.2.0)
+        version: 7.39.1(react@19.0.0-rc-cae764ce-20241025)
       ts-node:
         specifier: 10.9.1
         version: 10.9.1(@types/node@18.11.9)(typescript@4.8.4)
@@ -306,10 +308,10 @@ importers:
         version: 12.0.8
       "@testing-library/react":
         specifier: 13.4.0
-        version: 13.4.0(react-dom@18.2.0)(react@18.2.0)
+        version: 13.4.0(react-dom@19.0.0-rc-cae764ce-20241025)(react@19.0.0-rc-cae764ce-20241025)
       "@testing-library/react-hooks":
         specifier: 8.0.1
-        version: 8.0.1(@types/react@18.0.25)(react-dom@18.2.0)(react@18.2.0)
+        version: 8.0.1(react-dom@19.0.0-rc-cae764ce-20241025)(react@19.0.0-rc-cae764ce-20241025)(types-react@19.0.0-rc.1)
       "@types/jest":
         specifier: 29.2.2
         version: 29.2.2
@@ -320,8 +322,8 @@ importers:
         specifier: 2.0.1
         version: 2.0.1
       "@types/react":
-        specifier: 18.0.25
-        version: 18.0.25
+        specifier: npm:types-react@rc
+        version: /types-react@19.0.0-rc.1
       "@typescript-eslint/eslint-plugin":
         specifier: 5.42.1
         version: 5.42.1(@typescript-eslint/parser@5.9.1)(eslint@8.27.0)(supports-color@8.1.1)(typescript@4.8.4)
@@ -396,7 +398,7 @@ importers:
         version: 29.3.0
       next:
         specifier: 15.0.1
-        version: 15.0.1(@babel/core@7.12.10)(react-dom@18.2.0)(react@18.2.0)
+        version: 15.0.1(@babel/core@7.12.10)(react-dom@19.0.0-rc-cae764ce-20241025)(react@19.0.0-rc-cae764ce-20241025)
       passport-mock-strategy:
         specifier: 2.0.0
         version: 2.0.0
@@ -407,11 +409,11 @@ importers:
         specifier: 4.6.1
         version: 4.6.1
       react:
-        specifier: 18.2.0
-        version: 18.2.0
+        specifier: rc
+        version: 19.0.0-rc-cae764ce-20241025
       react-dom:
-        specifier: 18.2.0
-        version: 18.2.0(react@18.2.0)
+        specifier: rc
+        version: 19.0.0-rc-cae764ce-20241025(react@19.0.0-rc-cae764ce-20241025)
       ts-node:
         specifier: 10.9.1
         version: 10.9.1(@types/node@18.11.9)(typescript@4.8.4)
@@ -420,8 +422,8 @@ importers:
         specifier: 12.0.8
         version: 12.0.8
       "@types/react":
-        specifier: 18.0.25
-        version: 18.0.25
+        specifier: npm:types-react@rc
+        version: /types-react@19.0.0-rc.1
       eslint:
         specifier: 8.27.0
         version: 8.27.0(supports-color@8.1.1)
@@ -451,16 +453,16 @@ importers:
         version: 3.0.0
       next:
         specifier: 15.0.1
-        version: 15.0.1(@babel/core@7.12.10)(react-dom@18.2.0)(react@18.2.0)
+        version: 15.0.1(@babel/core@7.12.10)(react-dom@19.0.0-rc-cae764ce-20241025)(react@19.0.0-rc-cae764ce-20241025)
       prisma:
         specifier: 4.6.1
         version: 4.6.1
       react:
-        specifier: 18.2.0
-        version: 18.2.0
+        specifier: rc
+        version: 19.0.0-rc-cae764ce-20241025
       react-dom:
-        specifier: 18.2.0
-        version: 18.2.0(react@18.2.0)
+        specifier: rc
+        version: 19.0.0-rc-cae764ce-20241025(react@19.0.0-rc-cae764ce-20241025)
       secure-password:
         specifier: 4.0.0
         version: 4.0.0
@@ -484,8 +486,8 @@ importers:
         specifier: 2.6.1
         version: 2.6.1
       "@types/react":
-        specifier: 18.0.25
-        version: 18.0.25
+        specifier: npm:types-react@rc
+        version: /types-react@19.0.0-rc.1
       b64-lite:
         specifier: 1.4.0
         version: 1.4.0
@@ -527,7 +529,7 @@ importers:
         version: link:../../packages/blitz-rpc
       "@hookform/error-message":
         specifier: 2.0.0
-        version: 2.0.0(react-dom@18.2.0)(react-hook-form@7.39.1)(react@18.2.0)
+        version: 2.0.0(react-dom@19.0.0-rc-cae764ce-20241025)(react-hook-form@7.39.1)(react@19.0.0-rc-cae764ce-20241025)
       "@hookform/resolvers":
         specifier: 2.9.10
         version: 2.9.10(react-hook-form@7.39.1)
@@ -542,19 +544,19 @@ importers:
         version: 5.0.0
       next:
         specifier: 15.0.1
-        version: 15.0.1(@babel/core@7.20.2)(react-dom@18.2.0)(react@18.2.0)
+        version: 15.0.1(@babel/core@7.20.2)(react-dom@19.0.0-rc-cae764ce-20241025)(react@19.0.0-rc-cae764ce-20241025)
       prisma:
         specifier: 4.6.1
         version: 4.6.1
       react:
-        specifier: 18.2.0
-        version: 18.2.0
+        specifier: rc
+        version: 19.0.0-rc-cae764ce-20241025
       react-dom:
-        specifier: 18.2.0
-        version: 18.2.0(react@18.2.0)
+        specifier: rc
+        version: 19.0.0-rc-cae764ce-20241025(react@19.0.0-rc-cae764ce-20241025)
       react-hook-form:
         specifier: 7.39.1
-        version: 7.39.1(react@18.2.0)
+        version: 7.39.1(react@19.0.0-rc-cae764ce-20241025)
       ts-node:
         specifier: 10.9.1
         version: 10.9.1(@types/node@18.11.9)(typescript@4.8.4)
@@ -570,10 +572,10 @@ importers:
         version: 5.16.5
       "@testing-library/react":
         specifier: 13.4.0
-        version: 13.4.0(react-dom@18.2.0)(react@18.2.0)
+        version: 13.4.0(react-dom@19.0.0-rc-cae764ce-20241025)(react@19.0.0-rc-cae764ce-20241025)
       "@testing-library/react-hooks":
         specifier: 8.0.1
-        version: 8.0.1(@types/react@18.0.25)(react-dom@18.2.0)(react@18.2.0)
+        version: 8.0.1(react-dom@19.0.0-rc-cae764ce-20241025)(react@19.0.0-rc-cae764ce-20241025)(types-react@19.0.0-rc.1)
       "@types/node":
         specifier: 18.11.9
         version: 18.11.9
@@ -581,8 +583,8 @@ importers:
         specifier: 2.0.1
         version: 2.0.1
       "@types/react":
-        specifier: 18.0.25
-        version: 18.0.25
+        specifier: npm:types-react@rc
+        version: /types-react@19.0.0-rc.1
       "@typescript-eslint/eslint-plugin":
         specifier: 5.42.1
         version: 5.42.1(@typescript-eslint/parser@5.9.1)(eslint@8.27.0)(supports-color@8.1.1)(typescript@4.8.4)
@@ -654,16 +656,16 @@ importers:
         version: 2.1.0
       next:
         specifier: 15.0.1
-        version: 15.0.1(@babel/core@7.12.10)(react-dom@18.2.0)(react@18.2.0)
+        version: 15.0.1(@babel/core@7.12.10)(react-dom@19.0.0-rc-cae764ce-20241025)(react@19.0.0-rc-cae764ce-20241025)
       prisma:
         specifier: 4.6.1
         version: 4.6.1
       react:
-        specifier: 18.2.0
-        version: 18.2.0
+        specifier: rc
+        version: 19.0.0-rc-cae764ce-20241025
       react-dom:
-        specifier: 18.2.0
-        version: 18.2.0(react@18.2.0)
+        specifier: rc
+        version: 19.0.0-rc-cae764ce-20241025(react@19.0.0-rc-cae764ce-20241025)
     devDependencies:
       "@blitzjs/config":
         specifier: 2.1.3
@@ -681,8 +683,8 @@ importers:
         specifier: 2.6.1
         version: 2.6.1
       "@types/react":
-        specifier: 18.0.25
-        version: 18.0.25
+        specifier: npm:types-react@rc
+        version: /types-react@19.0.0-rc.1
       b64-lite:
         specifier: 1.4.0
         version: 1.4.0
@@ -718,13 +720,13 @@ importers:
         version: link:../../packages/blitz
       next:
         specifier: 15.0.1
-        version: 15.0.1(@babel/core@7.12.10)(react-dom@18.2.0)(react@18.2.0)
+        version: 15.0.1(@babel/core@7.12.10)(react-dom@19.0.0-rc-cae764ce-20241025)(react@19.0.0-rc-cae764ce-20241025)
       react:
-        specifier: 18.2.0
-        version: 18.2.0
+        specifier: rc
+        version: 19.0.0-rc-cae764ce-20241025
       react-dom:
-        specifier: 18.2.0
-        version: 18.2.0(react@18.2.0)
+        specifier: rc
+        version: 19.0.0-rc-cae764ce-20241025(react@19.0.0-rc-cae764ce-20241025)
     devDependencies:
       "@next/bundle-analyzer":
         specifier: 12.0.8
@@ -739,8 +741,8 @@ importers:
         specifier: 2.6.1
         version: 2.6.1
       "@types/react":
-        specifier: 18.0.25
-        version: 18.0.25
+        specifier: npm:types-react@rc
+        version: /types-react@19.0.0-rc.1
       eslint:
         specifier: 8.27.0
         version: 8.27.0(supports-color@8.1.1)
@@ -782,16 +784,16 @@ importers:
         version: 2.1.0
       next:
         specifier: 15.0.1
-        version: 15.0.1(@babel/core@7.12.10)(react-dom@18.2.0)(react@18.2.0)
+        version: 15.0.1(@babel/core@7.12.10)(react-dom@19.0.0-rc-cae764ce-20241025)(react@19.0.0-rc-cae764ce-20241025)
       prisma:
         specifier: 4.6.1
         version: 4.6.1
       react:
-        specifier: 18.2.0
-        version: 18.2.0
+        specifier: rc
+        version: 19.0.0-rc-cae764ce-20241025
       react-dom:
-        specifier: 18.2.0
-        version: 18.2.0(react@18.2.0)
+        specifier: rc
+        version: 19.0.0-rc-cae764ce-20241025(react@19.0.0-rc-cae764ce-20241025)
       secure-password:
         specifier: 4.0.0
         version: 4.0.0
@@ -815,8 +817,8 @@ importers:
         specifier: 2.6.1
         version: 2.6.1
       "@types/react":
-        specifier: 18.0.25
-        version: 18.0.25
+        specifier: npm:types-react@rc
+        version: /types-react@19.0.0-rc.1
       b64-lite:
         specifier: 1.4.0
         version: 1.4.0
@@ -864,16 +866,16 @@ importers:
         version: 3.0.0
       next:
         specifier: 15.0.1
-        version: 15.0.1(@babel/core@7.12.10)(react-dom@18.2.0)(react@18.2.0)
+        version: 15.0.1(@babel/core@7.12.10)(react-dom@19.0.0-rc-cae764ce-20241025)(react@19.0.0-rc-cae764ce-20241025)
       prisma:
         specifier: 4.6.1
         version: 4.6.1
       react:
-        specifier: 18.2.0
-        version: 18.2.0
+        specifier: rc
+        version: 19.0.0-rc-cae764ce-20241025
       react-dom:
-        specifier: 18.2.0
-        version: 18.2.0(react@18.2.0)
+        specifier: rc
+        version: 19.0.0-rc-cae764ce-20241025(react@19.0.0-rc-cae764ce-20241025)
     devDependencies:
       "@blitzjs/config":
         specifier: 2.1.3
@@ -891,8 +893,8 @@ importers:
         specifier: 2.6.1
         version: 2.6.1
       "@types/react":
-        specifier: 18.0.25
-        version: 18.0.25
+        specifier: npm:types-react@rc
+        version: /types-react@19.0.0-rc.1
       b64-lite:
         specifier: 1.4.0
         version: 1.4.0
@@ -931,29 +933,29 @@ importers:
         version: 4.6.1(prisma@4.6.1)
       "@tanstack/react-query":
         specifier: 4.0.10
-        version: 4.0.10(react-dom@18.2.0)(react@18.2.0)
+        version: 4.0.10(react-dom@19.0.0-rc-cae764ce-20241025)(react@19.0.0-rc-cae764ce-20241025)
       blitz:
         specifier: 2.1.3
         version: link:../../packages/blitz
       next:
         specifier: 15.0.1
-        version: 15.0.1(@babel/core@7.18.2)(react-dom@18.2.0)(react@18.2.0)
+        version: 15.0.1(@babel/core@7.18.2)(react-dom@19.0.0-rc-cae764ce-20241025)(react@19.0.0-rc-cae764ce-20241025)
       prisma:
         specifier: 4.6.1
         version: 4.6.1
       react:
-        specifier: 18.2.0
-        version: 18.2.0
+        specifier: rc
+        version: 19.0.0-rc-cae764ce-20241025
       react-dom:
-        specifier: 18.2.0
-        version: 18.2.0(react@18.2.0)
+        specifier: rc
+        version: 19.0.0-rc-cae764ce-20241025(react@19.0.0-rc-cae764ce-20241025)
     devDependencies:
       "@testing-library/react":
         specifier: 13.4.0
-        version: 13.4.0(react-dom@18.2.0)(react@18.2.0)
+        version: 13.4.0(react-dom@19.0.0-rc-cae764ce-20241025)(react@19.0.0-rc-cae764ce-20241025)
       "@types/react":
-        specifier: 18.0.25
-        version: 18.0.25
+        specifier: npm:types-react@rc
+        version: /types-react@19.0.0-rc.1
       "@vitejs/plugin-react":
         specifier: 1.3.0
         version: 1.3.0
@@ -995,16 +997,16 @@ importers:
         version: 3.0.0
       next:
         specifier: 15.0.1
-        version: 15.0.1(@babel/core@7.12.10)(react-dom@18.2.0)(react@18.2.0)
+        version: 15.0.1(@babel/core@7.12.10)(react-dom@19.0.0-rc-cae764ce-20241025)(react@19.0.0-rc-cae764ce-20241025)
       prisma:
         specifier: 4.6.1
         version: 4.6.1
       react:
-        specifier: 18.2.0
-        version: 18.2.0
+        specifier: rc
+        version: 19.0.0-rc-cae764ce-20241025
       react-dom:
-        specifier: 18.2.0
-        version: 18.2.0(react@18.2.0)
+        specifier: rc
+        version: 19.0.0-rc-cae764ce-20241025(react@19.0.0-rc-cae764ce-20241025)
     devDependencies:
       "@blitzjs/config":
         specifier: 2.1.3
@@ -1022,8 +1024,8 @@ importers:
         specifier: 2.6.1
         version: 2.6.1
       "@types/react":
-        specifier: 18.0.25
-        version: 18.0.25
+        specifier: npm:types-react@rc
+        version: /types-react@19.0.0-rc.1
       b64-lite:
         specifier: 1.4.0
         version: 1.4.0
@@ -1059,13 +1061,13 @@ importers:
         version: link:../../packages/blitz
       next:
         specifier: 15.0.1
-        version: 15.0.1(@babel/core@7.12.10)(react-dom@18.2.0)(react@18.2.0)
+        version: 15.0.1(@babel/core@7.12.10)(react-dom@19.0.0-rc-cae764ce-20241025)(react@19.0.0-rc-cae764ce-20241025)
       react:
-        specifier: 18.2.0
-        version: 18.2.0
+        specifier: rc
+        version: 19.0.0-rc-cae764ce-20241025
       react-dom:
-        specifier: 18.2.0
-        version: 18.2.0(react@18.2.0)
+        specifier: rc
+        version: 19.0.0-rc-cae764ce-20241025(react@19.0.0-rc-cae764ce-20241025)
     devDependencies:
       "@types/express":
         specifier: 4.17.13
@@ -1077,8 +1079,8 @@ importers:
         specifier: 2.6.1
         version: 2.6.1
       "@types/react":
-        specifier: 18.0.25
-        version: 18.0.25
+        specifier: npm:types-react@rc
+        version: /types-react@19.0.0-rc.1
       b64-lite:
         specifier: 1.4.0
         version: 1.4.0
@@ -1108,13 +1110,13 @@ importers:
         version: link:../../packages/blitz
       next:
         specifier: 15.0.1
-        version: 15.0.1(@babel/core@7.12.10)(react-dom@18.2.0)(react@18.2.0)
+        version: 15.0.1(@babel/core@7.12.10)(react-dom@19.0.0-rc-cae764ce-20241025)(react@19.0.0-rc-cae764ce-20241025)
       react:
-        specifier: 18.2.0
-        version: 18.2.0
+        specifier: rc
+        version: 19.0.0-rc-cae764ce-20241025
       react-dom:
-        specifier: 18.2.0
-        version: 18.2.0(react@18.2.0)
+        specifier: rc
+        version: 19.0.0-rc-cae764ce-20241025(react@19.0.0-rc-cae764ce-20241025)
     devDependencies:
       "@types/express":
         specifier: 4.17.13
@@ -1126,8 +1128,8 @@ importers:
         specifier: 2.6.1
         version: 2.6.1
       "@types/react":
-        specifier: 18.0.25
-        version: 18.0.25
+        specifier: npm:types-react@rc
+        version: /types-react@19.0.0-rc.1
       b64-lite:
         specifier: 1.4.0
         version: 1.4.0
@@ -1163,16 +1165,16 @@ importers:
         version: 3.0.0
       next:
         specifier: 15.0.1
-        version: 15.0.1(@babel/core@7.12.10)(react-dom@18.2.0)(react@18.2.0)
+        version: 15.0.1(@babel/core@7.12.10)(react-dom@19.0.0-rc-cae764ce-20241025)(react@19.0.0-rc-cae764ce-20241025)
       prisma:
         specifier: 4.6.1
         version: 4.6.1
       react:
-        specifier: 18.2.0
-        version: 18.2.0
+        specifier: rc
+        version: 19.0.0-rc-cae764ce-20241025
       react-dom:
-        specifier: 18.2.0
-        version: 18.2.0(react@18.2.0)
+        specifier: rc
+        version: 19.0.0-rc-cae764ce-20241025(react@19.0.0-rc-cae764ce-20241025)
     devDependencies:
       "@blitzjs/config":
         specifier: 2.1.3
@@ -1190,8 +1192,8 @@ importers:
         specifier: 2.6.1
         version: 2.6.1
       "@types/react":
-        specifier: 18.0.25
-        version: 18.0.25
+        specifier: npm:types-react@rc
+        version: /types-react@19.0.0-rc.1
       b64-lite:
         specifier: 1.4.0
         version: 1.4.0
@@ -1224,10 +1226,10 @@ importers:
         version: link:../../packages/blitz-rpc
       "@tanstack/react-query":
         specifier: 4.13.0
-        version: 4.13.0(react-dom@18.2.0)(react@18.2.0)
+        version: 4.13.0(react-dom@19.0.0-rc-cae764ce-20241025)(react@19.0.0-rc-cae764ce-20241025)
       "@testing-library/react":
         specifier: 13.4.0
-        version: 13.4.0(react-dom@18.2.0)(react@18.2.0)
+        version: 13.4.0(react-dom@19.0.0-rc-cae764ce-20241025)(react@19.0.0-rc-cae764ce-20241025)
       "@types/express":
         specifier: 4.17.13
         version: 4.17.13
@@ -1238,8 +1240,8 @@ importers:
         specifier: 2.6.1
         version: 2.6.1
       "@types/react":
-        specifier: 18.0.25
-        version: 18.0.25
+        specifier: npm:types-react@rc
+        version: /types-react@19.0.0-rc.1
       "@types/rimraf":
         specifier: 3.0.2
         version: 3.0.2
@@ -1274,11 +1276,11 @@ importers:
         specifier: 1.28.0
         version: 1.28.0
       react:
-        specifier: 18.2.0
-        version: 18.2.0
+        specifier: rc
+        version: 19.0.0-rc-cae764ce-20241025
       react-dom:
-        specifier: 18.2.0
-        version: 18.2.0(react@18.2.0)
+        specifier: rc
+        version: 19.0.0-rc-cae764ce-20241025(react@19.0.0-rc-cae764ce-20241025)
       resolve-cwd:
         specifier: 3.0.0
         version: 3.0.0
@@ -1377,10 +1379,10 @@ importers:
         version: 1.2.3
       ink:
         specifier: 3.2.0
-        version: 3.2.0(@types/react@18.0.25)(react@18.2.0)
+        version: 3.2.0(react@19.0.0-rc-cae764ce-20241025)(types-react@19.0.0-rc.1)
       ink-spinner:
         specifier: 4.0.3
-        version: 4.0.3(ink@3.2.0)(react@18.2.0)
+        version: 4.0.3(ink@3.2.0)(react@19.0.0-rc-cae764ce-20241025)
       jscodeshift:
         specifier: 0.13.0
         version: 0.13.0(@babel/preset-env@7.12.10)(supports-color@8.1.1)
@@ -1491,11 +1493,11 @@ importers:
         specifier: 2.0.14
         version: 2.0.14
       "@types/react":
-        specifier: 18.0.25
-        version: 18.0.25
+        specifier: npm:types-react@rc
+        version: /types-react@19.0.0-rc.1
       "@types/react-dom":
-        specifier: 17.0.14
-        version: 17.0.14
+        specifier: npm:types-react-dom@rc
+        version: /types-react-dom@19.0.0-rc.1
       "@types/test-listen":
         specifier: 1.1.0
         version: 1.1.0
@@ -1506,8 +1508,8 @@ importers:
         specifier: 4.17.3
         version: 4.17.3(supports-color@8.1.1)
       react:
-        specifier: 18.2.0
-        version: 18.2.0
+        specifier: rc
+        version: 19.0.0-rc-cae764ce-20241025
       test-listen:
         specifier: 1.1.0
         version: 1.1.0
@@ -1595,10 +1597,10 @@ importers:
         version: link:../config
       "@testing-library/react":
         specifier: 13.4.0
-        version: 13.4.0(react-dom@18.2.0)(react@18.2.0)
+        version: 13.4.0(react-dom@19.0.0-rc-cae764ce-20241025)(react@19.0.0-rc-cae764ce-20241025)
       "@testing-library/react-hooks":
         specifier: 8.0.1
-        version: 8.0.1(@types/react@18.0.25)(react-dom@18.2.0)(react@18.2.0)
+        version: 8.0.1(react-dom@19.0.0-rc-cae764ce-20241025)(react@19.0.0-rc-cae764ce-20241025)(types-react@19.0.0-rc.1)
       "@types/cookie":
         specifier: 0.4.1
         version: 0.4.1
@@ -1609,26 +1611,26 @@ importers:
         specifier: 8.5.8
         version: 8.5.8
       "@types/react":
-        specifier: 18.0.25
-        version: 18.0.25
+        specifier: npm:types-react@rc
+        version: /types-react@19.0.0-rc.1
       "@types/react-dom":
-        specifier: 17.0.14
-        version: 17.0.14
+        specifier: npm:types-react-dom@rc
+        version: /types-react-dom@19.0.0-rc.1
       blitz:
         specifier: 2.1.3
         version: link:../blitz
       next:
         specifier: 15.0.1
-        version: 15.0.1(@babel/core@7.20.2)(react-dom@18.2.0)(react@18.2.0)
+        version: 15.0.1(@babel/core@7.20.2)(react-dom@19.0.0-rc-cae764ce-20241025)(react@19.0.0-rc-cae764ce-20241025)
       next-auth:
         specifier: 4.24.7
-        version: 4.24.7(patch_hash=xxwv3g3ul7bnzqsfasefw3kyq4)(next@15.0.1)(react-dom@18.2.0)(react@18.2.0)
+        version: 4.24.7(patch_hash=xxwv3g3ul7bnzqsfasefw3kyq4)(next@15.0.1)(react-dom@19.0.0-rc-cae764ce-20241025)(react@19.0.0-rc-cae764ce-20241025)
       react:
-        specifier: 18.2.0
-        version: 18.2.0
+        specifier: rc
+        version: 19.0.0-rc-cae764ce-20241025
       react-dom:
-        specifier: 18.2.0
-        version: 18.2.0(react@18.2.0)
+        specifier: rc
+        version: 19.0.0-rc-cae764ce-20241025(react@19.0.0-rc-cae764ce-20241025)
       secure-password:
         specifier: 4.0.0
         version: 4.0.0
@@ -1680,10 +1682,10 @@ importers:
         version: 5.16.3
       "@testing-library/react":
         specifier: 13.4.0
-        version: 13.4.0(react-dom@18.2.0)(react@18.2.0)
+        version: 13.4.0(react-dom@19.0.0-rc-cae764ce-20241025)(react@19.0.0-rc-cae764ce-20241025)
       "@testing-library/react-hooks":
         specifier: 8.0.1
-        version: 8.0.1(@types/react@18.0.25)(react-dom@18.2.0)(react@18.2.0)
+        version: 8.0.1(react-dom@19.0.0-rc-cae764ce-20241025)(react@19.0.0-rc-cae764ce-20241025)(types-react@19.0.0-rc.1)
       "@testing-library/user-event":
         specifier: 13.5.0
         version: 13.5.0(@testing-library/dom@8.13.0)
@@ -1694,14 +1696,14 @@ importers:
         specifier: 18.11.9
         version: 18.11.9
       "@types/react":
-        specifier: 18.0.25
-        version: 18.0.25
+        specifier: npm:types-react@rc
+        version: /types-react@19.0.0-rc.1
       "@types/react-dom":
-        specifier: 17.0.14
-        version: 17.0.14
+        specifier: npm:types-react-dom@rc
+        version: /types-react-dom@19.0.0-rc.1
       "@types/testing-library__react-hooks":
         specifier: 4.0.0
-        version: 4.0.0(@types/react@18.0.25)(react-dom@18.2.0)(react@18.2.0)
+        version: 4.0.0(react-dom@19.0.0-rc-cae764ce-20241025)(react@19.0.0-rc-cae764ce-20241025)(types-react@19.0.0-rc.1)
       blitz:
         specifier: 2.1.3
         version: link:../blitz
@@ -1713,16 +1715,16 @@ importers:
         version: 4.1.0
       next:
         specifier: 15.0.1
-        version: 15.0.1(@babel/core@7.20.2)(react-dom@18.2.0)(react@18.2.0)
+        version: 15.0.1(@babel/core@7.20.2)(react-dom@19.0.0-rc-cae764ce-20241025)(react@19.0.0-rc-cae764ce-20241025)
       next-router-mock:
         specifier: 0.9.1
-        version: 0.9.1(next@15.0.1)(react@18.2.0)
+        version: 0.9.1(next@15.0.1)(react@19.0.0-rc-cae764ce-20241025)
       react:
-        specifier: 18.2.0
-        version: 18.2.0
+        specifier: rc
+        version: 19.0.0-rc-cae764ce-20241025
       react-dom:
-        specifier: 18.2.0
-        version: 18.2.0(react@18.2.0)
+        specifier: rc
+        version: 19.0.0-rc-cae764ce-20241025(react@19.0.0-rc-cae764ce-20241025)
       resolve-from:
         specifier: 5.0.0
         version: 5.0.0
@@ -1749,7 +1751,7 @@ importers:
         version: 1.3.7
       "@tanstack/react-query":
         specifier: 4.24.4
-        version: 4.24.4(react-dom@18.2.0)(react@18.2.0)
+        version: 4.24.4(react-dom@19.0.0-rc-cae764ce-20241025)(react@19.0.0-rc-cae764ce-20241025)
       b64-lite:
         specifier: 1.4.0
         version: 1.4.0
@@ -1782,23 +1784,23 @@ importers:
         specifier: 4.1.7
         version: 4.1.7
       "@types/react":
-        specifier: 18.0.25
-        version: 18.0.25
+        specifier: npm:types-react@rc
+        version: /types-react@19.0.0-rc.1
       "@types/react-dom":
-        specifier: 17.0.14
-        version: 17.0.14
+        specifier: npm:types-react-dom@rc
+        version: /types-react-dom@19.0.0-rc.1
       blitz:
         specifier: 2.1.3
         version: link:../blitz
       next:
         specifier: 15.0.1
-        version: 15.0.1(@babel/core@7.20.2)(react-dom@18.2.0)(react@18.2.0)
+        version: 15.0.1(@babel/core@7.20.2)(react-dom@19.0.0-rc-cae764ce-20241025)(react@19.0.0-rc-cae764ce-20241025)
       react:
-        specifier: 18.2.0
-        version: 18.2.0
+        specifier: rc
+        version: 19.0.0-rc-cae764ce-20241025
       react-dom:
-        specifier: 18.2.0
-        version: 18.2.0(react@18.2.0)
+        specifier: rc
+        version: 19.0.0-rc-cae764ce-20241025(react@19.0.0-rc-cae764ce-20241025)
       typescript:
         specifier: ^4.8.4
         version: 4.8.4
@@ -2013,11 +2015,11 @@ importers:
         specifier: 2.4.4
         version: 2.4.4
       "@types/react":
-        specifier: 18.0.25
-        version: 18.0.25
+        specifier: npm:types-react@rc
+        version: /types-react@19.0.0-rc.1
       "@types/react-dom":
-        specifier: 17.0.14
-        version: 17.0.14
+        specifier: npm:types-react-dom@rc
+        version: /types-react-dom@19.0.0-rc.1
       "@types/vinyl":
         specifier: 2.0.6
         version: 2.0.6
@@ -2037,8 +2039,8 @@ importers:
         specifier: 8.27.0
         version: 8.27.0(supports-color@8.1.1)
       react:
-        specifier: 18.2.0
-        version: 18.2.0
+        specifier: rc
+        version: 19.0.0-rc-cae764ce-20241025
       typescript:
         specifier: ^4.8.4
         version: 4.8.4
@@ -2062,14 +2064,14 @@ importers:
         specifier: 2.1.3
         version: link:../config
       "@types/react":
-        specifier: 18.0.25
-        version: 18.0.25
+        specifier: npm:types-react@rc
+        version: /types-react@19.0.0-rc.1
       "@types/react-dom":
-        specifier: 17.0.14
-        version: 17.0.14
+        specifier: npm:types-react-dom@rc
+        version: /types-react-dom@19.0.0-rc.1
       react:
-        specifier: 18.2.0
-        version: 18.2.0
+        specifier: rc
+        version: 19.0.0-rc-cae764ce-20241025
       typescript:
         specifier: ^4.8.4
         version: 4.8.4
@@ -4723,7 +4725,7 @@ packages:
       "@hapi/hoek": 9.3.0
     dev: false
 
-  /@hookform/error-message@2.0.0(react-dom@18.2.0)(react-hook-form@7.39.1)(react@18.2.0):
+  /@hookform/error-message@2.0.0(react-dom@19.0.0-rc-cae764ce-20241025)(react-hook-form@7.39.1)(react@19.0.0-rc-cae764ce-20241025):
     resolution:
       {
         integrity: sha512-Y90nHzjgL2MP7GFy75kscdvxrCTjtyxGmOLLxX14nd08OXRIh9lMH/y9Kpdo0p1IPowJBiZMHyueg7p+yrqynQ==,
@@ -4733,9 +4735,9 @@ packages:
       react-dom: ">=16.8.0"
       react-hook-form: ^7.0.0
     dependencies:
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
-      react-hook-form: 7.39.1(react@18.2.0)
+      react: 19.0.0-rc-cae764ce-20241025
+      react-dom: 19.0.0-rc-cae764ce-20241025(react@19.0.0-rc-cae764ce-20241025)
+      react-hook-form: 7.39.1(react@19.0.0-rc-cae764ce-20241025)
     dev: false
 
   /@hookform/resolvers@2.9.10(react-hook-form@7.39.1):
@@ -4746,7 +4748,7 @@ packages:
     peerDependencies:
       react-hook-form: ^7.0.0
     dependencies:
-      react-hook-form: 7.39.1(react@18.2.0)
+      react-hook-form: 7.39.1(react@19.0.0-rc-cae764ce-20241025)
     dev: false
 
   /@humanwhocodes/config-array@0.11.7(supports-color@8.1.1):
@@ -6379,7 +6381,7 @@ packages:
         integrity: sha512-9dqjv9eeB6VHN7lD3cLo16ZAjfjCsdXetSAD5+VyKqLUvcKTL0CklGQRJu+bWzdrS69R6Ea4UZo8obHYZnG6aA==,
       }
 
-  /@tanstack/react-query@4.0.10(react-dom@18.2.0)(react@18.2.0):
+  /@tanstack/react-query@4.0.10(react-dom@19.0.0-rc-cae764ce-20241025)(react@19.0.0-rc-cae764ce-20241025):
     resolution:
       {
         integrity: sha512-Wn5QhZUE5wvr6rGClV7KeQIUsdTmYR9mgmMZen7DSRWauHW2UTynFg3Kkf6pw+XlxxOLsyLWwz/Q6q1lSpM3TQ==,
@@ -6396,12 +6398,12 @@ packages:
     dependencies:
       "@tanstack/query-core": 4.24.4
       "@types/use-sync-external-store": 0.0.3
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
-      use-sync-external-store: 1.2.0(react@18.2.0)
+      react: 19.0.0-rc-cae764ce-20241025
+      react-dom: 19.0.0-rc-cae764ce-20241025(react@19.0.0-rc-cae764ce-20241025)
+      use-sync-external-store: 1.2.0(react@19.0.0-rc-cae764ce-20241025)
     dev: false
 
-  /@tanstack/react-query@4.13.0(react-dom@18.2.0)(react@18.2.0):
+  /@tanstack/react-query@4.13.0(react-dom@19.0.0-rc-cae764ce-20241025)(react@19.0.0-rc-cae764ce-20241025):
     resolution:
       {
         integrity: sha512-dI/5hJ/pGQ74P5hxBLC9h6K0/Cap2T3k0ZjjjFLBCNnohDYgl7LNmMopzrRzBHk2mMjf2hgXHIzcKNG8GOZ5hg==,
@@ -6417,12 +6419,12 @@ packages:
         optional: true
     dependencies:
       "@tanstack/query-core": 4.13.0
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
-      use-sync-external-store: 1.2.0(react@18.2.0)
+      react: 19.0.0-rc-cae764ce-20241025
+      react-dom: 19.0.0-rc-cae764ce-20241025(react@19.0.0-rc-cae764ce-20241025)
+      use-sync-external-store: 1.2.0(react@19.0.0-rc-cae764ce-20241025)
     dev: true
 
-  /@tanstack/react-query@4.24.4(react-dom@18.2.0)(react@18.2.0):
+  /@tanstack/react-query@4.24.4(react-dom@19.0.0-rc-cae764ce-20241025)(react@19.0.0-rc-cae764ce-20241025):
     resolution:
       {
         integrity: sha512-RpaS/3T/a3pHuZJbIAzAYRu+1nkp+/enr9hfRXDS/mojwx567UiMksoqW4wUFWlwIvWTXyhot2nbIipTKEg55Q==,
@@ -6438,9 +6440,9 @@ packages:
         optional: true
     dependencies:
       "@tanstack/query-core": 4.24.4
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
-      use-sync-external-store: 1.2.0(react@18.2.0)
+      react: 19.0.0-rc-cae764ce-20241025
+      react-dom: 19.0.0-rc-cae764ce-20241025(react@19.0.0-rc-cae764ce-20241025)
+      use-sync-external-store: 1.2.0(react@19.0.0-rc-cae764ce-20241025)
     dev: false
 
   /@testim/chrome-version@1.1.2:
@@ -6503,14 +6505,14 @@ packages:
       redent: 3.0.0
     dev: true
 
-  /@testing-library/react-hooks@8.0.1(@types/react@18.0.25)(react-dom@18.2.0)(react@18.2.0):
+  /@testing-library/react-hooks@8.0.1(react-dom@19.0.0-rc-cae764ce-20241025)(react@19.0.0-rc-cae764ce-20241025)(types-react@19.0.0-rc.1):
     resolution:
       {
         integrity: sha512-Aqhl2IVmLt8IovEVarNDFuJDVWVvhnr9/GCU6UUnrYXwgDFF9h2L2o2P9KBni1AST5sT6riAyoukFLyjQUgD/g==,
       }
     engines: {node: ">=12"}
     peerDependencies:
-      "@types/react": ^16.9.0 || ^17.0.0
+      "@types/react": npm:types-react@rc
       react: ^16.9.0 || ^17.0.0
       react-dom: ^16.9.0 || ^17.0.0
       react-test-renderer: ^16.9.0 || ^17.0.0
@@ -6523,13 +6525,13 @@ packages:
         optional: true
     dependencies:
       "@babel/runtime": 7.18.3
-      "@types/react": 18.0.25
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
-      react-error-boundary: 3.1.4(react@18.2.0)
+      "@types/react": /types-react@19.0.0-rc.1
+      react: 19.0.0-rc-cae764ce-20241025
+      react-dom: 19.0.0-rc-cae764ce-20241025(react@19.0.0-rc-cae764ce-20241025)
+      react-error-boundary: 3.1.4(react@19.0.0-rc-cae764ce-20241025)
     dev: true
 
-  /@testing-library/react@13.4.0(react-dom@18.2.0)(react@18.2.0):
+  /@testing-library/react@13.4.0(react-dom@19.0.0-rc-cae764ce-20241025)(react@19.0.0-rc-cae764ce-20241025):
     resolution:
       {
         integrity: sha512-sXOGON+WNTh3MLE9rve97ftaZukN3oNf2KjDy7YTx6hcTO2uuLHuCGynMDhFwGw/jYf4OJ2Qk0i4i79qMNNkyw==,
@@ -6541,9 +6543,9 @@ packages:
     dependencies:
       "@babel/runtime": 7.18.3
       "@testing-library/dom": 8.13.0
-      "@types/react-dom": 18.0.7
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
+      "@types/react-dom": /types-react-dom@19.0.0-rc.1
+      react: 19.0.0-rc-cae764ce-20241025
+      react-dom: 19.0.0-rc-cae764ce-20241025(react@19.0.0-rc-cae764ce-20241025)
     dev: true
 
   /@testing-library/user-event@13.5.0(@testing-library/dom@8.13.0):
@@ -6896,7 +6898,7 @@ packages:
         integrity: sha512-iMIqiko6ooLrTh1joXodJK5X9xeEALT1kM5G3ZLhD3hszxBdIEd5C75U834D9mLcINgD4OyZf5uQXjkuYydWvA==,
       }
     dependencies:
-      "@types/react": 18.0.25
+      "@types/react": /types-react@19.0.0-rc.1
       hoist-non-react-statics: 3.3.2
     dev: false
 
@@ -7216,12 +7218,6 @@ packages:
       "@types/node": 18.11.9
     dev: true
 
-  /@types/prop-types@15.7.5:
-    resolution:
-      {
-        integrity: sha512-JCB8C6SnDoQf0cNycqd/35A7MjcnK+ZTqE7judS6o7utxUCg6imJg3QK2qzHKszlTjcj2cn+NwMB2i96ubpj7w==,
-      }
-
   /@types/qs@6.9.7:
     resolution:
       {
@@ -7233,45 +7229,6 @@ packages:
       {
         integrity: sha512-EEhsLsD6UsDM1yFhAvy0Cjr6VwmpMWqFBCb9w07wVugF7w9nfajxLuVmngTIpgS6svCnm6Vaw+MZhoDCKnOfsw==,
       }
-
-  /@types/react-dom@17.0.14:
-    resolution:
-      {
-        integrity: sha512-H03xwEP1oXmSfl3iobtmQ/2dHF5aBHr8aUMwyGZya6OW45G+xtdzmq6HkncefiBt5JU8DVyaWl/nWZbjZCnzAQ==,
-      }
-    dependencies:
-      "@types/react": 18.0.25
-    dev: true
-
-  /@types/react-dom@18.0.7:
-    resolution:
-      {
-        integrity: sha512-HaXc+BbqAZE1RdsK3tC8SbkFy6UL2xF76lT9rQs5JkPrJg3rWA3Ou/Lhw3YJQzEDkBpmJ79nBsfnd05WrBd2QQ==,
-      }
-    dependencies:
-      "@types/react": 18.0.25
-    dev: true
-
-  /@types/react@18.0.23:
-    resolution:
-      {
-        integrity: sha512-R1wTULtCiJkudAN2DJGoYYySbGtOdzZyUWAACYinKdiQC8auxso4kLDUhQ7AJ2kh3F6A6z4v69U6tNY39hihVQ==,
-      }
-    dependencies:
-      "@types/prop-types": 15.7.5
-      "@types/scheduler": 0.16.2
-      csstype: 3.1.0
-    dev: true
-
-  /@types/react@18.0.25:
-    resolution:
-      {
-        integrity: sha512-xD6c0KDT4m7n9uD4ZHi02lzskaiqcBxf4zi+tXZY98a04wvc0hi/TcCPC2FOESZi51Nd7tlUeOJY8RofL799/g==,
-      }
-    dependencies:
-      "@types/prop-types": 15.7.5
-      "@types/scheduler": 0.16.2
-      csstype: 3.1.0
 
   /@types/resolve@1.17.1:
     resolution:
@@ -7300,12 +7257,6 @@ packages:
       "@types/glob": 7.2.0
       "@types/node": 18.11.9
     dev: true
-
-  /@types/scheduler@0.16.2:
-    resolution:
-      {
-        integrity: sha512-hppQEBDmlwhFAXKJX2KnWLYu5yMfi91yazPb2l+lbJiwW+wdo1gNeRA+3RgNSO39WYX2euey41KEwnqesU2Jew==,
-      }
 
   /@types/secure-password@3.1.1:
     resolution:
@@ -7369,14 +7320,14 @@ packages:
       "@types/jest": 29.2.2
     dev: true
 
-  /@types/testing-library__react-hooks@4.0.0(@types/react@18.0.25)(react-dom@18.2.0)(react@18.2.0):
+  /@types/testing-library__react-hooks@4.0.0(react-dom@19.0.0-rc-cae764ce-20241025)(react@19.0.0-rc-cae764ce-20241025)(types-react@19.0.0-rc.1):
     resolution:
       {
         integrity: sha512-UzZUXthQtVjDruR2YA+hqg9ux5AfmZ8Kaw+QDungax+T7wb/5NC4x7YOpIqRx7oY3KksGQ69bzNE/xwzb5NslQ==,
       }
     deprecated: This is a stub types definition. @testing-library/react-hooks provides its own type definitions, so you do not need this installed.
     dependencies:
-      "@testing-library/react-hooks": 8.0.1(@types/react@18.0.25)(react-dom@18.2.0)(react@18.2.0)
+      "@testing-library/react-hooks": 8.0.1(react-dom@19.0.0-rc-cae764ce-20241025)(react@19.0.0-rc-cae764ce-20241025)(types-react@19.0.0-rc.1)
     transitivePeerDependencies:
       - "@types/react"
       - react
@@ -14264,7 +14215,7 @@ packages:
       }
     dev: false
 
-  /ink-spinner@4.0.3(ink@3.2.0)(react@18.2.0):
+  /ink-spinner@4.0.3(ink@3.2.0)(react@19.0.0-rc-cae764ce-20241025):
     resolution:
       {
         integrity: sha512-uJ4nbH00MM9fjTJ5xdw0zzvtXMkeGb0WV6dzSWvFv2/+ks6FIhpkt+Ge/eLdh0Ah6Vjw5pLMyNfoHQpRDRVFbQ==,
@@ -14275,24 +14226,24 @@ packages:
       react: ">=16.8.2"
     dependencies:
       cli-spinners: 2.6.1
-      ink: 3.2.0(@types/react@18.0.25)(react@18.2.0)
-      react: 18.2.0
+      ink: 3.2.0(react@19.0.0-rc-cae764ce-20241025)(types-react@19.0.0-rc.1)
+      react: 19.0.0-rc-cae764ce-20241025
     dev: false
 
-  /ink@3.2.0(@types/react@18.0.25)(react@18.2.0):
+  /ink@3.2.0(react@19.0.0-rc-cae764ce-20241025)(types-react@19.0.0-rc.1):
     resolution:
       {
         integrity: sha512-firNp1q3xxTzoItj/eOOSZQnYSlyrWks5llCTVX37nJ59K3eXbQ8PtzCguqo8YI19EELo5QxaKnJd4VxzhU8tg==,
       }
     engines: {node: ">=10"}
     peerDependencies:
-      "@types/react": ">=16.8.0"
+      "@types/react": npm:types-react@rc
       react: ">=16.8.0"
     peerDependenciesMeta:
       "@types/react":
         optional: true
     dependencies:
-      "@types/react": 18.0.25
+      "@types/react": /types-react@19.0.0-rc.1
       ansi-escapes: 4.3.2
       auto-bind: 4.0.0
       chalk: 4.1.2
@@ -14304,9 +14255,9 @@ packages:
       is-ci: 2.0.0
       lodash: 4.17.21
       patch-console: 1.0.0
-      react: 18.2.0
+      react: 19.0.0-rc-cae764ce-20241025
       react-devtools-core: 4.25.0
-      react-reconciler: 0.26.2(react@18.2.0)
+      react-reconciler: 0.26.2(react@19.0.0-rc-cae764ce-20241025)
       scheduler: 0.20.2
       signal-exit: 3.0.7
       slice-ansi: 3.0.0
@@ -17578,7 +17529,7 @@ packages:
       }
     dev: false
 
-  /next-auth@4.24.7(patch_hash=xxwv3g3ul7bnzqsfasefw3kyq4)(next@15.0.1)(react-dom@18.2.0)(react@18.2.0):
+  /next-auth@4.24.7(patch_hash=xxwv3g3ul7bnzqsfasefw3kyq4)(next@15.0.1)(react-dom@19.0.0-rc-cae764ce-20241025)(react@19.0.0-rc-cae764ce-20241025):
     resolution:
       {
         integrity: sha512-iChjE8ov/1K/z98gdKbn2Jw+2vLgJtVV39X+rCP5SGnVQuco7QOr19FRNGMIrD8d3LYhHWV9j9sKLzq1aDWWQQ==,
@@ -17596,17 +17547,17 @@ packages:
       "@panva/hkdf": 1.0.2
       cookie: 0.5.0
       jose: 4.15.5
-      next: 15.0.1(@babel/core@7.20.2)(react-dom@18.2.0)(react@18.2.0)
+      next: 15.0.1(@babel/core@7.20.2)(react-dom@19.0.0-rc-cae764ce-20241025)(react@19.0.0-rc-cae764ce-20241025)
       oauth: 0.9.15
       openid-client: 5.6.5
       preact: 10.11.3
       preact-render-to-string: 5.2.6(preact@10.11.3)
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
+      react: 19.0.0-rc-cae764ce-20241025
+      react-dom: 19.0.0-rc-cae764ce-20241025(react@19.0.0-rc-cae764ce-20241025)
       uuid: 8.3.2
     patched: true
 
-  /next-router-mock@0.9.1(next@15.0.1)(react@18.2.0):
+  /next-router-mock@0.9.1(next@15.0.1)(react@19.0.0-rc-cae764ce-20241025):
     resolution:
       {
         integrity: sha512-GTrns944dnFNgycpinyRszOiwwk99LUJsvvX0FWRgUFHv6hOuzCns1rmTlzO+DRimYB9/XMA+87X2/dQLzjiUQ==,
@@ -17615,11 +17566,11 @@ packages:
       next: 15.0.1
       react: ">=17.0.0"
     dependencies:
-      next: 15.0.1(@babel/core@7.20.2)(react-dom@18.2.0)(react@18.2.0)
-      react: 18.2.0
+      next: 15.0.1(@babel/core@7.20.2)(react-dom@19.0.0-rc-cae764ce-20241025)(react@19.0.0-rc-cae764ce-20241025)
+      react: 19.0.0-rc-cae764ce-20241025
     dev: true
 
-  /next@15.0.1(@babel/core@7.12.10)(react-dom@18.2.0)(react@18.2.0):
+  /next@15.0.1(@babel/core@7.12.10)(react-dom@19.0.0-rc-cae764ce-20241025)(react@19.0.0-rc-cae764ce-20241025):
     resolution:
       {
         integrity: sha512-PSkFkr/w7UnFWm+EP8y/QpHrJXMqpZzAXpergB/EqLPOh4SGPJXv1wj4mslr2hUZBAS9pX7/9YLIdxTv6fwytw==,
@@ -17649,9 +17600,9 @@ packages:
       busboy: 1.6.0
       caniuse-lite: 1.0.30001599
       postcss: 8.4.31
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
-      styled-jsx: 5.1.6(@babel/core@7.12.10)(react@18.2.0)
+      react: 19.0.0-rc-cae764ce-20241025
+      react-dom: 19.0.0-rc-cae764ce-20241025(react@19.0.0-rc-cae764ce-20241025)
+      styled-jsx: 5.1.6(@babel/core@7.12.10)(react@19.0.0-rc-cae764ce-20241025)
     optionalDependencies:
       "@next/swc-darwin-arm64": 15.0.1
       "@next/swc-darwin-x64": 15.0.1
@@ -17667,7 +17618,7 @@ packages:
       - babel-plugin-macros
     dev: false
 
-  /next@15.0.1(@babel/core@7.18.2)(react-dom@18.2.0)(react@18.2.0):
+  /next@15.0.1(@babel/core@7.18.2)(react-dom@19.0.0-rc-cae764ce-20241025)(react@19.0.0-rc-cae764ce-20241025):
     resolution:
       {
         integrity: sha512-PSkFkr/w7UnFWm+EP8y/QpHrJXMqpZzAXpergB/EqLPOh4SGPJXv1wj4mslr2hUZBAS9pX7/9YLIdxTv6fwytw==,
@@ -17697,9 +17648,9 @@ packages:
       busboy: 1.6.0
       caniuse-lite: 1.0.30001599
       postcss: 8.4.31
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
-      styled-jsx: 5.1.6(@babel/core@7.18.2)(react@18.2.0)
+      react: 19.0.0-rc-cae764ce-20241025
+      react-dom: 19.0.0-rc-cae764ce-20241025(react@19.0.0-rc-cae764ce-20241025)
+      styled-jsx: 5.1.6(@babel/core@7.18.2)(react@19.0.0-rc-cae764ce-20241025)
     optionalDependencies:
       "@next/swc-darwin-arm64": 15.0.1
       "@next/swc-darwin-x64": 15.0.1
@@ -17715,7 +17666,54 @@ packages:
       - babel-plugin-macros
     dev: false
 
-  /next@15.0.1(@babel/core@7.20.2)(react-dom@18.2.0)(react@18.2.0):
+  /next@15.0.1(@babel/core@7.20.2)(react-dom@19.0.0-rc-cae764ce-20241025)(react@19.0.0-rc-cae764ce-20241025):
+    resolution:
+      {
+        integrity: sha512-PSkFkr/w7UnFWm+EP8y/QpHrJXMqpZzAXpergB/EqLPOh4SGPJXv1wj4mslr2hUZBAS9pX7/9YLIdxTv6fwytw==,
+      }
+    engines: {node: ">=18.18.0"}
+    hasBin: true
+    peerDependencies:
+      "@opentelemetry/api": ^1.1.0
+      "@playwright/test": ^1.41.2
+      babel-plugin-react-compiler: "*"
+      react: ^18.2.0 || 19.0.0-rc-69d4b800-20241021
+      react-dom: ^18.2.0 || 19.0.0-rc-69d4b800-20241021
+      sass: ^1.3.0
+    peerDependenciesMeta:
+      "@opentelemetry/api":
+        optional: true
+      "@playwright/test":
+        optional: true
+      babel-plugin-react-compiler:
+        optional: true
+      sass:
+        optional: true
+    dependencies:
+      "@next/env": 15.0.1
+      "@swc/counter": 0.1.3
+      "@swc/helpers": 0.5.13
+      busboy: 1.6.0
+      caniuse-lite: 1.0.30001599
+      postcss: 8.4.31
+      react: 19.0.0-rc-cae764ce-20241025
+      react-dom: 19.0.0-rc-cae764ce-20241025(react@19.0.0-rc-cae764ce-20241025)
+      styled-jsx: 5.1.6(@babel/core@7.20.2)(react@19.0.0-rc-cae764ce-20241025)
+    optionalDependencies:
+      "@next/swc-darwin-arm64": 15.0.1
+      "@next/swc-darwin-x64": 15.0.1
+      "@next/swc-linux-arm64-gnu": 15.0.1
+      "@next/swc-linux-arm64-musl": 15.0.1
+      "@next/swc-linux-x64-gnu": 15.0.1
+      "@next/swc-linux-x64-musl": 15.0.1
+      "@next/swc-win32-arm64-msvc": 15.0.1
+      "@next/swc-win32-x64-msvc": 15.0.1
+      sharp: 0.33.5
+    transitivePeerDependencies:
+      - "@babel/core"
+      - babel-plugin-macros
+
+  /next@15.0.1(react-dom@18.2.0)(react@18.2.0):
     resolution:
       {
         integrity: sha512-PSkFkr/w7UnFWm+EP8y/QpHrJXMqpZzAXpergB/EqLPOh4SGPJXv1wj4mslr2hUZBAS9pX7/9YLIdxTv6fwytw==,
@@ -17747,7 +17745,7 @@ packages:
       postcss: 8.4.31
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
-      styled-jsx: 5.1.6(@babel/core@7.20.2)(react@18.2.0)
+      styled-jsx: 5.1.6(react@18.2.0)
     optionalDependencies:
       "@next/swc-darwin-arm64": 15.0.1
       "@next/swc-darwin-x64": 15.0.1
@@ -17761,6 +17759,7 @@ packages:
     transitivePeerDependencies:
       - "@babel/core"
       - babel-plugin-macros
+    dev: false
 
   /nice-try@1.0.5:
     resolution:
@@ -19461,8 +19460,20 @@ packages:
       loose-envify: 1.4.0
       react: 18.2.0
       scheduler: 0.23.0
+    dev: false
 
-  /react-error-boundary@3.1.4(react@18.2.0):
+  /react-dom@19.0.0-rc-cae764ce-20241025(react@19.0.0-rc-cae764ce-20241025):
+    resolution:
+      {
+        integrity: sha512-e3CVe2+ojMe4dz8E/WsV9bkRj+lZt5ms+rhTFHEqIAHv4/PDdXa7P4uJXNhfik+ZYF4Wg5wCDVP4l7cgaudCpg==,
+      }
+    peerDependencies:
+      react: 19.0.0-rc-cae764ce-20241025
+    dependencies:
+      react: 19.0.0-rc-cae764ce-20241025
+      scheduler: 0.25.0-rc-cae764ce-20241025
+
+  /react-error-boundary@3.1.4(react@19.0.0-rc-cae764ce-20241025):
     resolution:
       {
         integrity: sha512-uM9uPzZJTF6wRQORmSrvOIgt4lJ9MC1sNgEOj2XGsDTRE4kmpWxg7ENK9EWNKJRMAOY9z0MuF4yIfl6gp4sotA==,
@@ -19472,10 +19483,10 @@ packages:
       react: ">=16.13.1"
     dependencies:
       "@babel/runtime": 7.18.3
-      react: 18.2.0
+      react: 19.0.0-rc-cae764ce-20241025
     dev: true
 
-  /react-hook-form@7.39.1(react@18.2.0):
+  /react-hook-form@7.39.1(react@19.0.0-rc-cae764ce-20241025):
     resolution:
       {
         integrity: sha512-MiF9PCILN5KulhSGbnjohMiTOrB47GerDTichMNP0y2cPUu1GTRFqbunOxCE9N1499YTLMV/ne4gFzqCp1rxrQ==,
@@ -19484,7 +19495,7 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17 || ^18
     dependencies:
-      react: 18.2.0
+      react: 19.0.0-rc-cae764ce-20241025
     dev: false
 
   /react-is@16.13.1:
@@ -19506,7 +19517,7 @@ packages:
         integrity: sha512-xWGDIW6x921xtzPkhiULtthJHoJvBbF3q26fzloPCK0hsvxtPVelvftw3zjbHWSkR2km9Z+4uxbDDK/6Zw9B8w==,
       }
 
-  /react-reconciler@0.26.2(react@18.2.0):
+  /react-reconciler@0.26.2(react@19.0.0-rc-cae764ce-20241025):
     resolution:
       {
         integrity: sha512-nK6kgY28HwrMNwDnMui3dvm3rCFjZrcGiuwLc5COUipBK5hWHLOxMJhSnSomirqWwjPBJKV1QcbkI0VJr7Gl1Q==,
@@ -19517,7 +19528,7 @@ packages:
     dependencies:
       loose-envify: 1.4.0
       object-assign: 4.1.1
-      react: 18.2.0
+      react: 19.0.0-rc-cae764ce-20241025
       scheduler: 0.20.2
     dev: false
 
@@ -19545,6 +19556,14 @@ packages:
     engines: {node: ">=0.10.0"}
     dependencies:
       loose-envify: 1.4.0
+    dev: false
+
+  /react@19.0.0-rc-cae764ce-20241025:
+    resolution:
+      {
+        integrity: sha512-5wV/3MJc6Ws4l4ZF95yaQKaMV8aWVlIBKOdPA4Kere7CfdJ0NMIuKt9j9v0U4ZTmCi4ubAdN+KL4gGdfTEIpuw==,
+      }
+    engines: {node: ">=0.10.0"}
 
   /read-pkg-up@7.0.1:
     resolution:
@@ -20189,6 +20208,13 @@ packages:
       }
     dependencies:
       loose-envify: 1.4.0
+    dev: false
+
+  /scheduler@0.25.0-rc-cae764ce-20241025:
+    resolution:
+      {
+        integrity: sha512-kiDqIcp0nrZ8RW65wMujBEs7eDNfd49hcfjDmscxWIsnDTz9NRQrTAChv/tYRYCUNk7qPM36SQOja2HcRuee0A==,
+      }
 
   /schema-utils@3.3.0:
     resolution:
@@ -21137,7 +21163,7 @@ packages:
     dependencies:
       acorn: 8.8.1
 
-  /styled-jsx@5.1.6(@babel/core@7.12.10)(react@18.2.0):
+  /styled-jsx@5.1.6(@babel/core@7.12.10)(react@19.0.0-rc-cae764ce-20241025):
     resolution:
       {
         integrity: sha512-qSVyDTeMotdvQYoHWLNGwRFJHC+i+ZvdBRYosOFgC+Wg1vx4frN2/RG/NA7SYqqvKNLf39P2LSRA2pu6n0XYZA==,
@@ -21155,10 +21181,10 @@ packages:
     dependencies:
       "@babel/core": 7.12.10(supports-color@8.1.1)
       client-only: 0.0.1
-      react: 18.2.0
+      react: 19.0.0-rc-cae764ce-20241025
     dev: false
 
-  /styled-jsx@5.1.6(@babel/core@7.18.2)(react@18.2.0):
+  /styled-jsx@5.1.6(@babel/core@7.18.2)(react@19.0.0-rc-cae764ce-20241025):
     resolution:
       {
         integrity: sha512-qSVyDTeMotdvQYoHWLNGwRFJHC+i+ZvdBRYosOFgC+Wg1vx4frN2/RG/NA7SYqqvKNLf39P2LSRA2pu6n0XYZA==,
@@ -21176,10 +21202,10 @@ packages:
     dependencies:
       "@babel/core": 7.18.2
       client-only: 0.0.1
-      react: 18.2.0
+      react: 19.0.0-rc-cae764ce-20241025
     dev: false
 
-  /styled-jsx@5.1.6(@babel/core@7.20.2)(react@18.2.0):
+  /styled-jsx@5.1.6(@babel/core@7.20.2)(react@19.0.0-rc-cae764ce-20241025):
     resolution:
       {
         integrity: sha512-qSVyDTeMotdvQYoHWLNGwRFJHC+i+ZvdBRYosOFgC+Wg1vx4frN2/RG/NA7SYqqvKNLf39P2LSRA2pu6n0XYZA==,
@@ -21197,7 +21223,27 @@ packages:
     dependencies:
       "@babel/core": 7.20.2(supports-color@8.1.1)
       client-only: 0.0.1
+      react: 19.0.0-rc-cae764ce-20241025
+
+  /styled-jsx@5.1.6(react@18.2.0):
+    resolution:
+      {
+        integrity: sha512-qSVyDTeMotdvQYoHWLNGwRFJHC+i+ZvdBRYosOFgC+Wg1vx4frN2/RG/NA7SYqqvKNLf39P2LSRA2pu6n0XYZA==,
+      }
+    engines: {node: ">= 12.0.0"}
+    peerDependencies:
+      "@babel/core": "*"
+      babel-plugin-macros: "*"
+      react: ">= 16.8.0 || 17.x.x || ^18.0.0-0 || ^19.0.0-0"
+    peerDependenciesMeta:
+      "@babel/core":
+        optional: true
+      babel-plugin-macros:
+        optional: true
+    dependencies:
+      client-only: 0.0.1
       react: 18.2.0
+    dev: false
 
   /subarg@1.0.0:
     resolution:
@@ -22122,6 +22168,23 @@ packages:
       is-typedarray: 1.0.0
     dev: true
 
+  /types-react-dom@19.0.0-rc.1:
+    resolution:
+      {
+        integrity: sha512-VSLZJl8VXCD0fAWp7DUTFUDCcZ8DVXOQmjhJMD03odgeFmu14ZQJHCXeETm3BEAhJqfgJaFkLnGkQv88sRx0fQ==,
+      }
+    dependencies:
+      "@types/react": /types-react@19.0.0-rc.1
+    dev: true
+
+  /types-react@19.0.0-rc.1:
+    resolution:
+      {
+        integrity: sha512-RshndUfqTW6K3STLPis8BtAYCGOkMbtvYsi90gmVNDZBXUyUc5juf2PE9LfS/JmOlUIRO8cWTS/1MTnmhjDqyQ==,
+      }
+    dependencies:
+      csstype: 3.1.0
+
   /typescript@4.8.4:
     resolution:
       {
@@ -22393,7 +22456,7 @@ packages:
       querystring: 0.2.0
     dev: false
 
-  /use-sync-external-store@1.2.0(react@18.2.0):
+  /use-sync-external-store@1.2.0(react@19.0.0-rc-cae764ce-20241025):
     resolution:
       {
         integrity: sha512-eEgnFxGQ1Ife9bzYs6VLi8/4X6CObHMw9Qr9tPY43iKwsPw8xE8+EFsf/2cFZ5S3esXgpWgtSCtLNS41F+sKPA==,
@@ -22401,7 +22464,7 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
     dependencies:
-      react: 18.2.0
+      react: 19.0.0-rc-cae764ce-20241025
 
   /use@3.1.1:
     resolution:
