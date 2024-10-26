@@ -8,11 +8,6 @@ overrides:
   "@types/mime": 3.0.4
   next: 14.2.15
 
-patchedDependencies:
-  next-auth@4.24.7:
-    hash: xxwv3g3ul7bnzqsfasefw3kyq4
-    path: patches/next-auth@4.24.7.patch
-
 importers:
   .:
     dependencies:
@@ -163,7 +158,7 @@ importers:
         version: 14.2.15(@babel/core@7.20.2)(react-dom@18.2.0)(react@18.2.0)
       next-auth:
         specifier: 4.24.7
-        version: 4.24.7(patch_hash=xxwv3g3ul7bnzqsfasefw3kyq4)(next@14.2.15)(react-dom@18.2.0)(react@18.2.0)
+        version: 4.24.7(next@14.2.15)(react-dom@18.2.0)(react@18.2.0)
       prisma:
         specifier: 4.6.1
         version: 4.6.1
@@ -1622,7 +1617,7 @@ importers:
         version: 14.2.15(@babel/core@7.20.2)(react-dom@18.2.0)(react@18.2.0)
       next-auth:
         specifier: 4.24.7
-        version: 4.24.7(patch_hash=xxwv3g3ul7bnzqsfasefw3kyq4)(next@14.2.15)(react-dom@18.2.0)(react@18.2.0)
+        version: 4.24.7(next@14.2.15)(react-dom@18.2.0)(react@18.2.0)
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -17284,7 +17279,7 @@ packages:
       }
     dev: false
 
-  /next-auth@4.24.7(patch_hash=xxwv3g3ul7bnzqsfasefw3kyq4)(next@14.2.15)(react-dom@18.2.0)(react@18.2.0):
+  /next-auth@4.24.7(next@14.2.15)(react-dom@18.2.0)(react@18.2.0):
     resolution:
       {
         integrity: sha512-iChjE8ov/1K/z98gdKbn2Jw+2vLgJtVV39X+rCP5SGnVQuco7QOr19FRNGMIrD8d3LYhHWV9j9sKLzq1aDWWQQ==,
@@ -17310,7 +17305,6 @@ packages:
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       uuid: 8.3.2
-    patched: true
 
   /next-router-mock@0.9.1(next@14.2.15)(react@18.2.0):
     resolution:
