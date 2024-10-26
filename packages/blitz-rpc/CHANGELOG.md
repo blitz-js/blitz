@@ -1,5 +1,20 @@
 # @blitzjs/rpc
 
+## 2.1.3
+
+### Patch Changes
+
+- 0b3286468: chore: bump `next.js` and `zod` versions
+- Updated dependencies [0b3286468]
+- Updated dependencies [50f17d21c]
+  - blitz@2.1.3
+
+## 2.1.2
+
+### Patch Changes
+
+- blitz@2.1.2
+
 ## 2.1.1
 
 ### Patch Changes

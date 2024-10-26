@@ -96,7 +96,7 @@ export const defaultCodegenConfig: CodegenConfig = {
     datetime: {
       component: "LabeledTextField",
       inputType: "text",
-      zodType: "string().datetime()",
+      zodType: "string().datetime",
       prismaType: "DateTime",
     },
     uuid: {

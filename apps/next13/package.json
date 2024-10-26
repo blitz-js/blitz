@@ -1,6 +1,6 @@
 {
   "name": "next-blitz-auth",
-  "version": "0.1.13",
+  "version": "0.1.15",
   "private": true,
   "scripts": {
     "blitz:dev": "next dev",
@@ -12,23 +12,23 @@
     "schema": "prisma/schema.prisma"
   },
   "dependencies": {
-    "@blitzjs/auth": "workspace:2.1.1",
-    "@blitzjs/config": "workspace:2.1.1",
-    "@blitzjs/next": "workspace:2.1.1",
-    "@blitzjs/rpc": "workspace:2.1.1",
+    "@blitzjs/auth": "2.1.3",
+    "@blitzjs/config": "2.1.3",
+    "@blitzjs/next": "2.1.3",
+    "@blitzjs/rpc": "2.1.3",
     "@hookform/error-message": "2.0.0",
     "@hookform/resolvers": "2.9.10",
     "@prisma/client": "^4.5.0",
     "@tanstack/react-query": "5.51.1",
-    "blitz": "workspace:2.1.1",
+    "blitz": "2.1.3",
     "flatted": "3.2.7",
-    "next": "14.3.0-canary.28",
+    "next": "14.2.15",
     "prisma": "^4.5.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "7.39.1",
     "superjson": "1.11.0",
-    "zod": "3.20.2"
+    "zod": "3.23.8"
   },
   "devDependencies": {
     "@types/node": "18.11.7",

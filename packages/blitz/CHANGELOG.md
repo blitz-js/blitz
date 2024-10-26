@@ -1,5 +1,22 @@
 # blitz
 
+## 2.1.3
+
+### Patch Changes
+
+- 0b3286468: chore: bump `next.js` and `zod` versions
+- 50f17d21c: Update prisma-ast dependency to prevent Blitz generator from failing when Prisma keywords are used as model names
+- Updated dependencies [0b3286468]
+  - @blitzjs/generator@2.1.3
+
+## 2.1.2
+
+### Patch Changes
+
+- Updated dependencies [2711291e9]
+- Updated dependencies [56bd32b55]
+  - @blitzjs/generator@2.1.2
+
 ## 2.1.1
 
 ### Patch Changes

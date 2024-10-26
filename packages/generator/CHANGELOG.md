@@ -1,5 +1,18 @@
 # @blitzjs/generator
 
+## 2.1.3
+
+### Patch Changes
+
+- 0b3286468: chore: bump `next.js` and `zod` versions
+
+## 2.1.2
+
+### Patch Changes
+
+- 2711291e9: Remove `views` property from `Session.PublicData` in `types.ts` file again
+- 56bd32b55: Fix Zod schema generation for datetime fields by removing extra parentheses.
+
 ## 2.1.1
 
 ## 2.1.0
