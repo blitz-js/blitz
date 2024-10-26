@@ -31,11 +31,6 @@ type MutateOptions = {
 }
 
 export const initializeQueryClient = () => {
-  let suspenseEnabled = true
-  if (!process.env.CLI_COMMAND_CONSOLE && !process.env.CLI_COMMAND_DB) {
-    suspenseEnabled = Boolean(globalThis.__BLITZ_SUSPENSE_ENABLED)
-  }
-
   return new QueryClient({
     defaultOptions: {
       queries: {
@@ -54,7 +49,7 @@ export const initializeQueryClient = () => {
 }
 
 // Query client is initialised in `BlitzRpcPlugin`, and can only be used with BlitzRpcPlugin right now
-export const getQueryClient = () => globalThis.queryClient
+export const getQueryClient = () => globalThis.queryClient as QueryClient
 
 function isRpcClient(f: any): f is RpcClient<any, any> {
   return !!f._isRpcClient
