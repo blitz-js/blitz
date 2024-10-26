@@ -260,7 +260,7 @@ export type RedirectAuthenticatedToFn = (
 ) => RedirectAuthenticatedTo
 
 export type BlitzPage<P = {}> = React.ComponentType<P> & {
-  getLayout?: (component: JSX.Element) => JSX.Element
+  getLayout?: (component: React.JSX.Element) => React.JSX.Element
   authenticate?: boolean | {redirectTo?: string | RouteUrlObject; role?: string | Array<string>}
   suppressFirstRenderFlicker?: boolean
   redirectAuthenticatedTo?: RedirectAuthenticatedTo | RedirectAuthenticatedToFn
