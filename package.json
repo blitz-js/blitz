@@ -33,7 +33,7 @@
     "wait-on": "6.0.1"
   },
   "npmClient": "pnpm",
-  "packageManager": "pnpm@9.6.0",
+  "packageManager": "pnpm@8.9.0",
   "manypkg": {
     "ignoredRules": [
       "EXTERNAL_MISMATCH"
