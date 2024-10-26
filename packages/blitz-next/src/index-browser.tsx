@@ -9,10 +9,16 @@ import type {Router} from "next/router"
 import {BlitzProvider} from "./provider"
 import dynamic from "next/dynamic"
 export {Routes} from ".blitz"
-const Head = dynamic(() => import("next/head").then((mod) => mod.default), {
-  ssr: false,
-  loading: () => null,
-})
+const Head = dynamic(
+  () =>
+    import("next/head").then((mod) => ({
+      default: mod.default,
+    })),
+  {
+    ssr: false,
+    loading: () => null,
+  },
+)
 
 export {BlitzProvider} from "./provider"
 
