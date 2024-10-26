@@ -9,7 +9,8 @@
       {
         "name": "next"
       }
-    ]
+    ],
+    "strictNullChecks": true
   },
   "exclude": ["node_modules"],
   "baseUrl": "."
