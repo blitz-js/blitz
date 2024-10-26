@@ -4,7 +4,7 @@
 import React from "react"
 import {describe, it, expect, vi, afterEach} from "vitest"
 import {extractRouterParams, useParam, useParams} from "./use-params"
-import {renderHook as defaultRenderHook} from "@testing-library/react-hooks"
+import {renderHook as defaultRenderHook} from "@testing-library/react"
 import {NextRouter} from "next/router"
 import {RouterContext} from "./router-context"
 
