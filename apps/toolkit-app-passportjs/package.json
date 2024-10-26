@@ -43,7 +43,6 @@
   "devDependencies": {
     "@next/bundle-analyzer": "12.0.8",
     "@testing-library/react": "16.0.1",
-    "@testing-library/react-hooks": "8.0.1",
     "@types/jest": "29.2.2",
     "@types/node": "18.11.9",
     "@types/preview-email": "2.0.1",
