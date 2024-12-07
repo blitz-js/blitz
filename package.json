@@ -39,16 +39,13 @@
     "wait-on": "6.0.1"
   },
   "npmClient": "pnpm",
-  "packageManager": "pnpm@8.6.6",
+  "packageManager": "pnpm@8.9.0",
   "manypkg": {
     "ignoredRules": [
       "EXTERNAL_MISMATCH"
     ]
   },
   "pnpm": {
-    "patchedDependencies": {
-      "next-auth@4.24.7": "patches/next-auth@4.24.7.patch"
-    },
     "overrides": {
       "@types/mime": "3.0.4",
       "next": "14.2.15"
