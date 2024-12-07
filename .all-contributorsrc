@@ -4104,6 +4104,16 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "fungilation",
+      "name": "Gary Fung",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3803466?v=4",
+      "profile": "https://garyfung.medium.com",
+      "contributions": [
+        "doc",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
