@@ -1,7 +1,7 @@
 import {RedirectError} from "blitz"
 import {useRouter} from "next/compat/router"
 import type {NextRouter} from "next/router"
-import * as React from "react"
+import React from "react"
 import {RouterContext} from "./router-context"
 import _debug from "debug"
 import type {ExcludeRouterProps, WithRouterProps} from "next/dist/client/with-router"
@@ -77,7 +77,7 @@ const initialState: ErrorBoundaryState = {error: null}
 function withRouter<P extends WithRouterProps>(
   ComposedComponent: React.ComponentType<P>,
 ): React.ComponentType<ExcludeRouterProps<P>> {
-  function WithRouterWrapper(props: any): JSX.Element {
+  function WithRouterWrapper(props: any): React.JSX.Element {
     return <ComposedComponent router={useRouter()} {...props} />
   }
 
@@ -114,7 +114,13 @@ export const ErrorBoundary = withRouter(
         await this.props.router.push(error.url)
         return
       }
-      this.props.onError?.(error, info)
+      if (this.props.onError) {
+        let componentStack = info.componentStack
+        if (!componentStack) {
+          componentStack = new Error("Stack trace").stack || ""
+        }
+        this.props.onError(error, {componentStack})
+      }
     }
 
     componentDidMount() {
@@ -190,7 +196,7 @@ export const ErrorBoundary = withRouter(
   },
 )
 
-function withErrorBoundary<P extends JSX.IntrinsicAttributes>(
+function withErrorBoundary<P extends React.JSX.IntrinsicAttributes>(
   Component: React.ComponentType<P>,
   errorBoundaryProps: ErrorBoundaryProps,
 ): React.ComponentType<P> {

@@ -1,7 +1,7 @@
 
 import {vi} from "vitest"
 import { render as defaultRender } from "@testing-library/react"
-import { renderHook as defaultRenderHook } from "@testing-library/react-hooks"
+import { renderHook as defaultRenderHook } from "@testing-library/react"
 import { NextRouter } from "next/router"
 import {BlitzProvider, RouterContext} from "@blitzjs/next"
 import { QueryClient } from "@blitzjs/rpc"
