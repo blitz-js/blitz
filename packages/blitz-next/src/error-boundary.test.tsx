@@ -80,7 +80,7 @@ test("standard use-case", () => {
   const calls = consoleError.mock.calls[0]
   //@ts-expect-error - it's a mock
   expect(calls[1]).toMatchInlineSnapshot("[Error: 💥 CABOOM 💥]")
-  expect(consoleError).toHaveBeenCalledTimes(3)
+  expect(consoleError).toHaveBeenCalledTimes(1)
   consoleError.mockClear()
 
   expect(screen.getByRole("alert")).toMatchInlineSnapshot(`
