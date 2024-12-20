@@ -46,9 +46,6 @@
     ]
   },
   "pnpm": {
-    "patchedDependencies": {
-      "next-auth@4.24.7": "patches/next-auth@4.24.7.patch"
-    },
     "overrides": {
       "@types/mime": "3.0.4",
       "next": "14.2.15"

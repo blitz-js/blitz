@@ -15,6 +15,8 @@ export {
   useMutation,
   usePaginatedQuery,
   useQuery,
+  useSuspenseInfiniteQuery,
+  useSuspenseQuery,
 } from "./query/react-query"
 export type {
   DefaultOptions,
@@ -28,5 +30,6 @@ export type {
 export * from "./query/utils"
 
 import {reactQueryClientReExports} from "./query/react-query"
-const {QueryClientProvider, Hydrate, useQueryErrorResetBoundary} = reactQueryClientReExports
-export {QueryClientProvider, Hydrate, useQueryErrorResetBoundary}
+const {QueryClientProvider, HydrationBoundary, useQueryErrorResetBoundary} =
+  reactQueryClientReExports
+export {QueryClientProvider, HydrationBoundary, useQueryErrorResetBoundary}

@@ -29,7 +29,7 @@ jobs:
         run: |
           pr="$(gh api repos/${{ github.repository }}/pulls/${{ github.event.issue.number }})"
           head_sha="$(echo "$pr" | jq -r .head.sha)"
-          
+
           echo "head_sha=$head_sha" >> $GITHUB_OUTPUT
 
       - uses: actions/checkout@v4
@@ -39,7 +39,7 @@ jobs:
       - name: Setup PNPM
         uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
         with:
-          version: 8.9.0
+          version: 8.6.6
 
       - name: Setup Node
         uses: actions/setup-node@v4

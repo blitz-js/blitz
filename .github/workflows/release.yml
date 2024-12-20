@@ -37,7 +37,7 @@ jobs:
       - name: Pre-publish
         uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
         with:
-          version: 8.9.0
+          version: 8.6.6
       - run: pnpm install
         env:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
