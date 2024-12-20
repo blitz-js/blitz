@@ -173,7 +173,7 @@ test("simple fallback is supported", () => {
   unmount()
 })
 
-test.only("withErrorBoundary HOC", () => {
+test("withErrorBoundary HOC", () => {
   const consoleError = console.error as MockedFunction<(args: unknown[]) => void>
 
   const onErrorHandler = vi.fn()
