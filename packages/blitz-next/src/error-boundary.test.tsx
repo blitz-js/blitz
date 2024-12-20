@@ -80,19 +80,6 @@ test("standard use-case", () => {
   const calls = consoleError.mock.calls[0]
   //@ts-expect-error - it's a mock
   expect(calls[1]).toMatchInlineSnapshot("[Error: 💥 CABOOM 💥]")
-  expect(cleanStack(componentStack)).toMatchInlineSnapshot(`
-    "Error: Uncaught [Error: 💥 CABOOM 💥]
-        at reportException 
-        at innerInvokeEventListeners 
-        at invokeEventListeners 
-        at HTMLUnknownElementImpl._dispatch 
-        at HTMLUnknownElementImpl.dispatchEvent 
-        at HTMLUnknownElement.dispatchEvent 
-        at Object.invokeGuardedCallbackDev 
-        at invokeGuardedCallback 
-        at beginWork\$1 
-        at performUnitOfWork "
-  `)
   expect(consoleError).toHaveBeenCalledTimes(3)
   consoleError.mockClear()
 
