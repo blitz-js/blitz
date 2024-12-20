@@ -2,14 +2,14 @@ import { forwardRef, PropsWithoutRef } from "react";
 import { useFormikContext, ErrorMessage, Field } from "formik";
 
 export interface LabeledSelectFieldProps
-  extends PropsWithoutRef<JSX.IntrinsicElements["select"]> {
+  extends PropsWithoutRef<React.JSX.IntrinsicElements["select"]> {
   /** Field name. */
   name: string;
   /** Field label. */
   label: string;
   /** Field options. */
   options: any;
-  outerProps?: PropsWithoutRef<JSX.IntrinsicElements["div"]>;
+  outerProps?: PropsWithoutRef<React.JSX.IntrinsicElements["div"]>;
 }
 
 export const LabeledSelectField = forwardRef<

@@ -289,8 +289,10 @@ const makeProxyToPublicData = <T extends SessionContextClass>(ctxClass: T): T =>
 export async function getBlitzContext(): Promise<Ctx> {
   try {
     const {headers, cookies} = require("next/headers")
-    const reqHeader = Object.fromEntries(headers())
-    const csrfToken = cookies().get(COOKIE_CSRF_TOKEN())
+    const cookieStore = await cookies()
+    const headersStore = await headers()
+    const reqHeader = Object.fromEntries(headersStore)
+    const csrfToken = cookieStore.get(COOKIE_CSRF_TOKEN())
     if (csrfToken) {
       reqHeader[HEADER_CSRF] = csrfToken.value
     }

@@ -221,7 +221,7 @@ async function getResolverMap(): Promise<ResolverFiles | null | undefined> {
   // Handles:
   // - Vite
   // {
-  //   const {resolverFilesLoaded, viteProvider} = await loadTelefuncFilesWithVite(runContext)
+  //   const {resolverFilesLoaded, viteProvider} = await loadTelefuncFilesWithVite(run
   //   if (resolverFilesLoaded) {
   //     assertUsage(
   //       Object.keys(resolverFilesLoaded).length > 0,
@@ -364,17 +364,18 @@ type Params = Record<string, unknown>
 
 export function rpcAppHandler(config?: RpcConfig) {
   registerBlitzErrorClasses()
-  async function handleRpcRequest(req: Request, context: {params: Params}, ctx?: Ctx) {
+  async function handleRpcRequest(req: Request, segmentData: {params: Promise<Params>}, ctx?: Ctx) {
+    const params = await segmentData.params
     const session = ctx?.session
     const resolverMap = await getResolverMap()
     assert(resolverMap, "No query or mutation resolvers found")
 
     assert(
-      Array.isArray(context.params.blitz),
+      Array.isArray(params.blitz),
       "It seems your Blitz RPC endpoint file is not named [[...blitz]].(jt)s. Please ensure it is",
     )
 
-    const relativeRoutePath = (context.params.blitz as string[])?.join("/")
+    const relativeRoutePath = (params.blitz as string[])?.join("/")
     const routePath = "/" + relativeRoutePath
     const resolverName = routePath.replace(/(\/api\/rpc)?\//, "")
     const rpcLogger = new RpcLogger(resolverName, config?.logging)
@@ -413,14 +414,14 @@ export function rpcAppHandler(config?: RpcConfig) {
           json:
             req.method === "POST"
               ? body.params
-              : context.params.params
-              ? parse(`${context.params.params}`)
+              : params.params
+              ? parse(`${params.params}`)
               : undefined,
           meta:
             req.method === "POST"
               ? body.meta?.params
-              : context.params.meta
-              ? parse(`${context.params.meta}`)
+              : params.meta
+              ? parse(`${params.meta}`)
               : undefined,
         })
         rpcLogger.timer.initResolver()

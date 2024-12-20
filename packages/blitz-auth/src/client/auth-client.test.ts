@@ -7,7 +7,7 @@ import {parsePublicDataToken, getPublicDataStore, useSession} from "./index"
 import {COOKIE_PUBLIC_DATA_TOKEN} from "../shared"
 import {toBase64} from "b64-lite"
 import {act} from "@testing-library/react"
-import {renderHook} from "@testing-library/react-hooks"
+import {renderHook} from "@testing-library/react"
 
 vi.mock("blitz", async () => {
   const blitz = await vi.importActual("blitz")
