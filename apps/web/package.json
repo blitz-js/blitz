@@ -30,13 +30,13 @@
     "passport-mock-strategy": "2.0.0",
     "passport-twitter": "1.0.4",
     "prisma": "4.6.1",
-    "react": "rc",
-    "react-dom": "rc",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
     "ts-node": "10.9.1"
   },
   "devDependencies": {
     "@next/bundle-analyzer": "12.0.8",
-    "@types/react": "npm:types-react@rc",
+    "@types/react": "npm:types-react@19.0.0",
     "eslint": "8.27.0",
     "typescript": "^4.8.4"
   }
