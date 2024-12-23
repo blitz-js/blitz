@@ -1,5 +1,11 @@
 # @blitzjs/generator
 
+## 2.1.4
+
+### Patch Changes
+
+- 38d320fd2: chore: Upgrade to prisma v6. Read more about migration in https://www.prisma.io/docs/orm/more/upgrade-guides/upgrading-versions/upgrading-to-prisma-6
+
 ## 2.1.3
 
 ### Patch Changes
