@@ -87,6 +87,9 @@ importers:
       "@tanstack/react-query":
         specifier: 4.0.10
         version: 4.0.10(react-dom@19.0.0)(react@19.0.0)
+      arctic:
+        specifier: 2.3.3
+        version: 2.3.3
       blitz:
         specifier: 2.1.3
         version: link:../../packages/blitz
@@ -95,7 +98,7 @@ importers:
         version: 3.2.7
       next:
         specifier: 15.0.1
-        version: 15.0.1(@babel/core@7.12.10)(react-dom@19.0.0)(react@19.0.0)
+        version: 15.0.1(@babel/core@7.18.2)(react-dom@19.0.0)(react@19.0.0)
       prisma:
         specifier: ^4.5.0
         version: 4.6.1
@@ -447,7 +450,7 @@ importers:
         version: 3.0.0
       next:
         specifier: 15.0.1
-        version: 15.0.1(@babel/core@7.12.10)(react-dom@19.0.0)(react@19.0.0)
+        version: 15.0.1(@babel/core@7.18.2)(react-dom@19.0.0)(react@19.0.0)
       prisma:
         specifier: 4.6.1
         version: 4.6.1
@@ -647,7 +650,7 @@ importers:
         version: 2.1.0
       next:
         specifier: 15.0.1
-        version: 15.0.1(@babel/core@7.12.10)(react-dom@19.0.0)(react@19.0.0)
+        version: 15.0.1(@babel/core@7.18.2)(react-dom@19.0.0)(react@19.0.0)
       prisma:
         specifier: 4.6.1
         version: 4.6.1
@@ -711,7 +714,7 @@ importers:
         version: link:../../packages/blitz
       next:
         specifier: 15.0.1
-        version: 15.0.1(@babel/core@7.12.10)(react-dom@19.0.0)(react@19.0.0)
+        version: 15.0.1(@babel/core@7.18.2)(react-dom@19.0.0)(react@19.0.0)
       react:
         specifier: 19.0.0
         version: 19.0.0
@@ -775,7 +778,7 @@ importers:
         version: 2.1.0
       next:
         specifier: 15.0.1
-        version: 15.0.1(@babel/core@7.12.10)(react-dom@19.0.0)(react@19.0.0)
+        version: 15.0.1(@babel/core@7.18.2)(react-dom@19.0.0)(react@19.0.0)
       prisma:
         specifier: 4.6.1
         version: 4.6.1
@@ -857,7 +860,7 @@ importers:
         version: 3.0.0
       next:
         specifier: 15.0.1
-        version: 15.0.1(@babel/core@7.12.10)(react-dom@19.0.0)(react@19.0.0)
+        version: 15.0.1(@babel/core@7.18.2)(react-dom@19.0.0)(react@19.0.0)
       prisma:
         specifier: 4.6.1
         version: 4.6.1
@@ -988,7 +991,7 @@ importers:
         version: 3.0.0
       next:
         specifier: 15.0.1
-        version: 15.0.1(@babel/core@7.12.10)(react-dom@19.0.0)(react@19.0.0)
+        version: 15.0.1(@babel/core@7.18.2)(react-dom@19.0.0)(react@19.0.0)
       prisma:
         specifier: 4.6.1
         version: 4.6.1
@@ -1052,7 +1055,7 @@ importers:
         version: link:../../packages/blitz
       next:
         specifier: 15.0.1
-        version: 15.0.1(@babel/core@7.12.10)(react-dom@19.0.0)(react@19.0.0)
+        version: 15.0.1(@babel/core@7.18.2)(react-dom@19.0.0)(react@19.0.0)
       react:
         specifier: 19.0.0
         version: 19.0.0
@@ -1101,7 +1104,7 @@ importers:
         version: link:../../packages/blitz
       next:
         specifier: 15.0.1
-        version: 15.0.1(@babel/core@7.12.10)(react-dom@19.0.0)(react@19.0.0)
+        version: 15.0.1(@babel/core@7.18.2)(react-dom@19.0.0)(react@19.0.0)
       react:
         specifier: 19.0.0
         version: 19.0.0
@@ -1156,7 +1159,7 @@ importers:
         version: 3.0.0
       next:
         specifier: 15.0.1
-        version: 15.0.1(@babel/core@7.12.10)(react-dom@19.0.0)(react@19.0.0)
+        version: 15.0.1(@babel/core@7.18.2)(react-dom@19.0.0)(react@19.0.0)
       prisma:
         specifier: 4.6.1
         version: 4.6.1
@@ -1534,6 +1537,9 @@ importers:
       "@types/secure-password":
         specifier: 3.1.1
         version: 3.1.1
+      arctic:
+        specifier: 2.3.3
+        version: 2.3.3
       b64-lite:
         specifier: 1.4.0
         version: 1.4.0
@@ -1700,7 +1706,7 @@ importers:
         version: 4.1.0
       next:
         specifier: 15.0.1
-        version: 15.0.1(@babel/core@7.12.10)(react-dom@19.0.0)(react@19.0.0)
+        version: 15.0.1(@babel/core@7.20.2)(react-dom@19.0.0)(react@19.0.0)
       next-router-mock:
         specifier: 0.9.1
         version: 0.9.1(next@15.0.1)(react@19.0.0)
@@ -1715,7 +1721,7 @@ importers:
         version: 5.0.0
       ts-jest:
         specifier: 27.1.4
-        version: 27.1.4(@babel/core@7.12.10)(esbuild@0.14.51)(jest@27.5.1)(typescript@4.8.4)
+        version: 27.1.4(@babel/core@7.20.2)(esbuild@0.14.51)(jest@27.5.1)(typescript@4.8.4)
       tslog:
         specifier: 4.9.0
         version: 4.9.0
@@ -5808,6 +5814,55 @@ packages:
       "@nodelib/fs.scandir": 2.1.5
       fastq: 1.13.0
 
+  /@oslojs/asn1@1.0.0:
+    resolution:
+      {
+        integrity: sha512-zw/wn0sj0j0QKbIXfIlnEcTviaCzYOY3V5rAyjR6YtOByFtJiT574+8p9Wlach0lZH9fddD4yb9laEAIl4vXQA==,
+      }
+    dependencies:
+      "@oslojs/binary": 1.0.0
+    dev: false
+
+  /@oslojs/binary@1.0.0:
+    resolution:
+      {
+        integrity: sha512-9RCU6OwXU6p67H4NODbuxv2S3eenuQ4/WFLrsq+K/k682xrznH5EVWA7N4VFk9VYVcbFtKqur5YQQZc0ySGhsQ==,
+      }
+    dev: false
+
+  /@oslojs/crypto@1.0.1:
+    resolution:
+      {
+        integrity: sha512-7n08G8nWjAr/Yu3vu9zzrd0L9XnrJfpMioQcvCMxBIiF5orECHe5/3J0jmXRVvgfqMm/+4oxlQ+Sq39COYLcNQ==,
+      }
+    dependencies:
+      "@oslojs/asn1": 1.0.0
+      "@oslojs/binary": 1.0.0
+    dev: false
+
+  /@oslojs/encoding@0.4.1:
+    resolution:
+      {
+        integrity: sha512-hkjo6MuIK/kQR5CrGNdAPZhS01ZCXuWDRJ187zh6qqF2+yMHZpD9fAYpX8q2bOO6Ryhl3XpCT6kUX76N8hhm4Q==,
+      }
+    dev: false
+
+  /@oslojs/encoding@1.1.0:
+    resolution:
+      {
+        integrity: sha512-70wQhgYmndg4GCPxPPxPGevRKqTIJ2Nh4OkiMWmDAVYsTQ+Ta7Sq+rPevXyXGdzr30/qZBnyOalCszoMxlyldQ==,
+      }
+    dev: false
+
+  /@oslojs/jwt@0.2.0:
+    resolution:
+      {
+        integrity: sha512-bLE7BtHrURedCn4Mco3ma9L4Y1GR2SMBuIvjWr7rmQ4/W/4Jy70TIAgZ+0nIlk0xHz1vNP8x8DCns45Sb2XRbg==,
+      }
+    dependencies:
+      "@oslojs/encoding": 0.4.1
+    dev: false
+
   /@panva/hkdf@1.0.2:
     resolution:
       {
@@ -6514,7 +6569,7 @@ packages:
       }
     engines: {node: ">=12"}
     peerDependencies:
-      "@types/react": ^16.9.0 || ^17.0.0
+      "@types/react": npm:types-react@rc
       react: ^16.9.0 || ^17.0.0
       react-dom: ^16.9.0 || ^17.0.0
       react-test-renderer: ^16.9.0 || ^17.0.0
@@ -6541,8 +6596,8 @@ packages:
     engines: {node: ">=18"}
     peerDependencies:
       "@testing-library/dom": ^10.0.0
-      "@types/react": ^18.0.0
-      "@types/react-dom": ^18.0.0
+      "@types/react": npm:types-react@rc
+      "@types/react-dom": npm:types-react-dom@rc
       react: ^18.0.0
       react-dom: ^18.0.0
     peerDependenciesMeta:
@@ -6567,8 +6622,8 @@ packages:
     engines: {node: ">=18"}
     peerDependencies:
       "@testing-library/dom": ^10.0.0
-      "@types/react": ^18.0.0
-      "@types/react-dom": ^18.0.0
+      "@types/react": npm:types-react@rc
+      "@types/react-dom": npm:types-react-dom@rc
       react: ^18.0.0
       react-dom: ^18.0.0
     peerDependenciesMeta:
@@ -8320,6 +8375,17 @@ packages:
     dependencies:
       normalize-path: 3.0.0
       picomatch: 2.3.1
+
+  /arctic@2.3.3:
+    resolution:
+      {
+        integrity: sha512-f42+wyM0LKNwUY0TV3fSH1Fnsr/klcZi42XfWFvlNP7Ag8aBX92FaKQIU5xBQzxvvy7jg02tF567LsIlmEujKg==,
+      }
+    dependencies:
+      "@oslojs/crypto": 1.0.1
+      "@oslojs/encoding": 1.1.0
+      "@oslojs/jwt": 0.2.0
+    dev: false
 
   /arg@4.1.3:
     resolution:
@@ -14283,7 +14349,7 @@ packages:
       }
     engines: {node: ">=10"}
     peerDependencies:
-      "@types/react": ">=16.8.0"
+      "@types/react": npm:types-react@rc
       react: ">=16.8.0"
     peerDependenciesMeta:
       "@types/react":
@@ -17589,7 +17655,7 @@ packages:
         integrity: sha512-iChjE8ov/1K/z98gdKbn2Jw+2vLgJtVV39X+rCP5SGnVQuco7QOr19FRNGMIrD8d3LYhHWV9j9sKLzq1aDWWQQ==,
       }
     peerDependencies:
-      next: ^12.2.5 || ^13 || ^14
+      next: 15.0.1
       nodemailer: ^6.6.5
       react: ^17.0.2 || ^18
       react-dom: ^17.0.2 || ^18
@@ -17617,10 +17683,10 @@ packages:
         integrity: sha512-GTrns944dnFNgycpinyRszOiwwk99LUJsvvX0FWRgUFHv6hOuzCns1rmTlzO+DRimYB9/XMA+87X2/dQLzjiUQ==,
       }
     peerDependencies:
-      next: ">=10.0.0"
+      next: 15.0.1
       react: ">=17.0.0"
     dependencies:
-      next: 15.0.1(@babel/core@7.12.10)(react-dom@19.0.0)(react@19.0.0)
+      next: 15.0.1(@babel/core@7.20.2)(react-dom@19.0.0)(react@19.0.0)
       react: 19.0.0
     dev: true
 
@@ -17670,6 +17736,7 @@ packages:
     transitivePeerDependencies:
       - "@babel/core"
       - babel-plugin-macros
+    dev: false
 
   /next@15.0.1(@babel/core@7.18.2)(react-dom@19.0.0)(react@19.0.0):
     resolution:
@@ -19535,7 +19602,7 @@ packages:
     peerDependencies:
       react: ">=16.13.1"
     dependencies:
-      "@babel/runtime": 7.18.3
+      "@babel/runtime": 7.23.2
       react: 19.0.0
     dev: true
 
@@ -21235,6 +21302,7 @@ packages:
       "@babel/core": 7.12.10(supports-color@8.1.1)
       client-only: 0.0.1
       react: 19.0.0
+    dev: false
 
   /styled-jsx@5.1.6(@babel/core@7.18.2)(react@19.0.0):
     resolution:
@@ -21779,7 +21847,7 @@ packages:
       }
     dev: true
 
-  /ts-jest@27.1.4(@babel/core@7.12.10)(esbuild@0.14.51)(jest@27.5.1)(typescript@4.8.4):
+  /ts-jest@27.1.4(@babel/core@7.20.2)(esbuild@0.14.51)(jest@27.5.1)(typescript@4.8.4):
     resolution:
       {
         integrity: sha512-qjkZlVPWVctAezwsOD1OPzbZ+k7zA5z3oxII4dGdZo5ggX/PL7kvwTM0pXTr10fAtbiVpJaL3bWd502zAhpgSQ==,
@@ -21803,7 +21871,7 @@ packages:
       esbuild:
         optional: true
     dependencies:
-      "@babel/core": 7.12.10(supports-color@8.1.1)
+      "@babel/core": 7.20.2(supports-color@8.1.1)
       bs-logger: 0.2.6
       esbuild: 0.14.51
       fast-json-stable-stringify: 2.1.0
