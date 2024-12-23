@@ -1,5 +1,13 @@
 # @blitzjs/next
 
+## 2.1.4
+
+### Patch Changes
+
+- ce23d4ed0: fix: Update `turbopack-empty.js` syntax to support latest turbopack and next.js versions
+  - blitz@2.1.4
+  - @blitzjs/rpc@2.1.4
+
 ## 2.1.3
 
 ### Patch Changes
