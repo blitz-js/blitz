@@ -1,14 +1,14 @@
 import { forwardRef, PropsWithoutRef } from "react"
 import { useField } from "react-final-form"
 
-export interface LabeledSelectFieldProps extends PropsWithoutRef<JSX.IntrinsicElements["select"]> {
+export interface LabeledSelectFieldProps extends PropsWithoutRef<React.JSX.IntrinsicElements["select"]> {
   /** Field name. */
   name: string
   /** Field label. */
   label: string
   type?: "number" | "string"
   options: any
-  outerProps?: PropsWithoutRef<JSX.IntrinsicElements["div"]>
+  outerProps?: PropsWithoutRef<React.JSX.IntrinsicElements["div"]>
 }
 
 export const LabeledSelectField = forwardRef<HTMLSelectElement, LabeledSelectFieldProps>(

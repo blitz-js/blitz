@@ -11,6 +11,7 @@ import {
   registerBlitzErrorClasses,
 } from "./errors"
 import type {EventHooks, MiddlewareHooks} from "./types"
+import React from "react"
 export {
   AuthenticationError,
   AuthorizationError,
@@ -26,7 +27,7 @@ export * from "./utils/enhance-prisma"
 export type BlitzProviderComponentType = <TProps = any>(
   component: ComponentType<TProps>,
 ) => {
-  (props: TProps): JSX.Element
+  (props: TProps): React.JSX.Element
   displayName: string
 }
 

@@ -1,10 +1,16 @@
 import React from "react"
 import {NextPageContext} from "next"
 import dynamic from "next/dynamic"
-const Head = dynamic(() => import("next/head").then((mod) => mod.default), {
-  ssr: false,
-  loading: () => null,
-})
+const Head = dynamic(
+  () =>
+    import("next/head").then((mod) => ({
+      default: mod.default,
+    })),
+  {
+    ssr: false,
+    loading: () => null,
+  },
+)
 
 const statusCodes: {[code: number]: string} = {
   400: "Bad Request",
