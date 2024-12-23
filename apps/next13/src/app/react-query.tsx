@@ -1,6 +1,6 @@
 "use client"
 
-import {useQuery, useMutation} from "@blitzjs/rpc"
+import {useQuery, useMutation, useSuspenseQuery} from "@blitzjs/rpc"
 import logout from "../auth/mutations/logout"
 import getCurrentUser from "../users/queries/getCurrentUser"
 import {useTransition} from "react"
@@ -8,7 +8,7 @@ import {useRouter} from "next/navigation"
 
 export default function Test() {
   const router = useRouter()
-  const [user] = useQuery(getCurrentUser, null)
+  const [user] = useSuspenseQuery(getCurrentUser, null)
   const [isPending, startTransition] = useTransition()
   const [logoutMutation] = useMutation(logout)
   console.log(user)

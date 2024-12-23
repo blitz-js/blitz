@@ -1,11 +1,11 @@
-import {useMutation, useQuery} from "@blitzjs/rpc"
+import {useMutation, useSuspenseQuery} from "@blitzjs/rpc"
 import {BlitzPage} from "@blitzjs/next"
 import logout from "../mutations/logout"
 import getAuthenticatedBasic from "../queries/getAuthenticatedBasic"
 import {Suspense} from "react"
 
 function Content() {
-  const [result] = useQuery(getAuthenticatedBasic, undefined)
+  const [result] = useSuspenseQuery(getAuthenticatedBasic, undefined)
   const [logoutMutation] = useMutation(logout)
   return (
     <div>
