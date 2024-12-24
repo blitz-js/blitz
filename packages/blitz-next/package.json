@@ -1,6 +1,6 @@
 {
   "name": "@blitzjs/next",
-  "version": "3.0.0",
+  "version": "2.2.0",
   "homepage": "https://blitzjs.com/",
   "repository": {
     "type": "git",
@@ -29,7 +29,7 @@
     "eslint.js"
   ],
   "dependencies": {
-    "@blitzjs/rpc": "3.0.0",
+    "@blitzjs/rpc": "2.2.0",
     "@types/hoist-non-react-statics": "3.3.1",
     "copy-webpack-plugin": "11.0.0",
     "debug": "4.3.3",
@@ -45,7 +45,7 @@
     "tslog": "4.9.0"
   },
   "devDependencies": {
-    "@blitzjs/config": "3.0.0",
+    "@blitzjs/config": "2.2.0",
     "@testing-library/dom": "8.13.0",
     "@testing-library/jest-dom": "5.16.3",
     "@testing-library/react": "16.0.1",
