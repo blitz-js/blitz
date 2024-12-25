@@ -9,7 +9,7 @@
 ### Patch Changes
 
 - 565db3c5a: Fixed incorrect terminal message after creating a new Blitz project to use the correct command (`npm run dev` or `yarn dev`).
-  - @blitzjs/generator@3.0.0
+  - @blitzjs/generator@2.2.0
 
 ## 2.1.4
 
