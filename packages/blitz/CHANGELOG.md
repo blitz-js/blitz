@@ -1,5 +1,23 @@
 # blitz
 
+## 2.2.0
+
+### Minor Changes
+
+- 3fa3a4ef3: chore: support next.js 15
+
+### Patch Changes
+
+- 565db3c5a: Fixed incorrect terminal message after creating a new Blitz project to use the correct command (`npm run dev` or `yarn dev`).
+  - @blitzjs/generator@2.2.0
+
+## 2.1.4
+
+### Patch Changes
+
+- Updated dependencies [38d320fd2]
+  - @blitzjs/generator@2.1.4
+
 ## 2.1.3
 
 ### Patch Changes

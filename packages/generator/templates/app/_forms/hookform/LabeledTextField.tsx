@@ -2,14 +2,14 @@ import { forwardRef, PropsWithoutRef, ComponentPropsWithoutRef } from "react"
 import { useFormContext } from "react-hook-form"
 import { ErrorMessage } from "@hookform/error-message"
 
-export interface LabeledTextFieldProps extends PropsWithoutRef<JSX.IntrinsicElements["input"]> {
+export interface LabeledTextFieldProps extends PropsWithoutRef<React.JSX.IntrinsicElements["input"]> {
   /** Field name. */
   name: string
   /** Field label. */
   label: string
   /** Field type. Doesn't include radio buttons and checkboxes */
   type?: "text" | "password" | "email" | "number"
-  outerProps?: PropsWithoutRef<JSX.IntrinsicElements["div"]>
+  outerProps?: PropsWithoutRef<React.JSX.IntrinsicElements["div"]>
   labelProps?: ComponentPropsWithoutRef<"label">
 }
 

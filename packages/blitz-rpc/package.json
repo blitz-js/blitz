@@ -1,6 +1,6 @@
 {
   "name": "@blitzjs/rpc",
-  "version": "2.1.3",
+  "version": "2.2.0",
   "homepage": "https://blitzjs.com/",
   "repository": {
     "type": "git",
@@ -37,21 +37,21 @@
   },
   "peerDependencies": {
     "@tanstack/query-core": "5.51.1",
-    "blitz": "2.1.3",
+    "blitz": "2.2.0",
     "next": "*",
     "react": "*"
   },
   "devDependencies": {
-    "@blitzjs/auth": "2.1.3",
-    "@blitzjs/config": "2.1.3",
+    "@blitzjs/auth": "2.2.0",
+    "@blitzjs/config": "2.2.0",
     "@tanstack/query-core": "5.51.1",
     "@types/debug": "4.1.7",
-    "@types/react": "18.0.25",
-    "@types/react-dom": "17.0.14",
-    "blitz": "2.1.3",
-    "next": "14.2.15",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
+    "@types/react": "npm:types-react@19.0.0",
+    "@types/react-dom": "npm:types-react-dom@19.0.0",
+    "blitz": "2.2.0",
+    "next": "15.0.1",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
     "typescript": "^4.8.4",
     "unbuild": "0.7.6",
     "watch": "1.0.2",

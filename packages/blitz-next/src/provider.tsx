@@ -3,7 +3,7 @@ import type {QueryClient, HydrateOptions} from "@blitzjs/rpc"
 import React from "react"
 
 export type BlitzProviderProps = {
-  children: JSX.Element
+  children: React.JSX.Element
   client?: QueryClient
   contextSharing?: boolean
   dehydratedState?: unknown
