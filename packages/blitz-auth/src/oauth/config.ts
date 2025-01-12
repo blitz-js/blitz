@@ -1,6 +1,13 @@
 import {decodeIdToken, GitHub, Google, OAuth2Tokens} from "arctic"
 import {ArcticOAuthClient, SupportedOAuthProviders} from "./types"
 
+type InternalConfig = {
+  name: SupportedOAuthProviders
+  profile(token: OAuth2Tokens): Record<string, unknown>
+  pkce: true
+  client: 
+}
+
 export function getInternalConfig(provider: SupportedOAuthProviders, client: ArcticOAuthClient) {
   switch (provider) {
     case SupportedOAuthProviders.Google:
@@ -8,10 +15,11 @@ export function getInternalConfig(provider: SupportedOAuthProviders, client: Arc
         name: SupportedOAuthProviders.Google,
         profile(token: OAuth2Tokens) {
           const idToken = token.idToken()
+
           return decodeIdToken(idToken)
         },
         pkce: true,
-        client: client as Google,
+        client: client,
       }
     case SupportedOAuthProviders.GitHub:
       return {
@@ -21,7 +29,7 @@ export function getInternalConfig(provider: SupportedOAuthProviders, client: Arc
           return decodeIdToken(idToken)
         },
         pkce: false,
-        client: client as GitHub,
+        client: client,
       }
     default:
       throw new Error(`Unsupported provider: ${provider}`)

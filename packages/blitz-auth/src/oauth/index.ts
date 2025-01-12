@@ -43,8 +43,6 @@ export function oAuth2Handler(config: OAuthConfig) {
         code === null ||
         storedState === undefined ||
         codeVerifier === undefined ||
-        typeof code !== "string" ||
-        typeof state !== "string" ||
         state !== storedState
       ) {
         return new Response("Bad Request", {status: 400})
