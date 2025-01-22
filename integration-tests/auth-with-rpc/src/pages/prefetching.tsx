@@ -32,9 +32,9 @@ type Props = {
 }
 
 export const getServerSideProps = gSSP<Props>(async ({ctx}) => {
-  await getQueryClient().prefetchQuery(getQueryKey(getNoauthBasic, null), () =>
-    getNoauthBasic(null, ctx),
-  )
+  await getQueryClient().prefetchQuery({
+    queryKey: getQueryKey(getNoauthBasic),
+  })
   return {
     props: {
       dehydratedState: dehydrate(queryClient),

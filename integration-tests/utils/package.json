@@ -22,7 +22,7 @@
     "get-port": "6.1.2",
     "node-fetch": "3.2.3",
     "pkg-dir": "5.0.0",
-    "playwright-chromium": "1.28.0",
+    "playwright-chromium": "1.49.1",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "resolve-cwd": "3.0.0",

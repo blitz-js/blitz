@@ -10,11 +10,6 @@ overrides:
   "@types/react": npm:types-react@rc
   "@types/react-dom": npm:types-react-dom@rc
 
-patchedDependencies:
-  next-auth@4.24.7:
-    hash: xxwv3g3ul7bnzqsfasefw3kyq4
-    path: patches/next-auth@4.24.7.patch
-
 importers:
   .:
     dependencies:
@@ -85,8 +80,8 @@ importers:
         specifier: ^4.5.0
         version: 4.6.1(prisma@4.6.1)
       "@tanstack/react-query":
-        specifier: 4.0.10
-        version: 4.0.10(react-dom@19.0.0)(react@19.0.0)
+        specifier: 5.51.1
+        version: 5.51.1(react@19.0.0)
       blitz:
         specifier: 2.2.1
         version: link:../../packages/blitz
@@ -165,7 +160,7 @@ importers:
         version: 15.0.1(@babel/core@7.20.2)(react-dom@19.0.0)(react@19.0.0)
       next-auth:
         specifier: 4.24.7
-        version: 4.24.7(patch_hash=xxwv3g3ul7bnzqsfasefw3kyq4)(next@15.0.1)(react-dom@19.0.0)(react@19.0.0)
+        version: 4.24.7(next@15.0.1)(react-dom@19.0.0)(react@19.0.0)
       prisma:
         specifier: 6.1.0
         version: 6.1.0
@@ -498,8 +493,8 @@ importers:
         specifier: 3.2.3
         version: 3.2.3
       playwright:
-        specifier: 1.28.0
-        version: 1.28.0
+        specifier: 1.49.1
+        version: 1.49.1
       ts-node:
         specifier: 10.9.1
         version: 10.9.1(@types/node@18.7.13)(typescript@4.8.4)
@@ -601,8 +596,8 @@ importers:
         specifier: 13.0.3
         version: 13.0.3
       playwright:
-        specifier: 1.28.0
-        version: 1.28.0
+        specifier: 1.49.1
+        version: 1.49.1
       prettier:
         specifier: ^2.7.1
         version: 2.7.1
@@ -826,8 +821,8 @@ importers:
         specifier: 3.2.3
         version: 3.2.3
       playwright:
-        specifier: 1.28.0
-        version: 1.28.0
+        specifier: 1.49.1
+        version: 1.49.1
       ts-node:
         specifier: 10.9.1
         version: 10.9.1(@types/node@18.7.13)(typescript@4.9.5)
@@ -923,8 +918,8 @@ importers:
         specifier: 6.1.0
         version: 6.1.0(prisma@6.1.0)
       "@tanstack/react-query":
-        specifier: 4.0.10
-        version: 4.0.10(react-dom@19.0.0)(react@19.0.0)
+        specifier: 5.51.1
+        version: 5.51.1(react@19.0.0)
       blitz:
         specifier: 2.2.1
         version: link:../../packages/blitz
@@ -1264,8 +1259,8 @@ importers:
         specifier: 5.0.0
         version: 5.0.0
       playwright-chromium:
-        specifier: 1.28.0
-        version: 1.28.0
+        specifier: 1.49.1
+        version: 1.49.1
       react:
         specifier: 19.0.0
         version: 19.0.0
@@ -1612,7 +1607,7 @@ importers:
         version: 15.0.1(@babel/core@7.20.2)(react-dom@19.0.0)(react@19.0.0)
       next-auth:
         specifier: 4.24.7
-        version: 4.24.7(patch_hash=xxwv3g3ul7bnzqsfasefw3kyq4)(next@15.0.1)(react-dom@19.0.0)(react@19.0.0)
+        version: 4.24.7(next@15.0.1)(react-dom@19.0.0)(react@19.0.0)
       react:
         specifier: 19.0.0
         version: 19.0.0
@@ -1735,8 +1730,8 @@ importers:
         specifier: 1.3.7
         version: 1.3.7
       "@tanstack/react-query":
-        specifier: 4.24.4
-        version: 4.24.4(react-dom@19.0.0)(react@19.0.0)
+        specifier: 5.51.1
+        version: 5.51.1(react@19.0.0)
       b64-lite:
         specifier: 1.4.0
         version: 1.4.0
@@ -1763,8 +1758,8 @@ importers:
         specifier: 2.2.1
         version: link:../config
       "@tanstack/query-core":
-        specifier: 4.24.4
-        version: 4.24.4
+        specifier: 5.51.1
+        version: 5.51.1
       "@types/debug":
         specifier: 4.1.7
         version: 4.1.7
@@ -6743,33 +6738,11 @@ packages:
       }
     dev: true
 
-  /@tanstack/query-core@4.24.4:
+  /@tanstack/query-core@5.51.1:
     resolution:
       {
-        integrity: sha512-9dqjv9eeB6VHN7lD3cLo16ZAjfjCsdXetSAD5+VyKqLUvcKTL0CklGQRJu+bWzdrS69R6Ea4UZo8obHYZnG6aA==,
+        integrity: sha512-fJBMQMpo8/KSsWW5ratJR5+IFr7YNJ3K2kfP9l5XObYHsgfVy1w3FJUWU4FT2fj7+JMaEg33zOcNDBo0LMwHnw==,
       }
-
-  /@tanstack/react-query@4.0.10(react-dom@19.0.0)(react@19.0.0):
-    resolution:
-      {
-        integrity: sha512-Wn5QhZUE5wvr6rGClV7KeQIUsdTmYR9mgmMZen7DSRWauHW2UTynFg3Kkf6pw+XlxxOLsyLWwz/Q6q1lSpM3TQ==,
-      }
-    peerDependencies:
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0
-      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-      react-native: "*"
-    peerDependenciesMeta:
-      react-dom:
-        optional: true
-      react-native:
-        optional: true
-    dependencies:
-      "@tanstack/query-core": 4.24.4
-      "@types/use-sync-external-store": 0.0.3
-      react: 19.0.0
-      react-dom: 19.0.0(react@19.0.0)
-      use-sync-external-store: 1.2.0(react@19.0.0)
-    dev: false
 
   /@tanstack/react-query@4.13.0(react-dom@19.0.0)(react@19.0.0):
     resolution:
@@ -6792,25 +6765,16 @@ packages:
       use-sync-external-store: 1.2.0(react@19.0.0)
     dev: true
 
-  /@tanstack/react-query@4.24.4(react-dom@19.0.0)(react@19.0.0):
+  /@tanstack/react-query@5.51.1(react@19.0.0):
     resolution:
       {
-        integrity: sha512-RpaS/3T/a3pHuZJbIAzAYRu+1nkp+/enr9hfRXDS/mojwx567UiMksoqW4wUFWlwIvWTXyhot2nbIipTKEg55Q==,
+        integrity: sha512-s47HKFnQ4HOJAHoIiXcpna/roMMPZJPy6fJ6p4ZNVn8+/onlLBEDd1+xc8OnDuwgvecqkZD7Z2mnSRbcWefrKw==,
       }
     peerDependencies:
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0
-      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-      react-native: "*"
-    peerDependenciesMeta:
-      react-dom:
-        optional: true
-      react-native:
-        optional: true
+      react: ^18.0.0
     dependencies:
-      "@tanstack/query-core": 4.24.4
+      "@tanstack/query-core": 5.51.1
       react: 19.0.0
-      react-dom: 19.0.0(react@19.0.0)
-      use-sync-external-store: 1.2.0(react@19.0.0)
     dev: false
 
   /@testim/chrome-version@1.1.2:
@@ -7767,13 +7731,6 @@ packages:
       {
         integrity: sha512-Q5vtl1W5ue16D+nIaW8JWebSSraJVlK+EthKn7e7UcD4KWsaSJ8BqGPXNaPghgtcn/fhvrN17Tv8ksUsQpiplw==,
       }
-
-  /@types/use-sync-external-store@0.0.3:
-    resolution:
-      {
-        integrity: sha512-EwmlvuaxPNej9+T4v5AuBPJa2x2UOJVdjCtDHgcDqitUeOtjnJKJ+apYjVcAoBEMjKW1VVFGZLUb5+qqa09XFA==,
-      }
-    dev: false
 
   /@types/vinyl@2.0.6:
     resolution:
@@ -13739,6 +13696,17 @@ packages:
         integrity: sha512-OO0pH2lK6a0hZnAdau5ItzHPI6pUlvI7jMVnxUQRtw4owF2wk8lOSabtGDCTP4Ggrg2MbGnWO9X8K1t4+fGMDw==,
       }
 
+  /fsevents@2.3.2:
+    resolution:
+      {
+        integrity: sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==,
+      }
+    engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
+    os: [darwin]
+    requiresBuild: true
+    dev: true
+    optional: true
+
   /fsevents@2.3.3:
     resolution:
       {
@@ -18031,7 +17999,7 @@ packages:
       }
     dev: false
 
-  /next-auth@4.24.7(patch_hash=xxwv3g3ul7bnzqsfasefw3kyq4)(next@15.0.1)(react-dom@19.0.0)(react@19.0.0):
+  /next-auth@4.24.7(next@15.0.1)(react-dom@19.0.0)(react@19.0.0):
     resolution:
       {
         integrity: sha512-iChjE8ov/1K/z98gdKbn2Jw+2vLgJtVV39X+rCP5SGnVQuco7QOr19FRNGMIrD8d3LYhHWV9j9sKLzq1aDWWQQ==,
@@ -18057,7 +18025,6 @@ packages:
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)
       uuid: 8.3.2
-    patched: true
 
   /next-router-mock@0.9.1(next@15.0.1)(react@19.0.0):
     resolution:
@@ -19309,37 +19276,38 @@ packages:
       pathe: 0.3.2
     dev: true
 
-  /playwright-chromium@1.28.0:
+  /playwright-chromium@1.49.1:
     resolution:
       {
-        integrity: sha512-5IUBJShMJMaK6NmRj/7KWdvVqd7J8DqLH0wVdXBs/4MfZUAvByBB35y5v6B33NjlJg3SZGX5alR8TANrcKaJNA==,
+        integrity: sha512-XAQDkZ1Eem1OONhfS8B2LM2mgHG/i5jIxooxjvqjbF/9GnLnRTJHdQamNjo1e4FZvt7J0BFD/15+qAcT0eKlfA==,
       }
-    engines: {node: ">=14"}
+    engines: {node: ">=18"}
     hasBin: true
     requiresBuild: true
     dependencies:
-      playwright-core: 1.28.0
+      playwright-core: 1.49.1
     dev: true
 
-  /playwright-core@1.28.0:
+  /playwright-core@1.49.1:
     resolution:
       {
-        integrity: sha512-nJLknd28kPBiCNTbqpu6Wmkrh63OEqJSFw9xOfL9qxfNwody7h6/L3O2dZoWQ6Oxcm0VOHjWmGiCUGkc0X3VZA==,
+        integrity: sha512-BzmpVcs4kE2CH15rWfzpjzVGhWERJfmnXmniSyKeRZUs9Ws65m+RGIi7mjJK/euCegfn3i7jvqWeWyHe9y3Vgg==,
       }
-    engines: {node: ">=14"}
+    engines: {node: ">=18"}
     hasBin: true
     dev: true
 
-  /playwright@1.28.0:
+  /playwright@1.49.1:
     resolution:
       {
-        integrity: sha512-kyOXGc5y1mgi+hgEcCIyE1P1+JumLrxS09nFHo5sdJNzrucxPRAGwM4A2X3u3SDOfdgJqx61yIoR6Av+5plJPg==,
+        integrity: sha512-VYL8zLoNTBxVOrJBbDuRgDWa3i+mfQgDTrL8Ah9QXZ7ax4Dsj0MSq5bYgytRnDVVe+njoKnfsYkH3HzqVj5UZA==,
       }
-    engines: {node: ">=14"}
+    engines: {node: ">=18"}
     hasBin: true
-    requiresBuild: true
     dependencies:
-      playwright-core: 1.28.0
+      playwright-core: 1.49.1
+    optionalDependencies:
+      fsevents: 2.3.2
     dev: true
 
   /pluralize@8.0.0:
@@ -22979,6 +22947,7 @@ packages:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
     dependencies:
       react: 19.0.0
+    dev: true
 
   /use@3.1.1:
     resolution:
