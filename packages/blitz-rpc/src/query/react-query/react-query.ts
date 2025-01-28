@@ -29,6 +29,7 @@ import {
   sanitizeQuery,
   sanitizeMutation,
   getInfiniteQueryKey,
+  QueryType,
 } from "../utils"
 import {useRouter} from "next/compat/router"
 
@@ -311,7 +312,11 @@ export function useInfiniteQuery<
 
   const rest = {
     ...queryRest,
-    ...getQueryCacheFunctions<FirstParam<T>, TResult, T>(queryFn, getQueryParams),
+    ...getQueryCacheFunctions<FirstParam<T>, TResult, T>(
+      queryFn,
+      getQueryParams,
+      QueryType.INFINITE,
+    ),
     pageParams: data?.pageParams,
   }
 

@@ -71,9 +71,10 @@ export interface QueryCacheFunctions<T> {
 export const getQueryCacheFunctions = <TInput, TResult, T extends AsyncFunc>(
   resolver: T | Resolver<TInput, TResult> | RpcClient<TInput, TResult>,
   params: TInput,
+  queryType: QueryType = QueryType.STANDARD,
 ): QueryCacheFunctions<TResult> => ({
   setQueryData: (newData, opts = {refetch: true}) => {
-    return setQueryData(resolver, params, newData, opts)
+    return setQueryData(resolver, params, newData, opts, queryType)
   },
 })
 
@@ -174,16 +175,22 @@ export const invalidateQuery: InvalidateQuery = (resolver = undefined, ...params
   return getQueryClient().invalidateQueries(fullQueryKey)
 }
 
+export enum QueryType {
+  STANDARD = "STANDARD",
+  INFINITE = "INFINITE",
+}
 export function setQueryData<TInput, TResult, T extends AsyncFunc>(
   resolver: T | Resolver<TInput, TResult> | RpcClient<TInput, TResult>,
   params: TInput,
   newData: TResult | ((oldData: TResult | undefined) => TResult | undefined),
   opts: MutateOptions = {refetch: true},
+  queryType: QueryType = QueryType.STANDARD,
 ): Promise<void | ReturnType<ReturnType<typeof getQueryClient>["invalidateQueries"]>> {
   if (typeof resolver === "undefined") {
     throw new Error("setQueryData is missing the first argument - it must be a resolver function")
   }
-  const queryKey = getQueryKey(resolver, params)
+  const getQueryKeyFn = queryType === QueryType.STANDARD ? getQueryKey : getInfiniteQueryKey
+  const queryKey = getQueryKeyFn(resolver, params)
 
   return new Promise((res) => {
     getQueryClient().setQueryData(queryKey, newData)
