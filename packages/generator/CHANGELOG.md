@@ -1,5 +1,12 @@
 # @blitzjs/generator
 
+## 2.2.1
+
+### Patch Changes
+
+- 5b20ce628: Fixes Error: Cannot find module when running blitz new and selecting the minimal pages router option
+- fbf5e51a7: chore: update next and react versions in new template using next.js app directory
+
 ## 2.2.0
 
 ## 2.1.4

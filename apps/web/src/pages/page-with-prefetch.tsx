@@ -1,4 +1,4 @@
-import {useQuery} from "@blitzjs/rpc"
+import {useSuspenseQuery} from "@blitzjs/rpc"
 import {gSSP} from "src/blitz-server"
 import getUsers from "src/queries/getUsers"
 
@@ -10,7 +10,7 @@ export const getServerSideProps = gSSP(async ({ctx}) => {
 })
 
 function PageWithPrefetch(props) {
-  const [users] = useQuery(getUsers, {})
+  const [users] = useSuspenseQuery(getUsers, {})
   return (
     <div>
       {users.map((u) => (

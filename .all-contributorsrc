@@ -4114,6 +4114,26 @@
         "doc",
         "code"
       ]
+    },
+    {
+      "login": "rene-demonsters",
+      "name": "René Vlugt",
+      "avatar_url": "https://avatars.githubusercontent.com/u/20322259?v=4",
+      "profile": "https://github.com/rene-demonsters",
+      "contributions": [
+        "doc",
+        "code"
+      ]
+    },
+    {
+      "login": "kksandr7",
+      "name": "Ksandr",
+      "avatar_url": "https://avatars.githubusercontent.com/u/132560756?v=4",
+      "profile": "https://www.drupal.org/u/kksandr",
+      "contributions": [
+        "doc",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,

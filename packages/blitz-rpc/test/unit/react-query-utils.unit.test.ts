@@ -59,7 +59,7 @@ describe("invalidateQuery", () => {
     expect(spyRefetchQueries).toBeCalledTimes(1)
     const calledWith = spyRefetchQueries.mock.calls[0]![0] as any
     // json of the queryKey is "a"
-    expect(calledWith[1].json).toEqual("a")
+    expect(calledWith.queryKey[1].json).toEqual("a")
   })
 })
 
@@ -90,7 +90,7 @@ describe("setQueryData", () => {
     expect(spySetQueryData).toBeCalledTimes(1)
 
     const invalidateCalledWith = spyRefetchQueries.mock.calls[0]![0] as any
-    expect(invalidateCalledWith[1].json).toEqual("params")
+    expect(invalidateCalledWith.queryKey[1].json).toEqual("params")
 
     const calledWith = spySetQueryData.mock.calls[0] as Array<any>
     expect(calledWith[0][1].json).toEqual("params")

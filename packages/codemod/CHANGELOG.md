@@ -1,5 +1,14 @@
 # @blitzjs/codemod
 
+## 2.2.1
+
+### Patch Changes
+
+- Updated dependencies [5b20ce628]
+- Updated dependencies [fbf5e51a7]
+  - @blitzjs/generator@2.2.1
+  - blitz@2.2.1
+
 ## 2.2.0
 
 ### Patch Changes

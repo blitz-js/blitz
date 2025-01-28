@@ -1,4 +1,4 @@
-import {useInfiniteQuery} from "@blitzjs/rpc"
+import {useSuspenseInfiniteQuery} from "@blitzjs/rpc"
 import {gSSP} from "../app/blitz-server"
 import testQuery from "../app/queries/getInfiniteData"
 
@@ -12,12 +12,12 @@ export const getServerSideProps = gSSP(async ({ctx}) => {
 })
 
 const PageWithPrefetchInfQuery = () => {
-  const [data] = useInfiniteQuery(
+  const [data] = useSuspenseInfiniteQuery(
     testQuery,
     (pageParams) => ({...pageParams, name: "hello world"}),
     {
-      suspense: false,
       getNextPageParam: (lastPage) => lastPage,
+      initialPageParam: {name: "hello world"},
     },
   )
   return <div id="data">{data ? data : "no-data"}</div>

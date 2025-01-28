@@ -1,13 +1,14 @@
-import {useMutation, useQuery} from "@blitzjs/rpc"
+import {QueryClient, useMutation, useQuery} from "@blitzjs/rpc"
 import logout from "../mutations/logout"
 import getAuthenticatedBasic from "../queries/getAuthenticatedBasic"
-import {Suspense} from "react"
 
 function Content() {
-  const [result] = useQuery(getAuthenticatedBasic, undefined)
+  const [result, {isLoading, isError, error}] = useQuery(getAuthenticatedBasic, undefined)
   const [logoutMutation] = useMutation(logout)
+  if (isError) throw error
+  if (isLoading || !result) return <div>Loading...</div>
   return (
-    <div>
+    <>
       <div id="content">{result}</div>
       <button
         id="logout"
@@ -17,16 +18,14 @@ function Content() {
       >
         logout
       </button>
-    </div>
+    </>
   )
 }
 
 function AuthenticatedQuery() {
   return (
     <div id="page">
-      <Suspense fallback={"Loading..."}>
-        <Content />
-      </Suspense>
+      <Content />
     </div>
   )
 }
