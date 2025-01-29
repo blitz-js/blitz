@@ -283,7 +283,7 @@ export function usePaginatedQuery<
 // -------------------------
 export interface RestInfiniteResult<TResult, TError>
   extends Omit<UseInfiniteQueryResult<TResult, TError>, "data">,
-    QueryCacheFunctions<TResult> {
+    QueryCacheFunctions<InfiniteData<TResult>> {
   pageParams: any
 }
 
@@ -314,6 +314,7 @@ export function useInfiniteQuery<
   getQueryParams: (pageParam: any) => FirstParam<T>,
   options: Omit<InfiniteQueryConfig<TResult, TError, TSelectedData>, "queryKey"> & QueryLazyOptions,
 ): [TSelectedData[] | undefined, RestInfiniteResult<TSelectedData, TError>]
+
 export function useInfiniteQuery<
   T extends AsyncFunc,
   TResult = PromiseReturnType<T>,
@@ -356,7 +357,7 @@ export function useInfiniteQuery<
 
   const rest = {
     ...queryRest,
-    ...getQueryCacheFunctions<FirstParam<T>, TResult, T>(queryFn, getQueryParams),
+    ...getQueryCacheFunctions<FirstParam<T>, InfiniteData<TResult>, T>(queryFn, getQueryParams),
     pageParams: infiniteQueryData?.pageParams,
   }
 
@@ -368,7 +369,7 @@ export function useInfiniteQuery<
 // -------------------------
 export interface RestInfiniteResult<TResult, TError>
   extends Omit<UseInfiniteQueryResult<TResult, TError>, "data">,
-    QueryCacheFunctions<TResult> {
+    QueryCacheFunctions<InfiniteData<TResult>> {
   pageParams: any
 }
 
@@ -450,7 +451,7 @@ export function useSuspenseInfiniteQuery<
 
   const rest = {
     ...queryRest,
-    ...getQueryCacheFunctions<FirstParam<T>, TResult, T>(
+    ...getQueryCacheFunctions<FirstParam<T>, InfiniteData<TResult>, T>(
       queryFn,
       getQueryParams,
       QueryType.INFINITE,

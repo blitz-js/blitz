@@ -26,23 +26,32 @@ function PageWithInfiniteQueryMutate(props) {
 
     await setQueryData(
       (oldData) => {
+        if (!oldData) {
+          return {
+            pages: [],
+            pageParams: [],
+          }
+        }
+
         return {
           ...oldData,
-          pages: [
-            {
-              ...oldData.pages[0],
-              users: [
-                {
-                  id: Math.random(),
-                  name,
-                  role: "user",
-                  email: `${name}@yopmail.com`,
-                },
-                ...oldData.pages[0].users,
-              ],
-            },
-            ...oldData.pages.slice(1),
-          ],
+          pages: oldData.pages.map((page, index) => {
+            if (index === 0) {
+              return {
+                ...page,
+                users: [
+                  {
+                    id: Math.random(),
+                    name,
+                    role: "user",
+                    email: `${name}@yopmail.com`,
+                  },
+                  ...page.users,
+                ],
+              }
+            }
+            return page
+          }),
         }
       },
       {refetch: false},
@@ -51,6 +60,7 @@ function PageWithInfiniteQueryMutate(props) {
 
   const [, formAction] = useActionState(onOnContactSave, {name: ""})
 
+  console.log(usersPages)
   return (
     <div>
       <form action={formAction}>
