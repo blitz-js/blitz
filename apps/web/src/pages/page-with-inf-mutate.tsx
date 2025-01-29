@@ -1,14 +1,6 @@
 import {useSuspenseInfiniteQuery} from "@blitzjs/rpc"
-import {gSSP} from "src/blitz-server"
 import getInfiniteUsers from "src/queries/getInfiniteUsers"
 import {useActionState} from "react"
-
-export const getServerSideProps = gSSP(async ({ctx}) => {
-  const {prefetchInfiniteQuery} = ctx
-
-  await prefetchInfiniteQuery(getInfiniteUsers, {}, {})
-  return {props: {}}
-})
 
 function PageWithInfiniteQueryMutate(props) {
   const [usersPages, extraInfo] = useSuspenseInfiniteQuery(
@@ -19,7 +11,7 @@ function PageWithInfiniteQueryMutate(props) {
       initialPageParam: {take: 3, skip: 0},
     },
   )
-  const {isFetching, isFetchingNextPage, fetchNextPage, hasNextPage, setQueryData} = extraInfo
+  const {isFetchingNextPage, fetchNextPage, hasNextPage, setQueryData} = extraInfo
 
   const onOnContactSave = async (previousState, formData: FormData) => {
     const name = formData.get("name")
@@ -60,7 +52,6 @@ function PageWithInfiniteQueryMutate(props) {
 
   const [, formAction] = useActionState(onOnContactSave, {name: ""})
 
-  console.log(usersPages)
   return (
     <div>
       <form action={formAction}>
