@@ -1,4 +1,4 @@
-import {useSuspenseInfiniteQuery} from "@blitzjs/rpc"
+import {useInfiniteQuery} from "@blitzjs/rpc"
 import {gSSP} from "src/blitz-server"
 import getInfiniteUsers from "src/queries/getInfiniteUsers"
 
@@ -10,14 +10,9 @@ export const getServerSideProps = gSSP(async ({ctx}) => {
 })
 
 function PageWithPrefetchInfiniteQuery(props) {
-  const [usersPages] = useSuspenseInfiniteQuery(
-    getInfiniteUsers,
-    (page = {take: 3, skip: 0}) => page,
-    {
-      getNextPageParam: (lastPage) => lastPage.nextPage,
-      initialPageParam: {take: 3, skip: 0},
-    },
-  )
+  const [usersPages] = useInfiniteQuery(getInfiniteUsers, (page = {take: 3, skip: 0}) => page, {
+    getNextPageParam: (lastPage) => lastPage.nextPage,
+  })
   return (
     <div>
       {usersPages.map((usersPage) =>

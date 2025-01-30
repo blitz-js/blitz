@@ -1,5 +1,5 @@
 import {useRouter} from "next/router"
-import {useMutation, useSuspenseQuery} from "@blitzjs/rpc"
+import {useMutation, useQuery} from "@blitzjs/rpc"
 import login from "../mutations/login"
 import logout from "../mutations/logout"
 import getCurrentUser from "../queries/getCurrentUser"
@@ -8,7 +8,7 @@ import {Suspense, useState} from "react"
 function Content() {
   const router = useRouter()
   const [error, setError] = useState(null)
-  const [userId] = useSuspenseQuery(getCurrentUser, null)
+  const [userId] = useQuery(getCurrentUser, null)
   const [loginMutation] = useMutation(login)
   const [logoutMutation] = useMutation(logout)
 

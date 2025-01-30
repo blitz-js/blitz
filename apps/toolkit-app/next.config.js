@@ -1,3 +1,4 @@
+const { withNextAuthAdapter } = require("@blitzjs/auth/next-auth")
 const { withBlitz } = require("@blitzjs/next")
 
 /**
@@ -10,4 +11,4 @@ const config = {
   },
 }
 
-module.exports = withBlitz(config)
+module.exports = withBlitz(withNextAuthAdapter(config))

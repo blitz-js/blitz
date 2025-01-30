@@ -1,9 +1,9 @@
 import React, {Suspense} from "react"
 import {BlitzPage} from "@blitzjs/next"
-import {invalidateQuery, useSuspenseQuery} from "@blitzjs/rpc"
+import {invalidateQuery, useQuery} from "@blitzjs/rpc"
 import getSequence from "../app/queries/getSequence"
 
-const useSuspenseQueryOptions = {
+const useQueryOptions = {
   refetchInterval: 0,
   refetchOnMount: false,
   refetchOnReconnect: false,
@@ -11,16 +11,8 @@ const useSuspenseQueryOptions = {
 }
 
 const PageWithInvalidateQuery: React.FC = () => {
-  const [query1, {isFetching: isQ1Fetching}] = useSuspenseQuery(
-    getSequence,
-    "query1",
-    useSuspenseQueryOptions,
-  )
-  const [query2, {isFetching: isQ2Fetching}] = useSuspenseQuery(
-    getSequence,
-    "query2",
-    useSuspenseQueryOptions,
-  )
+  const [query1, {isFetching: isQ1Fetching}] = useQuery(getSequence, "query1", useQueryOptions)
+  const [query2, {isFetching: isQ2Fetching}] = useQuery(getSequence, "query2", useQueryOptions)
 
   const isFetching = isQ1Fetching || isQ2Fetching
 

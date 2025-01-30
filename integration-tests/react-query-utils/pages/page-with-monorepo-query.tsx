@@ -1,9 +1,9 @@
-import {getQueryData, useSuspenseQuery} from "@blitzjs/rpc"
+import {getQueryData, useQuery} from "@blitzjs/rpc"
 import {Suspense, useState} from "react"
 import getNoSuspenseBasic from "../../no-suspense/app/queries/getNoSuspenseBasic"
 
 function Content() {
-  const [data] = useSuspenseQuery(getNoSuspenseBasic, undefined)
+  const [data] = useQuery(getNoSuspenseBasic, undefined)
   const [newData, setNewData] = useState<string>()
   return (
     <div>

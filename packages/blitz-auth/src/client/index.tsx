@@ -152,7 +152,7 @@ export interface UseSessionOptions {
 }
 
 export const useSession = (options: UseSessionOptions = {}): ClientSession => {
-  const suspense = options?.suspense ?? true
+  const suspense = options?.suspense ?? Boolean(globalThis.__BLITZ_SUSPENSE_ENABLED)
 
   let initialState: ClientSession
   if (options.initialPublicData) {

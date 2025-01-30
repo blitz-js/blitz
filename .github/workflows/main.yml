@@ -148,7 +148,7 @@ jobs:
       - name: Install playwright
         if: matrix.folder != 'next-13-app-dir' || matrix.os != 'windows-latest'
         run: |
-          pnpx playwright@1.49.1 install --with-deps
+          pnpx playwright@1.28.0 install --with-deps
         shell: bash
 
       - name: Build

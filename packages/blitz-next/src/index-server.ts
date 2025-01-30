@@ -123,15 +123,11 @@ const prefetchQueryFactory = (
       }
 
       if (infinite) {
-        await queryClient.prefetchQuery({
-          queryKey: getInfiniteQueryKey(fn, input),
-          queryFn: () => fn(input, ctx),
-        })
+        await queryClient.prefetchInfiniteQuery(getInfiniteQueryKey(fn, input), () =>
+          fn(input, ctx),
+        )
       } else {
-        await queryClient.prefetchQuery({
-          queryKey: getQueryKey(fn, input),
-          queryFn: () => fn(input, ctx),
-        })
+        await queryClient.prefetchQuery(getQueryKey(fn, input), () => fn(input, ctx))
       }
     },
   }
@@ -246,6 +242,7 @@ export interface BlitzConfig extends NextConfig {
     }
   }
 }
+
 
 export function withBlitz(nextConfig: BlitzConfig = {}): NextConfig {
   if (

@@ -1,10 +1,10 @@
-import {invalidateQuery, useMutation, useSuspenseQuery} from "@blitzjs/rpc"
+import {invalidateQuery, useMutation, useQuery} from "@blitzjs/rpc"
 import changeRole from "../mutations/changeRole"
 import getPublicDataForUser from "../queries/getPublicDataForUser"
 import {Suspense} from "react"
 
 function Content() {
-  const [publicData] = useSuspenseQuery(getPublicDataForUser, {userId: 1})
+  const [publicData] = useQuery(getPublicDataForUser, {userId: 1})
   return (
     <div id="session">
       <>

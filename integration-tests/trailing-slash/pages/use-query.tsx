@@ -1,9 +1,9 @@
 import getBasic from "../app/queries/getBasic"
-import {useSuspenseQuery} from "@blitzjs/rpc"
+import {useQuery} from "@blitzjs/rpc"
 import {Suspense} from "react"
 
 function Content() {
-  const [result] = useSuspenseQuery(getBasic, undefined)
+  const [result] = useQuery(getBasic, undefined)
   return <div id="content">{result}</div>
 }
 

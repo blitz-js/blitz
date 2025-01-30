@@ -1,12 +1,6 @@
 import {describe, it, expect, beforeAll, vi} from "vitest"
 import {act, screen, waitForElementToBeRemoved} from "@testing-library/react"
-import {
-  useSuspenseQuery,
-  useQuery,
-  useSuspenseInfiniteQuery,
-  BlitzRpcPlugin,
-  BlitzProvider,
-} from "@blitzjs/rpc"
+import {useQuery, useInfiniteQuery, BlitzRpcPlugin, BlitzProvider} from "@blitzjs/rpc"
 import React from "react"
 import delay from "delay"
 import {buildMutationRpc, buildQueryRpc, mockRouter, render} from "../../utils/blitz-test-utils"
@@ -17,18 +11,19 @@ beforeAll(() => {
   globalThis.IS_REACT_ACT_ENVIRONMENT = true
 })
 
-describe("useSuspenseQuery", () => {
+describe("useQuery", () => {
   const setupHook = (
     ID: string,
     params: any,
     queryFn: (...args: any) => any,
-    options: Parameters<typeof useSuspenseQuery>[2] = {} as any,
+    options: Parameters<typeof useQuery>[2] = {} as any,
   ): [{data?: any; setQueryData?: any}, Function] => {
     let res = {}
     const qc = BlitzRpcPlugin({})
 
-    function TestSuspenseHarness() {
-      const [data, {setQueryData}] = useSuspenseQuery(queryFn, params, {
+    function TestHarness() {
+      const [data, {setQueryData}] = useQuery(queryFn, params, {
+        suspense: true,
         ...(options as any),
       } as any)
 
@@ -43,7 +38,7 @@ describe("useSuspenseQuery", () => {
 
     const ui = () => (
       <React.Suspense fallback="Loading...">
-        <TestSuspenseHarness />
+        <TestHarness />
       </React.Suspense>
     )
 
@@ -95,101 +90,6 @@ describe("useSuspenseQuery", () => {
       expect(() => setupHook("5", "test", buildMutationRpc(upcase))).toThrowErrorMatchingSnapshot()
     })
 
-    it("works with options other than enabled & suspense without type error", () => {
-      const Demo = () => {
-        useSuspenseQuery(buildQueryRpc(upcase), undefined, {refetchInterval: 10000})
-        return <div></div>
-      }
-      const ui = () => <Demo />
-
-      const {rerender} = render(ui(), {
-        wrapper: ({children}) => (
-          <BlitzProvider>
-            <RouterContext.Provider value={mockRouter}>{children}</RouterContext.Provider>
-          </BlitzProvider>
-        ),
-      })
-    })
-  })
-})
-
-describe("useQuery", () => {
-  const setupHook = (
-    ID: string,
-    params: any,
-    queryFn: (...args: any) => any,
-    options: Parameters<typeof useQuery>[2] = {} as any,
-  ): [{data?: any; setQueryData?: any}, Function] => {
-    let res = {}
-    const qc = BlitzRpcPlugin({})
-
-    function TestHarness() {
-      const [data, {setQueryData, isLoading}] = useQuery(queryFn, params, {
-        ...(options as any),
-      } as any)
-
-      Object.assign(res, {data, setQueryData})
-      if (isLoading) {
-        return <div>Loading...</div>
-      }
-      return (
-        <div id={`harness-${ID}`}>
-          <span>{data ? `Ready${ID}` : "No data"}</span>
-          <span>{data}</span>
-        </div>
-      )
-    }
-
-    const ui = () => <TestHarness />
-
-    const {rerender} = render(ui(), {
-      wrapper: ({children}) => (
-        <BlitzProvider>
-          <RouterContext.Provider value={mockRouter}>{children}</RouterContext.Provider>
-        </BlitzProvider>
-      ),
-    })
-    return [res, () => rerender(ui())]
-  }
-
-  describe('a "query" that converts the string parameter to uppercase', () => {
-    const upcase = async (args: string) => {
-      await delay(500)
-      return args.toUpperCase()
-    }
-
-    it("should work with Blitz queries", async () => {
-      const [res] = setupHook("2", "test", buildQueryRpc(upcase))
-      await waitForElementToBeRemoved(() => screen.getByText("Loading..."))
-      await act(async () => {
-        await screen.queryAllByText("Ready2")[0]
-        expect(res.data).toBe("TEST")
-      })
-    })
-
-    it("should be able to change the data with setQueryData", async () => {
-      const [res] = setupHook("3", "fooBar", buildQueryRpc(upcase))
-      await waitForElementToBeRemoved(() => screen.getByText("Loading..."))
-      await act(async () => {
-        await screen.queryAllByText("Ready3")[0]
-        expect(res.data).toBe("FOOBAR")
-        res.setQueryData((p: string) => p.substr(3, 3), {refetch: false})
-        await delay(100)
-      })
-
-      expect(res.data).toBe("BAR")
-    })
-
-    it("shouldn't work with regular functions", () => {
-      console.error = vi.fn()
-      expect(() => setupHook("4", "test", upcase)).toThrowErrorMatchingSnapshot()
-    })
-
-    it("shouldn't work with mutation function", () => {
-      console.error = vi.fn()
-      expect(() => setupHook("5", "test", buildMutationRpc(upcase))).toThrowErrorMatchingSnapshot()
-    })
-
     it("suspense disabled if enabled is false", async () => {
       setupHook("6", "test", buildQueryRpc(upcase), {enabled: false})
       await screen.findByText("No data")
@@ -200,9 +100,17 @@ describe("useQuery", () => {
       await screen.findByText("No data")
     })
 
+    // it("suspense disabled if enabled is false and suspense set", async () => {
+    //   setupHook("8", "test", buildQueryRpc(upcase), {
+    //     enabled: false,
+    //     suspense: true,
+    //   })
+    //   await screen.findByText("No data")
+    // })
+
     it("works with options other than enabled & suspense without type error", () => {
       const Demo = () => {
-        useSuspenseQuery(buildQueryRpc(upcase), undefined, {refetchInterval: 10000})
+        useQuery(buildQueryRpc(upcase), undefined, {refetchInterval: 10000})
         return <div></div>
       }
       const ui = () => <Demo />
@@ -218,7 +126,7 @@ describe("useQuery", () => {
   })
 })
 
-describe("useSuspenseInfiniteQuery", () => {
+describe("useInfiniteQuery", () => {
   const setupHook = (
     ID: string,
     params: (arg?: any) => any,
@@ -230,7 +138,7 @@ describe("useSuspenseInfiniteQuery", () => {
     function TestHarness() {
       // TODO - fix typing
       //@ts-ignore
-      const [groupedData] = useSuspenseInfiniteQuery(queryFn, params, {
+      const [groupedData] = useInfiniteQuery(queryFn, params, {
         suspense: true,
         getNextPageParam: () => {},
       })

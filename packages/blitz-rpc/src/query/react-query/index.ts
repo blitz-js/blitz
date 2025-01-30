@@ -28,6 +28,11 @@ export const BlitzRpcPlugin = createClientPlugin<
 >((options?: BlitzRpcOptions) => {
   const initializeQueryClient = () => {
     const {reactQueryOptions} = options || {}
+    let suspenseEnabled = reactQueryOptions?.queries?.suspense ?? true
+    if (!process.env.CLI_COMMAND_CONSOLE && !process.env.CLI_COMMAND_DB) {
+      globalThis.__BLITZ_SUSPENSE_ENABLED = suspenseEnabled
+    }
+
     return new QueryClient({
       defaultOptions: {
         ...reactQueryOptions,
@@ -42,6 +47,7 @@ export const BlitzRpcPlugin = createClientPlugin<
             return false
           },
           ...reactQueryOptions?.queries,
+          suspense: suspenseEnabled,
         },
       },
     })

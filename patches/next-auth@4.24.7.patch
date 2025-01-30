@@ -1,0 +1,23 @@
+diff --git a/package.json b/package.json
+index c89e03c41a03de738cfb0ad090a63c2e99dadc7b..a5f38083c24732651c427c2b2d17cbcb23495473 100644
+--- a/package.json
++++ b/package.json
+@@ -57,6 +57,18 @@
+     "./providers/*": {
+       "types": "./providers/*.d.ts",
+       "default": "./providers/*.js"
++    },
++    "./core/init": {
++      "types": "./core/init.d.ts",
++      "default": "./core/init.js"
++    },
++    "./core/lib/oauth/authorization-url": {
++      "types": "./core/lib/oauth/authorization-url.d.ts",
++      "default": "./core/lib/oauth/authorization-url.js"
++    },
++    "./core/lib/oauth/callback": {
++      "types": "./core/lib/oauth/callback.d.ts",
++      "default": "./core/lib/oauth/callback.js"
+     }
+   },
+   "files": [
