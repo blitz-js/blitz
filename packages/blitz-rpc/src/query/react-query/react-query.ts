@@ -314,7 +314,6 @@ export function useInfiniteQuery<
   getQueryParams: (pageParam: any) => FirstParam<T>,
   options: Omit<InfiniteQueryConfig<TResult, TError, TSelectedData>, "queryKey"> & QueryLazyOptions,
 ): [TSelectedData[] | undefined, RestInfiniteResult<TSelectedData, TError>]
-
 export function useInfiniteQuery<
   T extends AsyncFunc,
   TResult = PromiseReturnType<T>,
