@@ -14,7 +14,7 @@ function PageWithInfiniteQueryMutate(props) {
   const {isFetchingNextPage, fetchNextPage, hasNextPage, setQueryData} = extraInfo
 
   const onOnContactSave = async (previousState, formData: FormData) => {
-    const name = formData.get("name")
+    const name = formData.get("name") as string | null
 
     await setQueryData(
       (oldData) => {
@@ -37,6 +37,9 @@ function PageWithInfiniteQueryMutate(props) {
                     name,
                     role: "user",
                     email: `${name}@yopmail.com`,
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                    hashedPassword: "alsdklaskdoaskdokdo",
                   },
                   ...page.users,
                 ],
