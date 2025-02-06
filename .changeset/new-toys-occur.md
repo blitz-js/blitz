@@ -1,5 +1,4 @@
 ---
-"web": patch
 "@blitzjs/rpc": patch
 ---
 
