@@ -39,6 +39,7 @@ import {
   sanitizeQuery,
   sanitizeMutation,
   getInfiniteQueryKey,
+  QueryType,
 } from "../utils"
 import {useRouter} from "next/compat/router"
 
@@ -282,7 +283,7 @@ export function usePaginatedQuery<
 // -------------------------
 export interface RestInfiniteResult<TResult, TError>
   extends Omit<UseInfiniteQueryResult<TResult, TError>, "data">,
-    QueryCacheFunctions<TResult> {
+    QueryCacheFunctions<InfiniteData<TResult>> {
   pageParams: any
 }
 
@@ -355,7 +356,7 @@ export function useInfiniteQuery<
 
   const rest = {
     ...queryRest,
-    ...getQueryCacheFunctions<FirstParam<T>, TResult, T>(queryFn, getQueryParams),
+    ...getQueryCacheFunctions<FirstParam<T>, InfiniteData<TResult>, T>(queryFn, getQueryParams),
     pageParams: infiniteQueryData?.pageParams,
   }
 
@@ -367,7 +368,7 @@ export function useInfiniteQuery<
 // -------------------------
 export interface RestInfiniteResult<TResult, TError>
   extends Omit<UseInfiniteQueryResult<TResult, TError>, "data">,
-    QueryCacheFunctions<TResult> {
+    QueryCacheFunctions<InfiniteData<TResult>> {
   pageParams: any
 }
 
@@ -449,7 +450,11 @@ export function useSuspenseInfiniteQuery<
 
   const rest = {
     ...queryRest,
-    ...getQueryCacheFunctions<FirstParam<T>, TResult, T>(queryFn, getQueryParams),
+    ...getQueryCacheFunctions<FirstParam<T>, InfiniteData<TResult>, T>(
+      queryFn,
+      getQueryParams,
+      QueryType.INFINITE,
+    ),
     pageParams: infiniteQueryData?.pageParams,
   }
 
