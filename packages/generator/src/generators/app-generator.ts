@@ -68,15 +68,24 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
       this.destinationPath("package.json"),
     )
 
-    const rpcEndpointPath = `src/app/api/rpc/blitzrpcroute/route.${
+    const appRpcEndpointPath = `src/app/api/rpc/blitzrpcroute/route.${
       this.options.useTs ? "ts" : "js"
     }`
-    if (this.fs.exists(rpcEndpointPath)) {
+    const pagesRpcEndpointPath = `src/pages/api/rpc/blitzrpcroute.${
+      this.options.useTs ? "ts" : "js"
+    }`
+    if (this.fs.exists(appRpcEndpointPath)) {
       this.fs.move(
-        this.destinationPath(rpcEndpointPath),
+        this.destinationPath(appRpcEndpointPath),
         this.destinationPath(
           `src/app/api/rpc/[[...blitz]]/route.${this.options.useTs ? "ts" : "js"}`,
         ),
+      )
+    }
+    if (this.fs.exists(pagesRpcEndpointPath)) {
+      this.fs.move(
+        this.destinationPath(pagesRpcEndpointPath),
+        this.destinationPath(`src/pages/api/rpc/[[...blitz]].${this.options.useTs ? "ts" : "js"}`),
       )
     }
 
