@@ -1,5 +1,18 @@
 # blitz
 
+## 3.0.0
+
+### Major Changes
+
+- ce1a603b2: TODO: Upgrade @tanstack/react-query to v5.1.1
+
+### Patch Changes
+
+- 1610c73f9: Due to increased maintenance required to keep recipes up to date. Removing them from the codebase from v3
+- Updated dependencies [ce1a603b2]
+- Updated dependencies [0a257e915]
+  - @blitzjs/generator@3.0.0
+
 ## 2.2.1
 
 ### Patch Changes
