@@ -1,5 +1,12 @@
 # @blitzjs/auth
 
+## 3.0.1
+
+### Patch Changes
+
+- 816330b9d: fix: Overriden custom cookies used inside `withBlitzAuth`
+  - blitz@3.0.1
+
 ## 3.0.0
 
 ### Major Changes
