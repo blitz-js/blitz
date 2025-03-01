@@ -468,7 +468,7 @@ export class SessionContextClass implements SessionContext {
     if (response instanceof Response) {
       response.headers.append("Set-Cookie", cookieHeaders!)
     } else {
-      response.setHeader("Set-Cookie", splitCookiesString(cookieHeaders!))
+      append(response, "Set-Cookie", splitCookiesString(cookieHeaders!))
     }
 
     const headers = this._headers.entries()
