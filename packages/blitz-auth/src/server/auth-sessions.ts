@@ -1249,12 +1249,31 @@ export async function setPublicDataForUser(userId: PublicData["userId"], data: R
  * @param {string} field
  * @param {string| string[]} val
  */
-function append(res: ServerResponse, field: string, val: string | string[]) {
+export function append(res: ServerResponse, field: string, val: string | string[]) {
   let prev: string | string[] | undefined = res.getHeader(field) as string | string[] | undefined
   let value = val
 
-  if (prev !== undefined) {
-    // concat the new and prev vals
+  if (field.toLowerCase() === "set-cookie") {
+    const prevCookies = prev ? (Array.isArray(prev) ? prev : [prev]) : []
+    const newCookies = Array.isArray(val) ? val : [val]
+
+    const allCookies = [...prevCookies, ...newCookies].reduce((acc: string[], cookieHeader) => {
+      return acc.concat(splitCookiesString(cookieHeader))
+    }, [])
+
+    const cookieMap = new Map()
+    allCookies.forEach((cookieStr) => {
+      const firstSemicolon = cookieStr.indexOf(";")
+      const cookieNameValue = firstSemicolon > -1 ? cookieStr.slice(0, firstSemicolon) : cookieStr
+      const parsed = cookie.parse(cookieNameValue)
+      const name = Object.keys(parsed)[0]
+      if (name) {
+        cookieMap.set(name, cookieStr)
+      }
+    })
+
+    value = Array.from(cookieMap.values())
+  } else if (prev !== undefined) {
     value = Array.isArray(prev)
       ? prev.concat(val)
       : Array.isArray(val)
@@ -1263,7 +1282,6 @@ function append(res: ServerResponse, field: string, val: string | string[]) {
   }
 
   value = Array.isArray(value) ? value.map(String) : String(value)
-
   res.setHeader(field, value)
   return res
 }
