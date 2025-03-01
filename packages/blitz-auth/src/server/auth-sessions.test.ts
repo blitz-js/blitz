@@ -165,7 +165,6 @@ describe("append", () => {
 
       const cookieNames = cookies.map((c) => c.substring(0, c.indexOf("=")))
 
-      // Check we have the right number of each cookie type
       const counts = cookieNames.reduce((acc, name) => {
         acc[name] = (acc[name] || 0) + 1
         return acc
@@ -185,6 +184,43 @@ describe("append", () => {
       const cookies = res.getHeader("Set-Cookie") as string[]
       expect(cookies).toHaveLength(1)
       expect(cookies[0]).toBe(specialCookie)
+    })
+
+    it("should properly merge with existing custom cookies already in the response", () => {
+      const customCookie1 = "custom1=value1; Path=/; HttpOnly"
+      const customCookie2 = "custom2=value2; Path=/; HttpOnly"
+      const existingAuthCookie = `${COOKIE_PREFIX}AntiCsrfToken=old-token; Path=/; SameSite=Lax`
+
+      res.setHeader("Set-Cookie", [customCookie1, customCookie2, existingAuthCookie])
+
+      // login
+      append(res, "Set-Cookie", [anonymousSessionCookie, loginAntiCsrfCookie, publicDataCookie])
+
+      const cookies = res.getHeader("Set-Cookie") as string[]
+
+      expect(cookies).toHaveLength(5)
+
+      // Custom cookies should be preserved
+      expect(cookies).toContain(customCookie1)
+      expect(cookies).toContain(customCookie2)
+
+      // Auth cookies should be correctly applied, with antiCsrf being updated
+      expect(cookies).toContain(anonymousSessionCookie)
+      expect(cookies).toContain(loginAntiCsrfCookie)
+      expect(cookies).toContain(publicDataCookie)
+
+      // The old auth cookie should be replaced
+      expect(cookies).not.toContain(existingAuthCookie)
+
+      // Verify we have the right counts of each cookie type
+      const cookieNames = cookies.map((c) => c.substring(0, c.indexOf("=")))
+      expect(cookieNames.filter((n) => n === "custom1")).toHaveLength(1)
+      expect(cookieNames.filter((n) => n === "custom2")).toHaveLength(1)
+      expect(cookieNames.filter((n) => n === `${COOKIE_PREFIX}AnonymousSessionToken`)).toHaveLength(
+        1,
+      )
+      expect(cookieNames.filter((n) => n === `${COOKIE_PREFIX}AntiCsrfToken`)).toHaveLength(1)
+      expect(cookieNames.filter((n) => n === `${COOKIE_PREFIX}PublicDataToken`)).toHaveLength(1)
     })
   })
 })
