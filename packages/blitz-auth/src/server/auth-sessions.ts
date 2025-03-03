@@ -465,10 +465,12 @@ export class SessionContextClass implements SessionContext {
       return
     }
     const cookieHeaders = this._headers.get("set-cookie")
-    if (response instanceof Response) {
-      response.headers.append("Set-Cookie", cookieHeaders!)
-    } else {
-      append(response, "Set-Cookie", splitCookiesString(cookieHeaders!))
+    if (cookieHeaders) {
+      if (response instanceof Response) {
+        response.headers.append("Set-Cookie", cookieHeaders)
+      } else {
+        append(response, "Set-Cookie", splitCookiesString(cookieHeaders))
+      }
     }
 
     const headers = this._headers.entries()
@@ -1281,7 +1283,7 @@ export function append(res: ServerResponse, field: string, val: string | string[
       : [prev, val]
   }
 
-  value = Array.isArray(value) ? value.map(String) : String(value)
+  value = Array.isArray(value) ? value.filter(Boolean).map(String) : String(value)
   res.setHeader(field, value)
   return res
 }
