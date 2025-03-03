@@ -1,5 +1,12 @@
 # @blitzjs/codemod
 
+## 3.0.2
+
+### Patch Changes
+
+- @blitzjs/generator@3.0.2
+- blitz@3.0.2
+
 ## 3.0.1
 
 ### Patch Changes
