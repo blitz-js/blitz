@@ -1,5 +1,12 @@
 # @blitzjs/auth
 
+## 3.0.2
+
+### Patch Changes
+
+- 0ef8de04b: fix: Overriden custom cookies with pages router
+  - blitz@3.0.2
+
 ## 3.0.1
 
 ### Patch Changes

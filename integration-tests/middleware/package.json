@@ -11,10 +11,10 @@
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf .next"
   },
   "dependencies": {
-    "@blitzjs/config": "3.0.1",
-    "@blitzjs/next": "3.0.1",
-    "@blitzjs/rpc": "3.0.1",
-    "blitz": "3.0.1",
+    "@blitzjs/config": "3.0.2",
+    "@blitzjs/next": "3.0.2",
+    "@blitzjs/rpc": "3.0.2",
+    "blitz": "3.0.2",
     "next": "15.0.1",
     "react": "19.0.0",
     "react-dom": "19.0.0"
