@@ -1,5 +1,11 @@
 # @blitzjs/rpc
 
+## 2.2.3
+
+### Patch Changes
+
+- blitz@2.2.3
+
 ## 2.2.2
 
 ### Patch Changes
