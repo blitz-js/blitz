@@ -1283,7 +1283,7 @@ export function append(res: ServerResponse, field: string, val: string | string[
       : [prev, val]
   }
 
-  value = Array.isArray(value) ? value.map(String) : String(value)
+  value = Array.isArray(value) ? value.filter(Boolean).map(String) : String(value)
   res.setHeader(field, value)
   return res
 }
