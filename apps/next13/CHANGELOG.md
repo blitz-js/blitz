@@ -1,5 +1,17 @@
 # next-blitz-auth
 
+## 0.1.21
+
+### Patch Changes
+
+- Updated dependencies [030c8135b]
+- Updated dependencies [aa033af9f]
+  - @blitzjs/auth@2.2.4
+  - @blitzjs/rpc@2.2.4
+  - @blitzjs/next@2.2.4
+  - @blitzjs/config@2.2.4
+  - blitz@2.2.4
+
 ## 0.1.20
 
 ### Patch Changes
