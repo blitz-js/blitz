@@ -17,12 +17,12 @@
     "prisma:studio": "prisma studio"
   },
   "dependencies": {
-    "@blitzjs/auth": "3.0.1",
-    "@blitzjs/config": "3.0.1",
-    "@blitzjs/next": "3.0.1",
-    "@blitzjs/rpc": "3.0.1",
+    "@blitzjs/auth": "3.0.2",
+    "@blitzjs/config": "3.0.2",
+    "@blitzjs/next": "3.0.2",
+    "@blitzjs/rpc": "3.0.2",
     "@prisma/client": "6.1.0",
-    "blitz": "3.0.1",
+    "blitz": "3.0.2",
     "lowdb": "2.1.0",
     "next": "15.0.1",
     "prisma": "6.1.0",

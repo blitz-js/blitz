@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/config",
   "private": true,
-  "version": "3.0.1",
+  "version": "3.0.2",
   "license": "MIT",
   "dependencies": {
     "@typescript-eslint/eslint-plugin": "5.42.1",

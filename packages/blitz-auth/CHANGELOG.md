@@ -1,5 +1,13 @@
 # @blitzjs/auth
 
+## 3.0.2
+
+### Patch Changes
+
+- 83b6be7ad: Upgrade cookie-session dependency to v2.1.1
+- 0ef8de04b: fix: Overriden custom cookies with pages router
+  - blitz@3.0.2
+
 ## 3.0.1
 
 ### Patch Changes
