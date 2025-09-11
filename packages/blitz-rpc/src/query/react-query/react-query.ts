@@ -30,6 +30,16 @@ import type {
   UseSuspenseInfiniteQueryOptions,
 } from "@tanstack/react-query"
 
+function throwNextSuspenseError() {
+  const e = new NextError()
+  e.name = "Rendering Suspense fallback..."
+  e.digest = "DYNAMIC_SERVER_USAGE"
+  // Backwards compatibility for nextjs 13.0.7
+  e.message = "DYNAMIC_SERVER_USAGE"
+  delete e.stack
+  throw e
+}
+
 import {isServer, FirstParam, PromiseReturnType, AsyncFunc} from "blitz"
 import {
   emptyQueryFn,
@@ -172,16 +182,6 @@ export function useSuspenseQuery<
     routerIsReady = true
   }
 
-  if (isServer) {
-    const e = new NextError()
-    e.name = "Rendering Suspense fallback..."
-    e.digest = "DYNAMIC_SERVER_USAGE"
-    // Backwards compatibility for nextjs 13.0.7
-    e.message = "DYNAMIC_SERVER_USAGE"
-    delete e.stack
-    throw e
-  }
-
   const {data, ...queryRest} = useSuspenseReactQuery({
     queryKey: routerIsReady ? queryKey : ["_routerNotReady_"],
     queryFn: routerIsReady
@@ -189,6 +189,10 @@ export function useSuspenseQuery<
       : (emptyQueryFn as PromiseReturnType<T>),
     ...options,
   })
+
+  if (queryRest.fetchStatus === "idle" && isServer && !data) {
+    throwNextSuspenseError()
+  }
 
   const rest = {
     ...queryRest,
@@ -259,7 +263,75 @@ export function usePaginatedQuery<
     enabled,
   })
 
-  if (queryRest.fetchStatus === "idle" && isServer && !data) {
+  const rest = {
+    ...queryRest,
+    ...getQueryCacheFunctions<FirstParam<T>, TResult, T>(queryFn, params),
+  }
+
+  return [data, rest as RestPaginatedResult<TResult, TError>]
+}
+
+// -------------------------
+// useSuspensePaginatedQuery
+// -------------------------
+export function useSuspensePaginatedQuery<
+  T extends AsyncFunc,
+  TResult = PromiseReturnType<T>,
+  TError = DefaultError,
+  TSelectedData = TResult,
+>(
+  queryFn: T,
+  params: FirstParam<T>,
+  options?: Omit<UseSuspenseQueryOptions<TResult, TError, TSelectedData>, "queryKey"> &
+    QueryNonLazyOptions,
+): [TSelectedData, RestPaginatedResult<TSelectedData, TError>]
+export function useSuspensePaginatedQuery<
+  T extends AsyncFunc,
+  TResult = PromiseReturnType<T>,
+  TError = DefaultError,
+  TSelectedData = TResult,
+>(
+  queryFn: T,
+  params: FirstParam<T>,
+  options: Omit<UseSuspenseQueryOptions<TResult, TError, TSelectedData>, "queryKey"> &
+    QueryLazyOptions,
+): [TSelectedData | undefined, RestPaginatedResult<TSelectedData, TError>]
+export function useSuspensePaginatedQuery<
+  T extends AsyncFunc,
+  TResult = PromiseReturnType<T>,
+  TError = DefaultError,
+  TSelectedData = TResult,
+>(
+  queryFn: T,
+  params: FirstParam<T>,
+  options: Omit<UseSuspenseQueryOptions<TResult, TError, TSelectedData>, "queryKey"> = {},
+) {
+  if (typeof queryFn === "undefined") {
+    throw new Error(
+      "useSuspensePaginatedQuery is missing the first argument - it must be a query function",
+    )
+  }
+
+  let routerIsReady = false
+  const router = useRouter()
+  if (router) {
+    routerIsReady = router?.isReady || isServer
+  } else {
+    routerIsReady = true
+  }
+  const enhancedResolverRpcClient = sanitizeQuery(queryFn)
+  const queryKey = getQueryKey(queryFn, params)
+
+  const {data, ...queryRest} = useReactQuery({
+    queryKey: routerIsReady ? queryKey : ["_routerNotReady_"],
+    queryFn: routerIsReady
+      ? ({signal}) => enhancedResolverRpcClient(params, {fromQueryHook: true}, signal)
+      : (emptyQueryFn as PromiseReturnType<T>),
+    ...options,
+    placeholderData: keepPreviousData,
+  })
+
+  if (queryRest.fetchStatus === "idle" || (isServer && !data)) {
     const e = new NextError()
     e.name = "Rendering Suspense fallback..."
     e.digest = "DYNAMIC_SERVER_USAGE"
@@ -274,8 +346,7 @@ export function usePaginatedQuery<
     ...getQueryCacheFunctions<FirstParam<T>, TResult, T>(queryFn, params),
   }
 
-  // return [data, rest as RestPaginatedResult<TResult>]
-  return [data, rest]
+  return [data, rest as RestPaginatedResult<TResult, TError>]
 }
 
 // -------------------------
@@ -439,13 +510,7 @@ export function useSuspenseInfiniteQuery<
   const infiniteQueryData = data as InfiniteData<TResult>
 
   if (queryRest.fetchStatus === "idle" && isServer && !infiniteQueryData) {
-    const e = new NextError()
-    e.name = "Rendering Suspense fallback..."
-    e.digest = "DYNAMIC_SERVER_USAGE"
-    // Backwards compatibility for nextjs 13.0.7
-    e.message = "DYNAMIC_SERVER_USAGE"
-    delete e.stack
-    throw e
+    throwNextSuspenseError()
   }
 
   const rest = {
