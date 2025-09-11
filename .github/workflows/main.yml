@@ -16,12 +16,12 @@ jobs:
     name: Lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: pnpm/action-setup@v4.0.0
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
         with:
           version: 8.6.6
       - name: Setup node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v5
         with:
           node-version: 20
           cache: "pnpm"
@@ -37,12 +37,12 @@ jobs:
     runs-on: ubuntu-latest
     name: Build
     steps:
-      - uses: actions/checkout@v2
-      - uses: pnpm/action-setup@v4.0.0
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
         with:
           version: 8.6.6
       - name: Setup node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v5
         with:
           node-version: 20
           cache: "pnpm"
@@ -65,15 +65,15 @@ jobs:
       NODE_VERSION: 18
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v5
 
       - name: Setup PNPM
-        uses: pnpm/action-setup@v4.0.0
+        uses: pnpm/action-setup@v4
         with:
           version: 8.6.6
 
       - name: Setup node@16
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v5
         with:
           node-version: 20
           cache: "pnpm"
@@ -100,7 +100,7 @@ jobs:
     outputs:
       folders: ${{ steps.set-matrix.outputs.folders }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v5
       - id: set-matrix
         name: "Find all folders"
         shell: bash
@@ -125,17 +125,17 @@ jobs:
       - run: echo ${{matrix.folder}}
       - name: Checkout
         if: matrix.folder != 'next-13-app-dir' || matrix.os != 'windows-latest'
-        uses: actions/checkout@v3
+        uses: actions/checkout@v5
 
       - name: Setup PNPM
         if: matrix.folder != 'next-13-app-dir' || matrix.os != 'windows-latest'
-        uses: pnpm/action-setup@v4.0.0
+        uses: pnpm/action-setup@v4
         with:
           version: 8.6.6
 
       - name: Setup node@18
         if: matrix.folder != 'next-13-app-dir' || matrix.os != 'windows-latest'
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v5
         with:
           node-version: 20
           cache: "pnpm"
