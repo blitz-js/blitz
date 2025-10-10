@@ -13,7 +13,7 @@
     "@blitzjs/next": "3.0.2",
     "@blitzjs/rpc": "3.0.2",
     "@prisma/client": "6.1.0",
-    "@tanstack/react-query": "5.51.1",
+    "@tanstack/react-query": "5.90.2",
     "blitz": "3.0.2",
     "next": "15.0.1",
     "prisma": "6.1.0",
