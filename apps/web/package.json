@@ -20,7 +20,7 @@
     "@blitzjs/config": "3.0.2",
     "@blitzjs/next": "3.0.2",
     "@blitzjs/rpc": "3.0.2",
-    "@prisma/client": "6.1.0",
+    "@prisma/client": "7.0.0",
     "@types/jest": "29.2.2",
     "@types/passport-twitter": "1.0.37",
     "blitz": "3.0.2",
@@ -29,7 +29,7 @@
     "next": "15.0.1",
     "passport-mock-strategy": "2.0.0",
     "passport-twitter": "1.0.4",
-    "prisma": "6.1.0",
+    "prisma": "7.0.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "ts-node": "10.9.1"
