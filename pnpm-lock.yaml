@@ -6,7 +6,7 @@ settings:
 
 overrides:
   "@types/mime": 3.0.4
-  next: 15.0.5
+  next: 15.0.7
   "@types/react": npm:types-react@rc
   "@types/react-dom": npm:types-react-dom@rc
 
@@ -32,8 +32,8 @@ importers:
         specifier: 13.0.3
         version: 13.0.3
       next:
-        specifier: 15.0.5
-        version: 15.0.5(@babel/core@7.12.10)(react-dom@19.0.0)(react@19.0.1)
+        specifier: 15.0.7
+        version: 15.0.7(@babel/core@7.12.10)(react-dom@19.0.3)(react@19.0.3)
       only-allow:
         specifier: 1.1.0
         version: 1.1.0
@@ -72,7 +72,7 @@ importers:
         version: link:../../packages/blitz-rpc
       "@hookform/error-message":
         specifier: 2.0.0
-        version: 2.0.0(react-dom@19.0.0)(react-hook-form@7.39.1)(react@19.0.1)
+        version: 2.0.0(react-dom@19.0.3)(react-hook-form@7.39.1)(react@19.0.3)
       "@hookform/resolvers":
         specifier: 2.9.10
         version: 2.9.10(react-hook-form@7.39.1)
@@ -81,7 +81,7 @@ importers:
         version: 4.6.1(prisma@4.6.1)
       "@tanstack/react-query":
         specifier: 5.51.1
-        version: 5.51.1(react@19.0.1)
+        version: 5.51.1(react@19.0.3)
       blitz:
         specifier: 3.0.2
         version: link:../../packages/blitz
@@ -89,20 +89,20 @@ importers:
         specifier: 3.2.7
         version: 3.2.7
       next:
-        specifier: 15.0.5
-        version: 15.0.5(@babel/core@7.12.10)(react-dom@19.0.0)(react@19.0.1)
+        specifier: 15.0.7
+        version: 15.0.7(@babel/core@7.12.10)(react-dom@19.0.3)(react@19.0.3)
       prisma:
         specifier: ^4.5.0
         version: 4.6.1
       react:
-        specifier: 19.0.1
-        version: 19.0.1
+        specifier: 19.0.3
+        version: 19.0.3
       react-dom:
-        specifier: 19.0.0
-        version: 19.0.0(react@19.0.1)
+        specifier: 19.0.3
+        version: 19.0.3(react@19.0.3)
       react-hook-form:
         specifier: 7.39.1
-        version: 7.39.1(react@19.0.1)
+        version: 7.39.1(react@19.0.3)
       superjson:
         specifier: 1.11.0
         version: 1.11.0
@@ -145,7 +145,7 @@ importers:
         version: link:../../packages/blitz-rpc
       "@hookform/error-message":
         specifier: 2.0.0
-        version: 2.0.0(react-dom@19.0.0)(react-hook-form@7.39.1)(react@19.0.1)
+        version: 2.0.0(react-dom@19.0.3)(react-hook-form@7.39.1)(react@19.0.3)
       "@hookform/resolvers":
         specifier: 2.9.10
         version: 2.9.10(react-hook-form@7.39.1)
@@ -156,23 +156,23 @@ importers:
         specifier: 3.0.2
         version: link:../../packages/blitz
       next:
-        specifier: 15.0.5
-        version: 15.0.5(@babel/core@7.20.2)(react-dom@19.0.0)(react@19.0.1)
+        specifier: 15.0.7
+        version: 15.0.7(@babel/core@7.20.2)(react-dom@19.0.3)(react@19.0.3)
       next-auth:
         specifier: 4.24.7
-        version: 4.24.7(next@15.0.5)(react-dom@19.0.0)(react@19.0.1)
+        version: 4.24.7(next@15.0.7)(react-dom@19.0.3)(react@19.0.3)
       prisma:
         specifier: 6.1.0
         version: 6.1.0
       react:
-        specifier: 19.0.1
-        version: 19.0.1
+        specifier: 19.0.3
+        version: 19.0.3
       react-dom:
-        specifier: 19.0.0
-        version: 19.0.0(react@19.0.1)
+        specifier: 19.0.3
+        version: 19.0.3(react@19.0.3)
       react-hook-form:
         specifier: 7.39.1
-        version: 7.39.1(react@19.0.1)
+        version: 7.39.1(react@19.0.3)
       ts-node:
         specifier: 10.9.1
         version: 10.9.1(@types/node@18.11.9)(typescript@4.8.4)
@@ -188,7 +188,7 @@ importers:
         version: 5.16.5
       "@testing-library/react":
         specifier: 16.0.1
-        version: 16.0.1(@testing-library/dom@10.4.0)(react-dom@19.0.0)(react@19.0.1)(types-react-dom@19.0.0-rc.1)(types-react@19.0.0-rc.1)
+        version: 16.0.1(@testing-library/dom@10.4.0)(react-dom@19.0.3)(react@19.0.3)(types-react-dom@19.0.0-rc.1)(types-react@19.0.0-rc.1)
       "@types/node":
         specifier: 18.11.9
         version: 18.11.9
@@ -260,7 +260,7 @@ importers:
         version: link:../../packages/blitz-rpc
       "@hookform/error-message":
         specifier: 2.0.0
-        version: 2.0.0(react-dom@19.0.0)(react-hook-form@7.39.1)(react@19.0.1)
+        version: 2.0.0(react-dom@19.0.3)(react-hook-form@7.39.1)(react@19.0.3)
       "@hookform/resolvers":
         specifier: 2.9.10
         version: 2.9.10(react-hook-form@7.39.1)
@@ -271,8 +271,8 @@ importers:
         specifier: 3.0.2
         version: link:../../packages/blitz
       next:
-        specifier: 15.0.5
-        version: 15.0.5(@babel/core@7.12.10)(react-dom@19.0.0)(react@19.0.1)
+        specifier: 15.0.7
+        version: 15.0.7(@babel/core@7.12.10)(react-dom@19.0.3)(react@19.0.3)
       openid-client:
         specifier: 5.2.1
         version: 5.2.1
@@ -280,14 +280,14 @@ importers:
         specifier: 6.1.0
         version: 6.1.0
       react:
-        specifier: 19.0.1
-        version: 19.0.1
+        specifier: 19.0.3
+        version: 19.0.3
       react-dom:
-        specifier: 19.0.0
-        version: 19.0.0(react@19.0.1)
+        specifier: 19.0.3
+        version: 19.0.3(react@19.0.3)
       react-hook-form:
         specifier: 7.39.1
-        version: 7.39.1(react@19.0.1)
+        version: 7.39.1(react@19.0.3)
       ts-node:
         specifier: 10.9.1
         version: 10.9.1(@types/node@18.11.9)(typescript@4.8.4)
@@ -300,7 +300,7 @@ importers:
         version: 12.0.8
       "@testing-library/react":
         specifier: 16.0.1
-        version: 16.0.1(@testing-library/dom@10.4.0)(react-dom@19.0.0)(react@19.0.1)(types-react-dom@19.0.0-rc.1)(types-react@19.0.0-rc.1)
+        version: 16.0.1(@testing-library/dom@10.4.0)(react-dom@19.0.3)(react@19.0.3)(types-react-dom@19.0.0-rc.1)(types-react@19.0.0-rc.1)
       "@types/jest":
         specifier: 29.2.2
         version: 29.2.2
@@ -386,8 +386,8 @@ importers:
         specifier: 29.3.0
         version: 29.3.0
       next:
-        specifier: 15.0.5
-        version: 15.0.5(@babel/core@7.12.10)(react-dom@19.0.0)(react@19.0.1)
+        specifier: 15.0.7
+        version: 15.0.7(@babel/core@7.12.10)(react-dom@19.0.3)(react@19.0.3)
       passport-mock-strategy:
         specifier: 2.0.0
         version: 2.0.0
@@ -398,11 +398,11 @@ importers:
         specifier: 6.1.0
         version: 6.1.0
       react:
-        specifier: 19.0.1
-        version: 19.0.1
+        specifier: 19.0.3
+        version: 19.0.3
       react-dom:
-        specifier: 19.0.0
-        version: 19.0.0(react@19.0.1)
+        specifier: 19.0.3
+        version: 19.0.3(react@19.0.3)
       ts-node:
         specifier: 10.9.1
         version: 10.9.1(@types/node@18.11.9)(typescript@4.8.4)
@@ -441,17 +441,17 @@ importers:
         specifier: 3.0.0
         version: 3.0.0
       next:
-        specifier: 15.0.5
-        version: 15.0.5(@babel/core@7.12.10)(react-dom@19.0.0)(react@19.0.1)
+        specifier: 15.0.7
+        version: 15.0.7(@babel/core@7.12.10)(react-dom@19.0.3)(react@19.0.3)
       prisma:
         specifier: 6.1.0
         version: 6.1.0
       react:
-        specifier: 19.0.1
-        version: 19.0.1
+        specifier: 19.0.3
+        version: 19.0.3
       react-dom:
-        specifier: 19.0.0
-        version: 19.0.0(react@19.0.1)
+        specifier: 19.0.3
+        version: 19.0.3(react@19.0.3)
       secure-password:
         specifier: 4.0.0
         version: 4.0.0
@@ -518,7 +518,7 @@ importers:
         version: link:../../packages/blitz-rpc
       "@hookform/error-message":
         specifier: 2.0.0
-        version: 2.0.0(react-dom@19.0.0)(react-hook-form@7.39.1)(react@19.0.1)
+        version: 2.0.0(react-dom@19.0.3)(react-hook-form@7.39.1)(react@19.0.3)
       "@hookform/resolvers":
         specifier: 2.9.10
         version: 2.9.10(react-hook-form@7.39.1)
@@ -532,20 +532,20 @@ importers:
         specifier: 5.0.0
         version: 5.0.0
       next:
-        specifier: 15.0.5
-        version: 15.0.5(@babel/core@7.20.2)(react-dom@19.0.0)(react@19.0.1)
+        specifier: 15.0.7
+        version: 15.0.7(@babel/core@7.20.2)(react-dom@19.0.3)(react@19.0.3)
       prisma:
         specifier: 6.1.0
         version: 6.1.0
       react:
-        specifier: 19.0.1
-        version: 19.0.1
+        specifier: 19.0.3
+        version: 19.0.3
       react-dom:
-        specifier: 19.0.0
-        version: 19.0.0(react@19.0.1)
+        specifier: 19.0.3
+        version: 19.0.3(react@19.0.3)
       react-hook-form:
         specifier: 7.39.1
-        version: 7.39.1(react@19.0.1)
+        version: 7.39.1(react@19.0.3)
       ts-node:
         specifier: 10.9.1
         version: 10.9.1(@types/node@18.11.9)(typescript@4.8.4)
@@ -561,7 +561,7 @@ importers:
         version: 5.16.5
       "@testing-library/react":
         specifier: 16.0.1
-        version: 16.0.1(@testing-library/dom@10.4.0)(react-dom@19.0.0)(react@19.0.1)(types-react-dom@19.0.0-rc.1)(types-react@19.0.0-rc.1)
+        version: 16.0.1(@testing-library/dom@10.4.0)(react-dom@19.0.3)(react@19.0.3)(types-react-dom@19.0.0-rc.1)(types-react@19.0.0-rc.1)
       "@types/node":
         specifier: 18.11.9
         version: 18.11.9
@@ -641,17 +641,17 @@ importers:
         specifier: 2.1.0
         version: 2.1.0
       next:
-        specifier: 15.0.5
-        version: 15.0.5(@babel/core@7.12.10)(react-dom@19.0.0)(react@19.0.1)
+        specifier: 15.0.7
+        version: 15.0.7(@babel/core@7.12.10)(react-dom@19.0.3)(react@19.0.3)
       prisma:
         specifier: 6.1.0
         version: 6.1.0
       react:
-        specifier: 19.0.1
-        version: 19.0.1
+        specifier: 19.0.3
+        version: 19.0.3
       react-dom:
-        specifier: 19.0.0
-        version: 19.0.0(react@19.0.1)
+        specifier: 19.0.3
+        version: 19.0.3(react@19.0.3)
     devDependencies:
       "@blitzjs/config":
         specifier: 3.0.2
@@ -705,14 +705,14 @@ importers:
         specifier: 3.0.2
         version: link:../../packages/blitz
       next:
-        specifier: 15.0.5
-        version: 15.0.5(@babel/core@7.12.10)(react-dom@19.0.0)(react@19.0.1)
+        specifier: 15.0.7
+        version: 15.0.7(@babel/core@7.12.10)(react-dom@19.0.3)(react@19.0.3)
       react:
-        specifier: 19.0.1
-        version: 19.0.1
+        specifier: 19.0.3
+        version: 19.0.3
       react-dom:
-        specifier: 19.0.0
-        version: 19.0.0(react@19.0.1)
+        specifier: 19.0.3
+        version: 19.0.3(react@19.0.3)
     devDependencies:
       "@next/bundle-analyzer":
         specifier: 12.0.8
@@ -769,17 +769,17 @@ importers:
         specifier: 2.1.0
         version: 2.1.0
       next:
-        specifier: 15.0.5
-        version: 15.0.5(@babel/core@7.12.10)(react-dom@19.0.0)(react@19.0.1)
+        specifier: 15.0.7
+        version: 15.0.7(@babel/core@7.12.10)(react-dom@19.0.3)(react@19.0.3)
       prisma:
         specifier: 6.1.0
         version: 6.1.0
       react:
-        specifier: 19.0.1
-        version: 19.0.1
+        specifier: 19.0.3
+        version: 19.0.3
       react-dom:
-        specifier: 19.0.0
-        version: 19.0.0(react@19.0.1)
+        specifier: 19.0.3
+        version: 19.0.3(react@19.0.3)
       secure-password:
         specifier: 4.0.0
         version: 4.0.0
@@ -851,17 +851,17 @@ importers:
         specifier: 3.0.0
         version: 3.0.0
       next:
-        specifier: 15.0.5
-        version: 15.0.5(@babel/core@7.12.10)(react-dom@19.0.0)(react@19.0.1)
+        specifier: 15.0.7
+        version: 15.0.7(@babel/core@7.12.10)(react-dom@19.0.3)(react@19.0.3)
       prisma:
         specifier: 6.1.0
         version: 6.1.0
       react:
-        specifier: 19.0.1
-        version: 19.0.1
+        specifier: 19.0.3
+        version: 19.0.3
       react-dom:
-        specifier: 19.0.0
-        version: 19.0.0(react@19.0.1)
+        specifier: 19.0.3
+        version: 19.0.3(react@19.0.3)
     devDependencies:
       "@blitzjs/config":
         specifier: 3.0.2
@@ -919,26 +919,26 @@ importers:
         version: 6.1.0(prisma@6.1.0)
       "@tanstack/react-query":
         specifier: 5.51.1
-        version: 5.51.1(react@19.0.1)
+        version: 5.51.1(react@19.0.3)
       blitz:
         specifier: 3.0.2
         version: link:../../packages/blitz
       next:
-        specifier: 15.0.5
-        version: 15.0.5(@babel/core@7.18.2)(react-dom@19.0.0)(react@19.0.1)
+        specifier: 15.0.7
+        version: 15.0.7(@babel/core@7.18.2)(react-dom@19.0.3)(react@19.0.3)
       prisma:
         specifier: 6.1.0
         version: 6.1.0
       react:
-        specifier: 19.0.1
-        version: 19.0.1
+        specifier: 19.0.3
+        version: 19.0.3
       react-dom:
-        specifier: 19.0.0
-        version: 19.0.0(react@19.0.1)
+        specifier: 19.0.3
+        version: 19.0.3(react@19.0.3)
     devDependencies:
       "@testing-library/react":
         specifier: 16.0.1
-        version: 16.0.1(@testing-library/dom@10.4.0)(react-dom@19.0.0)(react@19.0.1)(types-react-dom@19.0.0-rc.1)(types-react@19.0.0-rc.1)
+        version: 16.0.1(@testing-library/dom@10.4.0)(react-dom@19.0.3)(react@19.0.3)(types-react-dom@19.0.0-rc.1)(types-react@19.0.0-rc.1)
       "@types/react":
         specifier: npm:types-react@rc
         version: /types-react@19.0.0-rc.1
@@ -982,17 +982,17 @@ importers:
         specifier: 3.0.0
         version: 3.0.0
       next:
-        specifier: 15.0.5
-        version: 15.0.5(@babel/core@7.12.10)(react-dom@19.0.0)(react@19.0.1)
+        specifier: 15.0.7
+        version: 15.0.7(@babel/core@7.12.10)(react-dom@19.0.3)(react@19.0.3)
       prisma:
         specifier: 6.1.0
         version: 6.1.0
       react:
-        specifier: 19.0.1
-        version: 19.0.1
+        specifier: 19.0.3
+        version: 19.0.3
       react-dom:
-        specifier: 19.0.0
-        version: 19.0.0(react@19.0.1)
+        specifier: 19.0.3
+        version: 19.0.3(react@19.0.3)
     devDependencies:
       "@blitzjs/config":
         specifier: 3.0.2
@@ -1046,14 +1046,14 @@ importers:
         specifier: 3.0.2
         version: link:../../packages/blitz
       next:
-        specifier: 15.0.5
-        version: 15.0.5(@babel/core@7.12.10)(react-dom@19.0.0)(react@19.0.1)
+        specifier: 15.0.7
+        version: 15.0.7(@babel/core@7.12.10)(react-dom@19.0.3)(react@19.0.3)
       react:
-        specifier: 19.0.1
-        version: 19.0.1
+        specifier: 19.0.3
+        version: 19.0.3
       react-dom:
-        specifier: 19.0.0
-        version: 19.0.0(react@19.0.1)
+        specifier: 19.0.3
+        version: 19.0.3(react@19.0.3)
     devDependencies:
       "@types/express":
         specifier: 4.17.13
@@ -1095,14 +1095,14 @@ importers:
         specifier: 3.0.2
         version: link:../../packages/blitz
       next:
-        specifier: 15.0.5
-        version: 15.0.5(@babel/core@7.12.10)(react-dom@19.0.0)(react@19.0.1)
+        specifier: 15.0.7
+        version: 15.0.7(@babel/core@7.12.10)(react-dom@19.0.3)(react@19.0.3)
       react:
-        specifier: 19.0.1
-        version: 19.0.1
+        specifier: 19.0.3
+        version: 19.0.3
       react-dom:
-        specifier: 19.0.0
-        version: 19.0.0(react@19.0.1)
+        specifier: 19.0.3
+        version: 19.0.3(react@19.0.3)
     devDependencies:
       "@types/express":
         specifier: 4.17.13
@@ -1150,17 +1150,17 @@ importers:
         specifier: 3.0.0
         version: 3.0.0
       next:
-        specifier: 15.0.5
-        version: 15.0.5(@babel/core@7.12.10)(react-dom@19.0.0)(react@19.0.1)
+        specifier: 15.0.7
+        version: 15.0.7(@babel/core@7.12.10)(react-dom@19.0.3)(react@19.0.3)
       prisma:
         specifier: 6.1.0
         version: 6.1.0
       react:
-        specifier: 19.0.1
-        version: 19.0.1
+        specifier: 19.0.3
+        version: 19.0.3
       react-dom:
-        specifier: 19.0.0
-        version: 19.0.0(react@19.0.1)
+        specifier: 19.0.3
+        version: 19.0.3(react@19.0.3)
     devDependencies:
       "@blitzjs/config":
         specifier: 3.0.2
@@ -1212,10 +1212,10 @@ importers:
         version: link:../../packages/blitz-rpc
       "@tanstack/react-query":
         specifier: 4.13.0
-        version: 4.13.0(react-dom@19.0.0)(react@19.0.1)
+        version: 4.13.0(react-dom@19.0.3)(react@19.0.3)
       "@testing-library/react":
         specifier: 16.0.1
-        version: 16.0.1(@testing-library/dom@10.4.0)(react-dom@19.0.0)(react@19.0.1)(types-react-dom@19.0.0-rc.1)(types-react@19.0.0-rc.1)
+        version: 16.0.1(@testing-library/dom@10.4.0)(react-dom@19.0.3)(react@19.0.3)(types-react-dom@19.0.0-rc.1)(types-react@19.0.0-rc.1)
       "@types/express":
         specifier: 4.17.13
         version: 4.17.13
@@ -1262,11 +1262,11 @@ importers:
         specifier: 1.49.1
         version: 1.49.1
       react:
-        specifier: 19.0.1
-        version: 19.0.1
+        specifier: 19.0.3
+        version: 19.0.3
       react-dom:
-        specifier: 19.0.0
-        version: 19.0.0(react@19.0.1)
+        specifier: 19.0.3
+        version: 19.0.3(react@19.0.3)
       resolve-cwd:
         specifier: 3.0.0
         version: 3.0.0
@@ -1365,10 +1365,10 @@ importers:
         version: 1.2.3
       ink:
         specifier: 3.2.0
-        version: 3.2.0(react@19.0.1)(types-react@19.0.0-rc.1)
+        version: 3.2.0(react@19.0.3)(types-react@19.0.0-rc.1)
       ink-spinner:
         specifier: 4.0.3
-        version: 4.0.3(ink@3.2.0)(react@19.0.1)
+        version: 4.0.3(ink@3.2.0)(react@19.0.3)
       jscodeshift:
         specifier: 0.13.0
         version: 0.13.0(@babel/preset-env@7.12.10)(supports-color@8.1.1)
@@ -1494,8 +1494,8 @@ importers:
         specifier: 4.17.3
         version: 4.17.3(supports-color@8.1.1)
       react:
-        specifier: 19.0.1
-        version: 19.0.1
+        specifier: 19.0.3
+        version: 19.0.3
       test-listen:
         specifier: 1.1.0
         version: 1.1.0
@@ -1583,7 +1583,7 @@ importers:
         version: link:../config
       "@testing-library/react":
         specifier: 16.0.1
-        version: 16.0.1(@testing-library/dom@10.4.0)(react-dom@19.0.0)(react@19.0.1)(types-react-dom@19.0.0-rc.1)(types-react@19.0.0-rc.1)
+        version: 16.0.1(@testing-library/dom@10.4.0)(react-dom@19.0.3)(react@19.0.3)(types-react-dom@19.0.0-rc.1)(types-react@19.0.0-rc.1)
       "@types/cookie":
         specifier: 0.4.1
         version: 0.4.1
@@ -1603,17 +1603,17 @@ importers:
         specifier: 3.0.2
         version: link:../blitz
       next:
-        specifier: 15.0.5
-        version: 15.0.5(@babel/core@7.20.2)(react-dom@19.0.0)(react@19.0.1)
+        specifier: 15.0.7
+        version: 15.0.7(@babel/core@7.20.2)(react-dom@19.0.3)(react@19.0.3)
       next-auth:
         specifier: 4.24.7
-        version: 4.24.7(next@15.0.5)(react-dom@19.0.0)(react@19.0.1)
+        version: 4.24.7(next@15.0.7)(react-dom@19.0.3)(react@19.0.3)
       react:
-        specifier: 19.0.1
-        version: 19.0.1
+        specifier: 19.0.3
+        version: 19.0.3
       react-dom:
-        specifier: 19.0.0
-        version: 19.0.0(react@19.0.1)
+        specifier: 19.0.3
+        version: 19.0.3(react@19.0.3)
       secure-password:
         specifier: 4.0.0
         version: 4.0.0
@@ -1665,7 +1665,7 @@ importers:
         version: 5.16.3
       "@testing-library/react":
         specifier: 16.0.1
-        version: 16.0.1(@testing-library/dom@8.13.0)(react-dom@19.0.0)(react@19.0.1)(types-react-dom@19.0.0-rc.1)(types-react@19.0.0-rc.1)
+        version: 16.0.1(@testing-library/dom@8.13.0)(react-dom@19.0.3)(react@19.0.3)(types-react-dom@19.0.0-rc.1)(types-react@19.0.0-rc.1)
       "@testing-library/user-event":
         specifier: 13.5.0
         version: 13.5.0(@testing-library/dom@8.13.0)
@@ -1683,7 +1683,7 @@ importers:
         version: /types-react-dom@19.0.0-rc.1
       "@types/testing-library__react-hooks":
         specifier: 4.0.0
-        version: 4.0.0(react-dom@19.0.0)(react@19.0.1)(types-react@19.0.0-rc.1)
+        version: 4.0.0(react-dom@19.0.3)(react@19.0.3)(types-react@19.0.0-rc.1)
       blitz:
         specifier: 3.0.2
         version: link:../blitz
@@ -1694,17 +1694,17 @@ importers:
         specifier: 4.1.0
         version: 4.1.0
       next:
-        specifier: 15.0.5
-        version: 15.0.5(@babel/core@7.12.10)(react-dom@19.0.0)(react@19.0.1)
+        specifier: 15.0.7
+        version: 15.0.7(@babel/core@7.12.10)(react-dom@19.0.3)(react@19.0.3)
       next-router-mock:
         specifier: 0.9.1
-        version: 0.9.1(next@15.0.5)(react@19.0.1)
+        version: 0.9.1(next@15.0.7)(react@19.0.3)
       react:
-        specifier: 19.0.1
-        version: 19.0.1
+        specifier: 19.0.3
+        version: 19.0.3
       react-dom:
-        specifier: 19.0.0
-        version: 19.0.0(react@19.0.1)
+        specifier: 19.0.3
+        version: 19.0.3(react@19.0.3)
       resolve-from:
         specifier: 5.0.0
         version: 5.0.0
@@ -1731,7 +1731,7 @@ importers:
         version: 1.3.7
       "@tanstack/react-query":
         specifier: 5.51.1
-        version: 5.51.1(react@19.0.1)
+        version: 5.51.1(react@19.0.3)
       b64-lite:
         specifier: 1.4.0
         version: 1.4.0
@@ -1773,14 +1773,14 @@ importers:
         specifier: 3.0.2
         version: link:../blitz
       next:
-        specifier: 15.0.5
-        version: 15.0.5(@babel/core@7.20.2)(react-dom@19.0.0)(react@19.0.1)
+        specifier: 15.0.7
+        version: 15.0.7(@babel/core@7.20.2)(react-dom@19.0.3)(react@19.0.3)
       react:
-        specifier: 19.0.1
-        version: 19.0.1
+        specifier: 19.0.3
+        version: 19.0.3
       react-dom:
-        specifier: 19.0.0
-        version: 19.0.0(react@19.0.1)
+        specifier: 19.0.3
+        version: 19.0.3(react@19.0.3)
       typescript:
         specifier: ^4.8.4
         version: 4.8.4
@@ -2019,8 +2019,8 @@ importers:
         specifier: 8.27.0
         version: 8.27.0(supports-color@8.1.1)
       react:
-        specifier: 19.0.1
-        version: 19.0.1
+        specifier: 19.0.3
+        version: 19.0.3
       typescript:
         specifier: ^4.8.4
         version: 4.8.4
@@ -2050,8 +2050,8 @@ importers:
         specifier: npm:types-react-dom@rc
         version: /types-react-dom@19.0.0-rc.1
       react:
-        specifier: 19.0.1
-        version: 19.0.1
+        specifier: 19.0.3
+        version: 19.0.3
       typescript:
         specifier: ^4.8.4
         version: 4.8.4
@@ -4864,7 +4864,7 @@ packages:
       "@hapi/hoek": 9.3.0
     dev: false
 
-  /@hookform/error-message@2.0.0(react-dom@19.0.0)(react-hook-form@7.39.1)(react@19.0.1):
+  /@hookform/error-message@2.0.0(react-dom@19.0.3)(react-hook-form@7.39.1)(react@19.0.3):
     resolution:
       {
         integrity: sha512-Y90nHzjgL2MP7GFy75kscdvxrCTjtyxGmOLLxX14nd08OXRIh9lMH/y9Kpdo0p1IPowJBiZMHyueg7p+yrqynQ==,
@@ -4874,9 +4874,9 @@ packages:
       react-dom: ">=16.8.0"
       react-hook-form: ^7.0.0
     dependencies:
-      react: 19.0.1
-      react-dom: 19.0.0(react@19.0.1)
-      react-hook-form: 7.39.1(react@19.0.1)
+      react: 19.0.3
+      react-dom: 19.0.3(react@19.0.3)
+      react-hook-form: 7.39.1(react@19.0.3)
     dev: false
 
   /@hookform/resolvers@2.9.10(react-hook-form@7.39.1):
@@ -4887,7 +4887,7 @@ packages:
     peerDependencies:
       react-hook-form: ^7.0.0
     dependencies:
-      react-hook-form: 7.39.1(react@19.0.1)
+      react-hook-form: 7.39.1(react@19.0.3)
     dev: false
 
   /@humanwhocodes/config-array@0.11.7(supports-color@8.1.1):
@@ -5792,10 +5792,10 @@ packages:
       - utf-8-validate
     dev: true
 
-  /@next/env@15.0.5:
+  /@next/env@15.0.7:
     resolution:
       {
-        integrity: sha512-rDeqk/QF6OxTSvQItPdtyR0O4QN5L2a794F4+i8/syHN92DqFXcLNhZgLtYhW3rrJ23vRR7B5wIamsgGM4I6UQ==,
+        integrity: sha512-g/v9G2Xmv9T6w/DcRdcdVkLuAHnGt5fcJ3C33PmPrrdtUrwrjXcT4jXasdedSbw+koXa4YeEA3nPgy6q2wmk2A==,
       }
 
   /@next/eslint-plugin-next@12.3.1:
@@ -6566,7 +6566,7 @@ packages:
         integrity: sha512-fJBMQMpo8/KSsWW5ratJR5+IFr7YNJ3K2kfP9l5XObYHsgfVy1w3FJUWU4FT2fj7+JMaEg33zOcNDBo0LMwHnw==,
       }
 
-  /@tanstack/react-query@4.13.0(react-dom@19.0.0)(react@19.0.1):
+  /@tanstack/react-query@4.13.0(react-dom@19.0.3)(react@19.0.3):
     resolution:
       {
         integrity: sha512-dI/5hJ/pGQ74P5hxBLC9h6K0/Cap2T3k0ZjjjFLBCNnohDYgl7LNmMopzrRzBHk2mMjf2hgXHIzcKNG8GOZ5hg==,
@@ -6582,12 +6582,12 @@ packages:
         optional: true
     dependencies:
       "@tanstack/query-core": 4.13.0
-      react: 19.0.1
-      react-dom: 19.0.0(react@19.0.1)
-      use-sync-external-store: 1.2.0(react@19.0.1)
+      react: 19.0.3
+      react-dom: 19.0.3(react@19.0.3)
+      use-sync-external-store: 1.2.0(react@19.0.3)
     dev: true
 
-  /@tanstack/react-query@5.51.1(react@19.0.1):
+  /@tanstack/react-query@5.51.1(react@19.0.3):
     resolution:
       {
         integrity: sha512-s47HKFnQ4HOJAHoIiXcpna/roMMPZJPy6fJ6p4ZNVn8+/onlLBEDd1+xc8OnDuwgvecqkZD7Z2mnSRbcWefrKw==,
@@ -6596,7 +6596,7 @@ packages:
       react: ^18.0.0
     dependencies:
       "@tanstack/query-core": 5.51.1
-      react: 19.0.1
+      react: 19.0.3
     dev: false
 
   /@testim/chrome-version@1.1.2:
@@ -6676,7 +6676,7 @@ packages:
       redent: 3.0.0
     dev: true
 
-  /@testing-library/react-hooks@8.0.1(react-dom@19.0.0)(react@19.0.1)(types-react@19.0.0-rc.1):
+  /@testing-library/react-hooks@8.0.1(react-dom@19.0.3)(react@19.0.3)(types-react@19.0.0-rc.1):
     resolution:
       {
         integrity: sha512-Aqhl2IVmLt8IovEVarNDFuJDVWVvhnr9/GCU6UUnrYXwgDFF9h2L2o2P9KBni1AST5sT6riAyoukFLyjQUgD/g==,
@@ -6697,12 +6697,12 @@ packages:
     dependencies:
       "@babel/runtime": 7.18.3
       "@types/react": /types-react@19.0.0-rc.1
-      react: 19.0.1
-      react-dom: 19.0.0(react@19.0.1)
-      react-error-boundary: 3.1.4(react@19.0.1)
+      react: 19.0.3
+      react-dom: 19.0.3(react@19.0.3)
+      react-error-boundary: 3.1.4(react@19.0.3)
     dev: true
 
-  /@testing-library/react@16.0.1(@testing-library/dom@10.4.0)(react-dom@19.0.0)(react@19.0.1)(types-react-dom@19.0.0-rc.1)(types-react@19.0.0-rc.1):
+  /@testing-library/react@16.0.1(@testing-library/dom@10.4.0)(react-dom@19.0.3)(react@19.0.3)(types-react-dom@19.0.0-rc.1)(types-react@19.0.0-rc.1):
     resolution:
       {
         integrity: sha512-dSmwJVtJXmku+iocRhWOUFbrERC76TX2Mnf0ATODz8brzAZrMBbzLwQixlBSanZxR6LddK3eiwpSFZgDET1URg==,
@@ -6724,11 +6724,11 @@ packages:
       "@testing-library/dom": 10.4.0
       "@types/react": /types-react@19.0.0-rc.1
       "@types/react-dom": /types-react-dom@19.0.0-rc.1
-      react: 19.0.1
-      react-dom: 19.0.0(react@19.0.1)
+      react: 19.0.3
+      react-dom: 19.0.3(react@19.0.3)
     dev: true
 
-  /@testing-library/react@16.0.1(@testing-library/dom@8.13.0)(react-dom@19.0.0)(react@19.0.1)(types-react-dom@19.0.0-rc.1)(types-react@19.0.0-rc.1):
+  /@testing-library/react@16.0.1(@testing-library/dom@8.13.0)(react-dom@19.0.3)(react@19.0.3)(types-react-dom@19.0.0-rc.1)(types-react@19.0.0-rc.1):
     resolution:
       {
         integrity: sha512-dSmwJVtJXmku+iocRhWOUFbrERC76TX2Mnf0ATODz8brzAZrMBbzLwQixlBSanZxR6LddK3eiwpSFZgDET1URg==,
@@ -6750,8 +6750,8 @@ packages:
       "@testing-library/dom": 8.13.0
       "@types/react": /types-react@19.0.0-rc.1
       "@types/react-dom": /types-react-dom@19.0.0-rc.1
-      react: 19.0.1
-      react-dom: 19.0.0(react@19.0.1)
+      react: 19.0.3
+      react-dom: 19.0.3(react@19.0.3)
     dev: true
 
   /@testing-library/user-event@13.5.0(@testing-library/dom@8.13.0):
@@ -7533,14 +7533,14 @@ packages:
       "@types/jest": 29.2.2
     dev: true
 
-  /@types/testing-library__react-hooks@4.0.0(react-dom@19.0.0)(react@19.0.1)(types-react@19.0.0-rc.1):
+  /@types/testing-library__react-hooks@4.0.0(react-dom@19.0.3)(react@19.0.3)(types-react@19.0.0-rc.1):
     resolution:
       {
         integrity: sha512-UzZUXthQtVjDruR2YA+hqg9ux5AfmZ8Kaw+QDungax+T7wb/5NC4x7YOpIqRx7oY3KksGQ69bzNE/xwzb5NslQ==,
       }
     deprecated: This is a stub types definition. @testing-library/react-hooks provides its own type definitions, so you do not need this installed.
     dependencies:
-      "@testing-library/react-hooks": 8.0.1(react-dom@19.0.0)(react@19.0.1)(types-react@19.0.0-rc.1)
+      "@testing-library/react-hooks": 8.0.1(react-dom@19.0.3)(react@19.0.3)(types-react@19.0.0-rc.1)
     transitivePeerDependencies:
       - "@types/react"
       - react
@@ -14771,7 +14771,7 @@ packages:
       }
     dev: false
 
-  /ink-spinner@4.0.3(ink@3.2.0)(react@19.0.1):
+  /ink-spinner@4.0.3(ink@3.2.0)(react@19.0.3):
     resolution:
       {
         integrity: sha512-uJ4nbH00MM9fjTJ5xdw0zzvtXMkeGb0WV6dzSWvFv2/+ks6FIhpkt+Ge/eLdh0Ah6Vjw5pLMyNfoHQpRDRVFbQ==,
@@ -14782,11 +14782,11 @@ packages:
       react: ">=16.8.2"
     dependencies:
       cli-spinners: 2.6.1
-      ink: 3.2.0(react@19.0.1)(types-react@19.0.0-rc.1)
-      react: 19.0.1
+      ink: 3.2.0(react@19.0.3)(types-react@19.0.0-rc.1)
+      react: 19.0.3
     dev: false
 
-  /ink@3.2.0(react@19.0.1)(types-react@19.0.0-rc.1):
+  /ink@3.2.0(react@19.0.3)(types-react@19.0.0-rc.1):
     resolution:
       {
         integrity: sha512-firNp1q3xxTzoItj/eOOSZQnYSlyrWks5llCTVX37nJ59K3eXbQ8PtzCguqo8YI19EELo5QxaKnJd4VxzhU8tg==,
@@ -14811,9 +14811,9 @@ packages:
       is-ci: 2.0.0
       lodash: 4.17.21
       patch-console: 1.0.0
-      react: 19.0.1
+      react: 19.0.3
       react-devtools-core: 4.25.0
-      react-reconciler: 0.26.2(react@19.0.1)
+      react-reconciler: 0.26.2(react@19.0.3)
       scheduler: 0.20.2
       signal-exit: 3.0.7
       slice-ansi: 3.0.0
@@ -18167,7 +18167,7 @@ packages:
       }
     dev: false
 
-  /next-auth@4.24.7(next@15.0.5)(react-dom@19.0.0)(react@19.0.1):
+  /next-auth@4.24.7(next@15.0.7)(react-dom@19.0.3)(react@19.0.3):
     resolution:
       {
         integrity: sha512-iChjE8ov/1K/z98gdKbn2Jw+2vLgJtVV39X+rCP5SGnVQuco7QOr19FRNGMIrD8d3LYhHWV9j9sKLzq1aDWWQQ==,
@@ -18185,16 +18185,16 @@ packages:
       "@panva/hkdf": 1.0.2
       cookie: 0.5.0
       jose: 4.15.5
-      next: 15.0.5(@babel/core@7.20.2)(react-dom@19.0.0)(react@19.0.1)
+      next: 15.0.7(@babel/core@7.20.2)(react-dom@19.0.3)(react@19.0.3)
       oauth: 0.9.15
       openid-client: 5.6.5
       preact: 10.11.3
       preact-render-to-string: 5.2.6(preact@10.11.3)
-      react: 19.0.1
-      react-dom: 19.0.0(react@19.0.1)
+      react: 19.0.3
+      react-dom: 19.0.3(react@19.0.3)
       uuid: 8.3.2
 
-  /next-router-mock@0.9.1(next@15.0.5)(react@19.0.1):
+  /next-router-mock@0.9.1(next@15.0.7)(react@19.0.3):
     resolution:
       {
         integrity: sha512-GTrns944dnFNgycpinyRszOiwwk99LUJsvvX0FWRgUFHv6hOuzCns1rmTlzO+DRimYB9/XMA+87X2/dQLzjiUQ==,
@@ -18203,14 +18203,14 @@ packages:
       next: ">=10.0.0"
       react: ">=17.0.0"
     dependencies:
-      next: 15.0.5(@babel/core@7.12.10)(react-dom@19.0.0)(react@19.0.1)
-      react: 19.0.1
+      next: 15.0.7(@babel/core@7.12.10)(react-dom@19.0.3)(react@19.0.3)
+      react: 19.0.3
     dev: true
 
-  /next@15.0.5(@babel/core@7.12.10)(react-dom@19.0.0)(react@19.0.1):
+  /next@15.0.7(@babel/core@7.12.10)(react-dom@19.0.3)(react@19.0.3):
     resolution:
       {
-        integrity: sha512-WTh/Rmxkn4J4vwSYiqEZGzoxjid83iCyN0qg7oJFKzHjYCzy5mwBRqWVlFotM9nAnxGGv5MzbMa4gMu88qeGLA==,
+        integrity: sha512-Vl6fLEuOP1MgtEmDrY51BQr6Bl8oC8vDSHdA10xZWPPZa6e+dOwYNDLWHjvTktNLZkKYySpsW3Yzy4Lo+JORkw==,
       }
     engines: {node: ^18.18.0 || ^19.8.0 || >= 20.0.0}
     hasBin: true
@@ -18231,15 +18231,15 @@ packages:
       sass:
         optional: true
     dependencies:
-      "@next/env": 15.0.5
+      "@next/env": 15.0.7
       "@swc/counter": 0.1.3
       "@swc/helpers": 0.5.13
       busboy: 1.6.0
       caniuse-lite: 1.0.30001599
       postcss: 8.4.31
-      react: 19.0.1
-      react-dom: 19.0.0(react@19.0.1)
-      styled-jsx: 5.1.6(@babel/core@7.12.10)(react@19.0.1)
+      react: 19.0.3
+      react-dom: 19.0.3(react@19.0.3)
+      styled-jsx: 5.1.6(@babel/core@7.12.10)(react@19.0.3)
     optionalDependencies:
       "@next/swc-darwin-arm64": 15.0.5
       "@next/swc-darwin-x64": 15.0.5
@@ -18254,10 +18254,10 @@ packages:
       - "@babel/core"
       - babel-plugin-macros
 
-  /next@15.0.5(@babel/core@7.18.2)(react-dom@19.0.0)(react@19.0.1):
+  /next@15.0.7(@babel/core@7.18.2)(react-dom@19.0.3)(react@19.0.3):
     resolution:
       {
-        integrity: sha512-WTh/Rmxkn4J4vwSYiqEZGzoxjid83iCyN0qg7oJFKzHjYCzy5mwBRqWVlFotM9nAnxGGv5MzbMa4gMu88qeGLA==,
+        integrity: sha512-Vl6fLEuOP1MgtEmDrY51BQr6Bl8oC8vDSHdA10xZWPPZa6e+dOwYNDLWHjvTktNLZkKYySpsW3Yzy4Lo+JORkw==,
       }
     engines: {node: ^18.18.0 || ^19.8.0 || >= 20.0.0}
     hasBin: true
@@ -18278,15 +18278,15 @@ packages:
       sass:
         optional: true
     dependencies:
-      "@next/env": 15.0.5
+      "@next/env": 15.0.7
       "@swc/counter": 0.1.3
       "@swc/helpers": 0.5.13
       busboy: 1.6.0
       caniuse-lite: 1.0.30001599
       postcss: 8.4.31
-      react: 19.0.1
-      react-dom: 19.0.0(react@19.0.1)
-      styled-jsx: 5.1.6(@babel/core@7.18.2)(react@19.0.1)
+      react: 19.0.3
+      react-dom: 19.0.3(react@19.0.3)
+      styled-jsx: 5.1.6(@babel/core@7.18.2)(react@19.0.3)
     optionalDependencies:
       "@next/swc-darwin-arm64": 15.0.5
       "@next/swc-darwin-x64": 15.0.5
@@ -18302,10 +18302,10 @@ packages:
       - babel-plugin-macros
     dev: false
 
-  /next@15.0.5(@babel/core@7.20.2)(react-dom@19.0.0)(react@19.0.1):
+  /next@15.0.7(@babel/core@7.20.2)(react-dom@19.0.3)(react@19.0.3):
     resolution:
       {
-        integrity: sha512-WTh/Rmxkn4J4vwSYiqEZGzoxjid83iCyN0qg7oJFKzHjYCzy5mwBRqWVlFotM9nAnxGGv5MzbMa4gMu88qeGLA==,
+        integrity: sha512-Vl6fLEuOP1MgtEmDrY51BQr6Bl8oC8vDSHdA10xZWPPZa6e+dOwYNDLWHjvTktNLZkKYySpsW3Yzy4Lo+JORkw==,
       }
     engines: {node: ^18.18.0 || ^19.8.0 || >= 20.0.0}
     hasBin: true
@@ -18326,15 +18326,15 @@ packages:
       sass:
         optional: true
     dependencies:
-      "@next/env": 15.0.5
+      "@next/env": 15.0.7
       "@swc/counter": 0.1.3
       "@swc/helpers": 0.5.13
       busboy: 1.6.0
       caniuse-lite: 1.0.30001599
       postcss: 8.4.31
-      react: 19.0.1
-      react-dom: 19.0.0(react@19.0.1)
-      styled-jsx: 5.1.6(@babel/core@7.20.2)(react@19.0.1)
+      react: 19.0.3
+      react-dom: 19.0.3(react@19.0.3)
+      styled-jsx: 5.1.6(@babel/core@7.20.2)(react@19.0.3)
     optionalDependencies:
       "@next/swc-darwin-arm64": 15.0.5
       "@next/swc-darwin-x64": 15.0.5
@@ -20102,18 +20102,18 @@ packages:
       - utf-8-validate
     dev: false
 
-  /react-dom@19.0.0(react@19.0.1):
+  /react-dom@19.0.3(react@19.0.3):
     resolution:
       {
-        integrity: sha512-4GV5sHFG0e/0AD4X+ySy6UJd3jVl1iNsNHdpad0qhABJ11twS3TTBnseqsKurKcsNqCEFeGL3uLpVChpIO3QfQ==,
+        integrity: sha512-a7ezLfxibhu6fZBVLwy6WEd3Jn/4H8JYVO8K8GtBfRf1Pl+ox7KFoMCzAGlxLZUXo0t44YZShzhhoDH3yMVdxQ==,
       }
     peerDependencies:
-      react: ^19.0.0
+      react: ^19.0.3
     dependencies:
-      react: 19.0.1
+      react: 19.0.3
       scheduler: 0.25.0
 
-  /react-error-boundary@3.1.4(react@19.0.1):
+  /react-error-boundary@3.1.4(react@19.0.3):
     resolution:
       {
         integrity: sha512-uM9uPzZJTF6wRQORmSrvOIgt4lJ9MC1sNgEOj2XGsDTRE4kmpWxg7ENK9EWNKJRMAOY9z0MuF4yIfl6gp4sotA==,
@@ -20123,10 +20123,10 @@ packages:
       react: ">=16.13.1"
     dependencies:
       "@babel/runtime": 7.23.2
-      react: 19.0.1
+      react: 19.0.3
     dev: true
 
-  /react-hook-form@7.39.1(react@19.0.1):
+  /react-hook-form@7.39.1(react@19.0.3):
     resolution:
       {
         integrity: sha512-MiF9PCILN5KulhSGbnjohMiTOrB47GerDTichMNP0y2cPUu1GTRFqbunOxCE9N1499YTLMV/ne4gFzqCp1rxrQ==,
@@ -20135,7 +20135,7 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17 || ^18
     dependencies:
-      react: 19.0.1
+      react: 19.0.3
     dev: false
 
   /react-is@16.13.1:
@@ -20157,7 +20157,7 @@ packages:
         integrity: sha512-xWGDIW6x921xtzPkhiULtthJHoJvBbF3q26fzloPCK0hsvxtPVelvftw3zjbHWSkR2km9Z+4uxbDDK/6Zw9B8w==,
       }
 
-  /react-reconciler@0.26.2(react@19.0.1):
+  /react-reconciler@0.26.2(react@19.0.3):
     resolution:
       {
         integrity: sha512-nK6kgY28HwrMNwDnMui3dvm3rCFjZrcGiuwLc5COUipBK5hWHLOxMJhSnSomirqWwjPBJKV1QcbkI0VJr7Gl1Q==,
@@ -20168,7 +20168,7 @@ packages:
     dependencies:
       loose-envify: 1.4.0
       object-assign: 4.1.1
-      react: 19.0.1
+      react: 19.0.3
       scheduler: 0.20.2
     dev: false
 
@@ -20188,10 +20188,10 @@ packages:
     engines: {node: ">=0.10.0"}
     dev: true
 
-  /react@19.0.1:
+  /react@19.0.3:
     resolution:
       {
-        integrity: sha512-nVRaZCuEyvu69sWrkdwjP6QY57C+lY+uMNNMyWUFJb9Z/JlaBOQus7mSMfGYsblv7R691u6SSJA/dX9IRnyyLQ==,
+        integrity: sha512-owzQanTgpB8GF7pVL6mUwZZyhKzFePi9++GkFk54i9PRU0jq+z7v9Mwg7PAZJYCiYl5YwcyQGGq5/PLkesd8nw==,
       }
     engines: {node: ">=0.10.0"}
 
@@ -21927,7 +21927,7 @@ packages:
     dependencies:
       acorn: 8.8.1
 
-  /styled-jsx@5.1.6(@babel/core@7.12.10)(react@19.0.1):
+  /styled-jsx@5.1.6(@babel/core@7.12.10)(react@19.0.3):
     resolution:
       {
         integrity: sha512-qSVyDTeMotdvQYoHWLNGwRFJHC+i+ZvdBRYosOFgC+Wg1vx4frN2/RG/NA7SYqqvKNLf39P2LSRA2pu6n0XYZA==,
@@ -21945,9 +21945,9 @@ packages:
     dependencies:
       "@babel/core": 7.12.10(supports-color@8.1.1)
       client-only: 0.0.1
-      react: 19.0.1
+      react: 19.0.3
 
-  /styled-jsx@5.1.6(@babel/core@7.18.2)(react@19.0.1):
+  /styled-jsx@5.1.6(@babel/core@7.18.2)(react@19.0.3):
     resolution:
       {
         integrity: sha512-qSVyDTeMotdvQYoHWLNGwRFJHC+i+ZvdBRYosOFgC+Wg1vx4frN2/RG/NA7SYqqvKNLf39P2LSRA2pu6n0XYZA==,
@@ -21965,10 +21965,10 @@ packages:
     dependencies:
       "@babel/core": 7.18.2
       client-only: 0.0.1
-      react: 19.0.1
+      react: 19.0.3
     dev: false
 
-  /styled-jsx@5.1.6(@babel/core@7.20.2)(react@19.0.1):
+  /styled-jsx@5.1.6(@babel/core@7.20.2)(react@19.0.3):
     resolution:
       {
         integrity: sha512-qSVyDTeMotdvQYoHWLNGwRFJHC+i+ZvdBRYosOFgC+Wg1vx4frN2/RG/NA7SYqqvKNLf39P2LSRA2pu6n0XYZA==,
@@ -21986,7 +21986,7 @@ packages:
     dependencies:
       "@babel/core": 7.20.2
       client-only: 0.0.1
-      react: 19.0.1
+      react: 19.0.3
 
   /subarg@1.0.0:
     resolution:
@@ -23273,7 +23273,7 @@ packages:
       querystring: 0.2.0
     dev: false
 
-  /use-sync-external-store@1.2.0(react@19.0.1):
+  /use-sync-external-store@1.2.0(react@19.0.3):
     resolution:
       {
         integrity: sha512-eEgnFxGQ1Ife9bzYs6VLi8/4X6CObHMw9Qr9tPY43iKwsPw8xE8+EFsf/2cFZ5S3esXgpWgtSCtLNS41F+sKPA==,
@@ -23281,7 +23281,7 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
     dependencies:
-      react: 19.0.1
+      react: 19.0.3
     dev: true
 
   /use@3.1.1:
