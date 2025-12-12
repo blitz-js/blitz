@@ -99,7 +99,7 @@
     "@types/test-listen": "1.1.0",
     "@types/watchpack": "1.1.1",
     "express": "4.17.3",
-    "react": "19.0.0",
+    "react": "19.0.3",
     "test-listen": "1.1.0",
     "typescript": "^4.8.4",
     "unbuild": "0.7.6",
