@@ -7,7 +7,7 @@ import {join} from "path"
 import {defaultConfig} from "./default-config"
 
 // eslint-disable-next-line
-declare module globalThis {
+declare namespace globalThis {
   let _blitz_baseLogger: Logger<ILogObj>
   let _blitz_logLevel: LogLevel
 }
