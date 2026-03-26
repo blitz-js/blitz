@@ -13,6 +13,7 @@
   </a>
   <a aria-label="NPM version" href="https://www.npmjs.com/package/blitz">
     <img alt="" src="https://img.shields.io/npm/v/blitz.svg?style=for-the-badge&labelColor=000000&color=E65528">
+[![Stack Health](https://indiestack.ai/api/badge/health/blitz-js/blitz.svg)](https://indiestack.ai/audit?repo=blitz-js/blitz)
   </a>
 </p>
 <!-- prettier-ignore-end -->
