@@ -30,7 +30,6 @@
     "@blitzjs/rpc": "latest",
     "@prisma/client": "5.4.2",
     "blitz": "latest",
-    "formik": "2.4.5",
     "next": "15.0.1",
     "prisma": "5.4.2",
     "react": "19.0.0",
